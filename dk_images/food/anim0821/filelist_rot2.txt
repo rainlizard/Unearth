@@ -1,0 +1,4 @@
+animation_2070   2   3  -25  -20
+r2frame01.png
+r2frame02.png
+r2frame03.png

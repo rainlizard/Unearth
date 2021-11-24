@@ -1,0 +1,83 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Scenes/ThingInstance.gd" type="Script" id=1]
+[ext_resource path="res://dk_images/creature_flower_32/level_06.png" type="Texture" id=2]
+[ext_resource path="res://dk_images/creature_flower_32/level_09.png" type="Texture" id=3]
+[ext_resource path="res://dk_images/creature_flower_32/level_08.png" type="Texture" id=4]
+[ext_resource path="res://dk_images/creature_flower_32/level_04.png" type="Texture" id=5]
+[ext_resource path="res://dk_images/creature_flower_32/level_03.png" type="Texture" id=6]
+[ext_resource path="res://dk_images/creature_flower_32/level_02.png" type="Texture" id=7]
+[ext_resource path="res://dk_images/creature_flower_32/level_05.png" type="Texture" id=8]
+[ext_resource path="res://dk_images/creature_flower_32/level_07.png" type="Texture" id=9]
+[ext_resource path="res://dk_images/creature_flower_32/level_10.png" type="Texture" id=10]
+[ext_resource path="res://dk_images/creature_flower_32/level_01.png" type="Texture" id=11]
+[ext_resource path="res://Art/Thing.png" type="Texture" id=12]
+[ext_resource path="res://Theme/Stoke-Light.ttf" type="DynamicFontData" id=13]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 16, 16 )
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 11 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 5 ), ExtResource( 8 ), ExtResource( 2 ), ExtResource( 9 ), ExtResource( 4 ), ExtResource( 3 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="DynamicFont" id=2]
+size = 24
+use_mipmaps = true
+font_data = ExtResource( 13 )
+
+[node name="ThingInstance" type="Node2D" groups=["Instance", "Thing"]]
+script = ExtResource( 1 )
+
+[node name="MouseDetection" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseDetection"]
+shape = SubResource( 1 )
+
+[node name="ThingTexture" type="TextureRect" parent="."]
+margin_left = -16.0
+margin_top = -16.0
+margin_right = 16.0
+margin_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 32, 32 )
+rect_pivot_offset = Vector2( 16, 16 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 12 )
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CreatureLevel" type="AnimatedSprite" parent="ThingTexture"]
+visible = false
+position = Vector2( 15, 16 )
+z_index = 10
+frames = SubResource( 3 )
+
+[node name="GateNumber" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+size_flags_vertical = 7
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/line_spacing = 0
+custom_constants/shadow_as_outline = 1
+custom_fonts/font = SubResource( 2 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="mouse_entered" from="MouseDetection" to="." method="_on_MouseDetection_mouse_entered"]
+[connection signal="mouse_exited" from="MouseDetection" to="." method="_on_MouseDetection_mouse_exited"]

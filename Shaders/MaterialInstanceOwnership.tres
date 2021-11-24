@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://Shaders/thing_ownership.shader" type="Shader" id=1]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/alphaFilled = 1.0
+shader_param/fadeAlpha = 1.0
+shader_param/ownerCol = Plane( 1, 0, 0, 1 )

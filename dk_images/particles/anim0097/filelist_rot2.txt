@@ -1,0 +1,11 @@
+animation_186   2  10   -8  -11
+r2frame01.png
+r2frame02.png
+r2frame03.png
+r2frame04.png
+r2frame05.png
+r2frame06.png
+r2frame07.png
+r2frame08.png
+r2frame09.png
+r2frame10.png

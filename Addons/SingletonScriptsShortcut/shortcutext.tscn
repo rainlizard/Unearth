@@ -1,0 +1,54 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/SingletonScriptsShortcut/shortcutext.gd" type="Script" id=1]
+
+[node name="shortcutext" type="Button"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Singletons"
+flat = true
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Popup" type="WindowDialog" parent="."]
+visible = true
+margin_right = 8.0
+margin_bottom = 8.0
+rect_min_size = Vector2( 200, 300 )
+window_title = "Singletons"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 4.0
+margin_right = -4.0
+margin_bottom = -4.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ItemList" type="ItemList" parent="Popup/VBoxContainer"]
+margin_right = 192.0
+margin_bottom = 248.0
+size_flags_vertical = 3
+items = [ "Item 0", null, false, "Item 1", null, false, "Item 2", null, false, "Item 3", null, false, "Item 4", null, false, "Item 5", null, false ]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/VBoxContainer"]
+margin_top = 252.0
+margin_right = 192.0
+margin_bottom = 292.0
+alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="Popup/VBoxContainer/HBoxContainer"]
+margin_left = 2.0
+margin_right = 190.0
+margin_bottom = 40.0
+pressed = true
+text = "Alphabetical Sort"
+flat = true

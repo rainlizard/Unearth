@@ -1,0 +1,2 @@
+animation_2033   0   1  -19  -17
+r1frame01.png

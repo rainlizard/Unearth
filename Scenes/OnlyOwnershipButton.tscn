@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Theme/ButtonGroupOnlyOwnership.tres" type="ButtonGroup" id=1]
+[ext_resource path="res://edited_images/plyrsym_32/symbol_player_red_std.png" type="Texture" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.431373, 0.4, 0.501961, 1 )
+
+[node name="OnlyOwnershipButton" type="Button"]
+rect_min_size = Vector2( 70, 70 )
+focus_mode = 0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/pressed = SubResource( 1 )
+toggle_mode = true
+enabled_focus_mode = 0
+group = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+anchor_right = 1.0
+align = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.75
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}

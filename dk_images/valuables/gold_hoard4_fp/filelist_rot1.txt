@@ -1,0 +1,5 @@
+animation_2224   0   4  -32  -49
+r1frame01.png
+r1frame02.png
+r1frame03.png
+r1frame04.png

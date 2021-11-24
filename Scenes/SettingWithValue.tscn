@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/SettingWithValue.gd" type="Script" id=1]
+
+[node name="SettingWithValue" type="HBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -0.793671
+margin_right = -0.793701
+mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_top = 353.0
+margin_right = 86.0
+margin_bottom = 367.0
+text = "SettingName:"
+
+[node name="LineEdit" type="LineEdit" parent="."]
+margin_left = 90.0
+margin_right = 148.0
+margin_bottom = 24.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+expand_to_text_length = true

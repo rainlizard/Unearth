@@ -1,0 +1,7 @@
+animation_2078   2   6  -12  -24
+r5frame01.png
+r5frame02.png
+r5frame03.png
+r5frame04.png
+r5frame05.png
+r5frame06.png

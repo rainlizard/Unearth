@@ -1,0 +1,73 @@
+ Volume in drive D is Stuff
+ Volume Serial Number is 163A-0AB5
+
+ Directory of D:\Gamedev\Godot\MyProjects\DungeonKeeperMapEditor\unearth_images\creature_portrait_64
+
+04/04/2021  11:57 AM    <DIR>          .
+04/04/2021  11:57 AM    <DIR>          ..
+01/12/2014  12:26 AM             2,124 creatr_portrt_archr.png
+03/04/2021  06:19 PM               721 creatr_portrt_archr.png.import
+01/12/2014  12:26 AM             1,513 creatr_portrt_avatr.png
+03/04/2021  06:19 PM               721 creatr_portrt_avatr.png.import
+01/12/2014  12:26 AM             1,623 creatr_portrt_barbr.png
+03/04/2021  06:19 PM               721 creatr_portrt_barbr.png.import
+01/12/2014  12:26 AM             2,542 creatr_portrt_biled.png
+03/04/2021  06:19 PM               721 creatr_portrt_biled.png.import
+01/12/2014  12:26 AM             2,914 creatr_portrt_bug.png
+03/04/2021  06:19 PM               715 creatr_portrt_bug.png.import
+01/12/2014  12:26 AM             2,709 creatr_portrt_dragn.png
+03/04/2021  06:19 PM               721 creatr_portrt_dragn.png.import
+01/12/2014  12:26 AM             3,431 creatr_portrt_dwrf1.png
+03/04/2021  06:19 PM               721 creatr_portrt_dwrf1.png.import
+01/12/2014  12:26 AM             3,526 creatr_portrt_dwrf2.png
+03/04/2021  06:19 PM               721 creatr_portrt_dwrf2.png.import
+01/12/2014  12:26 AM             2,674 creatr_portrt_fairy.png
+03/04/2021  06:19 PM               721 creatr_portrt_fairy.png.import
+01/12/2014  12:26 AM             2,030 creatr_portrt_fly.png
+03/04/2021  06:19 PM               715 creatr_portrt_fly.png.import
+01/12/2014  12:26 AM             1,782 creatr_portrt_ghost.png
+03/04/2021  06:19 PM               721 creatr_portrt_ghost.png.import
+01/12/2014  12:26 AM             2,643 creatr_portrt_giant.png
+03/04/2021  06:19 PM               721 creatr_portrt_giant.png.import
+01/12/2014  12:26 AM             3,011 creatr_portrt_horny.png
+03/04/2021  06:19 PM               721 creatr_portrt_horny.png.import
+01/12/2014  12:26 AM             1,979 creatr_portrt_hound.png
+03/04/2021  06:19 PM               721 creatr_portrt_hound.png.import
+01/12/2014  12:26 AM             1,944 creatr_portrt_imp.png
+03/04/2021  06:19 PM               715 creatr_portrt_imp.png.import
+01/12/2014  12:26 AM             2,303 creatr_portrt_knigh.png
+03/04/2021  06:19 PM               721 creatr_portrt_knigh.png.import
+01/12/2014  12:26 AM             2,312 creatr_portrt_mistr.png
+03/04/2021  06:19 PM               721 creatr_portrt_mistr.png.import
+01/12/2014  12:26 AM             1,943 creatr_portrt_monk.png
+03/04/2021  06:19 PM               718 creatr_portrt_monk.png.import
+01/12/2014  12:26 AM             2,116 creatr_portrt_orc.png
+03/04/2021  06:19 PM               715 creatr_portrt_orc.png.import
+01/12/2014  12:26 AM             2,127 creatr_portrt_samur.png
+03/04/2021  06:19 PM               721 creatr_portrt_samur.png.import
+01/12/2014  12:26 AM             2,243 creatr_portrt_skelt.png
+03/04/2021  06:19 PM               721 creatr_portrt_skelt.png.import
+01/12/2014  12:26 AM             2,289 creatr_portrt_spawn.png
+03/04/2021  06:19 PM               721 creatr_portrt_spawn.png.import
+01/12/2014  12:26 AM             2,759 creatr_portrt_spidr.png
+03/04/2021  06:19 PM               721 creatr_portrt_spidr.png.import
+01/12/2014  12:26 AM             1,503 creatr_portrt_tentc.png
+03/04/2021  06:19 PM               721 creatr_portrt_tentc.png.import
+01/12/2014  12:26 AM             2,203 creatr_portrt_thief.png
+03/04/2021  06:19 PM               721 creatr_portrt_thief.png.import
+01/12/2014  12:26 AM             2,105 creatr_portrt_troll.png
+03/04/2021  06:19 PM               721 creatr_portrt_troll.png.import
+01/12/2014  12:26 AM             2,916 creatr_portrt_vampr.png
+03/04/2021  06:19 PM               721 creatr_portrt_vampr.png.import
+01/12/2014  12:26 AM             2,193 creatr_portrt_warlk.png
+03/04/2021  06:19 PM               721 creatr_portrt_warlk.png.import
+01/12/2014  12:26 AM             2,613 creatr_portrt_witch.png
+03/04/2021  06:19 PM               721 creatr_portrt_witch.png.import
+01/12/2014  12:26 AM             1,669 creatr_portrt_wizrd.png
+03/04/2021  06:19 PM               721 creatr_portrt_wizrd.png.import
+04/04/2021  11:57 AM                 0 listmyfolder.txt
+              61 File(s)         91,342 bytes
+
+     Total Files Listed:
+              61 File(s)         91,342 bytes
+               2 Dir(s)  372,717,297,664 bytes free

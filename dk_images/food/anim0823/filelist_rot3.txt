@@ -1,0 +1,4 @@
+animation_2081   2   3  -19  -22
+r3frame01.png
+r3frame02.png
+r3frame03.png

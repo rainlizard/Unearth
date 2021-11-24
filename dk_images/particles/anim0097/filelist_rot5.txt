@@ -1,0 +1,11 @@
+animation_189   2  10   -8  -11
+r5frame01.png
+r5frame02.png
+r5frame03.png
+r5frame04.png
+r5frame05.png
+r5frame06.png
+r5frame07.png
+r5frame08.png
+r5frame09.png
+r5frame10.png

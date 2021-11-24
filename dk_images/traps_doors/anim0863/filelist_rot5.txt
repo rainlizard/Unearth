@@ -1,0 +1,9 @@
+animation_2131   2   8  -33  -47
+r5frame01.png
+r5frame02.png
+r5frame03.png
+r5frame04.png
+r5frame05.png
+r5frame06.png
+r5frame07.png
+r5frame08.png

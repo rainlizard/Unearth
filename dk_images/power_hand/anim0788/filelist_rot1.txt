@@ -1,0 +1,5 @@
+animation_2032   0   4  -38  -42
+r1frame01.png
+r1frame02.png
+r1frame03.png
+r1frame04.png

@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://global/FPScounter.gd" type="Script" id=1]
+
+[node name="FPScounter" type="Label"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = 269.0
+margin_top = 1.52588e-05
+margin_right = 309.0
+margin_bottom = 14.0
+grow_horizontal = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_Wait_timeout"]

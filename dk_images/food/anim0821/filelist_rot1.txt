@@ -1,0 +1,4 @@
+animation_2069   2   3  -25  -20
+r1frame01.png
+r1frame02.png
+r1frame03.png

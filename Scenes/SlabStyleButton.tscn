@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Theme/ButtonGroupSlabStyle.tres" type="ButtonGroup" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.431373, 0.4, 0.501961, 1 )
+
+[node name="SlabStyleButton" type="Button"]
+rect_min_size = Vector2( 35, 35 )
+focus_mode = 0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+custom_styles/pressed = SubResource( 1 )
+toggle_mode = true
+enabled_focus_mode = 0
+group = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

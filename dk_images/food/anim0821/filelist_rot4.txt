@@ -1,0 +1,4 @@
+animation_2072   2   3  -25  -20
+r4frame01.png
+r4frame02.png
+r4frame03.png
