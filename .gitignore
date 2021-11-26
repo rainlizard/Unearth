@@ -1,0 +1,14 @@
+# Unearth
+settings.cfg
+
+unearthdata/tmapa0*
+
+
+### Godot ###
+.import/
+# Imported translations (automatically generated from CSV files)
+*.translation
+# Mono-specific ignores
+.mono/
+.vs/
+data_*/
