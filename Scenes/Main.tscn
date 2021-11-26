@@ -1,4 +1,4 @@
-[gd_scene load_steps=135 format=2]
+[gd_scene load_steps=136 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -104,7 +104,7 @@
 [ext_resource path="res://Scenes/DisplayOverlapping.gd" type="Script" id=102]
 [ext_resource path="res://Scenes/SlabSettingsWindow.gd" type="Script" id=103]
 [ext_resource path="res://Scenes/ImageAsMapDialog.gd" type="Script" id=104]
-[ext_resource path="res://Theme/StyleBoxThinnerPanel.tres" type="StyleBox" id=105]
+[ext_resource path="res://Class/TopTabsSection.tscn" type="PackedScene" id=105]
 [ext_resource path="res://Shaders/flashASpecificColour.gdshader" type="Shader" id=106]
 [ext_resource path="res://Art/IconPencil.png" type="Texture" id=107]
 [ext_resource path="res://Theme/EditingToolsButtonGroup.tres" type="ButtonGroup" id=108]
@@ -119,6 +119,7 @@
 [ext_resource path="res://Scenes/DataScript.gd" type="Script" id=117]
 [ext_resource path="res://Scenes/PropertiesTabs.gd" type="Script" id=118]
 [ext_resource path="res://Scenes/AboutWindow.gd" type="Script" id=119]
+[ext_resource path="res://Class/SpecialTabs.gd" type="Script" id=120]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -549,58 +550,66 @@ window_title = "Slab"
 resizable = true
 script = ExtResource( 68 )
 __meta__ = {
-"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 
-[node name="SlabTabs" type="TabContainer" parent="Ui/UiTools/PickSlabWindow"]
+[node name="SlabTabs" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_clip_content = true
-custom_styles/panel = ExtResource( 105 )
-drag_to_rearrange_enabled = true
+script = ExtResource( 120 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MainSlabs" type="HBoxContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+[node name="TopTabsSection" parent="Ui/UiTools/PickSlabWindow/SlabTabs" instance=ExtResource( 105 )]
+margin_right = 1284.0
+margin_bottom = 31.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/MainSlabs"]
-margin_right = 1276.0
+[node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs"]
+margin_top = 35.0
+margin_right = 1284.0
+margin_bottom = 195.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MainSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
+margin_right = 1284.0
+margin_bottom = 160.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 1280.0
 margin_bottom = 156.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/MainSlabs/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs/ScrollContainer"]
 margin_left = 638.0
-margin_top = 78.0
+margin_top = 76.0
 margin_right = 638.0
-margin_bottom = 78.0
+margin_bottom = 76.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="WallSlabs" type="HBoxContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs"]
+[node name="WallSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/WallSlabs"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/WallSlabs"]
 margin_right = 929.0
 margin_bottom = 171.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/WallSlabs/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/WallSlabs/ScrollContainer"]
 margin_left = 464.0
 margin_top = 85.0
 margin_right = 464.0
@@ -608,17 +617,15 @@ margin_bottom = 85.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="SlabStyle" type="HBoxContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs"]
+[node name="SlabStyle" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 1 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/SlabStyle"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/SlabStyle"]
 margin_right = 122.0
 margin_bottom = 164.0
 size_flags_horizontal = 3
@@ -627,7 +634,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/SlabStyle/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/SlabStyle/ScrollContainer"]
 margin_left = 61.0
 margin_top = 82.0
 margin_right = 61.0
@@ -635,17 +642,15 @@ margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="OnlyOwnership" type="HBoxContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs"]
+[node name="OnlyOwnership" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 115 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/OnlyOwnership"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership"]
 margin_right = 122.0
 margin_bottom = 164.0
 size_flags_horizontal = 3
@@ -654,7 +659,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/OnlyOwnership/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership/ScrollContainer"]
 margin_left = 61.0
 margin_top = 82.0
 margin_right = 61.0
@@ -714,54 +719,63 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ThingTabs" type="TabContainer" parent="Ui/UiTools/PickThingWindow"]
+[node name="ThingTabs" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_clip_content = true
-custom_styles/panel = ExtResource( 105 )
-drag_to_rearrange_enabled = true
+script = ExtResource( 120 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Creature" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+[node name="TopTabsSection" parent="Ui/UiTools/PickThingWindow/ThingTabs" instance=ExtResource( 105 )]
+margin_right = 1247.0
+margin_bottom = 31.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Creature"]
-margin_right = 1239.0
+[node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+margin_top = 35.0
+margin_right = 1247.0
+margin_bottom = 147.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Creature" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+margin_right = 1247.0
+margin_bottom = 112.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Creature"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 1243.0
 margin_bottom = 108.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Creature/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Creature/ScrollContainer"]
 margin_left = 619.0
-margin_top = 54.0
+margin_top = 52.0
 margin_right = 619.0
-margin_bottom = 54.0
+margin_bottom = 52.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Furniture" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Furniture" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Furniture"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Furniture"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Furniture/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Furniture/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -769,22 +783,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Decoration" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Decoration" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Decoration"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Decoration"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Decoration/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Decoration/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -792,22 +804,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Effect" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Effect" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Effect"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Effect"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Effect/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Effect/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -815,22 +825,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Action" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Action" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Action"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Action"]
 margin_right = 1130.0
 margin_bottom = 108.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Action/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Action/ScrollContainer"]
 margin_left = 565.0
 margin_top = 54.0
 margin_right = 565.0
@@ -838,22 +846,20 @@ margin_bottom = 54.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Gold" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Gold" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Gold"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Gold"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Gold/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Gold/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -861,22 +867,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Spell" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Spell" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Spell"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Spell"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Spell/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Spell/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -884,22 +888,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Trap" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Trap" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Trap"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Trap"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Trap/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Trap/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -907,22 +909,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Box" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Box" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Box"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Box"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Box/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Box/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -930,22 +930,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Special" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Special" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Special"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Special"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Special/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Special/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -953,22 +951,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Food" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Food" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Food"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Food"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Food/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Food/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -976,22 +972,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Lair" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Lair" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Lair"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Lair"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Lair/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Lair/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -999,22 +993,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Power" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Power" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Power"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Power"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Power/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Power/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -1022,22 +1014,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Door" type="HBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="Door" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 35.0
-margin_right = -4.0
-margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Door"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Door"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/Door/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Door/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -3222,8 +3212,7 @@ align = 1
 script = ExtResource( 88 )
 
 [connection signal="pressed" from="Ui/Ui3D/Possess3DButton" to="Ui" method="_on_Possess3DButton_pressed"]
-[connection signal="tab_changed" from="Ui/UiTools/PickSlabWindow/SlabTabs" to="Ui/UiTools/PickSlabWindow" method="_on_SlabTabs_tab_changed"]
-[connection signal="visibility_changed" from="Ui/UiTools/PickSlabWindow/SlabTabs/OnlyOwnership" to="Ui/UiTools/PickSlabWindow/SlabTabs/OnlyOwnership" method="_on_OnlyOwnership_visibility_changed"]
+[connection signal="visibility_changed" from="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership" to="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership" method="_on_OnlyOwnership_visibility_changed"]
 [connection signal="timeout" from="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/TimerUpdateColumnEntries" to="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails" method="_on_TimerUpdateColumnEntries_timeout"]
 [connection signal="item_rect_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs" to="Ui/UiTools/PropertiesWindow" method="_on_PropertiesTabs_item_rect_changed"]
 [connection signal="tab_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails" method="_on_PropertiesTabs_tab_changed"]

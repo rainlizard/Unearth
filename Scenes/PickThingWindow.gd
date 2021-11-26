@@ -10,21 +10,26 @@ onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oInspector = Nodelist.list["oInspector"]
 
+enum {
+	GRIDCON_PATH
+	ICON_PATH
+}
+
 onready var tabs = {
-	Things.TAB_CREATURE: $ThingTabs/Creature,
-	Things.TAB_FURNITURE: $ThingTabs/Furniture,
-	Things.TAB_DECORATION: $ThingTabs/Decoration,
-	Things.TAB_EFFECT: $ThingTabs/Effect,
-	Things.TAB_ACTION: $ThingTabs/Action,
-	Things.TAB_GOLD: $ThingTabs/Gold,
-	Things.TAB_SPELL: $ThingTabs/Spell,
-	Things.TAB_TRAP: $ThingTabs/Trap,
-	Things.TAB_BOX: $ThingTabs/Box,
-	Things.TAB_SPECIAL: $ThingTabs/Special,
-	Things.TAB_FOOD: $ThingTabs/Food,
-	Things.TAB_LAIR: $ThingTabs/Lair,
-	Things.TAB_POWER: $ThingTabs/Power,
-	Things.TAB_DOOR: $ThingTabs/Door,
+	Things.TAB_CREATURE: [$ThingTabs/TabFolder/Creature,"res://dk_images/crspell_64/flight_std.png"],
+	Things.TAB_FURNITURE: [$ThingTabs/TabFolder/Furniture,"res://dk_images/furniture/workshop_machine_fp/r1frame01.png"], #"res://dk_images/furniture/training_machine_fp/r1frame09.png"
+	Things.TAB_DECORATION: [$ThingTabs/TabFolder/Decoration,"res://dk_images/statues/anim0906/r1frame01.png"],
+	Things.TAB_EFFECT: [$ThingTabs/TabFolder/Effect,"res://dk_images/guisymbols_64/new_function_3.png"],
+	Things.TAB_ACTION: [$ThingTabs/TabFolder/Action,"res://dk_images/guisymbols_64/sym_fight.png"], #"res://Art/ActionPoint.png"
+	Things.TAB_GOLD: [$ThingTabs/TabFolder/Gold,"res://dk_images/symbols_64/creatr_stat_gold_std.png"], #"res://dk_images/valuables/gold_hoard1_fp/r1frame03.png" #"res://dk_images/valuables/gold_hoard2_fp/r1frame02.png" #"res://dk_images/valuables/gold_hoard4_fp/r1frame01.png"
+	Things.TAB_SPELL: [$ThingTabs/TabFolder/Spell,"res://dk_images/keepower_64/speed_std.png"],
+	Things.TAB_TRAP: [$ThingTabs/TabFolder/Trap,"res://dk_images/traps_doors/anim0845/r1frame04.png"],
+	Things.TAB_BOX: [$ThingTabs/TabFolder/Box,"res://dk_images/traps_doors/anim0116/r1frame12.png"],
+	Things.TAB_SPECIAL: [$ThingTabs/TabFolder/Special,"res://dk_images/trapdoor_64/bonus_box_std.png"],
+	Things.TAB_FOOD: [$ThingTabs/TabFolder/Food,"res://dk_images/keepower_64/chicken_std.png"],
+	Things.TAB_LAIR: [$ThingTabs/TabFolder/Lair,"res://dk_images/room_64/lair_std.png"],
+	Things.TAB_POWER: [$ThingTabs/TabFolder/Power,"res://dk_images/power_hand/anim0783/r1frame03.png"],
+	Things.TAB_DOOR: [$ThingTabs/TabFolder/Door,"res://dk_images/trapdoor_64/door_pers_braced_std.png"],
 }
 
 export var grid_item_size : Vector2
@@ -42,7 +47,7 @@ func _ready():
 	connect("item_rect_changed",oGridFunctions,"_on_GridWindow_item_rect_changed", [self])
 	connect("visibility_changed",oGridFunctions,"_on_GridWindow_visibility_changed",[self])
 	connect("gui_input",oGridFunctions,"_on_GridWindow_gui_input",[self])
-	oThingTabs.connect("tab_changed",oGridFunctions,"_on_tab_changed",[self])
+	oThingTabs.tabSystem.connect("tab_changed",oGridFunctions,"_on_tab_changed",[self])
 	
 	grid_window_scale = 0.55
 	grid_item_size = Vector2(96, 96)
@@ -54,6 +59,8 @@ func _ready():
 		yield(get_tree(),'idle_frame')
 	
 	initialize_thing_grid_items()
+	
+	$ThingTabs.initialize([])
 
 func initialize_thing_grid_items():
 	remove_all_grid_items()
@@ -65,27 +72,27 @@ func initialize_thing_grid_items():
 			Things.TYPE.OBJECT:
 				for subtype in Things.DATA_OBJECT:
 					var putIntoTab = Things.DATA_OBJECT[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab], Things.DATA_OBJECT, thingCategory, subtype, Things.TEXTURE)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_OBJECT, thingCategory, subtype, Things.TEXTURE)
 			Things.TYPE.CREATURE:
 				for subtype in Things.DATA_CREATURE:
 					var putIntoTab = Things.DATA_CREATURE[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab], Things.DATA_CREATURE, thingCategory, subtype, Things.PORTRAIT)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_CREATURE, thingCategory, subtype, Things.PORTRAIT)
 			Things.TYPE.TRAP:
 				for subtype in Things.DATA_TRAP:
 					var putIntoTab = Things.DATA_TRAP[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab], Things.DATA_TRAP, thingCategory, subtype, Things.TEXTURE)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_TRAP, thingCategory, subtype, Things.TEXTURE)
 			Things.TYPE.DOOR:
 				for subtype in Things.DATA_DOOR:
 					var putIntoTab = Things.DATA_DOOR[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab], Things.DATA_DOOR, thingCategory, subtype, Things.TEXTURE)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_DOOR, thingCategory, subtype, Things.TEXTURE)
 			Things.TYPE.EFFECT:
 				for subtype in Things.DATA_EFFECT:
 					var putIntoTab = Things.DATA_EFFECT[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab], Things.DATA_EFFECT, thingCategory, subtype, Things.TEXTURE)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EFFECT, thingCategory, subtype, Things.TEXTURE)
 			Things.TYPE.EXTRA:
 				for subtype in Things.DATA_EXTRA:
 					var putIntoTab = Things.DATA_EXTRA[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab], Things.DATA_EXTRA, thingCategory, subtype, Things.TEXTURE)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EXTRA, thingCategory, subtype, Things.TEXTURE)
 	
 	print('Initialized Things window: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 

@@ -37,6 +37,8 @@ enum {
 enum {
 	TAB_MAINSLAB
 	TAB_OTHER
+	TAB_STYLE
+	TAB_OWNER
 	TAB_NONE
 }
 const OWNABLE = true

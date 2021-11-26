@@ -16,7 +16,7 @@ func _ready():
 	oWarningIdInUse.visible = false
 	var optionButtonIndex = 0
 	for tabEnum in oPickThingWindow.tabs:
-		oNewObjectTab.add_item(oPickThingWindow.tabs[tabEnum].name)
+		oNewObjectTab.add_item(oPickThingWindow.tabs[tabEnum][oPickThingWindow.GRIDCON_PATH].name)
 		oNewObjectTab.set_item_metadata(optionButtonIndex, tabEnum)
 		optionButtonIndex += 1
 

@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "VBoxContainer",
 "class": "SpecialTabContainer",
 "language": "GDScript",
-"path": "res://Test/SpecialTabs.gd"
+"path": "res://Class/SpecialTabs.gd"
 } ]
 _global_script_class_icons={
 "SpecialTabContainer": ""

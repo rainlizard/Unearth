@@ -43,9 +43,14 @@ func _process(delta):
 	oMenuButtonPlay.disabled = false
 	oMenuButtonPlay.hint_tooltip = ""
 	
-	var fixedBaseDir = oGame.EXECUTABLE_PATH.get_base_dir().replace('\\','/')
-	var fixedMapPath = oCurrentMap.path.replace('\\','/')
-	if fixedBaseDir.plus_file("levels") in fixedMapPath or fixedBaseDir.plus_file("campgns") in fixedMapPath:
+	
+	
+	var fixedBaseDir = oGame.EXECUTABLE_PATH.get_base_dir().to_upper().replace('\\','/')
+	var fixedMapPath = oCurrentMap.path.to_upper().replace('\\','/')
+	
+#	print('Checking for "'+fixedBaseDir.plus_file("LEVELS")+'"  in  "'+fixedMapPath+'"')
+#	print('Checking for "'+fixedBaseDir.plus_file("CAMPGNS")+'"  in  "'+fixedMapPath+'"')
+	if fixedBaseDir.plus_file("LEVELS") in fixedMapPath or fixedBaseDir.plus_file("CAMPGNS") in fixedMapPath:
 		# Is playable path
 		pass
 	else:

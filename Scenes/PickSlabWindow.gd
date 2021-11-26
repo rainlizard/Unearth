@@ -16,9 +16,19 @@ onready var oCenteredLabel = $Clippy/CenteredLabel
 export var grid_item_size : Vector2
 export var grid_window_scale : float setget update_scale
 
+enum {
+	GRIDCON_PATH
+	ICON_PATH
+}
+
+# To adjust space around the icon, "hseparation" is actually the space between a tab's text and its icon. And also increase content_margin_left in theme.
+
 onready var tabs = {
-	Slabs.TAB_MAINSLAB: $SlabTabs/MainSlabs/ScrollContainer/GridContainer,
-	Slabs.TAB_OTHER: $SlabTabs/WallSlabs/ScrollContainer/GridContainer,
+	Slabs.TAB_MAINSLAB: [$SlabTabs/TabFolder/MainSlabs/ScrollContainer/GridContainer, "res://dk_images/crspell_64/dig_std.png"],
+	Slabs.TAB_OTHER: [$SlabTabs/TabFolder/WallSlabs/ScrollContainer/GridContainer, "res://dk_images/crspell_64/dig_dis.png"],
+	Slabs.TAB_STYLE: [$SlabTabs/TabFolder/SlabStyle/ScrollContainer/GridContainer, "res://dk_images/magic_dust/anim0978/r1frame06.png"],
+	Slabs.TAB_OWNER: [$SlabTabs/TabFolder/OnlyOwnership/ScrollContainer/GridContainer, "res://dk_images/furniture/flagpole_redflag_fp/r1frame05.png"], # "res://edited_images/ownership.png"
+	Slabs.TAB_NONE: [null, ""],
 }
 
 func _ready():
@@ -28,19 +38,15 @@ func _ready():
 	connect("item_rect_changed",oGridFunctions,"_on_GridWindow_item_rect_changed", [self])
 	connect("visibility_changed",oGridFunctions,"_on_GridWindow_visibility_changed",[self])
 	connect("gui_input",oGridFunctions,"_on_GridWindow_gui_input",[self])
-	
-	oSlabTabs.connect("tab_changed",oGridFunctions,"_on_tab_changed",[self])
+	oSlabTabs.tabSystem.connect("tab_changed",oGridFunctions,"_on_tab_changed",[self])
+	oSlabTabs.tabSystem.connect("tab_changed",self,"_on_SlabTabs_tab_changed")
 	
 	grid_window_scale = 0.76
 	grid_item_size = Vector2(96, 96)
 	
 	# Window's minimum size
 	rect_min_size = Vector2((grid_item_size.x*grid_window_scale)+11, (grid_item_size.y*grid_window_scale)+11)
-	$SlabTabs.set_tab_title(0,"Main")
-	$SlabTabs.set_tab_title(1,"Other")
-	$SlabTabs.set_tab_title(2,"Style")
-	$SlabTabs.set_tab_title(3,"Ownership")
-
+	$SlabTabs.initialize(["Main", "Other", "Style", "Ownership"])
 
 func _process(delta): # It's necessary to use _process to update selection, because ScrollContainer won't fire a signal while you're scrolling.
 	update_selection_position()
@@ -85,11 +91,11 @@ func add_slabs():
 			id.set_meta("ID_of_slab", slabID)
 			id.panelView = Slabs.data[slabID][Slabs.PANEL_VIEW]
 			id.set_visual()
-			add_child_to_grid(tabs[putIntoTab], id, Slabs.data[slabID][Slabs.NAME])
+			add_child_to_grid(tabs[putIntoTab][GRIDCON_PATH], id, Slabs.data[slabID][Slabs.NAME])
 	
 	if visible == true:
 		set_selection(oSelection.paintSlab) # Default initial selection
-
+	
 
 func pressed(id):
 	var setValue = id.get_meta("ID_of_slab")

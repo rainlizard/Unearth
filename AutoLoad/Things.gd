@@ -14,6 +14,7 @@ enum {
 	PORTRAIT = 2 # Keep PORTAIT field "null" if I want to use texture for portrait.
 	EDITOR_TAB = 3
 }
+
 enum { # I only used the official DK keeperfx categories as a guide rather than strict adherence. What strict adherence gets you is all the egg objects classified as Furniture, while Chicken sits alone in its own Food category.
 	TAB_ACTION
 	TAB_CREATURE
@@ -96,6 +97,7 @@ var DATA_CREATURE = {
 30 : ["Orc",             preload("res://dk_images/creatr_icon_64/orc_std.png"),   preload("res://dk_images/creature_portrait_64/creatr_portrt_orc.png"), TAB_CREATURE],
 31 : ["Floating Spirit", preload("res://dk_images/creatr_icon_64/ghost_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_ghost.png"), TAB_CREATURE] # wrong icon probably
 }
+
 var DATA_OBJECT = {
 001 : ["Barrel", preload("res://dk_images/other/anim0932/r1frame01.png"), null, TAB_DECORATION],
 002 : ["Torch", preload("res://dk_images/other/anim0963/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE

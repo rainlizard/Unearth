@@ -1,8 +1,11 @@
 extends Node
 
+
 func _on_GridWindow_visibility_changed(callingNode): # Initial load for correct grid arrangement
 	if callingNode.visible == true:
-		_on_GridWindow_resized(callingNode)
+		for i in 2:
+			yield(get_tree(),'idle_frame')
+			_on_GridWindow_resized(callingNode)
 
 func _on_GridWindow_gui_input(event, callingNode):
 	if event is InputEventMouseButton:
@@ -17,9 +20,6 @@ func _on_GridWindow_item_rect_changed(callingNode):
 		"PickSlabWindow":
 			Settings.set_setting("slab_window_size", callingNode.rect_size)
 			Settings.set_setting("slab_window_position", callingNode.rect_position)
-		"SlabStyleWindow":
-			Settings.set_setting("slab_style_window_size", callingNode.rect_size)
-			Settings.set_setting("slab_style_window_position", callingNode.rect_position)
 		"PickThingWindow":
 			Settings.set_setting("thing_window_size", callingNode.rect_size)
 			Settings.set_setting("thing_window_position", callingNode.rect_position)
@@ -32,14 +32,13 @@ func _on_GridWindow_resized(callingNode):
 	var maxHeight
 	match callingNode.name:
 		"PickSlabWindow":
-			maxWidth = floor(oGridContainer.get_parent().get_parent().rect_size.x/(callingNode.grid_item_size.x*callingNode.grid_window_scale))
-			maxHeight = floor(oGridContainer.get_parent().get_parent().rect_size.y/(callingNode.grid_item_size.y*callingNode.grid_window_scale))
+			var tabFolder = oGridContainer.get_parent().get_parent().get_parent()
+			maxWidth = floor(tabFolder.rect_size.x/(callingNode.grid_item_size.x*callingNode.grid_window_scale))
+			maxHeight = floor(tabFolder.rect_size.y/(callingNode.grid_item_size.y*callingNode.grid_window_scale))
 		"PickThingWindow":
-			maxWidth = floor(oGridContainer.get_parent().get_parent().rect_size.x/(callingNode.grid_item_size.x*callingNode.grid_window_scale))
-			maxHeight = floor(oGridContainer.get_parent().get_parent().rect_size.y/(callingNode.grid_item_size.y*callingNode.grid_window_scale))
-		"SlabStyleWindow":
-			maxWidth = floor(oGridContainer.get_parent().rect_size.x/(callingNode.grid_item_size.x*callingNode.grid_window_scale))
-			maxHeight = floor(oGridContainer.get_parent().rect_size.y/(callingNode.grid_item_size.y*callingNode.grid_window_scale))
+			var tabFolder = oGridContainer.get_parent().get_parent().get_parent()
+			maxWidth = floor(tabFolder.rect_size.x/(callingNode.grid_item_size.x*callingNode.grid_window_scale))
+			maxHeight = floor(tabFolder.rect_size.y/(callingNode.grid_item_size.y*callingNode.grid_window_scale))
 	if maxWidth > 0: oGridContainer.set_columns(maxWidth)
 	# If the window is wider than tall, then fit the grid items within maxHeight
 	if maxWidth > maxHeight and maxHeight > 0:

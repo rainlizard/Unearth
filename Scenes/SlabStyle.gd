@@ -1,4 +1,4 @@
-extends HBoxContainer
+extends PanelContainer
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
@@ -6,7 +6,7 @@ onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 
 var scnSlabStyleButton = preload("res://Scenes/SlabStyleButton.tscn")
 var paintSlabStyle = 0 setget set_paintSlabStyle
-onready var oSelectedRect = get_node("../../Clippy/SelectedRect")
+onready var oSelectedRect = get_node("../../../Clippy/SelectedRect")
 
 func initialize_grid_items():
 	if is_instance_valid(oDisplaySlxNumbers):
