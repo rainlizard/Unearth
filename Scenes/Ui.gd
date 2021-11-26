@@ -29,10 +29,13 @@ func _ready():
 	for mainCategories in get_children():
 		for potentialWindow in mainCategories.get_children():
 			if potentialWindow is WindowDialog:
-				potentialWindow.connect("item_rect_changed",self,"_on_any_window_was_dragged",[potentialWindow])
 				listOfWindowDialogs.append(potentialWindow)
-				# Old versions had windows with rect_position.y in the top bar, this should fix that:
-				_on_any_window_was_dragged(potentialWindow)
+	
+	for i in 10: # Important to wait here, so the viewport size/resolution doesn't affect window positions
+		yield(get_tree(),'idle_frame')
+	for i in listOfWindowDialogs:
+		i.connect("item_rect_changed",self,"_on_any_window_was_dragged",[i])
+		_on_any_window_was_dragged(i)
 
 func _on_any_window_was_dragged(callingNode):
 	callingNode.disconnect("item_rect_changed",self,"_on_any_window_was_dragged") # Fixes a Stack Overflow under certain circumstances
