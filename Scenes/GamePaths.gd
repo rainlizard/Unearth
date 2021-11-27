@@ -54,7 +54,7 @@ func add_map_to_command_line():
 func set_paths(path):
 	if path == null: path = ""
 	EXECUTABLE_PATH = path
-	GAME_DIRECTORY = path.get_base_dir() + '/'
+	GAME_DIRECTORY = path.get_base_dir()
 	
 	for i in get_subdirs(GAME_DIRECTORY):
 		if i.to_upper() == "DATA":
