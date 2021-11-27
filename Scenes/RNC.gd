@@ -28,7 +28,11 @@ func _ready():
 
 func setDecompressorAbsolutePath():
 	var file = File.new()
-	var path = Settings.unearthdata.plus_file("rnc-decompressor/dernc.exe")
+	var path
+	match OS.get_name():
+		"Windows": path = Settings.unearthdata.plus_file("rnc-decompressor/dernc.exe")
+		"X11": path = Settings.unearthdata.plus_file("rnc-decompressor/dernc.x86_64")
+	
 	#var path = Settings.unearthdata.plus_file("rnc-decompressor/ancient.exe")
 	if file.file_exists(path) == true:
 		file.open(path,File.READ)
@@ -58,8 +62,8 @@ func decompress(input_path, output_path):
 	
 	var commands = ""
 	commands += '"' + decompressorExeFullPath + '" '
-	commands += '-o ' # dernc.exe
-	#commands += 'decompress ' # ancient.exe
+	commands += '-o ' # dernc
+	#commands += 'decompress ' # ancient
 	commands += '"' + input_path + '" '
 	commands += '"' + output_path + '"'
 	

@@ -2632,8 +2632,8 @@ margin_right = 514.0
 margin_bottom = 621.0
 text = "Controls
 
-- Mouse wheel up: Zoom in
-- Mouse wheel down: Zoom out
+- Mouse wheel up (Ctrl+Up): Zoom in
+- Mouse wheel down (Ctrl+Down): Zoom out
 - Hold middle click: Pan grab
 - WASD/Arrow keys: Pan directionally
 - Left click: Place
