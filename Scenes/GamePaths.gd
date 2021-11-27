@@ -3,6 +3,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oRayCastBlockMap = Nodelist.list["oRayCastBlockMap"]
 onready var oSaveMap = Nodelist.list["oSaveMap"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 var EXECUTABLE_PATH = ""
 var SAVE_AS_DIRECTORY = ""
@@ -89,6 +90,24 @@ func get_subdirs(path):
 			fileName = dir.get_next()
 	return array
 
+func test_write_permissions():
+	if EXECUTABLE_PATH == "": return OK # Don't provide an error when an executable hasn't even been set
+	
+	# Test write permissions of DK directory
+	var testPath = EXECUTABLE_PATH.get_base_dir().plus_file('testing_write_permissions')
+	
+	var file = File.new()
+	var err = file.open(testPath, File.WRITE)
+	
+	file.close()
+	
+	var removeFile = Directory.new()
+	removeFile.remove(testPath) # Be careful with this
+	
+	if err != OK:
+		oMessage.big("Error", "There are no write permissions for your Dungeon Keeper directory. Please exit the editor and move your entire Dungeon Keeper folder elsewhere, then choose the executable again.")
+	
+	return err
 
 #
 #	var arguments = ""

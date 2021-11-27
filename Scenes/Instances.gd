@@ -1,5 +1,5 @@
 extends Node2D
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oWarning = Nodelist.list["oWarning"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]

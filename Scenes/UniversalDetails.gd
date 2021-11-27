@@ -1,7 +1,7 @@
 extends PanelContainer
 onready var oUniversalListData = Nodelist.list["oUniversalListData"]
 onready var oDataClm = Nodelist.list["oDataClm"]
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 
@@ -25,4 +25,4 @@ func _on_TimerUpdateColumnEntries_timeout():
 	clmEntryCount = newCount
 	
 	if msg != "":
-		oQuickMessage.message(msg)
+		oMessage.quick(msg)

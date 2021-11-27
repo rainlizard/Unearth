@@ -21,7 +21,7 @@ onready var oAboutWindow = Nodelist.list["oAboutWindow"]
 onready var oControlsWindow = Nodelist.list["oControlsWindow"]
 onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 
@@ -96,17 +96,17 @@ func _on_EditSubmenu_Pressed(pressedID):
 				var pathToTryAndOpen = oCurrentMap.path + '.txt'
 				var err = OS.shell_open(pathToTryAndOpen)
 				if err != OK:
-					oQuickMessage.message("Could not open: " + pathToTryAndOpen)
+					oMessage.quick("Could not open: " + pathToTryAndOpen)
 			else:
-				oQuickMessage.message("No map path detected. Try saving first.")
+				oMessage.quick("No map path detected. Try saving first.")
 		2: # Open map folder
 			if oCurrentMap.path != "":
 				var pathToTryAndOpen = oCurrentMap.path.get_base_dir()
 				var err = OS.shell_open(pathToTryAndOpen)
 				if err != OK:
-					oQuickMessage.message("Could not open: " + pathToTryAndOpen)
+					oMessage.quick("Could not open: " + pathToTryAndOpen)
 			else:
-				oQuickMessage.message("No map path detected. Try saving first.")
+				oMessage.quick("No map path detected. Try saving first.")
 		3: # Slab settings
 			Utils.popup_centered(oSlabSettingsWindow)
 		4: # Update all slabs

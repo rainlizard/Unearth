@@ -1,7 +1,7 @@
 extends Node
 onready var oReadData = Nodelist.list["oReadData"]
 onready var oConfirmDecompression = Nodelist.list["oConfirmDecompression"]
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oRNC = Nodelist.list["oRNC"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
@@ -29,8 +29,7 @@ var ALWAYS_DECOMPRESS = false # Default to false
 func start():
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
 	
-	if oGame.EXECUTABLE_PATH == "":
-		no_path()
+	if oGame.EXECUTABLE_PATH == "": return # Silently wait for user to set executable path. No need to show an error.
 	
 	if OS.get_cmdline_args():
 		# FILE ASSOCIATION
@@ -55,12 +54,13 @@ func _on_files_dropped(_files, _screen):
 func open_map(filePath): # auto opens other files
 	# Prevent opening any maps under any circumstance if you haven't set the dk exe yet. (Fix to launching via file association)
 	if oGame.EXECUTABLE_PATH == "":
-		no_path()
+		oMessage.quick("Error: Cannot open map because executable path is not set")
+		oCurrentMap.clear_map()
 		return
 	
 	# Prevent opening any maps under any circumstance if textures haven't been loaded. (Fix to launching via file association)
 	if oTextureCache.texturesLoadedState != oTextureCache.LOADING_SUCCESS:
-		oQuickMessage.message("Error: Textures haven't been loaded")
+		oMessage.quick("Error: Textures haven't been loaded")
 		oCurrentMap.clear_map()
 		return
 	
@@ -101,7 +101,7 @@ func open_map(filePath): # auto opens other files
 			# Begin decompression without confirmation dialog
 			_on_ConfirmDecompression_confirmed()
 #	else:
-#		oQuickMessage.message("Error: Map files not found")
+#		oMessage.quick("Error: Map files not found")
 
 func finish_opening_map(map):
 	oCurrentMap.set_path_and_title(map)
@@ -117,7 +117,10 @@ func finish_opening_map(map):
 	oPickSlabWindow.add_slabs()
 	oTextureCache.set_default_texture_pack(oDataLevelStyle.data)
 	
-	oQuickMessage.message('Opened map')
+	if oCurrentMap.path == "":
+		oMessage.quick('New map')
+	else:
+		oMessage.quick('Opened map')
 	
 	oEditor.set_view_2d()
 	
@@ -138,10 +141,6 @@ func _on_ConfirmDecompression_confirmed():
 
 func _on_FileDialogOpen_file_selected(path):
 	open_map(path)
-
-func no_path():
-	oQuickMessage.message("Error: Executable path not set")
-	oCurrentMap.clear_map()
 
 
 func list_accompanying_files(map):

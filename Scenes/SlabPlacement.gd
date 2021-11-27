@@ -7,7 +7,7 @@ onready var oSlabPalette = Nodelist.list["oSlabPalette"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oDataOwnership = Nodelist.list["oDataOwnership"]
 onready var oOverheadOwnership = Nodelist.list["oOverheadOwnership"]
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oPlaceThingWithSlab = Nodelist.list["oPlaceThingWithSlab"]
 onready var oInstances = Nodelist.list["oInstances"]
@@ -41,7 +41,7 @@ enum {
 }
 
 func _on_ConfirmAutoGen_confirmed():
-	oQuickMessage.message("Auto-generated all slabs")
+	oMessage.quick("Auto-generated all slabs")
 	auto_generate_rectangle(Vector2(0,0), Vector2(84,84))
 
 func auto_generate_rectangle(rectStart, rectEnd):

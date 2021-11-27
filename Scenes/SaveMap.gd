@@ -1,7 +1,7 @@
 extends Node
 onready var oGame = Nodelist.list["oGame"]
 onready var oWriteData = Nodelist.list["oWriteData"]
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 
@@ -17,7 +17,7 @@ func save_map(filePath): # auto opens other files
 	
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	
-	oQuickMessage.message('Saved map')
+	oMessage.quick('Saved map')
 	oCurrentMap.set_path_and_title(filePath)
 	oEditor.mapHasBeenEdited = false
 	

@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Scenes/MessageInstance.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/QuickMsgInstance.gd" type="Script" id=1]
 
-[node name="MessageInstance" type="PanelContainer" groups=["MessageInstance"]]
+[node name="QuickMsgInstance" type="PanelContainer" groups=["MessageInstance"]]
 self_modulate = Color( 0.717647, 0.741176, 1, 0.533333 )
 grow_horizontal = 2
 grow_vertical = 2

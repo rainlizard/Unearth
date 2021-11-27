@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/BigMessageInstance.gd" type="Script" id=1]
+
+[node name="BigMessageInstance" type="AcceptDialog"]
+margin_right = 640.0
+margin_bottom = 180.0
+window_title = ""
+dialog_text = "test"
+dialog_autowrap = true
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -4,7 +4,7 @@ onready var oNewObjectSubtypeID = Nodelist.list["oNewObjectSubtypeID"]
 onready var oNewObjectName = Nodelist.list["oNewObjectName"]
 onready var oNewObjectTab = Nodelist.list["oNewObjectTab"]
 onready var oNewObjectType = Nodelist.list["oNewObjectType"]
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oThingTabs = Nodelist.list["oThingTabs"]
 onready var oCustomData = Nodelist.list["oCustomData"]
@@ -31,10 +31,10 @@ func _process(delta):
 
 func _on_AddCustomObjectButton_pressed():
 	if oNewObjectName.text == "":
-		oQuickMessage.message("Enter a name")
+		oMessage.quick("Enter a name")
 		return
 	if oNewObjectSubtypeID.text == "":
-		oQuickMessage.message("Enter an ID")
+		oMessage.quick("Enter an ID")
 		return
 	
 	var array = [

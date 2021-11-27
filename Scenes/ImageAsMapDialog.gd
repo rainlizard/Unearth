@@ -1,7 +1,7 @@
 extends WindowDialog
 onready var oChooseMapImageFileDialog = Nodelist.list["oChooseMapImageFileDialog"]
 onready var oMapImageTextureRect = Nodelist.list["oMapImageTextureRect"]
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
@@ -43,7 +43,7 @@ func _on_ChooseMapImageFileDialog_file_selected(path):
 	var err = imageData.load(path)
 	
 	if err != OK:
-		oQuickMessage.message("Error loading file.")
+		oMessage.quick("Error loading file.")
 		return
 	
 	if imageData.get_size() > Vector2(85,85):
@@ -109,10 +109,10 @@ func _on_slab_button_pressed(buttonID):
 	
 	if highlightedColour == null:
 		buttonID.pressed = false
-		oQuickMessage.message("Click on a pixel within the image first.")
+		oMessage.quick("Click on a pixel within the image first.")
 		return
 	if oMapImageTextureRect.texture == null:
-		oQuickMessage.message("Load an image first.")
+		oMessage.quick("Load an image first.")
 		return
 	var slabID = buttonID.get_meta("slabID")
 	
@@ -148,7 +148,7 @@ func _on_ImgMapButtonApply_pressed():
 	if didSomething == true:
 		finish_up()
 	else:
-		oQuickMessage.message("You haven't even set any colours yet.")
+		oMessage.quick("You haven't even set any colours yet.")
 
 func apply_colour_as_slabIDs_to_map(doColour, slabID):
 	var shapePositionArray = []
@@ -174,7 +174,7 @@ func apply_colour_as_slabIDs_to_map(doColour, slabID):
 	oSlabPlacement.auto_generate_rectangle(rectStart, rectEnd)
 
 func finish_up():
-	oQuickMessage.message("Applied slabs to map.")
+	oMessage.quick("Applied slabs to map.")
 
 
 func _on_ImgMapButtonNewMap_pressed():

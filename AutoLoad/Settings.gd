@@ -65,29 +65,53 @@ var listOfSettings = [
 #	"editor_window_fullscreen_state",
 ]
 
-func _init():
+
+func _init(): # Lots of stuff relies on "unearthdata" being set first.
 	if OS.has_feature("standalone") == true:
 		# Create settings.cfg next to unearth.exe
 		unearth_path = OS.get_executable_path().get_base_dir()
 	else:
 		unearth_path = ""
-		# Create settings.cfg in res:// directory
-		#settings_file_path = "settings.cfg"
-	unearthdata = unearth_path.plus_file("unearthdata/")
-	settings_file_path = unearth_path.plus_file("settings.cfg")
-	var err = config.load(settings_file_path)
-	if err != OK: config.save(settings_file_path)
+	unearthdata = unearth_path.plus_file("unearthdata")
+
 
 func initialize_settings():
+	settings_file_path = unearth_path.plus_file("settings.cfg")
+	var loadError = config.load(settings_file_path)
+	if loadError != OK:
+		var saveError = config.save(settings_file_path)
+		
+		if saveError != OK:
+			var oMessage = Nodelist.list["oMessage"]
+			oMessage.big("Error", "Cannot create settings.cfg: Error "+ str(saveError) + "\n" + "Please exit the editor and move the Unearth directory elsewhere.")
+			return
+	
 	read_all()
+	
+	executable_stuff()
+	
+	haveInitializedAllSettings = true
+
+func executable_stuff():
+	# Confirm that executable hasn't been deleted
+	var oGame = Nodelist.list["oGame"]
+	if File.new().file_exists(oGame.EXECUTABLE_PATH) == false:
+		cfg_remove_setting("executable_path")
+	
 	# Choose executable path upon first starting
 	if cfg_has_setting("executable_path") == false:
 		var oChooseDkExe = $'../ViewportContainer/Viewport/Main/Ui/UiSystem/ChooseDkExe'
 		Utils.popup_centered(oChooseDkExe)
-	haveInitializedAllSettings = true
+	else:
+		oGame.test_write_permissions()
 
 func cfg_has_setting(setting):
 	return config.has_section_key("settings", setting)
+
+func cfg_remove_setting(setting):
+	return config.erase_section_key("settings", setting)
+
+
 
 func get_setting(string):
 	return Settings.game_setting(Settings.GET, string, null)

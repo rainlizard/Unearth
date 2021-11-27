@@ -1,5 +1,5 @@
 extends Node
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oEditor = Nodelist.list["oEditor"]
 
 #var CODETIME_START
@@ -16,9 +16,9 @@ onready var oEditor = Nodelist.list["oEditor"]
 #	if arrayOfMapFileTypes.size() > 0:
 #		for i in arrayOfMapFileTypes:
 #			delete_path(map.get_base_dir().plus_file(i))
-#			oQuickMessage.message("Deleted map")
+#			oMessage.quick("Deleted map")
 #	else:
-#		oQuickMessage.message("Error: Unable to delete map")
+#		oMessage.quick("Error: Unable to delete map")
 
 #func delete_path(filePath):
 #	if dir.remove(filePath) == OK:

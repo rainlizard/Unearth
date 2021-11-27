@@ -71,4 +71,3 @@ func decompress(input_path, output_path):
 	# To make the file lowercase, it must be renamed to a new file
 	#dir.rename(output_path, output_path.to_lower()+'tmp')
 	#dir.rename(output_path+'tmp', output_path.to_lower())
-

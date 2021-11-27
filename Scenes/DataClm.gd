@@ -1,5 +1,5 @@
 extends Node
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oTimerUpdateColumnEntries = Nodelist.list["oTimerUpdateColumnEntries"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 
@@ -86,7 +86,7 @@ func index_entry(cubeArray, setFloorID):
 		oTimerUpdateColumnEntries.start()
 		return index
 
-	oQuickMessage.message("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
+	oMessage.quick("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
 	print("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
 	return 0
 
@@ -199,7 +199,7 @@ func calculate_solid_mask(index, cubeArray):
 #		oTimerUpdateColumnEntries.start()
 #		return entryIndex
 #
-#	oQuickMessage.message("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
+#	oMessage.quick("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
 #	print("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
 #	return 0
 

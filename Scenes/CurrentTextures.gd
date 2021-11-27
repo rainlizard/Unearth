@@ -6,7 +6,7 @@ extends Node
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
-onready var oQuickMessage = Nodelist.list["oQuickMessage"]
+onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oReadPalette = Nodelist.list["oReadPalette"]
 onready var oGame = Nodelist.list["oGame"]
@@ -39,7 +39,7 @@ func _notification(what: int):
 
 func _on_ReloadTextureMapsButton_pressed():
 	if texturesLoadedState != LOADING_IN_PROGRESS: # Don't do anything if it's already doing something
-		oQuickMessage.message("Reloading texture maps")
+		oMessage.quick("Reloading texture maps")
 		REMEMBER_TMAPA_PATHS.clear()
 		start()
 
@@ -49,6 +49,10 @@ func LOAD_TMAPA_PATHS_FROM_SETTINGS(dictionaryFromSettings):
 
 
 func start():
+	if oGame.EXECUTABLE_PATH == "": return
+	if oGame.DK_DATA_DIRECTORY == "": return
+	if oGame.GAME_DIRECTORY == "": return
+	
 	texturesLoadedState = LOADING_IN_PROGRESS
 	paletteData = oReadPalette.readPalette(Settings.unearthdata.plus_file("palette.dat"))
 	
@@ -80,13 +84,13 @@ func start():
 		OK:
 			#print(cachedTextures)
 			Settings.set_setting("REMEMBER_TMAPA_PATHS", newTmapaPaths) # Do this last
-			#oQuickMessage.message("Texture cache loaded")
+			#oMessage.quick("Texture cache loaded")
 			texturesLoadedState = LOADING_SUCCESS
 			# This is important to do here if updating textures while a map is already open
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				set_default_texture_pack(oDataLevelStyle.data)
 		FAILED:
-			oQuickMessage.message("Cache failed loading")
+			oMessage.quick("Cache failed loading")
 			newTmapaPaths.clear()
 			REMEMBER_TMAPA_PATHS.clear()
 			texturesLoadedState = LOADING_NOT_STARTED
@@ -138,7 +142,7 @@ func create_png_cache_file(tmapaDkOriginalPath):
 		constructFilename += ".png"
 		ResourceSaver.save(Settings.unearthdata.plus_file(constructFilename), imgTex)
 		
-		oQuickMessage.message("Caching texture maps : unearthdata".plus_file(constructFilename))
+		oMessage.quick("Caching texture maps : unearthdata".plus_file(constructFilename))
 		print('Created cache file in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	else:
 		print("Failed to open file.")
@@ -181,7 +185,7 @@ func loadCachedTextures(newTmapaPaths):
 
 func set_default_texture_pack(value):
 	if cachedTextures[value][0] == null or cachedTextures[value][1] == null:
-		oQuickMessage.message("Error: Cached textures could not be loaded. Try reloading texture maps.")
+		oMessage.quick("Error: Cached textures could not be loaded. Try reloading texture maps.")
 		return
 	# 2D
 	if oOverheadGraphics.arrayOfColorRects.size() > 0:
