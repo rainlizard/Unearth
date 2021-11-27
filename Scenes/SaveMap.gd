@@ -5,6 +5,8 @@ onready var oQuickMessage = Nodelist.list["oQuickMessage"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 
+var queueExit = false
+
 func save_map(filePath): # auto opens other files
 	var map = filePath.get_basename()
 	
@@ -18,7 +20,10 @@ func save_map(filePath): # auto opens other files
 	oQuickMessage.message('Saved map')
 	oCurrentMap.set_path_and_title(filePath)
 	oEditor.mapHasBeenEdited = false
-
+	
+	# This goes last. Queued from when doing "save before quitting" and "save as" before quitting.
+	if queueExit == true:
+		get_tree().quit()
 
 func clicked_save_on_menu():
 	save_map(oCurrentMap.path)

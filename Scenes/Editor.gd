@@ -11,6 +11,7 @@ onready var oTerrainMesh = Nodelist.list["oTerrainMesh"]
 onready var oEditingMode = Nodelist.list["oEditingMode"]
 onready var oEditableBordersCheckbox = Nodelist.list["oEditableBordersCheckbox"]
 onready var oMenu = Nodelist.list["oMenu"]
+onready var oConfirmSaveBeforeQuit = Nodelist.list["oConfirmSaveBeforeQuit"]
 
 enum {
 	VIEW_2D = 0
@@ -22,6 +23,8 @@ var fieldBoundary = Rect2(Vector2(1,1), Vector2(83,83)) # Position, Size
 var mapHasBeenEdited = false
 
 func _ready():
+	get_tree().set_auto_accept_quit(false)
+	
 	just_opened_editor()
 
 func _unhandled_input(event):
@@ -39,10 +42,7 @@ func _unhandled_input(event):
 								foundDialogToClose = true
 				
 				if foundDialogToClose == false:
-					if OS.has_feature("standalone") == true:
-						Utils.popup_centered(oConfirmQuit)
-					else:
-						get_tree().quit()
+					notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 			VIEW_3D:
 				if oMenu.visible == false:
 					oUi.switch_to_3D_overhead()
@@ -53,6 +53,16 @@ func _unhandled_input(event):
 		if event.is_action_pressed("mouse_right"):
 			if oMenu.visible == false:
 				oUi.switch_to_3D_overhead()
+
+func _notification(what):
+	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
+		if OS.has_feature("standalone") == true:
+			if mapHasBeenEdited == true:
+				Utils.popup_centered(oConfirmSaveBeforeQuit)
+			else:
+				Utils.popup_centered(oConfirmQuit)
+		else:
+			get_tree().quit()
 
 func just_opened_editor():
 	yield(get_tree(),'idle_frame')
@@ -99,3 +109,4 @@ func _on_pressed_2D_View():
 	
 	if currentView == VIEW_3D:
 		set_view_2d()
+

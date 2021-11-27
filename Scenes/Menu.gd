@@ -85,6 +85,7 @@ func _on_FileSubmenu_Pressed(pressedID):
 		3: oSaveMap.clicked_save_on_menu() # Save
 		4: Utils.popup_centered(oFileDialogSaveAs) # Save as
 		5: Utils.popup_centered(oImageAsMapDialog) # Load image as map
+		6: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:

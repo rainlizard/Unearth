@@ -1,4 +1,4 @@
-[gd_scene load_steps=136 format=2]
+[gd_scene load_steps=137 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -120,6 +120,7 @@
 [ext_resource path="res://Scenes/PropertiesTabs.gd" type="Script" id=118]
 [ext_resource path="res://Scenes/AboutWindow.gd" type="Script" id=119]
 [ext_resource path="res://Class/SpecialTabs.gd" type="Script" id=120]
+[ext_resource path="res://Scenes/ConfirmSaveBeforeQuit.gd" type="Script" id=121]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -1371,7 +1372,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "File"
 align = 0
-items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Save map", null, 0, false, false, 3, 0, null, "", false, "Save map as", null, 0, false, false, 4, 0, null, "", false, "Load image as map", null, 0, false, false, 5, 0, null, "", false ]
+items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Save map", null, 0, false, false, 3, 0, null, "", false, "Save map as", null, 0, false, false, 4, 0, null, "", false, "Load image as map", null, 0, false, false, 5, 0, null, "", false, "Exit", null, 0, false, false, 6, 0, null, "", false ]
 switch_on_hover = true
 
 [node name="VSeparator1" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
@@ -1935,18 +1936,81 @@ __meta__ = {
 
 [node name="ConfirmQuit" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = 699.739
-margin_top = -196.622
-margin_right = 989.739
-margin_bottom = -124.622
+margin_left = 916.0
+margin_top = -181.0
+margin_right = 1216.0
+margin_bottom = -76.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Confirm exit"
-dialog_text = "Are you sure you want to quit?"
+dialog_text = "Are you sure you want to exit?"
+dialog_autowrap = true
 script = ExtResource( 61 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ConfirmSaveBeforeQuit" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = 944.0
+margin_top = -421.0
+margin_right = 1220.0
+margin_bottom = -322.0
+window_title = "Confirm exit and save"
+resizable = true
+script = ExtResource( 121 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ConfirmSaveBeforeQuit"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer"]
+margin_right = 257.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Save changes before exiting?"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer"]
+margin_top = 52.0
+margin_right = 257.0
+margin_bottom = 79.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ButtonConfirmExitSave" type="Button" parent="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer"]
+margin_left = 6.0
+margin_right = 61.0
+margin_bottom = 27.0
+text = "Save"
+
+[node name="ButtonConfirmExitDontSave" type="Button" parent="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer"]
+margin_left = 65.0
+margin_right = 174.0
+margin_bottom = 27.0
+text = "Don't Save"
+
+[node name="ButtonConfirmExitCancel" type="Button" parent="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer"]
+margin_left = 178.0
+margin_right = 251.0
+margin_bottom = 27.0
+text = "Cancel"
 
 [node name="SettingsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -3252,6 +3316,9 @@ script = ExtResource( 88 )
 [connection signal="item_rect_changed" from="Ui/UiSystem/ConfirmDecompression" to="Ui/UiSystem/ConfirmDecompression" method="_on_ConfirmDecompression_item_rect_changed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDelete" to="Ui/UiSystem/MapBrowser" method="_on_ConfirmDelete_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmQuit" to="Editor" method="_on_ConfirmQuit_confirmed"]
+[connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitSave" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitSave_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitDontSave" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitDontSave_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitCancel" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitCancel_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/SettingsWindow" to="Ui/UiSystem/SettingsWindow" method="_on_SettingsWindow_about_to_show"]
 [connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/SettingsWindow" method="_on_SetDirButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ReloadTextureMapsButton" to="TextureCache" method="_on_ReloadTextureMapsButton_pressed"]
