@@ -107,9 +107,10 @@ func scan_dk_data_directory():
 		while fileName != "":
 			if dir.current_is_dir() == false:
 				if fileName.to_upper().begins_with("TMAPA") == true: # Get file regardless of case (case insensitive)
-					if fileName.to_upper().begins_with("TMAPANIM") == false:
-						var getModifiedTime = File.new().get_modified_time(path.plus_file(fileName))
-						dictionary[path.plus_file(fileName)] = getModifiedTime
+					if fileName.to_upper().get_extension() == "DAT":
+						if fileName.to_upper().begins_with("TMAPANIM") == false:
+							var getModifiedTime = File.new().get_modified_time(path.plus_file(fileName))
+							dictionary[path.plus_file(fileName)] = getModifiedTime
 			fileName = dir.get_next()
 	return dictionary
 
