@@ -1,5 +1,9 @@
 extends Node
 
+var field1 = ""
+var field2 = ""
+var field3 = ""
+
 var decompressorExeFullPath = ""
 
 func _ready():
@@ -31,7 +35,7 @@ func setDecompressorAbsolutePath():
 	var path
 	match OS.get_name():
 		"Windows": path = Settings.unearthdata.plus_file("rnc-decompressor/dernc.exe")
-		"X11": path = Settings.unearthdata.plus_file("rnc-decompressor/dernc.x86_64")
+		"X11": path = Settings.unearthdata.plus_file("rnc-decompressor/dernc")
 	
 	#var path = Settings.unearthdata.plus_file("rnc-decompressor/ancient.exe")
 	if file.file_exists(path) == true:
@@ -61,15 +65,18 @@ func checkForRncCompression(path): # Check if the first 3 bytes are the letters 
 func decompress(input_path, output_path):
 	
 	var commands = ""
-	commands += '"' + decompressorExeFullPath + '" '
-	commands += '-o ' # dernc
+	#commands += '"' + decompressorExeFullPath + '" '
+	#commands += '-o ' # dernc
 	#commands += 'decompress ' # ancient
-	commands += '"' + input_path + '" '
+	#commands += '"' + input_path + '" '
 	commands += '"' + output_path + '"'
 	
-	print(commands)
+#	match OS.get_name():
+#		"Windows":
+#			OS.execute("cmd", ["/C", commands], true)
+#		"X11":
 	
-	OS.execute("cmd", ["/C", commands], true)
+	
 	
 	# Renaming to lowercase looks a bit messy anyway.
 	# To make the file lowercase, it must be renamed to a new file

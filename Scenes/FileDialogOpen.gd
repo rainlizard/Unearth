@@ -6,8 +6,8 @@ onready var oUi = Nodelist.list["oUi"]
 func _on_FileDialogOpen_about_to_show():
 	var path = oGame.EXECUTABLE_PATH
 	#if path != "":
-	current_path = path.get_base_dir() + "/"
-	current_dir = path.get_base_dir() + "/"
+	current_path = path.get_base_dir().plus_file("")
+	current_dir = path.get_base_dir().plus_file("")
 
 #func _ready():
 #	Utils.popup_centered(self)

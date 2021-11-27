@@ -127,13 +127,13 @@ func finish_opening_map(map):
 	print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 
 func _on_ConfirmDecompression_confirmed():
-	var CODETIME_START = OS.get_ticks_msec()
-	print('Decompressing...')
+	#var CODETIME_START = OS.get_ticks_msec()
+	print('Attempting to decompress...')
 	# Decompress files
 	#var dir = Directory.new()
 	for path in compressedFiles:
 		oRNC.decompress(path, path)
-	print('Decompressed in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	#print('Decompressed in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	# Retry opening the map
 	# (any of the compressed files will have the appropriate name)
@@ -157,7 +157,7 @@ func list_accompanying_files(map):
 			if dir.current_is_dir() == false:
 				if fileName.to_upper().begins_with(mapName.to_upper()): # Get file regardless of case (case insensitive)
 					var EXT = fileName.get_extension().to_upper()
-					dict[EXT] = baseDir + '\\' + fileName
+					dict[EXT] = baseDir.plus_file(fileName)
 			fileName = dir.get_next()
 	return dict
 

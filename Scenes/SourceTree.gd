@@ -46,7 +46,7 @@ func get_dir_contents(rootPath):
 func _add_dir_contents(dir: Directory, treeItem):
 	var file_name = dir.get_next()
 	while (file_name != ""):
-		var path = dir.get_current_dir() + "/" + file_name
+		var path = dir.get_current_dir().plus_file(file_name)
 		if dir.current_is_dir():
 			
 			var newTreeItem = add_tree_dir(self,treeItem,path)
