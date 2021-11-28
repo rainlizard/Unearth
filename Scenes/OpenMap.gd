@@ -40,10 +40,10 @@ func start():
 		if OS.has_feature("standalone") == false:
 			#yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
-			#open_map("F:\\Games\\Dungeon Keeper\\campgns\\keeporig\\map00020.slb")
-			#open_map("F:\\Games\\Dungeon Keeper\\campgns\\ancntkpr\\map00001.slb")
-			#open_map("F:\\Games\\Dungeon Keeper\\ADiKtEd\\levels\\map00001.slb")
-			open_map("F:\\Games\\Dungeon Keeper\\levels\\personal\\map00001.slb")
+			#open_map("F:/Games/Dungeon Keeper/campgns/keeporig/map00020.slb")
+			#open_map("F:/Games/Dungeon Keeper/campgns/ancntkpr/map00001.slb")
+			#open_map("F:/Games/Dungeon Keeper/ADiKtEd/levels/map00001.slb")
+			open_map("F:/Games/Dungeon Keeper/levels/personal/map00001.slb")
 			pass
 		else:
 			oCurrentMap.clear_map()
@@ -132,7 +132,7 @@ func _on_ConfirmDecompression_confirmed():
 	# Decompress files
 	#var dir = Directory.new()
 	for path in compressedFiles:
-		oRNC.decompress(path, path)
+		oRNC.decompress(path)
 	#print('Decompressed in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	# Retry opening the map

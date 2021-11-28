@@ -117,7 +117,7 @@ func scan_dk_data_directory():
 
 func create_png_cache_file(tmapaDkOriginalPath):
 	if oRNC.checkForRncCompression(tmapaDkOriginalPath) == true:
-		oRNC.decompress(tmapaDkOriginalPath,tmapaDkOriginalPath)
+		oRNC.decompress(tmapaDkOriginalPath)
 	
 	var file = File.new()
 	if file.open(tmapaDkOriginalPath, File.READ) == OK:
