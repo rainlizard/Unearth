@@ -1,4 +1,4 @@
-[gd_scene load_steps=137 format=2]
+[gd_scene load_steps=136 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -22,13 +22,12 @@
 [ext_resource path="res://Scenes/ReadData.gd" type="Script" id=20]
 [ext_resource path="res://Scenes/RayCastBlockMap.gd" type="Script" id=21]
 [ext_resource path="res://Scenes/3dSelector.gd" type="Script" id=22]
-[ext_resource path="res://Art/FontThingTitle.tres" type="DynamicFont" id=23]
 [ext_resource path="res://Art/Cursor96x96.png" type="Texture" id=24]
 [ext_resource path="res://Scenes/Selection.gd" type="Script" id=25]
 [ext_resource path="res://Art/Cursor32x32.png" type="Texture" id=26]
 [ext_resource path="res://Scenes/InstanceOwnership.gd" type="Script" id=27]
 [ext_resource path="res://Scenes/UiDisplay.tscn" type="PackedScene" id=28]
-[ext_resource path="res://Scenes/MapTree.gd" type="Script" id=29]
+[ext_resource path="res://Scenes/DynamicMapTree.gd" type="Script" id=29]
 [ext_resource path="res://Scenes/GamePaths.gd" type="Script" id=30]
 [ext_resource path="res://Scenes/SaveMap.gd" type="Script" id=31]
 [ext_resource path="res://Scenes/WriteData.gd" type="Script" id=32]
@@ -59,7 +58,7 @@
 [ext_resource path="res://Art/IconFolder.png" type="Texture" id=57]
 [ext_resource path="res://Art/IconFolderPressed.png" type="Texture" id=58]
 [ext_resource path="res://Art/IconFolderHover.png" type="Texture" id=59]
-[ext_resource path="res://Scenes/SourceTree.gd" type="Script" id=60]
+[ext_resource path="res://Scenes/SourceMapTree.gd" type="Script" id=60]
 [ext_resource path="res://Scenes/YesNoConfirmationDialog.gd" type="Script" id=61]
 [ext_resource path="res://Scenes/SettingsWindow.gd" type="Script" id=62]
 [ext_resource path="res://Scenes/OptionButtonMSAA.gd" type="Script" id=63]
@@ -1593,7 +1592,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
+[node name="DynamicMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
 margin_top = 50.0
 margin_right = 326.0
 margin_bottom = 780.0
@@ -1601,7 +1600,6 @@ mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/draw_relationship_lines = 1
-custom_fonts/font = ExtResource( 70 )
 columns = 2
 allow_reselect = true
 hide_root = true
@@ -1611,7 +1609,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SourceTree" type="Tree" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
+[node name="SourceMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
 visible = false
 margin_top = 297.0
 margin_right = 586.0
@@ -1619,7 +1617,6 @@ margin_bottom = 563.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_fonts/font = ExtResource( 23 )
 columns = 2
 allow_reselect = true
 hide_root = true
@@ -3295,9 +3292,9 @@ script = ExtResource( 88 )
 [connection signal="item_rect_changed" from="Ui/UiSystem/MapBrowser" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowser_item_rect_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapBrowser" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowser_visibility_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/LineEditFilter" to="Ui/UiSystem/MapBrowser" method="_on_LineEdit_text_changed"]
-[connection signal="item_activated" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/MapTree" to="Ui/UiSystem/MapBrowser" method="_on_MapTree_item_activated"]
-[connection signal="item_selected" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/MapTree" to="Ui/UiSystem/MapBrowser" method="_on_MapTree_item_selected"]
-[connection signal="item_selected" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/MapTree" to="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/MapTree" method="_on_MapTree_item_selected"]
+[connection signal="item_activated" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser" method="_on_DynamicMapTree_item_activated"]
+[connection signal="item_selected" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser" method="_on_DynamicMapTree_item_selected"]
+[connection signal="item_selected" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" method="_on_DynamicMapTree_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer/TextureButton" to="Ui/UiSystem/MapBrowser" method="_on_TextureButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer/ButtonFilename" to="Ui/UiSystem/MapBrowser" method="_on_ButtonFilename_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ButtonListVBC/ButtonPlay" to="Game" method="_on_ButtonPlay_pressed"]

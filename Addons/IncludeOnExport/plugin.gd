@@ -1,7 +1,7 @@
 tool
 extends EditorPlugin
 
-var scriptExportPlugin = preload("res://Addons/IncludeOnExport/export.gd").new()
+var scriptExportPlugin = preload("res://addons/IncludeOnExport/export.gd").new()
 
 func _enter_tree():
 	print('EditorExportPlugin activated.')

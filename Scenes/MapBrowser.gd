@@ -5,8 +5,8 @@ onready var oDeleteMap = Nodelist.list["oDeleteMap"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oLineEditFilter = Nodelist.list["oLineEditFilter"]
 onready var oButtonFilename = Nodelist.list["oButtonFilename"]
-onready var oMapTree = Nodelist.list["oMapTree"]
-onready var oSourceTree = Nodelist.list["oSourceTree"]
+onready var oDynamicMapTree = Nodelist.list["oDynamicMapTree"]
+onready var oSourceMapTree = Nodelist.list["oSourceMapTree"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDateSaved = Nodelist.list["oDateSaved"]
 onready var oCannotDelete = Nodelist.list["oCannotDelete"]
@@ -19,14 +19,16 @@ func _ready():
 	oButtonFilename.visible = false
 
 func _on_MapBrowser_about_to_show():
-	oSourceTree.updateSourceTree()
+	oSourceMapTree.update_source_tree()
+	
+	oDynamicMapTree.update_dynamic_tree()
 	oDateSaved.text = ""
 	
 	yield(get_tree(), "idle_frame") #Needs to be here for grab focus to work
 	oLineEditFilter.grab_focus()
 
-func _on_MapTree_item_activated():
-	var selectedTreeItem = oMapTree.get_selected()
+func _on_DynamicMapTree_item_activated():
+	var selectedTreeItem = oDynamicMapTree.get_selected()
 	var path = selectedTreeItem.get_metadata(0)
 	if selectedTreeItem.get_metadata(1) == "is_a_file":
 		activate(path)
@@ -39,15 +41,15 @@ func activate(path):
 	path = path.get_basename()
 	oOpenMap.open_map(path)
 
-func _on_MapTree_item_selected():
-	var selectedTreeItem = oMapTree.get_selected()
+func _on_DynamicMapTree_item_selected():
+	var selectedTreeItem = oDynamicMapTree.get_selected()
 	var path = selectedTreeItem.get_metadata(0)
 	# Set modified time, if it's a file
 	if selectedTreeItem.get_metadata(1) == "is_a_file":
 		oButtonFilename.visible = true
 		var file = File.new()
 		var modifiedTime = file.get_modified_time(path + '.slb') # This might cause case-sensitive issues but I don't care right now.
-		oDateSaved.text = convertUnixTimeToReadable(modifiedTime)
+		oDateSaved.text = convert_unix_time_to_readable(modifiedTime)
 		file.close()
 		
 		# Set filename field to selected item
@@ -60,12 +62,12 @@ func _on_MapTree_item_selected():
 	oBrowserFilename.text = path
 
 func _on_LineEdit_text_changed(new_text):
-	oMapTree.searchTree(new_text, false)
+	oDynamicMapTree.search_tree(new_text, false)
 
-var mapPathDelete
+#var mapPathDelete
 #func _input(event):
 #	if Input.is_action_just_pressed("ui_delete"):
-#		var selectedTreeItem = oMapTree.get_selected()
+#		var selectedTreeItem = oDynamicMapTree.get_selected()
 #		if visible == true and selectedTreeItem != null:
 #			mapPathDelete = selectedTreeItem.get_metadata(0)
 #			if oCurrentMap.path == mapPathDelete:
@@ -73,13 +75,13 @@ var mapPathDelete
 #			else:
 #				Utils.popup_centered(oConfirmDelete)
 
-func _on_ConfirmDelete_confirmed():
-	oDeleteMap.delete_map(mapPathDelete)
-	oLineEditFilter.text = ""
-	oBrowserFilename.text = ""
-	oSourceTree.updateSourceTree()
+#func _on_ConfirmDelete_confirmed():
+#	oDeleteMap.delete_map(mapPathDelete)
+#	oLineEditFilter.text = ""
+#	oBrowserFilename.text = ""
+#	oSourceMapTree.updateSourceMapTree()
 
-func convertUnixTimeToReadable(modifiedTime):
+func convert_unix_time_to_readable(modifiedTime):
 	var dict = OS.get_datetime_from_unix_time(modifiedTime)
 	var dateAndTime = ""
 	dateAndTime += str(dict["day"]) + "/"
@@ -100,7 +102,7 @@ func _on_TextureButton_pressed():
 		path = oBrowserFilename.text
 	else:
 		# If the filename field is blank, then use the selected tree item instead
-		var selectedTreeItem = oMapTree.get_selected()
+		var selectedTreeItem = oDynamicMapTree.get_selected()
 		if selectedTreeItem != null:
 			path = selectedTreeItem.get_metadata(0)
 	

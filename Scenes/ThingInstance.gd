@@ -113,7 +113,8 @@ func set_herogateNumber(setval):
 func set_texture_based_on_thingtype():
 	var tex = null
 	match thingType:
-		Things.TYPE.NONE: pass
+		Things.TYPE.NONE:
+			pass
 		Things.TYPE.OBJECT:
 			tex = Things.DATA_OBJECT[subtype][Things.TEXTURE]
 			if subtype in [49, 111,120,121,122]: # Heart Flame and Gate
@@ -133,7 +134,11 @@ func set_texture_based_on_thingtype():
 		Things.TYPE.DOOR:
 			if Things.DATA_DOOR.has(subtype) == true:
 				tex = Things.DATA_DOOR[subtype][Things.TEXTURE]
-	if tex != null: $ThingTexture.texture = tex
+	if tex != null:
+		$ThingTexture.texture = tex
+	else:
+		$ThingTexture.texture = preload('res://Art/Thing.png')
+		$ThingTexture.expand = true
 
 func set_grow_direction():
 	# Change Grow Direction so the art pokes out from the base.

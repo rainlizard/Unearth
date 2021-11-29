@@ -6,7 +6,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oRNC = Nodelist.list["oRNC"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oUniversalDetails = Nodelist.list["oUniversalDetails"]
-onready var oMapTree = Nodelist.list["oMapTree"]
+onready var oDynamicMapTree = Nodelist.list["oDynamicMapTree"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oOverheadOwnership = Nodelist.list["oOverheadOwnership"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
@@ -105,7 +105,7 @@ func open_map(filePath): # auto opens other files
 
 func finish_opening_map(map):
 	oCurrentMap.set_path_and_title(map)
-	oMapTree.highlight_current_map()
+	oDynamicMapTree.highlight_current_map()
 	oEditor.mapHasBeenEdited = false
 	oOverheadOwnership.start()
 	

@@ -71,7 +71,9 @@ func start():
 				REMEMBER_TMAPA_PATHS.erase(path)
 		
 		# Look for any changes
-		for path in newTmapaPaths:
+		var sortedArr = newTmapaPaths.keys()
+		sortedArr.sort() # required for linux to create in a nice looking order
+		for path in sortedArr:
 			if REMEMBER_TMAPA_PATHS.has(path) == true:
 				if newTmapaPaths[path] != REMEMBER_TMAPA_PATHS[path]: # Check if date differs
 					create_png_cache_file(path)

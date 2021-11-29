@@ -1,7 +1,9 @@
 extends Tree
 onready var oEditor = Nodelist.list["oEditor"]
-onready var oSourceTree = Nodelist.list["oSourceTree"]
+onready var oSourceMapTree = Nodelist.list["oSourceMapTree"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oLineEditFilter = Nodelist.list["oLineEditFilter"]
+
 
 
 var searchResultTreeItemDirs = [] # Just used for killing items with no children
@@ -10,7 +12,16 @@ func _ready():
 	set_column_expand(0,false)
 	set_column_min_width(0,135)
 
-func searchTree(searchText, collapseResults):
+func update_dynamic_tree():
+	# Display tree. Collapse things depending on the state of the CURRENT_MAP and search field.
+	if oLineEditFilter.text == "" and oCurrentMap.path == "":
+		search_tree(oLineEditFilter.text, true)
+	elif oCurrentMap.path != "":
+		search_tree(oLineEditFilter.text, true)
+	else:
+		search_tree(oLineEditFilter.text, false)
+
+func search_tree(searchText, collapseResults):
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	clear()
@@ -18,20 +29,20 @@ func searchTree(searchText, collapseResults):
 	create_item() # Create root
 	get_root().set_text(0,"maptree root")
 	
-	getTreeItemsRecursively(oSourceTree.get_root(), get_root(), searchText, collapseResults)
-	oSourceTree.kill_childless_tree_items(searchResultTreeItemDirs)
+	get_tree_items_recursively(oSourceMapTree.get_root(), get_root(), searchText, collapseResults)
+	oSourceMapTree.kill_childless_tree_items(searchResultTreeItemDirs)
 	
 	print('time: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	highlight_current_map()
 
-func getTreeItemsRecursively(fromItem, toItem, searchText, collapseResults):
+func get_tree_items_recursively(fromItem, toItem, searchText, collapseResults):
 	fromItem = fromItem.get_children()
 	if fromItem != null:
 		while true:
 			var newTreeItem
 			if fromItem.get_metadata(1) == "is_a_directory":
-				newTreeItem = oSourceTree.add_tree_dir(self, toItem, fromItem.get_metadata(0))
+				newTreeItem = oSourceMapTree.add_tree_dir(self, toItem, fromItem.get_metadata(0))
 				
 				if fromItem.get_metadata(0).to_upper() in oCurrentMap.path.to_upper():
 					newTreeItem.set_collapsed(false)
@@ -39,7 +50,7 @@ func getTreeItemsRecursively(fromItem, toItem, searchText, collapseResults):
 					newTreeItem.set_collapsed(collapseResults)
 				
 				searchResultTreeItemDirs.append(newTreeItem)
-				getTreeItemsRecursively(fromItem, newTreeItem, searchText, collapseResults)
+				get_tree_items_recursively(fromItem, newTreeItem, searchText, collapseResults)
 			else: #is_a_file
 				var allowDisplay = true
 				
@@ -50,7 +61,7 @@ func getTreeItemsRecursively(fromItem, toItem, searchText, collapseResults):
 					allowDisplay = false
 				
 				if allowDisplay == true:
-					newTreeItem = oSourceTree.add_tree_file(self, toItem, path)
+					newTreeItem = oSourceMapTree.add_tree_file(self, toItem, path)
 					newTreeItem.set_text(1, lifMapName)
 					
 					# Scrolls the tree to the map you've opened
@@ -62,15 +73,15 @@ func getTreeItemsRecursively(fromItem, toItem, searchText, collapseResults):
 			if fromItem == null:
 				break
 
-func _on_MapTree_item_selected():
+func _on_DynamicMapTree_item_selected():
 	# Never collapse root node
 	var item = get_selected()
 	if item == get_root(): return
 	
 	# Selected item signal is firing when changing "collapsed"
-	disconnect('item_selected',self,"_on_MapTree_item_selected")
+	disconnect('item_selected',self,"_on_DynamicMapTree_item_selected")
 	item.collapsed = !item.collapsed
-	connect('item_selected',self,"_on_MapTree_item_selected")
+	connect('item_selected',self,"_on_DynamicMapTree_item_selected")
 
 
 func highlight_current_map():
@@ -88,16 +99,12 @@ func highlight_current_map():
 	get_root().call_recursive("clear_custom_color",0)
 	get_root().call_recursive("clear_custom_color",1)
 	
-	
-	
-	
-	
-	recursiveHighlight(get_root(),path)
+	recursive_highlight(get_root(),path)
 	
 	print('time: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 
-func recursiveHighlight(item,path):
+func recursive_highlight(item,path):
 	item = item.get_children()
 	if item != null:
 		while true:
@@ -108,6 +115,6 @@ func recursiveHighlight(item,path):
 					item.set_custom_bg_color(0,Color(58/255.0, 62/255.0, 105/255.0, 1))
 					item.set_custom_bg_color(1,Color(58/255.0, 62/255.0, 105/255.0, 1))
 			
-			recursiveHighlight(item,path)
+			recursive_highlight(item,path)
 			item = item.get_next()
 			if item == null: break

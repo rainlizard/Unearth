@@ -93,16 +93,19 @@ func initialize_settings():
 	haveInitializedAllSettings = true
 
 func executable_stuff():
-	# Confirm that executable hasn't been deleted
 	var oGame = Nodelist.list["oGame"]
-	if File.new().file_exists(oGame.EXECUTABLE_PATH) == false:
-		cfg_remove_setting("executable_path")
+	
+	# If previous executable_path is no longer valid (maybe it was deleted)
+	if cfg_has_setting("executable_path") == true:
+		if File.new().file_exists(oGame.EXECUTABLE_PATH) == false:
+			cfg_remove_setting("executable_path")
 	
 	# Choose executable path upon first starting
 	if cfg_has_setting("executable_path") == false:
 		var oChooseDkExe = $'../ViewportContainer/Viewport/Main/Ui/UiSystem/ChooseDkExe'
 		Utils.popup_centered(oChooseDkExe)
 	else:
+		# Test whenever you restart, to always show the error if there's a problem
 		oGame.test_write_permissions()
 
 func cfg_has_setting(setting):
