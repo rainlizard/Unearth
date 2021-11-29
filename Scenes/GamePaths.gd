@@ -91,7 +91,7 @@ func launch_game():
 			executeCmd += "'" + EXECUTABLE_PATH.get_file() + "'"
 			executeCmd += " "
 			executeCmd += COMMAND_LINE # Specific DK commands
-			OS.execute("cmd", ["/C", executeCmd], true, printOutput)
+			OS.execute("/bin/sh", ["-c", executeCmd], true, printOutput)
 	
 	print(printOutput)
 	
