@@ -166,8 +166,9 @@ func game_setting(doWhat,string,value):
 			if doWhat == SET: oOpenMap.ALWAYS_DECOMPRESS = value
 			if doWhat == GET: return oOpenMap.ALWAYS_DECOMPRESS
 		"msaa":
-			if doWhat == SET: get_viewport().msaa = value
-			if doWhat == GET: return get_viewport().msaa
+			var oViewport = $'../ViewportContainer/Viewport'
+			if doWhat == SET: oViewport.msaa = value
+			if doWhat == GET: return oViewport.msaa
 		"play_command_line":
 			var oGame = $'../ViewportContainer/Viewport/Main/Game'
 			if doWhat == SET: oGame.COMMAND_LINE = value

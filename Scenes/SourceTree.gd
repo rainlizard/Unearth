@@ -114,8 +114,10 @@ func give_lif_names_to_tree_items():
 		# No lif name found, so check dklevels.lof and ddisk1.lif
 		if lifMapName == "":
 			lifPath = ""
-			if "keeporig" in path or "origplus" in path: lifPath = Settings.unearthdata.plus_file("dklevels.lof")
-			if "deepdngn" in path: lifPath = Settings.unearthdata.plus_file("ddisk1.lif")
+			if "KEEPORIG" in path.to_upper() or "ORIGPLUS" in path.to_upper():
+				lifPath = Settings.unearthdata.plus_file("dklevels.lof")
+			if "DEEPDNGN" in path.to_upper():
+				lifPath = Settings.unearthdata.plus_file("ddisk1.lif")
 			
 			if lifPath != "":
 				lifArray = get_lif_array(lifPath)

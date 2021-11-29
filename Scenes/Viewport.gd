@@ -7,7 +7,6 @@ var cameraInitialZoom
 func _init():
 	OS.window_borderless = false
 	OS.set_window_position(Vector2(1000000000,1000000000)) # Put window off screen
-	msaa = Viewport.MSAA_16X
 
 func _ready():
 	get_tree().get_root().connect("size_changed",self,"size_changed")

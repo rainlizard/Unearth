@@ -70,13 +70,31 @@ func menu_play_clicked():
 	launch_game()
 
 func launch_game():
-	# Basic stuff to launch the executable properly
-	var executeCmd = 'cd /D ' + '"' + GAME_DIRECTORY + '"' + " && " + EXECUTABLE_PATH.get_file() + ' '
+	# Keep in mind Linux and Windows both want different quotation marks ' "
 	
-	# Specific DK commands
-	executeCmd += COMMAND_LINE
+	var printOutput = []
+	match OS.get_name():
+		"Windows":
+			var executeCmd = ''
+			executeCmd += 'cd /D '
+			executeCmd += '"' + GAME_DIRECTORY + '"'
+			executeCmd += ' && '
+			executeCmd += '"' + EXECUTABLE_PATH.get_file() + '"'
+			executeCmd += ' '
+			executeCmd += COMMAND_LINE # Specific DK commands
+			OS.execute("cmd", ["/C", executeCmd], true, printOutput)
+		"X11":
+			var executeCmd = ""
+			executeCmd += "cd "
+			executeCmd += "'" + GAME_DIRECTORY + "'"
+			executeCmd += " && wine "
+			executeCmd += "'" + EXECUTABLE_PATH.get_file() + "'"
+			executeCmd += " "
+			executeCmd += COMMAND_LINE # Specific DK commands
+			OS.execute("cmd", ["/C", executeCmd], true, printOutput)
 	
-	OS.execute('cmd', ['/C', executeCmd], false)
+	print(printOutput)
+	
 
 func get_subdirs(path):
 	var array = []

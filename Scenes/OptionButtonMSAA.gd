@@ -11,11 +11,6 @@ func _ready():
 	dropdown.add_item("MSAA 4x",2)
 	dropdown.add_item("MSAA 8x",3)
 	dropdown.add_item("MSAA 16x",4)
-#	print(Viewport.MSAA_DISABLED)
-#	print(Viewport.MSAA_2X)
-#	print(Viewport.MSAA_4X)
-#	print(Viewport.MSAA_8X)
-#	print(Viewport.MSAA_16X)
 
 func index_pressed(index):
 	text = dropdown.get_item_text(index)

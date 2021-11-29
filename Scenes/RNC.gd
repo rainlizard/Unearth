@@ -38,18 +38,27 @@ func checkForRncCompression(path): # Check if the first 3 bytes are the letters 
 # Remember to be careful with file.open(path, File.READ) if calling decompress() from there it won't let you overwrite when decompressing.
 func decompress(path):
 	
-	var commands = ""
-	commands += '"' + decompressorExeFullPath + '"'
-	commands += " "
-	commands += '"' + path + '"'
+	# Windows and Linux want different quotations for dernc
+	# Linux dernc won't allow spaces in directory paths unless using the small quotation: '
+	# Windows dernc only works with the big quotation: "
 	
 	var printOutput = []
 	
 	match OS.get_name():
 		"Windows":
+			var commands = ''
+			commands += '"' + decompressorExeFullPath + '"'
+			commands += ' '
+			commands += '"' + path + '"'
+			
 			OS.execute("cmd", ["/C", commands], true, printOutput)
 		"X11":
-			# Warning: won't work on directories with spaces in them
+			var commands = ""
+			commands += "'" + decompressorExeFullPath + "'"
+			commands += " "
+			commands += "'" + path + "'"
+			
+			# dernc.x86_64 file permissions must be set to "Allow executing file as program"
 			OS.execute("/bin/sh", ["-c", commands], true, printOutput)
 	
 	print(printOutput)

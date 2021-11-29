@@ -23,7 +23,8 @@ func _on_ButtonNewMap_pressed():
 	oOpenMap.open_map(Settings.unearthdata.plus_file("blank_map.slb"))
 
 func set_path_and_title(newpath):
-	if "unearthdata".plus_file("blank_map") in newpath: newpath = ""
+	if "unearthdata".plus_file("blank_map").to_upper() in newpath.to_upper():
+		newpath = ""
 	
 	if newpath != "":
 		OS.set_window_title(newpath + ' - Unearth v'+Constants.VERSION)

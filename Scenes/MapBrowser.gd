@@ -63,15 +63,15 @@ func _on_LineEdit_text_changed(new_text):
 	oMapTree.searchTree(new_text, false)
 
 var mapPathDelete
-func _input(event):
-	if Input.is_action_just_pressed("ui_delete"):
-		var selectedTreeItem = oMapTree.get_selected()
-		if visible == true and selectedTreeItem != null:
-			mapPathDelete = selectedTreeItem.get_metadata(0)
-			if oCurrentMap.path == mapPathDelete:
-				Utils.popup_centered(oCannotDelete)
-			else:
-				Utils.popup_centered(oConfirmDelete)
+#func _input(event):
+#	if Input.is_action_just_pressed("ui_delete"):
+#		var selectedTreeItem = oMapTree.get_selected()
+#		if visible == true and selectedTreeItem != null:
+#			mapPathDelete = selectedTreeItem.get_metadata(0)
+#			if oCurrentMap.path == mapPathDelete:
+#				Utils.popup_centered(oCannotDelete)
+#			else:
+#				Utils.popup_centered(oConfirmDelete)
 
 func _on_ConfirmDelete_confirmed():
 	oDeleteMap.delete_map(mapPathDelete)

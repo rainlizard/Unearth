@@ -33,7 +33,7 @@ func getTreeItemsRecursively(fromItem, toItem, searchText, collapseResults):
 			if fromItem.get_metadata(1) == "is_a_directory":
 				newTreeItem = oSourceTree.add_tree_dir(self, toItem, fromItem.get_metadata(0))
 				
-				if fromItem.get_metadata(0) in oCurrentMap.path:
+				if fromItem.get_metadata(0).to_upper() in oCurrentMap.path.to_upper():
 					newTreeItem.set_collapsed(false)
 				else:
 					newTreeItem.set_collapsed(collapseResults)
@@ -101,10 +101,10 @@ func recursiveHighlight(item,path):
 	item = item.get_children()
 	if item != null:
 		while true:
-			if item.get_metadata(0) in path:
+			if item.get_metadata(0).to_upper() in path.to_upper():
 				item.set_custom_color(0,Color(125/255.0, 133/255.0, 227/255.0, 1))
 				item.set_custom_color(1,Color(125/255.0, 133/255.0, 227/255.0, 1))
-				if item.get_metadata(0) == path:
+				if item.get_metadata(0).to_upper() == path.to_upper():
 					item.set_custom_bg_color(0,Color(58/255.0, 62/255.0, 105/255.0, 1))
 					item.set_custom_bg_color(1,Color(58/255.0, 62/255.0, 105/255.0, 1))
 			
