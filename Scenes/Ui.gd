@@ -112,6 +112,10 @@ func set_FONT_SIZE_CR_LVL_MAX(setVal):
 
 
 func show_tools():
+	if oDataSlab.get_cell(0,0) == TileMap.INVALID_CELL:
+		oMenu.visible = true
+		return
+	
 	match oModeSwitchButton.text:
 		"Slab":
 			oPickSlabWindow.visible = true

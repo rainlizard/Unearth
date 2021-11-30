@@ -31,7 +31,7 @@ func set_path_and_title(newpath):
 	else:
 		OS.set_window_title('Unearth v'+Constants.VERSION)
 	path = newpath
-	oGame.add_map_to_command_line()
+	oGame.construct_command_line()
 
 func clear_map():
 	var CODETIME_START = OS.get_ticks_msec()

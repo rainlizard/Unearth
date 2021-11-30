@@ -21,7 +21,7 @@ var listOfSettings = [
 	"vsync",
 	"always_decompress",
 	"msaa",
-	"play_command_line",
+	"dk_commands",
 	"mouse_edge_panning",
 	"pan_speed",
 	"zoom_step",
@@ -172,10 +172,10 @@ func game_setting(doWhat,string,value):
 			var oViewport = $'../ViewportContainer/Viewport'
 			if doWhat == SET: oViewport.msaa = value
 			if doWhat == GET: return oViewport.msaa
-		"play_command_line":
+		"dk_commands":
 			var oGame = $'../ViewportContainer/Viewport/Main/Game'
-			if doWhat == SET: oGame.COMMAND_LINE = value
-			if doWhat == GET: return oGame.COMMAND_LINE
+			if doWhat == SET: oGame.DK_COMMANDS = value
+			if doWhat == GET: return oGame.DK_COMMANDS
 		"mouse_edge_panning":
 			var oCamera2D = $'../ViewportContainer/Viewport/Main/Game2D/Camera2D'
 			if doWhat == SET: oCamera2D.MOUSE_EDGE_PANNING = value

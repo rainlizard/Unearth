@@ -2094,37 +2094,70 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 62.0
 margin_right = 561.0
-margin_bottom = 93.0
-mouse_filter = 2
-size_flags_horizontal = 9
+margin_bottom = 91.0
+text = "Always decompress maps"
+
+[node name="Label" type="Label" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+margin_top = 95.0
+margin_right = 561.0
+margin_bottom = 116.0
+text = "Play button command line"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer"]
-margin_top = 5.0
-margin_right = 190.0
-margin_bottom = 26.0
-text = "\"Play\" command line:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="EditCmdLine" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer"]
-margin_left = 194.0
-margin_right = 252.0
-margin_bottom = 31.0
-size_flags_horizontal = 8
+[node name="CmdLineDkCommands" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+margin_top = 120.0
+margin_right = 58.0
+margin_bottom = 160.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 0
 expand_to_text_length = true
 
-[node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
-margin_top = 97.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+margin_top = 164.0
 margin_right = 561.0
-margin_bottom = 126.0
-text = "Always decompress maps"
+margin_bottom = 204.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+scroll_vertical_enabled = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer"]
+margin_right = 561.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CmdLineConsole" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
+margin_right = 58.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 0
+editable = false
+expand_to_text_length = true
+
+[node name="CmdLineConsoleArg" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
+margin_left = 62.0
+margin_right = 120.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 0
+editable = false
+expand_to_text_length = true
+
+[node name="CmdLineExecute" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
+margin_left = 124.0
+margin_right = 561.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 3
+editable = false
+expand_to_text_length = true
 
 [node name="TabGraphics" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings"]
 visible = false
@@ -3320,8 +3353,8 @@ script = ExtResource( 88 )
 [connection signal="about_to_show" from="Ui/UiSystem/SettingsWindow" to="Ui/UiSystem/SettingsWindow" method="_on_SettingsWindow_about_to_show"]
 [connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/SettingsWindow" method="_on_SetDirButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ReloadTextureMapsButton" to="TextureCache" method="_on_ReloadTextureMapsButton_pressed"]
-[connection signal="text_changed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer/EditCmdLine" to="Ui/UiSystem/SettingsWindow" method="_on_EditCmdLine_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
+[connection signal="text_changed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CmdLineDkCommands" to="Ui/UiSystem/SettingsWindow" method="_on_CmdLineDkCommands_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer/CheckBoxVsync" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxVsync_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer/CheckBoxDisplayFPS" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxDisplayFPS_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer/CheckBoxHideUnknown" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxHideUnknown_toggled"]

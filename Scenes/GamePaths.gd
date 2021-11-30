@@ -4,6 +4,9 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oRayCastBlockMap = Nodelist.list["oRayCastBlockMap"]
 onready var oSaveMap = Nodelist.list["oSaveMap"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oCmdLineConsole = Nodelist.list["oCmdLineConsole"]
+onready var oCmdLineConsoleArg = Nodelist.list["oCmdLineConsoleArg"]
+onready var oCmdLineExecute = Nodelist.list["oCmdLineExecute"]
 
 var EXECUTABLE_PATH = ""
 var SAVE_AS_DIRECTORY = ""
@@ -14,15 +17,62 @@ var DK_DATA_DIRECTORY = ""
 #var cheats = true
 #var gameSpeed = 25
 
-var COMMAND_LINE = "-nointro -alex" # Default command line for everyone
+var COMMAND_LINE = ""
+var COMMAND_LINE_CONSOLE = ""
+var COMMAND_LINE_CONSOLE_ARG = ""
+var DK_COMMANDS = "-nointro -alex" setget set_DK_COMMANDS
 
 func _input(event):
 	if Input.is_action_just_pressed("SaveAndPlay"):
 		menu_play_clicked()
 
-func add_map_to_command_line():
-	print(COMMAND_LINE)
+func launch_game():
+	var printOutput = []
+	OS.execute(COMMAND_LINE_CONSOLE, [COMMAND_LINE_CONSOLE_ARG, COMMAND_LINE], true, printOutput)
+	print(printOutput)
+
+func set_paths(path):
+	if path == null: path = ""
+	EXECUTABLE_PATH = path
+	GAME_DIRECTORY = path.get_base_dir()
 	
+	for i in get_subdirs(GAME_DIRECTORY):
+		if i.to_upper() == "DATA":
+			DK_DATA_DIRECTORY = GAME_DIRECTORY.plus_file(i)
+	
+	construct_command_line()
+
+func construct_command_line():
+	print('Constructing  command line...')
+	
+	COMMAND_LINE = ""
+	cmdline_main()
+	cmdline_map()
+	cmdline_commands()
+	oCmdLineConsole.text = COMMAND_LINE_CONSOLE
+	oCmdLineConsoleArg.text = COMMAND_LINE_CONSOLE_ARG
+	oCmdLineExecute.text = COMMAND_LINE
+
+func cmdline_main():
+	# Keep in mind Linux and Windows both want different quotation marks ' "
+	match OS.get_name():
+		"Windows":
+			COMMAND_LINE_CONSOLE = 'cmd'
+			COMMAND_LINE_CONSOLE_ARG = '/C'
+			COMMAND_LINE += 'cd /D '
+			COMMAND_LINE += '"' + GAME_DIRECTORY + '"'
+			COMMAND_LINE += ' && '
+			COMMAND_LINE += '"' + EXECUTABLE_PATH.get_file() + '"'
+		"X11":
+			COMMAND_LINE_CONSOLE = "/bin/sh"
+			COMMAND_LINE_CONSOLE_ARG = "-c"
+			COMMAND_LINE += "cd "
+			COMMAND_LINE += "'" + GAME_DIRECTORY + "'"
+			COMMAND_LINE += " && wine "
+			COMMAND_LINE += "'" + EXECUTABLE_PATH.get_file() + "'"
+
+func cmdline_map():
+	print('Adding map to command line...')
 	# Delete -level xxx and -campaign xxx from the command line
 	var arrayOfWords = COMMAND_LINE.split(" ")
 	for i in arrayOfWords.size():
@@ -49,16 +99,16 @@ func add_map_to_command_line():
 		COMMAND_LINE += " -campaign " + newCampaignName
 	
 	COMMAND_LINE = COMMAND_LINE.strip_edges(true,true)
-	print(COMMAND_LINE)
 
-func set_paths(path):
-	if path == null: path = ""
-	EXECUTABLE_PATH = path
-	GAME_DIRECTORY = path.get_base_dir()
-	
-	for i in get_subdirs(GAME_DIRECTORY):
-		if i.to_upper() == "DATA":
-			DK_DATA_DIRECTORY = GAME_DIRECTORY.plus_file(i)
+func cmdline_commands():
+	if DK_COMMANDS != '':
+		COMMAND_LINE += ' '
+	COMMAND_LINE += DK_COMMANDS
+
+func set_DK_COMMANDS(setVal): # For when editing the field in Settings
+	DK_COMMANDS = setVal
+	construct_command_line()
+
 
 func set_SAVE_AS_DIRECTORY(path):
 	if path == null: path = ""
@@ -68,33 +118,6 @@ func menu_play_clicked():
 	if oEditor.mapHasBeenEdited == true:
 		oSaveMap.save_map(oCurrentMap.path)
 	launch_game()
-
-func launch_game():
-	# Keep in mind Linux and Windows both want different quotation marks ' "
-	
-	var printOutput = []
-	match OS.get_name():
-		"Windows":
-			var executeCmd = ''
-			executeCmd += 'cd /D '
-			executeCmd += '"' + GAME_DIRECTORY + '"'
-			executeCmd += ' && '
-			executeCmd += '"' + EXECUTABLE_PATH.get_file() + '"'
-			executeCmd += ' '
-			executeCmd += COMMAND_LINE # Specific DK commands
-			OS.execute("cmd", ["/C", executeCmd], true, printOutput)
-		"X11":
-			var executeCmd = ""
-			executeCmd += "cd "
-			executeCmd += "'" + GAME_DIRECTORY + "'"
-			executeCmd += " && wine "
-			executeCmd += "'" + EXECUTABLE_PATH.get_file() + "'"
-			executeCmd += " "
-			executeCmd += COMMAND_LINE # Specific DK commands
-			OS.execute("/bin/sh", ["-c", executeCmd], true, printOutput)
-	
-	print(printOutput)
-	
 
 func get_subdirs(path):
 	var array = []
@@ -126,6 +149,19 @@ func test_write_permissions():
 		oMessage.big("Error", "There are no write permissions for your Dungeon Keeper directory. Please exit the editor and move your entire Dungeon Keeper folder elsewhere, then choose the executable again.")
 	
 	return err
+
+
+#func load_command_line_from_settings(COMMAND_LINE):
+#	COMMAND_LINE = COMMAND_LINE.replace("%DIR%", GAME_DIRECTORY)
+#	COMMAND_LINE = COMMAND_LINE.replace("%EXE%", EXECUTABLE_PATH.get_file())
+#
+#func EDITED_COMMAND_LINE(lineEditText):
+#	COMMAND_LINE = lineEditText.replace(GAME_DIRECTORY, "%DIR%")
+#	COMMAND_LINE = lineEditText.replace(EXECUTABLE_PATH.get_file(), "%EXE%")
+#	Settings.set_setting("play_command_line", COMMAND_LINE)
+
+
+#func EDIT_COMMAND_LINE():
 
 #
 #	var arguments = ""

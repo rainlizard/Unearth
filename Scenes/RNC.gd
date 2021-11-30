@@ -10,7 +10,10 @@ func setDecompressorAbsolutePath():
 	var path
 	match OS.get_name():
 		"Windows": path = Settings.unearthdata.plus_file("rnc-decompressor/dernc.exe")
-		"X11": path = Settings.unearthdata.plus_file("rnc-decompressor/dernc.x86_64")
+		"X11":
+			path = Settings.unearthdata.plus_file("rnc-decompressor/dernc.x86_64")
+			# Checks in permissions: "Allow executing file as program"
+			OS.execute("/bin/sh", ["-c", "chmod +x '" + path + "'"], true)
 	
 	if file.file_exists(path) == true:
 		file.open(path,File.READ)

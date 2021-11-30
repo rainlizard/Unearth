@@ -187,13 +187,15 @@ func loadCachedTextures(newTmapaPaths):
 
 
 func set_default_texture_pack(value):
-	if cachedTextures[value][0] == null or cachedTextures[value][1] == null:
+	if cachedTextures.has(value) == false or cachedTextures[value][0] == null or cachedTextures[value][1] == null:
 		oMessage.quick("Error: Cached textures could not be loaded. Try reloading texture maps.")
 		return
+	
 	# 2D
 	if oOverheadGraphics.arrayOfColorRects.size() > 0:
 		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
 		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+	
 	# 3D
 	if oGenerateTerrain.materialArray.size() > 0:
 		oGenerateTerrain.materialArray[0].set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])

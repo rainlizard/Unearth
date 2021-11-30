@@ -5,7 +5,7 @@ onready var oCheckBoxVsync = Nodelist.list["oCheckBoxVsync"]
 onready var oMenuMSAA = Nodelist.list["oMenuMSAA"]
 onready var oCheckBoxAlwaysDecompress = Nodelist.list["oCheckBoxAlwaysDecompress"]
 onready var oChooseDkExe = Nodelist.list["oChooseDkExe"]
-onready var oEditCmdLine = Nodelist.list["oEditCmdLine"]
+onready var oCmdLineDkCommands = Nodelist.list["oCmdLineDkCommands"]
 onready var oCheckBoxMouseEdgePanning = Nodelist.list["oCheckBoxMouseEdgePanning"]
 onready var oCheckBoxSmoothPan = Nodelist.list["oCheckBoxSmoothPan"]
 onready var oCheckBoxDisplayFPS = Nodelist.list["oCheckBoxDisplayFPS"]
@@ -53,7 +53,8 @@ func _on_SettingsWindow_about_to_show():
 	oCheckBoxVsync.pressed = Settings.get_setting("vsync")
 	oMenuMSAA.text = oMenuMSAA.dropdown.get_item_text(Settings.get_setting("msaa"))
 	oCheckBoxAlwaysDecompress.pressed = Settings.get_setting("always_decompress")
-	oEditCmdLine.text = Settings.get_setting("play_command_line")
+	oCmdLineDkCommands.text = Settings.get_setting("dk_commands")
+	
 	oCheckBoxMouseEdgePanning.pressed = Settings.get_setting("mouse_edge_panning")
 	oCheckBoxSmoothPan.pressed = Settings.get_setting("smooth_pan_enabled")
 	oCheckBoxDisplayFPS.pressed = Settings.get_setting("display_fps")
@@ -88,9 +89,6 @@ func menu_msaa_index_pressed(index):
 
 func _on_CloseButton_pressed():
 	hide()
-
-func _on_EditCmdLine_text_changed(new_text):
-	Settings.set_setting("play_command_line", new_text)
 
 func _on_ResetToDefault_pressed():
 	Settings.delete_settings()
@@ -146,3 +144,6 @@ func _on_CheckBoxDisplay3dInfo_toggled(button_pressed):
 
 func _on_CheckBoxHideUnknown_toggled(button_pressed):
 	Settings.set_setting("hide_unknown_data", button_pressed)
+
+func _on_CmdLineDkCommands_text_changed(new_text):
+	Settings.set_setting("dk_commands", new_text)
