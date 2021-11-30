@@ -29,7 +29,7 @@ func clicked_save_on_menu():
 	save_map(oCurrentMap.path)
 
 func _on_FileDialogSaveAs_file_selected(filePath):
-	Settings.set_setting("save_path", filePath.get_base_dir().plus_file(''))
+	Settings.set_setting("save_path", filePath.get_base_dir())
 	
 	var map = filePath.get_basename()
 	save_map(map)

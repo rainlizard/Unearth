@@ -32,7 +32,7 @@ func search_tree(searchText, collapseResults):
 	get_tree_items_recursively(oSourceMapTree.get_root(), get_root(), searchText, collapseResults)
 	oSourceMapTree.kill_childless_tree_items(searchResultTreeItemDirs)
 	
-	print('time: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	print('Tree searched in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	highlight_current_map()
 
@@ -101,7 +101,7 @@ func highlight_current_map():
 	
 	recursive_highlight(get_root(),path)
 	
-	print('time: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	print('Map highlighted in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 
 func recursive_highlight(item,path):

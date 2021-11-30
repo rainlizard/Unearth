@@ -28,9 +28,8 @@ func _on_FileDialogSaveAs_about_to_show():
 	if oGame.SAVE_AS_DIRECTORY == "":
 		path = oGame.EXECUTABLE_PATH
 	
-	current_path = path.get_base_dir().plus_file("")
-	current_dir = path.get_base_dir().plus_file("")
-	
+	current_path = path
+	current_dir = path
 	
 	lineEdit.placeholder_text = "(Enter numbers only)"
 	lineEdit.placeholder_alpha = 0.15
