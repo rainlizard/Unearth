@@ -216,32 +216,66 @@ func read_tng(buffer):
 		
 		oInstances.add_child(id)
 
+#func _ready(): #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#	var file = File.new()
+#	file.open("res://unearthdata/dklevels.lof",File.READ)
+#	var buffer = StreamPeerBuffer.new()
+#	buffer.data_array = file.get_buffer(file.get_len())
+#	file.close()
+#
+#	read_lif(buffer)
 
-func read_lif(buffer, file):
-	var lifStuff = parse_lif_text(file)
-	if lifStuff.size() > 0:
-		if lifStuff[0].size() > 1:
-			oDataLif.data = lifStuff[0][1]
+func read_lif(buffer):
+	var array = lif_buffer_to_array(buffer)
+	var mapName = lif_array_to_map_name(array)
+	oDataLif.data = mapName
 
-# This gets its own function because it's also used for Viewing Map Files before you open them
-func parse_lif_text(file):
-	#I'm using get_csv_line() which means the lines MUST have commas separating the values.
-	var array = []
-	while true:
-		var stringArray = file.get_csv_line()
-		if stringArray.size() > 1:
-			stringArray[0] = stringArray[0].strip_edges(true,true)
-			stringArray[1] = stringArray[1].strip_edges(true,true)
-			
-			# If second array has Translation ID (so it looks like #201 or something), then read the next line.
-			if "#" in stringArray[1]:
-				stringArray[1] = file.get_line().trim_prefix(';')
-			array.append(stringArray)
-		else:
-			break
-	# Array can look like this: [[80, Morkardar], [81, Korros Tor], [82, Kari-Mar], [83, Belbata], [84, Caddis Fell], [85, Pladitz], [86, Abbadon], [87, Svatona], [88, Kanasko], [91, Netzcaro], [93, Batezek], [94, Benetzaron], [95, Daka-Gorn], [97, Dixaroc], [92, Belial]]
-	# Or like this if there's only one entry: [[80, Morkardar]]
+# These get their own functions because it's also used for Viewing Map Files before you open them
+func lif_buffer_to_array(buffer):
+	var stringFile = buffer.get_string(buffer.get_size())
+	# Divide string into lines
+	var array = stringFile.split("\n")
+	# Convert from PoolStringArray to normal array, for the sake of being editable
+	array = Array(array)
+	
+	# Each line by their comma
+	for i in array.size():
+		var subArray = array[i].split(",")
+		array[i] = subArray
 	return array
+
+# Map name
+func lif_array_to_map_name(array):
+	if array.size() > 0: # Checks if Lif contains anything
+		if array[0].size() > 1: # Checks if Lif contains both map number and map name (or at least if there was a comma)
+			return array[0][1]
+	return ""
+
+
+
+#func parse_lif_text(file):
+#	#I'm using get_csv_line() which means the lines MUST have commas separating the values.
+#	var array = []
+#	while true:
+#		var stringArray = file.get_csv_line()
+#		if stringArray.size() > 1:
+#			stringArray[0] = stringArray[0].strip_edges(true,true)
+#			stringArray[1] = stringArray[1].strip_edges(true,true)
+#
+#			# If second array has Translation ID (so it looks like #201 or something), then read the next line.
+#			if "#" in stringArray[1]:
+#				stringArray[1] = file.get_line().trim_prefix(';')
+#			array.append(stringArray)
+#		else:
+#			break
+#	# Array can look like this: [[80, Morkardar], [81, Korros Tor], [82, Kari-Mar], [83, Belbata], [84, Caddis Fell], [85, Pladitz], [86, Abbadon], [87, Svatona], [88, Kanasko], [91, Netzcaro], [93, Batezek], [94, Benetzaron], [95, Daka-Gorn], [97, Dixaroc], [92, Belial]]
+#	# Or like this if there's only one entry: [[80, Morkardar]]
+#	return array
+
+
+
+
+
 
 
 	# Move to the next character until a number isn't found

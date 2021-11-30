@@ -5,6 +5,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oReadData = Nodelist.list["oReadData"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDynamicMapTree = Nodelist.list["oDynamicMapTree"]
+onready var oDataLif = Nodelist.list["oDataLif"]
 
 var treeItemsThatWantNames = {} # <BASENAME> <TreeItem>
 var lifNames = {} # <BASENAME> <LifNameString>
@@ -24,7 +25,7 @@ func update_source_tree(): # Call this whenever there's an update to the filesys
 	# For the remaining items without lif names
 	for BASENAME in treeItemsThatWantNames:
 		var fetchItem = treeItemsThatWantNames[BASENAME]
-		var txt = getSpecialLifText(BASENAME)
+		var txt = oDataLif.get_special_lif_text(BASENAME)
 		fetchItem.set_text(1, txt)
 	
 	print('SourceMapTree updated in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
@@ -134,87 +135,7 @@ func LIF_WANTS_TO_GIVE_NAME(pathString):
 
 
 func lif_name_text(pathString):
-	var f = File.new()
-	f.open(pathString, File.READ)
-	var lifArray = oReadData.parse_lif_text(f)
-	f.close()
-	
-	if lifArray.empty() == false:
-		var lifName = lifArray[0][1]
-		return lifName
-	
-	return ""
-
-
-func getSpecialLifText(BASENAME):
-	# No lif name found, so check dklevels.lof and ddisk1.lif
-	var checkLifPath = ""
-	if "KEEPORIG" in BASENAME or "ORIGPLUS" in BASENAME:
-		checkLifPath = Settings.unearthdata.plus_file("dklevels.lof")
-	if "DEEPDNGN" in BASENAME:
-		checkLifPath = Settings.unearthdata.plus_file("ddisk1.lif")
-
-	if checkLifPath != "":
-		var f = File.new()
-		f.open(checkLifPath, File.READ)
-		var lifArray = oReadData.parse_lif_text(f)
-		f.close()
-
-		if lifArray.empty() == false:
-			for line in lifArray.size():
-				var lifNumber = lifArray[line][0].pad_zeros(5)
-				var mapNumber = BASENAME.get_file().trim_prefix("MAP")
-				if lifNumber == mapNumber:
-					return lifArray[line][1]
-	return ""
-
-
-
-
-#func give_lif_names_to_tree_items():
-#	var lifArray
-#	# Erase from lifFilePaths too if that would help with speed?
-#
-#	for treeItem in listOfTreeItemFiles:
-#		var path = treeItem.get_metadata(0)
-#		var lifPath = ""
-#
-#		for i in lifFilePaths:
-#			if i.get_basename().to_upper() == path.get_basename().to_upper():
-#				lifPath = i
-#				lifFilePaths.erase(i)
-#				break
-#
-#		var lifMapName = ""
-#		lifArray = get_lif_array(lifPath)
-#		if lifArray.empty() == false:
-#			lifMapName = lifArray[0][1] # [line #], [number or name]
-#
-#		# No lif name found, so check dklevels.lof and ddisk1.lif
-#		if lifMapName == "":
-#			lifPath = ""
-#			if "KEEPORIG" in path.to_upper() or "ORIGPLUS" in path.to_upper():
-#				lifPath = Settings.unearthdata.plus_file("dklevels.lof")
-#			if "DEEPDNGN" in path.to_upper():
-#				lifPath = Settings.unearthdata.plus_file("ddisk1.lif")
-#
-#			if lifPath != "":
-#				lifArray = get_lif_array(lifPath)
-#				if lifArray.empty() == false:
-#					for line in lifArray.size():
-#						var lifNumber = lifArray[line][0].pad_zeros(5)
-#						var mapNumber = path.get_file().to_upper().trim_prefix("MAP")
-#						if lifNumber == mapNumber:
-#							lifMapName = lifArray[line][1]
-#							break
-#
-#		treeItem.set_text(1, lifMapName)
-#
-#func get_lif_array(lifPath):
-#	var file = File.new()
-#	if file.file_exists(lifPath) == true:
-#		file.open(lifPath, File.READ)
-#		var returnedData = oReadData.parse_lif_text(file)
-#		file.close()
-#		return returnedData
-#	return []
+	var buffer = Filetypes.file_path_to_buffer(pathString)
+	var array = oReadData.lif_buffer_to_array(buffer)
+	var mapName = oReadData.lif_array_to_map_name(array)
+	return mapName

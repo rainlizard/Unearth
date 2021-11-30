@@ -1388,7 +1388,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map properties", null, 0, false, false, 0, 0, null, "", false, "Open script file", null, 0, false, false, 1, 0, null, "", false, "Open map folder", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false ]
+items = [ "Map properties", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3354,7 +3354,7 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/SettingsWindow" method="_on_SetDirButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ReloadTextureMapsButton" to="TextureCache" method="_on_ReloadTextureMapsButton_pressed"]
 [connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
-[connection signal="text_changed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CmdLineDkCommands" to="Ui/UiSystem/SettingsWindow" method="_on_CmdLineDkCommands_text_changed"]
+[connection signal="text_changed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CmdLineDkCommands" to="Game" method="_on_CmdLineDkCommands_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer/CheckBoxVsync" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxVsync_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer/CheckBoxDisplayFPS" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxDisplayFPS_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer/CheckBoxHideUnknown" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxHideUnknown_toggled"]

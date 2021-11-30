@@ -91,17 +91,17 @@ func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:
 		0: # Map properties
 			Utils.popup_centered(oMapPropertiesWindow)
-		1: # Open script file
+		1: # Open map folder
 			if oCurrentMap.path != "":
-				var pathToTryAndOpen = oCurrentMap.path + '.txt'
+				var pathToTryAndOpen = oCurrentMap.path.get_base_dir()
 				var err = OS.shell_open(pathToTryAndOpen)
 				if err != OK:
 					oMessage.quick("Could not open: " + pathToTryAndOpen)
 			else:
 				oMessage.quick("No map path detected. Try saving first.")
-		2: # Open map folder
+		2: # Open script file
 			if oCurrentMap.path != "":
-				var pathToTryAndOpen = oCurrentMap.path.get_base_dir()
+				var pathToTryAndOpen = oCurrentMap.path + '.txt'
 				var err = OS.shell_open(pathToTryAndOpen)
 				if err != OK:
 					oMessage.quick("Could not open: " + pathToTryAndOpen)

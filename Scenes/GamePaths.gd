@@ -20,7 +20,7 @@ var DK_DATA_DIRECTORY = ""
 var COMMAND_LINE = ""
 var COMMAND_LINE_CONSOLE = ""
 var COMMAND_LINE_CONSOLE_ARG = ""
-var DK_COMMANDS = "-nointro -alex" setget set_DK_COMMANDS
+var DK_COMMANDS = "-nointro -alex"
 
 func _input(event):
 	if Input.is_action_just_pressed("SaveAndPlay"):
@@ -39,11 +39,13 @@ func set_paths(path):
 	for i in get_subdirs(GAME_DIRECTORY):
 		if i.to_upper() == "DATA":
 			DK_DATA_DIRECTORY = GAME_DIRECTORY.plus_file(i)
-	
+
+func _on_CmdLineDkCommands_text_changed(new_text):
+	Settings.set_setting("dk_commands", new_text)
 	construct_command_line()
 
 func construct_command_line():
-	print('Constructing  command line...')
+	print('Constructing command line...')
 	
 	COMMAND_LINE = ""
 	cmdline_main()
@@ -72,7 +74,6 @@ func cmdline_main():
 			COMMAND_LINE += "'" + EXECUTABLE_PATH.get_file() + "'"
 
 func cmdline_map():
-	print('Adding map to command line...')
 	# Delete -level xxx and -campaign xxx from the command line
 	var arrayOfWords = COMMAND_LINE.split(" ")
 	for i in arrayOfWords.size():
@@ -104,11 +105,6 @@ func cmdline_commands():
 	if DK_COMMANDS != '':
 		COMMAND_LINE += ' '
 	COMMAND_LINE += DK_COMMANDS
-
-func set_DK_COMMANDS(setVal): # For when editing the field in Settings
-	DK_COMMANDS = setVal
-	construct_command_line()
-
 
 func set_SAVE_AS_DIRECTORY(path):
 	if path == null: path = ""
@@ -151,6 +147,7 @@ func test_write_permissions():
 	return err
 
 
+
 #func load_command_line_from_settings(COMMAND_LINE):
 #	COMMAND_LINE = COMMAND_LINE.replace("%DIR%", GAME_DIRECTORY)
 #	COMMAND_LINE = COMMAND_LINE.replace("%EXE%", EXECUTABLE_PATH.get_file())
@@ -185,4 +182,6 @@ func test_write_permissions():
 
 #"-nointro -altinput -alex"
 #F:\Games\Dungeon Keeper\
+
+
 

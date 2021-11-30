@@ -20,6 +20,7 @@ onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
+onready var oDataLif = Nodelist.list["oDataLif"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -82,12 +83,18 @@ func open_map(filePath): # auto opens other files
 		oCurrentMap.clear_map()
 		
 		for EXT in Filetypes.FILE_TYPES:
-			if accompanyingDict.has(EXT):
+			if accompanyingDict.has(EXT) == true:
 				Filetypes.read(accompanyingDict[EXT])
 			else:
 				print('Missing file, so using blank_map instead')
-				var blankPath = Settings.unearthdata.plus_file("blank_map.")+EXT.to_lower()
+				var blankPath = Settings.unearthdata.plus_file("blank_map.") + EXT.to_lower()
 				Filetypes.read(blankPath)
+				
+				# Assign name data to any that's missing
+				if EXT == "LIF":
+					var mapName = oDataLif.get_special_lif_text(filePath)
+					if mapName != "":
+						oDataLif.data = mapName
 		
 		finish_opening_map(map)
 	else:

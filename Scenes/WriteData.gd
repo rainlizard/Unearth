@@ -22,10 +22,12 @@ func write_lif(buffer, filePath):
 		mapNumber = mapNumber.trim_prefix('0')
 	
 	value = mapNumber + ', ' + oDataLif.data
-	buffer.put_string(value)
+	
+	buffer.put_data(value.to_utf8())
 
 func write_txt(buffer):
-	buffer.put_string(oDataScript.data)
+	var value = oDataScript.data
+	buffer.put_data(value.to_utf8())
 
 func write_wlb(buffer):
 	for ySlab in 85:

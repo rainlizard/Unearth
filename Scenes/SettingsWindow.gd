@@ -144,6 +144,3 @@ func _on_CheckBoxDisplay3dInfo_toggled(button_pressed):
 
 func _on_CheckBoxHideUnknown_toggled(button_pressed):
 	Settings.set_setting("hide_unknown_data", button_pressed)
-
-func _on_CmdLineDkCommands_text_changed(new_text):
-	Settings.set_setting("dk_commands", new_text)

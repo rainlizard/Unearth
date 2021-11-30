@@ -20,21 +20,14 @@ func read(filePath):
 	var EXT = filePath.get_extension().to_upper()
 	if Filetypes.FILE_TYPES.has(EXT) == false: return
 	
-	var file = File.new()
-	if file.file_exists(filePath) == false:
+	if File.new().file_exists(filePath) == false:
 		print("File not found : " + filePath)
 		return
 	
 	print("Attempting to read : "+filePath)
 	var CODETIME_START = OS.get_ticks_msec()
-	var buffer = StreamPeerBuffer.new()
-	file.open(filePath,File.READ)
-	buffer.data_array = file.get_buffer(file.get_len())
 	
-#	buffer.seek(0)
-#	print(buffer.get_32())
-#	file.seek(0)
-#	print(file.get_32())
+	var buffer = file_path_to_buffer(filePath)
 	
 	var oReadData = Nodelist.list["oReadData"]
 	match EXT:
@@ -45,13 +38,13 @@ func read(filePath):
 		"INF" : oReadData.read_inf(buffer)
 		"SLB" : oReadData.read_slb(buffer)
 		"OWN" : oReadData.read_own(buffer)
-		"LIF" : oReadData.read_lif(buffer,file)
+		"LIF" : oReadData.read_lif(buffer)
 		"LGT" : oReadData.read_lgt(buffer)
 		"WIB" : oReadData.read_wib(buffer)
 		"SLX" : oReadData.read_slx(buffer)
 		"WLB" : oReadData.read_wlb(buffer)
 		#"TXT" : oReadData.read_txt(buffer)
-	file.close()
+	
 	print('.'+EXT+' read success in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 
@@ -83,3 +76,11 @@ func write(filePath):
 	file.store_buffer(buffer.data_array)
 	file.close()
 	print('.'+EXT+' wrote in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+
+func file_path_to_buffer(filePath):
+	var buffer = StreamPeerBuffer.new()
+	var file = File.new()
+	if file.open(filePath, File.READ) == OK:
+		buffer.data_array = file.get_buffer(file.get_len())
+		file.close()
+	return buffer
