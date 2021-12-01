@@ -27,8 +27,12 @@ func initialize_grid_items():
 			btnId.text = "~" #"Default"
 			btnId.set_meta("grid_item_text","Default")
 		else:
-			btnId.text = str(i-1) #"tmapa" + str(i).pad_zeros(3) + ".dat"
-			btnId.set_meta("grid_item_text",Constants.TEXTURE_MAP_NAMES[i-1])
+			var val = i-1
+			btnId.text = str(val) #"tmapa" + str(i).pad_zeros(3) + ".dat"
+			if Constants.TEXTURE_MAP_NAMES.has(val) == true:
+				btnId.set_meta("grid_item_text", Constants.TEXTURE_MAP_NAMES[val])
+			else:
+				btnId.set_meta("grid_item_text", "")
 		
 		if i == paintSlabStyle:
 			btnId.pressed = true

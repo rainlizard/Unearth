@@ -26,7 +26,10 @@ func generateDungeonStyleOptions():
 			aaa.pressed = true
 		aaa.group = load("res://Theme/ButtonGroupDungeonStyle.tres")
 		#aaa.text = "tmapa" + str(i).pad_zeros(3) + ".dat"
-		aaa.text = Constants.TEXTURE_MAP_NAMES[i]
+		if Constants.TEXTURE_MAP_NAMES.has(i) == true:
+			aaa.text = Constants.TEXTURE_MAP_NAMES[i]
+		else:
+			aaa.text = 'Texture map ' + str(i)
 		aaa.size_flags_vertical = Control.SIZE_EXPAND + Control.SIZE_SHRINK_CENTER
 		aaa.size_flags_horizontal = Control.SIZE_EXPAND + Control.SIZE_SHRINK_CENTER
 		aaa.connect("pressed",self,"_on_DungeonStyleButtonPressed",[i])

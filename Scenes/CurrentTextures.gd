@@ -187,8 +187,10 @@ func loadCachedTextures(newTmapaPaths):
 
 
 func set_default_texture_pack(value):
-	if cachedTextures.empty() == true or cachedTextures[value][0] == null or cachedTextures[value][1] == null:
-		oMessage.quick("Error: Cached textures could not be loaded. Try reloading texture maps.")
+	if cachedTextures.empty() == true:
+		oMessage.quick("Error: No texture maps could be loaded. Try reloading texture maps.")
+	if cachedTextures[value][0] == null or cachedTextures[value][1] == null:
+		oMessage.quick("Error: Unable to load texture map number " + str(value) + '. Try reloading texture maps.')
 		return
 	
 	# 2D

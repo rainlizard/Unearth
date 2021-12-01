@@ -61,7 +61,7 @@ func open_map(filePath): # auto opens other files
 	
 	# Prevent opening any maps under any circumstance if textures haven't been loaded. (Fix to launching via file association)
 	if oTextureCache.texturesLoadedState != oTextureCache.LOADING_SUCCESS:
-		oMessage.quick("Error: Textures haven't been loaded")
+		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
 		oCurrentMap.clear_map()
 		return
 	
