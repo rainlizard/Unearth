@@ -19,10 +19,7 @@ var directionalPan = Vector2()
 var middleMousePanning = false
 var mouseIsMoving = false
 
-func _ready():
-	resetCamera()
-
-func resetCamera():
+func reset_camera():
 	offset = Vector2(85*96,85*96) * Vector2(0.5,0.5)
 	desired_offset = offset
 	

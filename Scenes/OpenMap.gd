@@ -116,7 +116,7 @@ func finish_opening_map(map):
 	oEditor.mapHasBeenEdited = false
 	oOverheadOwnership.start()
 	
-	oCamera2D.resetCamera()
+	oCamera2D.reset_camera()
 	
 	oSlabPalette.start()
 	oOverheadGraphics.update_map_overhead_2d_textures()

@@ -2,16 +2,16 @@ extends Node2D
 
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 
-func _init():
+func _enter_tree():
 	print("Unearth v"+Constants.VERSION)
 	Nodelist.start(self)
 
 func _ready():
 	Nodelist.done()
 	Settings.initialize_settings()
+	get_parent().initialize_window_settings()
 	$TextureCache.start() # Needs to be run after Settings initialized so that the GAME_DIRECTORY is correctly set
 	$OpenMap.start()
-
 
 
 

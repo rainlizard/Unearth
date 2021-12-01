@@ -26,7 +26,7 @@ func write_lif(buffer, filePath):
 	buffer.put_data(value.to_utf8())
 
 func write_txt(buffer):
-	var value = oDataScript.data
+	value = oDataScript.data
 	buffer.put_data(value.to_utf8())
 
 func write_wlb(buffer):

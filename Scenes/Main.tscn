@@ -544,8 +544,8 @@ script = ExtResource( 76 )
 [node name="PickSlabWindow" type="WindowDialog" parent="Ui/UiTools"]
 visible = true
 margin_top = 60.0
-margin_right = 1284.0
-margin_bottom = 255.0
+margin_right = 308.0
+margin_bottom = 707.0
 window_title = "Slab"
 resizable = true
 script = ExtResource( 68 )
@@ -563,36 +563,36 @@ __meta__ = {
 }
 
 [node name="TopTabsSection" parent="Ui/UiTools/PickSlabWindow/SlabTabs" instance=ExtResource( 105 )]
-margin_right = 1284.0
+margin_right = 308.0
 margin_bottom = 31.0
 
 [node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs"]
 margin_top = 35.0
-margin_right = 1284.0
-margin_bottom = 195.0
+margin_right = 308.0
+margin_bottom = 647.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MainSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
-margin_right = 1284.0
-margin_bottom = 160.0
+margin_right = 308.0
+margin_bottom = 612.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 1280.0
-margin_bottom = 156.0
+margin_right = 304.0
+margin_bottom = 608.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs/ScrollContainer"]
-margin_left = 638.0
-margin_top = 76.0
-margin_right = 638.0
-margin_bottom = 76.0
+margin_left = 150.0
+margin_top = 302.0
+margin_right = 150.0
+margin_bottom = 302.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
@@ -707,8 +707,8 @@ __meta__ = {
 [node name="PickThingWindow" type="WindowDialog" parent="Ui/UiTools"]
 visible = true
 margin_top = 60.0
-margin_right = 1247.0
-margin_bottom = 207.0
+margin_right = 750.0
+margin_bottom = 268.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 window_title = "Thing"
@@ -729,36 +729,36 @@ __meta__ = {
 }
 
 [node name="TopTabsSection" parent="Ui/UiTools/PickThingWindow/ThingTabs" instance=ExtResource( 105 )]
-margin_right = 1247.0
+margin_right = 750.0
 margin_bottom = 31.0
 
 [node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
 margin_top = 35.0
-margin_right = 1247.0
-margin_bottom = 147.0
+margin_right = 750.0
+margin_bottom = 208.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Creature" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
-margin_right = 1247.0
-margin_bottom = 112.0
+margin_right = 750.0
+margin_bottom = 173.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Creature"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 1243.0
-margin_bottom = 108.0
+margin_right = 746.0
+margin_bottom = 169.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Creature/ScrollContainer"]
-margin_left = 619.0
-margin_top = 52.0
-margin_right = 619.0
-margin_bottom = 52.0
+margin_left = 371.0
+margin_top = 82.0
+margin_right = 371.0
+margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
