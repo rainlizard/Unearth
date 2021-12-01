@@ -246,10 +246,16 @@ func lif_buffer_to_array(buffer):
 
 # Map name
 func lif_array_to_map_name(array):
-	if array.size() > 0: # Checks if Lif contains anything
-		if array[0].size() > 1: # Checks if Lif contains both map number and map name (or at least if there was a comma)
-			return array[0][1]
-	return ""
+	# First number in array is the "line", the second number is whether it's map number or map name
+	if array.size() == 0: return "" # Lines
+	if array[0].size() <= 1: return "" # Need both map number and map name to be present
+	
+	if array.size() >= 2: # Two lines
+		if "#" in array[0][1]: # If translation ID marker ("#") present, then read the next line
+			return array[1][0].trim_prefix(';')
+	
+	# Read map name normally
+	return array[0][1]
 
 
 

@@ -39,10 +39,14 @@ func _process(delta):
 	
 	desired_offset += directionalPan * DIRECTIONAL_PAN_SPEED * zoom * delta
 	var fieldSize = Vector2(32*255,32*255)
-#	desired_offset.x = clamp(desired_offset.x, 0-(fieldSize.x*1.00*desired_zoom.x), fieldSize.x+(fieldSize.x*1.00*desired_zoom.x))
-#	desired_offset.y = clamp(desired_offset.y, 0-(fieldSize.y*1.00*desired_zoom.y), fieldSize.y+(fieldSize.y*1.00*desired_zoom.y))
-	desired_offset.x = clamp(desired_offset.x, 0, fieldSize.x)
-	desired_offset.y = clamp(desired_offset.y, 0, fieldSize.y)
+	
+	var halfViewSize = (get_viewport().size * 0.5) * desired_zoom
+	
+	# The point of this is just so you can't move the map COMPLETELY off the screen
+	var allowLittleExtraVisible = halfViewSize * 0.10
+	
+	desired_offset.x = clamp(desired_offset.x, -(halfViewSize.x-allowLittleExtraVisible.x), fieldSize.x+(halfViewSize.x-allowLittleExtraVisible.x))
+	desired_offset.y = clamp(desired_offset.y, -(halfViewSize.y-allowLittleExtraVisible.y), fieldSize.y+(halfViewSize.y-allowLittleExtraVisible.y))
 	
 	offset = lerp(offset, desired_offset, clamp(SMOOTHING_RATE * delta, 0.0, 1.0))
 	
