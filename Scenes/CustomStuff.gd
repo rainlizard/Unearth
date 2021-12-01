@@ -49,5 +49,3 @@ func remove_object(thingType, subtype):
 		print('Removed custom object type: '+str(thingType) + ' subtype: '+ str(subtype))
 	else:
 		print('Object not found in Custom Objects dictionary')
-	
-	print(CUSTOM_OBJECTS)
