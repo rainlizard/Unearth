@@ -119,7 +119,7 @@ func get_subdirs(path):
 	var array = []
 	var dir = Directory.new()
 	if dir.open(path) == OK:
-		dir.list_dir_begin()
+		dir.list_dir_begin(true, false)
 		var fileName = dir.get_next()
 		while fileName != "":
 			if dir.current_is_dir() == true:

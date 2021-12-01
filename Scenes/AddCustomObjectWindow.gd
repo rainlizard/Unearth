@@ -30,18 +30,22 @@ func _process(delta):
 		oWarningIdInUse.visible = false
 
 func _on_AddCustomObjectButton_pressed():
-	if oNewObjectName.text == "":
+	var givenName = oNewObjectName.text
+	
+	if givenName == "":
 		oMessage.quick("Enter a name")
 		return
 	if oNewObjectSubtypeID.text == "":
 		oMessage.quick("Enter an ID")
 		return
 	
+	var tabToPlaceIn = oNewObjectTab.get_item_metadata(oNewObjectTab.selected)
+	
 	var array = [
-	oNewObjectName.text, # Name
+	givenName, # Name
 	null, # Image
 	null, # Portrait
-	oNewObjectTab.get_item_metadata(oNewObjectTab.selected),
+	tabToPlaceIn,
 	]
 	
 	var subtype = int(oNewObjectSubtypeID.text)
@@ -55,8 +59,10 @@ func _on_AddCustomObjectButton_pressed():
 	
 	# Switch to show the thing you've added
 	oSelector.change_mode(oSelector.MODE_SUBTILE)
+	
+	
 	for i in oThingTabs.get_tab_count():
-		if oThingTabs.get_tab_control(i) == oPickThingWindow.tabs[oNewObjectTab.get_item_metadata(oNewObjectTab.selected)]:
+		if oThingTabs.get_tab_control(i) == oPickThingWindow.tabs[tabToPlaceIn][oPickThingWindow.GRIDCON_PATH]:
 			oThingTabs.current_tab = i
 	
 	# Clear the stuff you set

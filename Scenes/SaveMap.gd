@@ -12,8 +12,12 @@ func save_map(filePath): # auto opens other files
 	
 	var SAVETIME_START = OS.get_ticks_msec()
 	
-	for i in Filetypes.FILE_TYPES:
-		Filetypes.write(map + '.' + i.to_lower())
+	# Delete the old files. Important for Linux otherwise duplicates can be created. (Lowercase files can be saved without replacing the uppercase files)
+	if OS.get_name() == "X11":
+		delete_existing_files(map)
+	
+	for EXT in Filetypes.FILE_TYPES:
+		Filetypes.write(map + '.' + EXT.to_lower(), EXT.to_upper())
 	
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	
@@ -24,6 +28,24 @@ func save_map(filePath): # auto opens other files
 	# This goes last. Queued from when doing "save before quitting" and "save as" before quitting.
 	if queueExit == true:
 		get_tree().quit()
+
+func delete_existing_files(map):
+	
+	var baseDirectory = map.get_base_dir()
+	var MAP_NAME = map.get_basename().get_file().to_upper()
+	var dir = Directory.new()
+	if dir.open(baseDirectory) == OK:
+		dir.list_dir_begin(true, false)
+		var fileName = dir.get_next()
+		while fileName != "":
+			if MAP_NAME in fileName.to_upper():
+				# Only delete the accompanying file types that I'm about to write
+				if Filetypes.FILE_TYPES.has(fileName.get_extension().to_upper()):
+					print("Deleted: " + fileName)
+					dir.remove(fileName)
+			fileName = dir.get_next()
+	else:
+		print("An error occurred when trying to access the path.")
 
 func clicked_save_on_menu():
 	save_map(oCurrentMap.path)

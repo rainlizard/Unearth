@@ -16,9 +16,7 @@ const FILE_TYPES = [
 #	"TXT" : ["read_txt", "write_txt"],
 ]
 
-func read(filePath):
-	var EXT = filePath.get_extension().to_upper()
-	if Filetypes.FILE_TYPES.has(EXT) == false: return
+func read(filePath, EXT):
 	
 	if File.new().file_exists(filePath) == false:
 		print("File not found : " + filePath)
@@ -48,9 +46,7 @@ func read(filePath):
 	print('.'+EXT+' read success in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 
-func write(filePath):
-	var EXT = filePath.get_extension().to_upper()
-	if Filetypes.FILE_TYPES.has(EXT) == false: return
+func write(filePath, EXT):
 	print("Saving : "+filePath)
 	var CODETIME_START = OS.get_ticks_msec()
 	

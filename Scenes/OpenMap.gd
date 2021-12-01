@@ -84,11 +84,11 @@ func open_map(filePath): # auto opens other files
 		
 		for EXT in Filetypes.FILE_TYPES:
 			if accompanyingDict.has(EXT) == true:
-				Filetypes.read(accompanyingDict[EXT])
+				Filetypes.read(accompanyingDict[EXT], EXT.to_upper())
 			else:
 				print('Missing file, so using blank_map instead')
 				var blankPath = Settings.unearthdata.plus_file("blank_map.") + EXT.to_lower()
-				Filetypes.read(blankPath)
+				Filetypes.read(blankPath, EXT.to_upper())
 				
 				# Assign name data to any that's missing
 				if EXT == "LIF":
@@ -157,7 +157,7 @@ func list_accompanying_files(map):
 	var dict = {}
 	var dir = Directory.new()
 	if dir.open(baseDir) == OK:
-		dir.list_dir_begin()
+		dir.list_dir_begin(true, false)
 
 		var fileName = dir.get_next()
 		while fileName != "":
