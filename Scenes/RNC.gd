@@ -3,9 +3,9 @@ extends Node
 var decompressorExeFullPath = ""
 
 func _ready():
-	setDecompressorAbsolutePath()
+	set_decompressor_path()
 
-func setDecompressorAbsolutePath():
+func set_decompressor_path():
 	var file = File.new()
 	var path
 	match OS.get_name():
@@ -20,7 +20,7 @@ func setDecompressorAbsolutePath():
 		decompressorExeFullPath = file.get_path_absolute()
 		file.close()
 
-func checkForRncCompression(path): # Check if the first 3 bytes are the letters "RNC" and the 4th byte is a "1".
+func check_for_RNC_compression(path): # Check if the first 3 bytes are the letters "RNC" and the 4th byte is a "1".
 	var isCompressed = false
 	
 	var file = File.new()

@@ -203,11 +203,13 @@ func slab_update_clm(xSlab, ySlab, slabID, ownership):
 	
 	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
 	match bitmaskType:
-		Slabs.BITMASK_WALL:    place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
-		Slabs.BITMASK_OTHER:   place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
-		Slabs.BITMASK_GENERAL: place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
-		Slabs.BITMASK_CLAIMED: place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
-		Slabs.BITMASK_TALL:    place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+		Slabs.BITMASK_WALL:
+			place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+		Slabs.BITMASK_OTHER:
+			place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+		_:
+			place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+
 
 func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
 	var slabVariation = slabID*28

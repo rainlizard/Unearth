@@ -45,7 +45,6 @@ func read(filePath, EXT):
 	
 	print('.'+EXT+' read success in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-
 func write(filePath, EXT):
 	print("Saving : "+filePath)
 	var CODETIME_START = OS.get_ticks_msec()

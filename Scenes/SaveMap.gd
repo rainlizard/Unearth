@@ -17,7 +17,9 @@ func save_map(filePath): # auto opens other files
 		delete_existing_files(map)
 	
 	for EXT in Filetypes.FILE_TYPES:
-		Filetypes.write(map + '.' + EXT.to_lower(), EXT.to_upper())
+		var saveToFilePath = map + '.' + EXT.to_lower()
+		Filetypes.write(saveToFilePath, EXT.to_upper())
+		oCurrentMap.currentFilePaths[EXT][0] = saveToFilePath
 	
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	

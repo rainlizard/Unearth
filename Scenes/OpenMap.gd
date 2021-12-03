@@ -53,6 +53,7 @@ func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
 func open_map(filePath): # auto opens other files
+	
 	# Prevent opening any maps under any circumstance if you haven't set the dk exe yet. (Fix to launching via file association)
 	if oGame.EXECUTABLE_PATH == "":
 		oMessage.quick("Error: Cannot open map because executable path is not set")
@@ -70,21 +71,20 @@ func open_map(filePath): # auto opens other files
 	
 	# Open all map file types
 	
-	var accompanyingDict = list_accompanying_files(map)
+	oCurrentMap.currentFilePaths = get_accompanying_files(map)
 	
 	compressedFiles.clear()
-	for i in accompanyingDict.values():
-		if oRNC.checkForRncCompression(i) == true:
-			compressedFiles.append(i)
+	for i in oCurrentMap.currentFilePaths.values():
+		if oRNC.check_for_RNC_compression(i[0]) == true:
+			compressedFiles.append(i[0])
 	
 	if compressedFiles.empty() == true:
-		
 		# Load files
 		oCurrentMap.clear_map()
 		
 		for EXT in Filetypes.FILE_TYPES:
-			if accompanyingDict.has(EXT) == true:
-				Filetypes.read(accompanyingDict[EXT], EXT.to_upper())
+			if oCurrentMap.currentFilePaths.has(EXT) == true:
+				Filetypes.read(oCurrentMap.currentFilePaths[EXT][0], EXT.to_upper())
 			else:
 				print('Missing file, so using blank_map instead')
 				var blankPath = Settings.unearthdata.plus_file("blank_map.") + EXT.to_lower()
@@ -150,10 +150,10 @@ func _on_FileDialogOpen_file_selected(path):
 	open_map(path)
 
 
-func list_accompanying_files(map):
+func get_accompanying_files(map):
 	var baseDir = map.get_base_dir()
 	var mapName = map.get_file()
-
+	
 	var dict = {}
 	var dir = Directory.new()
 	if dir.open(baseDir) == OK:
@@ -164,7 +164,11 @@ func list_accompanying_files(map):
 			if dir.current_is_dir() == false:
 				if fileName.to_upper().begins_with(mapName.to_upper()): # Get file regardless of case (case insensitive)
 					var EXT = fileName.get_extension().to_upper()
-					dict[EXT] = baseDir.plus_file(fileName)
+					if Filetypes.FILE_TYPES.has(EXT) and fileName.get_file().get_basename().to_upper() != "BLANK_MAP":
+						
+						var fullPath = baseDir.plus_file(fileName)
+						var getModifiedTime = File.new().get_modified_time(fullPath)
+						dict[EXT] = [fullPath, getModifiedTime]
 			fileName = dir.get_next()
 	return dict
 
