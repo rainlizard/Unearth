@@ -97,44 +97,6 @@ func place_slab_shape(shapePositionArray, slabID, ownership):
 	oOverheadOwnership.ownership_update_shape(shapePositionArray, ownership)
 	print('Rectangle placed in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-#func place_slab(xSlab, ySlab, slabID, ownership, updateSurrounding):
-#
-#	match slabID:
-#		Slabs.BRIDGE:
-#			if oBridgesOnlyOnLiquidCheckbox.pressed == true:
-#				if oDataSlab.get_cell(xSlab, ySlab) != Slabs.WATER and oDataSlab.get_cell(xSlab, ySlab) != Slabs.LAVA:
-#					return
-#
-#	oOverheadOwnership.ownership_update_shape([Vector2(xSlab,ySlab)], ownership)
-#
-#	oDataSlab.set_cell(xSlab, ySlab, slabID)
-#
-#	if slabID == Slabs.EARTH or Slabs.data[slabID][Slabs.IS_SOLID] == false:
-#		for dir in [Vector2(0,1),Vector2(-1,0),Vector2(0,-1),Vector2(1,0),Vector2(-1,1),Vector2(-1,-1),Vector2(1,-1),Vector2(1,1)]:
-#			var surroundingSlabID = oDataSlab.get_cell(xSlab+dir.x, ySlab+dir.y)
-#			if surroundingSlabID in [Slabs.EARTH, Slabs.EARTH_WITH_TORCH]:
-#				auto_torch_earth(xSlab+dir.x, ySlab+dir.y)
-#		if slabID == Slabs.EARTH:
-#			slabID = auto_torch_earth(xSlab, ySlab)
-#
-#	# Update nearby SlabIDs if placing an automatic wall or a non-solid.
-#	if slabID == Slabs.WALL_AUTOMATIC or Slabs.data[slabID][Slabs.IS_SOLID] == false:
-#		for dir in [Vector2(0,1),Vector2(-1,0),Vector2(0,-1),Vector2(1,0),Vector2(-1,1),Vector2(-1,-1),Vector2(1,-1),Vector2(1,1)]:
-#			var surroundingSlabID = oDataSlab.get_cell(xSlab+dir.x, ySlab+dir.y)
-#			if Slabs.auto_wall_updates_these.has(surroundingSlabID):
-#				auto_wall(xSlab+dir.x, ySlab+dir.y)
-#
-#	slab_update_clm(xSlab, ySlab, slabID, ownership)
-#
-#	if updateSurrounding == true:
-#		for dir in [Vector2(0,1),Vector2(-1,0),Vector2(0,-1),Vector2(1,0),Vector2(-1,1),Vector2(-1,-1),Vector2(1,-1),Vector2(1,1)]:
-#			var surroundingSlabID = oDataSlab.get_cell(xSlab+dir.x, ySlab+dir.y)
-#			var surroundingOwnership = oDataOwnership.get_cell(xSlab+dir.x, ySlab+dir.y)
-#
-#			slab_update_clm(xSlab+dir.x, ySlab+dir.y, surroundingSlabID, surroundingOwnership)
-#
-#	oOverheadGraphics.overhead2d_update_rect(Vector2(xSlab,ySlab), Vector2(xSlab,ySlab)) # Uses clm, so this goes last
-
 func auto_torch_earth(xSlab, ySlab):
 	var newSlabID = Slabs.EARTH
 	var calcTorchSide = calculate_torch_side(xSlab,ySlab)
@@ -226,28 +188,70 @@ func calculate_torch_side(xSlab, ySlab):
 	return calcTorchSide
 
 func slab_update_clm(xSlab, ySlab, slabID, ownership):
+	if slabID == Slabs.WALL_AUTOMATIC:
+		slabID = auto_wall(xSlab, ySlab) # Set slabID to a real one
+	elif slabID == Slabs.EARTH:
+		slabID = auto_torch_earth(xSlab, ySlab) # Potentially change slab ID to Torch Earth
 	
 	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
-	
 	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
-	
 	# WIB (wibble)
 	update_wibble(xSlab, ySlab, slabID, surrID)
 	# WLB (Water Lava Block)
 	if slabID != Slabs.BRIDGE:
 		oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
 	
-	match Slabs.data[slabID][Slabs.BITMASK_TYPE]:
-		Slabs.BITMASK_WALL: place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner)
-		Slabs.BITMASK_GOLD: place_gold(xSlab, ySlab, slabID, ownership, surrID, surrOwner)
-		Slabs.BITMASK_OTHER: place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner)
-		Slabs.BITMASK_GENERAL: place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner)
-		Slabs.BITMASK_CLAIMED: place_claimed_area(xSlab, ySlab, slabID, ownership, surrID, surrOwner)
+	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
+	match bitmaskType:
+		Slabs.BITMASK_WALL:    place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+		Slabs.BITMASK_OTHER:   place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+		Slabs.BITMASK_GENERAL: place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+		Slabs.BITMASK_CLAIMED: place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+		Slabs.BITMASK_TALL:    place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
 
-func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner):
-	if slabID == Slabs.WALL_AUTOMATIC:
-		slabID = auto_wall(xSlab, ySlab) # Set slabID to a real one
+func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
+	var slabVariation = slabID*28
 	
+	var bitmask
+	match bitmaskType:
+		Slabs.BITMASK_GENERAL: bitmask = get_general_bitmask(slabID, ownership, surrID, surrOwner)
+		Slabs.BITMASK_CLAIMED: bitmask = get_claimed_bitmask(slabID, ownership, surrID, surrOwner)
+		Slabs.BITMASK_TALL: bitmask = get_tall_bitmask(surrID)
+	
+	var asset3x3group = make_slab(slabID*28, bitmask)
+	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
+	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
+	var clmIndexArray = asset_position_to_column_index(asset3x3group)
+	
+	match slabID:
+		Slabs.EARTH:
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_EARTH, slabID)
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_EARTH_NEARBY_WATER, slabID)
+		Slabs.CLAIMED_GROUND:
+			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_FLOOR, bitmask, slabID)
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_CLAIMED_AREA, slabID)
+		Slabs.GOLD:
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD, slabID)
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD_NEARBY_LAVA, slabID)
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD_NEARBY_WATER, slabID)
+		Slabs.PATH:
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_DIRTPATH, slabID)
+		Slabs.LAVA:
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_LAVA, slabID)
+		Slabs.DUNGEON_HEART:
+			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_HEART, bitmask, slabID)
+		Slabs.PORTAL:
+			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
+		Slabs.LIBRARY:
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_LIBRARY, slabID)
+		Slabs.EARTH_WITH_TORCH:
+			clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
+	
+	set_columns(xSlab, ySlab, clmIndexArray)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
+
+
+func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
 	var slabVariation = slabID * 28
 	
 	var bitmask = get_wall_bitmask(xSlab, ySlab, surrID, ownership)
@@ -261,13 +265,13 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner):
 	var wallW = Slabs.data[ surrID[dir.w] ][Slabs.BITMASK_TYPE]
 	var wallN = Slabs.data[ surrID[dir.n] ][Slabs.BITMASK_TYPE]
 	var wallE = Slabs.data[ surrID[dir.e] ][Slabs.BITMASK_TYPE]
-	if wallN == Slabs.BITMASK_WALL and wallE == Slabs.BITMASK_WALL and Slabs.data[ surrID[dir.ne] ][Slabs.IS_SOLID] == false:
+	if wallN == bitmaskType and wallE == bitmaskType and Slabs.data[ surrID[dir.ne] ][Slabs.IS_SOLID] == false:
 		asset3x3group[2] = ((slabVariation + dir.all) * 9) + 2
-	if wallN == Slabs.BITMASK_WALL and wallW == Slabs.BITMASK_WALL and Slabs.data[ surrID[dir.nw] ][Slabs.IS_SOLID] == false:
+	if wallN == bitmaskType and wallW == bitmaskType and Slabs.data[ surrID[dir.nw] ][Slabs.IS_SOLID] == false:
 		asset3x3group[0] = ((slabVariation + dir.all) * 9) + 0
-	if wallS == Slabs.BITMASK_WALL and wallE == Slabs.BITMASK_WALL and Slabs.data[ surrID[dir.se] ][Slabs.IS_SOLID] == false:
+	if wallS == bitmaskType and wallE == bitmaskType and Slabs.data[ surrID[dir.se] ][Slabs.IS_SOLID] == false:
 		asset3x3group[8] = ((slabVariation + dir.all) * 9) + 8
-	if wallS == Slabs.BITMASK_WALL and wallW == Slabs.BITMASK_WALL and Slabs.data[ surrID[dir.sw] ][Slabs.IS_SOLID] == false:
+	if wallS == bitmaskType and wallW == bitmaskType and Slabs.data[ surrID[dir.sw] ][Slabs.IS_SOLID] == false:
 		asset3x3group[6] = ((slabVariation + dir.all) * 9) + 6
 	
 	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
@@ -277,80 +281,18 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner):
 	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
 	
 	if slabID == Slabs.WALL_WITH_TORCH:
-		
 		clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
 	
-	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL, slabID)
-	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL_NEARBY_WATER, slabID)
-	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL_NEARBY_LAVA, slabID)
+	if bitmaskType == Slabs.BITMASK_WALL:
+		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL, slabID)
+		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL_NEARBY_WATER, slabID)
+		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL_NEARBY_LAVA, slabID)
 	
 	set_columns(xSlab, ySlab, clmIndexArray)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
 
-func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner):
-	if slabID == Slabs.EARTH:
-		slabID = auto_torch_earth(xSlab, ySlab) # Potentially change slab ID to Torch Earth
-	
-	var slabVariation = slabID*28
-	var bitmask = get_general_bitmask(slabID, ownership, surrID, surrOwner)
-	var asset3x3group = make_slab(slabID*28, bitmask)
-	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
-	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
-	var clmIndexArray = asset_position_to_column_index(asset3x3group)
-	
-	match slabID:
-		Slabs.EARTH:
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_EARTH, slabID)
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_EARTH_NEARBY_WATER, slabID)
-		Slabs.PATH:
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_DIRTPATH, slabID)
-		Slabs.DUNGEON_HEART:
-			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_HEART, bitmask, slabID)
-		Slabs.PORTAL:
-			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
-		Slabs.LIBRARY:
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_LIBRARY, slabID)
-		Slabs.EARTH_WITH_TORCH:
-			clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
-		Slabs.LAVA:
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_LAVA, slabID)
-	
-	set_columns(xSlab, ySlab, clmIndexArray)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
 
-
-func place_claimed_area(xSlab, ySlab, slabID, ownership, surrID, surrOwner):
-	var slabVariation = slabID*28
-	var bitmask = get_claimed_area_bitmask(xSlab, ySlab, slabID, surrID, ownership)
-	#var bitmask = get_general_bitmask(slabID, surrID)
-	var asset3x3group = make_slab(slabVariation, bitmask)
-	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
-	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
-	var clmIndexArray = asset_position_to_column_index(asset3x3group)
-	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_FLOOR, bitmask, slabID)
-	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_CLAIMED_AREA, slabID)
-	
-	set_columns(xSlab, ySlab, clmIndexArray)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
-
-
-func place_gold(xSlab, ySlab, slabID, ownership, surrID, surrOwner):
-	var slabVariation = slabID*28
-	var bitmask = get_gold_bitmask(surrID)
-	var asset3x3group = make_slab(slabVariation, bitmask)
-	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
-	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
-	var clmIndexArray = asset_position_to_column_index(asset3x3group)
-	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD, slabID)
-	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD_NEARBY_LAVA, slabID)
-	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD_NEARBY_WATER, slabID)
-	
-	set_columns(xSlab, ySlab, clmIndexArray)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
-
-
-func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner): # These slabs only have 8 variations each, compared to the others which have 28 each.
-	
+func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType): # These slabs only have 8 variations each, compared to the others which have 28 each.
 	# Make sure door is facing the correct direction by changing its Slab based on surrounding slabs.
 	if slabID in [Slabs.WOODEN_DOOR_1, Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_1, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_1, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_1, Slabs.MAGIC_DOOR_2]:
 		if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == true and Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == true:
@@ -384,6 +326,8 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner): # These sl
 	
 	set_columns(xSlab, ySlab, clmIndexArray)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, null, null)
+
+
 
 func randomize_columns(clmIndexArray, RNG_CLM, slabID):
 	var rngSelect = oSlabPalette.randomColumns[RNG_CLM]
@@ -493,7 +437,7 @@ func set_columns(xSlab, ySlab, array):
 		var xSubtile = i - (ySubtile*3)
 		oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
 
-func get_gold_bitmask(surrID):
+func get_tall_bitmask(surrID):
 	var bitmask = 0
 	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false: bitmask += 1
 	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false: bitmask += 2
@@ -517,12 +461,12 @@ func get_wall_bitmask(xSlab, ySlab, surrID, ownership):
 	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false or ownerE != ownership: bitmask += 8
 	return bitmask
 
-func get_claimed_area_bitmask(xSlab, ySlab, slabID, surrID, ownership):
+func get_claimed_bitmask(slabID, ownership, surrID, surrOwner):
 	var bitmask = 0
-	if (slabID != surrID[dir.s] and Slabs.doors.has(surrID[dir.s]) == false) or oDataOwnership.get_cell(xSlab, ySlab+1) != ownership: bitmask += 1
-	if (slabID != surrID[dir.w] and Slabs.doors.has(surrID[dir.w]) == false) or oDataOwnership.get_cell(xSlab-1, ySlab) != ownership: bitmask += 2
-	if (slabID != surrID[dir.n] and Slabs.doors.has(surrID[dir.n]) == false) or oDataOwnership.get_cell(xSlab, ySlab-1) != ownership: bitmask += 4
-	if (slabID != surrID[dir.e] and Slabs.doors.has(surrID[dir.e]) == false) or oDataOwnership.get_cell(xSlab+1, ySlab) != ownership: bitmask += 8
+	if (slabID != surrID[dir.s] and Slabs.doors.has(surrID[dir.s]) == false) or ownership != surrOwner[dir.s]: bitmask += 1
+	if (slabID != surrID[dir.w] and Slabs.doors.has(surrID[dir.w]) == false) or ownership != surrOwner[dir.w]: bitmask += 2
+	if (slabID != surrID[dir.n] and Slabs.doors.has(surrID[dir.n]) == false) or ownership != surrOwner[dir.n]: bitmask += 4
+	if (slabID != surrID[dir.e] and Slabs.doors.has(surrID[dir.e]) == false) or ownership != surrOwner[dir.e]: bitmask += 8
 	return bitmask
 
 func get_general_bitmask(slabID, ownership, surrID, surrOwner):
@@ -532,12 +476,6 @@ func get_general_bitmask(slabID, ownership, surrID, surrOwner):
 	if slabID != surrID[dir.n] or ownership != surrOwner[dir.n]: bitmask += 4
 	if slabID != surrID[dir.e] or ownership != surrOwner[dir.e]: bitmask += 8
 	
-#	if bitmask == 0:
-#		if slabID != surrID[dir.sw] or ownership != surrOwner[dir.sw]: bitmask = 15
-#		if slabID != surrID[dir.nw] or ownership != surrOwner[dir.nw]: bitmask = 15
-#		if slabID != surrID[dir.ne] or ownership != surrOwner[dir.ne]: bitmask = 15
-#		if slabID != surrID[dir.se] or ownership != surrOwner[dir.se]: bitmask = 15
-	
 	# Middle slab
 	if bitmask == 0:
 		if Slabs.rooms_with_middle_slab.has(slabID):
@@ -546,7 +484,6 @@ func get_general_bitmask(slabID, ownership, surrID, surrOwner):
 				if slabID == Slabs.TEMPLE: # Temple is just odd
 					bitmask = 1000
 	return bitmask
-
 
 
 func get_surrounding_slabIDs(xSlab, ySlab):
@@ -1006,263 +943,3 @@ func update_wibble(xSlab, ySlab, slabID, surrID):
 #		asset3x3group[8] = cornerBottomRight * 28 * 9
 #
 #	return asset3x3group
-
-
-#	if myWibble == 0:
-#		oDataWibble.set_cell(xWib+1, yWib+1, myWibble)
-	#if myWibble <= 1:
-#	for i in 16:
-#		var ySubtile = i/4
-#		var xSubtile = i - (ySubtile*4)
-#		#print(xWib+xSubtile)
-#		oDataWibble.set_cell(xWib+xSubtile, yWib+ySubtile, myWibble)
-	
-#	if myWibble == 2:
-#		oDataWibble.set_cell(xWib+1, yWib+0, 1)
-#		oDataWibble.set_cell(xWib+2, yWib+0, 1)
-#		if Slabs.data[ surrID[dir.n] ][Slabs.WIBBLE_TYPE] != 2:
-#			oDataWibble.set_cell(xWib+1, yWib+0, 1)
-#			oDataWibble.set_cell(xWib+2, yWib+0, 1)
-#		if Slabs.data[ surrID[dir.w] ][Slabs.WIBBLE_TYPE] != 2:
-#			oDataWibble.set_cell(xWib+0, yWib+1, 1)
-#			oDataWibble.set_cell(xWib+0, yWib+2, 1)
-#		if Slabs.data[ surrID[dir.nw] ][Slabs.WIBBLE_TYPE] != 2:
-#			oDataWibble.set_cell(xWib+0, yWib+0, 1)
-	
-#	else: # myWibble == 2
-#		for i in 9:
-#			var ySubtile = i/3
-#			var xSubtile = i - (ySubtile*3)
-#			var existingValue = oDataClmPos.get_cell(xWib+xSubtile, yWib+ySubtile)
-#			if existingValue != 1:
-#				oDataWibble.set_cell(xWib+xSubtile, yWib+ySubtile, myWibble)
-	
-	#if oDataWibble.get_cell(xWib+xSubtile, yWib+ySubtile) == 2:
-
-#	if sCheck == myWibble:
-#		oDataWibble.set_cell(xWib+1, yWib+2, myWibble)
-#		oDataWibble.set_cell(xWib+2, yWib+2, myWibble)
-#	if eCheck == myWibble:
-#		oDataWibble.set_cell(xWib+0, yWib+1, myWibble)
-#		oDataWibble.set_cell(xWib+0, yWib+2, myWibble)
-#		if nCheck == myWibble: # east AND north
-#			oDataWibble.set_cell(xWib+3, yWib+0, myWibble)
-#		if sCheck == myWibble: # east AND south
-#			oDataWibble.set_cell(xWib+3, yWib+3, myWibble)
-#	if wCheck == myWibble:
-#		oDataWibble.set_cell(xWib+2, yWib+1, myWibble)
-#		oDataWibble.set_cell(xWib+2, yWib+2, myWibble)
-#		if sCheck == myWibble: # west AND south
-#			oDataWibble.set_cell(xWib+0, yWib+3, myWibble)
-#		if nCheck == myWibble: # west AND north
-#			oDataWibble.set_cell(xWib+0, yWib+0, myWibble)
-
-	
-	
-	
-
-
-
-#func set_columns(xSlab, ySlab, array):
-#	for ySubtile in 3:
-#		for xSubtile in 3:
-#			var i = (ySubtile*3)+xSubtile
-#
-#			var slabVariation = array[i] / 9
-#			var newSubtile = array[i] - (slabVariation*9)
-#			var value = oSlabPalette.slabPal[slabVariation][newSubtile] # slab variation - subtile of that variation
-#
-#			oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, value)
-
-
-	# Temple is really bizarre
-#	if slabID == Slabs.TEMPLE:
-#		if bitmask != 1+2 and bitmask != 1+8 and bitmask != 4+2 and bitmask != 4+8:
-#			var countSurr = 0
-#			if surrID[dir.ne] != slabID: countSurr += 1
-#			if surrID[dir.nw] != slabID: countSurr += 1
-#			if surrID[dir.se] != slabID: countSurr += 1
-#			if surrID[dir.sw] != slabID: countSurr += 1
-#			if countSurr > 2:
-#				bitmask = 15
-
-
-#func adjust_torch_cubes(clmIndexArray, torchSide):
-#	var torchSidesToRemove = []
-#	for i in 9:
-#		match i:
-#			1,3,5,7: 
-#				if oDataClm.cubes[clmIndexArray[i]][3] == 119: # Torch cube
-#					torchSidesToRemove.append(i)
-#	if torchSidesToRemove.empty() == true: return clmIndexArray
-#
-#	# Pick one side to keep, by removing it from the array in which they'll be removed
-#	torchSidesToRemove.remove(randi() % torchSidesToRemove.size())
-#	# Paint over the rest with "normal wall" cube.
-#	for i in torchSidesToRemove:
-#		var replaceUsingCubeBelow = oDataClm.cubes[clmIndexArray[i]][2]
-#		clmIndexArray[i] = oDataClm.index_entry_replace_one_cube(clmIndexArray[i], 3, replaceUsingCubeBelow)
-#
-#	return clmIndexArray
-
-
-#					var TORCH_DISTANCE = float(oTorchDistanceLineEdit.text)
-#					if torch_within_distance(TORCH_DISTANCE, xSlab, ySlab) == false:
-#						slabID = Slabs.WALL_WITH_TORCH
-
-#func torch_within_distance(torchDist, xSlab,ySlab):
-#	var ts = Constants.TILE_SIZE
-#	var sourcePos = Vector2(xSlab*ts, ySlab*ts) + Vector2(ts/2, ts/2)
-#
-#	var realDistance = torchDist * ts
-#
-#	for id in get_tree().get_nodes_in_group("Thing"):
-#		if id.subtype == 2 and id.thingType == Things.TYPE.OBJECT:
-#
-#			# Get the tile that the Torch is "attached to".
-#			var sensY = int(id.sensitiveTile/85)
-#			var sensX = id.sensitiveTile - (sensY*85)
-#			var attachedToTilePos = Vector2(sensX*ts,sensY*ts) + Vector2(ts/2, ts/2)
-#
-#
-#			if attachedToTilePos.distance_to(sourcePos) <= realDistance and Vector2(sensX,sensY) != Vector2(xSlab,ySlab):
-#				return true
-#	return false
-
-#func torch_flags(xSlab,ySlab):
-#	var tflag = 0
-#	if int(xSlab) % 5 == 0:
-#		if oDataSlab.get_cell(xSlab, ySlab+1) == Slabs.CLAIMED_GROUND or oDataSlab.get_cell(xSlab, ySlab-1) == Slabs.CLAIMED_GROUND:
-#			tflag += 1
-#	if int(ySlab) % 5 == 0:
-#		if oDataSlab.get_cell(xSlab+1, ySlab) == Slabs.CLAIMED_GROUND or oDataSlab.get_cell(xSlab-1, ySlab) == Slabs.CLAIMED_GROUND:
-#			tflag += 1
-#	return tflag
-
-
-#	get_test_slb_data()
-
-#func get_test_slb_data():
-#	var file = File.new()
-#	file.open("F:/Games/Dungeon Keeper/campgns/keeporig/map00014.slb", File.READ)
-#	#file.open("F:/Games/Dungeon Keeper/ADiKtEd/levels/map00001.slb", File.READ)
-#	oReadData.read_slb(file)
-
-#func _unhandled_input(event):
-#	if Input.is_key_pressed(KEY_T):
-#		print('Pressed T to auto generate DAT/CLM')
-#		auto_generate()
-#		oShaderUniform.map_overhead_2d_textures()
-#
-#	if Input.is_key_pressed(KEY_U):
-#		oDataClm.update_all_utilized()
-
-
-#func randomize_dirtpath(clmIndexArray, RNG_CLM):
-#	var rngSelect = oSlabPalette.randomColumns[RNG_CLM]
-#	if rngSelect.has(clmIndexArray[i]):
-#	var stoneRatio = 0.10
-#	for i in 9:
-#		if stoneRatio < randf():
-#			clmIndexArray[i] = rngSelect[Random.randi_range(0,2)] # Smooth path
-#		else:
-#			clmIndexArray[i] = rngSelect[Random.randi_range(3,4)] # Stony path
-#	return clmIndexArray
-
-
-	# Every second tile will prioritize the opposite direction
-#	if int(xSlab) % 2 == 0:
-#		if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false: return dir.n
-#		if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false: return dir.s
-#	else:
-#		if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false: return dir.s
-#		if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false: return dir.n
-#
-#	if int(ySlab) % 2 == 0:
-#		if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false: return dir.e
-#		if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false: return dir.w
-#	else:
-#		if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false: return dir.w
-#		if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false: return dir.e
-#	return -1
-
-
-	# Every second tile will prioritize the opposite direction
-#	var tflag = torch_flags(xSlab, ySlab)
-#
-#	if tflag == 1:
-#		if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false:
-#			return dir.n
-#		elif Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false:
-#			return dir.s
-#
-#		if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false:
-#			return dir.w
-#		elif Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false:
-#			return dir.e
-	
-#	var faceX = 0
-#	var faceY = 0
-#
-#	if int(xSlab) % 2 == 0:
-#		if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false:
-#			faceY = dir.n
-#		elif Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false:
-#			faceY = dir.s
-#	else:
-#		if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false:
-#			faceY = dir.s
-#		elif Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false:
-#			faceY = dir.n
-#
-#	if int(ySlab) % 2 == 0:
-#		if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false:
-#			faceX = dir.e
-#		elif Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false:
-#			faceX = dir.w
-#	else:
-#		if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false:
-#			faceX = dir.w
-#		elif Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false:
-#			faceX = dir.e
-#
-#	if int(xSlab) % 5 == 0: # This is tricky to explain but it ensures that there's less slabs facing north only.
-#		if faceY != 0: return faceY
-#		elif faceX != 0: return faceX
-#	else:
-#		if faceX != 0: return faceX
-#		elif faceY != 0: return faceY
-	
-
-
-#const subtilePos = [Vector2(0,0),Vector2(1,0),Vector2(2,0),Vector2(0,1),Vector2(1,1),Vector2(2,1),Vector2(0,2),Vector2(1,2),Vector2(2,2)]
-#	for i in 9:
-#		oDataClmPos.set_cellv(Vector2((xSlab*3)+subtilePos[i].x, (ySlab*3)+subtilePos[i].y), array[i])
-
-
-#func set_columns(array, xSlab, ySlab):
-#	for ySubtile in 3:
-#		for xSubtile in 3:
-#			var i = (ySubtile*3)+xSubtile
-#			oDataClmPos.set_cell( (xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
-
-
-
-			
-#			if slabID == Slabs.WALL_AUTOMATIC:
-#				listOfAutowallsToUpdate.append(Vector2(xSlab,ySlab))
-#			else:
-	
-	# This must be done afterwards for the autowall to work correctly, not sure why.
-	# Automatic walls can be set inside "Image to Map", and they need to be "Placed" but ONLY after surrounding cells have been set
-	
-#	for i in listOfAutowallsToUpdate:
-#		var xSlab = i.x
-#		var ySlab = i.y
-#		# Update nearby SlabIDs if placing an automatic wall or a non-solid.
-#		for dir in [Vector2(0,1),Vector2(-1,0),Vector2(0,-1),Vector2(1,0),Vector2(-1,1),Vector2(-1,-1),Vector2(1,-1),Vector2(1,1)]:
-#			var surroundingSlabID = oDataSlab.get_cell(xSlab+dir.x, ySlab+dir.y)
-#			if Slabs.auto_wall_updates_these.has(surroundingSlabID):
-#				var slabID = auto_wall(xSlab+dir.x, ySlab+dir.y)
-#				var ownership = oDataOwnership.get_cell(xSlab, ySlab)
-#				slab_update_clm(xSlab, ySlab, slabID, ownership)

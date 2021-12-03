@@ -5,9 +5,9 @@ extends Node
 # DISPLAYS DECORATION STUFF ON THE SIDE
 
 enum {
-	BITMASK_GOLD
 	BITMASK_GENERAL
 	BITMASK_WALL
+	BITMASK_TALL
 	BITMASK_OTHER
 	BITMASK_CLAIMED
 }
@@ -144,11 +144,11 @@ var doors = {42:null,43:null,44:null,45:null,46:null,47:null,48:null,49:null}
 #]
 
 var data = {
-	-1:                  ["Outside tilemap",       BLOCK_SLAB, BITMASK_GENERAL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # -1
-	ROCK:                ["Impenetrable Rock",     BLOCK_SLAB, BITMASK_GENERAL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 0
-	GOLD:                ["Gold Seam",             BLOCK_SLAB, BITMASK_GOLD,    PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 1
-	EARTH:               ["Earth",                 BLOCK_SLAB, BITMASK_GENERAL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 2
-	EARTH_WITH_TORCH:    ["Torch Earth",           BLOCK_SLAB, BITMASK_GENERAL, PANEL_SIDE_VIEW, 4, TAB_OTHER,     WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 3
+	-1:                  ["Outside tilemap",       BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # -1
+	ROCK:                ["Impenetrable Rock",     BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 0
+	GOLD:                ["Gold Seam",             BLOCK_SLAB, BITMASK_TALL,    PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 1
+	EARTH:               ["Earth",                 BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 2
+	EARTH_WITH_TORCH:    ["Torch Earth",           BLOCK_SLAB, BITMASK_TALL, PANEL_SIDE_VIEW, 4, TAB_OTHER,     WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 3
 	WALL_WITH_BANNER:    ["Banner Wall",           BLOCK_SLAB, BITMASK_WALL,    PANEL_SIDE_VIEW, 4, TAB_OTHER,     WIBBLE_ON,       NOT_LIQUID,   OWNABLE], # 4
 	WALL_WITH_TORCH:     ["Torch Wall",            BLOCK_SLAB, BITMASK_WALL,    PANEL_SIDE_VIEW, 4, TAB_OTHER,     WIBBLE_ON,       NOT_LIQUID,   OWNABLE], # 5
 	WALL_WITH_TWINS:     ["Twins Wall",            BLOCK_SLAB, BITMASK_WALL,    PANEL_SIDE_VIEW, 4, TAB_OTHER,     WIBBLE_ON,       NOT_LIQUID,   OWNABLE], # 6
