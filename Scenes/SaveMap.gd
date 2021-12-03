@@ -19,7 +19,7 @@ func save_map(filePath): # auto opens other files
 	for EXT in Filetypes.FILE_TYPES:
 		var saveToFilePath = map + '.' + EXT.to_lower()
 		Filetypes.write(saveToFilePath, EXT.to_upper())
-		oCurrentMap.currentFilePaths[EXT][0] = saveToFilePath
+		oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING] = saveToFilePath
 	
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	

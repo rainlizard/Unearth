@@ -18,24 +18,14 @@ onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oMain = Nodelist.list["oMain"]
 onready var oMessage = Nodelist.list["oMessage"]
 
+
 var path = ""
 var currentFilePaths = {} # [0] = pathString,  [1] = modified date
 
-func _ready():
-	check_modified_loop()
-
-func check_modified_loop():
-	if currentFilePaths.has("TXT"):
-		var fileName = currentFilePaths["TXT"][0]
-		var getModifiedTime = File.new().get_modified_time(fileName)
-		if currentFilePaths["TXT"][1] != getModifiedTime:
-			oMessage.quick("TXT file on disk is newer!")
-	
-	yield(get_tree().create_timer(1.0), "timeout")
-	check_modified_loop()
-
-
-
+enum {
+	PATHSTRING
+	MODIFIED_DATE
+}
 
 func _on_ButtonNewMap_pressed():
 	oOpenMap.open_map(Settings.unearthdata.plus_file("blank_map.slb"))

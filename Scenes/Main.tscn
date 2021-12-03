@@ -2449,6 +2449,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ConfirmReloadTXT" type="ConfirmationDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -560.0
+margin_top = -936.0
+margin_right = -197.0
+margin_bottom = -792.0
+rect_min_size = Vector2( 300, 105 )
+popup_exclusive = true
+window_title = "File changes detected"
+dialog_text = "The .TXT script file on disk is newer than the .TXT file you've loaded.
+
+Reload .TXT script from disk?"
+dialog_autowrap = true
+script = ExtResource( 61 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="ConfirmAutoGen" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -456.0
@@ -3530,6 +3548,7 @@ script = ExtResource( 88 )
 [connection signal="about_to_show" from="Ui/UiSystem/FileDialogOpen" to="Ui/UiSystem/FileDialogOpen" method="_on_FileDialogOpen_about_to_show"]
 [connection signal="file_selected" from="Ui/UiSystem/FileDialogOpen" to="OpenMap" method="_on_FileDialogOpen_file_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/FileDialogOpen" to="Ui/UiSystem/FileDialogOpen" method="_on_FileDialogOpen_visibility_changed"]
+[connection signal="confirmed" from="Ui/UiSystem/ConfirmReloadTXT" to="CurrentMap/DataScript" method="_on_ConfirmReloadTXT_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmAutoGen" to="SlabPlacement" method="_on_ConfirmAutoGen_confirmed"]
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/OwnableNaturalTerrain" to="Ui/UiSystem/SlabSettingsWindow" method="_on_OwnableNaturalTerrain_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox" to="Editor" method="_on_EditableBordersCheckbox_toggled"]

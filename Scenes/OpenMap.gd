@@ -75,8 +75,8 @@ func open_map(filePath): # auto opens other files
 	
 	compressedFiles.clear()
 	for i in oCurrentMap.currentFilePaths.values():
-		if oRNC.check_for_RNC_compression(i[0]) == true:
-			compressedFiles.append(i[0])
+		if oRNC.check_for_RNC_compression(i[oCurrentMap.PATHSTRING]) == true:
+			compressedFiles.append(i[oCurrentMap.PATHSTRING])
 	
 	if compressedFiles.empty() == true:
 		# Load files
@@ -84,7 +84,7 @@ func open_map(filePath): # auto opens other files
 		
 		for EXT in Filetypes.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
-				Filetypes.read(oCurrentMap.currentFilePaths[EXT][0], EXT.to_upper())
+				Filetypes.read(oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING], EXT.to_upper())
 			else:
 				print('Missing file, so using blank_map instead')
 				var blankPath = Settings.unearthdata.plus_file("blank_map.") + EXT.to_lower()
