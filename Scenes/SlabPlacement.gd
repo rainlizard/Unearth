@@ -227,51 +227,52 @@ func calculate_torch_side(xSlab, ySlab):
 
 func slab_update_clm(xSlab, ySlab, slabID, ownership):
 	
-	var surrounding = get_surrounding_slabs(xSlab, ySlab)
+	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
+	
+	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
 	
 	# WIB (wibble)
-	update_wibble(xSlab, ySlab, slabID, surrounding)
+	update_wibble(xSlab, ySlab, slabID, surrID)
 	# WLB (Water Lava Block)
 	if slabID != Slabs.BRIDGE:
 		oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
 	
 	match Slabs.data[slabID][Slabs.BITMASK_TYPE]:
-		Slabs.BITMASK_WALL: place_fortified_wall(xSlab, ySlab, slabID, ownership, surrounding)
-		Slabs.BITMASK_NONE: place_simple(xSlab, ySlab, slabID, ownership, surrounding)
-		Slabs.BITMASK_GOLD: place_gold(xSlab, ySlab, slabID, ownership, surrounding)
-		Slabs.BITMASK_OTHER: place_other(xSlab, ySlab, slabID, ownership, surrounding)
-		Slabs.BITMASK_GENERAL: place_general(xSlab, ySlab, slabID, ownership, surrounding)
-		Slabs.BITMASK_CLAIMED: place_claimed_area(xSlab, ySlab, slabID, ownership, surrounding)
+		Slabs.BITMASK_WALL: place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner)
+		Slabs.BITMASK_GOLD: place_gold(xSlab, ySlab, slabID, ownership, surrID, surrOwner)
+		Slabs.BITMASK_OTHER: place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner)
+		Slabs.BITMASK_GENERAL: place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner)
+		Slabs.BITMASK_CLAIMED: place_claimed_area(xSlab, ySlab, slabID, ownership, surrID, surrOwner)
 
-func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrounding):
+func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner):
 	if slabID == Slabs.WALL_AUTOMATIC:
 		slabID = auto_wall(xSlab, ySlab) # Set slabID to a real one
 	
 	var slabVariation = slabID * 28
 	
-	var bitmask = get_wall_bitmask(xSlab, ySlab, surrounding, ownership)
+	var bitmask = get_wall_bitmask(xSlab, ySlab, surrID, ownership)
 	var asset3x3group = make_slab(slabID*28, bitmask)
 	
 	# Wall corners
 	# 0 1 2
 	# 3 4 5
 	# 6 7 8
-	var wallS = Slabs.data[ surrounding[dir.s] ][Slabs.BITMASK_TYPE]
-	var wallW = Slabs.data[ surrounding[dir.w] ][Slabs.BITMASK_TYPE]
-	var wallN = Slabs.data[ surrounding[dir.n] ][Slabs.BITMASK_TYPE]
-	var wallE = Slabs.data[ surrounding[dir.e] ][Slabs.BITMASK_TYPE]
-	if wallN == Slabs.BITMASK_WALL and wallE == Slabs.BITMASK_WALL and Slabs.data[ surrounding[dir.ne] ][Slabs.IS_SOLID] == false:
+	var wallS = Slabs.data[ surrID[dir.s] ][Slabs.BITMASK_TYPE]
+	var wallW = Slabs.data[ surrID[dir.w] ][Slabs.BITMASK_TYPE]
+	var wallN = Slabs.data[ surrID[dir.n] ][Slabs.BITMASK_TYPE]
+	var wallE = Slabs.data[ surrID[dir.e] ][Slabs.BITMASK_TYPE]
+	if wallN == Slabs.BITMASK_WALL and wallE == Slabs.BITMASK_WALL and Slabs.data[ surrID[dir.ne] ][Slabs.IS_SOLID] == false:
 		asset3x3group[2] = ((slabVariation + dir.all) * 9) + 2
-	if wallN == Slabs.BITMASK_WALL and wallW == Slabs.BITMASK_WALL and Slabs.data[ surrounding[dir.nw] ][Slabs.IS_SOLID] == false:
+	if wallN == Slabs.BITMASK_WALL and wallW == Slabs.BITMASK_WALL and Slabs.data[ surrID[dir.nw] ][Slabs.IS_SOLID] == false:
 		asset3x3group[0] = ((slabVariation + dir.all) * 9) + 0
-	if wallS == Slabs.BITMASK_WALL and wallE == Slabs.BITMASK_WALL and Slabs.data[ surrounding[dir.se] ][Slabs.IS_SOLID] == false:
+	if wallS == Slabs.BITMASK_WALL and wallE == Slabs.BITMASK_WALL and Slabs.data[ surrID[dir.se] ][Slabs.IS_SOLID] == false:
 		asset3x3group[8] = ((slabVariation + dir.all) * 9) + 8
-	if wallS == Slabs.BITMASK_WALL and wallW == Slabs.BITMASK_WALL and Slabs.data[ surrounding[dir.sw] ][Slabs.IS_SOLID] == false:
+	if wallS == Slabs.BITMASK_WALL and wallW == Slabs.BITMASK_WALL and Slabs.data[ surrID[dir.sw] ][Slabs.IS_SOLID] == false:
 		asset3x3group[6] = ((slabVariation + dir.all) * 9) + 6
 	
-	asset3x3group = modify_for_liquid(asset3x3group, surrounding, bitmask, slabID)
-	asset3x3group = modify_room_face(asset3x3group, surrounding, slabID)
-	
+	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
+	asset3x3group = modify_room_face(asset3x3group, surrID, slabID)
+	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
 	var clmIndexArray = asset_position_to_column_index(asset3x3group)
 	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
 	
@@ -284,80 +285,82 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrounding):
 	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL_NEARBY_LAVA, slabID)
 	
 	set_columns(xSlab, ySlab, clmIndexArray)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, surrounding)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
 
-func place_general(xSlab, ySlab, slabID, ownership, surrounding):
+func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner):
 	if slabID == Slabs.EARTH:
-		slabID = auto_torch_earth(xSlab, ySlab) # Set slabID to a real one
+		slabID = auto_torch_earth(xSlab, ySlab) # Potentially change slab ID to Torch Earth
 	
 	var slabVariation = slabID*28
-	var bitmask = get_general_bitmask(slabID, surrounding)
+	var bitmask = get_general_bitmask(slabID, ownership, surrID, surrOwner)
 	var asset3x3group = make_slab(slabID*28, bitmask)
-	asset3x3group = modify_for_liquid(asset3x3group, surrounding, bitmask, slabID)
+	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
+	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
 	var clmIndexArray = asset_position_to_column_index(asset3x3group)
 	
-	if slabID == Slabs.EARTH:
-		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_EARTH, slabID)
-		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_EARTH_NEARBY_WATER, slabID)
-	elif slabID == Slabs.PATH: clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_DIRTPATH, slabID)
-	elif slabID == Slabs.DUNGEON_HEART: clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_HEART, bitmask, slabID)
-	elif slabID == Slabs.PORTAL: clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
-	elif slabID == Slabs.LIBRARY: clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_LIBRARY, slabID)
-	elif slabID == Slabs.EARTH_WITH_TORCH:
-		clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
-		
+	match slabID:
+		Slabs.EARTH:
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_EARTH, slabID)
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_EARTH_NEARBY_WATER, slabID)
+		Slabs.PATH:
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_DIRTPATH, slabID)
+		Slabs.DUNGEON_HEART:
+			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_HEART, bitmask, slabID)
+		Slabs.PORTAL:
+			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
+		Slabs.LIBRARY:
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_LIBRARY, slabID)
+		Slabs.EARTH_WITH_TORCH:
+			clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
+		Slabs.LAVA:
+			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_LAVA, slabID)
+	
 	set_columns(xSlab, ySlab, clmIndexArray)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, surrounding)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
 
-func place_gold(xSlab, ySlab, slabID, ownership, surrounding):
+
+func place_claimed_area(xSlab, ySlab, slabID, ownership, surrID, surrOwner):
 	var slabVariation = slabID*28
-	var bitmask = get_gold_bitmask(surrounding)
+	var bitmask = get_claimed_area_bitmask(xSlab, ySlab, slabID, surrID, ownership)
+	#var bitmask = get_general_bitmask(slabID, surrID)
 	var asset3x3group = make_slab(slabVariation, bitmask)
-	asset3x3group = modify_for_liquid(asset3x3group, surrounding, bitmask, slabID)
+	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
+	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
+	var clmIndexArray = asset_position_to_column_index(asset3x3group)
+	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_FLOOR, bitmask, slabID)
+	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_CLAIMED_AREA, slabID)
+	
+	set_columns(xSlab, ySlab, clmIndexArray)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
+
+
+func place_gold(xSlab, ySlab, slabID, ownership, surrID, surrOwner):
+	var slabVariation = slabID*28
+	var bitmask = get_gold_bitmask(surrID)
+	var asset3x3group = make_slab(slabVariation, bitmask)
+	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
+	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
 	var clmIndexArray = asset_position_to_column_index(asset3x3group)
 	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD, slabID)
 	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD_NEARBY_LAVA, slabID)
 	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD_NEARBY_WATER, slabID)
 	
 	set_columns(xSlab, ySlab, clmIndexArray)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrounding)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
 
-func place_claimed_area(xSlab, ySlab, slabID, ownership, surrounding):
-	var slabVariation = slabID*28
-	var bitmask = get_claimed_area_bitmask(xSlab, ySlab, slabID, surrounding, ownership)
-	var asset3x3group = make_slab(slabVariation, bitmask)
-	asset3x3group = modify_for_liquid(asset3x3group, surrounding, bitmask, slabID)
-	var clmIndexArray = asset_position_to_column_index(asset3x3group)
-	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_FLOOR, bitmask, slabID)
-	clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_CLAIMED_AREA, slabID)
-	
-	set_columns(xSlab, ySlab, clmIndexArray)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, surrounding)
 
-func place_simple(xSlab, ySlab, slabID, ownership, surrounding):
-	var slabVariation = slabID*28
-	var bitmask = 0
-	var asset3x3group = make_slab(slabVariation, bitmask)
-	var clmIndexArray = asset_position_to_column_index(asset3x3group)
-	
-	if slabID == Slabs.LAVA:
-		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_LAVA, slabID)
-	
-	set_columns(xSlab, ySlab, clmIndexArray)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, null)
-
-func place_other(xSlab, ySlab, slabID, ownership, surrounding): # These slabs only have 8 variations each, compared to the others which have 28 each.
+func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner): # These slabs only have 8 variations each, compared to the others which have 28 each.
 	
 	# Make sure door is facing the correct direction by changing its Slab based on surrounding slabs.
 	if slabID in [Slabs.WOODEN_DOOR_1, Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_1, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_1, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_1, Slabs.MAGIC_DOOR_2]:
-		if Slabs.data[ surrounding[dir.e] ][Slabs.IS_SOLID] == true and Slabs.data[ surrounding[dir.w] ][Slabs.IS_SOLID] == true:
+		if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == true and Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == true:
 			match slabID:
 				Slabs.WOODEN_DOOR_1: slabID = Slabs.WOODEN_DOOR_2
 				Slabs.BRACED_DOOR_1: slabID = Slabs.BRACED_DOOR_2
 				Slabs.IRON_DOOR_1: slabID = Slabs.IRON_DOOR_2
 				Slabs.MAGIC_DOOR_1: slabID = Slabs.MAGIC_DOOR_2
 			oDataSlab.set_cell(xSlab, ySlab, slabID)
-		elif Slabs.data[ surrounding[dir.n] ][Slabs.IS_SOLID] == true and Slabs.data[ surrounding[dir.s] ][Slabs.IS_SOLID] == true:
+		elif Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == true and Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == true:
 			match slabID:
 				Slabs.WOODEN_DOOR_2: slabID = Slabs.WOODEN_DOOR_1
 				Slabs.BRACED_DOOR_2: slabID = Slabs.BRACED_DOOR_1
@@ -368,6 +371,7 @@ func place_other(xSlab, ySlab, slabID, ownership, surrounding): # These slabs on
 	var slabVariation = (42 * 28) + (8 * (slabID - 42))
 	var bitmask = 1
 	var asset3x3group = make_slab(slabVariation, bitmask)
+	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
 	var clmIndexArray = asset_position_to_column_index(asset3x3group)
 	
 	match slabID:
@@ -379,7 +383,7 @@ func place_other(xSlab, ySlab, slabID, ownership, surrounding): # These slabs on
 			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GEMS, slabID)
 	
 	set_columns(xSlab, ySlab, clmIndexArray)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, null)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, null, null)
 
 func randomize_columns(clmIndexArray, RNG_CLM, slabID):
 	var rngSelect = oSlabPalette.randomColumns[RNG_CLM]
@@ -474,6 +478,12 @@ func asset_position_to_column_index(array):
 	for i in 9:
 		var slabVariation = array[i] / 9
 		var newSubtile = array[i] - (slabVariation*9)
+		
+		# Prevent crash if I do something dumb, just show a purple tile
+		if slabVariation >= oSlabPalette.slabPal.size():
+			array[i] = oSlabPalette.slabPal[1303][0] # Show purple
+			continue
+		
 		array[i] = oSlabPalette.slabPal[slabVariation][newSubtile] # slab variation - subtile of that variation
 	return array
 
@@ -483,15 +493,15 @@ func set_columns(xSlab, ySlab, array):
 		var xSubtile = i - (ySubtile*3)
 		oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
 
-func get_gold_bitmask(surrounding):
+func get_gold_bitmask(surrID):
 	var bitmask = 0
-	if Slabs.data[ surrounding[dir.s] ][Slabs.IS_SOLID] == false: bitmask += 1
-	if Slabs.data[ surrounding[dir.w] ][Slabs.IS_SOLID] == false: bitmask += 2
-	if Slabs.data[ surrounding[dir.n] ][Slabs.IS_SOLID] == false: bitmask += 4
-	if Slabs.data[ surrounding[dir.e] ][Slabs.IS_SOLID] == false: bitmask += 8
+	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false: bitmask += 1
+	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false: bitmask += 2
+	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false: bitmask += 4
+	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false: bitmask += 8
 	return bitmask
 
-func get_wall_bitmask(xSlab, ySlab, surrounding, ownership):
+func get_wall_bitmask(xSlab, ySlab, surrID, ownership):
 	var ownerS = oDataOwnership.get_cell(xSlab, ySlab+1)
 	var ownerW = oDataOwnership.get_cell(xSlab-1, ySlab)
 	var ownerN = oDataOwnership.get_cell(xSlab, ySlab-1)
@@ -501,47 +511,69 @@ func get_wall_bitmask(xSlab, ySlab, surrounding, ownership):
 	if ownerN == 5: ownerN = ownership
 	if ownerE == 5: ownerE = ownership
 	var bitmask = 0
-	if Slabs.data[ surrounding[dir.s] ][Slabs.IS_SOLID] == false or ownerS != ownership: bitmask += 1
-	if Slabs.data[ surrounding[dir.w] ][Slabs.IS_SOLID] == false or ownerW != ownership: bitmask += 2
-	if Slabs.data[ surrounding[dir.n] ][Slabs.IS_SOLID] == false or ownerN != ownership: bitmask += 4
-	if Slabs.data[ surrounding[dir.e] ][Slabs.IS_SOLID] == false or ownerE != ownership: bitmask += 8
+	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false or ownerS != ownership: bitmask += 1
+	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false or ownerW != ownership: bitmask += 2
+	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false or ownerN != ownership: bitmask += 4
+	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false or ownerE != ownership: bitmask += 8
 	return bitmask
 
-func get_claimed_area_bitmask(xSlab, ySlab, slabID, surrounding, ownership):
+func get_claimed_area_bitmask(xSlab, ySlab, slabID, surrID, ownership):
 	var bitmask = 0
-	if (slabID != surrounding[dir.s] and Slabs.doors.has(surrounding[dir.s]) == false) or oDataOwnership.get_cell(xSlab, ySlab+1) != ownership: bitmask += 1
-	if (slabID != surrounding[dir.w] and Slabs.doors.has(surrounding[dir.w]) == false) or oDataOwnership.get_cell(xSlab-1, ySlab) != ownership: bitmask += 2
-	if (slabID != surrounding[dir.n] and Slabs.doors.has(surrounding[dir.n]) == false) or oDataOwnership.get_cell(xSlab, ySlab-1) != ownership: bitmask += 4
-	if (slabID != surrounding[dir.e] and Slabs.doors.has(surrounding[dir.e]) == false) or oDataOwnership.get_cell(xSlab+1, ySlab) != ownership: bitmask += 8
+	if (slabID != surrID[dir.s] and Slabs.doors.has(surrID[dir.s]) == false) or oDataOwnership.get_cell(xSlab, ySlab+1) != ownership: bitmask += 1
+	if (slabID != surrID[dir.w] and Slabs.doors.has(surrID[dir.w]) == false) or oDataOwnership.get_cell(xSlab-1, ySlab) != ownership: bitmask += 2
+	if (slabID != surrID[dir.n] and Slabs.doors.has(surrID[dir.n]) == false) or oDataOwnership.get_cell(xSlab, ySlab-1) != ownership: bitmask += 4
+	if (slabID != surrID[dir.e] and Slabs.doors.has(surrID[dir.e]) == false) or oDataOwnership.get_cell(xSlab+1, ySlab) != ownership: bitmask += 8
 	return bitmask
 
-func get_general_bitmask(slabID, surrounding):
+func get_general_bitmask(slabID, ownership, surrID, surrOwner):
 	var bitmask = 0
-	if slabID != surrounding[dir.s]: bitmask += 1
-	if slabID != surrounding[dir.w]: bitmask += 2
-	if slabID != surrounding[dir.n]: bitmask += 4
-	if slabID != surrounding[dir.e]: bitmask += 8
+	if slabID != surrID[dir.s] or ownership != surrOwner[dir.s]: bitmask += 1
+	if slabID != surrID[dir.w] or ownership != surrOwner[dir.w]: bitmask += 2
+	if slabID != surrID[dir.n] or ownership != surrOwner[dir.n]: bitmask += 4
+	if slabID != surrID[dir.e] or ownership != surrOwner[dir.e]: bitmask += 8
+	
+#	if bitmask == 0:
+#		if slabID != surrID[dir.sw] or ownership != surrOwner[dir.sw]: bitmask = 15
+#		if slabID != surrID[dir.nw] or ownership != surrOwner[dir.nw]: bitmask = 15
+#		if slabID != surrID[dir.ne] or ownership != surrOwner[dir.ne]: bitmask = 15
+#		if slabID != surrID[dir.se] or ownership != surrOwner[dir.se]: bitmask = 15
+	
 	# Middle slab
 	if bitmask == 0:
 		if Slabs.rooms_with_middle_slab.has(slabID):
-			if slabID != surrounding[dir.se] or slabID != surrounding[dir.sw] or slabID != surrounding[dir.ne] or slabID != surrounding[dir.nw]:
+			if slabID != surrID[dir.se] or slabID != surrID[dir.sw] or slabID != surrID[dir.ne] or slabID != surrID[dir.nw] or ownership != surrOwner[dir.se] or ownership != surrOwner[dir.sw] or ownership != surrOwner[dir.ne] or ownership != surrOwner[dir.nw]:
 				bitmask = 15
 				if slabID == Slabs.TEMPLE: # Temple is just odd
 					bitmask = 1000
 	return bitmask
 
-func get_surrounding_slabs(xSlab, ySlab):
-	var surrounding = []
-	surrounding.resize(8)
-	surrounding[dir.n] = oDataSlab.get_cell(xSlab, ySlab-1)
-	surrounding[dir.s] = oDataSlab.get_cell(xSlab, ySlab+1)
-	surrounding[dir.e] = oDataSlab.get_cell(xSlab+1, ySlab)
-	surrounding[dir.w] = oDataSlab.get_cell(xSlab-1, ySlab)
-	surrounding[dir.ne] = oDataSlab.get_cell(xSlab+1, ySlab-1)
-	surrounding[dir.nw] = oDataSlab.get_cell(xSlab-1, ySlab-1)
-	surrounding[dir.se] = oDataSlab.get_cell(xSlab+1, ySlab+1)
-	surrounding[dir.sw] = oDataSlab.get_cell(xSlab-1, ySlab+1)
-	return surrounding
+
+
+func get_surrounding_slabIDs(xSlab, ySlab):
+	var surrID = []
+	surrID.resize(8)
+	surrID[dir.n] = oDataSlab.get_cell(xSlab, ySlab-1)
+	surrID[dir.s] = oDataSlab.get_cell(xSlab, ySlab+1)
+	surrID[dir.e] = oDataSlab.get_cell(xSlab+1, ySlab)
+	surrID[dir.w] = oDataSlab.get_cell(xSlab-1, ySlab)
+	surrID[dir.ne] = oDataSlab.get_cell(xSlab+1, ySlab-1)
+	surrID[dir.nw] = oDataSlab.get_cell(xSlab-1, ySlab-1)
+	surrID[dir.se] = oDataSlab.get_cell(xSlab+1, ySlab+1)
+	surrID[dir.sw] = oDataSlab.get_cell(xSlab-1, ySlab+1)
+	return surrID
+
+func get_surrounding_ownership(xSlab, ySlab):
+	var surrOwner = []
+	surrOwner.resize(8)
+	surrOwner[dir.n] = oDataOwnership.get_cell(xSlab, ySlab-1)
+	surrOwner[dir.s] = oDataOwnership.get_cell(xSlab, ySlab+1)
+	surrOwner[dir.e] = oDataOwnership.get_cell(xSlab+1, ySlab)
+	surrOwner[dir.w] = oDataOwnership.get_cell(xSlab-1, ySlab)
+	surrOwner[dir.ne] = oDataOwnership.get_cell(xSlab+1, ySlab-1)
+	surrOwner[dir.nw] = oDataOwnership.get_cell(xSlab-1, ySlab-1)
+	surrOwner[dir.se] = oDataOwnership.get_cell(xSlab+1, ySlab+1)
+	surrOwner[dir.sw] = oDataOwnership.get_cell(xSlab-1, ySlab+1)
+	return surrOwner
 
 func adjust_torch_cubes(clmIndexArray, torchSideToKeep):
 	var side = 0
@@ -556,37 +588,37 @@ func adjust_torch_cubes(clmIndexArray, torchSideToKeep):
 		side += 1
 	return clmIndexArray
 
-func modify_room_face(asset3x3group, surrounding, slabID):
+func modify_room_face(asset3x3group, surrID, slabID):
 	var modify0 = 0; var modify1 = 0; var modify2 = 0; var modify3 = 0; var modify4 = 0; var modify5 = 0; var modify6 = 0; var modify7 = 0; var modify8 = 0
-	if Slabs.rooms.has(surrounding[dir.s]):
-		var roomFace = surrounding[dir.s] + 1
+	if Slabs.rooms.has(surrID[dir.s]):
+		var roomFace = surrID[dir.s] + 1
 		var offset = ((roomFace-slabID)*28)*9
-		if surrounding[dir.se] == surrounding[dir.s] and surrounding[dir.sw] == surrounding[dir.s]:
+		if surrID[dir.se] == surrID[dir.s] and surrID[dir.sw] == surrID[dir.s]:
 			offset += 9*9
 		modify6 = offset
 		modify7 = offset
 		modify8 = offset
 	
-	if Slabs.rooms.has(surrounding[dir.w]):
-		var roomFace = surrounding[dir.w] + 1
+	if Slabs.rooms.has(surrID[dir.w]):
+		var roomFace = surrID[dir.w] + 1
 		var offset = ((roomFace-slabID)*28)*9
-		if surrounding[dir.sw] == surrounding[dir.w] and surrounding[dir.nw] == surrounding[dir.w]:
+		if surrID[dir.sw] == surrID[dir.w] and surrID[dir.nw] == surrID[dir.w]:
 			offset += 9*9
 		modify0 = offset
 		modify3 = offset
 		modify6 = offset
-	if Slabs.rooms.has(surrounding[dir.n]):
-		var roomFace = surrounding[dir.n] + 1
+	if Slabs.rooms.has(surrID[dir.n]):
+		var roomFace = surrID[dir.n] + 1
 		var offset = ((roomFace-slabID)*28)*9
-		if surrounding[dir.ne] == surrounding[dir.n] and surrounding[dir.nw] == surrounding[dir.n]:
+		if surrID[dir.ne] == surrID[dir.n] and surrID[dir.nw] == surrID[dir.n]:
 			offset += 9*9
 		modify0 = offset
 		modify1 = offset
 		modify2 = offset
-	if Slabs.rooms.has(surrounding[dir.e]):
-		var roomFace = surrounding[dir.e] + 1
+	if Slabs.rooms.has(surrID[dir.e]):
+		var roomFace = surrID[dir.e] + 1
 		var offset = ((roomFace-slabID)*28)*9
-		if surrounding[dir.se] == surrounding[dir.e] and surrounding[dir.ne] == surrounding[dir.e]:
+		if surrID[dir.se] == surrID[dir.e] and surrID[dir.ne] == surrID[dir.e]:
 			offset += 9*9
 		modify2 = offset
 		modify5 = offset
@@ -604,40 +636,44 @@ func modify_room_face(asset3x3group, surrounding, slabID):
 	
 	return asset3x3group
 
-func modify_for_liquid(asset3x3group, surrounding, bitmask, slabID):
+func modify_for_liquid(asset3x3group, surrID, slabID):
+	# Don't modify slab if slab is liquid
+	if Slabs.data[slabID][Slabs.LIQUID_TYPE] != Slabs.NOT_LIQUID:
+		return asset3x3group
+	
 	var modify0 = 0; var modify1 = 0; var modify2 = 0; var modify3 = 0; var modify4 = 0; var modify5 = 0; var modify6 = 0; var modify7 = 0; var modify8 = 0
-	if surrounding[dir.s] == Slabs.LAVA:
+	if surrID[dir.s] == Slabs.LAVA:
 		modify6 = 9*9
 		modify7 = 9*9
 		modify8 = 9*9
-	elif surrounding[dir.s] == Slabs.WATER:
+	elif surrID[dir.s] == Slabs.WATER:
 		modify6 = 18*9
 		modify7 = 18*9
 		modify8 = 18*9
 	
-	if surrounding[dir.w] == Slabs.LAVA:
+	if surrID[dir.w] == Slabs.LAVA:
 		modify0 = 9*9
 		modify3 = 9*9
 		modify6 = 9*9
-	elif surrounding[dir.w] == Slabs.WATER:
+	elif surrID[dir.w] == Slabs.WATER:
 		modify0 = 18*9
 		modify3 = 18*9
 		modify6 = 18*9
 	
-	if surrounding[dir.n] == Slabs.LAVA:
+	if surrID[dir.n] == Slabs.LAVA:
 		modify0 = 9*9
 		modify1 = 9*9
 		modify2 = 9*9
-	elif surrounding[dir.n] == Slabs.WATER:
+	elif surrID[dir.n] == Slabs.WATER:
 		modify0 = 18*9
 		modify1 = 18*9
 		modify2 = 18*9
 	
-	if surrounding[dir.e] == Slabs.LAVA:
+	if surrID[dir.e] == Slabs.LAVA:
 		modify2 = 9*9
 		modify5 = 9*9
 		modify8 = 9*9
-	elif surrounding[dir.e] == Slabs.WATER:
+	elif surrID[dir.e] == Slabs.WATER:
 		modify2 = 18*9
 		modify5 = 18*9
 		modify8 = 18*9
@@ -652,18 +688,6 @@ func modify_for_liquid(asset3x3group, surrounding, bitmask, slabID):
 	asset3x3group[7] += modify7
 	asset3x3group[8] += modify8
 	
-	# When gold, impenetrable or earth is placed in lava/water, as a solo piece, randomly remove 1-3 corners
-	if bitmask == 15 and (slabID == Slabs.ROCK or slabID == Slabs.EARTH or slabID == Slabs.GOLD):
-		var cornerList = [0,2,6,8]
-		cornerList.shuffle()
-		if modify0 == 9*9:
-			for i in Random.randi_range(1,3):
-				var choose = cornerList[i]
-				asset3x3group[choose] = Slabs.LAVA * 28 * 9
-		elif modify0 == 9*18:
-			for i in Random.randi_range(1,3):
-				var choose = cornerList[i]
-				asset3x3group[choose] = Slabs.WATER * 28 * 9
 	return asset3x3group
 
 func make_slab(slabVariation, bitmask):
@@ -886,7 +910,7 @@ const slab_temple_odd = [
 	dir.n, # subtile 8
 ]
 
-func update_wibble(xSlab, ySlab, slabID, surrounding):
+func update_wibble(xSlab, ySlab, slabID, surrID):
 	var myWibble = Slabs.data[slabID][Slabs.WIBBLE_TYPE]
 	
 	var xWib = xSlab * 3
@@ -912,17 +936,78 @@ func update_wibble(xSlab, ySlab, slabID, surrounding):
 		oDataWibble.set_cell(xWib+0, yWib+2, myWibble)
 	
 	if myWibble != 1:
-		var nCheck = Slabs.data[ surrounding[dir.n] ][Slabs.WIBBLE_TYPE]
-		var wCheck = Slabs.data[ surrounding[dir.w] ][Slabs.WIBBLE_TYPE]
+		var nCheck = Slabs.data[ surrID[dir.n] ][Slabs.WIBBLE_TYPE]
+		var wCheck = Slabs.data[ surrID[dir.w] ][Slabs.WIBBLE_TYPE]
 		if nCheck == myWibble:
 			oDataWibble.set_cell(xWib+1, yWib+0, myWibble)
 			oDataWibble.set_cell(xWib+2, yWib+0, myWibble)
 		if wCheck == myWibble:
 			oDataWibble.set_cell(xWib+0, yWib+1, myWibble)
 			oDataWibble.set_cell(xWib+0, yWib+2, myWibble)
-		if nCheck == myWibble and wCheck == myWibble and Slabs.data[ surrounding[dir.nw] ][Slabs.WIBBLE_TYPE] == myWibble:
+		if nCheck == myWibble and wCheck == myWibble and Slabs.data[ surrID[dir.nw] ][Slabs.WIBBLE_TYPE] == myWibble:
 			oDataWibble.set_cell(xWib+0, yWib+0, myWibble)
-	
+
+#var slabsThatCanBeUsedAsCornerFiller = {
+#	Slabs.PATH:0,
+#	Slabs.WATER:1,
+#	Slabs.LAVA:2,
+#}
+#var frailSlabs = {
+#}
+
+#func special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID):
+#	var cornerTopLeft = null
+#	var cornerTopRight = null
+#	var cornerBottomLeft = null
+#	var cornerBottomRight = null
+#
+#	if surrID[dir.n] == surrID[dir.w]:
+#		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.n]):
+#			cornerTopLeft = surrID[dir.n]
+#			# In the case of how two filler slabs decide to fill their corners
+#			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.n] != surrID[dir.nw] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.nw]):
+#				if slabsThatCanBeUsedAsCornerFiller[cornerTopLeft] > slabsThatCanBeUsedAsCornerFiller[slabID]:
+#					cornerTopLeft = null
+#
+#	if surrID[dir.n] == surrID[dir.e]:
+#		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.n]):
+#			cornerTopRight = surrID[dir.n]
+#			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.n] != surrID[dir.ne] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.ne]):
+#				if slabsThatCanBeUsedAsCornerFiller[cornerTopRight] > slabsThatCanBeUsedAsCornerFiller[slabID]:
+#					cornerTopRight = null
+#
+#	if surrID[dir.s] == surrID[dir.w]:
+#		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.s]):
+#			cornerBottomLeft = surrID[dir.s]
+#			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.s] != surrID[dir.sw] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.sw]):
+#				if slabsThatCanBeUsedAsCornerFiller[cornerBottomLeft] > slabsThatCanBeUsedAsCornerFiller[slabID]:
+#					cornerBottomLeft = null
+#
+#	if surrID[dir.s] == surrID[dir.e]:
+#		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.s]):
+#			cornerBottomRight = surrID[dir.s]
+#			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.s] != surrID[dir.se] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.se]):
+#				if slabsThatCanBeUsedAsCornerFiller[cornerBottomRight] > slabsThatCanBeUsedAsCornerFiller[slabID]:
+#					cornerBottomRight = null
+#
+#	if cornerTopLeft != null and cornerTopRight != null and cornerBottomLeft != null and cornerBottomRight != null:
+#		if Random.chance_int(50): cornerTopLeft = null
+#		if Random.chance_int(50): cornerTopRight = null
+#		if Random.chance_int(50): cornerBottomLeft = null
+#		if Random.chance_int(50): cornerBottomRight = null
+#
+#	if cornerTopLeft != null:
+#		asset3x3group[0] = cornerTopLeft * 28 * 9
+#	if cornerTopRight != null:
+#		asset3x3group[2] = cornerTopRight * 28 * 9
+#	if cornerBottomLeft != null:
+#		asset3x3group[6] = cornerBottomLeft * 28 * 9
+#	if cornerBottomRight != null:
+#		asset3x3group[8] = cornerBottomRight * 28 * 9
+#
+#	return asset3x3group
+
+
 #	if myWibble == 0:
 #		oDataWibble.set_cell(xWib+1, yWib+1, myWibble)
 	#if myWibble <= 1:
@@ -935,13 +1020,13 @@ func update_wibble(xSlab, ySlab, slabID, surrounding):
 #	if myWibble == 2:
 #		oDataWibble.set_cell(xWib+1, yWib+0, 1)
 #		oDataWibble.set_cell(xWib+2, yWib+0, 1)
-#		if Slabs.data[ surrounding[dir.n] ][Slabs.WIBBLE_TYPE] != 2:
+#		if Slabs.data[ surrID[dir.n] ][Slabs.WIBBLE_TYPE] != 2:
 #			oDataWibble.set_cell(xWib+1, yWib+0, 1)
 #			oDataWibble.set_cell(xWib+2, yWib+0, 1)
-#		if Slabs.data[ surrounding[dir.w] ][Slabs.WIBBLE_TYPE] != 2:
+#		if Slabs.data[ surrID[dir.w] ][Slabs.WIBBLE_TYPE] != 2:
 #			oDataWibble.set_cell(xWib+0, yWib+1, 1)
 #			oDataWibble.set_cell(xWib+0, yWib+2, 1)
-#		if Slabs.data[ surrounding[dir.nw] ][Slabs.WIBBLE_TYPE] != 2:
+#		if Slabs.data[ surrID[dir.nw] ][Slabs.WIBBLE_TYPE] != 2:
 #			oDataWibble.set_cell(xWib+0, yWib+0, 1)
 	
 #	else: # myWibble == 2
@@ -994,10 +1079,10 @@ func update_wibble(xSlab, ySlab, slabID, surrounding):
 #	if slabID == Slabs.TEMPLE:
 #		if bitmask != 1+2 and bitmask != 1+8 and bitmask != 4+2 and bitmask != 4+8:
 #			var countSurr = 0
-#			if surrounding[dir.ne] != slabID: countSurr += 1
-#			if surrounding[dir.nw] != slabID: countSurr += 1
-#			if surrounding[dir.se] != slabID: countSurr += 1
-#			if surrounding[dir.sw] != slabID: countSurr += 1
+#			if surrID[dir.ne] != slabID: countSurr += 1
+#			if surrID[dir.nw] != slabID: countSurr += 1
+#			if surrID[dir.se] != slabID: countSurr += 1
+#			if surrID[dir.sw] != slabID: countSurr += 1
 #			if countSurr > 2:
 #				bitmask = 15
 
@@ -1087,18 +1172,18 @@ func update_wibble(xSlab, ySlab, slabID, surrounding):
 
 	# Every second tile will prioritize the opposite direction
 #	if int(xSlab) % 2 == 0:
-#		if Slabs.data[ surrounding[dir.n] ][Slabs.IS_SOLID] == false: return dir.n
-#		if Slabs.data[ surrounding[dir.s] ][Slabs.IS_SOLID] == false: return dir.s
+#		if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false: return dir.n
+#		if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false: return dir.s
 #	else:
-#		if Slabs.data[ surrounding[dir.s] ][Slabs.IS_SOLID] == false: return dir.s
-#		if Slabs.data[ surrounding[dir.n] ][Slabs.IS_SOLID] == false: return dir.n
+#		if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false: return dir.s
+#		if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false: return dir.n
 #
 #	if int(ySlab) % 2 == 0:
-#		if Slabs.data[ surrounding[dir.e] ][Slabs.IS_SOLID] == false: return dir.e
-#		if Slabs.data[ surrounding[dir.w] ][Slabs.IS_SOLID] == false: return dir.w
+#		if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false: return dir.e
+#		if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false: return dir.w
 #	else:
-#		if Slabs.data[ surrounding[dir.w] ][Slabs.IS_SOLID] == false: return dir.w
-#		if Slabs.data[ surrounding[dir.e] ][Slabs.IS_SOLID] == false: return dir.e
+#		if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false: return dir.w
+#		if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false: return dir.e
 #	return -1
 
 
@@ -1106,39 +1191,39 @@ func update_wibble(xSlab, ySlab, slabID, surrounding):
 #	var tflag = torch_flags(xSlab, ySlab)
 #
 #	if tflag == 1:
-#		if Slabs.data[ surrounding[dir.n] ][Slabs.IS_SOLID] == false:
+#		if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false:
 #			return dir.n
-#		elif Slabs.data[ surrounding[dir.s] ][Slabs.IS_SOLID] == false:
+#		elif Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false:
 #			return dir.s
 #
-#		if Slabs.data[ surrounding[dir.w] ][Slabs.IS_SOLID] == false:
+#		if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false:
 #			return dir.w
-#		elif Slabs.data[ surrounding[dir.e] ][Slabs.IS_SOLID] == false:
+#		elif Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false:
 #			return dir.e
 	
 #	var faceX = 0
 #	var faceY = 0
 #
 #	if int(xSlab) % 2 == 0:
-#		if Slabs.data[ surrounding[dir.n] ][Slabs.IS_SOLID] == false:
+#		if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false:
 #			faceY = dir.n
-#		elif Slabs.data[ surrounding[dir.s] ][Slabs.IS_SOLID] == false:
+#		elif Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false:
 #			faceY = dir.s
 #	else:
-#		if Slabs.data[ surrounding[dir.s] ][Slabs.IS_SOLID] == false:
+#		if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false:
 #			faceY = dir.s
-#		elif Slabs.data[ surrounding[dir.n] ][Slabs.IS_SOLID] == false:
+#		elif Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false:
 #			faceY = dir.n
 #
 #	if int(ySlab) % 2 == 0:
-#		if Slabs.data[ surrounding[dir.e] ][Slabs.IS_SOLID] == false:
+#		if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false:
 #			faceX = dir.e
-#		elif Slabs.data[ surrounding[dir.w] ][Slabs.IS_SOLID] == false:
+#		elif Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false:
 #			faceX = dir.w
 #	else:
-#		if Slabs.data[ surrounding[dir.w] ][Slabs.IS_SOLID] == false:
+#		if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false:
 #			faceX = dir.w
-#		elif Slabs.data[ surrounding[dir.e] ][Slabs.IS_SOLID] == false:
+#		elif Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false:
 #			faceX = dir.e
 #
 #	if int(xSlab) % 5 == 0: # This is tricky to explain but it ensures that there's less slabs facing north only.

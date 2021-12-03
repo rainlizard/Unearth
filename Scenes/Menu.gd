@@ -24,6 +24,7 @@ onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
+onready var oEasyScriptWindow = Nodelist.list["oEasyScriptWindow"]
 
 func _ready():
 	oMenuButtonFile.get_popup().connect("id_pressed",self,"_on_FileSubmenu_Pressed")
@@ -114,7 +115,8 @@ func _on_EditSubmenu_Pressed(pressedID):
 				Utils.popup_centered(oConfirmAutoGen)
 		5: # Add custom object
 			Utils.popup_centered(oAddCustomObjectWindow)
-
+		6: # Easy script
+			Utils.popup_centered(oEasyScriptWindow)
 #			var popupmenu = oMenuButtonEdit.get_popup()
 #			popupmenu.toggle_item_checked(0)
 #			oSlabStyle.determine_window_visiblity()

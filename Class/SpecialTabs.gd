@@ -20,6 +20,8 @@ func _ready():
 	tabSystem.connect("reposition_active_tab_request", self, "_on_Tabs_reposition_active_tab_request")
 	tabSystem.connect("tab_changed", self, "_on_Tabs_tab_changed")
 	tabSystem.connect("resized", self, "_on_Tabs_resized")
+	tabSystem.connect("tab_hover", self, "_on_tab_hover")
+	tabSystem.connect("mouse_exited", self, "_on_mouse_exited")
 	tabSystem.connect("gui_input", self, "_on_gui_input")
 	btnLeft.connect("pressed", self, "_on_TextureButtonLeft_pressed")
 	btnRight.connect("pressed", self, "_on_TextureButtonRight_pressed")
@@ -94,7 +96,6 @@ func set_current_tab(tab):
 	for i in 2:
 		yield(get_tree(),'idle_frame')
 		tabSystem.ensure_tab_visible(tab)
-
 
 func _on_Tabs_reposition_active_tab_request(idx_to):
 	move_child(tabFolder.get_child(tabSystem.current_tab), idx_to)
@@ -175,3 +176,27 @@ func _on_gui_input(event):
 			_on_TextureButtonRight_pressed()
 		if event.button_index == BUTTON_WHEEL_DOWN:
 			_on_TextureButtonLeft_pressed()
+
+
+# Show and hide tab name depending on mouse cursor hover
+func _on_tab_hover(hoveredTab):
+
+	for i in tabFolder.get_children():
+		var idx = i.get_index()
+		if idx == get_current_tab() or idx == hoveredTab:
+			tabSystem.set_tab_title(idx, i.get_meta("tab_name"))
+		else:
+			tabSystem.set_tab_title(idx, " ")
+
+	calculate_tab_title_width()
+
+func _on_mouse_exited():
+	for i in tabFolder.get_children():
+		var idx = i.get_index()
+		if idx == get_current_tab():
+			tabSystem.set_tab_title(idx, i.get_meta("tab_name"))
+		else:
+			tabSystem.set_tab_title(idx, " ")
+
+	calculate_tab_title_width()
+	tabSystem.ensure_tab_visible(get_current_tab())

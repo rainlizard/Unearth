@@ -54,7 +54,10 @@ func read_inf(buffer):
 
 func read_txt(buffer):
 	buffer.seek(0)
-	value = buffer.get_as_text()
+	#value = buffer.get_data(buffer.get_size()).to_utf8()
+	
+	value = buffer.get_string(buffer.get_size())
+	
 	oDataScript.data = value
 
 func read_slb(buffer):

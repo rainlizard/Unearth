@@ -1,4 +1,4 @@
-[gd_scene load_steps=136 format=2]
+[gd_scene load_steps=139 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://Scenes/ReadData.gd" type="Script" id=20]
 [ext_resource path="res://Scenes/RayCastBlockMap.gd" type="Script" id=21]
 [ext_resource path="res://Scenes/3dSelector.gd" type="Script" id=22]
+[ext_resource path="res://Scenes/EasyScriptWindow.gd" type="Script" id=23]
 [ext_resource path="res://Art/Cursor96x96.png" type="Texture" id=24]
 [ext_resource path="res://Scenes/Selection.gd" type="Script" id=25]
 [ext_resource path="res://Art/Cursor32x32.png" type="Texture" id=26]
@@ -120,6 +121,7 @@
 [ext_resource path="res://Scenes/AboutWindow.gd" type="Script" id=119]
 [ext_resource path="res://Class/SpecialTabs.gd" type="Script" id=120]
 [ext_resource path="res://Scenes/ConfirmSaveBeforeQuit.gd" type="Script" id=121]
+[ext_resource path="res://Theme/Hack_Regular.ttf" type="DynamicFontData" id=122]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -245,6 +247,9 @@ PopupMenu/icons/asdf = null
 [sub_resource type="ShaderMaterial" id=14]
 shader = ExtResource( 106 )
 shader_param/flashSpecific = Color( 1e-05, 2e-05, 3e-05, 4e-05 )
+
+[sub_resource type="DynamicFont" id=16]
+font_data = ExtResource( 122 )
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 7 )
@@ -762,111 +767,6 @@ margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Furniture" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Furniture"]
-margin_right = 1252.0
-margin_bottom = 181.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Furniture/ScrollContainer"]
-margin_left = 626.0
-margin_top = 90.0
-margin_right = 626.0
-margin_bottom = 90.0
-size_flags_horizontal = 6
-size_flags_vertical = 6
-
-[node name="Decoration" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Decoration"]
-margin_right = 1252.0
-margin_bottom = 181.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Decoration/ScrollContainer"]
-margin_left = 626.0
-margin_top = 90.0
-margin_right = 626.0
-margin_bottom = 90.0
-size_flags_horizontal = 6
-size_flags_vertical = 6
-
-[node name="Effect" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Effect"]
-margin_right = 1252.0
-margin_bottom = 181.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Effect/ScrollContainer"]
-margin_left = 626.0
-margin_top = 90.0
-margin_right = 626.0
-margin_bottom = 90.0
-size_flags_horizontal = 6
-size_flags_vertical = 6
-
-[node name="Action" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Action"]
-margin_right = 1130.0
-margin_bottom = 108.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Action/ScrollContainer"]
-margin_left = 565.0
-margin_top = 54.0
-margin_right = 565.0
-margin_bottom = 54.0
-size_flags_horizontal = 6
-size_flags_vertical = 6
-
-[node name="Gold" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Gold"]
-margin_right = 1252.0
-margin_bottom = 181.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Gold/ScrollContainer"]
-margin_left = 626.0
-margin_top = 90.0
-margin_right = 626.0
-margin_bottom = 90.0
-size_flags_horizontal = 6
-size_flags_vertical = 6
-
 [node name="Spell" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
@@ -951,20 +851,104 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Food" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Gold" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Food"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Gold"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Food/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Gold/ScrollContainer"]
+margin_left = 626.0
+margin_top = 90.0
+margin_right = 626.0
+margin_bottom = 90.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="Decoration" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Decoration"]
+margin_right = 1252.0
+margin_bottom = 181.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Decoration/ScrollContainer"]
+margin_left = 626.0
+margin_top = 90.0
+margin_right = 626.0
+margin_bottom = 90.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="Action" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Action"]
+margin_right = 1130.0
+margin_bottom = 108.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Action/ScrollContainer"]
+margin_left = 565.0
+margin_top = 54.0
+margin_right = 565.0
+margin_bottom = 54.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="Effect" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Effect"]
+margin_right = 1252.0
+margin_bottom = 181.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Effect/ScrollContainer"]
+margin_left = 626.0
+margin_top = 90.0
+margin_right = 626.0
+margin_bottom = 90.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="Furniture" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Furniture"]
+margin_right = 1252.0
+margin_bottom = 181.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Furniture/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -993,41 +977,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Power" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Misc" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Power"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Misc"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Power/ScrollContainer"]
-margin_left = 626.0
-margin_top = 90.0
-margin_right = 626.0
-margin_bottom = 90.0
-size_flags_horizontal = 6
-size_flags_vertical = 6
-
-[node name="Door" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Door"]
-margin_right = 1252.0
-margin_bottom = 181.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Door/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Misc/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -1388,7 +1351,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map properties", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false ]
+items = [ "Map properties", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false, "Easy script", null, 0, false, false, 6, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3163,6 +3126,203 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="EasyScriptWindow" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = 344.0
+margin_top = -1923.0
+margin_right = 1571.0
+margin_bottom = -670.0
+window_title = "Script"
+resizable = true
+script = ExtResource( 23 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/EasyScriptWindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer"]
+margin_right = 601.0
+margin_bottom = 1233.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer"]
+margin_left = 605.0
+margin_right = 1207.0
+margin_bottom = 1233.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer"]
+margin_right = 602.0
+margin_bottom = 27.0
+text = "map00001.txt"
+
+[node name="ScriptTextEdit" type="TextEdit" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer"]
+margin_top = 31.0
+margin_right = 602.0
+margin_bottom = 1233.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 16 )
+text = "REM only if player visited the lightning spell area
+IF(PLAYER0,FLAG0>0)
+	IF(PLAYER0,MONEY>13000)
+		REM	QUICK_OBJECTIVE(8,\"Unsurprisingly, even down here, far from any civilisation, a few cheap slavs came to rob you. Stop them before they render your goal to obtain 32000 pieces of gold impossible. I also think you can expect at least one more party.\",6)
+		DISPLAY_OBJECTIVE(8,6)
+		ADD_PARTY_TO_LEVEL(PLAYER_GOOD,THVS,6,1)
+	ENDIF
+	IF(PLAYER0,MONEY>21000)
+		ADD_PARTY_TO_LEVEL(PLAYER_GOOD,THVS,DRAWFROM(2,3,4,5,7),2)
+	ENDIF
+ENDIF
+
+SET_GENERATE_SPEED(400)
+
+COMPUTER_PLAYER(PLAYER1,0)
+COMPUTER_PLAYER(PLAYER2,0)
+COMPUTER_PLAYER(PLAYER3,0)
+COMPUTER_PLAYER(PLAYER_GOOD,0)
+
+START_MONEY(ALL_PLAYERS,2500)
+
+MAX_CREATURES(ALL_PLAYERS,25)
+
+ADD_CREATURE_TO_POOL(BILE_DEMON,20)
+ADD_CREATURE_TO_POOL(BUG,20)
+ADD_CREATURE_TO_POOL(DARK_MISTRESS,20)
+ADD_CREATURE_TO_POOL(DEMONSPAWN,20)
+ADD_CREATURE_TO_POOL(DRAGON,20)
+ADD_CREATURE_TO_POOL(FLY,20)
+ADD_CREATURE_TO_POOL(HELL_HOUND,20)
+ADD_CREATURE_TO_POOL(ORC,20)
+ADD_CREATURE_TO_POOL(SORCEROR,20)
+ADD_CREATURE_TO_POOL(SPIDER,20)
+ADD_CREATURE_TO_POOL(TENTACLE,20)
+ADD_CREATURE_TO_POOL(TROLL,20)
+
+ADD_CREATURE_TO_POOL(FLOATING_SPIRIT,0)
+ADD_CREATURE_TO_POOL(GHOST,0)
+ADD_CREATURE_TO_POOL(HORNY,0)
+ADD_CREATURE_TO_POOL(IMP,0)
+ADD_CREATURE_TO_POOL(REAPER,0)
+ADD_CREATURE_TO_POOL(SKELETON,0)
+ADD_CREATURE_TO_POOL(VAMPIRE,0)
+ADD_CREATURE_TO_POOL(ARCHER,0)
+ADD_CREATURE_TO_POOL(BARBARIAN,0)
+ADD_CREATURE_TO_POOL(DWARFA,0)
+ADD_CREATURE_TO_POOL(FAIRY,0)
+ADD_CREATURE_TO_POOL(GIANT,0)
+ADD_CREATURE_TO_POOL(KNIGHT,0)
+ADD_CREATURE_TO_POOL(MONK,0)
+ADD_CREATURE_TO_POOL(SAMURAI,0)
+ADD_CREATURE_TO_POOL(THIEF,0)
+ADD_CREATURE_TO_POOL(TUNNELLER,0)
+ADD_CREATURE_TO_POOL(WITCH,0)
+ADD_CREATURE_TO_POOL(WIZARD,0)
+
+CREATURE_AVAILABLE(ALL_PLAYERS,BILE_DEMON,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,BUG,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,DARK_MISTRESS,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,DEMONSPAWN,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,DRAGON,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,FLY,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,HELL_HOUND,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,ORC,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,SORCEROR,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,SPIDER,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,TENTACLE,1,1)
+CREATURE_AVAILABLE(ALL_PLAYERS,TROLL,1,1)
+
+CREATURE_AVAILABLE(ALL_PLAYERS,FLOATING_SPIRIT,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,GHOST,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,HORNY,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,IMP,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,REAPER,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,SKELETON,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,VAMPIRE,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,ARCHER,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,BARBARIAN,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,DWARFA,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,FAIRY,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,GIANT,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,KNIGHT,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,MONK,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,SAMURAI,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,THIEF,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,TUNNELLER,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,WITCH,1,0)
+CREATURE_AVAILABLE(ALL_PLAYERS,WIZARD,1,0)
+
+ROOM_AVAILABLE(ALL_PLAYERS,TREASURE,1,1)
+ROOM_AVAILABLE(ALL_PLAYERS,LAIR,1,1)
+ROOM_AVAILABLE(ALL_PLAYERS,GARDEN,1,1)
+ROOM_AVAILABLE(ALL_PLAYERS,TRAINING,1,1)
+ROOM_AVAILABLE(ALL_PLAYERS,RESEARCH,1,1)
+ROOM_AVAILABLE(ALL_PLAYERS,BRIDGE,1,0)
+ROOM_AVAILABLE(ALL_PLAYERS,GUARD_POST,1,0)
+ROOM_AVAILABLE(ALL_PLAYERS,WORKSHOP,1,0)
+ROOM_AVAILABLE(ALL_PLAYERS,PRISON,1,0)
+ROOM_AVAILABLE(ALL_PLAYERS,TORTURE,1,0)
+ROOM_AVAILABLE(ALL_PLAYERS,BARRACKS,1,0)
+ROOM_AVAILABLE(ALL_PLAYERS,TEMPLE,1,0)
+ROOM_AVAILABLE(ALL_PLAYERS,GRAVEYARD,1,0)
+ROOM_AVAILABLE(ALL_PLAYERS,SCAVENGER,1,0)
+
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_HAND,1,1)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_SLAP,1,1)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_POSSESS,1,1)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_IMP,1,1)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_SIGHT,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_SPEED,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_OBEY,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_CALL_TO_ARMS,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_CONCEAL,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_HOLD_AUDIENCE,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_CAVE_IN,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_HEAL_CREATURE,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_LIGHTNING,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_PROTECT,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_CHICKEN,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_DISEASE,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_ARMAGEDDON,1,0)
+MAGIC_AVAILABLE(ALL_PLAYERS,POWER_DESTROY_WALLS,1,0)
+
+TRAP_AVAILABLE(ALL_PLAYERS,ALARM,1,0)
+TRAP_AVAILABLE(ALL_PLAYERS,POISON_GAS,1,0)
+TRAP_AVAILABLE(ALL_PLAYERS,LIGHTNING,1,0)
+TRAP_AVAILABLE(ALL_PLAYERS,LAVA,1,0)
+TRAP_AVAILABLE(ALL_PLAYERS,BOULDER,1,0)
+TRAP_AVAILABLE(ALL_PLAYERS,WORD_OF_POWER,1,0)
+DOOR_AVAILABLE(ALL_PLAYERS,WOOD,1,0)
+DOOR_AVAILABLE(ALL_PLAYERS,BRACED,1,0)
+DOOR_AVAILABLE(ALL_PLAYERS,STEEL,1,0)
+DOOR_AVAILABLE(ALL_PLAYERS,MAGIC,1,0)
+
+IF(PLAYER0,ALL_DUNGEONS_DESTROYED == 1)
+	WIN_GAME
+ENDIF"
+highlight_current_line = true
+syntax_highlighting = true
+show_line_numbers = true
+draw_tabs = true
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -3392,4 +3552,6 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonHelp" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonHelp_pressed"]
 [connection signal="gui_input" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/MapImageTextureRect" to="Ui/UiSystem/ImageAsMapDialog" method="_on_MapImageTextureRect_gui_input"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseMapImageFileDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ChooseMapImageFileDialog_file_selected"]
+[connection signal="about_to_show" from="Ui/UiSystem/EasyScriptWindow" to="Ui/UiSystem/EasyScriptWindow" method="_on_EasyScriptWindow_about_to_show"]
+[connection signal="text_changed" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/EasyScriptWindow" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

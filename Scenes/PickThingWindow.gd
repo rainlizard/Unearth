@@ -16,20 +16,18 @@ enum {
 }
 
 onready var tabs = {
-	Things.TAB_CREATURE: [$ThingTabs/TabFolder/Creature,"res://dk_images/crspell_64/flight_std.png"],
-	Things.TAB_FURNITURE: [$ThingTabs/TabFolder/Furniture,"res://dk_images/furniture/workshop_machine_fp/r1frame01.png"], #"res://dk_images/furniture/training_machine_fp/r1frame09.png"
-	Things.TAB_DECORATION: [$ThingTabs/TabFolder/Decoration,"res://dk_images/statues/anim0906/r1frame01.png"],
-	Things.TAB_EFFECT: [$ThingTabs/TabFolder/Effect,"res://dk_images/guisymbols_64/new_function_3.png"],
-	Things.TAB_ACTION: [$ThingTabs/TabFolder/Action,"res://dk_images/guisymbols_64/sym_fight.png"], #"res://Art/ActionPoint.png"
-	Things.TAB_GOLD: [$ThingTabs/TabFolder/Gold,"res://dk_images/symbols_64/creatr_stat_gold_std.png"], #"res://dk_images/valuables/gold_hoard1_fp/r1frame03.png" #"res://dk_images/valuables/gold_hoard2_fp/r1frame02.png" #"res://dk_images/valuables/gold_hoard4_fp/r1frame01.png"
-	Things.TAB_SPELL: [$ThingTabs/TabFolder/Spell,"res://dk_images/keepower_64/speed_std.png"],
+	Things.TAB_CREATURE: [$ThingTabs/TabFolder/Creature,"res://edited_images/icon_creature.png"],
+	Things.TAB_SPELL: [$ThingTabs/TabFolder/Spell,"res://edited_images/icon_book.png"],
 	Things.TAB_TRAP: [$ThingTabs/TabFolder/Trap,"res://dk_images/traps_doors/anim0845/r1frame04.png"],
 	Things.TAB_BOX: [$ThingTabs/TabFolder/Box,"res://dk_images/traps_doors/anim0116/r1frame12.png"],
 	Things.TAB_SPECIAL: [$ThingTabs/TabFolder/Special,"res://dk_images/trapdoor_64/bonus_box_std.png"],
-	Things.TAB_FOOD: [$ThingTabs/TabFolder/Food,"res://dk_images/keepower_64/chicken_std.png"],
+	Things.TAB_GOLD: [$ThingTabs/TabFolder/Gold,"res://dk_images/symbols_64/creatr_stat_gold_std.png"], #"res://dk_images/valuables/gold_hoard1_fp/r1frame03.png" #"res://dk_images/valuables/gold_hoard2_fp/r1frame02.png" #"res://dk_images/valuables/gold_hoard4_fp/r1frame01.png"
+	Things.TAB_DECORATION: [$ThingTabs/TabFolder/Decoration,"res://dk_images/statues/anim0906/r1frame01.png"],
+	Things.TAB_ACTION: [$ThingTabs/TabFolder/Action,"res://dk_images/guisymbols_64/sym_fight.png"], #"res://Art/ActionPoint.png"
+	Things.TAB_EFFECT: [$ThingTabs/TabFolder/Effect,"res://edited_images/icon_effect.png"],
+	Things.TAB_FURNITURE: [$ThingTabs/TabFolder/Furniture,"res://dk_images/furniture/workshop_machine_fp/r1frame01.png"], #"res://dk_images/furniture/training_machine_fp/r1frame09.png"
 	Things.TAB_LAIR: [$ThingTabs/TabFolder/Lair,"res://dk_images/room_64/lair_std.png"],
-	Things.TAB_POWER: [$ThingTabs/TabFolder/Power,"res://dk_images/power_hand/anim0783/r1frame03.png"],
-	Things.TAB_DOOR: [$ThingTabs/TabFolder/Door,"res://dk_images/trapdoor_64/door_pers_braced_std.png"],
+	Things.TAB_MISC: [$ThingTabs/TabFolder/Misc,"res://dk_images/rpanel_64/tab_crtr_wandr_std.png"],
 }
 
 export var grid_item_size : Vector2

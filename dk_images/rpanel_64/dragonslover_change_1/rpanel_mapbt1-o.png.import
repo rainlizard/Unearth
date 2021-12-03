@@ -1,0 +1,35 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/rpanel_mapbt1-o.png-ef5da21bb9b8bb99c5347a422a814958.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://dk_images/rpanel_64/dragonslover_change_1/rpanel_mapbt1-o.png"
+dest_files=[ "res://.import/rpanel_mapbt1-o.png-ef5da21bb9b8bb99c5347a422a814958.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=true
+flags/anisotropic=true
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+process/normal_map_invert_y=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0

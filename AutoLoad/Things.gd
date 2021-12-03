@@ -20,28 +20,26 @@ enum { # I only used the official DK keeperfx categories as a guide rather than 
 	TAB_CREATURE
 	TAB_GOLD
 	TAB_TRAP
-	TAB_DOOR
 	TAB_SPELL
 	TAB_SPECIAL
 	TAB_BOX
 	TAB_LAIR
 	TAB_EFFECT
 	TAB_FURNITURE
-	TAB_FOOD
-	TAB_POWER
 	TAB_DECORATION
+	TAB_MISC
 }
 
 var DATA_EXTRA = {
 1 : ["Action Point", preload("res://Art/ActionPoint.png"), null, TAB_ACTION],
-2 : ["Light", preload("res://edited_images/staticlight.png"), null, TAB_EFFECT],
+2 : ["Light", preload("res://edited_images/GUIEDIT-1/PIC26.png"), null, TAB_EFFECT],
 }
 
 var DATA_DOOR = {
-1 : ["Wooden Door", preload("res://dk_images/trapdoor_64/door_pers_wood_std.png"), null, TAB_DOOR],
-2 : ["Braced Door", preload("res://dk_images/trapdoor_64/door_pers_braced_std.png"), null, TAB_DOOR],
-3 : ["Iron Door", preload("res://dk_images/trapdoor_64/door_pers_iron_std.png"), null, TAB_DOOR],
-4 : ["Magic Door", preload("res://dk_images/trapdoor_64/door_pers_magic_std.png"), null, TAB_DOOR]
+1 : ["Wooden Door", preload("res://dk_images/trapdoor_64/door_pers_wood_std.png"), null, TAB_MISC],
+2 : ["Braced Door", preload("res://dk_images/trapdoor_64/door_pers_braced_std.png"), null, TAB_MISC],
+3 : ["Iron Door", preload("res://dk_images/trapdoor_64/door_pers_iron_std.png"), null, TAB_MISC],
+4 : ["Magic Door", preload("res://dk_images/trapdoor_64/door_pers_magic_std.png"), null, TAB_MISC]
 }
 var DATA_TRAP = {
 1 : ["Boulder Trap", preload("res://dk_images/trapdoor_64/trap_boulder_std.png"), null, TAB_TRAP],
@@ -58,11 +56,11 @@ var DATA_TRAP = {
 12 : ["Dummy Trap 7", null, null, TAB_TRAP],
 }
 var DATA_EFFECT = {
-1 : ["Effect: Lava", preload("res://edited_images/lavaeffect.png"), null, TAB_EFFECT],
-2 : ["Effect: Dripping Water", preload("res://edited_images/dripeffect.png"), null, TAB_EFFECT],
-3 : ["Effect: Rock Fall", preload("res://dk_images/particles/anim0833/r1frame01.png"), null, TAB_EFFECT],
-4 : ["Effect: Entrance Ice", preload("res://edited_images/entranceice.png"), null, TAB_EFFECT],
-5 : ["Effect: Dry Ice", preload("res://edited_images/dryice.png"), null, TAB_EFFECT]
+1 : ["Effect: Lava", preload("res://edited_images/GUIEDIT-1/PIC27.png"), null, TAB_EFFECT],
+2 : ["Effect: Dripping Water", preload("res://edited_images/GUIEDIT-1/PIC28.png"), null, TAB_EFFECT],
+3 : ["Effect: Rock Fall", preload("res://edited_images/GUIEDIT-1/PIC29.png"), null, TAB_EFFECT],
+4 : ["Effect: Entrance Ice", preload("res://edited_images/GUIEDIT-1/PIC30.png"), null, TAB_EFFECT],
+5 : ["Effect: Dry Ice", preload("res://edited_images/GUIEDIT-1/PIC31.png"), null, TAB_EFFECT]
 }
 var DATA_CREATURE = {
 01 : ["Wizard",          preload("res://dk_images/creatr_icon_64/wizrd_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_wizrd.png"), TAB_CREATURE],
@@ -107,8 +105,8 @@ var DATA_OBJECT = {
 006 : ["Gold Pot (250)", preload("res://dk_images/valuables/gold_pot_tp/r1frame01.png"), null, TAB_GOLD],
 007 : ["Unlit Torch", preload("res://dk_images/other/anim0963/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
 008 : ["Glowing Statue", preload("res://dk_images/statues/anim0952/r1frame01.png"), null, TAB_DECORATION], #Lit Statue No Flame # Partially Lit Statue
-009 : ["Egg Growing (1)", preload("res://dk_images/food/anim0898/r1frame03.png"), null, TAB_FOOD],
-010 : ["Chicken", preload("res://dk_images/food/anim0822/r3frame04.png"), null, TAB_FOOD],
+009 : ["Egg Growing (1)", preload("res://dk_images/food/anim0898/r1frame03.png"), null, TAB_MISC],
+010 : ["Chicken", preload("res://dk_images/food/anim0822/r3frame04.png"), null, TAB_MISC],
 011 : ["Hand Of Evil", null, null, TAB_SPELL],
 012 : ["Create Imp", preload("res://dk_images/keepower_64/imp_std.png"), null, TAB_SPELL],
 013 : ["Must Obey", preload("res://edited_images/mustobey.png"), null, TAB_SPELL],
@@ -122,8 +120,8 @@ var DATA_OBJECT = {
 021 : ["Speed Monster", preload("res://dk_images/keepower_64/speed_std.png"), null, TAB_SPELL],
 022 : ["Protect Monster", preload("res://dk_images/keepower_64/armor_std.png"), null, TAB_SPELL],
 023 : ["Conceal Monster", preload("res://dk_images/keepower_64/conceal_std.png"), null, TAB_SPELL],
-024 : ["Cta Ensign", null, null, TAB_POWER],
-025 : ["Room Flag", null, null, TAB_POWER], #TAB_DECORATION
+024 : ["Cta Ensign", null, null, TAB_MISC],
+025 : ["Room Flag", null, null, TAB_MISC], #TAB_DECORATION
 026 : ["Anvil", preload("res://dk_images/furniture/workshop_anvil_tp/r1frame01.png"), null, TAB_FURNITURE],
 027 : ["Prison Bar", preload("res://dk_images/other/anim0797/r1frame01.png"), null, TAB_FURNITURE],
 028 : ["Candlestick", preload("res://dk_images/furniture/anim0791/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
@@ -135,21 +133,21 @@ var DATA_OBJECT = {
 034 : ["Purple Potion", preload("res://dk_images/potions/anim0804/r1frame01.png"), null, TAB_DECORATION],
 035 : ["Blue Potion", preload("res://dk_images/potions/anim0806/r1frame01.png"), null, TAB_DECORATION],
 036 : ["Green Potion", preload("res://dk_images/potions/anim0808/r1frame01.png"), null, TAB_DECORATION],
-037 : ["Power Hand", preload("res://dk_images/power_hand/anim0783/r1frame03.png"), null, TAB_POWER],
-038 : ["Power Hand Grab", preload("res://dk_images/power_hand/anim0784/r1frame04.png"), null, TAB_POWER],
-039 : ["Power Hand Whip", preload("res://dk_images/power_hand/anim0786/r1frame03.png"), null, TAB_POWER],
-040 : ["Egg Stable (2)", preload("res://dk_images/food/anim0899/r1frame01.png"), null, TAB_FOOD],
-041 : ["Egg Wobbling (3)", preload("res://dk_images/food/anim0900/r1frame04.png"), null, TAB_FOOD],
-042 : ["Egg Cracking (4)", preload("res://dk_images/food/anim0901/r1frame07.png"), null, TAB_FOOD],
+037 : ["Power Hand", preload("res://dk_images/power_hand/anim0783/r1frame03.png"), null, TAB_MISC],
+038 : ["Power Hand Grab", preload("res://dk_images/power_hand/anim0784/r1frame04.png"), null, TAB_MISC],
+039 : ["Power Hand Whip", preload("res://dk_images/power_hand/anim0786/r1frame03.png"), null, TAB_MISC],
+040 : ["Egg Stable (2)", preload("res://dk_images/food/anim0899/r1frame01.png"), null, TAB_MISC],
+041 : ["Egg Wobbling (3)", preload("res://dk_images/food/anim0900/r1frame04.png"), null, TAB_MISC],
+042 : ["Egg Cracking (4)", preload("res://dk_images/food/anim0901/r1frame07.png"), null, TAB_MISC],
 043 : ["Gold Pile (200)", preload("res://dk_images/valuables/gold_hoard1_tp/r1frame01.png"), null, TAB_GOLD],
-044 : ["Spinning Key", preload("res://dk_images/traps_doors/anim0811/r1frame11.png"), null, TAB_DOOR],
+044 : ["Spinning Key", preload("res://dk_images/traps_doors/anim0811/r1frame11.png"), null, TAB_MISC],
 045 : ["Disease", preload("res://dk_images/keepower_64/disease_std.png"), null, TAB_SPELL],
 046 : ["Chicken Spell", preload("res://dk_images/keepower_64/chicken_std.png"), null, TAB_SPELL],
 047 : ["Destroy Walls", preload("res://dk_images/keepower_64/dstwall_std.png"), null, TAB_SPELL],
 048 : ["Time Bomb", preload("res://edited_images/timebomb.png"), null, TAB_SPELL], 
 049 : ["Hero Gate", preload("res://dk_images/crucials/anim0780/r1frame01.png"), null, TAB_ACTION],
-050 : ["Spinning Key 2", preload("res://dk_images/traps_doors/anim0811/r1frame11.png"), null, TAB_DOOR],
-051 : ["Armour Effect", null, null, TAB_POWER],
+050 : ["Spinning Key 2", preload("res://dk_images/traps_doors/anim0811/r1frame11.png"), null, TAB_MISC],
+051 : ["Armour Effect", null, null, TAB_MISC],
 052 : ["Treasury Gold 1", preload("res://dk_images/valuables/gold_hoard1_tp/r1frame01.png"), null, TAB_GOLD],
 053 : ["Treasury Gold 2", preload("res://dk_images/valuables/gold_hoard2_tp/r1frame01.png"), null, TAB_GOLD],
 054 : ["Treasury Gold 3", preload("res://dk_images/valuables/gold_hoard3_tp/r1frame01.png"), null, TAB_GOLD],
@@ -210,7 +208,7 @@ var DATA_OBJECT = {
 109 : ["Box: Magic Door", preload("res://dk_images/traps_doors/anim0116/r1frame12.png"), null, TAB_BOX],
 110 : ["Workshop Item", preload("res://dk_images/furniture/workshop_anvil_tp/r1frame01.png"), null, TAB_BOX],
 111 : ["Red Heart Flame", preload("res://dk_images/magic_fogs/anim0801/r1frame10.png"), null, TAB_FURNITURE],
-112 : ["Disease Effect", null, null, TAB_POWER],
+112 : ["Disease Effect", null, null, TAB_MISC],
 113 : ["Scavenger Eye", preload("res://dk_images/furniture/scavenge_eye_tp/r1frame01.png"), null, TAB_FURNITURE],
 114 : ["Workshop Machine", preload("res://dk_images/furniture/workshop_machine_tp/r1frame02.png"), null, TAB_FURNITURE],
 115 : ["Red Flag", preload("res://dk_images/furniture/flagpole_redflag_tp/r1frame01.png"), null, TAB_FURNITURE],
@@ -221,12 +219,12 @@ var DATA_OBJECT = {
 120 : ["Blue Heart Flame", preload("res://dk_images/magic_fogs/anim0802/r1frame10.png"), null, TAB_FURNITURE],
 121 : ["Green Heart Flame", preload("res://dk_images/magic_fogs/anim0800/r1frame10.png"), null, TAB_FURNITURE],
 122 : ["Yellow Heart Flame", preload("res://dk_images/magic_fogs/anim0799/r1frame10.png"), null, TAB_FURNITURE],
-123 : ["Casted Sight", preload("res://dk_images/magic_fogs/anim0854/r1frame06.png"), null, TAB_POWER],
-124 : ["Casted Lightning", null, null, TAB_POWER],
+123 : ["Casted Sight", preload("res://dk_images/magic_fogs/anim0854/r1frame06.png"), null, TAB_MISC],
+124 : ["Casted Lightning", null, null, TAB_MISC],
 125 : ["Torturer", preload("res://dk_images/furniture/torture_machine_tp/r1frame01.png"), null, TAB_FURNITURE],
 126 : ["Lair: Orc", preload("res://edited_images/lair/creature_orc/anim0128/r1frame01.png"), null, TAB_LAIR],
-127 : ["Power Hand Gold", preload("res://dk_images/power_hand/anim0782/r1frame01.png"), null, TAB_POWER],
-128 : ["Spinning Coin", null, null, TAB_POWER],
+127 : ["Power Hand Gold", preload("res://dk_images/power_hand/anim0782/r1frame01.png"), null, TAB_MISC],
+128 : ["Spinning Coin", null, null, TAB_MISC],
 129 : ["Unlit Statue", preload("res://dk_images/statues/anim0954/r1frame01.png"), null, TAB_DECORATION],
 130 : ["Statue 3", preload("res://dk_images/statues/anim0956/r1frame01.png"), null, TAB_DECORATION],
 131 : ["Statue 4", preload("res://dk_images/statues/anim0958/r1frame01.png"), null, TAB_DECORATION],

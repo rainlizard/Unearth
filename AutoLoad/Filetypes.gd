@@ -13,7 +13,7 @@ const FILE_TYPES = [
 	"WIB",
 	"SLX",
 	"WLB",
-#	"TXT" : ["read_txt", "write_txt"],
+	"TXT",
 ]
 
 func read(filePath, EXT):
@@ -41,7 +41,7 @@ func read(filePath, EXT):
 		"WIB" : oReadData.read_wib(buffer)
 		"SLX" : oReadData.read_slx(buffer)
 		"WLB" : oReadData.read_wlb(buffer)
-		#"TXT" : oReadData.read_txt(buffer)
+		"TXT" : oReadData.read_txt(buffer)
 	
 	print('.'+EXT+' read success in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
@@ -65,7 +65,7 @@ func write(filePath, EXT):
 		"WIB" : oWriteData.write_wib(buffer)
 		"SLX" : oWriteData.write_slx(buffer)
 		"WLB" : oWriteData.write_wlb(buffer)
-		#"TXT" : oWriteData.write_txt(file)
+		"TXT" : oWriteData.write_txt(buffer)
 	
 	var file = File.new()
 	file.open(filePath,File.WRITE)

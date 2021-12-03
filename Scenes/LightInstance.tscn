@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://edited_images/staticlight.png" type="Texture" id=1]
+[ext_resource path="res://edited_images/GUIEDIT-1/PIC26.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/LightInstance.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -15,10 +15,8 @@ script = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="TextureRect" type="TextureRect" parent="."]
-margin_left = -16.0
-margin_top = -16.0
-margin_right = 16.0
-margin_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource( 1 )
 stretch_mode = 4

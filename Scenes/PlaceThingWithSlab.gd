@@ -10,19 +10,19 @@ onready var dir = oSlabPlacement.dir
 # For example the Prison bars need extra rules for detecting nearby walls, but the original slab cubes did not need these rules.
 # So objects have their own placement rules, though we use the original bitmask/slabvariation (from oSlabPlacement) as a basis to work from.
 
-func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrounding):
+func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner):
 	oInstances.delete_attached_objects_on_slab(xSlab, ySlab)
 	
 	if slabID == Slabs.PRISON:
-		bitmask = prison_bar_bitmask(slabID, surrounding)
+		bitmask = prison_bar_bitmask(slabID, surrID)
 	elif slabID == Slabs.WALL_WITH_TORCH or slabID == Slabs.EARTH_WITH_TORCH:
-		bitmask = torch_object_bitmask(xSlab, ySlab, surrounding)
+		bitmask = torch_object_bitmask(xSlab, ySlab, surrID)
 	elif slabID in [Slabs.WOODEN_DOOR_1, Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_1, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_1, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_1, Slabs.MAGIC_DOOR_2]:
 		create_door_thing(xSlab, ySlab, ownership)
 	
 	var customSlab = oSlabPlacement.bitmaskToSlab[bitmask]
 	if bitmask == 0 and Slabs.rooms_with_middle_object.has(slabID):
-		var isMiddle = determineIfMiddle(slabID, surrounding, bitmask)
+		var isMiddle = determineIfMiddle(slabID, ownership, bitmask, surrID, surrOwner)
 		if isMiddle == false:
 			customSlab = oSlabPlacement.slab_all
 	
@@ -38,9 +38,9 @@ func create_door_thing(xSlab, ySlab, ownership):
 	if is_instance_valid(doorID) == false:
 		oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership) #subtype determined in oInstances
 
-func determineIfMiddle(slabID, surrounding, bitmask):
+func determineIfMiddle(slabID, ownership, bitmask, surrID, surrOwner):
 	if bitmask == 0:
-		if slabID == surrounding[dir.se] and slabID == surrounding[dir.sw] and slabID == surrounding[dir.ne] and slabID == surrounding[dir.nw]:
+		if slabID == surrID[dir.se] and slabID == surrID[dir.sw] and slabID == surrID[dir.ne] and slabID == surrID[dir.nw] and ownership == surrOwner[dir.se] and ownership == surrOwner[dir.sw] and ownership == surrOwner[dir.ne] and ownership == surrOwner[dir.nw]:
 			return true
 	return false
 
@@ -58,18 +58,18 @@ func get_obj_idx(newSlabVar, subtile):
 		if oDkSlabThings.tngObject[idx][1] != newSlabVar:
 			return -1
 
-func prison_bar_bitmask(slabID, surrounding):
+func prison_bar_bitmask(slabID, surrID):
 	var bitmask = 0
-	if Slabs.data[ surrounding[dir.s] ][Slabs.IS_SOLID] == false and slabID != surrounding[dir.s]: bitmask += 1
-	if Slabs.data[ surrounding[dir.w] ][Slabs.IS_SOLID] == false and slabID != surrounding[dir.w]: bitmask += 2
-	if Slabs.data[ surrounding[dir.n] ][Slabs.IS_SOLID] == false and slabID != surrounding[dir.n]: bitmask += 4
-	if Slabs.data[ surrounding[dir.e] ][Slabs.IS_SOLID] == false and slabID != surrounding[dir.e]: bitmask += 8
+	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.s]: bitmask += 1
+	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.w]: bitmask += 2
+	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.n]: bitmask += 4
+	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.e]: bitmask += 8
 	return bitmask
 
-func torch_object_bitmask(xSlab, ySlab, surrounding):
+func torch_object_bitmask(xSlab, ySlab, surrID):
 	var torchSide = oSlabPlacement.calculate_torch_side(xSlab, ySlab)
 	
-	if Slabs.data[ surrounding[torchSide] ][Slabs.IS_SOLID] == true:
+	if Slabs.data[ surrID[torchSide] ][Slabs.IS_SOLID] == true:
 		torchSide = -1
 	
 	if torchSide == 0: return 01 #s

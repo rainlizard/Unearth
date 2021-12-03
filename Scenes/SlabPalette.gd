@@ -53,7 +53,7 @@ func start():
 	CODETIME_START = OS.get_ticks_msec()
 	update_slab_palette_for_map()
 	
-	edit_impenetrable()
+	#edit_impenetrable()
 	edit_walltorch_sw_ne_shadow()
 	edit_damaged_wall()
 	
@@ -128,22 +128,22 @@ func update_slab_palette_for_map():
 	# Add extra sets here for custom slabs
 	
 
-func edit_impenetrable():
-	var slabVariation
-	slabVariation = 28 * Slabs.WATER
-	var waterColumn = slabPal[slabVariation + dir.s][0]
-	slabVariation = 28 * Slabs.LAVA
-	var lavaColumn = slabPal[slabVariation + dir.s][0]
-	
-	slabVariation = 28 * Slabs.ROCK
-	slabPal[slabVariation + dir.sw + 9][6] = lavaColumn
-	slabPal[slabVariation + dir.nw + 9][0] = lavaColumn
-	slabPal[slabVariation + dir.ne + 9][2] = lavaColumn
-	slabPal[slabVariation + dir.se + 9][8] = lavaColumn
-	slabPal[slabVariation + dir.sw + 18][6] = waterColumn
-	slabPal[slabVariation + dir.nw + 18][0] = waterColumn
-	slabPal[slabVariation + dir.ne + 18][2] = waterColumn
-	slabPal[slabVariation + dir.se + 18][8] = waterColumn
+#func edit_impenetrable():
+#	var slabVariation
+#	slabVariation = 28 * Slabs.WATER
+#	var waterColumn = slabPal[slabVariation + dir.s][0]
+#	slabVariation = 28 * Slabs.LAVA
+#	var lavaColumn = slabPal[slabVariation + dir.s][0]
+#
+#	slabVariation = 28 * Slabs.ROCK
+#	slabPal[slabVariation + dir.sw + 9][6] = lavaColumn
+#	slabPal[slabVariation + dir.nw + 9][0] = lavaColumn
+#	slabPal[slabVariation + dir.ne + 9][2] = lavaColumn
+#	slabPal[slabVariation + dir.se + 9][8] = lavaColumn
+#	slabPal[slabVariation + dir.sw + 18][6] = waterColumn
+#	slabPal[slabVariation + dir.nw + 18][0] = waterColumn
+#	slabPal[slabVariation + dir.ne + 18][2] = waterColumn
+#	slabPal[slabVariation + dir.se + 18][8] = waterColumn
 
 func edit_walltorch_sw_ne_shadow(): # it's using the wrong side shadow
 	var slabVariation
