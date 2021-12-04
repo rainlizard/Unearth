@@ -58,7 +58,7 @@ func add_item(leftText, rightText):
 				if nameValue.get_item_text(nameValue.get_item_index(i)) == rightText:
 					nameValue.selected = i
 		
-		"Level","Effect range","Light range","Intensity","Gate number","Point range","Point #":
+		"Level","Effect range","Light range","Intensity","Gate #","Point range","Point #","Custom box":
 			nameValue = LineEdit.new()
 			nameValue.expand_to_text_length = true
 			nameValue.theme = thinLineEditTheme
@@ -121,6 +121,15 @@ func _on_lineedit_focus_exited(lineEditId, leftText): # This signal will go off 
 	var inst = oInspector.inspectingInstance
 	
 	match leftText:
+		"Custom box":
+			valueNumber = int(valueNumber)
+			valueNumber = clamp(valueNumber, 0, 255)
+			match name:
+				"ThingListData":
+					if is_instance_valid(inst):
+						inst.boxNumber = valueNumber
+				"PlacingListData":
+					oPlacingSettings.boxNumber = valueNumber
 		"Level":
 			valueNumber = int(valueNumber)
 			valueNumber = clamp(valueNumber, 1, 10)
@@ -139,7 +148,7 @@ func _on_lineedit_focus_exited(lineEditId, leftText): # This signal will go off 
 						inst.pointNumber = valueNumber
 				"PlacingListData":
 					oPlacingSettings.pointNumber = valueNumber
-		"Gate number":
+		"Gate #":
 			valueNumber = int(valueNumber)
 			valueNumber = clamp(valueNumber, 0, 255)
 			match name:

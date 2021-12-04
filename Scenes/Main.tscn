@@ -1,4 +1,4 @@
-[gd_scene load_steps=139 format=2]
+[gd_scene load_steps=140 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -122,6 +122,7 @@
 [ext_resource path="res://Class/SpecialTabs.gd" type="Script" id=120]
 [ext_resource path="res://Scenes/ConfirmSaveBeforeQuit.gd" type="Script" id=121]
 [ext_resource path="res://Theme/Hack_Regular.ttf" type="DynamicFontData" id=122]
+[ext_resource path="res://Scenes/LineEditInteger.gd" type="Script" id=123]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -1351,7 +1352,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map properties", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false, "Easy script", null, 0, false, false, 6, 0, null, "", false ]
+items = [ "Map properties", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false, "Scripting", null, 0, false, false, 6, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3170,27 +3171,144 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer"]
-margin_right = 601.0
+[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer"]
+margin_right = 397.0
 margin_bottom = 1233.0
-size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+margin_right = 397.0
+margin_bottom = 21.0
+align = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+margin_top = 25.0
+margin_right = 397.0
+margin_bottom = 56.0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer"]
+margin_top = 5.0
+margin_right = 201.0
+margin_bottom = 26.0
+text = "Portal attraction rate:"
+
+[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer"]
+margin_left = 205.0
+margin_right = 263.0
+margin_bottom = 31.0
+script = ExtResource( 123 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+margin_top = 60.0
+margin_right = 397.0
+margin_bottom = 91.0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer2"]
+margin_top = 5.0
+margin_right = 126.0
+margin_bottom = 26.0
+text = "Starting gold:"
+
+[node name="GoldField" type="LineEdit" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer2"]
+margin_left = 130.0
+margin_right = 188.0
+margin_bottom = 31.0
+script = ExtResource( 123 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+margin_top = 95.0
+margin_right = 397.0
+margin_bottom = 126.0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer3"]
+margin_top = 5.0
+margin_right = 184.0
+margin_bottom = 26.0
+text = "Maximum creatures:"
+
+[node name="MaxCreaturesField" type="LineEdit" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer3"]
+margin_left = 188.0
+margin_right = 246.0
+margin_bottom = 31.0
+script = ExtResource( 123 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BlueAICheckBox" type="CheckBox" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+margin_top = 130.0
+margin_right = 397.0
+margin_bottom = 159.0
+text = "Blue computer AI"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GreenAICheckBox" type="CheckBox" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+margin_top = 163.0
+margin_right = 397.0
+margin_bottom = 192.0
+text = "Green computer AI"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="YellowAICheckBox" type="CheckBox" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+margin_top = 196.0
+margin_right = 397.0
+margin_bottom = 225.0
+text = "Yellow computer AI"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WhiteAICheckBox" type="CheckBox" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+margin_top = 229.0
+margin_right = 397.0
+margin_bottom = 258.0
+text = "White computer AI"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WinConditionCheckBox" type="CheckBox" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+margin_top = 262.0
+margin_right = 397.0
+margin_bottom = 291.0
+text = "Win when all enemy hearts are destroyed"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RoomsAvailable" type="GridContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+margin_top = 295.0
+margin_right = 397.0
+margin_bottom = 1233.0
 size_flags_vertical = 3
+columns = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer"]
-margin_left = 605.0
+margin_left = 401.0
 margin_right = 1207.0
 margin_bottom = 1233.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer"]
-margin_right = 602.0
-margin_bottom = 27.0
-text = "map00001.txt"
+[node name="ScriptNameLabel" type="Label" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer"]
+margin_right = 806.0
+margin_bottom = 21.0
+text = "test"
+align = 2
+clip_text = true
 
 [node name="ScriptTextEdit" type="TextEdit" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer"]
-margin_top = 31.0
-margin_right = 602.0
+margin_top = 25.0
+margin_right = 806.0
 margin_bottom = 1233.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -3336,6 +3454,8 @@ highlight_current_line = true
 syntax_highlighting = true
 show_line_numbers = true
 draw_tabs = true
+highlight_all_occurrences = true
+minimap_draw = true
 caret_blink = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3572,5 +3692,20 @@ script = ExtResource( 88 )
 [connection signal="gui_input" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/MapImageTextureRect" to="Ui/UiSystem/ImageAsMapDialog" method="_on_MapImageTextureRect_gui_input"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseMapImageFileDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ChooseMapImageFileDialog_file_selected"]
 [connection signal="about_to_show" from="Ui/UiSystem/EasyScriptWindow" to="Ui/UiSystem/EasyScriptWindow" method="_on_EasyScriptWindow_about_to_show"]
+[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer/PortalRateField" to="Ui/UiSystem/EasyScriptWindow" method="_on_PortalRateField_mouse_entered"]
+[connection signal="text_changed" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer/PortalRateField" to="Ui/UiSystem/EasyScriptWindow" method="_on_PortalRateField_text_changed"]
+[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer2/GoldField" to="Ui/UiSystem/EasyScriptWindow" method="_on_GoldField_mouse_entered"]
+[connection signal="text_changed" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer2/GoldField" to="Ui/UiSystem/EasyScriptWindow" method="_on_GoldField_text_changed"]
+[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer3/MaxCreaturesField" to="Ui/UiSystem/EasyScriptWindow" method="_on_MaxCreaturesField_mouse_entered"]
+[connection signal="text_changed" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer3/MaxCreaturesField" to="Ui/UiSystem/EasyScriptWindow" method="_on_MaxCreaturesField_text_changed"]
+[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/BlueAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_BlueAICheckBox_mouse_entered"]
+[connection signal="toggled" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/BlueAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_BlueAICheckBox_toggled"]
+[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/GreenAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_GreenAICheckBox_mouse_entered"]
+[connection signal="toggled" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/GreenAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_GreenAICheckBox_toggled"]
+[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/YellowAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_YellowAICheckBox_mouse_entered"]
+[connection signal="toggled" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/YellowAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_YellowAICheckBox_toggled"]
+[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/WhiteAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_WhiteAICheckBox_mouse_entered"]
+[connection signal="toggled" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/WhiteAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_WhiteAICheckBox_toggled"]
+[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/WinConditionCheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_WinConditionCheckBox_mouse_entered"]
 [connection signal="text_changed" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/EasyScriptWindow" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

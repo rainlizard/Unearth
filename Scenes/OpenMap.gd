@@ -21,6 +21,7 @@ onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
 onready var oDataLif = Nodelist.list["oDataLif"]
+onready var oEasyScriptWindow = Nodelist.list["oEasyScriptWindow"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -65,6 +66,9 @@ func open_map(filePath): # auto opens other files
 		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
 		oCurrentMap.clear_map()
 		return
+	
+	# Close windows that I want closed
+	oEasyScriptWindow.visible = false
 	
 	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
 	var map = filePath.get_basename()

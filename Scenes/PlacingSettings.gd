@@ -12,6 +12,7 @@ var ownership = 0
 var lightRange = 10
 var lightIntensity = 32
 var pointRange = 5
+var boxNumber = 0
 
 enum FIELDS {
 	NAME = 0
@@ -23,6 +24,7 @@ enum FIELDS {
 	POINT_RANGE = 6
 	LIGHT_RANGE = 7
 	LIGHT_INTENSITY = 8
+	CUSTOM_BOX_ID = 9
 }
 
 func _ready():
@@ -49,7 +51,10 @@ func update_and_set_placing_tab():
 	var availableFields = []
 	match thingType:
 		Things.TYPE.NONE: availableFields = [FIELDS.NAME]
-		Things.TYPE.OBJECT: availableFields = [FIELDS.NAME, FIELDS.TYPE]
+		Things.TYPE.OBJECT:
+			availableFields = [FIELDS.NAME, FIELDS.TYPE]
+			if subtype == 133: #Mysterious Box
+				availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.CUSTOM_BOX_ID]
 		Things.TYPE.CREATURE: availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.CREATURE_LEVEL]
 		Things.TYPE.EFFECT: availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.EFFECT_RANGE]
 		Things.TYPE.TRAP: availableFields = [FIELDS.NAME, FIELDS.TYPE]
@@ -58,6 +63,8 @@ func update_and_set_placing_tab():
 			match subtype:
 				1: availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.POINT_RANGE] # Action point
 				2: availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.LIGHT_RANGE, FIELDS.LIGHT_INTENSITY] # Light
+	
+	
 	
 	for i in FIELDS.size():
 		var description = null
@@ -93,6 +100,9 @@ func update_and_set_placing_tab():
 				FIELDS.LIGHT_INTENSITY:
 					description = "Intensity" # 9-10
 					value = lightIntensity
+				FIELDS.CUSTOM_BOX_ID:
+					description = "Custom box" # 14
+					value = boxNumber
 
 		if value != null:
 			oPlacingListData.add_item(description, str(value))

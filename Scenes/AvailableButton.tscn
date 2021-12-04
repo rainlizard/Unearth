@@ -1,0 +1,21 @@
+[gd_scene format=2]
+
+[node name="AvailableButton" type="TextureButton"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+focus_mode = 0
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.219608, 0.215686, 0.270588, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -69,6 +69,8 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			if id.subtype == 49: # Hero Gate
 				id.herogateNumber = get_free_hero_gate_number() #originalInstance.herogateNumber
 				#Set all attached to tile: None, except for these: Torch, Heart, Unlit Torch, all Eggs and Chicken, Spinning Key, Spinning Key 2, all Lairs (don't forget Orc Lair!), Spinning Coin, and Effects.
+			elif id.subtype == 133: # Mysterious Box
+				id.boxNumber = oPlacingSettings.boxNumber
 			elif id.subtype in [2,7]: # Torch and Unlit Torch
 				id.locationZ = 2.875
 				

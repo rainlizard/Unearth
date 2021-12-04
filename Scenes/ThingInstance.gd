@@ -20,6 +20,7 @@ var doorOrientation = null setget set_doorOrientation
 var creatureLevel = null setget set_creatureLevel
 var doorLocked = null setget set_doorLocked
 var herogateNumber = null setget set_herogateNumber
+var boxNumber = null setget set_boxNumber
 
 var data9 = null
 var data10 = null
@@ -100,6 +101,10 @@ func set_creatureLevel(setval):
 	creatureLevel = setval
 	$ThingTexture/CreatureLevel.frame = creatureLevel-1
 	$ThingTexture/CreatureLevel.visible = true
+
+func set_boxNumber(setval):
+	data14 = null
+	boxNumber = setval
 
 func set_doorLocked(setval):
 	data14 = null

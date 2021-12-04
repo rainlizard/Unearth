@@ -90,6 +90,7 @@ func write_tng(buffer):
 		if thingNode.creatureLevel != null: buffer.put_8(thingNode.creatureLevel - 1) # 14
 		elif thingNode.doorLocked != null: buffer.put_8(thingNode.doorLocked) # 14
 		elif thingNode.herogateNumber != null: buffer.put_8(thingNode.herogateNumber) # 14
+		elif thingNode.boxNumber != null: buffer.put_8(thingNode.boxNumber) # 14
 		else: buffer.put_8(thingNode.data14) # 14
 		
 		buffer.put_8(thingNode.data15) # 15

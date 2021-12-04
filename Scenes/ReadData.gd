@@ -203,6 +203,8 @@ func read_tng(buffer):
 				id.sensitiveTile = id.data11 | (id.data12 << 8) #get 16bit value # 11-12
 				if id.subtype == 49: # Hero Gate
 					id.herogateNumber = id.data14
+				elif id.subtype == 133: # Mysterious Box
+					id.boxNumber = id.data14
 			Things.TYPE.CREATURE:
 				id.creatureLevel = id.data14 + 1 # 14
 			Things.TYPE.EFFECT:
