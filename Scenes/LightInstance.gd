@@ -50,3 +50,9 @@ func _on_MouseDetection_mouse_exited():
 		oSelection.cursorOnInstancesArray.erase(self)
 	oSelection.clean_up_cursor_array()
 	update()
+
+func _on_VisibilityNotifier2D_screen_entered():
+	visible = true
+
+func _on_VisibilityNotifier2D_screen_exited():
+	visible = false

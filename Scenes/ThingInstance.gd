@@ -183,6 +183,12 @@ func toggle_spinning_key(): # Called when you manually change the lock state
 		if doorLocked == 1:
 			oInstances.place_new_thing(Things.TYPE.OBJECT, 44, Vector3(locationX,locationY,locationZ), ownership)
 
+func _on_VisibilityNotifier2D_screen_entered():
+	visible = true
+
+func _on_VisibilityNotifier2D_screen_exited():
+	visible = false
+
 #
 #
 #

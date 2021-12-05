@@ -24,5 +24,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+rect = Rect2( -32, -32, 64, 64 )
+
 [connection signal="mouse_entered" from="MouseDetection" to="." method="_on_MouseDetection_mouse_entered"]
 [connection signal="mouse_exited" from="MouseDetection" to="." method="_on_MouseDetection_mouse_exited"]
+[connection signal="screen_entered" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_entered"]
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
