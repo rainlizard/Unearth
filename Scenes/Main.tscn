@@ -1352,7 +1352,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map properties", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false, "Scripting", null, 0, false, false, 6, 0, null, "", false ]
+items = [ "Map properties", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false, "Script generator", null, 0, false, false, 6, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3145,20 +3145,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="EasyScriptWindow" type="WindowDialog" parent="Ui/UiSystem"]
+[node name="ScriptGeneratorWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 344.0
 margin_top = -1923.0
 margin_right = 1571.0
 margin_bottom = -670.0
-window_title = "Script"
+window_title = "Script generator"
 resizable = true
 script = ExtResource( 23 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/EasyScriptWindow"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 10.0
@@ -3171,285 +3171,283 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer"]
-margin_right = 397.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer"]
+margin_right = 410.0
 margin_bottom = 1233.0
+rect_min_size = Vector2( 410, 0 )
 
-[node name="Label" type="Label" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer"]
+margin_right = 397.0
+margin_bottom = 513.0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
 margin_right = 397.0
 margin_bottom = 21.0
 align = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
 margin_top = 25.0
 margin_right = 397.0
 margin_bottom = 56.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer"]
 margin_top = 5.0
 margin_right = 201.0
 margin_bottom = 26.0
 text = "Portal attraction rate:"
 
-[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer"]
 margin_left = 205.0
 margin_right = 263.0
 margin_bottom = 31.0
+text = "400"
+expand_to_text_length = true
 script = ExtResource( 123 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+[node name="PortalRateInSeconds" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer"]
+margin_left = 267.0
+margin_top = 5.0
+margin_right = 324.0
+margin_bottom = 26.0
+text = "(# sec)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
 margin_top = 60.0
 margin_right = 397.0
 margin_bottom = 91.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer2"]
+[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer2"]
 margin_top = 5.0
 margin_right = 126.0
 margin_bottom = 26.0
 text = "Starting gold:"
 
-[node name="GoldField" type="LineEdit" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer2"]
+[node name="GoldField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer2"]
 margin_left = 130.0
-margin_right = 188.0
+margin_right = 190.0
 margin_bottom = 31.0
+text = "2500"
+expand_to_text_length = true
 script = ExtResource( 123 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
 margin_top = 95.0
 margin_right = 397.0
 margin_bottom = 126.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer3"]
+[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer3"]
 margin_top = 5.0
 margin_right = 184.0
 margin_bottom = 26.0
 text = "Maximum creatures:"
 
-[node name="MaxCreaturesField" type="LineEdit" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer3"]
+[node name="MaxCreaturesField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer3"]
 margin_left = 188.0
 margin_right = 246.0
 margin_bottom = 31.0
+text = "25"
+expand_to_text_length = true
 script = ExtResource( 123 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BlueAICheckBox" type="CheckBox" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+[node name="BlueAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
 margin_top = 130.0
 margin_right = 397.0
 margin_bottom = 159.0
+pressed = true
 text = "Blue computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GreenAICheckBox" type="CheckBox" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+[node name="GreenAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
 margin_top = 163.0
 margin_right = 397.0
 margin_bottom = 192.0
+pressed = true
 text = "Green computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="YellowAICheckBox" type="CheckBox" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+[node name="YellowAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
 margin_top = 196.0
 margin_right = 397.0
 margin_bottom = 225.0
+pressed = true
 text = "Yellow computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WhiteAICheckBox" type="CheckBox" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+[node name="WhiteAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
 margin_top = 229.0
 margin_right = 397.0
 margin_bottom = 258.0
+pressed = true
 text = "White computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WinConditionCheckBox" type="CheckBox" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+[node name="WinConditionCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
 margin_top = 262.0
 margin_right = 397.0
 margin_bottom = 291.0
+pressed = true
 text = "Win when all enemy hearts are destroyed"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RoomsAvailable" type="GridContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2"]
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
 margin_top = 295.0
 margin_right = 397.0
-margin_bottom = 1233.0
-size_flags_vertical = 3
+margin_bottom = 307.0
+rect_min_size = Vector2( 12, 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HeaderLabel" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 311.0
+margin_right = 397.0
+margin_bottom = 332.0
+text = "Creature pool"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CreaturePool" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 336.0
+margin_right = 397.0
+margin_bottom = 336.0
 columns = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer"]
-margin_left = 401.0
+[node name="HeaderLabel3" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 340.0
+margin_right = 397.0
+margin_bottom = 361.0
+text = "Rooms"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RoomsAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 365.0
+margin_right = 397.0
+margin_bottom = 365.0
+columns = 4
+
+[node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 369.0
+margin_right = 397.0
+margin_bottom = 390.0
+text = "Magic"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MagicAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 394.0
+margin_right = 397.0
+margin_bottom = 394.0
+columns = 4
+
+[node name="HeaderLabel5" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 398.0
+margin_right = 397.0
+margin_bottom = 419.0
+text = "Traps"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TrapsAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 423.0
+margin_right = 397.0
+margin_bottom = 423.0
+columns = 4
+
+[node name="HeaderLabel6" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 427.0
+margin_right = 397.0
+margin_bottom = 448.0
+text = "Doors"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DoorsAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 452.0
+margin_right = 397.0
+margin_bottom = 452.0
+columns = 4
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 456.0
+margin_right = 397.0
+margin_bottom = 480.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2"]
+margin_top = 484.0
+margin_right = 397.0
+margin_bottom = 513.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GenerateScriptButton" type="Button" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer4"]
+margin_right = 238.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+text = "Generate script"
+
+[node name="ClearExistingScriptCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer4"]
+margin_left = 242.0
+margin_right = 397.0
+margin_bottom = 29.0
+pressed = true
+text = "Clear existing"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer"]
+margin_left = 414.0
 margin_right = 1207.0
 margin_bottom = 1233.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScriptNameLabel" type="Label" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer"]
-margin_right = 806.0
+[node name="ScriptNameLabel" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer"]
+margin_right = 793.0
 margin_bottom = 21.0
-text = "test"
+text = "No script file loaded"
 align = 2
 clip_text = true
 
-[node name="ScriptTextEdit" type="TextEdit" parent="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer"]
+[node name="ScriptTextEdit" type="TextEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer"]
 margin_top = 25.0
-margin_right = 806.0
+margin_right = 793.0
 margin_bottom = 1233.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 16 )
-text = "REM only if player visited the lightning spell area
-IF(PLAYER0,FLAG0>0)
-	IF(PLAYER0,MONEY>13000)
-		REM	QUICK_OBJECTIVE(8,\"Unsurprisingly, even down here, far from any civilisation, a few cheap slavs came to rob you. Stop them before they render your goal to obtain 32000 pieces of gold impossible. I also think you can expect at least one more party.\",6)
-		DISPLAY_OBJECTIVE(8,6)
-		ADD_PARTY_TO_LEVEL(PLAYER_GOOD,THVS,6,1)
-	ENDIF
-	IF(PLAYER0,MONEY>21000)
-		ADD_PARTY_TO_LEVEL(PLAYER_GOOD,THVS,DRAWFROM(2,3,4,5,7),2)
-	ENDIF
-ENDIF
-
-SET_GENERATE_SPEED(400)
-
-COMPUTER_PLAYER(PLAYER1,0)
-COMPUTER_PLAYER(PLAYER2,0)
-COMPUTER_PLAYER(PLAYER3,0)
-COMPUTER_PLAYER(PLAYER_GOOD,0)
-
-START_MONEY(ALL_PLAYERS,2500)
-
-MAX_CREATURES(ALL_PLAYERS,25)
-
-ADD_CREATURE_TO_POOL(BILE_DEMON,20)
-ADD_CREATURE_TO_POOL(BUG,20)
-ADD_CREATURE_TO_POOL(DARK_MISTRESS,20)
-ADD_CREATURE_TO_POOL(DEMONSPAWN,20)
-ADD_CREATURE_TO_POOL(DRAGON,20)
-ADD_CREATURE_TO_POOL(FLY,20)
-ADD_CREATURE_TO_POOL(HELL_HOUND,20)
-ADD_CREATURE_TO_POOL(ORC,20)
-ADD_CREATURE_TO_POOL(SORCEROR,20)
-ADD_CREATURE_TO_POOL(SPIDER,20)
-ADD_CREATURE_TO_POOL(TENTACLE,20)
-ADD_CREATURE_TO_POOL(TROLL,20)
-
-ADD_CREATURE_TO_POOL(FLOATING_SPIRIT,0)
-ADD_CREATURE_TO_POOL(GHOST,0)
-ADD_CREATURE_TO_POOL(HORNY,0)
-ADD_CREATURE_TO_POOL(IMP,0)
-ADD_CREATURE_TO_POOL(REAPER,0)
-ADD_CREATURE_TO_POOL(SKELETON,0)
-ADD_CREATURE_TO_POOL(VAMPIRE,0)
-ADD_CREATURE_TO_POOL(ARCHER,0)
-ADD_CREATURE_TO_POOL(BARBARIAN,0)
-ADD_CREATURE_TO_POOL(DWARFA,0)
-ADD_CREATURE_TO_POOL(FAIRY,0)
-ADD_CREATURE_TO_POOL(GIANT,0)
-ADD_CREATURE_TO_POOL(KNIGHT,0)
-ADD_CREATURE_TO_POOL(MONK,0)
-ADD_CREATURE_TO_POOL(SAMURAI,0)
-ADD_CREATURE_TO_POOL(THIEF,0)
-ADD_CREATURE_TO_POOL(TUNNELLER,0)
-ADD_CREATURE_TO_POOL(WITCH,0)
-ADD_CREATURE_TO_POOL(WIZARD,0)
-
-CREATURE_AVAILABLE(ALL_PLAYERS,BILE_DEMON,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,BUG,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,DARK_MISTRESS,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,DEMONSPAWN,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,DRAGON,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,FLY,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,HELL_HOUND,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,ORC,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,SORCEROR,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,SPIDER,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,TENTACLE,1,1)
-CREATURE_AVAILABLE(ALL_PLAYERS,TROLL,1,1)
-
-CREATURE_AVAILABLE(ALL_PLAYERS,FLOATING_SPIRIT,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,GHOST,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,HORNY,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,IMP,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,REAPER,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,SKELETON,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,VAMPIRE,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,ARCHER,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,BARBARIAN,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,DWARFA,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,FAIRY,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,GIANT,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,KNIGHT,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,MONK,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,SAMURAI,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,THIEF,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,TUNNELLER,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,WITCH,1,0)
-CREATURE_AVAILABLE(ALL_PLAYERS,WIZARD,1,0)
-
-ROOM_AVAILABLE(ALL_PLAYERS,TREASURE,1,1)
-ROOM_AVAILABLE(ALL_PLAYERS,LAIR,1,1)
-ROOM_AVAILABLE(ALL_PLAYERS,GARDEN,1,1)
-ROOM_AVAILABLE(ALL_PLAYERS,TRAINING,1,1)
-ROOM_AVAILABLE(ALL_PLAYERS,RESEARCH,1,1)
-ROOM_AVAILABLE(ALL_PLAYERS,BRIDGE,1,0)
-ROOM_AVAILABLE(ALL_PLAYERS,GUARD_POST,1,0)
-ROOM_AVAILABLE(ALL_PLAYERS,WORKSHOP,1,0)
-ROOM_AVAILABLE(ALL_PLAYERS,PRISON,1,0)
-ROOM_AVAILABLE(ALL_PLAYERS,TORTURE,1,0)
-ROOM_AVAILABLE(ALL_PLAYERS,BARRACKS,1,0)
-ROOM_AVAILABLE(ALL_PLAYERS,TEMPLE,1,0)
-ROOM_AVAILABLE(ALL_PLAYERS,GRAVEYARD,1,0)
-ROOM_AVAILABLE(ALL_PLAYERS,SCAVENGER,1,0)
-
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_HAND,1,1)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_SLAP,1,1)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_POSSESS,1,1)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_IMP,1,1)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_SIGHT,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_SPEED,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_OBEY,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_CALL_TO_ARMS,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_CONCEAL,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_HOLD_AUDIENCE,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_CAVE_IN,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_HEAL_CREATURE,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_LIGHTNING,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_PROTECT,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_CHICKEN,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_DISEASE,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_ARMAGEDDON,1,0)
-MAGIC_AVAILABLE(ALL_PLAYERS,POWER_DESTROY_WALLS,1,0)
-
-TRAP_AVAILABLE(ALL_PLAYERS,ALARM,1,0)
-TRAP_AVAILABLE(ALL_PLAYERS,POISON_GAS,1,0)
-TRAP_AVAILABLE(ALL_PLAYERS,LIGHTNING,1,0)
-TRAP_AVAILABLE(ALL_PLAYERS,LAVA,1,0)
-TRAP_AVAILABLE(ALL_PLAYERS,BOULDER,1,0)
-TRAP_AVAILABLE(ALL_PLAYERS,WORD_OF_POWER,1,0)
-DOOR_AVAILABLE(ALL_PLAYERS,WOOD,1,0)
-DOOR_AVAILABLE(ALL_PLAYERS,BRACED,1,0)
-DOOR_AVAILABLE(ALL_PLAYERS,STEEL,1,0)
-DOOR_AVAILABLE(ALL_PLAYERS,MAGIC,1,0)
-
-IF(PLAYER0,ALL_DUNGEONS_DESTROYED == 1)
-	WIN_GAME
-ENDIF"
 highlight_current_line = true
 syntax_highlighting = true
 show_line_numbers = true
@@ -3691,21 +3689,12 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonHelp" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonHelp_pressed"]
 [connection signal="gui_input" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/MapImageTextureRect" to="Ui/UiSystem/ImageAsMapDialog" method="_on_MapImageTextureRect_gui_input"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseMapImageFileDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ChooseMapImageFileDialog_file_selected"]
-[connection signal="about_to_show" from="Ui/UiSystem/EasyScriptWindow" to="Ui/UiSystem/EasyScriptWindow" method="_on_EasyScriptWindow_about_to_show"]
-[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer/PortalRateField" to="Ui/UiSystem/EasyScriptWindow" method="_on_PortalRateField_mouse_entered"]
-[connection signal="text_changed" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer/PortalRateField" to="Ui/UiSystem/EasyScriptWindow" method="_on_PortalRateField_text_changed"]
-[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer2/GoldField" to="Ui/UiSystem/EasyScriptWindow" method="_on_GoldField_mouse_entered"]
-[connection signal="text_changed" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer2/GoldField" to="Ui/UiSystem/EasyScriptWindow" method="_on_GoldField_text_changed"]
-[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer3/MaxCreaturesField" to="Ui/UiSystem/EasyScriptWindow" method="_on_MaxCreaturesField_mouse_entered"]
-[connection signal="text_changed" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/HBoxContainer3/MaxCreaturesField" to="Ui/UiSystem/EasyScriptWindow" method="_on_MaxCreaturesField_text_changed"]
-[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/BlueAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_BlueAICheckBox_mouse_entered"]
-[connection signal="toggled" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/BlueAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_BlueAICheckBox_toggled"]
-[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/GreenAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_GreenAICheckBox_mouse_entered"]
-[connection signal="toggled" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/GreenAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_GreenAICheckBox_toggled"]
-[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/YellowAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_YellowAICheckBox_mouse_entered"]
-[connection signal="toggled" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/YellowAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_YellowAICheckBox_toggled"]
-[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/WhiteAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_WhiteAICheckBox_mouse_entered"]
-[connection signal="toggled" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/WhiteAICheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_WhiteAICheckBox_toggled"]
-[connection signal="mouse_entered" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer2/WinConditionCheckBox" to="Ui/UiSystem/EasyScriptWindow" method="_on_WinConditionCheckBox_mouse_entered"]
-[connection signal="text_changed" from="Ui/UiSystem/EasyScriptWindow/HBoxContainer/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/EasyScriptWindow" method="_on_ScriptTextEdit_text_changed"]
+[connection signal="about_to_show" from="Ui/UiSystem/ScriptGeneratorWindow" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_ScriptGeneratorWindow_about_to_show"]
+[connection signal="text_changed" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_PortalRateField_text_changed"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/BlueAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_BlueAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/GreenAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_GreenAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/YellowAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_YellowAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/WhiteAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_WhiteAICheckBox_toggled"]
+[connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScrollContainer/VBoxContainer2/HBoxContainer4/GenerateScriptButton" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_GenerateScriptButton_pressed"]
+[connection signal="text_changed" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

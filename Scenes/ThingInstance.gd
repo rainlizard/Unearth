@@ -128,8 +128,8 @@ func set_texture_based_on_thingtype():
 			if Things.DATA_CREATURE.has(subtype) == true:
 				tex = Things.DATA_CREATURE[subtype][Things.TEXTURE]
 				if tex != null:
-					$ThingTexture.rect_position.y -= 12
-					$ThingTexture.rect_scale = Vector2(1.75,1.75)
+					#$ThingTexture.rect_position.y -= 12
+					$ThingTexture.rect_scale = Vector2(1.5,1.5)
 		Things.TYPE.EFFECT:
 			if Things.DATA_EFFECT.has(subtype) == true:
 				tex = Things.DATA_EFFECT[subtype][Things.TEXTURE]

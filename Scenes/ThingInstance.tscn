@@ -56,7 +56,7 @@ __meta__ = {
 
 [node name="CreatureLevel" type="AnimatedSprite" parent="ThingTexture"]
 visible = false
-position = Vector2( 15, 16 )
+position = Vector2( 15, 2 )
 z_index = 10
 frames = SubResource( 3 )
 

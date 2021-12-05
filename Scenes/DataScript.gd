@@ -1,7 +1,7 @@
 extends Node
 onready var oConfirmReloadTXT = Nodelist.list["oConfirmReloadTXT"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
-onready var oEasyScriptWindow = Nodelist.list["oEasyScriptWindow"]
+onready var oScriptGeneratorWindow = Nodelist.list["oScriptGeneratorWindow"]
 
 var data = ""
 
@@ -27,4 +27,4 @@ func _on_ConfirmReloadTXT_confirmed():
 	if oCurrentMap.currentFilePaths.has("TXT"):
 		var filePath = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
 		Filetypes.read(filePath, "TXT")
-		oEasyScriptWindow.reload_script_into_window()
+		oScriptGeneratorWindow.reload_script_into_window()

@@ -1,6 +1,7 @@
 extends FileDialog
 onready var oGame = Nodelist.list["oGame"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 var lineEdit
 var regex = RegEx.new()
@@ -34,10 +35,17 @@ func _on_FileDialogSaveAs_about_to_show():
 	lineEdit.placeholder_text = "(Enter numbers only)"
 	lineEdit.placeholder_alpha = 0.15
 	
+	
+	
 	yield(get_tree(),'idle_frame')
 	deselect_items()
 	lineEdit.text = ""
 	_on_LineEdit_text_changed("")
+	
+	for i in 2:
+		yield(get_tree(),'idle_frame')
+		lineEdit.grab_focus()
+		lineEdit.caret_position=3
 
 func _on_Tree_item_selected():
 	# This sometimes fails the first time
@@ -47,9 +55,10 @@ func _on_Tree_item_selected():
 	lineEdit.text = lineEdit.text.to_lower().trim_suffix('.slb')
 
 func _on_LineEdit_text_changed(new_text):
+	
 	var okButton = get_ok()
 	if new_text.length() < 8:
-		okButton.hint_tooltip = "Map name must contain 5 numbers."
+		okButton.hint_tooltip = "Map name must contain 5 digits"
 		okButton.disabled = true
 	else:
 		okButton.hint_tooltip = ""
@@ -58,13 +67,16 @@ func _on_LineEdit_text_changed(new_text):
 	if new_text.length() > 8:
 		new_text = new_text.left(8)
 	
-	new_text = new_text.to_lower().trim_prefix("map")
+	new_text = new_text.to_lower().trim_prefix("m").trim_prefix("a").trim_prefix("p") # Doing this prevents a bug
+	if int(new_text) > 32767: # Map IDs above 32767 don't work correctly (their scripts don't work)
+		new_text = "32767"
 	
 	if regex.search(new_text):
 		lineEdit.text = new_text
 		oldtext = lineEdit.text
 		lineEdit.text = 'map'+new_text
 	else:
+		oMessage.quick("Use only digits in map name")
 		lineEdit.text = 'map'+oldtext
 	
 	lineEdit.set_cursor_position(lineEdit.text.length())

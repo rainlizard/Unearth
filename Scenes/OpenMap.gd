@@ -21,7 +21,7 @@ onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
 onready var oDataLif = Nodelist.list["oDataLif"]
-onready var oEasyScriptWindow = Nodelist.list["oEasyScriptWindow"]
+onready var oScriptGeneratorWindow = Nodelist.list["oScriptGeneratorWindow"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -68,13 +68,12 @@ func open_map(filePath): # auto opens other files
 		return
 	
 	# Close windows that I want closed
-	oEasyScriptWindow.visible = false
+	oScriptGeneratorWindow.visible = false
 	
 	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
 	var map = filePath.get_basename()
 	
 	# Open all map file types
-	
 	oCurrentMap.currentFilePaths = get_accompanying_files(map)
 	
 	compressedFiles.clear()

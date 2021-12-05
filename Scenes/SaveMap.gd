@@ -4,6 +4,7 @@ onready var oWriteData = Nodelist.list["oWriteData"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oScriptGeneratorWindow = Nodelist.list["oScriptGeneratorWindow"]
 
 var queueExit = false
 
@@ -19,13 +20,16 @@ func save_map(filePath): # auto opens other files
 	for EXT in Filetypes.FILE_TYPES:
 		var saveToFilePath = map + '.' + EXT.to_lower()
 		Filetypes.write(saveToFilePath, EXT.to_upper())
-		oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING] = saveToFilePath
+		
+		var getModifiedTime = File.new().get_modified_time(saveToFilePath)
+		oCurrentMap.currentFilePaths[EXT] = [saveToFilePath, getModifiedTime]
 	
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	
 	oMessage.quick('Saved map')
 	oCurrentMap.set_path_and_title(filePath)
 	oEditor.mapHasBeenEdited = false
+	oScriptGeneratorWindow.visible = false
 	
 	# This goes last. Queued from when doing "save before quitting" and "save as" before quitting.
 	if queueExit == true:

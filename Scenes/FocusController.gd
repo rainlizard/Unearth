@@ -7,8 +7,3 @@ func _input(event):
 		var current_focus_control = get_focus_owner()
 		if current_focus_control:
 			current_focus_control.release_focus()
-	
-	if Input.is_action_just_pressed("mouse_left"):
-		var current_focus_control = get_focus_owner()
-		if current_focus_control is LineEdit:
-			current_focus_control.release_focus()
