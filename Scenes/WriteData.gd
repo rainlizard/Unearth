@@ -83,8 +83,7 @@ func write_tng(buffer):
 		elif thingNode.index != null:
 			buffer.put_16(thingNode.index) # 11-12
 		else:
-			buffer.put_8(thingNode.data11) # 11
-			buffer.put_8(thingNode.data12) # 12
+			buffer.put_16(thingNode.data11_12) # 11-12
 		
 		if thingNode.doorOrientation != null: buffer.put_8(thingNode.doorOrientation) # 13
 		else: buffer.put_8(thingNode.data13) # 13

@@ -45,8 +45,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 	
 	id.data9 = 0
 	id.data10 = 0
-	id.data11 = 0
-	id.data12 = 0
+	id.data11_12 = 0
 	id.data13 = 0
 	id.data14 = 0
 	id.data15 = 0
@@ -139,8 +138,7 @@ func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng 
 	var id = thingScn.instance()
 	id.data9 = 0
 	id.data10 = 0
-	id.data11 = 0
-	id.data12 = 0
+	id.data11_12 = 0
 	id.data13 = 0
 	id.data14 = 0
 	id.data15 = 0

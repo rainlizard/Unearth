@@ -26,8 +26,7 @@ var index = null setget set_index
 
 var data9 = null
 var data10 = null
-var data11 = null
-var data12 = null
+var data11_12 = null
 var data13 = null
 var data14 = null
 var data15 = null
@@ -95,13 +94,11 @@ func set_effectRange(setval):
 	update()
 
 func set_index(setval):
-	data11 = null
-	data12 = null
+	data11_12 = null
 	index = setval
 
 func set_sensitiveTile(setval):
-	data11 = null
-	data12 = null
+	data11_12 = null
 	sensitiveTile = setval
 func set_doorOrientation(setval):
 	data13 = null

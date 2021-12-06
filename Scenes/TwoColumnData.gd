@@ -57,8 +57,8 @@ func add_item(leftText, rightText):
 			for i in nameValue.get_item_count():
 				if nameValue.get_item_text(nameValue.get_item_index(i)) == rightText:
 					nameValue.selected = i
-		
-		"Level","Effect range","Light range","Intensity","Gate #","Point range","Point #","Custom box":
+	
+		"Level","Effect range","Light range","Intensity","Gate #","Point range","Point #","Custom box","Unknown 9","Unknown 10","Unknown 11-12","Unknown 13","Unknown 14","Unknown 15","Unknown 16","Unknown 17","Unknown 18","Unknown 19","Unknown 20":
 			nameValue = LineEdit.new()
 			nameValue.expand_to_text_length = true
 			nameValue.theme = thinLineEditTheme
@@ -122,77 +122,90 @@ func _on_lineedit_focus_exited(lineEditId, leftText): # This signal will go off 
 	
 	match leftText:
 		"Custom box":
-			valueNumber = int(valueNumber)
-			valueNumber = clamp(valueNumber, 0, 255)
+			valueNumber = clamp(int(valueNumber), 0, 255)
 			match name:
-				"ThingListData":
-					if is_instance_valid(inst):
-						inst.boxNumber = valueNumber
-				"PlacingListData":
-					oPlacingSettings.boxNumber = valueNumber
+				"ThingListData": if is_instance_valid(inst): inst.boxNumber = valueNumber
+				"PlacingListData": oPlacingSettings.boxNumber = valueNumber
 		"Level":
-			valueNumber = int(valueNumber)
-			valueNumber = clamp(valueNumber, 1, 10)
+			valueNumber = clamp(int(valueNumber), 1, 10)
 			match name:
-				"ThingListData":
-					if is_instance_valid(inst):
-						inst.creatureLevel = valueNumber
-				"PlacingListData":
-					oPlacingSettings.creatureLevel = valueNumber
+				"ThingListData": if is_instance_valid(inst): inst.creatureLevel = valueNumber
+				"PlacingListData": oPlacingSettings.creatureLevel = valueNumber
 		"Point #":
-			valueNumber = int(valueNumber)
-			valueNumber = clamp(valueNumber, 0, 255)
+			valueNumber = clamp(int(valueNumber), 0, 255)
 			match name:
 				"ThingListData":
-					if is_instance_valid(inst):
-						inst.pointNumber = valueNumber
-				"PlacingListData":
-					oPlacingSettings.pointNumber = valueNumber
+					if is_instance_valid(inst): inst.pointNumber = valueNumber
+				"PlacingListData": oPlacingSettings.pointNumber = valueNumber
 		"Gate #":
-			valueNumber = int(valueNumber)
-			valueNumber = clamp(valueNumber, 0, 255)
+			valueNumber = clamp(int(valueNumber), 0, 255)
 			match name:
-				"ThingListData":
-					if is_instance_valid(inst):
-						inst.herogateNumber = valueNumber
-				"PlacingListData":
-					oPlacingSettings.herogateNumber = valueNumber
+				"ThingListData": if is_instance_valid(inst): inst.herogateNumber = valueNumber
+				"PlacingListData": oPlacingSettings.herogateNumber = valueNumber
 		"Intensity":
-			valueNumber = int(valueNumber)
-			valueNumber = clamp(valueNumber, 0, 255)
+			valueNumber = clamp(int(valueNumber), 0, 255)
 			match name:
-				"ThingListData":
-					if is_instance_valid(inst):
-						inst.lightIntensity = valueNumber
-				"PlacingListData":
-					oPlacingSettings.lightIntensity = valueNumber
+				"ThingListData": if is_instance_valid(inst): inst.lightIntensity = valueNumber
+				"PlacingListData": oPlacingSettings.lightIntensity = valueNumber
 		"Effect range":
-			valueNumber = float(valueNumber)
-			valueNumber = clamp(valueNumber, 0, 255)
+			valueNumber = clamp(float(valueNumber), 0, 255)
 			match name:
-				"ThingListData":
-					if is_instance_valid(inst):
-						inst.effectRange = valueNumber
-				"PlacingListData":
-					oPlacingSettings.effectRange = valueNumber
+				"ThingListData": if is_instance_valid(inst): inst.effectRange = valueNumber
+				"PlacingListData": oPlacingSettings.effectRange = valueNumber
 		"Light range":
-			valueNumber = float(valueNumber)
-			valueNumber = clamp(valueNumber, 0, 255)
+			valueNumber = clamp(float(valueNumber), 0, 255)
 			match name:
-				"ThingListData":
-					if is_instance_valid(inst):
-						inst.lightRange = valueNumber
-				"PlacingListData":
-					oPlacingSettings.lightRange = valueNumber
+				"ThingListData": if is_instance_valid(inst): inst.lightRange = valueNumber
+				"PlacingListData": oPlacingSettings.lightRange = valueNumber
 		"Point range":
-			valueNumber = float(valueNumber)
-			valueNumber = clamp(valueNumber, 0, 255)
+			valueNumber = clamp(float(valueNumber), 0, 255)
 			match name:
-				"ThingListData":
-					if is_instance_valid(inst):
-						inst.pointRange = valueNumber
-				"PlacingListData":
-					oPlacingSettings.pointRange = valueNumber
+				"ThingListData": if is_instance_valid(inst): inst.pointRange = valueNumber
+				"PlacingListData": oPlacingSettings.pointRange = valueNumber
+		"Unknown 9":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data9 = valueNumber
+		"Unknown 10":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data10 = valueNumber
+		"Unknown 11-12":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data11_12 = valueNumber
+		"Unknown 13":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data13 = valueNumber
+		"Unknown 14":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data14 = valueNumber
+		"Unknown 15":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data15 = valueNumber
+		"Unknown 16":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data16 = valueNumber
+		"Unknown 17":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data17 = valueNumber
+		"Unknown 18":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data18 = valueNumber
+		"Unknown 19":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data19 = valueNumber
+		"Unknown 20":
+			valueNumber = clamp(int(valueNumber), 0, 255)
+			match name:
+				"ThingListData": if is_instance_valid(inst): inst.data20 = valueNumber
 	
 	lineEditId.text = String(valueNumber)
 

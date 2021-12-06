@@ -187,8 +187,7 @@ func read_tng(buffer):
 		id.ownership = buffer.get_u8() # 8
 		id.data9 = buffer.get_u8() # 9
 		id.data10 = buffer.get_u8() # 10
-		id.data11 = buffer.get_u8() # 11
-		id.data12 = buffer.get_u8() # 12
+		id.data11_12 = buffer.get_u16() # 11-12
 		id.data13 = buffer.get_u8() # 13
 		id.data14 = buffer.get_u8() # 14
 		id.data15 = buffer.get_u8() # 15
@@ -200,22 +199,22 @@ func read_tng(buffer):
 		
 		match id.thingType:
 			Things.TYPE.OBJECT:
-				id.sensitiveTile = id.data11 | (id.data12 << 8) #get 16bit value # 11-12
+				id.sensitiveTile = id.data11_12
 				if id.subtype == 49: # Hero Gate
 					id.herogateNumber = id.data14
 				elif id.subtype == 133: # Mysterious Box
 					id.boxNumber = id.data14
 			Things.TYPE.CREATURE:
-				id.index = id.data11 | (id.data12 << 8) #get 16bit value # 11-12
+				id.index = id.data11_12
 				id.creatureLevel = id.data14 + 1 # 14
 			Things.TYPE.EFFECT:
 				id.effectRange = (id.data9 / 256.0) + id.data10 # 9-10
-				id.sensitiveTile = id.data11 | (id.data12 << 8) #get 16bit value # 11-12
+				id.sensitiveTile = id.data11_12
 			Things.TYPE.TRAP:
-				id.index = id.data11 | (id.data12 << 8) #get 16bit value # 11-12
+				id.index = id.data11_12
 				pass
 			Things.TYPE.DOOR:
-				id.index = id.data11 | (id.data12 << 8) #get 16bit value # 11-12
+				id.index = id.data11_12
 				id.doorOrientation = id.data13 # 13
 				id.doorLocked = id.data14 # 14
 		

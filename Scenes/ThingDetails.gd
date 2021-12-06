@@ -146,7 +146,7 @@ func light_details(id):
 			oThingListData.add_item(description, str(value))
 
 func thing_details(id):
-	for i in 24:
+	for i in 23:
 		var description = null
 		var value = null
 		match i:
@@ -185,61 +185,57 @@ func thing_details(id):
 				description = "Index" # 11-12
 				value = id.index
 			9:
-				description = "Unknown 11"
-				value = id.data11
+				description = "Unknown 11-12"
+				value = id.data11_12
 				if HIDE_UNKNOWN_DATA == true: value = null
 			10:
-				description = "Unknown 12"
-				value = id.data12
-				if HIDE_UNKNOWN_DATA == true: value = null
-			11:
 				description = "Door orientation" # 13
 				match id.doorOrientation:
 					0: value = "E/W"
 					1: value = "N/S"
-			12:
+			11:
 				description = "Unknown 13"
 				value = id.data13
 				if HIDE_UNKNOWN_DATA == true: value = null
-			13:
+			12:
 				description = "Level" # 14
 				value = id.creatureLevel
-			14:
+			13:
 				description = "Gate #" # 14
 				value = id.herogateNumber
-			15:
+			14:
 				description = "Custom box" # 14
 				value = id.boxNumber
-			16:
+			15:
 				description = "Door locked" # 14
 				match id.doorLocked:
 					0: value = "False"
 					1: value = "True"
-			17:
+			16:
 				description = "Unknown 14"
 				value = id.data14
 				if HIDE_UNKNOWN_DATA == true: value = null
-			18:
+			17:
 				description = "Unknown 15"
 				value = id.data15
 				if HIDE_UNKNOWN_DATA == true: value = null
-			19:
+			18:
 				description = "Unknown 16"
 				value = id.data16
 				if HIDE_UNKNOWN_DATA == true: value = null
-			20:
+			19:
 				description = "Unknown 17"
 				value = id.data17
 				if HIDE_UNKNOWN_DATA == true: value = null
-			21:
+			20:
 				description = "Unknown 18"
 				value = id.data18
 				if HIDE_UNKNOWN_DATA == true: value = null
-			22:
+			21:
 				description = "Unknown 19"
 				value = id.data19
 				if HIDE_UNKNOWN_DATA == true: value = null
-			23:
+			22:
 				description = "Unknown 20"
 				value = id.data20
 				if HIDE_UNKNOWN_DATA == true: value = null
