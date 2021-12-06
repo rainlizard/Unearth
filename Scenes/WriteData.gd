@@ -80,6 +80,8 @@ func write_tng(buffer):
 		
 		if thingNode.sensitiveTile != null:
 			buffer.put_16(thingNode.sensitiveTile) # 11-12
+		elif thingNode.index != null:
+			buffer.put_16(thingNode.index) # 11-12
 		else:
 			buffer.put_8(thingNode.data11) # 11
 			buffer.put_8(thingNode.data12) # 12

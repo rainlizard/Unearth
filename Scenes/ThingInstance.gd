@@ -14,6 +14,7 @@ var thingType = null
 var subtype = null
 var ownership = null setget set_ownership
 
+
 var effectRange = null setget set_effectRange
 var sensitiveTile = null setget set_sensitiveTile
 var doorOrientation = null setget set_doorOrientation
@@ -21,6 +22,7 @@ var creatureLevel = null setget set_creatureLevel
 var doorLocked = null setget set_doorLocked
 var herogateNumber = null setget set_herogateNumber
 var boxNumber = null setget set_boxNumber
+var index = null setget set_index
 
 var data9 = null
 var data10 = null
@@ -45,6 +47,8 @@ func _enter_tree():
 		add_to_group('attachedtotile_'+str(sensitiveTile))
 	
 	match thingType:
+		Things.TYPE.TRAP:
+			add_to_group("Trap")
 		Things.TYPE.DOOR:
 			add_to_group("Door")
 		Things.TYPE.OBJECT:
@@ -55,6 +59,7 @@ func _enter_tree():
 #				oCamera2D.connect("zoom_level_changed",self,"_on_zoom_level_changed")
 #				_on_zoom_level_changed(oCamera2D.zoom)
 		Things.TYPE.CREATURE:
+			add_to_group("Creature")
 			var oCamera2D = Nodelist.list["oCamera2D"]
 			oCamera2D.connect("zoom_level_changed",self,"_on_zoom_level_changed")
 			_on_zoom_level_changed(oCamera2D.zoom)
@@ -88,6 +93,11 @@ func set_effectRange(setval):
 	data10 = null
 	effectRange = setval
 	update()
+
+func set_index(setval):
+	data11 = null
+	data12 = null
+	index = setval
 
 func set_sensitiveTile(setval):
 	data11 = null

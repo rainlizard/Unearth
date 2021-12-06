@@ -167,6 +167,8 @@ func _on_GenerateScriptButton_pressed():
 	if oYellowAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER3,0)" + '\n'
 	if oWhiteAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER_GOOD,0)" + '\n'
 	
+	#if generateString.c_unescape()
+	
 	generateString += '\n'
 	
 	for i in oCreaturePool.get_children():
@@ -218,8 +220,6 @@ func _on_GenerateScriptButton_pressed():
 		generateString += "IF(PLAYER0,ALL_DUNGEONS_DESTROYED == 1)" + '\n'
 		generateString += "	WIN_GAME" + '\n'
 		generateString += "ENDIF" + '\n'
-	
-	var lineNumber = oScriptTextEdit.cursor_get_line()
 	
 	place_text(generateString) # This also calls "_on_ScriptTextEdit_text_changed" because it changes the text
 
@@ -593,15 +593,15 @@ var listRoom = [
 func _on_BlueAICheckBox_toggled(button_pressed):
 	if button_pressed == true:
 		if check_for_dungeon_heart(1) == false:
-			oMessage.quick("Requires a Dungeon Heart! Otherwise this player's creatures will die after a few seconds.")
+			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 func _on_GreenAICheckBox_toggled(button_pressed):
 	if button_pressed == true:
 		if check_for_dungeon_heart(2) == false:
-			oMessage.quick("Requires a Dungeon Heart! Otherwise this player's creatures will die after a few seconds.")
+			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 func _on_YellowAICheckBox_toggled(button_pressed):
 	if button_pressed == true:
 		if check_for_dungeon_heart(3) == false:
-			oMessage.quick("Requires a Dungeon Heart! Otherwise this player's creatures will die after a few seconds.")
+			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 func _on_WhiteAICheckBox_toggled(button_pressed):
 	# This player does not require a Dungeon heart.
 	pass

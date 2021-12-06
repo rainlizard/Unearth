@@ -87,12 +87,14 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			
 		Things.TYPE.CREATURE:
 			id.creatureLevel = oPlacingSettings.creatureLevel
+			id.index = get_free_index_number()
 		Things.TYPE.EFFECT:
 			id.effectRange = oPlacingSettings.effectRange
 			id.sensitiveTile = (floor(newPosition.y/3) * 85) + floor(newPosition.x/3)
 		Things.TYPE.TRAP:
-			pass
+			id.index = get_free_index_number()
 		Things.TYPE.DOOR:
+			id.index = get_free_index_number()
 			id.doorLocked = oPlacingSettings.doorLocked
 			if newSubtype == 0: id.subtype = 1 #Depending on whether it was placed via autoslab or a hand placed Thing object.
 			match slabID:
@@ -235,6 +237,22 @@ func delete_attached_objects_on_slab(xSlab, ySlab):
 #			if oDkSlabThings.tngObject[idx][8] != 0:
 #				var id = oDkSlabThings.tngObject[idx][7]
 #				print(Things.DATA_OBJECT[id][Things.NAME] + ". Unknown value: " + str(oDkSlabThings.tngObject[idx][8]))
+
+func get_free_index_number():
+	var listOfThingNumbers = []
+	for id in get_tree().get_nodes_in_group("Creature"):
+		listOfThingNumbers.append(id.index)
+	for id in get_tree().get_nodes_in_group("Trap"):
+		listOfThingNumbers.append(id.index)
+	for id in get_tree().get_nodes_in_group("Door"):
+		listOfThingNumbers.append(id.index)
+	
+	var newNumber = 1
+	while true:
+		if newNumber in listOfThingNumbers:
+			newNumber += 1
+		else:
+			return newNumber
 
 func get_free_hero_gate_number():
 	var listOfHeroGateNumbers = []

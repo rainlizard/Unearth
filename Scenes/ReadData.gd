@@ -206,13 +206,16 @@ func read_tng(buffer):
 				elif id.subtype == 133: # Mysterious Box
 					id.boxNumber = id.data14
 			Things.TYPE.CREATURE:
+				id.index = id.data11 | (id.data12 << 8) #get 16bit value # 11-12
 				id.creatureLevel = id.data14 + 1 # 14
 			Things.TYPE.EFFECT:
 				id.effectRange = (id.data9 / 256.0) + id.data10 # 9-10
 				id.sensitiveTile = id.data11 | (id.data12 << 8) #get 16bit value # 11-12
 			Things.TYPE.TRAP:
+				id.index = id.data11 | (id.data12 << 8) #get 16bit value # 11-12
 				pass
 			Things.TYPE.DOOR:
+				id.index = id.data11 | (id.data12 << 8) #get 16bit value # 11-12
 				id.doorOrientation = id.data13 # 13
 				id.doorLocked = id.data14 # 14
 		

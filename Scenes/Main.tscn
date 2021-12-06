@@ -3265,7 +3265,6 @@ __meta__ = {
 margin_top = 130.0
 margin_right = 397.0
 margin_bottom = 159.0
-pressed = true
 text = "Blue computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3275,7 +3274,6 @@ __meta__ = {
 margin_top = 163.0
 margin_right = 397.0
 margin_bottom = 192.0
-pressed = true
 text = "Green computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3285,7 +3283,6 @@ __meta__ = {
 margin_top = 196.0
 margin_right = 397.0
 margin_bottom = 225.0
-pressed = true
 text = "Yellow computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3295,7 +3292,6 @@ __meta__ = {
 margin_top = 229.0
 margin_right = 397.0
 margin_bottom = 258.0
-pressed = true
 text = "White computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
