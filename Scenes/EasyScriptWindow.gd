@@ -160,30 +160,28 @@ func _on_GenerateScriptButton_pressed():
 	generateString += "START_MONEY(ALL_PLAYERS,"+str(int(oGoldField.text))+")" + '\n'
 	generateString += "MAX_CREATURES(ALL_PLAYERS,"+str(int(oMaxCreaturesField.text))+")" + '\n'
 	
-	generateString += '\n'
+	generateString = add_one_extra_line(generateString)
 	
 	if oBlueAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER1,0)" + '\n'
 	if oGreenAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER2,0)" + '\n'
 	if oYellowAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER3,0)" + '\n'
 	if oWhiteAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER_GOOD,0)" + '\n'
 	
-	#if generateString.c_unescape()
-	
-	generateString += '\n'
+	generateString = add_one_extra_line(generateString)
 	
 	for i in oCreaturePool.get_children():
 		var variableName = i.get_meta("variable")
 		if i.get_integer() > 0:
 			generateString += "ADD_CREATURE_TO_POOL(ALL_PLAYERS," + variableName + "," + str(i.get_integer()) + ")" + '\n'
 	
-	generateString += '\n'
+	generateString = add_one_extra_line(generateString)
 	
 	for i in oCreaturePool.get_children():
 		var variableName = i.get_meta("variable")
 		if i.get_integer() > 0:
 			generateString += "CREATURE_AVAILABLE(ALL_PLAYERS," + variableName + ",1,1)" + '\n'
 	
-	generateString += '\n'
+	generateString = add_one_extra_line(generateString)
 	
 	for i in oRoomsAvailable.get_children():
 		var variableName = i.get_meta("variable")
@@ -191,7 +189,7 @@ func _on_GenerateScriptButton_pressed():
 			i.OPTION_START:    generateString += "ROOM_AVAILABLE(ALL_PLAYERS," + variableName + ",1,1)" + '\n'
 			i.OPTION_RESEARCH: generateString += "ROOM_AVAILABLE(ALL_PLAYERS," + variableName + ",1,0)" + '\n'
 	
-	generateString += '\n'
+	generateString = add_one_extra_line(generateString)
 	
 	
 	for i in oMagicAvailable.get_children():
@@ -200,21 +198,21 @@ func _on_GenerateScriptButton_pressed():
 			i.OPTION_START:    generateString += "MAGIC_AVAILABLE(ALL_PLAYERS," + variableName + ",1,1)" + '\n'
 			i.OPTION_RESEARCH: generateString += "MAGIC_AVAILABLE(ALL_PLAYERS," + variableName + ",1,0)" + '\n'
 	
-	generateString += '\n'
+	generateString = add_one_extra_line(generateString)
 	
 	for i in oTrapsAvailable.get_children():
 		var variableName = i.get_meta("variable")
 		match i.availabilityState:
 			i.ENABLED: generateString += "TRAP_AVAILABLE(ALL_PLAYERS," + variableName + ",1,0)" + '\n'
 	
-	generateString += '\n'
+	generateString = add_one_extra_line(generateString)
 	
 	for i in oDoorsAvailable.get_children():
 		var variableName = i.get_meta("variable")
 		match i.availabilityState:
 			i.ENABLED: generateString += "DOOR_AVAILABLE(ALL_PLAYERS," + variableName + ",1,0)" + '\n'
 	
-	generateString += '\n'
+	generateString = add_one_extra_line(generateString)
 	
 	if oWinConditionCheckBox.pressed == true:
 		generateString += "IF(PLAYER0,ALL_DUNGEONS_DESTROYED == 1)" + '\n'
@@ -222,6 +220,12 @@ func _on_GenerateScriptButton_pressed():
 		generateString += "ENDIF" + '\n'
 	
 	place_text(generateString) # This also calls "_on_ScriptTextEdit_text_changed" because it changes the text
+
+func add_one_extra_line(generateString):
+	if generateString.c_unescape().ends_with('\n\n'):
+		return generateString
+	else:
+		return generateString + '\n'
 
 func place_text(insertString):
 	#oScriptTextEdit.cursor_set_line(lineNumber, txt)

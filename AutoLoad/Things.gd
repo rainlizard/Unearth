@@ -107,10 +107,10 @@ var DATA_OBJECT = {
 008 : ["Glowing Statue", preload("res://dk_images/statues/anim0952/r1frame01.png"), null, TAB_DECORATION], #Lit Statue No Flame # Partially Lit Statue
 009 : ["Egg Growing (1)", preload("res://dk_images/food/anim0898/r1frame03.png"), null, TAB_MISC],
 010 : ["Chicken", preload("res://dk_images/food/anim0822/r3frame04.png"), null, TAB_MISC],
-011 : ["Hand Of Evil", null, null, TAB_SPELL],
+011 : ["Hand Of Evil", preload("res://edited_images/icon_handofevil.png"), null, TAB_SPELL],
 012 : ["Create Imp", preload("res://dk_images/keepower_64/imp_std.png"), null, TAB_SPELL],
 013 : ["Must Obey", preload("res://edited_images/mustobey.png"), null, TAB_SPELL],
-014 : ["Slaps", null, null, TAB_SPELL],
+014 : ["Slap", preload("res://edited_images/icon_slap.png"), null, TAB_SPELL],
 015 : ["Sight of Evil", preload("res://dk_images/keepower_64/sight_std.png"), null, TAB_SPELL],
 016 : ["Call To Arms", preload("res://dk_images/keepower_64/cta_std.png"), null, TAB_SPELL],
 017 : ["Cave-In", preload("res://dk_images/keepower_64/cavein_std.png"), null, TAB_SPELL],
