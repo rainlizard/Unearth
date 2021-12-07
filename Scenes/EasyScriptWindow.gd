@@ -20,6 +20,8 @@ onready var oTrapsAvailable = Nodelist.list["oTrapsAvailable"]
 onready var oMagicAvailable = Nodelist.list["oMagicAvailable"]
 onready var oDoorsAvailable = Nodelist.list["oDoorsAvailable"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oScriptContainer = Nodelist.list["oScriptContainer"]
+onready var oGeneratorContainer = Nodelist.list["oGeneratorContainer"]
 
 var scnAvailableButton = preload('res://Scenes/AvailableButton.tscn')
 
@@ -140,6 +142,17 @@ func reload_script_into_window(): # Called from oDataScript
 		oScriptNameLabel.text = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
 	else:
 		oScriptNameLabel.text = "No script file loaded"
+	
+	
+	
+	if oDataScript.data == "":
+		oScriptContainer.visible = false
+		# Make scroll bar area fill the entire window
+		oGeneratorContainer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	else:
+		oScriptContainer.visible = true
+		# Reduce scroll bar area so ScriptContainer has space
+		oGeneratorContainer.size_flags_horizontal = Control.SIZE_FILL
 
 func _on_ScriptTextEdit_text_changed():
 	oEditor.mapHasBeenEdited = true
@@ -258,8 +271,6 @@ var listCreature = [
 [15, "SKELETON", 0],
 [25, "VAMPIRE", 0],
 [14, "HORNY", 0],
-[23, "IMP", 0],
-[31, "FLOATING_SPIRIT", 0],
 [12, "THIEF", 0],
 [8, "TUNNELLER", 0],
 [5, "DWARFA", 0],
@@ -274,6 +285,8 @@ var listCreature = [
 [6, "KNIGHT", 0],
 [7, "AVATAR", 0],
 ]
+#[23, "IMP", 0],
+#[31, "FLOATING_SPIRIT", 0],
 
 var listMagic = [
 [11, "POWER_HAND", 1],
