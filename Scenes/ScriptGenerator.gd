@@ -1,4 +1,5 @@
-extends WindowDialog
+extends VBoxContainer
+
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
 onready var oRoomsAvailable = Nodelist.list["oRoomsAvailable"]
@@ -12,15 +13,16 @@ onready var oGoldField = Nodelist.list["oGoldField"]
 onready var oMaxCreaturesField = Nodelist.list["oMaxCreaturesField"]
 onready var oPortalRateInSeconds = Nodelist.list["oPortalRateInSeconds"]
 onready var oWinConditionCheckBox = Nodelist.list["oWinConditionCheckBox"]
-onready var oClearExistingScriptCheckBox = Nodelist.list["oClearExistingScriptCheckBox"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCreaturePool = Nodelist.list["oCreaturePool"]
+onready var oHeroPool = Nodelist.list["oHeroPool"]
 onready var oTrapsAvailable = Nodelist.list["oTrapsAvailable"]
 onready var oMagicAvailable = Nodelist.list["oMagicAvailable"]
 onready var oDoorsAvailable = Nodelist.list["oDoorsAvailable"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oScriptContainer = Nodelist.list["oScriptContainer"]
 onready var oGeneratorContainer = Nodelist.list["oGeneratorContainer"]
+onready var oScriptEditor = Nodelist.list["oScriptEditor"]
+onready var oScriptTabs = Nodelist.list["oScriptTabs"]
 
 var scnAvailableButton = preload('res://Scenes/AvailableButton.tscn')
 
@@ -72,7 +74,10 @@ func initialize_creatures_available(): # oCreaturePool
 			id.set_availability_state(id.DISABLED)
 		
 		#id._on_EditableLabel_text_changed(str(defaultValue)) # To initialize the darkening
-		oCreaturePool.add_child(id)
+		if listCreature.find(i) < 16:
+			oCreaturePool.add_child(id)
+		else:
+			oHeroPool.add_child(id)
 
 func initialize_traps_available(): # oTrapsAvailable
 	for i in listTrap:
@@ -128,60 +133,15 @@ func initialize_doors_available(): # oDoorsAvailable
 		
 		oDoorsAvailable.add_child(id)
 
-
-func _on_ScriptGeneratorWindow_about_to_show():
-	reload_script_into_window()
-	_on_PortalRateField_text_changed("400") # to updatate the "in seconds" text
-
-
-func reload_script_into_window(): # Called from oDataScript
-	oScriptTextEdit.text = oDataScript.data
-	
-#	if oCurrentMap.currentFilePaths.has("TXT"):
-#		oScriptNameLabel.text = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
-#	else:
-#		oScriptNameLabel.text = "No script file loaded"
-	
-	if oDataScript.data == "":
-		hide_script_side()
-
-	else:
-		show_script_side()
-
-
-func hide_script_side():
-	oScriptContainer.visible = false
-	# Make scroll bar area fill the entire window
-	oGeneratorContainer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	yield(get_tree(),'idle_frame')
-	rect_size.x = 0
-
-func show_script_side():
-	oScriptContainer.visible = true
-	# Reduce scroll bar area so ScriptContainer has space
-	oGeneratorContainer.size_flags_horizontal = Control.SIZE_FILL
-	yield(get_tree(),'idle_frame')
-	if rect_size.x < 960:
-		rect_size.x = 1280
-
-func _on_ScriptTextEdit_text_changed():
-	oEditor.mapHasBeenEdited = true
-	oDataScript.data = oScriptTextEdit.text
-
-
 func _on_PortalRateField_text_changed(new_text):
 	var rateInSeconds = float(int(new_text)/20.0)
 	oPortalRateInSeconds.text = '('+str(rateInSeconds) + " sec)"
 
 
 func _on_GenerateScriptButton_pressed():
+	oScriptTextEdit.text = ""
 	
-	if oClearExistingScriptCheckBox.pressed == true:
-		oScriptTextEdit.text = ""
-		oMessage.quick("Cleared existing script and placed generated text")
-	else:
-		oMessage.quick("Placed generated text")
-	
+	oMessage.quick("Cleared existing script and placed generated text")
 	
 	var generateString = ""
 	generateString += "SET_GENERATE_SPEED("+str(int(oPortalRateField.text))+")" + '\n'
@@ -201,10 +161,18 @@ func _on_GenerateScriptButton_pressed():
 		var variableName = i.get_meta("variable")
 		if i.get_integer() > 0:
 			generateString += "ADD_CREATURE_TO_POOL(ALL_PLAYERS," + variableName + "," + str(i.get_integer()) + ")" + '\n'
+	for i in oHeroPool.get_children():
+		var variableName = i.get_meta("variable")
+		if i.get_integer() > 0:
+			generateString += "ADD_CREATURE_TO_POOL(ALL_PLAYERS," + variableName + "," + str(i.get_integer()) + ")" + '\n'
 	
 	generateString = add_one_extra_line(generateString)
 	
 	for i in oCreaturePool.get_children():
+		var variableName = i.get_meta("variable")
+		match i.availabilityState:
+			i.ENABLED: generateString += "CREATURE_AVAILABLE(ALL_PLAYERS," + variableName + ",1,1)" + '\n'
+	for i in oHeroPool.get_children():
 		var variableName = i.get_meta("variable")
 		match i.availabilityState:
 			i.ENABLED: generateString += "CREATURE_AVAILABLE(ALL_PLAYERS," + variableName + ",1,1)" + '\n'
@@ -247,29 +215,14 @@ func _on_GenerateScriptButton_pressed():
 		generateString += "	WIN_GAME" + '\n'
 		generateString += "ENDIF" + '\n'
 	
-	place_text(generateString) # This also calls "_on_ScriptTextEdit_text_changed" because it changes the text
-	
-	show_script_side()
+	oScriptTabs.current_tab = 1
+	oScriptEditor.set_text(generateString)
 
 func add_one_extra_line(generateString):
 	if generateString.c_unescape().ends_with('\n\n'):
 		return generateString
 	else:
 		return generateString + '\n'
-
-func place_text(insertString):
-	#oScriptTextEdit.cursor_set_line(lineNumber, txt)
-	var lineNumber = oScriptTextEdit.cursor_get_line()
-	var existingLineString = oScriptTextEdit.get_line(lineNumber)
-
-	if oScriptTextEdit.get_line(lineNumber).length() > 0: #If line contains stuff
-		oScriptTextEdit.set_line(lineNumber, existingLineString + '\n')
-		oScriptTextEdit.set_line(lineNumber+1, insertString)
-
-		oScriptTextEdit.cursor_set_line(oScriptTextEdit.cursor_get_line()+1)
-	else:
-		oScriptTextEdit.set_line(lineNumber, insertString)
-	oScriptTextEdit.update()
 
 var listCreature = [
 [19, "FLY", 20],

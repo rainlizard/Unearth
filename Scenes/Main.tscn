@@ -1,4 +1,4 @@
-[gd_scene load_steps=140 format=2]
+[gd_scene load_steps=142 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -22,7 +22,7 @@
 [ext_resource path="res://Scenes/ReadData.gd" type="Script" id=20]
 [ext_resource path="res://Scenes/RayCastBlockMap.gd" type="Script" id=21]
 [ext_resource path="res://Scenes/3dSelector.gd" type="Script" id=22]
-[ext_resource path="res://Scenes/EasyScriptWindow.gd" type="Script" id=23]
+[ext_resource path="res://Scenes/ScriptGenerator.gd" type="Script" id=23]
 [ext_resource path="res://Art/Cursor96x96.png" type="Texture" id=24]
 [ext_resource path="res://Scenes/Selection.gd" type="Script" id=25]
 [ext_resource path="res://Art/Cursor32x32.png" type="Texture" id=26]
@@ -123,6 +123,8 @@
 [ext_resource path="res://Scenes/ConfirmSaveBeforeQuit.gd" type="Script" id=121]
 [ext_resource path="res://Theme/Hack_Regular.ttf" type="DynamicFontData" id=122]
 [ext_resource path="res://Scenes/LineEditInteger.gd" type="Script" id=123]
+[ext_resource path="res://Scenes/ScriptEditor.gd" type="Script" id=124]
+[ext_resource path="res://Scenes/ScriptWindow.gd" type="Script" id=125]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -3145,69 +3147,85 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScriptGeneratorWindow" type="WindowDialog" parent="Ui/UiSystem"]
+[node name="ScriptWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 344.0
 margin_top = -1923.0
-margin_right = 1571.0
+margin_right = 1199.0
 margin_bottom = -670.0
 rect_min_size = Vector2( 429, 0 )
-window_title = "Script generator"
+window_title = "Scripting"
 resizable = true
+script = ExtResource( 125 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScriptTabs" type="TabContainer" parent="Ui/UiSystem/ScriptWindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScriptGenerator" type="VBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 471.0
+margin_bottom = -14.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 23 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer"]
-margin_right = 397.0
-margin_bottom = 1233.0
-
-[node name="GeneratorContainer" type="ScrollContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer"]
-margin_right = 397.0
-margin_bottom = 1200.0
+[node name="GeneratorContainer" type="ScrollContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator"]
+margin_right = 1316.0
+margin_bottom = 1198.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer"]
+margin_right = 485.0
+margin_bottom = 410.0
+custom_constants/hseparation = 28
+columns = 2
+
+[node name="ScriptSection1" type="VBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
 margin_right = 397.0
-margin_bottom = 1200.0
-size_flags_horizontal = 2
-size_flags_vertical = 3
+margin_bottom = 323.0
+
+[node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_right = 397.0
+margin_bottom = 21.0
+text = "Options"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_right = 397.0
-margin_bottom = 21.0
-align = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
+[node name="Spacing" type="Control" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
 margin_top = 25.0
 margin_right = 397.0
-margin_bottom = 56.0
+margin_bottom = 37.0
+rect_min_size = Vector2( 12, 12 )
+size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_top = 41.0
+margin_right = 397.0
+margin_bottom = 72.0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer"]
 margin_top = 5.0
 margin_right = 201.0
 margin_bottom = 26.0
 text = "Portal attraction rate:"
 
-[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer"]
 margin_left = 205.0
 margin_right = 263.0
 margin_bottom = 31.0
@@ -3218,28 +3236,28 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PortalRateInSeconds" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+[node name="PortalRateInSeconds" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer"]
 margin_left = 267.0
 margin_top = 5.0
 margin_right = 324.0
 margin_bottom = 26.0
-text = "(# sec)"
+text = "(20 sec)"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 60.0
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_top = 76.0
 margin_right = 397.0
-margin_bottom = 91.0
+margin_bottom = 107.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/HBoxContainer2"]
+[node name="Label" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer2"]
 margin_top = 5.0
 margin_right = 126.0
 margin_bottom = 26.0
 text = "Starting gold:"
 
-[node name="GoldField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/HBoxContainer2"]
+[node name="GoldField" type="LineEdit" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer2"]
 margin_left = 130.0
 margin_right = 190.0
 margin_bottom = 31.0
@@ -3250,18 +3268,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 95.0
+[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_top = 111.0
 margin_right = 397.0
-margin_bottom = 126.0
+margin_bottom = 142.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/HBoxContainer3"]
+[node name="Label" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer3"]
 margin_top = 5.0
 margin_right = 184.0
 margin_bottom = 26.0
 text = "Maximum creatures:"
 
-[node name="MaxCreaturesField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/HBoxContainer3"]
+[node name="MaxCreaturesField" type="LineEdit" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer3"]
 margin_left = 188.0
 margin_right = 246.0
 margin_bottom = 31.0
@@ -3272,178 +3290,203 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BlueAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 130.0
+[node name="BlueAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_top = 146.0
 margin_right = 397.0
-margin_bottom = 159.0
+margin_bottom = 175.0
 text = "Blue computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GreenAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 163.0
+[node name="GreenAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_top = 179.0
 margin_right = 397.0
-margin_bottom = 192.0
+margin_bottom = 208.0
 text = "Green computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="YellowAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 196.0
+[node name="YellowAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_top = 212.0
 margin_right = 397.0
-margin_bottom = 225.0
+margin_bottom = 241.0
 text = "Yellow computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WhiteAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 229.0
+[node name="WhiteAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_top = 245.0
 margin_right = 397.0
-margin_bottom = 258.0
+margin_bottom = 274.0
 text = "White computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WinConditionCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 262.0
+[node name="WinConditionCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_top = 278.0
 margin_right = 397.0
-margin_bottom = 291.0
+margin_bottom = 307.0
 pressed = true
 text = "Win when all enemy hearts are destroyed"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 295.0
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_top = 311.0
 margin_right = 397.0
-margin_bottom = 307.0
+margin_bottom = 323.0
 rect_min_size = Vector2( 12, 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HeaderLabel" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 311.0
-margin_right = 397.0
-margin_bottom = 332.0
-text = "Creatures"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="ScriptSection4" type="VBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
+margin_left = 425.0
+margin_right = 485.0
+margin_bottom = 323.0
 
-[node name="CreaturePool" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 336.0
-margin_right = 397.0
-margin_bottom = 336.0
-columns = 4
-
-[node name="HeaderLabel3" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 340.0
-margin_right = 397.0
-margin_bottom = 361.0
+[node name="HeaderLabel3" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection4"]
+margin_right = 60.0
+margin_bottom = 21.0
 text = "Rooms"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RoomsAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 365.0
-margin_right = 397.0
-margin_bottom = 365.0
+[node name="RoomsAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection4"]
+margin_top = 25.0
+margin_right = 60.0
+margin_bottom = 25.0
 columns = 4
 
-[node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 369.0
+[node name="ScriptSection2" type="VBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
+margin_top = 327.0
 margin_right = 397.0
-margin_bottom = 390.0
+margin_bottom = 352.0
+
+[node name="HeaderLabel" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection2"]
+margin_right = 397.0
+margin_bottom = 21.0
+text = "Creatures"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CreaturePool" type="GridContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection2"]
+margin_top = 25.0
+margin_right = 397.0
+margin_bottom = 25.0
+columns = 4
+
+[node name="ScriptSection5" type="VBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
+margin_left = 425.0
+margin_top = 327.0
+margin_right = 485.0
+margin_bottom = 352.0
+
+[node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection5"]
+margin_right = 60.0
+margin_bottom = 21.0
 text = "Magic"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MagicAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 394.0
-margin_right = 397.0
-margin_bottom = 394.0
+[node name="MagicAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection5"]
+margin_top = 25.0
+margin_right = 60.0
+margin_bottom = 25.0
 columns = 4
 
-[node name="HeaderLabel5" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 398.0
+[node name="ScriptSection3" type="VBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
+margin_top = 356.0
 margin_right = 397.0
-margin_bottom = 419.0
+margin_bottom = 410.0
+
+[node name="HeaderLabel2" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection3"]
+margin_right = 397.0
+margin_bottom = 21.0
+text = "Heroes"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HeroPool" type="GridContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection3"]
+margin_top = 25.0
+margin_right = 397.0
+margin_bottom = 25.0
+columns = 4
+
+[node name="ScriptSection6" type="VBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
+margin_left = 425.0
+margin_top = 356.0
+margin_right = 485.0
+margin_bottom = 410.0
+
+[node name="HeaderLabel5" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection6"]
+margin_right = 60.0
+margin_bottom = 21.0
 text = "Traps"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TrapsAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 423.0
-margin_right = 397.0
-margin_bottom = 423.0
+[node name="TrapsAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection6"]
+margin_top = 25.0
+margin_right = 60.0
+margin_bottom = 25.0
 columns = 4
 
-[node name="HeaderLabel6" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 427.0
-margin_right = 397.0
-margin_bottom = 448.0
+[node name="HeaderLabel6" type="Label" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection6"]
+margin_top = 29.0
+margin_right = 60.0
+margin_bottom = 50.0
 text = "Doors"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DoorsAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 452.0
-margin_right = 397.0
-margin_bottom = 452.0
+[node name="DoorsAvailable" type="GridContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection6"]
+margin_top = 54.0
+margin_right = 60.0
+margin_bottom = 54.0
 columns = 4
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2"]
-margin_top = 456.0
-margin_right = 397.0
-margin_bottom = 480.0
-rect_min_size = Vector2( 24, 24 )
-
-[node name="HBoxContainer4" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer"]
-margin_top = 1204.0
-margin_right = 397.0
-margin_bottom = 1233.0
+[node name="HBoxContainer4" type="HBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator"]
+margin_top = 1202.0
+margin_right = 1316.0
+margin_bottom = 1229.0
+alignment = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GenerateScriptButton" type="Button" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/HBoxContainer4"]
-margin_right = 238.0
-margin_bottom = 29.0
-size_flags_horizontal = 3
+[node name="GenerateScriptButton" type="Button" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/HBoxContainer4"]
+margin_left = 1167.0
+margin_right = 1316.0
+margin_bottom = 27.0
 text = "Generate script"
 
-[node name="ClearExistingScriptCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/HBoxContainer4"]
-margin_left = 242.0
-margin_right = 397.0
-margin_bottom = 29.0
-pressed = true
-text = "Clear existing"
-
-[node name="ScriptContainer" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer"]
-margin_left = 401.0
-margin_right = 1207.0
-margin_bottom = 1233.0
+[node name="ScriptEditor" type="VBoxContainer" parent="Ui/UiSystem/ScriptWindow/ScriptTabs"]
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource( 124 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="ScriptTextEdit" type="TextEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScriptContainer"]
-margin_right = 806.0
-margin_bottom = 1233.0
+[node name="ScriptTextEdit" type="TextEdit" parent="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptEditor"]
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 16 )
@@ -3688,12 +3731,13 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonHelp" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonHelp_pressed"]
 [connection signal="gui_input" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/MapImageTextureRect" to="Ui/UiSystem/ImageAsMapDialog" method="_on_MapImageTextureRect_gui_input"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseMapImageFileDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ChooseMapImageFileDialog_file_selected"]
-[connection signal="about_to_show" from="Ui/UiSystem/ScriptGeneratorWindow" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_ScriptGeneratorWindow_about_to_show"]
-[connection signal="text_changed" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/HBoxContainer/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_PortalRateField_text_changed"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/BlueAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_BlueAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/GreenAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_GreenAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/YellowAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_YellowAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/GeneratorContainer/VBoxContainer2/WhiteAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_WhiteAICheckBox_toggled"]
-[connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/VBoxContainer/HBoxContainer4/GenerateScriptButton" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_GenerateScriptButton_pressed"]
-[connection signal="text_changed" from="Ui/UiSystem/ScriptGeneratorWindow/HBoxContainer/ScriptContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptGeneratorWindow" method="_on_ScriptTextEdit_text_changed"]
+[connection signal="about_to_show" from="Ui/UiSystem/ScriptWindow" to="Ui/UiSystem/ScriptWindow" method="_on_ScriptGeneratorWindow_about_to_show"]
+[connection signal="text_changed" from="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer/PortalRateField" to="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator" method="_on_PortalRateField_text_changed"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/BlueAICheckBox" to="Ui/UiSystem/ScriptWindow" method="_on_BlueAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/GreenAICheckBox" to="Ui/UiSystem/ScriptWindow" method="_on_GreenAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/YellowAICheckBox" to="Ui/UiSystem/ScriptWindow" method="_on_YellowAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/WhiteAICheckBox" to="Ui/UiSystem/ScriptWindow" method="_on_WhiteAICheckBox_toggled"]
+[connection signal="pressed" from="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator/HBoxContainer4/GenerateScriptButton" to="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptGenerator" method="_on_GenerateScriptButton_pressed"]
+[connection signal="text_changed" from="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptEditor/ScriptTextEdit" to="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
+[connection signal="visibility_changed" from="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptEditor/ScriptTextEdit" to="Ui/UiSystem/ScriptWindow/ScriptTabs/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

@@ -53,12 +53,12 @@ func _on_button_pressed():
 func set_availability_state(setVal):
 	availabilityState = setVal
 	
-	var oIconTextureRect = $IconTextureRect
-	var oIconHighlight = $IconTextureRect/IconHighlight
-	var oIconColorRect = $IconTextureRect/IconColorRect
-	var oTextEditableLabel = $TextEditableLabel
-	var oTextHighlight = $TextEditableLabel/TextHighlight
-	var oTextColorRect = $TextEditableLabel/TextColorRect
+	oIconTextureRect = $IconTextureRect
+	oIconHighlight = $IconTextureRect/IconHighlight
+	oIconColorRect = $IconTextureRect/IconColorRect
+	oTextEditableLabel = $TextEditableLabel
+	oTextHighlight = $TextEditableLabel/TextHighlight
+	oTextColorRect = $TextEditableLabel/TextColorRect
 	
 	match availabilityState:
 		OPTION_START:
