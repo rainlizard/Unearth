@@ -1,4 +1,10 @@
 extends VBoxContainer
+onready var oIconTextureRect = $IconTextureRect
+onready var oIconHighlight = $IconTextureRect/IconHighlight
+onready var oIconColorRect = $IconTextureRect/IconColorRect
+onready var oTextEditableLabel = $TextEditableLabel
+onready var oTextHighlight = $TextEditableLabel/TextHighlight
+onready var oTextColorRect = $TextEditableLabel/TextColorRect
 
 var availabilityState setget set_availability_state
 
@@ -10,26 +16,32 @@ enum {
 	DISABLED
 }
 
+
 func _ready():
 	connect("mouse_entered", self, "_on_available_button_mouse_entered")
 	connect("mouse_exited", self, "_on_available_button_mouse_exited")
 
+
 func _on_available_button_mouse_entered():
-	$TextureRect/Highlight.color.a8 = 16
-	$Label/Highlight.color.a8 = 16
-	$LineEdit/Highlight.color.a8 = 16
+	oIconHighlight.color.a8 = 16
+	oTextHighlight.color.a8 = 16
+
 
 func _on_available_button_mouse_exited():
-	$TextureRect/Highlight.color.a8 = 0
-	$Label/Highlight.color.a8 = 0
-	$LineEdit/Highlight.color.a8 = 0
+	oIconHighlight.color.a8 = 0
+	oTextHighlight.color.a8 = 0
+
 
 func _on_AvailableButton_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			_on_button_pressed()
 
+
 func _on_button_pressed():
+	for id in get_tree().get_nodes_in_group("EditableLabel"):
+		id.release_focus()
+	
 	match availabilityState:
 		OPTION_START: set_availability_state(OPTION_RESEARCH)
 		OPTION_RESEARCH: set_availability_state(OPTION_DISABLED)
@@ -40,47 +52,52 @@ func _on_button_pressed():
 
 func set_availability_state(setVal):
 	availabilityState = setVal
+	
+	var oIconTextureRect = $IconTextureRect
+	var oIconHighlight = $IconTextureRect/IconHighlight
+	var oIconColorRect = $IconTextureRect/IconColorRect
+	var oTextEditableLabel = $TextEditableLabel
+	var oTextHighlight = $TextEditableLabel/TextHighlight
+	var oTextColorRect = $TextEditableLabel/TextColorRect
+	
 	match availabilityState:
 		OPTION_START:
-			get_node("Label").text = "Start"
-			modulate = Color(1,1,1,1)
-			get_node("Label/ColorRect").color = Color("#46455c")
-			get_node("TextureRect/ColorRect").color = Color("#383745")
+			oTextEditableLabel.text = "Start"
+			oTextColorRect.modulate = Color(1,1,1,1)
+			oIconColorRect.modulate = Color(1,1,1,1)
+			oTextColorRect.color = Color("#46455c")
+			oIconColorRect.color = Color("#383745")
 		OPTION_RESEARCH:
-			get_node("Label").text = "Research"
-			modulate = Color(1,1,1,1)
-			get_node("Label/ColorRect").color = Color("#5c3b5c")
-			get_node("TextureRect/ColorRect").color = Color("#3f3745")
+			oTextEditableLabel.text = "Research"
+			oTextColorRect.modulate = Color(1,1,1,1)
+			oIconColorRect.modulate = Color(1,1,1,1)
+			oTextColorRect.color = Color("#5c3b5c")
+			oIconColorRect.color = Color("#3f3745")
 		OPTION_DISABLED:
-			get_node("Label").text = "Disabled"
-			modulate = Color(1,1,1,0.25)
-			get_node("Label/ColorRect").color = Color("#000000")
-			get_node("TextureRect/ColorRect").color = Color("#000000")
+			oTextEditableLabel.text = "Disabled"
+			oTextColorRect.modulate = Color(1,1,1,0.25)
+			oIconColorRect.modulate = Color(1,1,1,0.25)
+			oTextColorRect.color = Color("#000000")
+			oIconColorRect.color = Color("#000000")
 		ENABLED:
-			get_node("Label").text = "Enabled"
-			modulate = Color(1,1,1,1)
-			get_node("Label/ColorRect").color = Color("#46455c")
-			get_node("TextureRect/ColorRect").color = Color("#383745")
+			oIconColorRect.modulate = Color(1,1,1,1)
+			oTextColorRect.modulate = Color(1,1,1,1)
+			oTextColorRect.color = Color("#46455c")
+			oIconColorRect.color = Color("#383745")
+			if oTextEditableLabel.editable == false:
+				oTextEditableLabel.text = "Enabled"
 		DISABLED:
-			get_node("Label").text = "Disabled"
-			modulate = Color(1,1,1,0.25)
-			get_node("Label/ColorRect").color = Color("#000000")
-			get_node("TextureRect/ColorRect").color = Color("#000000")
+			oIconColorRect.modulate = Color(1,1,1,0.25)
+			oTextColorRect.modulate = Color(1,1,1,0.25)
+			oTextColorRect.color = Color("#000000")
+			oIconColorRect.color = Color("#000000")
+			if oTextEditableLabel.editable == false:
+				oTextEditableLabel.text = "Disabled"
 
-func _on_LineEdit_text_changed(new_text):
-	var integer = int(new_text)
-	if integer > 0:
-		modulate = Color(1,1,1,1)
-		get_node("LineEdit/ColorRect").color = Color("#46455c")
-		get_node("TextureRect/ColorRect").color = Color("#383745")
-	else:
-		modulate = Color(1,1,1,0.25)
-		get_node("LineEdit/ColorRect").color = Color("#000000")
-		get_node("TextureRect/ColorRect").color = Color("#000000")
 
 func get_integer():
-	return int($LineEdit.text)
+	return int(oTextEditableLabel.text)
 
 
-func _on_LineEdit_focus_exited():
-	$LineEdit.deselect()
+func _on_EditableLabel_focus_exited():
+	oTextEditableLabel.text = str(int(oTextEditableLabel.text))

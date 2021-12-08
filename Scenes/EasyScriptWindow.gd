@@ -3,7 +3,6 @@ onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
 onready var oRoomsAvailable = Nodelist.list["oRoomsAvailable"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
-onready var oScriptNameLabel = Nodelist.list["oScriptNameLabel"]
 onready var oBlueAICheckBox = Nodelist.list["oBlueAICheckBox"]
 onready var oGreenAICheckBox = Nodelist.list["oGreenAICheckBox"]
 onready var oYellowAICheckBox = Nodelist.list["oYellowAICheckBox"]
@@ -41,11 +40,9 @@ func initialize_rooms_available():
 		if Slabs.icons.has(slabID):
 			var id = scnAvailableButton.instance()
 			id.hint_tooltip = Slabs.data[slabID][Slabs.NAME]
-			id.get_node("TextureRect").texture = Slabs.icons[slabID]
+			id.get_node("IconTextureRect").texture = Slabs.icons[slabID]
 			id.set_meta("variable", functionVariable)
-			
-			id.get_node("Label").visible = true
-			id.get_node("LineEdit").visible = false
+			id.get_node("TextEditableLabel").editable = false
 			
 			if defaultValue == 1:
 				id.set_availability_state(id.OPTION_START)
@@ -60,13 +57,21 @@ func initialize_creatures_available(): # oCreaturePool
 		var functionVariable = i[1]
 		var defaultValue = i[2]
 		var id = scnAvailableButton.instance()
-		id.hint_tooltip = Things.DATA_CREATURE[thingID][Things.NAME]
-		id.get_node("TextureRect").texture = Things.DATA_CREATURE[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
-		id.get_node("Label").visible = false
-		id.get_node("LineEdit").visible = true
-		id.get_node("LineEdit").text = str(defaultValue)
-		id._on_LineEdit_text_changed(str(defaultValue)) # To initialize the darkening
+		var creatureName = Things.DATA_CREATURE[thingID][Things.NAME]
+		id.hint_tooltip = creatureName + ' availability'
+		id.get_node("IconTextureRect").texture = Things.DATA_CREATURE[thingID][Things.TEXTURE]
+		id.get_node("TextEditableLabel").hint_tooltip = creatureName + ' in pool'
+		id.get_node("TextEditableLabel").text = str(defaultValue)
+		id.get_node("TextEditableLabel").editable = true
+		id.get_node("TextEditableLabel").mouse_filter = Control.MOUSE_FILTER_PASS
+		
+		if defaultValue > 0:
+			id.set_availability_state(id.ENABLED)
+		else:
+			id.set_availability_state(id.DISABLED)
+		
+		#id._on_EditableLabel_text_changed(str(defaultValue)) # To initialize the darkening
 		oCreaturePool.add_child(id)
 
 func initialize_traps_available(): # oTrapsAvailable
@@ -76,11 +81,9 @@ func initialize_traps_available(): # oTrapsAvailable
 		var defaultValue = i[2]
 		var id = scnAvailableButton.instance()
 		id.hint_tooltip = Things.DATA_TRAP[thingID][Things.NAME]
-		id.get_node("TextureRect").texture = Things.DATA_TRAP[thingID][Things.TEXTURE]
+		id.get_node("IconTextureRect").texture = Things.DATA_TRAP[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
-		
-		id.get_node("Label").visible = true
-		id.get_node("LineEdit").visible = false
+		id.get_node("TextEditableLabel").editable = false
 		
 		if defaultValue == 1:
 			id.set_availability_state(id.ENABLED)
@@ -96,11 +99,9 @@ func initialize_magic_available(): # oMagicAvailable
 		var defaultValue = i[2]
 		var id = scnAvailableButton.instance()
 		id.hint_tooltip = Things.DATA_OBJECT[thingID][Things.NAME]
-		id.get_node("TextureRect").texture = Things.DATA_OBJECT[thingID][Things.TEXTURE]
+		id.get_node("IconTextureRect").texture = Things.DATA_OBJECT[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
-		
-		id.get_node("Label").visible = true
-		id.get_node("LineEdit").visible = false
+		id.get_node("TextEditableLabel").editable = false
 		
 		if defaultValue == 1:
 			id.set_availability_state(id.OPTION_START)
@@ -116,11 +117,9 @@ func initialize_doors_available(): # oDoorsAvailable
 		var defaultValue = i[2]
 		var id = scnAvailableButton.instance()
 		id.hint_tooltip = Things.DATA_DOOR[thingID][Things.NAME]
-		id.get_node("TextureRect").texture = Things.DATA_DOOR[thingID][Things.TEXTURE]
+		id.get_node("IconTextureRect").texture = Things.DATA_DOOR[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
-		
-		id.get_node("Label").visible = true
-		id.get_node("LineEdit").visible = false
+		id.get_node("TextEditableLabel").editable = false
 		
 		if defaultValue == 1:
 			id.set_availability_state(id.ENABLED)
@@ -138,21 +137,32 @@ func _on_ScriptGeneratorWindow_about_to_show():
 func reload_script_into_window(): # Called from oDataScript
 	oScriptTextEdit.text = oDataScript.data
 	
-	if oCurrentMap.currentFilePaths.has("TXT"):
-		oScriptNameLabel.text = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
-	else:
-		oScriptNameLabel.text = "No script file loaded"
-	
-	
+#	if oCurrentMap.currentFilePaths.has("TXT"):
+#		oScriptNameLabel.text = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
+#	else:
+#		oScriptNameLabel.text = "No script file loaded"
 	
 	if oDataScript.data == "":
-		oScriptContainer.visible = false
-		# Make scroll bar area fill the entire window
-		oGeneratorContainer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		hide_script_side()
+
 	else:
-		oScriptContainer.visible = true
-		# Reduce scroll bar area so ScriptContainer has space
-		oGeneratorContainer.size_flags_horizontal = Control.SIZE_FILL
+		show_script_side()
+
+
+func hide_script_side():
+	oScriptContainer.visible = false
+	# Make scroll bar area fill the entire window
+	oGeneratorContainer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	yield(get_tree(),'idle_frame')
+	rect_size.x = 0
+
+func show_script_side():
+	oScriptContainer.visible = true
+	# Reduce scroll bar area so ScriptContainer has space
+	oGeneratorContainer.size_flags_horizontal = Control.SIZE_FILL
+	yield(get_tree(),'idle_frame')
+	if rect_size.x < 960:
+		rect_size.x = 1280
 
 func _on_ScriptTextEdit_text_changed():
 	oEditor.mapHasBeenEdited = true
@@ -165,8 +175,13 @@ func _on_PortalRateField_text_changed(new_text):
 
 
 func _on_GenerateScriptButton_pressed():
+	
 	if oClearExistingScriptCheckBox.pressed == true:
 		oScriptTextEdit.text = ""
+		oMessage.quick("Cleared existing script and placed generated text")
+	else:
+		oMessage.quick("Placed generated text")
+	
 	
 	var generateString = ""
 	generateString += "SET_GENERATE_SPEED("+str(int(oPortalRateField.text))+")" + '\n'
@@ -191,8 +206,8 @@ func _on_GenerateScriptButton_pressed():
 	
 	for i in oCreaturePool.get_children():
 		var variableName = i.get_meta("variable")
-		if i.get_integer() > 0:
-			generateString += "CREATURE_AVAILABLE(ALL_PLAYERS," + variableName + ",1,1)" + '\n'
+		match i.availabilityState:
+			i.ENABLED: generateString += "CREATURE_AVAILABLE(ALL_PLAYERS," + variableName + ",1,1)" + '\n'
 	
 	generateString = add_one_extra_line(generateString)
 	
@@ -233,6 +248,8 @@ func _on_GenerateScriptButton_pressed():
 		generateString += "ENDIF" + '\n'
 	
 	place_text(generateString) # This also calls "_on_ScriptTextEdit_text_changed" because it changes the text
+	
+	show_script_side()
 
 func add_one_extra_line(generateString):
 	if generateString.c_unescape().ends_with('\n\n'):

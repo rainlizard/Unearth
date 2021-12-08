@@ -1,25 +1,25 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Art/ActionPoint.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/AvailableButton.gd" type="Script" id=2]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.6, 0.6, 0.6, 0 )
+[ext_resource path="res://Class/EditableLabel.gd" type="Script" id=3]
+[ext_resource path="res://Class/StyleEditableLabel.tres" type="StyleBox" id=4]
 
 [node name="AvailableButton" type="VBoxContainer"]
 grow_horizontal = 2
 grow_vertical = 2
+rect_min_size = Vector2( 96, 0 )
 mouse_filter = 0
-size_flags_horizontal = 7
-size_flags_vertical = 7
+size_flags_horizontal = 5
+size_flags_vertical = 5
 alignment = 1
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="."]
-margin_right = 64.0
+[node name="IconTextureRect" type="TextureRect" parent="."]
+margin_right = 96.0
 margin_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -31,7 +31,7 @@ texture = ExtResource( 1 )
 expand = true
 stretch_mode = 6
 
-[node name="Highlight" type="ColorRect" parent="TextureRect"]
+[node name="IconHighlight" type="ColorRect" parent="IconTextureRect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -40,7 +40,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRect" type="ColorRect" parent="TextureRect"]
+[node name="IconColorRect" type="ColorRect" parent="IconTextureRect"]
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -54,22 +54,21 @@ __meta__ = {
 "_edit_use_anchors_": true
 }
 
-[node name="Label" type="Label" parent="."]
+[node name="TextEditableLabel" type="LineEdit" parent="." groups=["EditableLabel"]]
 margin_top = 68.0
-margin_right = 64.0
+margin_right = 96.0
 margin_bottom = 82.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Start"
+mouse_filter = 2
+size_flags_horizontal = 7
+size_flags_vertical = 4
+custom_styles/read_only = ExtResource( 4 )
+custom_styles/normal = ExtResource( 4 )
 align = 1
-valign = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource( 3 )
 
-[node name="Highlight" type="ColorRect" parent="Label"]
+[node name="TextHighlight" type="ColorRect" parent="TextEditableLabel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -78,38 +77,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRect" type="ColorRect" parent="Label"]
-show_behind_parent = true
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-color = Color( 0.27451, 0.270588, 0.360784, 1 )
-__meta__ = {
-"_edit_use_anchors_": true
-}
-
-[node name="LineEdit" type="LineEdit" parent="."]
-margin_top = 86.0
-margin_right = 64.0
-margin_bottom = 100.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_styles/normal = SubResource( 1 )
-align = 1
-
-[node name="Highlight" type="ColorRect" parent="LineEdit"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-color = Color( 1, 1, 1, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColorRect" type="ColorRect" parent="LineEdit"]
+[node name="TextColorRect" type="ColorRect" parent="TextEditableLabel"]
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -120,5 +88,5 @@ __meta__ = {
 }
 
 [connection signal="gui_input" from="." to="." method="_on_AvailableButton_gui_input"]
-[connection signal="focus_exited" from="LineEdit" to="." method="_on_LineEdit_focus_exited"]
-[connection signal="text_changed" from="LineEdit" to="." method="_on_LineEdit_text_changed"]
+[connection signal="focus_exited" from="TextEditableLabel" to="." method="_on_EditableLabel_focus_exited"]
+[connection signal="text_changed" from="TextEditableLabel" to="." method="_on_EditableLabel_text_changed"]

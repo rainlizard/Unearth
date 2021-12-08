@@ -9,12 +9,18 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "LineEdit",
+"class": "EditableLabel",
+"language": "GDScript",
+"path": "res://Class/EditableLabel.gd"
+}, {
 "base": "VBoxContainer",
 "class": "SpecialTabContainer",
 "language": "GDScript",
 "path": "res://Class/SpecialTabs.gd"
 } ]
 _global_script_class_icons={
+"EditableLabel": "",
 "SpecialTabContainer": ""
 }
 
