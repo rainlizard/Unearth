@@ -1031,9 +1031,7 @@ __meta__ = {
 [node name="Label" type="Label" parent="Ui/UiTools/PickThingWindow/Clippy/CenteredLabel"]
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 4
 align = 1
-valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -2468,6 +2466,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ConfirmGenerateScript" type="ConfirmationDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -456.0
+margin_top = 304.0
+margin_right = -16.0
+margin_bottom = 409.0
+rect_min_size = Vector2( 300, 105 )
+popup_exclusive = true
+window_title = "Apply script"
+dialog_text = "This will clear and replace your existing script, are you sure?"
+dialog_autowrap = true
+script = ExtResource( 61 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Warning" type="AcceptDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 56.0
@@ -3048,8 +3062,8 @@ visible = true
 margin_left = 344.0
 margin_top = -1923.0
 margin_right = 1199.0
-margin_bottom = -670.0
-rect_min_size = Vector2( 429, 0 )
+margin_bottom = -1168.0
+rect_min_size = Vector2( 855, 200 )
 window_title = "Map settings"
 resizable = true
 script = ExtResource( 125 )
@@ -3111,7 +3125,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
+[node name="LabelDungeonStyle" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
 margin_left = 350.0
 margin_top = 88.0
 margin_right = 480.0
@@ -3124,14 +3138,33 @@ text = "Dungeon style"
 align = 1
 valign = 1
 
-[node name="DungeonStyleList" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_left = 415.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
 margin_top = 113.0
+margin_right = 831.0
+margin_bottom = 700.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/HBoxContainer"]
+margin_right = 831.0
+margin_bottom = 587.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DungeonStyleList" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/HBoxContainer/ScrollContainer"]
+margin_left = 415.0
 margin_right = 415.0
-margin_bottom = 113.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 6
+size_flags_vertical = 2
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3184,6 +3217,16 @@ margin_bottom = 37.0
 rect_min_size = Vector2( 12, 12 )
 size_flags_horizontal = 3
 
+[node name="KeeperFXScriptCheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+margin_top = 146.0
+margin_right = 397.0
+margin_bottom = 175.0
+hint_tooltip = "Adds level_version(1) at the top of the script, allowing for extended scripting. Also different arguments for creature_available() are required in KeeperFX."
+text = "KeeperFX script"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
 margin_top = 41.0
 margin_right = 397.0
@@ -3193,6 +3236,8 @@ margin_bottom = 72.0
 margin_top = 5.0
 margin_right = 201.0
 margin_bottom = 26.0
+hint_tooltip = "set_generate_speed()"
+mouse_filter = 1
 text = "Portal attraction rate:"
 
 [node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer"]
@@ -3211,6 +3256,8 @@ margin_left = 267.0
 margin_top = 5.0
 margin_right = 335.0
 margin_bottom = 26.0
+hint_tooltip = "This time is calculated assuming Game Turns is set to 20"
+mouse_filter = 1
 text = "(20 sec)"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3225,6 +3272,8 @@ margin_bottom = 107.0
 margin_top = 5.0
 margin_right = 126.0
 margin_bottom = 26.0
+hint_tooltip = "start_money()"
+mouse_filter = 1
 text = "Starting gold:"
 
 [node name="GoldField" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer2"]
@@ -3247,6 +3296,8 @@ margin_bottom = 142.0
 margin_top = 5.0
 margin_right = 184.0
 margin_bottom = 26.0
+hint_tooltip = "max_creatures()"
+mouse_filter = 1
 text = "Maximum creatures:"
 
 [node name="MaxCreaturesField" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer3"]
@@ -3264,6 +3315,7 @@ __meta__ = {
 margin_top = 146.0
 margin_right = 397.0
 margin_bottom = 175.0
+hint_tooltip = "computer_player(player1,0)"
 text = "Blue computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3273,6 +3325,7 @@ __meta__ = {
 margin_top = 179.0
 margin_right = 397.0
 margin_bottom = 208.0
+hint_tooltip = "computer_player(player2,0)"
 text = "Green computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3282,6 +3335,7 @@ __meta__ = {
 margin_top = 212.0
 margin_right = 397.0
 margin_bottom = 241.0
+hint_tooltip = "computer_player(player3,0)"
 text = "Yellow computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3291,6 +3345,7 @@ __meta__ = {
 margin_top = 245.0
 margin_right = 397.0
 margin_bottom = 274.0
+hint_tooltip = "computer_player(player_good,0)"
 text = "White computer AI"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3300,6 +3355,9 @@ __meta__ = {
 margin_top = 278.0
 margin_right = 397.0
 margin_bottom = 307.0
+hint_tooltip = "if(player0,all_dungeons_destroyed == 1)
+	win_game
+endif"
 pressed = true
 text = "Win when all enemy hearts are destroyed"
 __meta__ = {
@@ -3448,8 +3506,7 @@ margin_right = 831.0
 margin_bottom = 27.0
 text = "Apply"
 
-[node name="ScriptEditor" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs"]
-visible = false
+[node name="ScriptEditor" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -3459,13 +3516,10 @@ margin_bottom = -12.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 124 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor"]
-margin_right = 831.0
-margin_bottom = 25.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -3482,7 +3536,7 @@ align = 1
 [node name="ScriptTextEdit" type="TextEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer"]
 margin_top = 25.0
 margin_right = 831.0
-margin_bottom = 25.0
+margin_bottom = 700.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 16 )
@@ -3496,6 +3550,23 @@ caret_blink = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HelpButtonPosition" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor"]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -15.0
+margin_top = -5.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UNNEEDEDScriptHelpButton" type="Button" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/HelpButtonPosition"]
+grow_horizontal = 0
+grow_vertical = 0
+text = "Help"
 
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
@@ -3705,6 +3776,7 @@ script = ExtResource( 88 )
 [connection signal="file_selected" from="Ui/UiSystem/FileDialogOpen" to="OpenMap" method="_on_FileDialogOpen_file_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/FileDialogOpen" to="Ui/UiSystem/FileDialogOpen" method="_on_FileDialogOpen_visibility_changed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmAutoGen" to="SlabPlacement" method="_on_ConfirmAutoGen_confirmed"]
+[connection signal="confirmed" from="Ui/UiSystem/ConfirmGenerateScript" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_ConfirmGenerateScript_confirmed"]
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/OwnableNaturalTerrain" to="Ui/UiSystem/SlabSettingsWindow" method="_on_OwnableNaturalTerrain_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox" to="Editor" method="_on_EditableBordersCheckbox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox" to="Ui/UiSystem/SlabSettingsWindow" method="_on_EditableBordersCheckbox_toggled"]
@@ -3725,6 +3797,7 @@ script = ExtResource( 88 )
 [connection signal="file_selected" from="Ui/UiSystem/ChooseMapImageFileDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ChooseMapImageFileDialog_file_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapProperties_visibility_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/MapNameLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapNameLineEdit_text_changed"]
+[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/KeeperFXScriptCheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_KeeperFXScriptCheckBox_toggled"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer/PortalRateField" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_PortalRateField_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/BlueAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_BlueAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/GreenAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_GreenAICheckBox_toggled"]
@@ -3733,4 +3806,5 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/HBoxContainer4/GenerateScriptButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_GenerateScriptButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]
+[connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/HelpButtonPosition/UNNEEDEDScriptHelpButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptHelpButton_pressed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

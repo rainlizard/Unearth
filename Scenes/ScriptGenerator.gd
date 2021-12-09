@@ -23,6 +23,9 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oGeneratorContainer = Nodelist.list["oGeneratorContainer"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
+onready var oConfirmGenerateScript = Nodelist.list["oConfirmGenerateScript"]
+onready var oKeeperFXScriptCheckBox = Nodelist.list["oKeeperFXScriptCheckBox"]
+
 
 var scnAvailableButton = preload('res://Scenes/AvailableButton.tscn')
 
@@ -250,12 +253,25 @@ func check_for_dungeon_heart(ownership):
 	return false
 
 
+
+
 func _on_GenerateScriptButton_pressed():
+	oMapSettingsTabs.current_tab = 2
+	Utils.popup_centered(oConfirmGenerateScript)
+
+func _on_ConfirmGenerateScript_confirmed():
 	oScriptTextEdit.text = ""
 	
-	oMessage.quick("Cleared existing script and placed generated text")
+	oMessage.quick("Cleared existing script and placed generated script")
 	
 	var generateString = ""
+	
+	var argumentForCreatureAvailable = ",1,1)"
+	
+	if oKeeperFXScriptCheckBox.pressed == true:
+		generateString += "LEVEL_VERSION(1)" + '\n'
+		argumentForCreatureAvailable = ",1,0)"
+	
 	generateString += "SET_GENERATE_SPEED("+str(int(oPortalRateField.text))+")" + '\n'
 	generateString += "START_MONEY(ALL_PLAYERS,"+str(int(oGoldField.text))+")" + '\n'
 	generateString += "MAX_CREATURES(ALL_PLAYERS,"+str(int(oMaxCreaturesField.text))+")" + '\n'
@@ -283,11 +299,11 @@ func _on_GenerateScriptButton_pressed():
 	for i in oCreaturePool.get_children():
 		var variableName = i.get_meta("variable")
 		match i.availabilityState:
-			i.ENABLED: generateString += "CREATURE_AVAILABLE(ALL_PLAYERS," + variableName + ",1,1)" + '\n'
+			i.ENABLED: generateString += "CREATURE_AVAILABLE(ALL_PLAYERS," + variableName + argumentForCreatureAvailable + '\n'
 	for i in oHeroPool.get_children():
 		var variableName = i.get_meta("variable")
 		match i.availabilityState:
-			i.ENABLED: generateString += "CREATURE_AVAILABLE(ALL_PLAYERS," + variableName + ",1,1)" + '\n'
+			i.ENABLED: generateString += "CREATURE_AVAILABLE(ALL_PLAYERS," + variableName + argumentForCreatureAvailable + '\n'
 	
 	generateString = add_one_extra_line(generateString)
 	
@@ -327,7 +343,6 @@ func _on_GenerateScriptButton_pressed():
 		generateString += "	WIN_GAME" + '\n'
 		generateString += "ENDIF" + '\n'
 	
-	oMapSettingsTabs.current_tab = 2
 	oScriptEditor.set_text(generateString)
 
 func add_one_extra_line(generateString):
@@ -335,3 +350,7 @@ func add_one_extra_line(generateString):
 		return generateString
 	else:
 		return generateString + '\n'
+
+
+func _on_KeeperFXScriptCheckBox_toggled(button_pressed):
+	pass # Replace with function body.

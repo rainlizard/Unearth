@@ -11,6 +11,7 @@ onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oReadPalette = Nodelist.list["oReadPalette"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oRNC = Nodelist.list["oRNC"]
+
 const IMAGE_FORMAT = Image.FORMAT_RGB8
 const textureWidth = 256
 const textureHeight = 2176

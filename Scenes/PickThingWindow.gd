@@ -120,13 +120,21 @@ func update_selection_position():
 		oSelectedRect.rect_global_position = oSelectedRect.boundToItem.rect_global_position
 		oSelectedRect.rect_size = oSelectedRect.boundToItem.rect_size
 
-func _on_hovered_none():
+func _on_hovered_none(id):
 	oCenteredLabel.get_node("Label").text = ""
+	
+	# Change creature texture to portrait
+	if id.get_meta("thingType") == Things.TYPE.CREATURE:
+		id.texture_normal = Things.DATA_CREATURE[id.get_meta("thingSubtype")][Things.PORTRAIT]
 
 func _on_hovered_over_item(id):
 	var offset = Vector2(id.rect_size.x * 0.5, id.rect_size.y * 0.5)
 	oCenteredLabel.rect_global_position = id.rect_global_position + offset
 	oCenteredLabel.get_node("Label").text = id.get_meta("grid_item_text")
+	
+	# Change creature portrait to texture
+	if id.get_meta("thingType") == Things.TYPE.CREATURE:
+		id.texture_normal = Things.DATA_CREATURE[id.get_meta("thingSubtype")][Things.TEXTURE]
 
 func add_item_to_grid(tabID, id, set_text):
 	tabID.add_child(id)
@@ -134,7 +142,7 @@ func add_item_to_grid(tabID, id, set_text):
 	set_text = set_text.replace(" ","\n") # Use "New lines" wherever there was a space.
 	id.set_meta("grid_item_text", set_text)
 	id.connect("mouse_entered", self, "_on_hovered_over_item", [id])
-	id.connect("mouse_exited", self, "_on_hovered_none")
+	id.connect("mouse_exited", self, "_on_hovered_none", [id])
 	id.connect("pressed",self,"pressed",[id])
 	id.rect_min_size = Vector2(grid_item_size.x * grid_window_scale, grid_item_size.y * grid_window_scale)
 

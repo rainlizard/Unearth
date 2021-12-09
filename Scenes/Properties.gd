@@ -33,8 +33,8 @@ func initialize_dungeon_style_options():
 			aaa.text = Constants.TEXTURE_MAP_NAMES[i]
 		else:
 			aaa.text = 'Texture map ' + str(i)
-		aaa.size_flags_vertical = Control.SIZE_EXPAND + Control.SIZE_SHRINK_CENTER
-		aaa.size_flags_horizontal = Control.SIZE_EXPAND + Control.SIZE_SHRINK_CENTER
+		aaa.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_CENTER
+		aaa.size_flags_horizontal = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_CENTER
 		aaa.connect("pressed",self,"_on_DungeonStyleButtonPressed",[i])
 		oDungeonStyleList.add_child(aaa)
 	

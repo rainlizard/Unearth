@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Control
 onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
@@ -96,3 +96,7 @@ func _on_ScriptTextEdit_text_changed():
 #		rect_size.x = 1280
 
 
+
+
+func _on_ScriptHelpButton_pressed():
+	oMessage.big("Help","Changes made to the script in this window are only committed to file upon saving the map. Changes made to the script externally using a text editor such as Notepad are instantly reloaded into Unearth, replacing any work done in this window. \nUse Google to learn more about Dungeon Keeper Script Commands.")
