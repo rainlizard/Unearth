@@ -244,7 +244,10 @@ func lif_buffer_to_array(buffer):
 	
 	# Each line by their comma
 	for i in array.size():
-		var subArray = array[i].split(",")
+		var subArray = Array(array[i].split(","))
+		for z in subArray.size():
+			subArray[z] = subArray[z].strip_edges(true, true)
+		
 		array[i] = subArray
 	return array
 

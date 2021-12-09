@@ -13,7 +13,6 @@ onready var oFileDialogSaveAs = Nodelist.list["oFileDialogSaveAs"]
 onready var oFileDialogOpen = Nodelist.list["oFileDialogOpen"]
 onready var oMenuButtonEdit = Nodelist.list["oMenuButtonEdit"]
 onready var oConfirmAutoGen = Nodelist.list["oConfirmAutoGen"]
-onready var oMapPropertiesWindow = Nodelist.list["oMapPropertiesWindow"]
 onready var oSlabSettingsWindow = Nodelist.list["oSlabSettingsWindow"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oMenuButtonHelp = Nodelist.list["oMenuButtonHelp"]
@@ -24,7 +23,7 @@ onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
-onready var oScriptWindow = Nodelist.list["oScriptWindow"]
+onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 
 func _ready():
 	oMenuButtonFile.get_popup().connect("id_pressed",self,"_on_FileSubmenu_Pressed")
@@ -90,8 +89,8 @@ func _on_FileSubmenu_Pressed(pressedID):
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:
-		0: # Map properties
-			Utils.popup_centered(oMapPropertiesWindow)
+		0: # Map Settings
+			Utils.popup_centered(oMapSettingsWindow)
 		1: # Open map folder
 			if oCurrentMap.path != "":
 				var pathToTryAndOpen = oCurrentMap.path.get_base_dir()
@@ -115,11 +114,7 @@ func _on_EditSubmenu_Pressed(pressedID):
 				Utils.popup_centered(oConfirmAutoGen)
 		5: # Add custom object
 			Utils.popup_centered(oAddCustomObjectWindow)
-		6: # Easy script
-			Utils.popup_centered(oScriptWindow)
-#			var popupmenu = oMenuButtonEdit.get_popup()
-#			popupmenu.toggle_item_checked(0)
-#			oSlabStyle.determine_window_visiblity()
+
 
 func _on_slab_style_window_close_button_clicked():
 	oMenuButtonEdit.get_popup().set_item_checked(0, false)

@@ -28,7 +28,7 @@ func _input(event):
 
 func launch_game():
 	var printOutput = []
-	OS.execute(COMMAND_LINE_CONSOLE, [COMMAND_LINE_CONSOLE_ARG, COMMAND_LINE], true, printOutput)
+	OS.execute(COMMAND_LINE_CONSOLE, [COMMAND_LINE_CONSOLE_ARG, COMMAND_LINE], false, printOutput) # Make sure "false" is set so Unearth doesn't freeze
 	print(printOutput)
 
 func set_paths(path):

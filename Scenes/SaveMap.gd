@@ -4,7 +4,7 @@ onready var oWriteData = Nodelist.list["oWriteData"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
-onready var oScriptWindow = Nodelist.list["oScriptWindow"]
+onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 
 var queueExit = false
 
@@ -29,7 +29,7 @@ func save_map(filePath): # auto opens other files
 	oMessage.quick('Saved map')
 	oCurrentMap.set_path_and_title(filePath)
 	oEditor.mapHasBeenEdited = false
-	oScriptWindow.visible = false
+	oMapSettingsWindow.visible = false
 	
 	# This goes last. Queued from when doing "save before quitting" and "save as" before quitting.
 	if queueExit == true:

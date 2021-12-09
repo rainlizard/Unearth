@@ -222,7 +222,7 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	
 	var asset3x3group = make_slab(slabID*28, bitmask)
 	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
-	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
+	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
 	var clmIndexArray = asset_position_to_column_index(asset3x3group)
 	
 	match slabID:
@@ -278,7 +278,7 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 	
 	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
 	asset3x3group = modify_room_face(asset3x3group, surrID, slabID)
-	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
+	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
 	var clmIndexArray = asset_position_to_column_index(asset3x3group)
 	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
 	
@@ -315,7 +315,7 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 	var slabVariation = (42 * 28) + (8 * (slabID - 42))
 	var bitmask = 1
 	var asset3x3group = make_slab(slabVariation, bitmask)
-	#asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
+	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
 	var clmIndexArray = asset_position_to_column_index(asset3x3group)
 	
 	match slabID:
@@ -886,62 +886,67 @@ func update_wibble(xSlab, ySlab, slabID, surrID):
 		if nCheck == myWibble and wCheck == myWibble and Slabs.data[ surrID[dir.nw] ][Slabs.WIBBLE_TYPE] == myWibble:
 			oDataWibble.set_cell(xWib+0, yWib+0, myWibble)
 
-#var slabsThatCanBeUsedAsCornerFiller = {
-#	Slabs.PATH:0,
-#	Slabs.WATER:1,
-#	Slabs.LAVA:2,
-#}
+var slabsThatCanBeUsedAsCornerFiller = {
+	Slabs.PATH:0,
+	Slabs.WATER:1,
+	Slabs.LAVA:2,
+}
 #var frailSlabs = {
 #}
 
-#func special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID):
-#	var cornerTopLeft = null
-#	var cornerTopRight = null
-#	var cornerBottomLeft = null
-#	var cornerBottomRight = null
-#
-#	if surrID[dir.n] == surrID[dir.w]:
-#		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.n]):
-#			cornerTopLeft = surrID[dir.n]
-#			# In the case of how two filler slabs decide to fill their corners
-#			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.n] != surrID[dir.nw] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.nw]):
-#				if slabsThatCanBeUsedAsCornerFiller[cornerTopLeft] > slabsThatCanBeUsedAsCornerFiller[slabID]:
-#					cornerTopLeft = null
-#
-#	if surrID[dir.n] == surrID[dir.e]:
-#		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.n]):
-#			cornerTopRight = surrID[dir.n]
-#			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.n] != surrID[dir.ne] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.ne]):
-#				if slabsThatCanBeUsedAsCornerFiller[cornerTopRight] > slabsThatCanBeUsedAsCornerFiller[slabID]:
-#					cornerTopRight = null
-#
-#	if surrID[dir.s] == surrID[dir.w]:
-#		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.s]):
-#			cornerBottomLeft = surrID[dir.s]
-#			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.s] != surrID[dir.sw] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.sw]):
-#				if slabsThatCanBeUsedAsCornerFiller[cornerBottomLeft] > slabsThatCanBeUsedAsCornerFiller[slabID]:
-#					cornerBottomLeft = null
-#
-#	if surrID[dir.s] == surrID[dir.e]:
-#		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.s]):
-#			cornerBottomRight = surrID[dir.s]
-#			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.s] != surrID[dir.se] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.se]):
-#				if slabsThatCanBeUsedAsCornerFiller[cornerBottomRight] > slabsThatCanBeUsedAsCornerFiller[slabID]:
-#					cornerBottomRight = null
-#
-#	if cornerTopLeft != null and cornerTopRight != null and cornerBottomLeft != null and cornerBottomRight != null:
-#		if Random.chance_int(50): cornerTopLeft = null
-#		if Random.chance_int(50): cornerTopRight = null
-#		if Random.chance_int(50): cornerBottomLeft = null
-#		if Random.chance_int(50): cornerBottomRight = null
-#
-#	if cornerTopLeft != null:
-#		asset3x3group[0] = cornerTopLeft * 28 * 9
-#	if cornerTopRight != null:
-#		asset3x3group[2] = cornerTopRight * 28 * 9
-#	if cornerBottomLeft != null:
-#		asset3x3group[6] = cornerBottomLeft * 28 * 9
-#	if cornerBottomRight != null:
-#		asset3x3group[8] = cornerBottomRight * 28 * 9
-#
-#	return asset3x3group
+func special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID):
+	if bitmask != 15:
+		return asset3x3group
+	if slabID != Slabs.ROCK and slabID != Slabs.EARTH and slabID != Slabs.GOLD:
+		return asset3x3group
+	
+	var cornerTopLeft = null
+	var cornerTopRight = null
+	var cornerBottomLeft = null
+	var cornerBottomRight = null
+	
+	if surrID[dir.n] == surrID[dir.w]:
+		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.n]):
+			cornerTopLeft = surrID[dir.n]
+			# In the case of how two filler slabs decide to fill their corners
+			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.n] != surrID[dir.nw] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.nw]):
+				if slabsThatCanBeUsedAsCornerFiller[cornerTopLeft] > slabsThatCanBeUsedAsCornerFiller[slabID]:
+					cornerTopLeft = null
+	
+	if surrID[dir.n] == surrID[dir.e]:
+		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.n]):
+			cornerTopRight = surrID[dir.n]
+			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.n] != surrID[dir.ne] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.ne]):
+				if slabsThatCanBeUsedAsCornerFiller[cornerTopRight] > slabsThatCanBeUsedAsCornerFiller[slabID]:
+					cornerTopRight = null
+	
+	if surrID[dir.s] == surrID[dir.w]:
+		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.s]):
+			cornerBottomLeft = surrID[dir.s]
+			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.s] != surrID[dir.sw] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.sw]):
+				if slabsThatCanBeUsedAsCornerFiller[cornerBottomLeft] > slabsThatCanBeUsedAsCornerFiller[slabID]:
+					cornerBottomLeft = null
+	
+	if surrID[dir.s] == surrID[dir.e]:
+		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.s]):
+			cornerBottomRight = surrID[dir.s]
+			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.s] != surrID[dir.se] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.se]):
+				if slabsThatCanBeUsedAsCornerFiller[cornerBottomRight] > slabsThatCanBeUsedAsCornerFiller[slabID]:
+					cornerBottomRight = null
+	
+	if cornerTopLeft != null and cornerTopRight != null and cornerBottomLeft != null and cornerBottomRight != null:
+		if Random.chance_int(50): cornerTopLeft = null
+		if Random.chance_int(50): cornerTopRight = null
+		if Random.chance_int(50): cornerBottomLeft = null
+		if Random.chance_int(50): cornerBottomRight = null
+	
+	if cornerTopLeft != null:
+		asset3x3group[0] = cornerTopLeft * 28 * 9
+	if cornerTopRight != null:
+		asset3x3group[2] = cornerTopRight * 28 * 9
+	if cornerBottomLeft != null:
+		asset3x3group[6] = cornerBottomLeft * 28 * 9
+	if cornerBottomRight != null:
+		asset3x3group[8] = cornerBottomRight * 28 * 9
+	
+	return asset3x3group

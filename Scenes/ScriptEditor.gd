@@ -3,28 +3,50 @@ onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oEditor = Nodelist.list["oEditor"]
+onready var oMessage = Nodelist.list["oMessage"]
+onready var oScriptEmptyStatus = Nodelist.list["oScriptEmptyStatus"]
 
-func _on_ScriptTextEdit_visibility_changed():
-	print('_on_ScriptTextEdit_visibility_changed')
-	if visible == true:
-		reload_script_into_window()
+func _ready():
+	loop_check_if_txt_file_has_been_modified()
+
+func loop_check_if_txt_file_has_been_modified():
+	if oCurrentMap.currentFilePaths.has("TXT"):
+		var filePath = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
+		var getModifiedTime = File.new().get_modified_time(filePath)
+		if oCurrentMap.currentFilePaths["TXT"][oCurrentMap.MODIFIED_DATE] != getModifiedTime:
+			oMessage.quick("Script reloaded from file.") #"Script was reloaded from file."
+			oCurrentMap.currentFilePaths["TXT"][oCurrentMap.MODIFIED_DATE] = getModifiedTime
+			# Reload
+			Filetypes.read(filePath, "TXT")
+			reload_script_into_textedit()
+	
+	yield(get_tree().create_timer(1.0), "timeout")
+	loop_check_if_txt_file_has_been_modified()
 
 func set_text(setWithString):
-	print('set_text')
-	oScriptTextEdit.text = setWithString
+	oEditor.mapHasBeenEdited = true
 	oDataScript.data = setWithString
-	_on_ScriptTextEdit_text_changed()
+	reload_script_into_textedit()
 
-func reload_script_into_window():
-	print('reload_script_into_window')
+func _on_ScriptTextEdit_visibility_changed():
+	if visible == true:
+		reload_script_into_textedit()
+
+func reload_script_into_textedit():
 	oScriptTextEdit.text = oDataScript.data
-#	if oCurrentMap.currentFilePaths.has("TXT"):
-#		oScriptNameLabel.text = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
+	if oScriptTextEdit.text == "":
+		oScriptEmptyStatus.visible = true
+	else:
+		oScriptEmptyStatus.visible = false
 
 func _on_ScriptTextEdit_text_changed():
-	print('_on_ScriptTextEdit_text_changed')
 	oEditor.mapHasBeenEdited = true
 	oDataScript.data = oScriptTextEdit.text
+
+
+
+#	if oCurrentMap.currentFilePaths.has("TXT"):
+#		oScriptNameLabel.text = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
 
 #func place_text(insertString):
 #	insertString =
