@@ -55,54 +55,41 @@ func start():
 	if oGame.GAME_DIRECTORY == "": return
 	
 	texturesLoadedState = LOADING_IN_PROGRESS
+	
 	paletteData = oReadPalette.read_palette(Settings.unearthdata.plus_file("palette.dat"))
 	
-	var newTmapaPaths = scan_dk_data_directory()
-	# Check if what's in TMAPA_PATHS (loaded from Settings) differs from what's in NEW_TMAPA_PATHS
+	var tmapaDatDictionary = scan_dk_data_directory()
+	var tmapaDatListSorted = tmapaDatDictionary.keys()
+	tmapaDatListSorted.sort()
 	
-	if REMEMBER_TMAPA_PATHS.hash() == newTmapaPaths.hash(): # This compares dictionaries, checking if date modified is different or if there's a different number of file entries
-		#print("No changes.")
-		pass
-	else:
-		# They differ in either file count or date
-		
-		# Remove any old entries
-		for path in REMEMBER_TMAPA_PATHS.keys(): # Doing .keys() should allow erasing while iterating I think
-			if newTmapaPaths.has(path) == false:
-				REMEMBER_TMAPA_PATHS.erase(path)
-		
-		# Look for any changes
-		var sortedArr = newTmapaPaths.keys()
-		sortedArr.sort() # required for linux to create in a nice looking order
-		for path in sortedArr:
-			if REMEMBER_TMAPA_PATHS.has(path) == true:
-				if newTmapaPaths[path] != REMEMBER_TMAPA_PATHS[path]: # Check if date differs
-					var img = convert_tmapa_to_image(path)
-					if img != null: save_image_as_cached_png(img, path) # only the filename from "path" is used
-			else:
-				var img = convert_tmapa_to_image(path)
-				if img != null: save_image_as_cached_png(img, path) # only the filename from "path" is used
-			
-			yield(get_tree(), "idle_frame")
+	# Remove any old entries
+	for path in REMEMBER_TMAPA_PATHS.keys(): # Doing .keys() should allow erasing while iterating I think
+		if tmapaDatDictionary.has(path) == false:
+			REMEMBER_TMAPA_PATHS.erase(path)
 	
-	var err = load_cached_textures(newTmapaPaths)
-	match err:
-		OK:
-			#print(cachedTextures)
-			Settings.set_setting("REMEMBER_TMAPA_PATHS", newTmapaPaths) # Do this last
-			#oMessage.quick("Texture cache loaded")
-			texturesLoadedState = LOADING_SUCCESS
-			# This is important to do here if updating textures while a map is already open
-			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
-				set_default_texture_pack(oDataLevelStyle.data)
-		FAILED:
-			oMessage.quick("Cache failed loading")
-			newTmapaPaths.clear()
-			REMEMBER_TMAPA_PATHS.clear()
-			texturesLoadedState = LOADING_NOT_STARTED
-			start() # Redo
-
-
+	for path in tmapaDatListSorted:
+		var cachedPath = ""
+		
+		var modifiedTime = tmapaDatDictionary[path]
+		var compareTime = -1
+		if REMEMBER_TMAPA_PATHS.has(path):
+			compareTime = REMEMBER_TMAPA_PATHS[path]
+		
+		if modifiedTime != compareTime: # Check if date differs or if has no entry (-1)
+			var img = convert_tmapa_to_image(path)
+			if img == null:
+				continue
+			save_image_as_png(img, path) # only the filename from "path" is used
+			yield(get_tree(),'idle_frame')
+		
+		load_cache_filename(path) # only the filename from "path" is used
+	
+	Settings.set_setting("REMEMBER_TMAPA_PATHS", tmapaDatDictionary) # Do this last
+	texturesLoadedState = LOADING_SUCCESS
+	
+	# This is important to do here if updating textures while a map is already open
+	if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
+		set_current_texture_pack()
 
 func scan_dk_data_directory():
 	var path = oGame.DK_DATA_DIRECTORY
@@ -147,80 +134,43 @@ func convert_tmapa_to_image(tmapaDatPath):
 	else:
 		print("Failed to open file.")
 		return null
-	
-	file.close()
 
-func save_image_as_cached_png(img, path):
-	var fileName = path.get_file().get_basename().to_lower() + ".png"
+func save_image_as_png(img, inputPath):
+	var fileName = inputPath.get_file().get_basename().to_lower() + ".png"
 	
 	var imgTex = ImageTexture.new()
 	imgTex.create_from_image(img, Texture.FLAG_MIPMAPS + Texture.FLAG_ANISOTROPIC_FILTER)
-	ResourceSaver.save(Settings.unearthdata.plus_file(fileName), imgTex)
+	var savePath = Settings.unearthdata.plus_file(fileName)
+	ResourceSaver.save(savePath, imgTex)
 	oMessage.quick("Caching texture maps : unearthdata".plus_file(fileName))
+	#return savePath
 
-func load_cached_textures(newTmapaPaths):
-	cachedTextures.clear()
+func load_cache_filename(path):
+	var fileName = path.get_file().get_basename().to_lower()
+	var cachePath = Settings.unearthdata.plus_file(fileName + ".png")
+	var tmapaNumber = int(fileName.to_lower().trim_prefix("tmapa")) # Get the specific position to create within the array
 	
-	CODETIME_START = OS.get_ticks_msec()
-	
-	var keys = newTmapaPaths.keys()
-	
-	for i in keys.size():
-		var fn = keys[i].get_file().get_basename().to_lower()
-		var cachePath = Settings.unearthdata.plus_file(fn + ".png")
-		
-		if File.new().file_exists(cachePath) == true:
-			var tmapaNumber = int(fn.to_lower().trim_prefix("tmapa")) # Get the specific position to create within the array
-			
-			# Fill all array positions, in case a tmapa00#.dat file is deleted
-			while cachedTextures.size() <= tmapaNumber:
-				cachedTextures.append(null)
-			
-			# Need to call load() on an Image class if I want the save and load to work correctly (otherwise it saves too fast and doesn't load or something)
-			var img = Image.new()
-			img.load(cachePath)
-			
-			var twoTexArr = convertImgToTwoTextureArrays(img)
-			cachedTextures[tmapaNumber] = twoTexArr
-			#print('Loaded cache file: ' + cachePath)
-		else:
-			print('Cache file not found: ' + cachePath)
-			cachedTextures.clear()
-			return FAILED
-	print('Loaded cached .png textures: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-	
-	return OK
+	if File.new().file_exists(cachePath) == true:
+		# Need to call load() on an Image class if I want the save and load to work correctly (otherwise it saves too fast and doesn't load or something)
+		var img = Image.new()
+		img.load(cachePath)
+		load_image_into_cache(img, tmapaNumber)
+		#print('Loaded cache file: ' + cachePath)
+		return OK
+	else:
+		print('Cache file not found: ' + cachePath)
+		cachedTextures.clear()
+		return FAILED
 
-
-func set_default_texture_pack(value):
-	if cachedTextures.empty() == true:
-		oMessage.quick("Error: No texture maps could be loaded. Try reloading texture maps.")
-	if cachedTextures[value][0] == null or cachedTextures[value][1] == null:
-		oMessage.quick("Error: Unable to load texture map number " + str(value) + '. Try reloading texture maps.')
-		return
-	
-	# 2D
-	if oOverheadGraphics.arrayOfColorRects.size() > 0:
-		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
-	
-	# 3D
-	if oGenerateTerrain.materialArray.size() > 0:
-		oGenerateTerrain.materialArray[0].set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-		oGenerateTerrain.materialArray[0].set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
-	
-	assign_textures_to_slab_window(value)
-
-
-func assign_textures_to_slab_window(value): # Called by SlabStyleWindow
-	for nodeID in get_tree().get_nodes_in_group("SlabDisplay"):
-		nodeID.get_material().set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-		nodeID.get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
-
+func load_image_into_cache(img, tmapaNumber):
+	tmapaNumber = int(tmapaNumber)
+	while cachedTextures.size() <= tmapaNumber: # Fill all array positions, in case a tmapa00#.dat file inbetween is deleted
+		cachedTextures.append([null, null])
+	cachedTextures[tmapaNumber] = convert_img_to_two_texture_arrays(img)
 
 # SLICE COUNT being too high is the reason TextureArray doesn't work on old PC. (NOT IMAGE SIZE, NOT MIPMAPS EITHER)
 # RES files might actually take longer to generate a TextureArray from than PNG, not sure.
-func convertImgToTwoTextureArrays(img):
+func convert_img_to_two_texture_arrays(img):
 	if img.get_format() != IMAGE_FORMAT:
 		img.convert(IMAGE_FORMAT)
 	
@@ -247,3 +197,142 @@ func convertImgToTwoTextureArrays(img):
 				twoTextureArrays[i].set_layer_data(slice, (y*xSlices)+x)
 	
 	return twoTextureArrays
+
+func set_current_texture_pack():
+	var value = oDataLevelStyle.data
+	
+	if cachedTextures.empty() == true:
+		oMessage.big("Error", "No texture maps could be loaded. Try pressing the [Reload texture map cache] button in Settings.")
+		return
+	if cachedTextures[value] == null or cachedTextures[value][0] == null or cachedTextures[value][1] == null:
+		oMessage.big("Error", "Unable to load texture map number " + str(value) + ". Try pressing the [Reload texture map cache] button in Settings.")
+		return
+	
+	# 2D
+	if oOverheadGraphics.arrayOfColorRects.size() > 0:
+		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
+		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+	
+	# 3D
+	if oGenerateTerrain.materialArray.size() > 0:
+		oGenerateTerrain.materialArray[0].set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
+		oGenerateTerrain.materialArray[0].set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+	
+	assign_textures_to_slab_window(value)
+
+
+func assign_textures_to_slab_window(value): # Called by SlabStyleWindow
+	for nodeID in get_tree().get_nodes_in_group("SlabDisplay"):
+		nodeID.get_material().set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
+		nodeID.get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+
+
+
+
+
+
+#func load_cached_textures(tmapaDatDictionary):
+#	cachedTextures.clear()
+#
+#	CODETIME_START = OS.get_ticks_msec()
+#
+#	var keys = tmapaDatDictionary.keys()
+#
+#	for i in keys.size():
+#		var fn = keys[i].get_file().get_basename().to_lower()
+#		var cachePath = Settings.unearthdata.plus_file(fn + ".png")
+#
+#		if File.new().file_exists(cachePath) == true:
+#			var tmapaNumber = int(fn.to_lower().trim_prefix("tmapa")) # Get the specific position to create within the array
+#
+#			# Fill all array positions, in case a tmapa00#.dat file is deleted
+#			while cachedTextures.size() <= tmapaNumber:
+#				cachedTextures.append(null)
+#
+#			# Need to call load() on an Image class if I want the save and load to work correctly (otherwise it saves too fast and doesn't load or something)
+#			var img = Image.new()
+#			img.load(cachePath)
+#
+#			var twoTexArr = convert_img_to_two_texture_arrays(img)
+#			cachedTextures[tmapaNumber] = twoTexArr
+#			#print('Loaded cache file: ' + cachePath)
+#		else:
+#			print('Cache file not found: ' + cachePath)
+#			cachedTextures.clear()
+#			return FAILED
+#	print('Loaded cached .png textures: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+#
+#	return OK
+
+	
+	# Check if what's in TMAPA_PATHS (loaded from Settings) differs from what's in NEW_TMAPA_PATHS
+	
+#	if REMEMBER_TMAPA_PATHS.hash() == tmapaDatDictionary.hash(): # This compares dictionaries, checking if date modified is different or if there's a different number of file entries
+#		#print("No changes.")
+#		pass
+#	else:
+#		# They differ in either file count or date
+#
+#		# Remove any old entries
+#		for path in REMEMBER_TMAPA_PATHS.keys(): # Doing .keys() should allow erasing while iterating I think
+#			if tmapaDatDictionary.has(path) == false:
+#				REMEMBER_TMAPA_PATHS.erase(path)
+#
+#		# Look for any changes
+#		var sortedArr = tmapaDatDictionary.keys()
+#		sortedArr.sort() # required for linux to create in a nice looking order
+#		for path in sortedArr:
+#			if REMEMBER_TMAPA_PATHS.has(path) == true:
+#				if tmapaDatDictionary[path] != REMEMBER_TMAPA_PATHS[path]: # Check if date differs
+#					var img = convert_tmapa_to_image(path)
+#					if img != null: save_image_as_cached_png(img, path) # only the filename from "path" is used
+#			else:
+#				var img = convert_tmapa_to_image(path)
+#				if img != null: save_image_as_cached_png(img, path) # only the filename from "path" is used
+#
+#			yield(get_tree(), "idle_frame")
+#
+#	var err = load_cached_textures(tmapaDatDictionary)
+#	match err:
+#		OK:
+#			#print(cachedTextures)
+#			Settings.set_setting("REMEMBER_TMAPA_PATHS", tmapaDatDictionary) # Do this last
+#			#oMessage.quick("Texture cache loaded")
+#			texturesLoadedState = LOADING_SUCCESS
+#			# This is important to do here if updating textures while a map is already open
+#			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
+#				set_current_texture_pack()
+#		FAILED:
+#			oMessage.quick("Cache failed loading")
+#			tmapaDatDictionary.clear()
+#			REMEMBER_TMAPA_PATHS.clear()
+#			texturesLoadedState = LOADING_NOT_STARTED
+#			start() # Redo
+
+
+#func load_cache(path):
+#	var fileName = path.get_file().get_basename().to_lower()
+#
+#	var cachePath = Settings.unearthdata.plus_file(fileName + ".png")
+#
+#	if File.new().file_exists(cachePath) == true:
+#
+#		var tmapaNumber = int(fileName.to_lower().trim_prefix("tmapa")) # Get the specific position to create within the array
+#
+#		# Need to call load() on an Image class if I want the save and load to work correctly (otherwise it saves too fast and doesn't load or something)
+#		var img = Image.new()
+#		img.load(cachePath)
+#
+#		var twoTexArr = convert_img_to_two_texture_arrays(img)
+#
+#		# Fill all array positions, in case a tmapa00#.dat file is deleted
+#		while cachedTextures.size() <= tmapaNumber:
+#			cachedTextures.append([null, null]) # Give it an entry of blank texture arrays
+#
+#		cachedTextures[tmapaNumber] = twoTexArr
+#		#print('Loaded cache file: ' + cachePath)
+#		return OK
+#	else:
+#		print('Cache file not found: ' + cachePath)
+#		cachedTextures.clear()
+#		return FAILED

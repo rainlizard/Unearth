@@ -272,7 +272,7 @@ func generation():
 			generatedMesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, newMeshArray)
 			generatedMesh.surface_set_material(generatedMesh.get_surface_count()-1, materialArray[i])
 	
-	oTextureCache.set_default_texture_pack(oDataLevelStyle.data)
+	oTextureCache.set_current_texture_pack()
 	
 	oTerrainMesh.mesh = generatedMesh
 	

@@ -48,4 +48,4 @@ func initialize_dungeon_style_options():
 func _on_DungeonStyleButtonPressed(value):
 	oEditor.mapHasBeenEdited = true
 	oDataLevelStyle.data = value
-	oTextureCache.set_default_texture_pack(oDataLevelStyle.data)
+	oTextureCache.set_current_texture_pack()

@@ -34,15 +34,18 @@ func _on_ScriptTextEdit_visibility_changed():
 
 func reload_script_into_textedit():
 	oScriptTextEdit.text = oDataScript.data
-	if oScriptTextEdit.text == "":
-		oScriptEmptyStatus.visible = true
-	else:
-		oScriptEmptyStatus.visible = false
+	update_empty_script_status()
 
 func _on_ScriptTextEdit_text_changed():
 	oEditor.mapHasBeenEdited = true
 	oDataScript.data = oScriptTextEdit.text
+	update_empty_script_status()
 
+func update_empty_script_status():
+	if oScriptTextEdit.text == "":
+		oScriptEmptyStatus.visible = true
+	else:
+		oScriptEmptyStatus.visible = false
 
 
 #	if oCurrentMap.currentFilePaths.has("TXT"):

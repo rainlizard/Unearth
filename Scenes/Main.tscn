@@ -3042,24 +3042,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ChooseFileListFileDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = -622.0
-margin_top = 1026.0
-margin_right = 72.0
-margin_bottom = 1682.0
-rect_min_size = Vector2( 250, 87.5 )
-window_title = "Open a File"
-dialog_text = "Find and select filelist_tmapa00#.txt (must have accompanying files folder)"
-mode = 0
-access = 2
-show_hidden_files = true
-current_dir = "/Godot/MyProjects/Unearth"
-current_path = "/Godot/MyProjects/Unearth/"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="MapSettingsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 344.0
@@ -3572,12 +3554,51 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Help"
 
+[node name="ChooseFileListFileDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -622.0
+margin_top = 1026.0
+margin_right = 72.0
+margin_bottom = 1682.0
+rect_min_size = Vector2( 250, 87.5 )
+window_title = "Open a File"
+resizable = true
+dialog_text = "Find and select filelist_tmapa###.txt (must have accompanying pack### folder)"
+mode = 0
+access = 2
+filters = PoolStringArray( "*.txt" )
+show_hidden_files = true
+current_dir = "/Godot/MyProjects/Unearth"
+current_path = "/Godot/MyProjects/Unearth/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ExportTmapaDatDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -622.0
+margin_top = 1026.0
+margin_right = 72.0
+margin_bottom = 1682.0
+rect_min_size = Vector2( 250, 87.5 )
+resizable = true
+dialog_text = "Any colours used that aren't in the DK palette will be set as bright purple.
+"
+access = 2
+filters = PoolStringArray( "*.dat" )
+show_hidden_files = true
+current_dir = "/Godot/MyProjects/Unearth"
+current_path = "/Godot/MyProjects/Unearth/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="TextureEditingWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -1112.0
 margin_top = 954.0
-margin_right = -708.0
-margin_bottom = 1272.0
+margin_right = -694.0
+margin_bottom = 1298.0
 window_title = "Texture editing"
 resizable = true
 script = ExtResource( 126 )
@@ -3586,6 +3607,8 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = 10.0
 margin_top = 10.0
 margin_right = -10.0
@@ -3595,15 +3618,94 @@ __meta__ = {
 }
 
 [node name="LoadFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_right = 384.0
+margin_right = 398.0
 margin_bottom = 27.0
-text = "Load filelist_tmapa00#.txt"
+text = "Load filelist_tmapa###.txt"
 
-[node name="ConvertCachedButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+[node name="ReloaderContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_top = 31.0
-margin_right = 384.0
-margin_bottom = 58.0
-text = "Convert cached textures to tmapa###.dat"
+margin_right = 398.0
+margin_bottom = 324.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
+margin_right = 398.0
+margin_bottom = 21.0
+scroll_vertical_enabled = false
+
+[node name="ReloaderPathLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ScrollContainer"]
+margin_right = 14.0
+margin_bottom = 21.0
+text = "<>"
+
+[node name="Spacing3" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
+margin_top = 25.0
+margin_right = 398.0
+margin_bottom = 49.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
+margin_top = 53.0
+margin_right = 398.0
+margin_bottom = 84.0
+
+[node name="label" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/HBoxContainer"]
+margin_top = 5.0
+margin_right = 114.0
+margin_bottom = 26.0
+text = "Reload every"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ReloadEveryLineEdit" type="LineEdit" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/HBoxContainer"]
+margin_left = 118.0
+margin_right = 176.0
+margin_bottom = 31.0
+text = "1.5"
+script = ExtResource( 89 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/HBoxContainer"]
+margin_left = 180.0
+margin_top = 5.0
+margin_right = 250.0
+margin_bottom = 26.0
+text = "seconds"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
+margin_top = 88.0
+margin_right = 398.0
+margin_bottom = 112.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="ReloaderLoopLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
+margin_top = 116.0
+margin_right = 398.0
+margin_bottom = 209.0
+text = "Reloader loop is now actively reloading files from pack### folder. This causes lag at the moment, restart the editor when you want to stop."
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
+margin_top = 213.0
+margin_right = 398.0
+margin_bottom = 237.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="ExportTmapaButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
+margin_top = 241.0
+margin_right = 398.0
+margin_bottom = 268.0
+text = "Export as tmapa###.dat"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -3835,7 +3937,6 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonHelp" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonHelp_pressed"]
 [connection signal="gui_input" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/MapImageTextureRect" to="Ui/UiSystem/ImageAsMapDialog" method="_on_MapImageTextureRect_gui_input"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseMapImageFileDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ChooseMapImageFileDialog_file_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/ChooseFileListFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseFileListFileDialog_file_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapProperties_visibility_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/MapNameLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapNameLineEdit_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/KeeperFXScriptCheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_KeeperFXScriptCheckBox_toggled"]
@@ -3848,6 +3949,8 @@ script = ExtResource( 88 )
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/HelpButtonPosition/UNNEEDEDScriptHelpButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptHelpButton_pressed"]
+[connection signal="file_selected" from="Ui/UiSystem/ChooseFileListFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseFileListFileDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ExportTmapaDatDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaDatDialog_file_selected"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ConvertCachedButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ConvertCachedButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

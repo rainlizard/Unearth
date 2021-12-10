@@ -33,6 +33,8 @@ func start():
 	
 	if oGame.EXECUTABLE_PATH == "": return # Silently wait for user to set executable path. No need to show an error.
 	
+	
+	
 	if OS.get_cmdline_args():
 		# FILE ASSOCIATION
 		var cmdLine = OS.get_cmdline_args()
@@ -125,7 +127,7 @@ func finish_opening_map(map):
 	oOverheadGraphics.update_map_overhead_2d_textures()
 	oUniversalDetails.clmEntryCount = oDataClm.count_filled_clm_entries()
 	oPickSlabWindow.add_slabs()
-	oTextureCache.set_default_texture_pack(oDataLevelStyle.data)
+	oTextureCache.set_current_texture_pack()
 	
 	if oCurrentMap.path == "":
 		oMessage.quick('New map')

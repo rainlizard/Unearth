@@ -1,5 +1,5 @@
 extends Node2D
-
+onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 
 func _enter_tree():

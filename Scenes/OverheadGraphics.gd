@@ -63,27 +63,28 @@ func initialize_display_fields():
 		createDisplayField(map, map+1)
 
 func createDisplayField(setMap, showStyle):
-		var displayField = ColorRect.new()
-		displayField.rect_size = Vector2(8160,8160)
-		#displayField.visible = false # FPS is only saved when setting visible to false. FPS is not saved by making image transparent
-		displayField.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		
-		var mat = ShaderMaterial.new()
-		mat.shader = preload("res://Shaders/display_texture_2d.shader")
-		displayField.material = mat
-		
-		if showStyle != 0: # Do not change the texturemap for default style
-			mat.set_shader_param("dkTextureMap_Split_A", oTextureCache.cachedTextures[setMap][0])
-			mat.set_shader_param("dkTextureMap_Split_B", oTextureCache.cachedTextures[setMap][1])
-		
-		mat.set_shader_param("showOnlySpecificStyle", showStyle)
-		mat.set_shader_param("fieldSizeInSubtiles", Vector2(255, 255))
-		mat.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
-		mat.set_shader_param("viewTextures", overheadTexData)
-		mat.set_shader_param("slxData", oDataSlx.slxTexData)
-		
-		arrayOfColorRects.append(displayField)
-		oGame2D.add_child_below_node(self, displayField)
+	
+	var displayField = ColorRect.new()
+	displayField.rect_size = Vector2(8160,8160)
+	#displayField.visible = false # FPS is only saved when setting visible to false. FPS is not saved by making image transparent
+	displayField.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	var mat = ShaderMaterial.new()
+	mat.shader = preload("res://Shaders/display_texture_2d.shader")
+	displayField.material = mat
+	
+	if showStyle != 0: # Do not change the texturemap for default style
+		mat.set_shader_param("dkTextureMap_Split_A", oTextureCache.cachedTextures[setMap][0])
+		mat.set_shader_param("dkTextureMap_Split_B", oTextureCache.cachedTextures[setMap][1])
+	
+	mat.set_shader_param("showOnlySpecificStyle", showStyle)
+	mat.set_shader_param("fieldSizeInSubtiles", Vector2(255, 255))
+	mat.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
+	mat.set_shader_param("viewTextures", overheadTexData)
+	mat.set_shader_param("slxData", oDataSlx.slxTexData)
+	
+	arrayOfColorRects.append(displayField)
+	oGame2D.add_child_below_node(self, displayField)
 
 func get_overhead_face_value(x, y, slabID):
 	# clmIndex is a position inside the 2048 column collection
