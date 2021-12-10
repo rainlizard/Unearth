@@ -20,7 +20,7 @@ func set_decompressor_path():
 		decompressorExeFullPath = file.get_path_absolute()
 		file.close()
 
-func check_for_RNC_compression(path): # Check if the first 3 bytes are the letters "RNC" and the 4th byte is a "1".
+func check_for_rnc_compression(path): # Check if the first 3 bytes are the letters "RNC" and the 4th byte is a "1".
 	var isCompressed = false
 	
 	var file = File.new()

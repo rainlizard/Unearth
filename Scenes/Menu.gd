@@ -24,6 +24,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
+onready var oTextureEditingWindow = Nodelist.list["oTextureEditingWindow"]
 
 func _ready():
 	oMenuButtonFile.get_popup().connect("id_pressed",self,"_on_FileSubmenu_Pressed")
@@ -114,7 +115,9 @@ func _on_EditSubmenu_Pressed(pressedID):
 				Utils.popup_centered(oConfirmAutoGen)
 		5: # Add custom object
 			Utils.popup_centered(oAddCustomObjectWindow)
-
+		6:
+			# Texture editing
+			Utils.popup_centered(oTextureEditingWindow)
 
 func _on_slab_style_window_close_button_clicked():
 	oMenuButtonEdit.get_popup().set_item_checked(0, false)

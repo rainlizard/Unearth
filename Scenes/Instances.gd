@@ -1,7 +1,6 @@
 extends Node2D
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
-onready var oWarning = Nodelist.list["oWarning"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
@@ -129,10 +128,10 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 	if id.thingType == Things.TYPE.OBJECT:
 		if id.subtype == 10:
 			if slabID != Slabs.HATCHERY:
-				oWarning.give_warning("Chicken won't appear unless placed inside a Hatchery. Place an Egg instead.")
+				oMessage.big("Warning","Chicken won't appear unless placed inside a Hatchery. Place an Egg instead.")
 		if id.subtype in [52,53,54,55,56]:
 			if slabID != Slabs.TREASURE_ROOM:
-				oWarning.give_warning("Treasury Gold won't appear unless placed inside a Treasure Room.")
+				oMessage.big("Warning","Treasury Gold won't appear unless placed inside a Treasure Room.")
 
 func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng file
 	var id = thingScn.instance()

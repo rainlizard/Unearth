@@ -78,7 +78,7 @@ func open_map(filePath): # auto opens other files
 	
 	compressedFiles.clear()
 	for i in oCurrentMap.currentFilePaths.values():
-		if oRNC.check_for_RNC_compression(i[oCurrentMap.PATHSTRING]) == true:
+		if oRNC.check_for_rnc_compression(i[oCurrentMap.PATHSTRING]) == true:
 			compressedFiles.append(i[oCurrentMap.PATHSTRING])
 	
 	if compressedFiles.empty() == true:

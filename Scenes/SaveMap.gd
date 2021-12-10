@@ -5,6 +5,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
+onready var oDataScript = Nodelist.list["oDataScript"]
 
 var queueExit = false
 
@@ -25,7 +26,8 @@ func save_map(filePath): # auto opens other files
 		oCurrentMap.currentFilePaths[EXT] = [saveToFilePath, getModifiedTime]
 	
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
-	
+	if oDataScript.data == "":
+		oMessage.big("Warning","Your map has no script! Use the Script Generator in Map Settings to give your map basic functionality.")
 	oMessage.quick('Saved map')
 	oCurrentMap.set_path_and_title(filePath)
 	oEditor.mapHasBeenEdited = false

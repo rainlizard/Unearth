@@ -55,7 +55,7 @@ func start():
 	if oGame.GAME_DIRECTORY == "": return
 	
 	texturesLoadedState = LOADING_IN_PROGRESS
-	paletteData = oReadPalette.readPalette(Settings.unearthdata.plus_file("palette.dat"))
+	paletteData = oReadPalette.read_palette(Settings.unearthdata.plus_file("palette.dat"))
 	
 	var newTmapaPaths = scan_dk_data_directory()
 	# Check if what's in TMAPA_PATHS (loaded from Settings) differs from what's in NEW_TMAPA_PATHS
@@ -77,12 +77,15 @@ func start():
 		for path in sortedArr:
 			if REMEMBER_TMAPA_PATHS.has(path) == true:
 				if newTmapaPaths[path] != REMEMBER_TMAPA_PATHS[path]: # Check if date differs
-					create_png_cache_file(path)
+					var img = convert_tmapa_to_image(path)
+					if img != null: save_image_as_cached_png(img, path) # only the filename from "path" is used
 			else:
-				create_png_cache_file(path)
+				var img = convert_tmapa_to_image(path)
+				if img != null: save_image_as_cached_png(img, path) # only the filename from "path" is used
+			
 			yield(get_tree(), "idle_frame")
 	
-	var err = loadCachedTextures(newTmapaPaths)
+	var err = load_cached_textures(newTmapaPaths)
 	match err:
 		OK:
 			#print(cachedTextures)
@@ -98,6 +101,7 @@ func start():
 			REMEMBER_TMAPA_PATHS.clear()
 			texturesLoadedState = LOADING_NOT_STARTED
 			start() # Redo
+
 
 
 func scan_dk_data_directory():
@@ -118,12 +122,12 @@ func scan_dk_data_directory():
 	return dictionary
 
 
-func create_png_cache_file(tmapaDkOriginalPath):
-	if oRNC.checkForRncCompression(tmapaDkOriginalPath) == true:
-		oRNC.decompress(tmapaDkOriginalPath)
+func convert_tmapa_to_image(tmapaDatPath):
+	if oRNC.check_for_rnc_compression(tmapaDatPath) == true:
+		oRNC.decompress(tmapaDatPath)
 	
 	var file = File.new()
-	if file.open(tmapaDkOriginalPath, File.READ) == OK:
+	if file.open(tmapaDatPath, File.READ) == OK:
 		CODETIME_START = OS.get_ticks_msec()
 		
 		var img = Image.new()
@@ -136,24 +140,25 @@ func create_png_cache_file(tmapaDkOriginalPath):
 				img.set_pixel(x,y,paletteData[paletteIndex])
 		img.unlock()
 		
-		#img.load("1024x1024.png")
-		#img.load("originalmapa.png")
+		print('Converted tmapa###.dat to image in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+		file.close()
 		
-		
-		var imgTex = ImageTexture.new()
-		imgTex.create_from_image(img, Texture.FLAG_MIPMAPS + Texture.FLAG_ANISOTROPIC_FILTER)
-		var constructFilename = tmapaDkOriginalPath.get_file().get_basename().to_lower()
-		constructFilename += ".png"
-		ResourceSaver.save(Settings.unearthdata.plus_file(constructFilename), imgTex)
-		
-		oMessage.quick("Caching texture maps : unearthdata".plus_file(constructFilename))
-		print('Created cache file in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+		return img
 	else:
 		print("Failed to open file.")
+		return null
+	
 	file.close()
 
+func save_image_as_cached_png(img, path):
+	var fileName = path.get_file().get_basename().to_lower() + ".png"
+	
+	var imgTex = ImageTexture.new()
+	imgTex.create_from_image(img, Texture.FLAG_MIPMAPS + Texture.FLAG_ANISOTROPIC_FILTER)
+	ResourceSaver.save(Settings.unearthdata.plus_file(fileName), imgTex)
+	oMessage.quick("Caching texture maps : unearthdata".plus_file(fileName))
 
-func loadCachedTextures(newTmapaPaths):
+func load_cached_textures(newTmapaPaths):
 	cachedTextures.clear()
 	
 	CODETIME_START = OS.get_ticks_msec()

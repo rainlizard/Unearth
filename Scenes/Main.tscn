@@ -32,7 +32,7 @@
 [ext_resource path="res://Scenes/GamePaths.gd" type="Script" id=30]
 [ext_resource path="res://Scenes/SaveMap.gd" type="Script" id=31]
 [ext_resource path="res://Scenes/WriteData.gd" type="Script" id=32]
-[ext_resource path="res://Scenes/QuickMessage.gd" type="Script" id=33]
+[ext_resource path="res://Scenes/Message.gd" type="Script" id=33]
 [ext_resource path="res://Scenes/ThingsOnSlabs.gd" type="Script" id=34]
 [ext_resource path="res://Scenes/ConfirmDecompression.gd" type="Script" id=35]
 [ext_resource path="res://Scenes/DeleteMap.gd" type="Script" id=36]
@@ -85,7 +85,6 @@
 [ext_resource path="res://Scenes/SelectedRectangleDisplay.gd" type="Script" id=83]
 [ext_resource path="res://Art/Cursor96x96Blue.png" type="Texture" id=84]
 [ext_resource path="res://Scenes/Instances.gd" type="Script" id=85]
-[ext_resource path="res://Scenes/Tips.gd" type="Script" id=86]
 [ext_resource path="res://Scenes/EditingMode.gd" type="Script" id=87]
 [ext_resource path="res://Scenes/LevelSpinBox.gd" type="Script" id=88]
 [ext_resource path="res://Scenes/LineEditFloat.gd" type="Script" id=89]
@@ -125,6 +124,7 @@
 [ext_resource path="res://Scenes/LineEditInteger.gd" type="Script" id=123]
 [ext_resource path="res://Scenes/ScriptEditor.gd" type="Script" id=124]
 [ext_resource path="res://Scenes/ScriptWindow.gd" type="Script" id=125]
+[ext_resource path="res://Scenes/TextureEditingWindow.gd" type="Script" id=126]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -1352,7 +1352,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false ]
+items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false, "Texture editing", null, 0, false, false, 6, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2474,25 +2474,10 @@ margin_right = -16.0
 margin_bottom = 409.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
-window_title = "Apply script"
+window_title = "Generate script"
 dialog_text = "This will clear and replace your existing script, are you sure?"
 dialog_autowrap = true
 script = ExtResource( 61 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Warning" type="AcceptDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = 56.0
-margin_top = -382.0
-margin_right = 504.0
-margin_bottom = -286.0
-popup_exclusive = true
-window_title = "Warning"
-dialog_text = "Custom messages are used here."
-dialog_autowrap = true
-script = ExtResource( 86 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -3057,6 +3042,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ChooseFileListFileDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -622.0
+margin_top = 1026.0
+margin_right = 72.0
+margin_bottom = 1682.0
+rect_min_size = Vector2( 250, 87.5 )
+window_title = "Open a File"
+dialog_text = "Find and select filelist_tmapa00#.txt (must have accompanying files folder)"
+mode = 0
+access = 2
+show_hidden_files = true
+current_dir = "/Godot/MyProjects/Unearth"
+current_path = "/Godot/MyProjects/Unearth/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="MapSettingsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 344.0
@@ -3193,7 +3196,7 @@ scroll_horizontal_enabled = false
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer"]
 margin_right = 485.0
-margin_bottom = 410.0
+margin_bottom = 443.0
 custom_constants/hseparation = 28
 columns = 2
 
@@ -3504,9 +3507,10 @@ __meta__ = {
 margin_left = 682.0
 margin_right = 831.0
 margin_bottom = 27.0
-text = "Apply"
+text = "Generate script"
 
 [node name="ScriptEditor" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -3567,6 +3571,42 @@ __meta__ = {
 grow_horizontal = 0
 grow_vertical = 0
 text = "Help"
+
+[node name="TextureEditingWindow" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -1112.0
+margin_top = 954.0
+margin_right = -708.0
+margin_bottom = 1272.0
+window_title = "Texture editing"
+resizable = true
+script = ExtResource( 126 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LoadFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+margin_right = 384.0
+margin_bottom = 27.0
+text = "Load filelist_tmapa00#.txt"
+
+[node name="ConvertCachedButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+margin_top = 31.0
+margin_right = 384.0
+margin_bottom = 58.0
+text = "Convert cached textures to tmapa###.dat"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
@@ -3795,6 +3835,7 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonHelp" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonHelp_pressed"]
 [connection signal="gui_input" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/MapImageTextureRect" to="Ui/UiSystem/ImageAsMapDialog" method="_on_MapImageTextureRect_gui_input"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseMapImageFileDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ChooseMapImageFileDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ChooseFileListFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseFileListFileDialog_file_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapProperties_visibility_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/MapNameLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapNameLineEdit_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/KeeperFXScriptCheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_KeeperFXScriptCheckBox_toggled"]
@@ -3807,4 +3848,6 @@ script = ExtResource( 88 )
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/HelpButtonPosition/UNNEEDEDScriptHelpButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ConvertCachedButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ConvertCachedButton_pressed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

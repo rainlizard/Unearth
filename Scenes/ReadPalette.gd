@@ -1,6 +1,6 @@
 extends Node
 
-func readPalette(path):
+func read_palette(path):
 	var array = []
 	array.resize(256)
 	
