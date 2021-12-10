@@ -25,6 +25,8 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oTextureEditingWindow = Nodelist.list["oTextureEditingWindow"]
+onready var oOpenMap = Nodelist.list["oOpenMap"]
+onready var oConfirmDiscardChanges = Nodelist.list["oConfirmDiscardChanges"]
 
 func _ready():
 	oMenuButtonFile.get_popup().connect("id_pressed",self,"_on_FileSubmenu_Pressed")
@@ -85,8 +87,9 @@ func _on_FileSubmenu_Pressed(pressedID):
 		2: Utils.popup_centered(oFileDialogOpen) # Open
 		3: oSaveMap.clicked_save_on_menu() # Save
 		4: Utils.popup_centered(oFileDialogSaveAs) # Save as
-		5: Utils.popup_centered(oImageAsMapDialog) # Load image as map
-		6: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
+		5: Utils.popup_centered(oConfirmDiscardChanges) # Reload map
+		6: Utils.popup_centered(oImageAsMapDialog) # Load image as map
+		7: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:
@@ -148,3 +151,7 @@ func _on_MenuButtonSettings_pressed():
 func _on_MenuButtonPlay_pressed():
 	oMenuButtonPlay.get_popup().visible = false
 	oGame.menu_play_clicked()
+
+
+func _on_ConfirmDiscardChanges_confirmed():
+	oOpenMap.open_map(oCurrentMap.path)

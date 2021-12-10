@@ -1335,7 +1335,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "File"
 align = 0
-items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Save map", null, 0, false, false, 3, 0, null, "", false, "Save map as", null, 0, false, false, 4, 0, null, "", false, "Load image as map", null, 0, false, false, 5, 0, null, "", false, "Exit", null, 0, false, false, 6, 0, null, "", false ]
+items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Save map", null, 0, false, false, 3, 0, null, "", false, "Save map as", null, 0, false, false, 4, 0, null, "", false, "Reload map", null, 0, false, false, 5, 0, null, "", false, "Load image as map", null, 0, false, false, 6, 0, null, "", false, "Exit", null, 0, false, false, 7, 0, null, "", false ]
 switch_on_hover = true
 
 [node name="VSeparator1" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
@@ -1891,6 +1891,21 @@ rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Confirm delete"
 dialog_text = "Are you sure you want to delete this map?"
+script = ExtResource( 61 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConfirmDiscardChanges" type="ConfirmationDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = 497.402
+margin_top = -181.886
+margin_right = 885.402
+margin_bottom = -109.886
+rect_min_size = Vector2( 300, 105 )
+popup_exclusive = true
+window_title = "Confirm discard changes"
+dialog_text = "Are you sure you want to discard changes and reload the map?"
 script = ExtResource( 61 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3895,6 +3910,7 @@ script = ExtResource( 88 )
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDecompression" to="OpenMap" method="_on_ConfirmDecompression_confirmed"]
 [connection signal="item_rect_changed" from="Ui/UiSystem/ConfirmDecompression" to="Ui/UiSystem/ConfirmDecompression" method="_on_ConfirmDecompression_item_rect_changed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDelete" to="Ui/UiSystem/MapBrowser" method="_on_ConfirmDelete_confirmed"]
+[connection signal="confirmed" from="Ui/UiSystem/ConfirmDiscardChanges" to="Ui/UiSystem/Menu" method="_on_ConfirmDiscardChanges_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmQuit" to="Editor" method="_on_ConfirmQuit_confirmed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitSave" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitSave_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitDontSave" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitDontSave_pressed"]
