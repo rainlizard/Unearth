@@ -3595,10 +3595,10 @@ __meta__ = {
 
 [node name="TextureEditingWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -1112.0
+margin_left = -1273.0
 margin_top = 954.0
 margin_right = -694.0
-margin_bottom = 1298.0
+margin_bottom = 1304.0
 window_title = "Texture editing"
 resizable = true
 script = ExtResource( 126 )
@@ -3618,19 +3618,19 @@ __meta__ = {
 }
 
 [node name="LoadFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_right = 398.0
+margin_right = 559.0
 margin_bottom = 27.0
 text = "Load filelist_tmapa###.txt"
 
 [node name="ReloaderContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_top = 31.0
-margin_right = 398.0
-margin_bottom = 324.0
+margin_right = 559.0
+margin_bottom = 330.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_right = 398.0
+margin_right = 559.0
 margin_bottom = 21.0
 scroll_vertical_enabled = false
 
@@ -3641,13 +3641,13 @@ text = "<>"
 
 [node name="Spacing3" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
 margin_top = 25.0
-margin_right = 398.0
+margin_right = 559.0
 margin_bottom = 49.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
 margin_top = 53.0
-margin_right = 398.0
+margin_right = 559.0
 margin_bottom = 84.0
 
 [node name="label" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/HBoxContainer"]
@@ -3681,30 +3681,32 @@ __meta__ = {
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
 margin_top = 88.0
-margin_right = 398.0
+margin_right = 559.0
 margin_bottom = 112.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="ReloaderLoopLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
 margin_top = 116.0
-margin_right = 398.0
-margin_bottom = 209.0
-text = "Reloader loop is now actively reloading files from pack### folder. This causes lag at the moment, restart the editor when you want to stop."
+margin_right = 559.0
+margin_bottom = 233.0
+text = "Reloader loop is now actively reloading files from pack### folder. For your edits to be visible be sure to set your Dungeon style in Map settings to match the pack number you're editing.
+
+Restart the editor when you want to stop."
 autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Spacing2" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_top = 213.0
-margin_right = 398.0
-margin_bottom = 237.0
+margin_top = 237.0
+margin_right = 559.0
+margin_bottom = 261.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="ExportTmapaButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_top = 241.0
-margin_right = 398.0
-margin_bottom = 268.0
+margin_top = 265.0
+margin_right = 559.0
+margin_bottom = 292.0
 text = "Export as tmapa###.dat"
 __meta__ = {
 "_edit_use_anchors_": false

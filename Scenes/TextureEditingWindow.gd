@@ -36,8 +36,11 @@ func reloader_loop():
 
 func _on_LoadFilelistButton_pressed():
 	Utils.popup_centered(oChooseFileListFileDialog)
+	oChooseFileListFileDialog.current_file = "filelist_tmapa000.txt"
+
 func _on_ExportTmapaButton_pressed():
 	Utils.popup_centered(oExportTmapaDatDialog)
+	oExportTmapaDatDialog.current_file = get_tmapa_filename()+".dat"
 
 
 func execute():
@@ -83,13 +86,15 @@ func execute():
 	
 	
 	
-	var tmapaNumber = fileListFilePath.right(fileListFilePath.length()-12).to_lower().trim_suffix(".txt")
+	var tmapaNumber = get_tmapa_filename()
 	oTextureCache.load_image_into_cache(editingImg, tmapaNumber)
 	oTextureCache.set_current_texture_pack()
 #	var imgTex = ImageTexture.new()
 #	imgTex.create_from_image(img,0)
 #	$"../TextureRect".texture = imgTex
 
+func get_tmapa_filename():
+	return fileListFilePath.right(fileListFilePath.length()-12).to_lower().trim_suffix(".txt")
 
 
 func _on_ExportTmapaDatDialog_file_selected(path):
