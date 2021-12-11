@@ -131,7 +131,7 @@ func initialize_rooms_available():
 		
 		if Slabs.icons.has(slabID):
 			var id = scnAvailableButton.instance()
-			id.hint_tooltip = Slabs.data[slabID][Slabs.NAME]
+			id.hint_tooltip = Slabs.data[slabID][Slabs.NAME] + ' availability'
 			id.get_node("IconTextureRect").texture = Slabs.icons[slabID]
 			id.set_meta("variable", functionVariable)
 			id.get_node("TextEditableLabel").editable = false
@@ -175,7 +175,7 @@ func initialize_traps_available(): # oTrapsAvailable
 		var functionVariable = i[1]
 		var defaultValue = i[2]
 		var id = scnAvailableButton.instance()
-		id.hint_tooltip = Things.DATA_TRAP[thingID][Things.NAME]
+		id.hint_tooltip = Things.DATA_TRAP[thingID][Things.NAME] + ' availability'
 		id.get_node("IconTextureRect").texture = Things.DATA_TRAP[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
 		id.get_node("TextEditableLabel").editable = false
@@ -193,7 +193,7 @@ func initialize_magic_available(): # oMagicAvailable
 		var functionVariable = i[1]
 		var defaultValue = i[2]
 		var id = scnAvailableButton.instance()
-		id.hint_tooltip = Things.DATA_OBJECT[thingID][Things.NAME]
+		id.hint_tooltip = Things.DATA_OBJECT[thingID][Things.NAME] + ' availability'
 		id.get_node("IconTextureRect").texture = Things.DATA_OBJECT[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
 		id.get_node("TextEditableLabel").editable = false
@@ -211,7 +211,7 @@ func initialize_doors_available(): # oDoorsAvailable
 		var functionVariable = i[1]
 		var defaultValue = i[2]
 		var id = scnAvailableButton.instance()
-		id.hint_tooltip = Things.DATA_DOOR[thingID][Things.NAME]
+		id.hint_tooltip = Things.DATA_DOOR[thingID][Things.NAME] + ' availability'
 		id.get_node("IconTextureRect").texture = Things.DATA_DOOR[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
 		id.get_node("TextEditableLabel").editable = false
@@ -288,11 +288,11 @@ func _on_ConfirmGenerateScript_confirmed():
 	for i in oCreaturePool.get_children():
 		var variableName = i.get_meta("variable")
 		if i.get_integer() > 0:
-			generateString += "ADD_CREATURE_TO_POOL(ALL_PLAYERS," + variableName + "," + str(i.get_integer()) + ")" + '\n'
+			generateString += "ADD_CREATURE_TO_POOL(" + variableName + "," + str(i.get_integer()) + ")" + '\n'
 	for i in oHeroPool.get_children():
 		var variableName = i.get_meta("variable")
 		if i.get_integer() > 0:
-			generateString += "ADD_CREATURE_TO_POOL(ALL_PLAYERS," + variableName + "," + str(i.get_integer()) + ")" + '\n'
+			generateString += "ADD_CREATURE_TO_POOL(" + variableName + "," + str(i.get_integer()) + ")" + '\n'
 	
 	generateString = add_one_extra_line(generateString)
 	

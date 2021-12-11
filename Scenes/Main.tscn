@@ -3192,7 +3192,7 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer"]
-margin_right = 485.0
+margin_right = 423.0
 margin_bottom = 443.0
 custom_constants/hseparation = 28
 columns = 2
@@ -3221,7 +3221,8 @@ size_flags_horizontal = 3
 margin_top = 146.0
 margin_right = 397.0
 margin_bottom = 175.0
-hint_tooltip = "Adds level_version(1) at the top of the script, allowing for extended scripting. Also different arguments for creature_available() are required in KeeperFX."
+hint_tooltip = "Adds LEVEL_VERSION at the top of the script, allowing for extended scripting.
+Keep in mind different arguments for CREATURE_AVAILABLE are used if LEVEL_VERSION is present."
 text = "KeeperFX script"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3236,7 +3237,7 @@ margin_bottom = 72.0
 margin_top = 5.0
 margin_right = 201.0
 margin_bottom = 26.0
-hint_tooltip = "set_generate_speed()"
+hint_tooltip = "SET_GENERATE_SPEED"
 mouse_filter = 1
 text = "Portal attraction rate:"
 
@@ -3272,7 +3273,7 @@ margin_bottom = 107.0
 margin_top = 5.0
 margin_right = 126.0
 margin_bottom = 26.0
-hint_tooltip = "start_money()"
+hint_tooltip = "START_MONEY"
 mouse_filter = 1
 text = "Starting gold:"
 
@@ -3296,7 +3297,7 @@ margin_bottom = 142.0
 margin_top = 5.0
 margin_right = 184.0
 margin_bottom = 26.0
-hint_tooltip = "max_creatures()"
+hint_tooltip = "MAX_CREATURES"
 mouse_filter = 1
 text = "Maximum creatures:"
 
@@ -3315,8 +3316,8 @@ __meta__ = {
 margin_top = 146.0
 margin_right = 397.0
 margin_bottom = 175.0
-hint_tooltip = "computer_player(player1,0)"
-text = "Blue computer AI"
+hint_tooltip = "Computer PLAYER1"
+text = "Blue keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -3325,8 +3326,8 @@ __meta__ = {
 margin_top = 179.0
 margin_right = 397.0
 margin_bottom = 208.0
-hint_tooltip = "computer_player(player2,0)"
-text = "Green computer AI"
+hint_tooltip = "Computer PLAYER2"
+text = "Green keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -3335,8 +3336,8 @@ __meta__ = {
 margin_top = 212.0
 margin_right = 397.0
 margin_bottom = 241.0
-hint_tooltip = "computer_player(player3,0)"
-text = "Yellow computer AI"
+hint_tooltip = "Computer PLAYER3"
+text = "Yellow keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -3345,8 +3346,8 @@ __meta__ = {
 margin_top = 245.0
 margin_right = 397.0
 margin_bottom = 274.0
-hint_tooltip = "computer_player(player_good,0)"
-text = "White computer AI"
+hint_tooltip = "Computer PLAYER_GOOD"
+text = "White keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -3355,11 +3356,8 @@ __meta__ = {
 margin_top = 278.0
 margin_right = 397.0
 margin_bottom = 307.0
-hint_tooltip = "if(player0,all_dungeons_destroyed == 1)
-	win_game
-endif"
-pressed = true
-text = "Win when all enemy hearts are destroyed"
+hint_tooltip = "Keep in mind if a keeper AI is not enabled then they'll be counted as defeated even if their dungeon heart has not been destroyed"
+text = "Win when all keepers are defeated"
 __meta__ = {
 "_edit_use_anchors_": false
 }

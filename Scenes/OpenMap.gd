@@ -22,6 +22,7 @@ onready var oUi = Nodelist.list["oUi"]
 onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
 onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
+onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -135,6 +136,12 @@ func finish_opening_map(map):
 		oMessage.quick('Opened map')
 	
 	oEditor.set_view_2d()
+	
+	
+#	var cubeArray = [1,0,1,1,0,1,1,0]
+#	var idx = oDataClm.index_entry(cubeArray, 1)
+#	oDataClmPos.set_cell(63,38, idx)
+	
 	
 	print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 
