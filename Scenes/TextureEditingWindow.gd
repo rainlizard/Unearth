@@ -8,6 +8,9 @@ onready var oExportTmapaDatDialog = Nodelist.list["oExportTmapaDatDialog"]
 onready var oReadPalette = Nodelist.list["oReadPalette"]
 onready var oChooseTmapaFileDialog = Nodelist.list["oChooseTmapaFileDialog"]
 onready var oRNC = Nodelist.list["oRNC"]
+onready var oGame = Nodelist.list["oGame"]
+onready var oMessage = Nodelist.list["oMessage"]
+
 
 var filelistfile = File.new()
 var fileListFilePath = ""
@@ -37,22 +40,31 @@ func reloader_loop():
 
 func _on_LoadFilelistButton_pressed():
 	Utils.popup_centered(oChooseFileListFileDialog)
+	oChooseFileListFileDialog.current_dir = Settings.unearth_path.plus_file("textures").plus_file("")
+	oChooseFileListFileDialog.current_path = Settings.unearth_path.plus_file("textures").plus_file("")
 	oChooseFileListFileDialog.current_file = "filelist_tmapa000.txt"
 
 func _on_ExportTmapaButton_pressed():
 	Utils.popup_centered(oExportTmapaDatDialog)
+	oExportTmapaDatDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportTmapaDatDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oExportTmapaDatDialog.current_file = get_tmapa_filename()+".dat"
 
+func _on_CreateFilelistButton_pressed():
+	Utils.popup_centered(oChooseTmapaFileDialog)
+	oChooseTmapaFileDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oChooseTmapaFileDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oChooseTmapaFileDialog.current_file = "tmapa000.dat"
 
 func execute():
 	var baseDir = fileListFilePath.get_base_dir()
 	
 	if filelistfile.open(fileListFilePath, File.READ) != OK: return
 	
-	var content = filelistfile.get_as_text()
+	var flContent = filelistfile.get_as_text()
 	filelistfile.close()
 	
-	var lineArray = Array(content.split('\n', false))
+	var lineArray = Array(flContent.split('\n', false))
 	lineArray.pop_front() # remove the first line: textures_pack_000	8	68	32	32
 	
 	for i in lineArray.size():
@@ -127,20 +139,19 @@ func _on_ExportTmapaDatDialog_file_selected(path):
 	file.open(path,File.WRITE)
 	file.store_buffer(buffer.data_array)
 	file.close()
-
+	
+	oMessage.quick("Exported : " + path)
+	
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 
-
-func _on_CreateFilelistButton_pressed():
-	Utils.popup_centered(oChooseTmapaFileDialog)
 
 func _on_ChooseTmapaFileDialog_file_selected(path):
 	var sourceImg = oTextureCache.convert_tmapa_to_image(path)
 	if sourceImg == null: return
 	var CODETIME_START = OS.get_ticks_msec()
 	
-	var baseDir = path.get_base_dir()
+	var outputDir = Settings.unearth_path.plus_file("textures")
 	
 	var filelistFile = File.new()
 	if filelistFile.open(Settings.unearthdata.plus_file("exportfilelist.txt"), File.READ) != OK:
@@ -148,14 +159,14 @@ func _on_ChooseTmapaFileDialog_file_selected(path):
 	
 	# Split the Filelist into usable arrays
 	
-	var content = filelistFile.get_as_text()
+	var flContent = filelistFile.get_as_text()
 	var numberString = path.get_file().get_basename().trim_prefix('tmapa')
-	content = content.replace("subdir", "pack" + numberString)
-	content = content.replace("textures_pack_number", "textures_pack_" + numberString)
+	flContent = flContent.replace("subdir", "pack" + numberString)
+	flContent = flContent.replace("textures_pack_number", "textures_pack_" + numberString)
 	filelistFile.close()
-	save_new_filelist_txt_file(content, numberString, baseDir)
 	
-	var lineArray = Array(content.split('\n', false))
+	
+	var lineArray = Array(flContent.split('\n', false))
 	lineArray.pop_front() # For the array remove the first line: textures_pack_number	8	68	32	32
 	
 	for i in lineArray.size():
@@ -186,7 +197,7 @@ func _on_ChooseTmapaFileDialog_file_selected(path):
 		createNewImage.create(w,h,false,Image.FORMAT_RGB8)
 		imageDictionary[i] = createNewImage
 	
-	var dir = Directory.new()
+	# Make images
 	for i in lineArray.size():
 		var sourceTileY = i / 8
 		var sourceTileX = i - (sourceTileY * 8)
@@ -200,22 +211,30 @@ func _on_ChooseTmapaFileDialog_file_selected(path):
 		createNewImage.lock()
 		createNewImage.blit_rect(sourceImg, Rect2(sourceTileX*32,sourceTileY*32, 32,32), Vector2(destX, destY))
 		createNewImage.unlock()
+	
+	# Save PNGs (separate loop so we're iterating once on each file, rather than every single filelist line)
+	var dir = Directory.new()
+	for localPath in imageDictionary:
 		
-		var savePath = baseDir.plus_file(localPath)
+		var savePath = outputDir.plus_file(localPath)
 		var packFolder = savePath.get_base_dir()
 		
 		if dir.dir_exists(packFolder) == false:
-			dir.make_dir(packFolder)
-		createNewImage.save_png(savePath)
+			dir.make_dir_recursive(packFolder)
 		
-		#sourceImg.save_png(savePath)
+		var createNewImage = imageDictionary[localPath]
+		createNewImage.save_png(savePath)
+		oMessage.quick("Exported : textures/" + localPath)
+	
+	save_new_filelist_txt_file(flContent, numberString, outputDir) # This goes after the "make_dir_recursive" commands
+	OS.shell_open(outputDir)
 	
 	print('Exported Filelist in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
-func save_new_filelist_txt_file(content, numberString, baseDir):
+func save_new_filelist_txt_file(flContent, numberString, outputDir):
 	var file = File.new()
-	file.open(baseDir.plus_file("filelist_tmapa"+numberString+".txt"), File.WRITE)
-	file.store_string(content)
+	file.open(outputDir.plus_file("filelist_tmapa"+numberString+".txt"), File.WRITE)
+	file.store_string(flContent)
 	file.close()
 
 #	for y in 68:

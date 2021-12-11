@@ -3578,7 +3578,7 @@ margin_bottom = 1682.0
 rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 resizable = true
-dialog_text = "Find and select filelist_tmapa###.txt (must have accompanying pack### folder)"
+dialog_text = "Find and select filelist_tmapa*.txt (must have accompanying pack* folder)"
 mode = 0
 access = 2
 filters = PoolStringArray( "*.txt" )
@@ -3598,16 +3598,17 @@ margin_bottom = 1682.0
 rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 resizable = true
-dialog_text = "Find and select tmapa*.dat
-Outputs filelist_tmapa*.txt and a pack* folder containing .PNGs, both into the directory of the tmapa*.dat file you select.
+dialog_text = "Select a tmapa*.dat file.
+Outputs filelist_tmapa*.txt and pack* folder containing .PNGs, both into a \"textures\" folder next to Unearth.exe
 "
 dialog_autowrap = true
 mode = 0
 access = 2
 filters = PoolStringArray( "*.dat" )
 show_hidden_files = true
-current_dir = "/Godot/MyProjects/Unearth"
-current_path = "/Godot/MyProjects/Unearth/"
+current_dir = "/Godot"
+current_file = "MyProje"
+current_path = "/Godot/MyProje"
 __meta__ = {
 "_edit_use_anchors_": false
 }
