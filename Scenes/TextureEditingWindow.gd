@@ -177,17 +177,15 @@ func _on_ChooseTmapaFileDialog_file_selected(path):
 	var imageDictionary = {}
 	for i in lineArray.size():
 		var localPath = lineArray[i][0]
+		var posX = int(lineArray[i][1])+32
+		var posY = int(lineArray[i][2])+32
 		
-		if imageDictionary.has(localPath) == true:
-			var compareWidth = int(lineArray[i][1]) + 32 #int(lineArray[i][3])
-			var compareHeight = int(lineArray[i][2]) + 32 #int(lineArray[i][4])
-			
-			if imageDictionary[localPath][0] < compareWidth:
-				imageDictionary[localPath][0] = compareWidth
-			if imageDictionary[localPath][1] < compareHeight:
-				imageDictionary[localPath][1] = compareHeight
-		else:
-			imageDictionary[localPath] = [32, 32] # 1 tile - minimum sized image
+		if imageDictionary.has(localPath) == false:
+			imageDictionary[localPath] = [0, 0]
+		
+		imageDictionary[localPath][0] = max(posX, imageDictionary[localPath][0])
+		imageDictionary[localPath][1] = max(posY, imageDictionary[localPath][1])
+	
 	
 	# Replace the width and height array with an Image.
 	for i in imageDictionary:
