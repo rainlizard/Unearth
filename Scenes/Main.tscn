@@ -2705,7 +2705,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 7
 text = "Dungeon Keeper 1 map editor made by rainlizard using Godot Engine.
 
-Contact me at:
+Contact:
 Keeperklan forums and discord
 https://rainlizard.itch.io/unearth
 ludorverr@gmail.com"
@@ -3589,6 +3589,29 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ChooseTmapaFileDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -622.0
+margin_top = 1026.0
+margin_right = 72.0
+margin_bottom = 1682.0
+rect_min_size = Vector2( 250, 87.5 )
+window_title = "Open a File"
+resizable = true
+dialog_text = "Find and select tmapa*.dat
+Outputs filelist_tmapa*.txt and a pack* folder containing .PNGs, both into the directory of the tmapa*.dat file you select.
+"
+dialog_autowrap = true
+mode = 0
+access = 2
+filters = PoolStringArray( "*.dat" )
+show_hidden_files = true
+current_dir = "/Godot/MyProjects/Unearth"
+current_path = "/Godot/MyProjects/Unearth/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="ExportTmapaDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -622.0
@@ -3613,7 +3636,7 @@ visible = true
 margin_left = -1273.0
 margin_top = 954.0
 margin_right = -694.0
-margin_bottom = 1304.0
+margin_bottom = 1345.0
 window_title = "Texture editing"
 resizable = true
 script = ExtResource( 126 )
@@ -3632,15 +3655,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LoadFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+[node name="CreateFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_right = 559.0
 margin_bottom = 27.0
-text = "Load filelist_tmapa###.txt"
+text = "Convert tmapa*.dat to filelist pack"
 
-[node name="ReloaderContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+[node name="LoadFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_top = 31.0
 margin_right = 559.0
-margin_bottom = 330.0
+margin_bottom = 58.0
+text = "Load filelist pack for auto updating"
+
+[node name="ReloaderContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+margin_top = 62.0
+margin_right = 559.0
+margin_bottom = 371.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -3704,7 +3733,7 @@ rect_min_size = Vector2( 24, 24 )
 margin_top = 116.0
 margin_right = 559.0
 margin_bottom = 233.0
-text = "Reloader loop is now actively reloading files from pack### folder. For your edits to be visible be sure to set your Dungeon style in Map settings to match the pack number you're editing.
+text = "Now actively reloading files from filelist pack folder. For your edits to be visible be sure to set your Dungeon style in Map settings to match the pack number you're editing.
 
 Restart the editor when you want to stop."
 autowrap = true
@@ -3722,7 +3751,7 @@ rect_min_size = Vector2( 24, 24 )
 margin_top = 265.0
 margin_right = 559.0
 margin_bottom = 292.0
-text = "Export as tmapa###.dat"
+text = "Export as tmapa*.dat"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -3968,7 +3997,9 @@ script = ExtResource( 88 )
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/HelpButtonPosition/UNNEEDEDScriptHelpButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptHelpButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseFileListFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseFileListFileDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ChooseTmapaFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseTmapaFileDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportTmapaDatDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaDatDialog_file_selected"]
+[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/CreateFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_CreateFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

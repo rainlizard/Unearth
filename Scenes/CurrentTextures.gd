@@ -68,8 +68,6 @@ func start():
 			REMEMBER_TMAPA_PATHS.erase(path)
 	
 	for path in tmapaDatListSorted:
-		var cachedPath = ""
-		
 		var modifiedTime = tmapaDatDictionary[path]
 		var compareTime = -1
 		if REMEMBER_TMAPA_PATHS.has(path):
@@ -127,7 +125,7 @@ func convert_tmapa_to_image(tmapaDatPath):
 				img.set_pixel(x,y,paletteData[paletteIndex])
 		img.unlock()
 		
-		print('Converted tmapa###.dat to image in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+		print('Converted tmapa*.dat to image in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 		file.close()
 		
 		return img
