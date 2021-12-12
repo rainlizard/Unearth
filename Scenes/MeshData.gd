@@ -7,11 +7,22 @@ enum {North, East, South, West, Top, Bottom}
 var vertex = [0,1,2,3,4,5]
 var normal = [0,1,2,3,4,5]
 var uv = [0,1,2,3,4,5]
+var blankArray = initalize_blank_array()
 
 func _ready():
 	vertices()
 	normals()
 	uvs()
+
+func initalize_blank_array():
+	var array = []
+	array.resize(Mesh.ARRAY_MAX)
+	array[Mesh.ARRAY_INDEX] = []
+	array[Mesh.ARRAY_VERTEX] = []
+	array[Mesh.ARRAY_TEX_UV] = []
+	array[Mesh.ARRAY_TEX_UV2] = []
+	array[Mesh.ARRAY_NORMAL] = []
+	return array
 
 func uvs():
 	uv[North] = [

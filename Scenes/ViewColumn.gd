@@ -31,7 +31,7 @@ func update_details():
 			entryIndex = oDataClmPos.get_cell(pos.x, pos.y)
 			
 		elif oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_CLM:
-			entryIndex = oGenerateTerrain.getClmIndex(oSelector3D.translation.x, oSelector3D.translation.z)
+			entryIndex = oGenerateTerrain.get_clm_index(oSelector3D.translation.x, oSelector3D.translation.z)
 			if entryIndex == null:
 				oColumnListData.clear()
 				return

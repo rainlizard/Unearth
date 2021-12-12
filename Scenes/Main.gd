@@ -12,8 +12,11 @@ func _ready():
 	get_parent().initialize_window_settings()
 	$TextureCache.start() # Needs to be run after Settings initialized so that the GAME_DIRECTORY is correctly set
 	$OpenMap.start()
-
-
+	
+	# Auto switch to 3D while devving
+	for i in 2:
+		yield(get_tree(),'idle_frame')
+	$Editor._on_ButtonViewType_pressed()
 
 
 

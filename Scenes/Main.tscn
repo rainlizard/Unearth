@@ -46,10 +46,10 @@
 [ext_resource path="res://Scenes/DataLif.gd" type="Script" id=44]
 [ext_resource path="res://Scenes/PickThingWindow.gd" type="Script" id=45]
 [ext_resource path="res://Scenes/CurrentTextures.gd" type="Script" id=46]
-[ext_resource path="res://3D/MeshData.gd" type="Script" id=47]
-[ext_resource path="res://3D/Player.gd" type="Script" id=48]
-[ext_resource path="res://3D/GenerateTerrain.gd" type="Script" id=49]
-[ext_resource path="res://3D/View3D.gd" type="Script" id=50]
+[ext_resource path="res://Scenes/MeshData.gd" type="Script" id=47]
+[ext_resource path="res://Scenes/Player.gd" type="Script" id=48]
+[ext_resource path="res://Scenes/GenerateTerrain.gd" type="Script" id=49]
+[ext_resource path="res://Scenes/View3D.gd" type="Script" id=50]
 [ext_resource path="res://Scenes/FileDialogSaveAs.gd" type="Script" id=51]
 [ext_resource path="res://Scenes/FocusController.gd" type="Script" id=52]
 [ext_resource path="res://Scenes/RNC.gd" type="Script" id=53]
@@ -346,6 +346,8 @@ script = ExtResource( 92 )
 
 [node name="Game3D" type="Spatial" parent="."]
 script = ExtResource( 50 )
+
+[node name="TestMesh" type="MeshInstance" parent="Game3D"]
 
 [node name="UNUSEDColumnModels" type="Node" parent="Game3D"]
 script = ExtResource( 81 )

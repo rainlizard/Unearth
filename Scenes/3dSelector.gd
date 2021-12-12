@@ -20,7 +20,7 @@ func _process(delta):
 	visible = false
 	#if oColumnDetails.visible == false: return #Only display Selector3D if "view column details" is visible
 	if oLoadingBar.visible == true: return
-	if oGenerateTerrain.blockMap.size() == 0: return
+	if oGenerateTerrain.materialArray.size() == 0: return
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED and oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_MAP: return
 	
 	var startPoint = oCamera3D.global_transform.origin
@@ -62,7 +62,7 @@ func resize():
 	if oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_MAP:
 		clmIndex = oDataClmPos.get_cell(translation.x,translation.z)
 	elif oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_CLM:
-		clmIndex = oGenerateTerrain.getClmIndex(translation.x,translation.z)
+		clmIndex = oGenerateTerrain.get_clm_index(translation.x,translation.z)
 	
 	if clmIndex != null:
 		newSize = oDataClm.get_real_height(clmIndex)

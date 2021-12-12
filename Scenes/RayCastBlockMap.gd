@@ -33,7 +33,7 @@ func start(startPoint, endPoint):
 		var newCheck = (startPoint+raycast).floor()
 		if previousCheck != newCheck:
 			previousCheck = newCheck
-			placeAreaCheck(newCheck)
+			place_area_check(newCheck)
 		raycastData = oPlayer.get_world().get_direct_space_state().intersect_ray(startPoint, startPoint+raycast, [], 524288, true, true) #This line is cheap, the performance cost comes from placing the areaChecks
 		if raycastData:
 			break
@@ -53,13 +53,13 @@ func start(startPoint, endPoint):
 	#print('countTime: ' + str(countTime) )
 	return raycastData
 
-func placeAreaCheck(raypos):
+func place_area_check(raypos):
 	
 	#var CODETIME_START = OS.get_ticks_usec() # USEC - MICRO SECONDS
 	# spawn blockcheck in directions AND on original position
 	for vecAxis in [Vector3(0,0,0), Vector3(0,0,-1), Vector3(0,0,1), Vector3(1,0,0), Vector3(-1,0,0), Vector3(0,1,0), Vector3(0,-1,0)]:
 		var superPos = raypos+vecAxis
-		if oGenerateTerrain.getBlock(superPos) != oGenerateTerrain.EMPTY:
+		if oGenerateTerrain.get_block(superPos) != oGenerateTerrain.EMPTY:
 			if blockChecks.has(superPos) == false:
 				
 				var id = blockCheckerScene.instance()

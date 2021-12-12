@@ -42,6 +42,8 @@ var GENERATED_TYPE = GEN_MAP
 # Gives the same speed as "standardTallSlabs". The problem is solidMask needs an additional check of whether coordinate is outside the blockmap chunk.
 
 func start(genType):
+	return #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
 	# The "+1" is to include the "Default" style.
 	numberOfSlabStyles = oTextureCache.cachedTextures.size()+1
 	
@@ -76,8 +78,8 @@ func start(genType):
 	TOTALTIME_CODETIME_START = OS.get_ticks_msec()
 	
 	CODETIME_START = OS.get_ticks_msec()
-	if GENERATED_TYPE == GEN_MAP: setCubeIdWithColumnPositionData()
-	elif GENERATED_TYPE == GEN_CLM: setCubeIdToClmIndex()
+	if GENERATED_TYPE == GEN_MAP: set_cube_id_with_column_position_data()
+	elif GENERATED_TYPE == GEN_CLM: set_cube_id_to_clm_index()
 	
 	print('Set cubeID in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
@@ -86,73 +88,9 @@ func start(genType):
 		faceCount[i] = 0
 	
 	generation()
-	
-	#print('permanent entries: '+str(oDataClm.count_permanent_clm_entries()))
-#	var file = File.new()
-#	file.open("clm.txt", File.WRITE)
-#	for i in 2048:
-#		file.store_line(str(oDataClm.data[i]))
-#	file.close()
-
-func setCubeIdWithColumnPositionData():
-	# clmIndex is a position inside the 2048 column collection
-	# clmData is the 24 byte array.
-	# Get the cubeIDs from that array
-	
-	blockMap.resize(TERRAIN_SIZE_X)
-	for x in TERRAIN_SIZE_X:
-		blockMap[x] = []
-		blockMap[x].resize(TERRAIN_SIZE_Z)
-		for z in TERRAIN_SIZE_Z:
-			blockMap[x][z] = []
-			blockMap[x][z].resize(TERRAIN_SIZE_Y)
-			
-			var clmIndex = oDataClmPos.get_cell(x,z)
-			blockMap[x][z] = oDataClm.cubes[clmIndex] # Warning: this is probably a reference. But it probably doesn't matter.
-	
-#	for z in TERRAIN_SIZE_Z:
-#		for x in TERRAIN_SIZE_X:
-#			var clmIndex = oDataClmPos.get_cell(x,z)
-#			for y in TERRAIN_SIZE_Y:
-#				blockMap[x][z] = oDataClm.cubes[clmIndex] # is this a reference? that would be bad
-
-func setCubeIdToClmIndex():
-	# clmIndex is a position inside the 2048 column collection
-	# clmData is the 24 byte array.
-	# "continue" skips current loop
-#	for z in TERRAIN_SIZE_Z:
-#		for x in TERRAIN_SIZE_X:
-	
-	blockMap.resize(TERRAIN_SIZE_X)
-	for x in TERRAIN_SIZE_X:
-		blockMap[x] = []
-		blockMap[x].resize(TERRAIN_SIZE_Z)
-		for z in TERRAIN_SIZE_Z:
-			blockMap[x][z] = []
-			blockMap[x][z].resize(TERRAIN_SIZE_Y)
-			
-			for y in TERRAIN_SIZE_Y:
-				blockMap[x][z][y] = EMPTY
-			
-			if x/2 != x/2.0 or z/2 != z/2.0: continue
-			var clmIndex = ((z/2) * (TERRAIN_SIZE_X/2)) + (x/2)
-			if clmIndex >= 2048: clmIndex = 0
-			
-			blockMap[x][z] = oDataClm.cubes[clmIndex] # Warning: this is probably a reference. But it probably doesn't matter.
-
-func getClmIndex(x, z): # Used by ColumnDetails in clm view
-	if int(x/2) != x/2.0 or int(z/2) != z/2.0: return null #skips current loop
-	if x >= TERRAIN_SIZE_X: return null
-	if z >= TERRAIN_SIZE_Z: return null
-	var clmIndex = ((z/2) * (TERRAIN_SIZE_X/2)) + (x/2)
-	if clmIndex >= 2048: clmIndex = 0
-	return clmIndex
 
 func generation():
 	# Level 1000 won't display correctly when using an optimization technique.
-	var skipOptimizationForThisMap = false
-	if oCurrentMap.path.get_file().get_basename() == "map01000":
-		skipOptimizationForThisMap = true
 	
 	CODETIME_START = OS.get_ticks_msec()
 	
@@ -182,27 +120,7 @@ func generation():
 			oLoadingBar.value = updateLoad*100
 			yield(get_tree(),"idle_frame")
 		
-		
-		
-		
 		for xSlab in TERRAIN_SIZE_X/3: # I could write "85" but the columns viewer has a different size.
-			var doOptimized = false
-			if GENERATED_TYPE == GEN_MAP and skipOptimizationForThisMap == false:
-				if Slabs.data[oDataSlab.get_cell(xSlab,ySlab)][Slabs.IS_SOLID] == true:
-					
-	#				var checkSubtileX = xSlab*3
-	#				var checkSubtileY = ySlab*3
-	#				if oDataClm.solidMask[oDataClmPos.get_cell(checkSubtileX,checkSubtileY-1)] > 0: return 
-					
-					var surr = 0
-					for vec in [Vector2(1,1),Vector2(-1,-1),Vector2(-1,1),Vector2(1,-1),Vector2(1,0),Vector2(-1,0),Vector2(0,1),Vector2(0,-1)]:
-						if Slabs.data[oDataSlab.get_cell(xSlab+vec.x,ySlab+vec.y)][Slabs.IS_SOLID] == false:
-							break
-						else:
-							surr += 1
-					if surr == 8:
-						doOptimized = true
-			
 			if GENERATED_TYPE == GEN_MAP:
 				slabStyleValue = oDataSlx.get_tileset_value(xSlab,ySlab)
 			else:
@@ -213,46 +131,30 @@ func generation():
 					var x = (xSlab*3) + xSubtile
 					var z = (ySlab*3) + ySubtile
 					
-					if doOptimized == false:
-						#if oDataClm.solidMask[oDataClmPos.get_cell(x,z)] == 0:
-						for y in TERRAIN_SIZE_Y:
-							var cubeID = blockMap[x][z][y]
-							if cubeID != EMPTY:
-								faceCount[slabStyleValue] += faceLoop(Vector3(x,y,z),cubeID, slabStyleValue)
-							else:
-								if y == 0:
-									var pos = Vector3(x,y-1,z)
-									var clmIndex
-									if GENERATED_TYPE == GEN_MAP:
-										clmIndex = oDataClmPos.get_cell(x,z)
-									elif GENERATED_TYPE == GEN_CLM:
-										if x/2 != x/2.0 or z/2 != z/2.0: continue #skips current loop
-										clmIndex = ((z/2) * (TERRAIN_SIZE_X/2)) + (x/2)
-										if clmIndex >= 2048: clmIndex = 0
-									
-									var floorID = oDataClm.floorTexture[clmIndex]
-									add_face(pos, 4, cubeID, floorID, faceCount[slabStyleValue], slabStyleValue)
-									
-				#					tempMeshInfo[ARRAY_BLOCK_POSITION].append_array([pos])
-				#					tempMeshInfo[ARRAY_SIDE_COUNT].append_array([1])
-									
-									faceCount[slabStyleValue] += 1
-					elif doOptimized == true:
-						# Standard tall slab/column that's surrounded by tall slabs/columns
-						var pos = Vector3(x, 4, z)
-						var cubeID = blockMap[x][z][4]
-						add_face(pos, 4, cubeID, null, faceCount[slabStyleValue], slabStyleValue)
-#						tempMeshInfo[ARRAY_BLOCK_POSITION].append_array([pos])
-#						tempMeshInfo[ARRAY_SIDE_COUNT].append_array([1])
-						faceCount[slabStyleValue] += 1
+					#if oDataClm.solidMask[oDataClmPos.get_cell(x,z)] == 0:
+					for y in TERRAIN_SIZE_Y:
+						var cubeID = blockMap[x][z][y]
+						if cubeID != EMPTY:
+							faceCount[slabStyleValue] += face_loop(Vector3(x,y,z),cubeID, slabStyleValue)
+						else:
+							if y == 0: # Floor
+								var pos = Vector3(x,y-1,z)
+								var clmIndex
+								if GENERATED_TYPE == GEN_MAP:
+									clmIndex = oDataClmPos.get_cell(x,z)
+								elif GENERATED_TYPE == GEN_CLM:
+									if x/2 != x/2.0 or z/2 != z/2.0: continue #skips current loop
+									clmIndex = ((z/2) * (TERRAIN_SIZE_X/2)) + (x/2)
+									if clmIndex >= 2048: clmIndex = 0
+								
+								var floorID = oDataClm.floorTexture[clmIndex]
+								add_face(pos, 4, cubeID, floorID, faceCount[slabStyleValue], slabStyleValue)
+								
+								faceCount[slabStyleValue] += 1
 
 	print('Set Mesh Faces in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	CODETIME_START = OS.get_ticks_msec()
-	
-#	meshInfo.resize(2)
-#	meshInfo[ARRAY_BLOCK_POSITION] = PoolVector3Array(tempMeshInfo[ARRAY_BLOCK_POSITION])
-#	meshInfo[ARRAY_SIDE_COUNT] = PoolIntArray(tempMeshInfo[ARRAY_SIDE_COUNT])
 	
 	if oTextureCache.cachedTextures.size() > 0:
 		create_surface_materials()
@@ -281,10 +183,54 @@ func generation():
 	print('Total time to generate terrain: '+str(OS.get_ticks_msec()-TOTALTIME_CODETIME_START)+'ms')
 	
 	oLoadingBar.visible = false
+
+
+func set_cube_id_with_column_position_data():
+	# clmIndex is a position inside the 2048 column collection
+	# clmData is the 24 byte array.
+	# Get the cubeIDs from that array
 	
-#	CODETIME_START = OS.get_ticks_msec()
-#	print(oTerrainMesh.create_trimesh_collision())
-#	print('Created trimesh collision in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	blockMap.resize(TERRAIN_SIZE_X)
+	for x in TERRAIN_SIZE_X:
+		blockMap[x] = []
+		blockMap[x].resize(TERRAIN_SIZE_Z)
+		for z in TERRAIN_SIZE_Z:
+			blockMap[x][z] = []
+			blockMap[x][z].resize(TERRAIN_SIZE_Y)
+			
+			var clmIndex = oDataClmPos.get_cell(x,z)
+			blockMap[x][z] = oDataClm.cubes[clmIndex] # Warning: this is probably a reference. But it probably doesn't matter.
+
+func set_cube_id_to_clm_index():
+	# clmIndex is a position inside the 2048 column collection
+	# clmData is the 24 byte array.
+	# "continue" skips current loop
+	
+	blockMap.resize(TERRAIN_SIZE_X)
+	for x in TERRAIN_SIZE_X:
+		blockMap[x] = []
+		blockMap[x].resize(TERRAIN_SIZE_Z)
+		for z in TERRAIN_SIZE_Z:
+			blockMap[x][z] = []
+			blockMap[x][z].resize(TERRAIN_SIZE_Y)
+			
+			for y in TERRAIN_SIZE_Y:
+				blockMap[x][z][y] = EMPTY
+			
+			if x/2 != x/2.0 or z/2 != z/2.0: continue
+			var clmIndex = ((z/2) * (TERRAIN_SIZE_X/2)) + (x/2)
+			if clmIndex >= 2048: clmIndex = 0
+			
+			blockMap[x][z] = oDataClm.cubes[clmIndex] # Warning: this is probably a reference. But it probably doesn't matter.
+
+func get_clm_index(x, z): # Used by ColumnDetails in clm view
+	if int(x/2) != x/2.0 or int(z/2) != z/2.0: return null #skips current loop
+	if x >= TERRAIN_SIZE_X: return null
+	if z >= TERRAIN_SIZE_Z: return null
+	var clmIndex = ((z/2) * (TERRAIN_SIZE_X/2)) + (x/2)
+	if clmIndex >= 2048: clmIndex = 0
+	return clmIndex
+
 
 func create_surface_materials():
 	materialArray.clear()
@@ -302,7 +248,7 @@ func create_surface_materials():
 		
 		materialArray.append(mat)
 
-func faceLoop(pos, cubeID, slabStyleValue):
+func face_loop(pos, cubeID, slabStyleValue):
 	var x = pos.x
 	var y = pos.y
 	var z = pos.z
@@ -351,11 +297,10 @@ func faceLoop(pos, cubeID, slabStyleValue):
 		add_face(pos, 5, cubeID, null, faceCount[slabStyleValue]+countSides, slabStyleValue)
 		countSides += 1
 	
-#	if countSides > 0:
-#		tempMeshInfo[ARRAY_BLOCK_POSITION].append(pos)
-#		tempMeshInfo[ARRAY_SIDE_COUNT].append(countSides)
-	
 	return countSides
+
+
+
 
 #func getLocalBlockNorth(x,y,z):
 #	if z < 0: return EMPTY
@@ -425,7 +370,7 @@ func clear():
 	tempArrays.clear()
 	faceCount.clear()
 
-func getBlock(pos):
+func get_block(pos):
 	if pos.x < 0: return EMPTY
 	if pos.x >= TERRAIN_SIZE_X: return EMPTY
 	if pos.y < 0: return EMPTY
