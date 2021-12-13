@@ -14,9 +14,9 @@ func _ready():
 	$OpenMap.start()
 	
 	# Auto switch to 3D while devving
-	for i in 2:
-		yield(get_tree(),'idle_frame')
-	$Editor._on_ButtonViewType_pressed()
+#	for i in 2:
+#		yield(get_tree(),'idle_frame')
+#	$Editor._on_ButtonViewType_pressed()
 
 
 

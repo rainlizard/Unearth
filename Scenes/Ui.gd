@@ -157,12 +157,12 @@ func switch_to_1st_person():
 	hide_tools()
 	
 	# This code section below is temporary.
-	yield(get_tree(),'idle_frame')
-	if oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_CLM:
-		oPropertiesWindow.visible = true
-		oUi3D.visible = true
-		
-		oPropertiesWindow.oPropertiesTabs.current_tab = 2
+#	yield(get_tree(),'idle_frame')
+#	if oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_CLM:
+#		oPropertiesWindow.visible = true
+#		oUi3D.visible = true
+#
+#		oPropertiesWindow.oPropertiesTabs.current_tab = 2
 
 
 func _on_Possess3DButton_pressed():

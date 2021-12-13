@@ -1,4 +1,4 @@
-[gd_scene load_steps=142 format=2]
+[gd_scene load_steps=144 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -27,7 +27,7 @@
 [ext_resource path="res://Scenes/Selection.gd" type="Script" id=25]
 [ext_resource path="res://Art/Cursor32x32.png" type="Texture" id=26]
 [ext_resource path="res://Scenes/InstanceOwnership.gd" type="Script" id=27]
-[ext_resource path="res://Scenes/UiDisplay.tscn" type="PackedScene" id=28]
+[ext_resource path="res://Scenes/SlabColumnEditor.gd" type="Script" id=28]
 [ext_resource path="res://Scenes/DynamicMapTree.gd" type="Script" id=29]
 [ext_resource path="res://Scenes/GamePaths.gd" type="Script" id=30]
 [ext_resource path="res://Scenes/SaveMap.gd" type="Script" id=31]
@@ -46,7 +46,7 @@
 [ext_resource path="res://Scenes/DataLif.gd" type="Script" id=44]
 [ext_resource path="res://Scenes/PickThingWindow.gd" type="Script" id=45]
 [ext_resource path="res://Scenes/CurrentTextures.gd" type="Script" id=46]
-[ext_resource path="res://Scenes/MeshData.gd" type="Script" id=47]
+[ext_resource path="res://Scenes/SlabColumnCamera.gd" type="Script" id=47]
 [ext_resource path="res://Scenes/Player.gd" type="Script" id=48]
 [ext_resource path="res://Scenes/GenerateTerrain.gd" type="Script" id=49]
 [ext_resource path="res://Scenes/View3D.gd" type="Script" id=50]
@@ -54,7 +54,7 @@
 [ext_resource path="res://Scenes/FocusController.gd" type="Script" id=52]
 [ext_resource path="res://Scenes/RNC.gd" type="Script" id=53]
 [ext_resource path="res://Scenes/MapBrowser.gd" type="Script" id=54]
-[ext_resource path="res://Theme/DisabledButton.tres" type="StyleBox" id=55]
+[ext_resource path="res://Scenes/VoxelGen.gd" type="Script" id=55]
 [ext_resource path="res://Art/IconSearch.png" type="Texture" id=56]
 [ext_resource path="res://Art/IconFolder.png" type="Texture" id=57]
 [ext_resource path="res://Art/IconFolderPressed.png" type="Texture" id=58]
@@ -80,7 +80,7 @@
 [ext_resource path="res://Scenes/Ui.gd" type="Script" id=78]
 [ext_resource path="res://Scenes/ThingDetails.gd" type="Script" id=79]
 [ext_resource path="res://Scenes/PlaceThingWithSlab.gd" type="Script" id=80]
-[ext_resource path="res://Scenes/ColumnModels.gd" type="Script" id=81]
+[ext_resource path="res://Scenes/GenerateSlabColumn.gd" type="Script" id=81]
 [ext_resource path="res://Scenes/UniversalDetails.gd" type="Script" id=82]
 [ext_resource path="res://Scenes/SelectedRectangleDisplay.gd" type="Script" id=83]
 [ext_resource path="res://Art/Cursor96x96Blue.png" type="Texture" id=84]
@@ -254,6 +254,12 @@ shader_param/flashSpecific = Color( 1e-05, 2e-05, 3e-05, 4e-05 )
 [sub_resource type="DynamicFont" id=16]
 font_data = ExtResource( 122 )
 
+[sub_resource type="Environment" id=19]
+ambient_light_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="World" id=17]
+environment = SubResource( 19 )
+
 [node name="Main" type="Node2D"]
 script = ExtResource( 7 )
 
@@ -347,16 +353,16 @@ script = ExtResource( 92 )
 [node name="Game3D" type="Spatial" parent="."]
 script = ExtResource( 50 )
 
-[node name="TestMesh" type="MeshInstance" parent="Game3D"]
-
-[node name="UNUSEDColumnModels" type="Node" parent="Game3D"]
-script = ExtResource( 81 )
+[node name="VoxelGen" type="Node" parent="Game3D"]
+script = ExtResource( 55 )
 
 [node name="GenerateTerrain" type="Node" parent="Game3D"]
 script = ExtResource( 49 )
 
-[node name="MeshData" type="Node" parent="Game3D"]
-script = ExtResource( 47 )
+[node name="GenerateSlabColumn" type="Node" parent="Game3D"]
+script = ExtResource( 81 )
+
+[node name="TestMesh" type="MeshInstance" parent="Game3D"]
 
 [node name="TerrainMesh" type="MeshInstance" parent="Game3D"]
 
@@ -385,6 +391,7 @@ __meta__ = {
 keep_aspect = 0
 current = true
 fov = 90.0
+size = 10.0
 far = 8192.0
 __meta__ = {
 "_edit_lock_": true
@@ -1374,7 +1381,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "View"
 align = 0
-items = [ "2D", null, 0, false, false, 0, 0, null, "", false, "3D", null, 0, false, false, 1, 0, null, "", false, "Columns", null, 0, false, false, 2, 0, null, "", false ]
+items = [ "2D", null, 0, false, false, 0, 0, null, "", false, "3D", null, 0, false, false, 1, 0, null, "", false, "Slabs/Columns", null, 0, false, false, 2, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1685,115 +1692,6 @@ margin_right = 40.0
 margin_bottom = 40.0
 mouse_filter = 2
 script = ExtResource( 52 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="UNUSEDHoverSlab" parent="Ui/UiSystem" instance=ExtResource( 28 )]
-visible = false
-anchor_top = 0.0
-anchor_bottom = 0.0
-margin_left = 492.0
-margin_right = 747.0
-margin_bottom = 64.0
-grow_vertical = 1
-
-[node name="UNUSEDHoverInstance" parent="Ui/UiSystem" instance=ExtResource( 28 )]
-visible = false
-anchor_top = 0.0
-anchor_bottom = 0.0
-margin_left = 492.0
-margin_top = 72.0
-margin_right = 747.0
-margin_bottom = 136.0
-grow_vertical = 1
-
-[node name="ButtonListVBC" type="VBoxContainer" parent="Ui/UiSystem"]
-visible = false
-margin_right = 127.0
-margin_bottom = 282.0
-custom_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ButtonPlay" type="Button" parent="Ui/UiSystem/ButtonListVBC"]
-margin_right = 127.0
-margin_bottom = 32.0
-focus_mode = 0
-mouse_filter = 1
-custom_fonts/font = ExtResource( 70 )
-custom_styles/disabled = ExtResource( 55 )
-text = "  Play  "
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ButtonNewMap" type="Button" parent="Ui/UiSystem/ButtonListVBC"]
-margin_top = 32.0
-margin_right = 127.0
-margin_bottom = 64.0
-custom_fonts/font = ExtResource( 70 )
-text = "New"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ButtonOpenMap" type="Button" parent="Ui/UiSystem/ButtonListVBC"]
-margin_top = 64.0
-margin_right = 127.0
-margin_bottom = 96.0
-focus_mode = 0
-mouse_filter = 1
-custom_fonts/font = ExtResource( 70 )
-custom_styles/disabled = ExtResource( 55 )
-text = "Open"
-
-[node name="ButtonSaveMap" type="Button" parent="Ui/UiSystem/ButtonListVBC"]
-margin_top = 96.0
-margin_right = 127.0
-margin_bottom = 128.0
-focus_mode = 0
-mouse_filter = 1
-custom_fonts/font = ExtResource( 70 )
-custom_styles/disabled = ExtResource( 55 )
-text = "Save"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ButtonViewType" type="Button" parent="Ui/UiSystem/ButtonListVBC"]
-margin_top = 128.0
-margin_right = 127.0
-margin_bottom = 160.0
-focus_mode = 0
-mouse_filter = 1
-custom_fonts/font = ExtResource( 70 )
-custom_styles/disabled = ExtResource( 55 )
-text = "3D View"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ButtonCLM" type="Button" parent="Ui/UiSystem/ButtonListVBC"]
-margin_top = 160.0
-margin_right = 127.0
-margin_bottom = 192.0
-custom_fonts/font = ExtResource( 70 )
-text = "Clm view"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ButtonSettings" type="Button" parent="Ui/UiSystem/ButtonListVBC"]
-margin_top = 192.0
-margin_right = 127.0
-margin_bottom = 224.0
-focus_mode = 0
-mouse_filter = 1
-custom_fonts/font = ExtResource( 70 )
-custom_styles/disabled = ExtResource( 55 )
-text = "Settings"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -3757,6 +3655,65 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="SlabColumnEditor" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -1326.0
+margin_top = -1481.0
+margin_right = -46.0
+margin_bottom = -761.0
+window_title = "Slab and column editor"
+resizable = true
+script = ExtResource( 28 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CEViewportContainer" type="ViewportContainer" parent="Ui/UiSystem/SlabColumnEditor"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CEViewport" type="Viewport" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer"]
+size = Vector2( 1280, 720 )
+own_world = true
+world = SubResource( 17 )
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="CEUI" type="Control" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CELabelCurrentColumn" type="Label" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport/CEUI"]
+anchor_right = 1.0
+size_flags_horizontal = 3
+text = "aaaaaaa"
+align = 1
+
+[node name="MeshBlock" type="MeshInstance" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport"]
+
+[node name="CameraPivotPoint" type="Spatial" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport"]
+
+[node name="CECamera" type="Camera" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport/CameraPivotPoint"]
+transform = Transform( -0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, 0.5, -0.5, -4, 8, -4 )
+current = true
+fov = 90.0
+size = 20.0
+far = 8192.0
+script = ExtResource( 47 )
+
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -3925,13 +3882,6 @@ script = ExtResource( 88 )
 [connection signal="item_selected" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" method="_on_DynamicMapTree_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer/TextureButton" to="Ui/UiSystem/MapBrowser" method="_on_TextureButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer/ButtonFilename" to="Ui/UiSystem/MapBrowser" method="_on_ButtonFilename_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ButtonListVBC/ButtonPlay" to="Game" method="_on_ButtonPlay_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ButtonListVBC/ButtonNewMap" to="CurrentMap" method="_on_ButtonNewMap_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ButtonListVBC/ButtonOpenMap" to="Ui/UiSystem/MapBrowser" method="_on_ButtonOpenMap_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ButtonListVBC/ButtonSaveMap" to="Ui/UiSystem/MapBrowser" method="_on_ButtonSaveMap_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ButtonListVBC/ButtonViewType" to="Editor" method="_on_ButtonViewType_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ButtonListVBC/ButtonCLM" to="Editor" method="_on_ButtonCLM_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ButtonListVBC/ButtonSettings" to="Ui/UiSystem/SettingsWindow" method="_on_ButtonSettings_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/ChooseDkExe" method="_on_ChooseDkExe_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/SettingsWindow" method="_on_ChooseDkExe_file_selected"]
 [connection signal="dir_selected" from="Ui/UiSystem/ChooseDefaultSaveFolder" to="Ui/UiSystem/ChooseDefaultSaveFolder" method="_on_ChooseDefaultSaveFolder_dir_selected"]
@@ -4003,4 +3953,5 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/CreateFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_CreateFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
+[connection signal="about_to_show" from="Ui/UiSystem/SlabColumnEditor" to="Ui/UiSystem/SlabColumnEditor" method="_on_SlabColumnEditor_about_to_show"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

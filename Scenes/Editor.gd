@@ -100,13 +100,13 @@ func _on_EditableBordersCheckbox_toggled(button_pressed):
 func _on_ConfirmQuit_confirmed():
 	get_tree().quit()
 
-func _on_ButtonCLM_pressed():
+func _on_ButtonViewSlabsColumns_pressed():
 	set_view_3d()
-	oGenerateTerrain.start("CLM")
+	oGenerateTerrain.start() #"CLM"
 
 func _on_ButtonViewType_pressed():
 	set_view_3d()
-	oGenerateTerrain.start("MAP")
+	oGenerateTerrain.start() #"MAP"
 
 func _on_pressed_2D_View():
 	#get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_VIEWPORT,SceneTree.STRETCH_ASPECT_EXPAND,Vector2(1280,720),0.75)

@@ -27,6 +27,7 @@ onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oTextureEditingWindow = Nodelist.list["oTextureEditingWindow"]
 onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oConfirmDiscardChanges = Nodelist.list["oConfirmDiscardChanges"]
+onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
 
 func _ready():
 	oMenuButtonFile.get_popup().connect("id_pressed",self,"_on_FileSubmenu_Pressed")
@@ -135,14 +136,11 @@ func _on_HelpSubmenu_Pressed(pressedID):
 func _on_ViewSubmenu_Pressed(pressedID):
 	match pressedID:
 		0:
-			#print("2D")
 			oEditor._on_pressed_2D_View()
 		1:
-			#print("3D")
 			oEditor._on_ButtonViewType_pressed()
 		2:
-			#print("Columns")
-			oEditor._on_ButtonCLM_pressed()
+			Utils.popup_centered(oSlabColumnEditor)
 
 func _on_MenuButtonSettings_pressed():
 	oMenuButtonSettings.get_popup().visible = false
