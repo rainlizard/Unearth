@@ -44,15 +44,12 @@ func _unhandled_input(event):
 				if foundDialogToClose == false:
 					notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 			VIEW_3D:
-				if oMenu.visible == false:
-					oUi.switch_to_3D_overhead()
-				else:
-					set_view_2d()
+				set_view_2d()
 	
 	if currentView == VIEW_3D:
 		if event.is_action_pressed("mouse_right"):
 			if oMenu.visible == false:
-				oUi.switch_to_3D_overhead()
+				set_view_2d()
 
 func _notification(what):
 	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
@@ -81,6 +78,7 @@ func set_view_2d():
 	oCamera2D.current = true
 	oCamera3D.current = false
 	oUi.switch_to_2D()
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func set_view_3d():
 	currentView = VIEW_3D
@@ -88,7 +86,6 @@ func set_view_3d():
 	oGame3D.visible = true
 	oCamera2D.current = false
 	oCamera3D.current = true
-	oUi.switch_to_1st_person()
 
 func _on_EditableBordersCheckbox_toggled(button_pressed):
 	print(button_pressed)
@@ -96,21 +93,5 @@ func _on_EditableBordersCheckbox_toggled(button_pressed):
 		true: fieldBoundary = Rect2(Vector2(0,0), Vector2(85,85))
 		false: fieldBoundary = Rect2(Vector2(1,1), Vector2(83,83))
 
-
 func _on_ConfirmQuit_confirmed():
 	get_tree().quit()
-
-func _on_ButtonViewSlabsColumns_pressed():
-	set_view_3d()
-	oGenerateTerrain.start() #"CLM"
-
-func _on_ButtonViewType_pressed():
-	set_view_3d()
-	oGenerateTerrain.start() #"MAP"
-
-func _on_pressed_2D_View():
-	#get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_VIEWPORT,SceneTree.STRETCH_ASPECT_EXPAND,Vector2(1280,720),0.75)
-	#get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED,SceneTree.STRETCH_ASPECT_IGNORE,Vector2(2560,1440),2.00)
-	
-	if currentView == VIEW_3D:
-		set_view_2d()

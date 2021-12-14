@@ -1,4 +1,4 @@
-[gd_scene load_steps=144 format=2]
+[gd_scene load_steps=143 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -18,7 +18,6 @@
 [ext_resource path="res://Scenes/SettingWithValue.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Theme/UnearthTheme.theme" type="Theme" id=17]
 [ext_resource path="res://Scenes/BoxSprite.gd" type="Script" id=18]
-[ext_resource path="res://Art/Crosshair.png" type="Texture" id=19]
 [ext_resource path="res://Scenes/ReadData.gd" type="Script" id=20]
 [ext_resource path="res://Scenes/RayCastBlockMap.gd" type="Script" id=21]
 [ext_resource path="res://Scenes/3dSelector.gd" type="Script" id=22]
@@ -392,6 +391,7 @@ keep_aspect = 0
 current = true
 fov = 90.0
 size = 10.0
+near = 0.01
 far = 8192.0
 __meta__ = {
 "_edit_lock_": true
@@ -401,6 +401,7 @@ __meta__ = {
 environment = SubResource( 4 )
 
 [node name="Floor" type="StaticBody" parent="Game3D"]
+visible = false
 collision_layer = 524288
 collision_mask = 0
 script = ExtResource( 43 )
@@ -500,28 +501,6 @@ anchor_bottom = 1.0
 grow_vertical = 0
 text = "3D INFO DISPLAY"
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="Crosshair" type="Control" parent="Ui/Ui3D"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="TextureRect" type="TextureRect" parent="Ui/Ui3D/Crosshair"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource( 19 )
-stretch_mode = 4
 __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
@@ -1381,7 +1360,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "View"
 align = 0
-items = [ "2D", null, 0, false, false, 0, 0, null, "", false, "3D", null, 0, false, false, 1, 0, null, "", false, "Slabs/Columns", null, 0, false, false, 2, 0, null, "", false ]
+items = [ "2D", null, 0, false, false, 0, 0, null, "", false, "3D: Overhead", null, 0, false, false, 1, 0, null, "", false, "3D: 1st person", null, 0, false, false, 2, 0, null, "", false, "Slabs/Columns", null, 0, false, false, 3, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3686,33 +3665,55 @@ transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="CEUI" type="Control" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="CameraPivotPoint" type="Spatial" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport"]
+transform = Transform( 0.623613, 0.333328, 0.707107, -0.471397, 0.881921, 0, -0.623613, -0.333328, 0.707107, 0.5, 4, 0.5 )
 
-[node name="CELabelCurrentColumn" type="Label" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport/CEUI"]
-anchor_right = 1.0
-size_flags_horizontal = 3
-text = "aaaaaaa"
-align = 1
+[node name="CECamera" type="Camera" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport/CameraPivotPoint"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6, 0, 0 )
+projection = 1
+current = true
+fov = 90.0
+size = 10.0
+far = 8192.0
+script = ExtResource( 47 )
 
 [node name="MeshBlock" type="MeshInstance" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport"]
 
-[node name="CameraPivotPoint" type="Spatial" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport"]
+[node name="CEUI" type="Control" parent="Ui/UiSystem/SlabColumnEditor"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="CECamera" type="Camera" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport/CameraPivotPoint"]
-transform = Transform( -0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, 0.5, -0.5, -4, 8, -4 )
-current = true
-fov = 90.0
-size = 20.0
-far = 8192.0
-script = ExtResource( 47 )
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/CEUI"]
+anchor_right = 1.0
+size_flags_horizontal = 3
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/CEUI/HBoxContainer"]
+margin_left = 536.0
+margin_top = 5.0
+margin_right = 666.0
+margin_bottom = 26.0
+text = "Column index:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CEColumnSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/CEUI/HBoxContainer"]
+margin_left = 670.0
+margin_right = 744.0
+margin_bottom = 31.0
+max_value = 2047.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
@@ -3954,4 +3955,5 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/SlabColumnEditor" to="Ui/UiSystem/SlabColumnEditor" method="_on_SlabColumnEditor_about_to_show"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/CEUI/HBoxContainer/CEColumnSpinBox" to="Ui/UiSystem/SlabColumnEditor" method="_on_CEColumnSpinBox_value_changed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

@@ -1,7 +1,7 @@
 shader_type spatial;
 render_mode blend_mix, cull_back, depth_draw_opaque, skip_vertex_transform; //for the sake of performance avoid enabling transparency on all your terrain.
-uniform sampler2DArray dkTextureMap_Split_A : hint_albedo;
-uniform sampler2DArray dkTextureMap_Split_B : hint_albedo;
+uniform sampler2DArray dkTextureMap_Split_A;
+uniform sampler2DArray dkTextureMap_Split_B;
 
 uniform bool useFullSizeMap = true;
 uniform sampler2D animationDatabase;
@@ -56,10 +56,8 @@ void fragment() {
 		ALBEDO = textureLod(dkTextureMap_Split_B, vec3(UV.x, UV.y, float(index-272)), mipmapLevel).rgb;
 	}
 	
-	// Forces the shader to convert albedo from sRGB space to linear space.
-	// I've been having trouble when using FORMAT_RGB8 texture maps, switching between 2D and 3D mode would make the game darker or brighter.
-	// I switched to using FORMAT_RGBF, and now I have to use the below line for the correct color space. It costs like 10fps
-	// ALBEDO = mix(pow((ALBEDO + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),ALBEDO * (1.0 / 12.92),lessThan(ALBEDO,vec3(0.04045)));
+	// Forces the shader to convert albedo from sRGB space to linear space. A problem when using the same TextureArray while mixing 2D and 3D shaders and displaying both 2D and 3D at the same time.
+	ALBEDO = mix(pow((ALBEDO + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),ALBEDO * (1.0 / 12.92),lessThan(ALBEDO,vec3(0.04045)));
 }
 
 //shader_type spatial;

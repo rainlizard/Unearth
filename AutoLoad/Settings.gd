@@ -32,7 +32,6 @@ var listOfSettings = [
 	"mouse_sensitivity",
 	"fov",
 	"display_3d_info",
-	
 	"font_size",
 	"font_size_creature_level_scale",
 	"font_size_creature_level_max",

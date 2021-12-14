@@ -15,6 +15,8 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oPossess3DButton = Nodelist.list["oPossess3DButton"]
+onready var oCamera3D = Nodelist.list["oCamera3D"]
+onready var oPlayer = Nodelist.list["oPlayer"]
 
 var FONT_SIZE = 16 setget set_FONT_SIZE
 var FONT_SIZE_CR_LVL_BASE := 1.00 setget set_FONT_SIZE_CR_LVL_BASE
@@ -145,13 +147,13 @@ func switch_to_2D():
 		oEditingMode.visible = false
 
 func switch_to_3D_overhead():
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	oPlayer.switch_camera_type(0)
 	oUi3D.visible = true
 	oPossess3DButton.visible = true
 	show_tools()
 
 func switch_to_1st_person():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	oPlayer.switch_camera_type(1)
 	oUi3D.visible = false
 	oPossess3DButton.visible = false
 	hide_tools()

@@ -23,7 +23,7 @@ func start():
 			if x+1 >= 255: surrClmIndex[1] = TileMap.INVALID_CELL
 			if z+1 >= 255: surrClmIndex[2] = TileMap.INVALID_CELL
 			
-			oVoxelGen.column_gen(genArray, x, z, clmIndex, surrClmIndex)
+			oVoxelGen.column_gen(genArray, x, z, clmIndex, surrClmIndex, false)
 	
 	oTerrainMesh.mesh = oVoxelGen.complete_mesh(genArray)
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')

@@ -15,10 +15,51 @@ var speed = 0.5
 var speed_multiplier = 1
 var movement = Vector3()
 
+var rememberPerspective = [null,null,null]
+var rememberOrthogonal = [null,null,null]
+
 #var scnProjectile = preload("res://Scenes/Projectile.tscn")
 
 onready var oCamera2D = $'../../Game2D/Camera2D'
 
+#func _ready():
+#	rememberOrthogonal = [transform, oHead.transform, oCamera3D.transform]
+	#rememberOrthogonal.transform
+
+func switch_camera_type(type):
+	velocity = Vector3(0,0,0) # stop moving
+	
+	if type == 0: # 3D overhead orthogonal
+		if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
+			rememberPerspective = [transform, oHead.transform, oCamera3D.transform]
+			if rememberOrthogonal != [null,null,null]:
+				transform = rememberOrthogonal[0]
+				oHead.transform = rememberOrthogonal[1]
+				oCamera3D.transform = rememberOrthogonal[2]
+			else:
+				# Default orthogonal camera position and rotation
+				rotation_degrees.y = -135
+				rotation_degrees.x = -45
+				oHead.rotation_degrees.x = 0
+				translation.x = 0
+				translation.y = 60
+				translation.z = 0
+		
+		oCamera3D.size = translation.y
+		
+		oCamera3D.set_orthogonal(oCamera3D.size, 0.01, 8192)
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
+	if type == 1: # 3D 1st person perspective
+		if oCamera3D.projection == Camera.PROJECTION_ORTHOGONAL:
+			rememberOrthogonal = [transform, oHead.transform, oCamera3D.transform]
+			if rememberPerspective != [null,null,null]:
+				transform = rememberPerspective[0]
+				oHead.transform = rememberPerspective[1]
+				oCamera3D.transform = rememberPerspective[2]
+		
+		oCamera3D.set_perspective(oCamera3D.fov, 0.01, 8192)
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _input(event):
 	if oEditor.currentView != oEditor.VIEW_3D: return
@@ -27,7 +68,11 @@ func _input(event):
 		rotation_degrees.y -= event.relative.x * mouseSensitivity
 		oHead.rotation_degrees.x = clamp(oHead.rotation_degrees.x - event.relative.y * mouseSensitivity, -90, 90)
 	
-	speed_multiplier = 1
+	
+	if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
+		speed_multiplier = 1
+	else:
+		speed_multiplier = 2
 	if Input.is_key_pressed(KEY_SHIFT):
 		speed_multiplier = 10
 	
@@ -41,10 +86,19 @@ func _input(event):
 		pass
 	
 	direction = Vector3()
-	if Input.is_mouse_button_pressed(BUTTON_WHEEL_UP):
-		translation.y -= 3
-	if Input.is_mouse_button_pressed(BUTTON_WHEEL_DOWN):
-		translation.y += 3
+	if Input.is_action_just_pressed("zoom_in"):
+		if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
+			translation.y -= 3
+		else: #Camera.PROJECTION_ORTHOGONAL
+			translation.y -= 6
+			oCamera3D.size = translation.y
+		
+	if Input.is_action_just_pressed("zoom_out"):
+		if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
+			translation.y += 3
+		else: #Camera.PROJECTION_ORTHOGONAL
+			translation.y += 6
+			oCamera3D.size = translation.y
 	
 	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
 		direction.z = -1

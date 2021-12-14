@@ -6,7 +6,7 @@ onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 
 var blankArray = initalize_blank_array()
 
-func column_gen(genArray, x, z, clmIndex, surrClmIndex):
+func column_gen(genArray, x, z, clmIndex, surrClmIndex, generateBottomFace):
 	var cubeArray = oDataClm.cubes[clmIndex]
 	for y in 8:
 		var cubeID = cubeArray[y]
@@ -24,8 +24,8 @@ func column_gen(genArray, x, z, clmIndex, surrClmIndex):
 				var textureID = Cube.tex[cubeID][4]
 				add_face(genArray, pos, 4, textureID)
 			
-#					# Bottom face
-			if y >= 1 and cubeArray[y-1] == 0:
+			# Bottom face
+			if (y >= 1 and cubeArray[y-1] == 0) or (y == 0 and generateBottomFace == true):
 				var textureID = Cube.tex[cubeID][5]
 				add_face(genArray, pos, 5, textureID)
 		else:

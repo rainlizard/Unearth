@@ -6,6 +6,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oColumnListData = Nodelist.list["oColumnListData"]
+onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
 
 var currentlyLookingAtNode = null
 var instanceType = 0
@@ -20,21 +21,24 @@ func update_details():
 	oColumnListData.clear()
 	
 	var pos = Vector2()
-	var entryIndex
+	var entryIndex = 0
 	
 	if oEditor.currentView == oEditor.VIEW_2D:
 		pos = oSelector.cursorSubtile
 		entryIndex = oDataClmPos.get_cell(pos.x,pos.y)
-	elif oEditor.currentView == oEditor.VIEW_3D:
-		if oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_MAP:
-			pos = Vector2(oSelector3D.translation.x, oSelector3D.translation.z)
-			entryIndex = oDataClmPos.get_cell(pos.x, pos.y)
-			
-		elif oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_CLM:
-			entryIndex = oGenerateTerrain.get_clm_index(oSelector3D.translation.x, oSelector3D.translation.z)
-			if entryIndex == null:
-				oColumnListData.clear()
-				return
+#	elif oEditor.currentView == oEditor.VIEW_3D:
+#		if oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_MAP:
+#			pos = Vector2(oSelector3D.translation.x, oSelector3D.translation.z)
+#			entryIndex = oDataClmPos.get_cell(pos.x, pos.y)
+#
+#		elif oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_CLM:
+#			entryIndex = oGenerateTerrain.get_clm_index(oSelector3D.translation.x, oSelector3D.translation.z)
+#			if entryIndex == null:
+#				oColumnListData.clear()
+#				return
+	
+	if oSlabColumnEditor.visible == true:
+		entryIndex = oSlabColumnEditor.viewColumn
 	
 	for i in 16:
 		var description

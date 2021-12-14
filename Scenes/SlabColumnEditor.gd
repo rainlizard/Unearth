@@ -1,6 +1,8 @@
 extends WindowDialog
 onready var oGenerateSlabColumn = Nodelist.list["oGenerateSlabColumn"]
-onready var oCELabelCurrentColumn = Nodelist.list["oCELabelCurrentColumn"]
+onready var oColumnDetails = Nodelist.list["oColumnDetails"]
+onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
+onready var oCEColumnSpinBox = Nodelist.list["oCEColumnSpinBox"]
 
 var viewColumn = 1
 
@@ -9,7 +11,7 @@ func _on_SlabColumnEditor_about_to_show():
 	var CODETIME_START = OS.get_ticks_msec()
 	oGenerateSlabColumn.start(viewColumn)
 	print('Column generated in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-	update_ui()
+	oPropertiesTabs.set_current_tab(2)
 
 func _ready():
 	popup_centered()
@@ -19,18 +21,19 @@ func _ready():
 func _unhandled_input(event):
 	if visible == false: return
 	
-	if event.is_action("ui_left"):
+	if (event.is_action("ui_left") or event.is_action("ui_down")) and event.is_pressed():
 		get_tree().set_input_as_handled()
-		viewColumn -= 1
-		update_ui()
-		oGenerateSlabColumn.start(viewColumn)
+		set_clm_value(viewColumn-1)
 		
-	if event.is_action("ui_right"):
+	if (event.is_action("ui_right") or event.is_action("ui_up")) and event.is_pressed():
 		get_tree().set_input_as_handled()
-		viewColumn += 1
-		update_ui()
-		oGenerateSlabColumn.start(viewColumn)
-		
+		set_clm_value(viewColumn+1)
 
-func update_ui():
-	oCELabelCurrentColumn.text = "Column index: " + str(viewColumn)
+func _on_CEColumnSpinBox_value_changed(value):
+	set_clm_value(value)
+
+func set_clm_value(newVal):
+	oCEColumnSpinBox.value = newVal
+	viewColumn = clamp(newVal,0,2047)
+	oColumnDetails.update_details()
+	oGenerateSlabColumn.start(viewColumn)

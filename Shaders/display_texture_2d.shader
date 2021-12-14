@@ -15,8 +15,8 @@ const vec2 oneTileSize = vec2(32,32);
 const float TEXTURE_ANIMATION_SPEED = 12.0;
 uniform int showOnlySpecificStyle = 77777;
 uniform sampler2D slxData;
-uniform sampler2DArray dkTextureMap_Split_A : hint_albedo;
-uniform sampler2DArray dkTextureMap_Split_B : hint_albedo;
+uniform sampler2DArray dkTextureMap_Split_A;
+uniform sampler2DArray dkTextureMap_Split_B;
 
 uniform vec2 fieldSizeInSubtiles = vec2(255.0, 255.0);
 

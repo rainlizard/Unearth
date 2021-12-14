@@ -9,7 +9,7 @@ func start(clmIndex):
 	var genArray = oVoxelGen.blankArray.duplicate(true)
 	
 	var surrClmIndex = [-1,-1,-1,-1]
-	oVoxelGen.column_gen(genArray, 0, 0, clmIndex, surrClmIndex)
+	oVoxelGen.column_gen(genArray, 0, 0, clmIndex, surrClmIndex, true)
 	
 	oMeshBlock.mesh = oVoxelGen.complete_mesh(genArray)
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
