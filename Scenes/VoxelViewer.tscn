@@ -50,7 +50,7 @@ script = ExtResource( 1 )
 
 [node name="VoxelCreator" type="Spatial" parent="VoxelViewport"]
 
-[node name="HighlightBaseColumn" type="MeshInstance" parent="VoxelViewport/VoxelCreator"]
+[node name="HighlightBase" type="MeshInstance" parent="VoxelViewport/VoxelCreator"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0 )
 mesh = SubResource( 20 )
 skeleton = NodePath("../..")

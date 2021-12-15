@@ -4,6 +4,7 @@ onready var oVoxelCameraPivotPoint = $".."
 
 var rotationSensitivity = 0.5
 
+
 func _input(event):
 	if oVoxelObjectView.visible == false: return
 	if Rect2( oVoxelObjectView.rect_global_position, oVoxelObjectView.rect_size ).has_point(oVoxelObjectView.get_global_mouse_position()) == false: return
