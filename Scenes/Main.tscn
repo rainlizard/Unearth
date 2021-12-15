@@ -1,4 +1,4 @@
-[gd_scene load_steps=143 format=2]
+[gd_scene load_steps=140 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -18,6 +18,7 @@
 [ext_resource path="res://Scenes/SettingWithValue.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Theme/UnearthTheme.theme" type="Theme" id=17]
 [ext_resource path="res://Scenes/BoxSprite.gd" type="Script" id=18]
+[ext_resource path="res://Scenes/VoxelViewer.tscn" type="PackedScene" id=19]
 [ext_resource path="res://Scenes/ReadData.gd" type="Script" id=20]
 [ext_resource path="res://Scenes/RayCastBlockMap.gd" type="Script" id=21]
 [ext_resource path="res://Scenes/3dSelector.gd" type="Script" id=22]
@@ -45,7 +46,6 @@
 [ext_resource path="res://Scenes/DataLif.gd" type="Script" id=44]
 [ext_resource path="res://Scenes/PickThingWindow.gd" type="Script" id=45]
 [ext_resource path="res://Scenes/CurrentTextures.gd" type="Script" id=46]
-[ext_resource path="res://Scenes/SlabColumnCamera.gd" type="Script" id=47]
 [ext_resource path="res://Scenes/Player.gd" type="Script" id=48]
 [ext_resource path="res://Scenes/GenerateTerrain.gd" type="Script" id=49]
 [ext_resource path="res://Scenes/View3D.gd" type="Script" id=50]
@@ -79,7 +79,6 @@
 [ext_resource path="res://Scenes/Ui.gd" type="Script" id=78]
 [ext_resource path="res://Scenes/ThingDetails.gd" type="Script" id=79]
 [ext_resource path="res://Scenes/PlaceThingWithSlab.gd" type="Script" id=80]
-[ext_resource path="res://Scenes/GenerateSlabColumn.gd" type="Script" id=81]
 [ext_resource path="res://Scenes/UniversalDetails.gd" type="Script" id=82]
 [ext_resource path="res://Scenes/SelectedRectangleDisplay.gd" type="Script" id=83]
 [ext_resource path="res://Art/Cursor96x96Blue.png" type="Texture" id=84]
@@ -253,12 +252,6 @@ shader_param/flashSpecific = Color( 1e-05, 2e-05, 3e-05, 4e-05 )
 [sub_resource type="DynamicFont" id=16]
 font_data = ExtResource( 122 )
 
-[sub_resource type="Environment" id=19]
-ambient_light_color = Color( 1, 1, 1, 1 )
-
-[sub_resource type="World" id=17]
-environment = SubResource( 19 )
-
 [node name="Main" type="Node2D"]
 script = ExtResource( 7 )
 
@@ -357,9 +350,6 @@ script = ExtResource( 55 )
 
 [node name="GenerateTerrain" type="Node" parent="Game3D"]
 script = ExtResource( 49 )
-
-[node name="GenerateSlabColumn" type="Node" parent="Game3D"]
-script = ExtResource( 81 )
 
 [node name="TestMesh" type="MeshInstance" parent="Game3D"]
 
@@ -2779,19 +2769,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tabs" type="Tabs" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
+[node name="Spacing" type="Control" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
 margin_top = 212.0
 margin_right = 289.0
-margin_bottom = 243.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_bottom = 237.0
+rect_min_size = Vector2( 25, 25 )
 
 [node name="AddCustomObjectButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
 margin_left = 121.0
-margin_top = 247.0
+margin_top = 241.0
 margin_right = 168.0
-margin_bottom = 274.0
+margin_bottom = 268.0
 size_flags_horizontal = 6
 size_flags_vertical = 10
 text = "Add"
@@ -2801,9 +2789,9 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
 modulate = Color( 1, 1, 1, 0.25098 )
-margin_top = 278.0
+margin_top = 272.0
 margin_right = 289.0
-margin_bottom = 299.0
+margin_bottom = 293.0
 text = "Right click its portrait to delete."
 align = 1
 autowrap = true
@@ -3647,73 +3635,222 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CEViewportContainer" type="ViewportContainer" parent="Ui/UiSystem/SlabColumnEditor"]
+[node name="VoxelTabs" type="TabContainer" parent="Ui/UiSystem/SlabColumnEditor"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-stretch = true
+margin_left = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CEViewport" type="Viewport" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer"]
-size = Vector2( 1280, 720 )
-own_world = true
-world = SubResource( 17 )
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 3
-
-[node name="CameraPivotPoint" type="Spatial" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport"]
-transform = Transform( 0.623613, 0.333328, 0.707107, -0.471397, 0.881921, 0, -0.623613, -0.333328, 0.707107, 0.5, 4, 0.5 )
-
-[node name="CECamera" type="Camera" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport/CameraPivotPoint"]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6, 0, 0 )
-projection = 1
-current = true
-fov = 90.0
-size = 10.0
-far = 8192.0
-script = ExtResource( 47 )
-
-[node name="MeshBlock" type="MeshInstance" parent="Ui/UiSystem/SlabColumnEditor/CEViewportContainer/CEViewport"]
-
-[node name="CEUI" type="Control" parent="Ui/UiSystem/SlabColumnEditor"]
+[node name="TabSlabVoxels" type="VBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 43.0
+margin_right = -12.0
+margin_bottom = -12.0
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels"]
+margin_right = 1236.0
+margin_bottom = 62.0
+columns = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainer"]
+margin_top = 5.0
+margin_right = 235.0
+margin_bottom = 26.0
+text = "Name:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NewSlabName" type="LineEdit" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainer"]
+margin_left = 1086.0
+margin_right = 1236.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainer"]
+margin_top = 38.0
+margin_right = 235.0
+margin_bottom = 59.0
+text = "Recognized as (SLB value):"
+
+[node name="NewObjectSubtypeID" type="OptionButton" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainer"]
+margin_left = 1207.0
+margin_top = 35.0
+margin_right = 1236.0
+margin_bottom = 62.0
+size_flags_horizontal = 10
+
+[node name="GridContainerForChoosing3x3" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels"]
+margin_left = 579.0
+margin_top = 66.0
+margin_right = 657.0
+margin_bottom = 155.0
+size_flags_horizontal = 6
+size_flags_vertical = 4
+columns = 3
+
+[node name="Button" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainerForChoosing3x3"]
+margin_right = 24.0
+margin_bottom = 27.0
+text = "0"
+
+[node name="Button2" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainerForChoosing3x3"]
+margin_left = 28.0
+margin_right = 51.0
+margin_bottom = 27.0
+text = "1"
+
+[node name="Button3" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainerForChoosing3x3"]
+margin_left = 55.0
+margin_right = 78.0
+margin_bottom = 27.0
+text = "2"
+
+[node name="Button4" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainerForChoosing3x3"]
+margin_top = 31.0
+margin_right = 24.0
+margin_bottom = 58.0
+text = "3"
+
+[node name="Button5" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainerForChoosing3x3"]
+margin_left = 28.0
+margin_top = 31.0
+margin_right = 51.0
+margin_bottom = 58.0
+text = "4"
+
+[node name="Button6" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainerForChoosing3x3"]
+margin_left = 55.0
+margin_top = 31.0
+margin_right = 78.0
+margin_bottom = 58.0
+text = "5"
+
+[node name="Button7" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainerForChoosing3x3"]
+margin_top = 62.0
+margin_right = 24.0
+margin_bottom = 89.0
+text = "6"
+
+[node name="Button8" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainerForChoosing3x3"]
+margin_left = 28.0
+margin_top = 62.0
+margin_right = 51.0
+margin_bottom = 89.0
+text = "7"
+
+[node name="Button9" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/GridContainerForChoosing3x3"]
+margin_left = 55.0
+margin_top = 62.0
+margin_right = 78.0
+margin_bottom = 89.0
+text = "8"
+
+[node name="AddCustomSlabButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels"]
+margin_left = 594.0
+margin_top = 159.0
+margin_right = 641.0
+margin_bottom = 186.0
+size_flags_horizontal = 6
+size_flags_vertical = 8
+text = "Add"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels"]
+modulate = Color( 1, 1, 1, 0.25098 )
+margin_top = 190.0
+margin_right = 1236.0
+margin_bottom = 211.0
+text = "Right click its portrait to delete."
+align = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SlabVoxelView" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" instance=ExtResource( 19 )]
+margin_top = 215.0
+margin_bottom = 655.0
+
+[node name="TabColumnVoxels" type="VBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 43.0
+margin_right = -12.0
+margin_bottom = -12.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels"]
+margin_right = 1236.0
+margin_bottom = 655.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/CEUI"]
-anchor_right = 1.0
+[node name="ColumnVoxelView" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer" instance=ExtResource( 19 )]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer"]
+margin_top = 624.0
+margin_right = 1236.0
+margin_bottom = 655.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/VBoxContainer"]
+margin_right = 1236.0
+margin_bottom = 31.0
 size_flags_horizontal = 3
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/CEUI/HBoxContainer"]
-margin_left = 536.0
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/VBoxContainer/HBoxContainer"]
+margin_left = 514.0
 margin_top = 5.0
-margin_right = 666.0
+margin_right = 644.0
 margin_bottom = 26.0
 text = "Column index:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CEColumnSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/CEUI/HBoxContainer"]
-margin_left = 670.0
-margin_right = 744.0
+[node name="ColumnViewSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/VBoxContainer/HBoxContainer"]
+margin_left = 648.0
+margin_right = 722.0
 margin_bottom = 31.0
 max_value = 2047.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ColumnViewDeleteButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/VBoxContainer/HBoxContainer"]
+margin_right = 12.0
+margin_bottom = 27.0
+hint_tooltip = "Columns with a Utilized value of 0 can be safely deleted.
+
+Note: this might not be true at all. lol
+Needs testing."
+focus_mode = 0
+text = "Delete column"
 
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
@@ -3954,6 +4091,7 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/CreateFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_CreateFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
-[connection signal="about_to_show" from="Ui/UiSystem/SlabColumnEditor" to="Ui/UiSystem/SlabColumnEditor" method="_on_SlabColumnEditor_about_to_show"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/CEUI/HBoxContainer/CEColumnSpinBox" to="Ui/UiSystem/SlabColumnEditor" method="_on_CEColumnSpinBox_value_changed"]
+[connection signal="tab_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs" to="Ui/UiSystem/SlabColumnEditor" method="_on_VoxelTabs_tab_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/VBoxContainer/HBoxContainer/ColumnViewSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/ColumnVoxelView" method="_on_ColumnViewSpinBox_value_changed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/VBoxContainer/HBoxContainer/ColumnViewDeleteButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/ColumnVoxelView" method="_on_ColumnViewDeleteButton_pressed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

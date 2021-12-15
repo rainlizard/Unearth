@@ -16,6 +16,16 @@ var floorTexture = []
 
 var unknownData #The second 4 bytes
 
+func delete_column(index):
+	utilized[index] = 0
+	orientation[index] = 0
+	solidMask[index] = 0
+	permanent[index] = 0
+	lintel[index] = 0
+	height[index] = 0
+	cubes[index] = [0,0,0,0, 0,0,0,0]
+	floorTexture[index] = 0
+
 func clm_data_exists():
 	if cubes.empty() == true:
 		return false # Nothing in arrays, so column data doesn't exist

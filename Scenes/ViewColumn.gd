@@ -6,7 +6,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oColumnListData = Nodelist.list["oColumnListData"]
-onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
+onready var oColumnVoxelView = Nodelist.list["oColumnVoxelView"]
 
 var currentlyLookingAtNode = null
 var instanceType = 0
@@ -37,8 +37,8 @@ func update_details():
 #				oColumnListData.clear()
 #				return
 	
-	if oSlabColumnEditor.visible == true:
-		entryIndex = oSlabColumnEditor.viewColumn
+	if oColumnVoxelView.visible == true:
+		entryIndex = oColumnVoxelView.viewObject
 	
 	for i in 16:
 		var description
