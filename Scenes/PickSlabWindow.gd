@@ -10,6 +10,8 @@ onready var oSlabStyle = Nodelist.list["oSlabStyle"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
+onready var oCustomSlabData = Nodelist.list["oCustomSlabData"]
+
 
 onready var oSelectedRect = $Clippy/SelectedRect
 onready var oCenteredLabel = $Clippy/CenteredLabel
@@ -26,6 +28,7 @@ enum {
 onready var tabs = {
 	Slabs.TAB_MAINSLAB: [$SlabTabs/TabFolder/MainSlabs/ScrollContainer/GridContainer, "res://edited_images/icon_slab1.png"], #"res://dk_images/crspell_64/dig_std.png"
 	Slabs.TAB_OTHER: [$SlabTabs/TabFolder/WallSlabs/ScrollContainer/GridContainer, "res://edited_images/icon_slab2.png"], #"res://dk_images/crspell_64/dig_dis.png"
+	Slabs.TAB_CUSTOM: [$SlabTabs/TabFolder/CustomSlabsTab/ScrollContainer/GridContainer, "res://edited_images/icon_slab2.png"],
 	Slabs.TAB_STYLE: [$SlabTabs/TabFolder/SlabStyle/ScrollContainer/GridContainer, "res://dk_images/magic_dust/anim0978/r1frame06.png"],
 	Slabs.TAB_OWNER: [$SlabTabs/TabFolder/OnlyOwnership/ScrollContainer/GridContainer, "res://dk_images/furniture/flagpole_redflag_fp/r1frame05.png"], # "res://edited_images/ownership.png"
 	Slabs.TAB_NONE: [null, ""],
@@ -46,7 +49,7 @@ func _ready():
 	
 	# Window's minimum size
 	rect_min_size = Vector2((grid_item_size.x*grid_window_scale)+11, (grid_item_size.y*grid_window_scale)+11)
-	$SlabTabs.initialize(["Main", "Other", "Style", "Ownership"])
+	$SlabTabs.initialize(["Main", "Other", "Custom", "Style", "Ownership"])
 
 func _process(delta): # It's necessary to use _process to update selection, because ScrollContainer won't fire a signal while you're scrolling.
 	update_selection_position()
@@ -63,7 +66,11 @@ func add_slabs():
 	oOnlyOwnership.initialize_grid_items()
 	oSlabStyle.initialize_grid_items()
 	
-	for slabID in Slabs.slabOrder:
+	var allSlabIDs = []
+	allSlabIDs.append_array(Slabs.slabOrder)
+	allSlabIDs.append_array(oCustomSlabData.data.keys())
+	
+	for slabID in allSlabIDs:
 		var putIntoTab = Slabs.data[slabID][Slabs.EDITOR_TAB]
 		if putIntoTab != Slabs.TAB_NONE:
 			var scene = load("res://Scenes/SlabDisplay.tscn")
@@ -80,14 +87,18 @@ func add_slabs():
 					for i in 9:
 						id.columns[i] = oSlabPalette.slabPal[slabVariation][i]
 				_:
-					if slabID < 43:
-						slabVariation = slabID*28
+					if slabID <= 60:
+						if slabID <= 42: # 1176 variations
+							slabVariation = slabID*28
+						else:
+							slabVariation = (42 * 28) + (8 * (slabID - 42))
+						
+						for i in 9:
+							id.columns[i] = oSlabPalette.slabPal[slabVariation][i]
 					else:
-						slabVariation = (42 * 28) + (8 * (slabID - 42))
-					
-					for i in 9:
-						id.columns[i] = oSlabPalette.slabPal[slabVariation][i]
-			
+						# Custom slab
+						for i in 9:
+							id.columns[i] = oCustomSlabData.data[slabID][oCustomSlabData.SLAB_COLUMNS][i]
 			id.set_meta("ID_of_slab", slabID)
 			id.panelView = Slabs.data[slabID][Slabs.PANEL_VIEW]
 			id.set_visual()
@@ -132,7 +143,7 @@ func _on_hovered_none():
 func _on_hovered_over_item(id):
 	var offset
 	match $SlabTabs.current_tab:
-		2,3:
+		Slabs.TAB_STYLE,Slabs.TAB_OWNER:
 			offset = Vector2(id.rect_size.x * 0.5, id.rect_size.y * 0.25)
 		_:
 			offset = Vector2(id.rect_size.x * 0.5, id.rect_size.y * 0.50)
@@ -140,7 +151,7 @@ func _on_hovered_over_item(id):
 	oCenteredLabel.get_node("Label").text = id.get_meta("grid_item_text")
 
 
-func currentGridContainer():
+func current_grid_container():
 	return oSlabTabs.get_current_tab_control().get_node("ScrollContainer/GridContainer")
 
 
@@ -165,7 +176,7 @@ func set_selection(setID):
 
 
 func update_scale(setvalue):
-	var oGridContainer = currentGridContainer()
+	var oGridContainer = current_grid_container()
 	if oGridContainer == null: return
 	for id in oGridContainer.get_children():
 		id.rect_min_size = Vector2(grid_item_size.x * setvalue, grid_item_size.y * setvalue)

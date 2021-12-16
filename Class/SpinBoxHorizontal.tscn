@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Theme/ArrowRight.png" type="Texture" id=1]
+[ext_resource path="res://Class/SpinBoxHorizontal.gd" type="Script" id=2]
+
+[node name="SpinBoxHorizontal" type="HBoxContainer"]
+margin_right = 78.0
+margin_bottom = 24.0
+custom_constants/separation = 4
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButtonLeft" type="TextureButton" parent="."]
+margin_right = 6.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource( 1 )
+expand = true
+stretch_mode = 5
+flip_h = true
+
+[node name="LineEdit" type="LineEdit" parent="."]
+margin_left = 10.0
+margin_right = 68.0
+margin_bottom = 24.0
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButtonRight" type="TextureButton" parent="."]
+margin_left = 72.0
+margin_right = 78.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource( 1 )
+expand = true
+stretch_mode = 5
+
+[connection signal="pressed" from="TextureButtonRight" to="." method="_on_TextureButtonRight_pressed"]

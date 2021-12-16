@@ -17,6 +17,7 @@ onready var oDataWibble = Nodelist.list["oDataWibble"]
 onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oOwnableNaturalTerrain = Nodelist.list["oOwnableNaturalTerrain"]
 onready var oBridgesOnlyOnLiquidCheckbox = Nodelist.list["oBridgesOnlyOnLiquidCheckbox"]
+onready var oCustomSlabData = Nodelist.list["oCustomSlabData"]
 
 enum dir {
 	s = 0
@@ -40,33 +41,7 @@ enum {
 	OWNERSHIP_GRAPHIC_DOOR_2
 }
 
-func _on_ConfirmAutoGen_confirmed():
-	oMessage.quick("Auto-generated all slabs")
-	auto_generate_rectangle(Vector2(0,0), Vector2(84,84))
-
-func auto_generate_rectangle(rectStart, rectEnd):
-	oEditor.mapHasBeenEdited = true
-	# Include surrounding
-	rectStart -= Vector2(1,1)
-	rectEnd += Vector2(1,1)
-	rectStart = Vector2(clamp(rectStart.x, 0, 84), clamp(rectStart.y, 0, 84))
-	rectEnd = Vector2(clamp(rectEnd.x, 0, 84), clamp(rectEnd.y, 0, 84))
-	
-	var CODETIME_START = OS.get_ticks_msec()
-	for ySlab in range(rectStart.y, rectEnd.y+1):
-		for xSlab in range(rectStart.x, rectEnd.x+1):
-			var slabID = oDataSlab.get_cell(xSlab, ySlab)
-			var ownership = oDataOwnership.get_cell(xSlab, ySlab)
-			
-			slab_update_clm(xSlab, ySlab, slabID, ownership)
-	
-	print('Auto generated in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-
-	
-	oOverheadGraphics.overhead2d_update_rect(rectStart, rectEnd)
-
-func place_slab_shape(shapePositionArray, slabID, ownership):
-	
+func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	var removeFromShape = []
 	
 	var CODETIME_START = OS.get_ticks_msec()
@@ -95,7 +70,75 @@ func place_slab_shape(shapePositionArray, slabID, ownership):
 		shapePositionArray.erase(i)
 	
 	oOverheadOwnership.ownership_update_shape(shapePositionArray, ownership)
-	print('Rectangle placed in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+
+
+func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
+	oEditor.mapHasBeenEdited = true
+	if updateNearby == true:
+		# Include surrounding
+		rectStart -= Vector2(1,1)
+		rectEnd += Vector2(1,1)
+	rectStart = Vector2(clamp(rectStart.x, 0, 84), clamp(rectStart.y, 0, 84))
+	rectEnd = Vector2(clamp(rectEnd.x, 0, 84), clamp(rectEnd.y, 0, 84))
+	
+	var CODETIME_START = OS.get_ticks_msec()
+	for ySlab in range(rectStart.y, rectEnd.y+1):
+		for xSlab in range(rectStart.x, rectEnd.x+1):
+			var slabID = oDataSlab.get_cell(xSlab, ySlab)
+			var ownership = oDataOwnership.get_cell(xSlab, ySlab)
+			do_slab(xSlab, ySlab, slabID, ownership)
+	
+	print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	
+	oOverheadGraphics.overhead2d_update_rect(rectStart, rectEnd)
+
+
+func do_slab(xSlab, ySlab, slabID, ownership):
+	if slabID > 60: # Custom Slab IDs
+		if oCustomSlabData.data.has(slabID):
+			slab_place_custom(xSlab, ySlab, slabID, ownership)
+		return
+	
+	if slabID == Slabs.WALL_AUTOMATIC:
+		slabID = auto_wall(xSlab, ySlab) # Set slabID to a real one
+	elif slabID == Slabs.EARTH:
+		slabID = auto_torch_earth(xSlab, ySlab) # Potentially change slab ID to Torch Earth
+	
+	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
+	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
+	# WIB (wibble)
+	update_wibble(xSlab, ySlab, slabID, surrID)
+	# WLB (Water Lava Block)
+	if slabID != Slabs.BRIDGE:
+		oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
+	
+	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
+	match bitmaskType:
+		Slabs.BITMASK_WALL:
+			place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+		Slabs.BITMASK_OTHER:
+			place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+		_:
+			place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+
+
+func slab_place_custom(xSlab, ySlab, slabID, ownership):
+	
+	# Wibble?
+	# WLB?
+	
+	var clmIndexArray = oCustomSlabData.data[slabID][oCustomSlabData.SLAB_COLUMNS]
+	set_columns(xSlab, ySlab, clmIndexArray)
+	var recognizedAsID = oCustomSlabData.data[slabID][oCustomSlabData.RECOGNIZED_AS]
+	oDataSlab.set_cell(xSlab, ySlab, recognizedAsID)
+
+
+func _on_ConfirmAutoGen_confirmed():
+	oMessage.quick("Auto-generated all slabs")
+	var updateNearby = true
+	generate_slabs_based_on_id(Vector2(0,0), Vector2(84,84), updateNearby)
+
 
 func auto_torch_earth(xSlab, ySlab):
 	var newSlabID = Slabs.EARTH
@@ -187,28 +230,6 @@ func calculate_torch_side(xSlab, ySlab):
 	
 	return calcTorchSide
 
-func slab_update_clm(xSlab, ySlab, slabID, ownership):
-	if slabID == Slabs.WALL_AUTOMATIC:
-		slabID = auto_wall(xSlab, ySlab) # Set slabID to a real one
-	elif slabID == Slabs.EARTH:
-		slabID = auto_torch_earth(xSlab, ySlab) # Potentially change slab ID to Torch Earth
-	
-	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
-	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
-	# WIB (wibble)
-	update_wibble(xSlab, ySlab, slabID, surrID)
-	# WLB (Water Lava Block)
-	if slabID != Slabs.BRIDGE:
-		oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
-	
-	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
-	match bitmaskType:
-		Slabs.BITMASK_WALL:
-			place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
-		Slabs.BITMASK_OTHER:
-			place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
-		_:
-			place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
 
 
 func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
@@ -327,7 +348,7 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GEMS, slabID)
 	
 	set_columns(xSlab, ySlab, clmIndexArray)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, null, null)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, null, null)
 
 
 

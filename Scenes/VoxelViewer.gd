@@ -3,6 +3,8 @@ onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oVoxelGen = Nodelist.list["oVoxelGen"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oColumnViewSpinBox = Nodelist.list["oColumnViewSpinBox"]
+onready var oGridContainerForChoosing3x3 = Nodelist.list["oGridContainerForChoosing3x3"]
+
 
 onready var oAllVoxelObjects = $"VoxelViewport/VoxelCreator/AllVoxelObjects"
 onready var oSelectedVoxelObject = $"VoxelViewport/VoxelCreator/SelectedPivotPoint/SelectedVoxelObject"
@@ -33,10 +35,12 @@ func initialize():
 	
 	if displayingType == SLAB:
 		oHighlightBase.mesh.size = Vector2(4,4)
+	if displayingType == COLUMN:
+		oHighlightBase.mesh.size = Vector2(2,2)
 
-func _unhandled_input(event):
+func _input(event):
 	if visible == false: return
-	
+
 	if displayingType == SLAB:
 		return
 	
@@ -53,7 +57,6 @@ func set_object(setVal):
 	viewObject = setVal
 	do_one()
 	
-	
 	if displayingType == CUBE:
 		pass
 	if displayingType == SLAB:
@@ -61,9 +64,9 @@ func set_object(setVal):
 	if displayingType == COLUMN:
 		oColumnViewSpinBox.value = setVal
 		oColumnDetails.update_details()
+		oAllVoxelObjects.visible = true
+		oSelectedVoxelObject.visible = false
 	
-	oAllVoxelObjects.visible = true
-	oSelectedVoxelObject.visible = false
 	 # Reset camera back
 	oVoxelCameraPivotPoint.rotation_degrees.z = -28.125
 	oSelectedPivotPoint.rotation_degrees.y = 0
@@ -89,12 +92,12 @@ func do_all():
 func do_one():
 	var genArray = oVoxelGen.blankArray.duplicate(true)
 	
-	
 	if displayingType == SLAB:
 		var surrClmIndex = [-1,-1,-1,-1] # Code this properly later for a slight performance boost
-		var clmIndex = 1
-		for x in 3:
-			for y in 3:
+		for y in 3:
+			for x in 3:
+				var i = (y*3) + x #((y*3)-x)
+				var clmIndex = oGridContainerForChoosing3x3.get_child(i).value
 				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true)
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
 		oSelectedVoxelObject.translation.z = 0.0
@@ -120,3 +123,8 @@ func _on_ColumnViewDeleteButton_pressed():
 
 func _on_ColumnViewSpinBox_value_changed(value):
 	set_object(value)
+
+func _on_CustomSlabSpinBox_value_changed(value):
+	do_one()
+	oColumnDetails.update_details()
+	#set_object(0)

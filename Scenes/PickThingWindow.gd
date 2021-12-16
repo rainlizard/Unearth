@@ -146,7 +146,7 @@ func add_item_to_grid(tabID, id, set_text):
 	id.connect("pressed",self,"pressed",[id])
 	id.rect_min_size = Vector2(grid_item_size.x * grid_window_scale, grid_item_size.y * grid_window_scale)
 
-func currentGridContainer():
+func current_grid_container():
 	return oThingTabs.get_current_tab_control().get_node("ScrollContainer/GridContainer")
 
 func pressed(id):
@@ -189,7 +189,7 @@ func set_selection(setType, setSubtype):
 				oThingTabs.set_current_tab(tabIndex)
 
 func update_scale(setvalue):
-	var oGridContainer = currentGridContainer()
+	var oGridContainer = current_grid_container()
 	if oGridContainer == null: return
 	for id in oGridContainer.get_children():
 		id.rect_min_size = Vector2(grid_item_size.x * setvalue, grid_item_size.y * setvalue)
@@ -202,7 +202,7 @@ func update_scale(setvalue):
 #	# Make oSelectedRect visible if it's in the tab you switched to, otherwise make in invisible
 #	oSelectedRect.visible = false
 #	if is_instance_valid(oSelectedRect.boundToItem):
-#		for id in currentGridContainer().get_children():
+#		for id in current_grid_container().get_children():
 #			if id.get_meta("thingSubtype") == oSelectedRect.boundToItem.get_meta("thingSubtype") and id.get_meta("thingType") == oSelectedRect.boundToItem.get_meta("thingType"):
 #				oSelectedRect.visible = true
 #

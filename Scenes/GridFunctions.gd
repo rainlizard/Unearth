@@ -25,7 +25,7 @@ func _on_GridWindow_item_rect_changed(callingNode):
 			Settings.set_setting("thing_window_position", callingNode.rect_position)
 
 func _on_GridWindow_resized(callingNode):
-	var oGridContainer = callingNode.currentGridContainer()
+	var oGridContainer = callingNode.current_grid_container()
 	if oGridContainer == null: return
 	
 	var maxWidth
@@ -53,7 +53,7 @@ func _on_tab_changed(newTab, callingNode):
 	# Make oSelectedRect visible if it's in the tab you switched to, otherwise make it invisible
 	callingNode.oSelectedRect.visible = false
 	if callingNode.oSelectedRect.boundToItem != null:
-		for id in callingNode.currentGridContainer().get_children():
+		for id in callingNode.current_grid_container().get_children():
 			if callingNode.oSelectedRect.boundToItem == id:
 				callingNode.oSelectedRect.visible = true
 	

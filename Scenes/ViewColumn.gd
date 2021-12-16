@@ -7,6 +7,8 @@ onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oColumnListData = Nodelist.list["oColumnListData"]
 onready var oColumnVoxelView = Nodelist.list["oColumnVoxelView"]
+onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
+onready var oUi = Nodelist.list["oUi"]
 
 var currentlyLookingAtNode = null
 var instanceType = 0
@@ -23,7 +25,7 @@ func update_details():
 	var pos = Vector2()
 	var entryIndex = 0
 	
-	if oEditor.currentView == oEditor.VIEW_2D:
+	if oEditor.currentView == oEditor.VIEW_2D and oUi.mouseOnUi == false:
 		pos = oSelector.cursorSubtile
 		entryIndex = oDataClmPos.get_cell(pos.x,pos.y)
 #	elif oEditor.currentView == oEditor.VIEW_3D:
@@ -39,6 +41,11 @@ func update_details():
 	
 	if oColumnVoxelView.visible == true:
 		entryIndex = oColumnVoxelView.viewObject
+	if oSlabVoxelView.visible == true:
+		if is_instance_valid(get_focus_owner()):
+			if is_instance_valid(get_focus_owner().get_parent()):
+				if get_focus_owner().get_parent() is SpinBox:
+					entryIndex = get_focus_owner().get_parent().value
 	
 	for i in 16:
 		var description

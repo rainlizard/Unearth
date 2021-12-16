@@ -89,6 +89,13 @@ func createDisplayField(setMap, showStyle):
 func get_overhead_face_value(x, y, slabID):
 	# clmIndex is a position inside the 2048 column collection
 	var clmIndex = oDataClmPos.get_cell(x, y)
+	
+	if clmIndex > 2048:
+		clmIndex = 0
+		#print(x)
+		#print(y)
+		#print('WHAT!!!!!!!!!!!!!!!!!!!!')
+	
 	# clmData is the 24 byte array.
 	var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
 	

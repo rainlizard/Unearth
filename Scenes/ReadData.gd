@@ -83,6 +83,8 @@ func read_dat(buffer):
 		for xSubtile in dataWidth:
 			#buffer.seek(2*(xSubtile + (ySubtile*dataWidth)))
 			value = 65536 - buffer.get_u16()
+			if value == 65536: value = 0
+			
 			oDataClmPos.set_cell(xSubtile,ySubtile,value)
 
 func read_clm(buffer):

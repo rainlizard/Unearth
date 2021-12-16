@@ -36,6 +36,7 @@ enum {
 enum {
 	TAB_MAINSLAB
 	TAB_OTHER
+	TAB_CUSTOM
 	TAB_STYLE
 	TAB_OWNER
 	TAB_NONE
@@ -143,8 +144,17 @@ var doors = {42:null,43:null,44:null,45:null,46:null,47:null,48:null,49:null}
 #	4,5,6,7,8,9
 #]
 
+func _init():
+	#var CODETIME_START = OS.get_ticks_msec()
+	# Fill empty entries to prevent crashes, takes 0ms
+	
+	for i in 1000: 
+		if data.has(i) == false:
+			data[i] = data[-1]
+	#print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
 var data = {
-	-1:                  ["Outside tilemap",       BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # -1
+	-1:                  ["Unrecognized Slab ID",  BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   OWNABLE], # -1
 	ROCK:                ["Impenetrable Rock",     BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 0
 	GOLD:                ["Gold Seam",             BLOCK_SLAB, BITMASK_TALL,    PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 1
 	EARTH:               ["Earth",                 BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       NOT_LIQUID,   NOT_OWNABLE], # 2

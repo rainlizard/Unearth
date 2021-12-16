@@ -6,7 +6,7 @@ var scnOwnerButton = preload("res://Scenes/OnlyOwnershipButton.tscn")
 onready var oSelectedRect = get_node("../../../Clippy/SelectedRect")
 
 func initialize_grid_items():
-	var oGridContainer = currentGridContainer()
+	var oGridContainer = current_grid_container()
 #	# Add children
 	for i in 6: # +1 is for "Default"
 		var id = scnOwnerButton.instance()
@@ -44,7 +44,7 @@ func _on_OwnerButtonPressed(id):
 func select_appropriate_button():
 	if visible == false: return # Needed because this function can be called when tab isn't visible
 	# Select grid item in window
-	for id in currentGridContainer().get_children():
+	for id in current_grid_container().get_children():
 		if id is Button:
 			if id.get_meta("ownershipID") == oSelection.paintOwnership:
 				oSelectedRect.boundToItem = id
@@ -53,7 +53,7 @@ func select_appropriate_button():
 				# highlight i here
 
 
-func currentGridContainer():
+func current_grid_container():
 	return $"ScrollContainer/GridContainer"
 
 

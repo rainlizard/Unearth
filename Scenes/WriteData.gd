@@ -163,7 +163,10 @@ func write_dat(buffer):
 		for subtileX in dataWidth:
 			buffer.seek(2*(subtileX + (subtileY*dataWidth)))
 			
-			buffer.put_16(65536 - oDataClmPos.get_cell(subtileX,subtileY))
+			value = 65536 - oDataClmPos.get_cell(subtileX,subtileY)
+			if value == 65536: value = 0
+			
+			buffer.put_16(value)
 
 func write_clm(buffer):
 	oDataClm.update_all_solid_mask()

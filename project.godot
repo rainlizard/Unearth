@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "SpinBox",
+"class": "CustomSpinBox",
+"language": "GDScript",
+"path": "res://Scenes/CustomSlabSpinBox.gd"
+}, {
 "base": "LineEdit",
 "class": "EditableLabel",
 "language": "GDScript",
@@ -20,6 +25,7 @@ _global_script_classes=[ {
 "path": "res://Class/SpecialTabs.gd"
 } ]
 _global_script_class_icons={
+"CustomSpinBox": "",
 "EditableLabel": "",
 "SpecialTabContainer": ""
 }

@@ -21,6 +21,7 @@ onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
 onready var oRectangleSelection = Nodelist.list["oRectangleSelection"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oInspector = Nodelist.list["oInspector"]
+onready var oCustomSlabsTab = Nodelist.list["oCustomSlabsTab"]
 
 var texBlueCursor = preload("res://Art/Cursor32x32Blue.png")
 var texGreenCursor = preload("res://Art/Cursor32x32.png")
@@ -88,11 +89,16 @@ func update_paint():
 				newOwnership(cursorOverSlabOwner)
 				oOnlyOwnership.select_appropriate_button()
 			else:
-				# When you right click on a wall, select "Wall (Automatic)"
-				if Slabs.data[cursorOverSlab][Slabs.BITMASK_TYPE] == Slabs.BITMASK_WALL:
-					cursorOverSlab = Slabs.WALL_AUTOMATIC
-				if cursorOverSlab == Slabs.EARTH_WITH_TORCH:
-					cursorOverSlab = Slabs.EARTH
+				if cursorOverSlab > 60:
+					return # Selecting these as paint is a bad idea right now, it allows you too place IDs without changing slab appearances
+				
+				if Slabs.data.has(cursorOverSlab) == true:
+					if Slabs.data[cursorOverSlab][Slabs.BITMASK_TYPE] == Slabs.BITMASK_WALL:
+						# When you right click on a wall, select "Wall (Automatic)"
+						cursorOverSlab = Slabs.WALL_AUTOMATIC
+					if cursorOverSlab == Slabs.EARTH_WITH_TORCH:
+						# When you right click on a torch wall, select "Earth"
+						cursorOverSlab = Slabs.EARTH
 				
 				newPaintSlab(cursorOverSlab)
 				oPickSlabWindow.set_selection(cursorOverSlab)
@@ -144,14 +150,20 @@ func place_shape(beginTile,endTile):
 		oDataSlx.set_tileset_shape(shapePositionArray)
 	elif oOnlyOwnership.visible == true:
 		oOverheadOwnership.ownership_update_shape(shapePositionArray, paintOwnership)
-		oSlabPlacement.auto_generate_rectangle(rectStart, rectEnd)
+		oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd)
 	else:
 		# Slab placement
 		var useOwner = paintOwnership
-		if oOwnableNaturalTerrain.pressed == false and Slabs.data[paintSlab][Slabs.IS_OWNABLE] == false:
+		if oOwnableNaturalTerrain.pressed == false and Slabs.data.has(paintSlab) and Slabs.data[paintSlab][Slabs.IS_OWNABLE] == false:
 			useOwner = 5
-		oSlabPlacement.place_slab_shape(shapePositionArray, paintSlab, useOwner)
-		oSlabPlacement.auto_generate_rectangle(rectStart, rectEnd)
+		oSlabPlacement.place_shape_of_slab_id(shapePositionArray, paintSlab, useOwner)
+		
+		var updateNearby = true
+		# Custom slabs don't update the surroundings
+		if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
+			updateNearby = false
+		
+		oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd, updateNearby)
 
 #func place_tile(placeTile):
 #	if placeTile.x < 0 or placeTile.y < 0 or placeTile.x >= 85 or placeTile.y >= 85:
@@ -163,7 +175,7 @@ func place_shape(beginTile,endTile):
 #		oDataSlx.set_tileset_shape([placeTile])
 #	elif oOnlyOwnership.visible == true: # Ownership placement
 #		oOverheadOwnership.ownership_update_shape([placeTile], paintOwnership)
-#		oSlabPlacement.auto_generate_rectangle(placeTile, placeTile)
+#		oSlabPlacement.generate_slabs_based_on_id(placeTile, placeTile)
 #	else: # Slab placement
 #		var CODETIME_START = OS.get_ticks_msec()
 #		oInstances.delete_all_objects_on_slab(placeTile.x,placeTile.y)

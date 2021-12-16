@@ -170,8 +170,8 @@ func apply_colour_as_slabIDs_to_map(doColour, slabID):
 	imageData.unlock()
 	
 	var useOwner = 5
-	oSlabPlacement.place_slab_shape(shapePositionArray, slabID, useOwner)
-	oSlabPlacement.auto_generate_rectangle(rectStart, rectEnd)
+	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner)
+	oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd)
 
 func finish_up():
 	oMessage.quick("Applied slabs to map.")

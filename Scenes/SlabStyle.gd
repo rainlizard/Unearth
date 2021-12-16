@@ -11,7 +11,7 @@ onready var oSelectedRect = get_node("../../../Clippy/SelectedRect")
 func initialize_grid_items():
 	if is_instance_valid(oDisplaySlxNumbers):
 		oDisplaySlxNumbers.update_grid()
-	var oGridContainer = currentGridContainer()
+	var oGridContainer = current_grid_container()
 #	# Add children
 	for i in oTextureCache.cachedTextures.size()+1: # +1 is for "Default"
 		var btnId = scnSlabStyleButton.instance()
@@ -19,8 +19,6 @@ func initialize_grid_items():
 		
 		btnId.connect("mouse_entered", oPickSlabWindow, "_on_hovered_over_item", [btnId])
 		btnId.connect("mouse_exited", oPickSlabWindow, "_on_hovered_none")
-		
-		
 		
 		
 		if i == 0:
@@ -51,7 +49,7 @@ func _on_SlabStyleButtonPressed(btnId,value):
 func update_paint_for_slab_style(tile):
 	set_paintSlabStyle(oDataSlx.get_tileset_value(tile.x,tile.y))
 	# Select grid item in window
-	for id in currentGridContainer().get_children():
+	for id in current_grid_container().get_children():
 		if id is Button:
 			if id.text == str(paintSlabStyle-1):
 				id.pressed = true
@@ -62,7 +60,7 @@ func update_paint_for_slab_style(tile):
 				oSelectedRect.boundToItem = id
 				oSelectedRect.visible = true
 
-func currentGridContainer():
+func current_grid_container():
 	return $"ScrollContainer/GridContainer"
 
 

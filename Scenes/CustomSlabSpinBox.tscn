@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/CustomSlabSpinBox.gd" type="Script" id=1]
+
+[node name="CustomSlabSpinBox" type="SpinBox"]
+margin_right = 74.0
+margin_bottom = 31.0
+focus_mode = 2
+max_value = 2047.0
+rounded = true
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

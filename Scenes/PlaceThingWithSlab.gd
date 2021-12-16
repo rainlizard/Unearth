@@ -20,14 +20,14 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask,
 	elif slabID in [Slabs.WOODEN_DOOR_1, Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_1, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_1, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_1, Slabs.MAGIC_DOOR_2]:
 		create_door_thing(xSlab, ySlab, ownership)
 	
-	var customSlab = oSlabPlacement.bitmaskToSlab[bitmask]
+	var constructedSlab = oSlabPlacement.bitmaskToSlab[bitmask]
 	if bitmask == 0 and Slabs.rooms_with_middle_object.has(slabID):
-		var isMiddle = determineIfMiddle(slabID, ownership, bitmask, surrID, surrOwner)
+		var isMiddle = determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner)
 		if isMiddle == false:
-			customSlab = oSlabPlacement.slab_all
-	
+			constructedSlab = oSlabPlacement.slab_all
+	print(slabVariation + constructedSlab[0])
 	for subtile in 9:
-		var idx = get_obj_idx(slabVariation + customSlab[subtile], subtile)
+		var idx = get_obj_idx(slabVariation + constructedSlab[subtile], subtile)
 		if idx != -1:
 			oInstances.spawn(xSlab, ySlab, slabID, ownership, subtile, oDkSlabThings.tngObject[idx])
 
@@ -38,13 +38,15 @@ func create_door_thing(xSlab, ySlab, ownership):
 	if is_instance_valid(doorID) == false:
 		oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership) #subtype determined in oInstances
 
-func determineIfMiddle(slabID, ownership, bitmask, surrID, surrOwner):
+func determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner):
 	if bitmask == 0:
 		if slabID == surrID[dir.se] and slabID == surrID[dir.sw] and slabID == surrID[dir.ne] and slabID == surrID[dir.nw] and ownership == surrOwner[dir.se] and ownership == surrOwner[dir.sw] and ownership == surrOwner[dir.ne] and ownership == surrOwner[dir.nw]:
 			return true
 	return false
 
 func get_obj_idx(newSlabVar, subtile):
+	if newSlabVar >= 1304: return -1 # Out of bounds, causes crash
+	
 	var idx = oDkSlabThings.tngIndex[newSlabVar]
 	if idx >= oDkSlabThings.numberOfThings: return -1
 	# "tngIndex" has one index per slabVariation.
