@@ -9,7 +9,7 @@ func _enter_tree():
 func _ready():
 	Nodelist.done()
 	Settings.initialize_settings()
-	get_parent().initialize_window_settings()
+	initialize_window_settings()
 	$TextureCache.start() # Needs to be run after Settings initialized so that the GAME_DIRECTORY is correctly set
 	$OpenMap.start()
 	
@@ -19,9 +19,28 @@ func _ready():
 #	$Editor._on_ButtonViewType_pressed()
 
 
-
-
-
+func initialize_window_settings():
+	#var vp = get_viewport()
+	
+	OS.window_borderless = false
+	
+	if Settings.cfg_has_setting("editor_window_size") == true:
+		OS.window_size = Settings.read_cfg("editor_window_size")
+	else:
+		var sameSize = OS.get_screen_size().y * 0.9
+		OS.window_size = Vector2(sameSize, sameSize)
+	if Settings.cfg_has_setting("editor_window_position") == true:
+		OS.window_position = Settings.read_cfg("editor_window_position")
+	else:
+		OS.center_window()
+	if Settings.cfg_has_setting("editor_window_maximized_state") == true:
+		OS.window_maximized = Settings.read_cfg("editor_window_maximized_state")
+	else:
+		OS.window_maximized = false
+	if Settings.cfg_has_setting("editor_window_fullscreen_state") == true:
+		OS.window_fullscreen = Settings.read_cfg("editor_window_fullscreen_state")
+	else:
+		OS.window_fullscreen = false
 
 
 

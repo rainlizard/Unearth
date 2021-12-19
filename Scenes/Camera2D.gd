@@ -4,6 +4,7 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oSettingsWindow = Nodelist.list["oSettingsWindow"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oMain = Nodelist.list["oMain"]
 
 signal zoom_level_changed
 
@@ -19,11 +20,13 @@ var directionalPan = Vector2()
 var middleMousePanning = false
 var mouseIsMoving = false
 
+func _ready():
+	reset_camera()
+
 func reset_camera():
 	offset = Vector2(85*96,85*96) * Vector2(0.5,0.5)
 	desired_offset = offset
-	
-	var initialZoom = get_viewport().cameraInitialZoom
+	var initialZoom = 9085.0 / OS.window_size.y * Settings.UI_SCALE.y
 	zoom = Vector2(initialZoom,initialZoom)
 	desired_zoom = zoom
 
@@ -37,7 +40,7 @@ func _process(delta):
 	desired_offset += directionalPan * DIRECTIONAL_PAN_SPEED * zoom * delta
 	var fieldSize = Vector2(32*255,32*255)
 	
-	var halfViewSize = (get_viewport().size * 0.5) * desired_zoom
+	var halfViewSize = ((get_viewport().size/Settings.UI_SCALE) * 0.5) * desired_zoom
 	
 	# The point of this is just so you can't move the map COMPLETELY off the screen
 	var allowLittleExtraVisible = halfViewSize * 0.10
@@ -63,7 +66,7 @@ func _unhandled_input(event):
 	if current == false: return #View is 3D
 	
 	if event.is_action_released('zoom_in') or event.is_action_pressed('keyboard_zoom_in'):
-		zoom_camera(-ZOOM_STEP, get_viewport().get_mouse_position()) #event.position)
+		zoom_camera(-ZOOM_STEP, get_viewport().get_mouse_position())
 	if event.is_action_released('zoom_out') or event.is_action_pressed('keyboard_zoom_out'):
 		zoom_camera(ZOOM_STEP, get_viewport().get_mouse_position()) #event.position)
 	
@@ -87,7 +90,7 @@ func _unhandled_input(event):
 
 func mouse_edge_pan():
 	directionalPan = Vector2()
-	var zoomedViewSize = get_viewport().size * zoom
+	var zoomedViewSize = (get_viewport().size/Settings.UI_SCALE) * zoom
 	var topLeftOfView = offset - (zoomedViewSize*0.5)
 	var panBorder = zoomedViewSize * 0.15 # 0.15 is percentage of screen, panBorder.x is 10% of screen width
 	var mpos = get_global_mouse_position()
@@ -106,10 +109,7 @@ func directional_pan():
 	if Input.is_action_pressed('keyboard_zoom_out'): return
 	
 	directionalPan = Vector2()
-	#var zoomedViewSize = get_viewport().size * zoom
-	#var topLeftOfView = offset - (zoomedViewSize*0.5)
-	#var panBorder = zoomedViewSize * 0.15 # 0.15 is percentage of screen, panBorder.x is 10% of screen width
-	#var mpos = get_global_mouse_position()
+	
 	if Input.is_action_pressed("pan_up"):
 		directionalPan.y = -1
 	if Input.is_action_pressed("pan_down"):
@@ -123,7 +123,7 @@ func directional_pan():
 
 func zoom_camera(zoom_factor, mouse_position):
 	
-	var viewport_size = get_viewport().size
+	var viewport_size = get_viewport().size/Settings.UI_SCALE
 	var previous_zoom = desired_zoom
 	
 	desired_zoom += desired_zoom * zoom_factor

@@ -76,7 +76,8 @@ func _on_MapImageTextureRect_gui_input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		CODETIME_START = OS.get_ticks_msec()
 		
-		var mousePos = get_global_mouse_position()
+		var mousePos = get_global_mouse_position() * Settings.UI_SCALE
+		
 		var screenshot = Image.new()
 		screenshot = get_viewport().get_texture().get_data()
 		
@@ -171,7 +172,7 @@ func apply_colour_as_slabIDs_to_map(doColour, slabID):
 	
 	var useOwner = 5
 	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner)
-	oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd)
+	oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd, true)
 
 func finish_up():
 	oMessage.quick("Applied slabs to map.")

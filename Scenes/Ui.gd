@@ -41,10 +41,12 @@ func _ready():
 
 func _on_any_window_was_dragged(callingNode):
 	callingNode.disconnect("item_rect_changed",self,"_on_any_window_was_dragged") # Fixes a Stack Overflow under certain circumstances
-	callingNode.rect_size.x = clamp(callingNode.rect_size.x, 0, get_viewport().size.x)
-	callingNode.rect_size.y = clamp(callingNode.rect_size.y, 0, get_viewport().size.y-60)
-	callingNode.rect_position.x = clamp(callingNode.rect_position.x, 0, get_viewport().size.x-callingNode.rect_size.x) #	Keep on screen
-	callingNode.rect_position.y = clamp(callingNode.rect_position.y, 60, get_viewport().size.y-callingNode.rect_size.y)
+	
+	var viewSize = get_viewport().size/Settings.UI_SCALE
+	callingNode.rect_size.x = clamp(callingNode.rect_size.x, 0, viewSize.x)
+	callingNode.rect_size.y = clamp(callingNode.rect_size.y, 0, viewSize.y-64)
+	callingNode.rect_position.x = clamp(callingNode.rect_position.x, 0, viewSize.x-callingNode.rect_size.x) #	Keep on screen
+	callingNode.rect_position.y = clamp(callingNode.rect_position.y, 64, viewSize.y-callingNode.rect_size.y)
 	callingNode.connect("item_rect_changed",self,"_on_any_window_was_dragged", [callingNode])
 
 func _input(event):
@@ -55,6 +57,7 @@ func _unhandled_input(event):
 	# There's a Godot bug where if you open an optionbutton, it treats it as if the mouse is not on UI.
 	if optionButtonIsOpened == true:
 		mouseOnUi = true
+
 
 
 #func _process(delta):
@@ -97,6 +100,7 @@ func set_FONT_SIZE_CR_LVL_BASE(setVal):
 func set_FONT_SIZE_CR_LVL_MAX(setVal):
 	FONT_SIZE_CR_LVL_MAX = setVal
 	oCamera2D.emit_signal("zoom_level_changed", oCamera2D.zoom)
+
 
 
 
@@ -169,3 +173,8 @@ func switch_to_1st_person():
 
 func _on_Possess3DButton_pressed():
 	switch_to_1st_person()
+
+
+func set_ui_scale(setVal):
+	Settings.UI_SCALE = Vector2(setVal,setVal)
+	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(1024,576), setVal)

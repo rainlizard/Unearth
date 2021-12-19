@@ -5,6 +5,8 @@ enum {
 }
 var haveInitializedAllSettings = false
 
+var UI_SCALE = Vector2(1, 1)
+
 var unearth_path = ""
 var unearthdata = ""
 var settings_file_path = ""
@@ -32,6 +34,7 @@ var listOfSettings = [
 	"mouse_sensitivity",
 	"fov",
 	"display_3d_info",
+	"ui_scale",
 	"font_size",
 	"font_size_creature_level_scale",
 	"font_size_creature_level_max",
@@ -101,7 +104,7 @@ func executable_stuff():
 	
 	# Choose executable path upon first starting
 	if cfg_has_setting("executable_path") == false:
-		var oChooseDkExe = $'../ViewportContainer/Viewport/Main/Ui/UiSystem/ChooseDkExe'
+		var oChooseDkExe = $'../Main/Ui/UiSystem/ChooseDkExe'
 		Utils.popup_centered(oChooseDkExe)
 	else:
 		# Test whenever you restart, to always show the error if there's a problem
@@ -137,130 +140,134 @@ func read_all():
 func game_setting(doWhat,string,value):
 	match string:
 		"REMEMBER_TMAPA_PATHS":
-			var oTextureCache = $'../ViewportContainer/Viewport/Main/TextureCache'
+			var oTextureCache = $'../Main/TextureCache'
 			if doWhat == SET: oTextureCache.LOAD_TMAPA_PATHS_FROM_SETTINGS(value)
 			if doWhat == GET: return oTextureCache.REMEMBER_TMAPA_PATHS
 		"custom_objects":
-			var oCustomData = $'../ViewportContainer/Viewport/Main/CustomData'
+			var oCustomData = $'../Main/CustomData'
 			if doWhat == SET: oCustomData.load_custom_objects(value)
 			if doWhat == GET: return oCustomData.CUSTOM_OBJECTS
 		"executable_path":
-			var oGame = $'../ViewportContainer/Viewport/Main/Game'
+			var oGame = $'../Main/Game'
 			if doWhat == SET: oGame.set_paths(value)
 			if doWhat == GET: return oGame.EXECUTABLE_PATH
 		"save_path":
-			var oGame = $'../ViewportContainer/Viewport/Main/Game'
+			var oGame = $'../Main/Game'
 			if doWhat == SET: oGame.set_SAVE_AS_DIRECTORY(value)
 			if doWhat == GET: return oGame.SAVE_AS_DIRECTORY
 		"file_viewer_window_size":
-			var oMapBrowser = $'../ViewportContainer/Viewport/Main/Ui/UiSystem/MapBrowser'
+			var oMapBrowser = $'../Main/Ui/UiSystem/MapBrowser'
 			if doWhat == SET: oMapBrowser.rect_size = value
 			if doWhat == GET: return oMapBrowser.rect_size
 		"file_viewer_window_position":
-			var oMapBrowser = $'../ViewportContainer/Viewport/Main/Ui/UiSystem/MapBrowser'
+			var oMapBrowser = $'../Main/Ui/UiSystem/MapBrowser'
 			if doWhat == SET: oMapBrowser.rect_position = value
 			if doWhat == GET: return oMapBrowser.rect_position
 		"vsync":
 			if doWhat == SET: OS.vsync_enabled = value
 			if doWhat == GET: return OS.vsync_enabled
 		"always_decompress":
-			var oOpenMap = $'../ViewportContainer/Viewport/Main/OpenMap'
+			var oOpenMap = $'../Main/OpenMap'
 			if doWhat == SET: oOpenMap.ALWAYS_DECOMPRESS = value
 			if doWhat == GET: return oOpenMap.ALWAYS_DECOMPRESS
 		"msaa":
-			var oViewport = $'../ViewportContainer/Viewport'
+			var oViewport = get_viewport()
 			if doWhat == SET: oViewport.msaa = value
 			if doWhat == GET: return oViewport.msaa
 		"dk_commands":
-			var oGame = $'../ViewportContainer/Viewport/Main/Game'
+			var oGame = $'../Main/Game'
 			if doWhat == SET: oGame.DK_COMMANDS = value
 			if doWhat == GET: return oGame.DK_COMMANDS
 		"mouse_edge_panning":
-			var oCamera2D = $'../ViewportContainer/Viewport/Main/Game2D/Camera2D'
+			var oCamera2D = $'../Main/Game2D/Camera2D'
 			if doWhat == SET: oCamera2D.MOUSE_EDGE_PANNING = value
 			if doWhat == GET: return oCamera2D.MOUSE_EDGE_PANNING
 		"pan_speed":
-			var oCamera2D = $'../ViewportContainer/Viewport/Main/Game2D/Camera2D'
+			var oCamera2D = $'../Main/Game2D/Camera2D'
 			if doWhat == SET: oCamera2D.DIRECTIONAL_PAN_SPEED = value
 			if doWhat == GET: return oCamera2D.DIRECTIONAL_PAN_SPEED
 		"zoom_step":
-			var oCamera2D = $'../ViewportContainer/Viewport/Main/Game2D/Camera2D'
+			var oCamera2D = $'../Main/Game2D/Camera2D'
 			if doWhat == SET: oCamera2D.ZOOM_STEP = value
 			if doWhat == GET: return oCamera2D.ZOOM_STEP
 		"smooth_pan_enabled":
-			var oCamera2D = $'../ViewportContainer/Viewport/Main/Game2D/Camera2D'
+			var oCamera2D = $'../Main/Game2D/Camera2D'
 			if doWhat == SET: oCamera2D.SMOOTH_PAN_ENABLED = value
 			if doWhat == GET: return oCamera2D.SMOOTH_PAN_ENABLED
 		"smoothing_rate":
-			var oCamera2D = $'../ViewportContainer/Viewport/Main/Game2D/Camera2D'
+			var oCamera2D = $'../Main/Game2D/Camera2D'
 			if doWhat == SET: oCamera2D.SMOOTHING_RATE = value
 			if doWhat == GET: return oCamera2D.SMOOTHING_RATE
 		"graphics_ownership_alpha":
-			var oOverheadOwnership = $'../ViewportContainer/Viewport/Main/Game2D/OverheadOwnership'
+			var oOverheadOwnership = $'../Main/Game2D/OverheadOwnership'
 			if doWhat == SET: oOverheadOwnership.OWNERSHIP_ALPHA = value
 			if doWhat == GET: return oOverheadOwnership.OWNERSHIP_ALPHA
 		"display_fps":
-			var oFPScounter = $'../ViewportContainer/Viewport/Main/Ui/UiMessages/FPScounter'
+			var oFPScounter = $'../Main/Ui/UiMessages/FPScounter'
 			if doWhat == SET: oFPScounter.visible = value
 			if doWhat == GET: return oFPScounter.visible
 		"mouse_sensitivity":
-			var oPlayer = $'../ViewportContainer/Viewport/Main/Game3D/Player'
+			var oPlayer = $'../Main/Game3D/Player'
 			if doWhat == SET: oPlayer.mouseSensitivity = value
 			if doWhat == GET: return oPlayer.mouseSensitivity
 		"fov":
-			var oCamera3D = $'../ViewportContainer/Viewport/Main/Game3D/Player/Head/Camera3D'
+			var oCamera3D = $'../Main/Game3D/Player/Head/Camera3D'
 			if doWhat == SET: oCamera3D.fov = value
 			if doWhat == GET: return oCamera3D.fov
 		"display_3d_info":
-			var oExtra3DInfo = $'../ViewportContainer/Viewport/Main/Ui/Ui3D/Extra3DInfo'
+			var oExtra3DInfo = $'../Main/Ui/Ui3D/Extra3DInfo'
 			if doWhat == SET: oExtra3DInfo.visible = value
 			if doWhat == GET: return oExtra3DInfo.visible
+		"ui_scale":
+			var oUi = $'../Main/Ui'
+			if doWhat == SET: oUi.set_ui_scale(value)
+			if doWhat == GET: return UI_SCALE.x
 		"font_size":
-			var oUi = $'../ViewportContainer/Viewport/Main/Ui'
+			var oUi = $'../Main/Ui'
 			if doWhat == SET: oUi.FONT_SIZE = value
 			if doWhat == GET: return oUi.FONT_SIZE
 		"font_size_creature_level_scale":
-			var oUi = $'../ViewportContainer/Viewport/Main/Ui'
+			var oUi = $'../Main/Ui'
 			if doWhat == SET: oUi.FONT_SIZE_CR_LVL_BASE = value
 			if doWhat == GET: return oUi.FONT_SIZE_CR_LVL_BASE
 		"font_size_creature_level_max":
-			var oUi = $'../ViewportContainer/Viewport/Main/Ui'
+			var oUi = $'../Main/Ui'
 			if doWhat == SET: oUi.FONT_SIZE_CR_LVL_MAX = value
 			if doWhat == GET: return oUi.FONT_SIZE_CR_LVL_MAX
 		"slab_window_size":
-			var oPickSlabWindow = $'../ViewportContainer/Viewport/Main/Ui/UiTools/PickSlabWindow'
+			var oPickSlabWindow = $'../Main/Ui/UiTools/PickSlabWindow'
 			if doWhat == SET: oPickSlabWindow.rect_size = value
 			if doWhat == GET: return oPickSlabWindow.rect_size
 		"slab_window_position":
-			var oPickSlabWindow = $'../ViewportContainer/Viewport/Main/Ui/UiTools/PickSlabWindow'
+			var oPickSlabWindow = $'../Main/Ui/UiTools/PickSlabWindow'
 			if doWhat == SET: oPickSlabWindow.rect_position = value
 			if doWhat == GET: return oPickSlabWindow.rect_position
 		"slab_window_scale":
-			var oPickSlabWindow = $'../ViewportContainer/Viewport/Main/Ui/UiTools/PickSlabWindow'
+			var oPickSlabWindow = $'../Main/Ui/UiTools/PickSlabWindow'
 			if doWhat == SET: oPickSlabWindow.grid_window_scale = value
 			if doWhat == GET: return oPickSlabWindow.grid_window_scale
 		"thing_window_size":
-			var oPickThingWindow = $'../ViewportContainer/Viewport/Main/Ui/UiTools/PickThingWindow'
+			var oPickThingWindow = $'../Main/Ui/UiTools/PickThingWindow'
 			if doWhat == SET: oPickThingWindow.rect_size = value
 			if doWhat == GET: return oPickThingWindow.rect_size
 		"thing_window_position":
-			var oPickThingWindow = $'../ViewportContainer/Viewport/Main/Ui/UiTools/PickThingWindow'
+			var oPickThingWindow = $'../Main/Ui/UiTools/PickThingWindow'
 			if doWhat == SET: oPickThingWindow.rect_position = value
 			if doWhat == GET: return oPickThingWindow.rect_position
 		"thing_window_scale":
-			var oPickThingWindow = $'../ViewportContainer/Viewport/Main/Ui/UiTools/PickThingWindow'
+			var oPickThingWindow = $'../Main/Ui/UiTools/PickThingWindow'
 			if doWhat == SET: oPickThingWindow.grid_window_scale = value
 			if doWhat == GET: return oPickThingWindow.grid_window_scale
 #		"owner_window_size":
-#			var oOwnerSelection = $'../ViewportContainer/Viewport/Main/Ui/UiTools/OwnerSelection'
+#			var oOwnerSelection = $'../Main/Ui/UiTools/OwnerSelection'
 #			if doWhat == SET: oOwnerSelection.rect_size = value
 #			if doWhat == GET: return oOwnerSelection.rect_size
 #		"owner_window_position":
-#			var oOwnerSelection = $'../ViewportContainer/Viewport/Main/Ui/UiTools/OwnerSelection'
+#			var oOwnerSelection = $'../Main/Ui/UiTools/OwnerSelection'
 #			if doWhat == SET: oOwnerSelection.rect_position = value
 #			if doWhat == GET: return oOwnerSelection.rect_position
 #		"owner_window_scale":
-#			var oOwnerSelection = $'../ViewportContainer/Viewport/Main/Ui/UiTools/OwnerSelection'
+#			var oOwnerSelection = $'../Main/Ui/UiTools/OwnerSelection'
 #			if doWhat == SET: oOwnerSelection.grid_window_scale = value
 #			if doWhat == GET: return oOwnerSelection.grid_window_scale
 		
@@ -277,35 +284,35 @@ func game_setting(doWhat,string,value):
 			if doWhat == SET: OS.window_fullscreen = value
 			if doWhat == GET: return OS.window_fullscreen
 		"details_viewer_window_position":
-			var oPropertiesWindow = $'../ViewportContainer/Viewport/Main/Ui/UiTools/PropertiesWindow'
+			var oPropertiesWindow = $'../Main/Ui/UiTools/PropertiesWindow'
 			if doWhat == SET: oPropertiesWindow.rect_position = value
 			if doWhat == GET: return oPropertiesWindow.rect_position
 #		"display_details_viewer":
-#			var oPropertiesWindow = $'../ViewportContainer/Viewport/Main/Ui/UiTools/PropertiesWindow'
+#			var oPropertiesWindow = $'../Main/Ui/UiTools/PropertiesWindow'
 #			if doWhat == SET: oPropertiesWindow.display_details = value
 #			if doWhat == GET: return oPropertiesWindow.display_details
 		"hide_unknown_data":
-			var oThingDetails = $'../ViewportContainer/Viewport/Main/Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails'
+			var oThingDetails = $'../Main/Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails'
 			if doWhat == SET: oThingDetails.HIDE_UNKNOWN_DATA = value
 			if doWhat == GET: return oThingDetails.HIDE_UNKNOWN_DATA
 		"ownable_natural_terrain":
-			var oOwnableNaturalTerrain = $'../ViewportContainer/Viewport/Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/OwnableNaturalTerrain'
+			var oOwnableNaturalTerrain = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/OwnableNaturalTerrain'
 			if doWhat == SET: oOwnableNaturalTerrain.pressed = value
 			if doWhat == GET: return oOwnableNaturalTerrain.pressed
 		"editable_borders":
-			var oEditableBordersCheckbox = $'../ViewportContainer/Viewport/Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox'
+			var oEditableBordersCheckbox = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox'
 			if doWhat == SET: oEditableBordersCheckbox.pressed = value
 			if doWhat == GET: return oEditableBordersCheckbox.pressed
 		"bridges_only_on_liquid":
-			var oBridgesOnlyOnLiquidCheckbox = $'../ViewportContainer/Viewport/Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox'
+			var oBridgesOnlyOnLiquidCheckbox = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox'
 			if doWhat == SET: oBridgesOnlyOnLiquidCheckbox.pressed = value
 			if doWhat == GET: return oBridgesOnlyOnLiquidCheckbox.pressed
 		"wallauto_art":
-			var oAutoWallArtButton = $'../ViewportContainer/Viewport/Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton'
+			var oAutoWallArtButton = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton'
 			if doWhat == SET: oAutoWallArtButton.text = value
 			if doWhat == GET: return oAutoWallArtButton.text
 		"wallauto_damaged":
-			var oDamagedWallLineEdit = $'../ViewportContainer/Viewport/Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit'
+			var oDamagedWallLineEdit = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit'
 			if doWhat == SET: oDamagedWallLineEdit.text = value
 			if doWhat == GET: return oDamagedWallLineEdit.text
 

@@ -6,9 +6,7 @@ onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
 
 
 func _ready():
-	popup_centered()
-	visible = false
-	visible = true
+	Utils.popup_centered(self)
 	
 	oVoxelTabs.set_tab_title(0, "Slabs")
 	oVoxelTabs.set_tab_title(1, "Columns")

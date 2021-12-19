@@ -20,6 +20,7 @@ onready var oThingWindowScale = Nodelist.list["oThingWindowScale"]
 onready var oTabSettings = Nodelist.list["oTabSettings"]
 onready var oCreatureLevelFontSizeScale = Nodelist.list["oCreatureLevelFontSizeScale"]
 onready var oCreatureLevelFontSizeMaxZoom = Nodelist.list["oCreatureLevelFontSizeMaxZoom"]
+onready var oUiScale = Nodelist.list["oUiScale"]
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
 #onready var oTabGraphics = Nodelist.list["oTabGraphics"]
@@ -41,12 +42,12 @@ func _ready():
 func _on_ButtonSettings_pressed():
 	Utils.popup_centered(self)
 
-const marginBorder = 12
+#const marginBorder = 12
 
-func _process(delta):
-	rect_size = $VBoxContainer.rect_size + Vector2(marginBorder*2,marginBorder*2)
-	$VBoxContainer.rect_size = Vector2(0,0)
-	$VBoxContainer.rect_position = Vector2(marginBorder,marginBorder)
+#func _process(delta):
+	#rect_size = $VBoxContainer.rect_size + Vector2(marginBorder*2,marginBorder*2)
+	#$VBoxContainer.rect_size = Vector2(0,0)
+	#$VBoxContainer.rect_position = Vector2(marginBorder,marginBorder)
 
 func _on_SettingsWindow_about_to_show():
 	oSetDirPath.text = Settings.get_setting("executable_path")
@@ -64,6 +65,7 @@ func _on_SettingsWindow_about_to_show():
 	oMouseSensitivity.line.text = str(Settings.get_setting("mouse_sensitivity"))
 	oFieldOfView.line.text = str(Settings.get_setting("fov"))
 	oCheckBoxDisplay3dInfo.pressed = Settings.get_setting("display_3d_info")
+	oUiScale.line.text = str(Settings.get_setting("ui_scale"))
 	oSlabWindowScale.line.text = str(Settings.get_setting("slab_window_scale"))
 	oThingWindowScale.line.text = str(Settings.get_setting("thing_window_scale"))
 	oCheckBoxHideUnknown.pressed = Settings.get_setting("hide_unknown_data")
@@ -120,6 +122,9 @@ func edited_MouseSensitivity(new_text):
 
 func edited_FieldOfView(new_text):
 	Settings.set_setting("fov", float(new_text))
+
+func edited_UiScale(new_text):
+	Settings.set_setting("ui_scale", float(new_text))
 
 func edited_SlabWindowScale(new_text):
 	Settings.set_setting("slab_window_scale", float(new_text))

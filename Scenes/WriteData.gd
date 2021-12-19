@@ -27,7 +27,10 @@ func write_lif(buffer, filePath):
 
 func write_txt(buffer):
 	value = oDataScript.data
-	buffer.put_data(value.to_utf8())
+	# I'm only using \n (LF) instead of \r\n (CRLF), because to_ascii() is removing the \r (CR) for some reason.
+	# Old Notepad will not display TXT files correctly.
+	# Notepad++ displays correctly and apparently so does Notepad on Windows 10.
+	buffer.put_data(value.to_ascii())
 
 func write_wlb(buffer):
 	for ySlab in 85:

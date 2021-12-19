@@ -215,7 +215,7 @@ shader_param/color5 = null
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = ExtResource( 8 )
-shader_param/zoom = 1.0
+shader_param/zoom = 2.5
 
 [sub_resource type="StyleBoxFlat" id=15]
 content_margin_left = 12.0
@@ -254,6 +254,9 @@ shader = ExtResource( 106 )
 shader_param/flashSpecific = Color( 1e-05, 2e-05, 3e-05, 4e-05 )
 
 [sub_resource type="DynamicFont" id=16]
+size = 24
+use_mipmaps = true
+use_filter = true
 font_data = ExtResource( 122 )
 
 [node name="Main" type="Node2D"]
@@ -486,6 +489,8 @@ script = ExtResource( 78 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource( 17 )
 __meta__ = {
 "_edit_lock_": true,
@@ -526,6 +531,8 @@ stretch_mode = 6
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource( 17 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1273,6 +1280,8 @@ texture_hover = ExtResource( 113 )
 expand = true
 
 [node name="ToolRectangle" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
+margin_right = 48.0
+margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Rectangle tool"
 focus_mode = 0
@@ -1311,6 +1320,8 @@ script = ExtResource( 42 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource( 17 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1507,7 +1518,7 @@ rect_min_size = Vector2( 12, 12 )
 [node name="MapBrowser" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_top = 60.0
-margin_right = 334.0
+margin_right = 354.0
 margin_bottom = 912.0
 rect_min_size = Vector2( 185, 0 )
 window_title = "Browse maps"
@@ -1520,6 +1531,10 @@ __meta__ = {
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/MapBrowser"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1528,7 +1543,7 @@ __meta__ = {
 margin_left = 4.0
 margin_top = 4.0
 margin_right = 330.0
-margin_bottom = 848.0
+margin_bottom = 828.0
 size_flags_vertical = 3
 custom_constants/separation = 0
 __meta__ = {
@@ -1566,7 +1581,7 @@ __meta__ = {
 [node name="DynamicMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
 margin_top = 50.0
 margin_right = 326.0
-margin_bottom = 780.0
+margin_bottom = 760.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1599,9 +1614,9 @@ __meta__ = {
 }
 
 [node name="HSeparator2" type="HSeparator" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 780.0
+margin_top = 760.0
 margin_right = 326.0
-margin_bottom = 788.0
+margin_bottom = 768.0
 mouse_filter = 1
 custom_constants/separation = 8
 custom_styles/separator = SubResource( 11 )
@@ -1610,9 +1625,9 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 788.0
+margin_top = 768.0
 margin_right = 326.0
-margin_bottom = 815.0
+margin_bottom = 795.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1667,9 +1682,9 @@ margin_bottom = 27.0
 text = "Open"
 
 [node name="HSeparator3" type="HSeparator" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 815.0
+margin_top = 795.0
 margin_right = 326.0
-margin_bottom = 823.0
+margin_bottom = 803.0
 mouse_filter = 1
 custom_constants/separation = 8
 custom_styles/separator = SubResource( 11 )
@@ -1678,9 +1693,9 @@ __meta__ = {
 }
 
 [node name="DateSaved" type="Label" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 823.0
+margin_top = 803.0
 margin_right = 326.0
-margin_bottom = 844.0
+margin_bottom = 824.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1698,8 +1713,8 @@ __meta__ = {
 visible = true
 margin_left = 1258.0
 margin_top = 504.0
-margin_right = 1954.0
-margin_bottom = 1030.0
+margin_right = 1874.0
+margin_bottom = 1011.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Select game executable (keeperfx.exe, keeper.exe)"
@@ -1720,9 +1735,9 @@ __meta__ = {
 [node name="ChooseDefaultSaveFolder" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 1258.0
-margin_top = 504.0
-margin_right = 1954.0
-margin_bottom = 1030.0
+margin_top = 1136.0
+margin_right = 1787.0
+margin_bottom = 1561.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Choose default directory for \"Save as\""
@@ -1889,11 +1904,12 @@ text = "Cancel"
 
 [node name="SettingsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -1696.0
+margin_left = -2520.0
 margin_top = 104.0
-margin_right = -1572.0
-margin_bottom = 105.0
+margin_right = -1932.0
+margin_bottom = 594.0
 window_title = "Settings"
+resizable = true
 script = ExtResource( 62 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1902,6 +1918,10 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
 rect_clip_content = true
 mouse_filter = 2
 size_flags_horizontal = 7
@@ -1911,9 +1931,11 @@ __meta__ = {
 }
 
 [node name="TabSettings" type="TabContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer"]
-margin_right = 585.0
-margin_bottom = 350.0
-rect_min_size = Vector2( 585, 350 )
+margin_right = 568.0
+margin_bottom = 380.0
+rect_min_size = Vector2( 439, 263 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 tab_align = 0
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
@@ -1930,13 +1952,13 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor"]
-margin_right = 561.0
-margin_bottom = 295.0
+margin_right = 544.0
+margin_bottom = 325.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
-margin_right = 561.0
+margin_right = 544.0
 margin_bottom = 27.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1952,7 +1974,7 @@ __meta__ = {
 
 [node name="SetDirPath" type="Label" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3"]
 margin_left = 166.0
-margin_right = 561.0
+margin_right = 544.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1973,13 +1995,13 @@ __meta__ = {
 
 [node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 62.0
-margin_right = 561.0
+margin_right = 544.0
 margin_bottom = 91.0
 text = "Always decompress maps"
 
 [node name="Label" type="Label" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 95.0
-margin_right = 561.0
+margin_right = 544.0
 margin_bottom = 116.0
 text = "Play button command line"
 __meta__ = {
@@ -1996,14 +2018,14 @@ expand_to_text_length = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 164.0
-margin_right = 561.0
+margin_right = 544.0
 margin_bottom = 204.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer"]
-margin_right = 561.0
+margin_right = 544.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 __meta__ = {
@@ -2029,7 +2051,7 @@ expand_to_text_length = true
 
 [node name="CmdLineExecute" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
 margin_left = 124.0
-margin_right = 561.0
+margin_right = 544.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
@@ -2096,10 +2118,21 @@ scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView"]
 margin_right = 340.0
-margin_bottom = 134.0
+margin_bottom = 169.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="UiScale" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 35.0
+margin_right = 577.0
+margin_bottom = 66.0
+settingText = "UI scale"
+minimumValue = 0.01
+maximumValue = 1000.0
 
 [node name="SlabWindowScale" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
@@ -2292,29 +2325,31 @@ __meta__ = {
 }
 
 [node name="ResetToDefault" type="Button" parent="Ui/UiSystem/SettingsWindow/VBoxContainer"]
-margin_top = 354.0
+margin_top = 384.0
 margin_right = 267.0
-margin_bottom = 381.0
+margin_bottom = 411.0
 size_flags_horizontal = 2
+size_flags_vertical = 8
 text = "Reset settings (closes editor)"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/SettingsWindow/VBoxContainer"]
-margin_top = 385.0
-margin_right = 585.0
-margin_bottom = 409.0
+margin_top = 415.0
+margin_right = 568.0
+margin_bottom = 439.0
 rect_min_size = Vector2( 24, 24 )
+size_flags_vertical = 8
 
 [node name="CloseButton" type="Button" parent="Ui/UiSystem/SettingsWindow/VBoxContainer"]
-margin_left = 262.0
-margin_top = 413.0
-margin_right = 323.0
-margin_bottom = 440.0
+margin_left = 253.0
+margin_top = 443.0
+margin_right = 314.0
+margin_bottom = 470.0
 grow_horizontal = 2
 size_flags_horizontal = 4
-size_flags_vertical = 2
+size_flags_vertical = 8
 text = "Close"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2322,10 +2357,10 @@ __meta__ = {
 
 [node name="FileDialogSaveAs" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -695.0
-margin_top = -601.0
-margin_right = -57.0
-margin_bottom = -63.0
+margin_left = -2006.0
+margin_top = 2227.0
+margin_right = -1329.0
+margin_bottom = 2789.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Save as"
@@ -2343,10 +2378,10 @@ __meta__ = {
 
 [node name="FileDialogOpen" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -1343.0
-margin_top = -601.0
-margin_right = -705.0
-margin_bottom = -63.0
+margin_left = -2751.0
+margin_top = 1631.0
+margin_right = -2075.0
+margin_bottom = 2175.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Open"
@@ -2398,9 +2433,9 @@ __meta__ = {
 [node name="SlabSettingsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 832.0
-margin_top = 344.0
+margin_top = 1216.0
 margin_right = 1146.0
-margin_bottom = 652.0
+margin_bottom = 1531.0
 rect_min_size = Vector2( 314, 220 )
 window_title = "Slab settings"
 script = ExtResource( 103 )
@@ -2421,7 +2456,7 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer"]
 margin_right = 278.0
-margin_bottom = 268.0
+margin_bottom = 275.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2516,10 +2551,10 @@ __meta__ = {
 
 [node name="ControlsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -1040.0
-margin_top = 48.0
-margin_right = -482.0
-margin_bottom = 718.0
+margin_left = -2210.0
+margin_top = 720.0
+margin_right = -1655.0
+margin_bottom = 1386.0
 window_title = "Controls"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2574,7 +2609,7 @@ visible = true
 margin_left = -976.0
 margin_top = 672.0
 margin_right = -319.0
-margin_bottom = 853.0
+margin_bottom = 854.0
 window_title = "About"
 script = ExtResource( 119 )
 __meta__ = {
@@ -2830,9 +2865,11 @@ __meta__ = {
 
 [node name="ImageAsMapDialog" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_right = 601.0
-margin_bottom = 449.0
-rect_min_size = Vector2( 490, 350 )
+margin_left = 8.0
+margin_top = 1872.0
+margin_right = 576.0
+margin_bottom = 2295.0
+rect_min_size = Vector2( 568, 233 )
 window_title = "Load image as map"
 resizable = true
 script = ExtResource( 104 )
@@ -2843,21 +2880,18 @@ __meta__ = {
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_bottom = -10.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer"]
-margin_right = 397.0
-margin_bottom = 429.0
+margin_right = 380.0
+margin_bottom = 423.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer"]
-margin_right = 397.0
+margin_right = 380.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 
@@ -2888,17 +2922,19 @@ text = "Help"
 [node name="MapImageTextureRect" type="TextureRect" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer"]
 material = SubResource( 14 )
 margin_top = 31.0
-margin_right = 397.0
-margin_bottom = 429.0
+margin_right = 380.0
+margin_bottom = 423.0
 size_flags_horizontal = 7
 size_flags_vertical = 7
 stretch_mode = 6
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer"]
-margin_left = 401.0
-margin_right = 591.0
-margin_bottom = 429.0
-rect_min_size = Vector2( 190, 0 )
+margin_left = 384.0
+margin_right = 569.0
+margin_bottom = 423.0
+rect_min_size = Vector2( 185, 0 )
+size_flags_horizontal = 8
+size_flags_vertical = 3
 
 [node name="ImageAsMapHelpText" type="Label" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer2"]
 visible = false
@@ -2910,15 +2946,15 @@ Click a pixel within the image to highlight its colour, then click a slab button
 autowrap = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer2"]
-margin_right = 190.0
-margin_bottom = 429.0
+margin_right = 185.0
+margin_bottom = 423.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 follow_focus = true
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer2/ScrollContainer"]
-margin_right = 190.0
-margin_bottom = 429.0
+margin_right = 185.0
+margin_bottom = 423.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -2957,9 +2993,9 @@ __meta__ = {
 visible = true
 margin_left = 344.0
 margin_top = -1923.0
-margin_right = 1199.0
-margin_bottom = -1168.0
-rect_min_size = Vector2( 855, 200 )
+margin_right = 1626.5
+margin_bottom = -790.5
+rect_min_size = Vector2( 1282.5, 300 )
 window_title = "Map settings"
 resizable = true
 script = ExtResource( 125 )
@@ -2990,8 +3026,8 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_left = 370.0
-margin_right = 461.0
+margin_left = 583.0
+margin_right = 674.0
 margin_bottom = 21.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -3002,9 +3038,9 @@ align = 1
 valign = 1
 
 [node name="MapNameLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_left = 386.0
+margin_left = 600.0
 margin_top = 25.0
-margin_right = 444.0
+margin_right = 658.0
 margin_bottom = 56.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -3014,7 +3050,7 @@ expand_to_text_length = true
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
 margin_top = 60.0
-margin_right = 831.0
+margin_right = 1258.0
 margin_bottom = 84.0
 rect_min_size = Vector2( 24, 24 )
 __meta__ = {
@@ -3022,9 +3058,9 @@ __meta__ = {
 }
 
 [node name="LabelDungeonStyle" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_left = 350.0
+margin_left = 564.0
 margin_top = 88.0
-margin_right = 480.0
+margin_right = 694.0
 margin_bottom = 109.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -3036,8 +3072,8 @@ valign = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
 margin_top = 113.0
-margin_right = 831.0
-margin_bottom = 700.0
+margin_right = 1258.0
+margin_bottom = 1077.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -3045,8 +3081,8 @@ __meta__ = {
 }
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/HBoxContainer"]
-margin_right = 831.0
-margin_bottom = 587.0
+margin_right = 1258.0
+margin_bottom = 964.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
@@ -3055,8 +3091,8 @@ __meta__ = {
 }
 
 [node name="DungeonStyleList" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/HBoxContainer/ScrollContainer"]
-margin_left = 415.0
-margin_right = 415.0
+margin_left = 629.0
+margin_right = 629.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 6
@@ -3465,10 +3501,10 @@ text = "Help"
 
 [node name="ChooseFileListFileDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -622.0
-margin_top = 1026.0
-margin_right = 72.0
-margin_bottom = 1682.0
+margin_left = -2004.0
+margin_top = 1631.0
+margin_right = -1326.0
+margin_bottom = 2186.0
 rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 resizable = true
@@ -3485,10 +3521,10 @@ __meta__ = {
 
 [node name="ChooseTmapaFileDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -622.0
-margin_top = 1026.0
-margin_right = 72.0
-margin_bottom = 1682.0
+margin_left = -1278.0
+margin_top = 2226.0
+margin_right = -607.0
+margin_bottom = 2792.0
 rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 resizable = true
@@ -3509,10 +3545,10 @@ __meta__ = {
 
 [node name="ExportTmapaDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -622.0
-margin_top = 1026.0
-margin_right = 72.0
-margin_bottom = 1682.0
+margin_left = -1278.0
+margin_top = 1626.0
+margin_right = -607.0
+margin_bottom = 2190.0
 rect_min_size = Vector2( 250, 87.5 )
 resizable = true
 dialog_text = "Any colours used that aren't in the DK palette will be set as bright purple.
@@ -3858,6 +3894,8 @@ text = "Delete column"
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource( 17 )
 __meta__ = {
 "_edit_use_anchors_": false
