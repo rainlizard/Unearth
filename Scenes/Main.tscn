@@ -2156,16 +2156,6 @@ settingText = "Thing window scale"
 minimumValue = 0.01
 maximumValue = 1000.0
 
-[node name="FontSize" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 0.0
-margin_right = 577.0
-margin_bottom = 31.0
-settingText = "Font size"
-minimumValue = 1.0
-maximumValue = 1000.0
-
 [node name="CheckBoxHideUnknown" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer"]
 margin_top = 105.0
 margin_right = 577.0
@@ -2993,9 +2983,9 @@ __meta__ = {
 visible = true
 margin_left = 344.0
 margin_top = -1923.0
-margin_right = 1626.5
-margin_bottom = -790.5
-rect_min_size = Vector2( 1282.5, 300 )
+margin_right = 1203.0
+margin_bottom = -893.0
+rect_min_size = Vector2( 200, 200 )
 window_title = "Map settings"
 resizable = true
 script = ExtResource( 125 )
@@ -3026,8 +3016,8 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_left = 583.0
-margin_right = 674.0
+margin_left = 372.0
+margin_right = 463.0
 margin_bottom = 21.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -3038,9 +3028,9 @@ align = 1
 valign = 1
 
 [node name="MapNameLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_left = 600.0
+margin_left = 388.0
 margin_top = 25.0
-margin_right = 658.0
+margin_right = 446.0
 margin_bottom = 56.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -3050,7 +3040,7 @@ expand_to_text_length = true
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
 margin_top = 60.0
-margin_right = 1258.0
+margin_right = 835.0
 margin_bottom = 84.0
 rect_min_size = Vector2( 24, 24 )
 __meta__ = {
@@ -3058,9 +3048,9 @@ __meta__ = {
 }
 
 [node name="LabelDungeonStyle" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_left = 564.0
+margin_left = 352.0
 margin_top = 88.0
-margin_right = 694.0
+margin_right = 482.0
 margin_bottom = 109.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -3072,8 +3062,8 @@ valign = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
 margin_top = 113.0
-margin_right = 1258.0
-margin_bottom = 1077.0
+margin_right = 835.0
+margin_bottom = 975.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -3081,8 +3071,8 @@ __meta__ = {
 }
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/HBoxContainer"]
-margin_right = 1258.0
-margin_bottom = 964.0
+margin_right = 835.0
+margin_bottom = 862.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
@@ -3091,8 +3081,8 @@ __meta__ = {
 }
 
 [node name="DungeonStyleList" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/HBoxContainer/ScrollContainer"]
-margin_left = 629.0
-margin_right = 629.0
+margin_left = 417.0
+margin_right = 417.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 6
@@ -3121,7 +3111,6 @@ __meta__ = {
 margin_right = 831.0
 margin_bottom = 1167.0
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer"]
 margin_right = 423.0

@@ -35,7 +35,6 @@ var listOfSettings = [
 	"fov",
 	"display_3d_info",
 	"ui_scale",
-	"font_size",
 	"font_size_creature_level_scale",
 	"font_size_creature_level_max",
 	"slab_window_size",
@@ -222,10 +221,6 @@ func game_setting(doWhat,string,value):
 			var oUi = $'../Main/Ui'
 			if doWhat == SET: oUi.set_ui_scale(value)
 			if doWhat == GET: return UI_SCALE.x
-		"font_size":
-			var oUi = $'../Main/Ui'
-			if doWhat == SET: oUi.FONT_SIZE = value
-			if doWhat == GET: return oUi.FONT_SIZE
 		"font_size_creature_level_scale":
 			var oUi = $'../Main/Ui'
 			if doWhat == SET: oUi.FONT_SIZE_CR_LVL_BASE = value

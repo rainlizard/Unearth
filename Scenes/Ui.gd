@@ -18,7 +18,6 @@ onready var oPossess3DButton = Nodelist.list["oPossess3DButton"]
 onready var oCamera3D = Nodelist.list["oCamera3D"]
 onready var oPlayer = Nodelist.list["oPlayer"]
 
-var FONT_SIZE = 16 setget set_FONT_SIZE
 var FONT_SIZE_CR_LVL_BASE := 1.00 setget set_FONT_SIZE_CR_LVL_BASE
 var FONT_SIZE_CR_LVL_MAX := 8.00 setget set_FONT_SIZE_CR_LVL_MAX
 
@@ -87,11 +86,6 @@ func HSV_8(h,s,v):
 	return Color.from_hsv(h/359.0,s/100.0,v/100.0, 1.0)
 
 #oUi2D.theme.set('WindowDialog/colors/title_color', col)
-
-
-func set_FONT_SIZE(setVal):
-	FONT_SIZE = setVal
-	oUiTools.theme.default_font.size = FONT_SIZE
 
 func set_FONT_SIZE_CR_LVL_BASE(setVal):
 	FONT_SIZE_CR_LVL_BASE = setVal

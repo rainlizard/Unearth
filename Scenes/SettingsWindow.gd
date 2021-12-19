@@ -30,7 +30,6 @@ onready var oUiScale = Nodelist.list["oUiScale"]
 
 onready var oCheckBoxHideUnknown = Nodelist.list["oCheckBoxHideUnknown"]
 onready var oOwnerAlphaSlider = Nodelist.list["oOwnerAlphaSlider"]
-onready var oFontSize = Nodelist.list["oFontSize"]
 
 func _ready():
 	oTabSettings.set_tab_title(0,"Editor")
@@ -60,19 +59,18 @@ func _on_SettingsWindow_about_to_show():
 	oCheckBoxSmoothPan.pressed = Settings.get_setting("smooth_pan_enabled")
 	oCheckBoxDisplayFPS.pressed = Settings.get_setting("display_fps")
 	oDirectionalPanSpeed.line.text = str(Settings.get_setting("pan_speed"))
-	oZoomStep.line.text = str(Settings.get_setting("zoom_step"))
-	oSmoothingRate.line.text = str(Settings.get_setting("smoothing_rate"))
-	oMouseSensitivity.line.text = str(Settings.get_setting("mouse_sensitivity"))
+	oZoomStep.line.text = str(Settings.get_setting("zoom_step")).pad_decimals(2)
+	oSmoothingRate.line.text = str(Settings.get_setting("smoothing_rate")).pad_decimals(2)
+	oMouseSensitivity.line.text = str(Settings.get_setting("mouse_sensitivity")).pad_decimals(2)
 	oFieldOfView.line.text = str(Settings.get_setting("fov"))
 	oCheckBoxDisplay3dInfo.pressed = Settings.get_setting("display_3d_info")
-	oUiScale.line.text = str(Settings.get_setting("ui_scale"))
-	oSlabWindowScale.line.text = str(Settings.get_setting("slab_window_scale"))
-	oThingWindowScale.line.text = str(Settings.get_setting("thing_window_scale"))
+	oUiScale.line.text = str(Settings.get_setting("ui_scale")).pad_decimals(2)
+	oSlabWindowScale.line.text = str(Settings.get_setting("slab_window_scale")).pad_decimals(2)
+	oThingWindowScale.line.text = str(Settings.get_setting("thing_window_scale")).pad_decimals(2)
 	oCheckBoxHideUnknown.pressed = Settings.get_setting("hide_unknown_data")
 	oOwnerAlphaSlider.value = Settings.get_setting("graphics_ownership_alpha")
-	oFontSize.line.text = str(Settings.get_setting("font_size"))
-	oCreatureLevelFontSizeScale.line.text = str(Settings.get_setting("font_size_creature_level_scale"))
-	oCreatureLevelFontSizeMaxZoom.line.text = str(Settings.get_setting("font_size_creature_level_max"))
+	oCreatureLevelFontSizeScale.line.text = str(Settings.get_setting("font_size_creature_level_scale")).pad_decimals(2)
+	oCreatureLevelFontSizeMaxZoom.line.text = str(Settings.get_setting("font_size_creature_level_max")).pad_decimals(2)
 
 func _on_CheckBoxVsync_toggled(button_pressed):
 	Settings.set_setting("vsync", button_pressed)
@@ -128,9 +126,6 @@ func edited_UiScale(new_text):
 
 func edited_SlabWindowScale(new_text):
 	Settings.set_setting("slab_window_scale", float(new_text))
-
-func edited_FontSize(new_text):
-	Settings.set_setting("font_size", float(new_text))
 
 func edited_CreatureLevelFontSizeScale(new_text):
 	Settings.set_setting("font_size_creature_level_scale", float(new_text))
