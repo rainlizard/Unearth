@@ -46,22 +46,16 @@ func clearAll():
 func get_top_cube_face(index, slabID):
 	var get_height = height[index]
 	if slabID == Slabs.PORTAL:
-		get_height = get_real_height(index)
+		get_height = get_real_height(cubes[index])
 	if get_height == 0:
 		return floorTexture[index]
 	else:
 		var cubeID = cubes[index][get_height-1] #get_height
 		return Cube.tex[cubeID][Cube.SIDE_TOP]
 
-func get_real_height(index):
+func get_real_height(cubeArray):
 	for cubeNumber in 8:
-		if cubes[index][7-cubeNumber] != 0:
-			return 8-cubeNumber
-	return 0
-
-func cube_array_get_real_height(array):
-	for cubeNumber in 8:
-		if array[7-cubeNumber] != 0:
+		if cubeArray[7-cubeNumber] != 0:
 			return 8-cubeNumber
 	return 0
 
@@ -89,7 +83,7 @@ func index_entry(cubeArray, setFloorID):
 		solidMask[index] = calculate_solid_mask(index, cubeArray)
 		permanent[index] = 0
 		lintel[index] = 0
-		height[index] = cube_array_get_real_height(cubeArray)
+		height[index] = get_real_height(cubeArray)
 		cubes[index] = cubeArray
 		floorTexture[index] = setFloorID
 		

@@ -97,8 +97,9 @@ func add_slabs():
 							id.columns[i] = oSlabPalette.slabPal[slabVariation][i]
 					else:
 						# Custom slab
-						for i in 9:
-							id.columns[i] = oCustomSlabData.data[slabID][oCustomSlabData.SLAB_COLUMNS][i]
+						pass
+#						for i in 9:
+#							id.columns[i] = oCustomSlabData.data[slabID][oCustomSlabData.SLAB_DATA][i]
 			id.set_meta("ID_of_slab", slabID)
 			id.panelView = Slabs.data[slabID][Slabs.PANEL_VIEW]
 			id.set_visual()

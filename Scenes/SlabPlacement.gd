@@ -124,12 +124,18 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 
 
 func slab_place_custom(xSlab, ySlab, slabID, ownership):
-	
 	# Wibble?
 	# WLB?
 	
-	var clmIndexArray = oCustomSlabData.data[slabID][oCustomSlabData.SLAB_COLUMNS]
+	var clmIndexArray = []
+	for i in 9:
+		var cubeArray = oCustomSlabData.data[slabID][oCustomSlabData.CUBE_DATA][i]
+		var setFloorID = oCustomSlabData.data[slabID][oCustomSlabData.FLOOR_DATA][i]
+		var clmIndex = oDataClm.index_entry(cubeArray, setFloorID) # Uses an existing entry, or creates a new one.
+		clmIndexArray.append(clmIndex)
+	
 	set_columns(xSlab, ySlab, clmIndexArray)
+	
 	var recognizedAsID = oCustomSlabData.data[slabID][oCustomSlabData.RECOGNIZED_AS]
 	oDataSlab.set_cell(xSlab, ySlab, recognizedAsID)
 

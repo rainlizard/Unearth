@@ -76,7 +76,7 @@ func set_icons():
 			img.resize(31, 31*aspectRatioH)
 		
 		var imgTex = ImageTexture.new()
-		imgTex.create_from_image(img)
+		imgTex.create_from_image(img, 0)
 		
 		tabSystem.set_tab_icon(tabIndex, imgTex)
 

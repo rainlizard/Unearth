@@ -9,6 +9,7 @@ onready var oCustomSlabData = Nodelist.list["oCustomSlabData"]
 onready var oNewSlabName = Nodelist.list["oNewSlabName"]
 onready var oSlabTabs = Nodelist.list["oSlabTabs"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oDataClm = Nodelist.list["oDataClm"]
 
 var cssb = preload('res://Scenes/CustomSlabSpinBox.tscn')
 
@@ -44,11 +45,14 @@ func _on_AddCustomSlabButton_pressed():
 	
 	var generalArray = [slabName, isSolid, bitmaskType, panelView, sideViewZOffset, editorTab, wibbleType, liquidType, isOwnable]
 	
-	var slabColumnsArray = []
+	var slabCubeData = []
+	var slabFloorData = []
 	for i in oGridContainerForChoosing3x3.get_children():
-		slabColumnsArray.append(i.value)
+		var clmIndex = i.value
+		slabCubeData.append(oDataClm.cubes[clmIndex])
+		slabFloorData.append(oDataClm.floorTexture[clmIndex])
 	
-	oCustomSlabData.add_custom_slab(newID, slabColumnsArray, generalArray, oSlabRecognizedAs.value)
+	oCustomSlabData.add_custom_slab(newID, generalArray, oSlabRecognizedAs.value, slabCubeData, slabFloorData)
 	
 	oPickSlabWindow.add_slabs()
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
