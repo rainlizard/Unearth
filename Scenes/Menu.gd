@@ -114,14 +114,16 @@ func _on_EditSubmenu_Pressed(pressedID):
 					oMessage.quick("Could not open: " + pathToTryAndOpen)
 			else:
 				oMessage.quick("No map path detected. Try saving first.")
-		3: # Slab settings
+		3: # Custom slabs
+			Utils.popup_centered(oSlabColumnEditor)
+		4: # Slab placement
 			Utils.popup_centered(oSlabSettingsWindow)
-		4: # Update all slabs
+		5: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oConfirmAutoGen)
-		5: # Add custom object
+		6: # Add custom object
 			Utils.popup_centered(oAddCustomObjectWindow)
-		6:
+		7:
 			# Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
 
@@ -150,8 +152,6 @@ func _on_ViewSubmenu_Pressed(pressedID):
 				oEditor.set_view_3d()
 				oGenerateTerrain.start()
 			oUi.switch_to_1st_person()
-		3:
-			Utils.popup_centered(oSlabColumnEditor)
 
 func _on_MenuButtonSettings_pressed():
 	oMenuButtonSettings.get_popup().visible = false

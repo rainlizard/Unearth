@@ -95,11 +95,6 @@ func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 
 
 func do_slab(xSlab, ySlab, slabID, ownership):
-	if slabID >= 1000: # Custom Slab IDs
-		if oCustomSlabData.data.has(slabID):
-			slab_place_custom(xSlab, ySlab, slabID, ownership)
-		return
-	
 	if slabID == Slabs.WALL_AUTOMATIC:
 		slabID = auto_wall(xSlab, ySlab) # Set slabID to a real one
 	elif slabID == Slabs.EARTH:
@@ -107,11 +102,17 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 	
 	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
 	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
+	
+	if slabID >= 1000: # Custom Slab IDs
+		if oCustomSlabData.data.has(slabID):
+			slab_place_custom(xSlab, ySlab, slabID, ownership, surrID)
+		return
+	
 	# WIB (wibble)
-	update_wibble(xSlab, ySlab, slabID, surrID)
+	update_wibble(xSlab, ySlab, slabID, false)
 	# WLB (Water Lava Block)
 	if slabID != Slabs.BRIDGE:
-		oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
+		oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.REMEMBER_TYPE])
 	
 	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
 	match bitmaskType:
@@ -123,17 +124,17 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 			place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
 
 
-func slab_place_custom(xSlab, ySlab, slabID, ownership):
+func slab_place_custom(xSlab, ySlab, slabID, ownership, surrID):
 	var recognizedAsID = oCustomSlabData.data[slabID][oCustomSlabData.RECOGNIZED_AS]
 	
-	var wibbleValue = oCustomSlabData.data[slabID][oCustomSlabData.GENERAL][Slabs.WIBBLE_TYPE]
-	
+	var wibbleNearby = oCustomSlabData.data[slabID][oCustomSlabData.WIBBLE_NEARBY]
 	
 	# WIB (wibble)
-	#update_wibble(xSlab, ySlab, slabID, surrID)
+	update_wibble(xSlab, ySlab, slabID, wibbleNearby)
+	
 	# WLB (Water Lava Block)
 	if recognizedAsID != Slabs.BRIDGE:
-		var liquidValue = oCustomSlabData.data[slabID][oCustomSlabData.GENERAL][Slabs.LIQUID_TYPE]
+		var liquidValue = Slabs.data[slabID][Slabs.REMEMBER_TYPE]
 		oDataLiquid.set_cell(xSlab, ySlab, liquidValue)
 	
 	var clmIndexArray = []
@@ -613,7 +614,7 @@ func modify_room_face(asset3x3group, surrID, slabID):
 
 func modify_for_liquid(asset3x3group, surrID, slabID):
 	# Don't modify slab if slab is liquid
-	if Slabs.data[slabID][Slabs.LIQUID_TYPE] != Slabs.NOT_LIQUID:
+	if slabID == Slabs.WATER or slabID == Slabs.LAVA:
 		return asset3x3group
 	
 	var modify0 = 0; var modify1 = 0; var modify2 = 0; var modify3 = 0; var modify4 = 0; var modify5 = 0; var modify6 = 0; var modify7 = 0; var modify8 = 0
@@ -885,42 +886,81 @@ const slab_temple_odd = [
 	dir.n, # subtile 8
 ]
 
-func update_wibble(xSlab, ySlab, slabID, surrID):
+func update_wibble(xSlab, ySlab, slabID, includeNearby):
+	# I'm using surrounding wibble to update this slab's wibble, instead of using surrounding slabID, this is for the sake of custom slabs
+	
 	var myWibble = Slabs.data[slabID][Slabs.WIBBLE_TYPE]
 	
 	var xWib = xSlab * 3
 	var yWib = ySlab * 3
 	
-	oDataWibble.set_cell(xWib+1, yWib+1, myWibble)
-	oDataWibble.set_cell(xWib+2, yWib+1, myWibble)
-	oDataWibble.set_cell(xWib+1, yWib+2, myWibble)
-	oDataWibble.set_cell(xWib+2, yWib+2, myWibble)
+	# O T T O
+	# L C C R
+	# L C C R
+	# O B B O
 	
-	if myWibble == 1:
-		oDataWibble.set_cell(xWib+0, yWib+0, myWibble)
-		oDataWibble.set_cell(xWib+1, yWib+3, myWibble)
-		oDataWibble.set_cell(xWib+2, yWib+3, myWibble)
-		oDataWibble.set_cell(xWib+3, yWib+3, myWibble)
-		oDataWibble.set_cell(xWib+3, yWib+2, myWibble)
-		oDataWibble.set_cell(xWib+3, yWib+1, myWibble)
-		oDataWibble.set_cell(xWib+3, yWib+0, myWibble)
-		oDataWibble.set_cell(xWib+0, yWib+3, myWibble)
-		oDataWibble.set_cell(xWib+1, yWib+0, myWibble)
-		oDataWibble.set_cell(xWib+2, yWib+0, myWibble)
-		oDataWibble.set_cell(xWib+0, yWib+1, myWibble)
-		oDataWibble.set_cell(xWib+0, yWib+2, myWibble)
+	var centerPos1 = Vector2(xWib+1, yWib+1)
+	var centerPos2 = Vector2(xWib+2, yWib+1)
+	var centerPos3 = Vector2(xWib+1, yWib+2)
+	var centerPos4 = Vector2(xWib+2, yWib+2)
 	
-	if myWibble != 1:
-		var nCheck = Slabs.data[ surrID[dir.n] ][Slabs.WIBBLE_TYPE]
-		var wCheck = Slabs.data[ surrID[dir.w] ][Slabs.WIBBLE_TYPE]
+	var nPos1 = Vector2(xWib+1, yWib+0)
+	var nPos2 = Vector2(xWib+2, yWib+0)
+	
+	var wPos1 = Vector2(xWib+0, yWib+1)
+	var wPos2 = Vector2(xWib+0, yWib+2)
+	
+	var ePos1 = Vector2(xWib+3, yWib+1)
+	var ePos2 = Vector2(xWib+3, yWib+2)
+	
+	var sPos1 = Vector2(xWib+1, yWib+3)
+	var sPos2 = Vector2(xWib+2, yWib+3)
+	
+	var nwPos = Vector2(xWib+0, yWib+0)
+	var nePos = Vector2(xWib+3, yWib+0)
+	var swPos = Vector2(xWib+0, yWib+3)
+	var sePos = Vector2(xWib+3, yWib+3)
+	
+	oDataWibble.set_cellv(centerPos1, myWibble)
+	oDataWibble.set_cellv(centerPos2, myWibble)
+	oDataWibble.set_cellv(centerPos3, myWibble)
+	oDataWibble.set_cellv(centerPos4, myWibble)
+	
+	if myWibble == Slabs.WIBBLE_ON or includeNearby == true:
+		for pos in [nPos1, nPos2, wPos1, wPos2, ePos1, ePos2, sPos1, sPos2, nwPos, nePos, swPos, sePos]:
+			oDataWibble.set_cellv(pos, myWibble)
+	else:
+		var nCheck = oDataWibble.get_cellv(nPos1 + Vector2(0,-1))
+		var wCheck = oDataWibble.get_cellv(wPos1 + Vector2(-1,0))
+		var sCheck = oDataWibble.get_cellv(sPos1 + Vector2(0,1))
+		var eCheck = oDataWibble.get_cellv(ePos1 + Vector2(1,0))
+		
+		var nwCheck = oDataWibble.get_cellv(nwPos + Vector2(-1,-1))
+		var neCheck = oDataWibble.get_cellv(nePos + Vector2(1,-1))
+		var swCheck = oDataWibble.get_cellv(swPos + Vector2(-1,1))
+		var seCheck = oDataWibble.get_cellv(sePos + Vector2(1,1))
+		
 		if nCheck == myWibble:
-			oDataWibble.set_cell(xWib+1, yWib+0, myWibble)
-			oDataWibble.set_cell(xWib+2, yWib+0, myWibble)
+			oDataWibble.set_cellv(nPos1, myWibble)
+			oDataWibble.set_cellv(nPos2, myWibble)
 		if wCheck == myWibble:
-			oDataWibble.set_cell(xWib+0, yWib+1, myWibble)
-			oDataWibble.set_cell(xWib+0, yWib+2, myWibble)
-		if nCheck == myWibble and wCheck == myWibble and Slabs.data[ surrID[dir.nw] ][Slabs.WIBBLE_TYPE] == myWibble:
-			oDataWibble.set_cell(xWib+0, yWib+0, myWibble)
+			oDataWibble.set_cellv(wPos1, myWibble)
+			oDataWibble.set_cellv(wPos2, myWibble)
+		if eCheck == myWibble:
+			oDataWibble.set_cellv(ePos1, myWibble)
+			oDataWibble.set_cellv(ePos2, myWibble)
+		if sCheck == myWibble:
+			oDataWibble.set_cellv(sPos1, myWibble)
+			oDataWibble.set_cellv(sPos2, myWibble)
+		
+		if nwCheck == myWibble and nCheck == myWibble and wCheck == myWibble:
+			oDataWibble.set_cellv(nwPos, myWibble)
+		if neCheck == myWibble and nCheck == myWibble and eCheck == myWibble:
+			oDataWibble.set_cellv(nePos, myWibble)
+		if swCheck == myWibble and sCheck == myWibble and wCheck == myWibble:
+			oDataWibble.set_cellv(swPos, myWibble)
+		if seCheck == myWibble and sCheck == myWibble and eCheck == myWibble:
+			oDataWibble.set_cellv(sePos, myWibble)
 
 var slabsThatCanBeUsedAsCornerFiller = {
 	Slabs.PATH:0,

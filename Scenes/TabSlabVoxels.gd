@@ -12,6 +12,8 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oSlabWibbleOptionButton = Nodelist.list["oSlabWibbleOptionButton"]
 onready var oSlabLiquidOptionButton = Nodelist.list["oSlabLiquidOptionButton"]
+onready var oWibbleEdgesCheckBox = Nodelist.list["oWibbleEdgesCheckBox"]
+onready var oWibbleEdgesSpacing = Nodelist.list["oWibbleEdgesSpacing"]
 
 var cssb = preload('res://Scenes/CustomSlabSpinBox.tscn')
 
@@ -47,10 +49,8 @@ func _on_AddCustomSlabButton_pressed():
 	var sideViewZOffset = 0
 	var editorTab = Slabs.TAB_CUSTOM
 	var wibbleType = oSlabWibbleOptionButton.get_selected_id()#Slabs.WIBBLE_ON
-	var liquidType = oSlabLiquidOptionButton.get_selected_id()#Slabs.NOT_LIQUID
+	var liquidType = oSlabLiquidOptionButton.get_selected_id()
 	var isOwnable = Slabs.OWNABLE
-	
-	
 	
 	
 	var generalArray = [slabName, isSolid, bitmaskType, panelView, sideViewZOffset, editorTab, wibbleType, liquidType, isOwnable]
@@ -62,15 +62,24 @@ func _on_AddCustomSlabButton_pressed():
 		slabCubeData.append(oDataClm.cubes[clmIndex])
 		slabFloorData.append(oDataClm.floorTexture[clmIndex])
 	
-	oCustomSlabData.add_custom_slab(newID, generalArray, oSlabRecognizedAs.value, slabCubeData, slabFloorData)
+	oCustomSlabData.add_custom_slab(newID, generalArray, oSlabRecognizedAs.value, slabCubeData, slabFloorData, oWibbleEdgesCheckBox.pressed)
 	
 	oPickSlabWindow.add_slabs()
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
-
+	oPickSlabWindow.set_selection(newID)
 
 func _on_HelpCustomSlabsButton_pressed():
 	var helptext = "\n"
 	helptext += "With a few exceptions, most custom slabs will reset their appearance when placing on or claiming an adjacent slab. \n"
-	helptext += "To avoid this, set 'Recognized as' to one of the following: Slab 50, Impenetrable Rock, Gold, Bridge, Gems, Guard post, Water and Lava (while not marked as liquid), Doors (without door object). Needs further testing.\n"
+	helptext += "To avoid this, set 'Recognized as' to one of the following: Slab 50, Impenetrable Rock, Gold, Bridge, Gems, Guard post, Doors (without door object). Needs further testing.\n"
 	helptext += "To remove custom slabs, right click their portrait within the slab picker window."
 	oMessage.big("Help",helptext)
+
+
+func _on_SlabWibbleOptionButton_item_selected(index):
+	if index != 1:
+		oWibbleEdgesSpacing.visible = true
+		oWibbleEdgesCheckBox.visible = true
+	else:
+		oWibbleEdgesSpacing.visible = false
+		oWibbleEdgesCheckBox.visible = false

@@ -25,7 +25,7 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask,
 		var isMiddle = determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner)
 		if isMiddle == false:
 			constructedSlab = oSlabPlacement.slab_all
-	print(slabVariation + constructedSlab[0])
+	#print(slabVariation + constructedSlab[0])
 	for subtile in 9:
 		var idx = get_obj_idx(slabVariation + constructedSlab[subtile], subtile)
 		if idx != -1:

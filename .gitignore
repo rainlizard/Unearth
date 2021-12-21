@@ -1,5 +1,6 @@
 # Unearth
 settings.cfg
+unearthcustomslabs.cfg
 
 unearthdata/tmapa0*
 
@@ -12,3 +13,9 @@ unearthdata/tmapa0*
 .mono/
 .vs/
 data_*/
+
+
+
+
+
+

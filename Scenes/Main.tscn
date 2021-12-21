@@ -1370,7 +1370,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Slab settings", null, 0, false, false, 3, 0, null, "", false, "Update all slabs", null, 0, false, false, 4, 0, null, "", false, "Add custom object", null, 0, false, false, 5, 0, null, "", false, "Texture editing", null, 0, false, false, 6, 0, null, "", false ]
+items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Custom slabs", null, 0, false, false, 3, 0, null, "", false, "Slab placement", null, 0, false, false, 4, 0, null, "", false, "Update all slabs", null, 0, false, false, 5, 0, null, "", false, "Add custom object", null, 0, false, false, 6, 0, null, "", false, "Texture editing", null, 0, false, false, 7, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1390,7 +1390,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "View"
 align = 0
-items = [ "2D", null, 0, false, false, 0, 0, null, "", false, "3D: Overhead", null, 0, false, false, 1, 0, null, "", false, "3D: 1st person", null, 0, false, false, 2, 0, null, "", false, "Slabs/Columns", null, 0, false, false, 3, 0, null, "", false ]
+items = [ "2D", null, 0, false, false, 0, 0, null, "", false, "3D: Overhead", null, 0, false, false, 1, 0, null, "", false, "3D: 1st person", null, 0, false, false, 2, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2427,7 +2427,7 @@ margin_top = 1216.0
 margin_right = 1146.0
 margin_bottom = 1531.0
 rect_min_size = Vector2( 314, 220 )
-window_title = "Slab settings"
+window_title = "Slab placement"
 script = ExtResource( 103 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3750,6 +3750,7 @@ margin_left = 132.0
 margin_right = 282.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 150, 0 )
+hint_tooltip = "The name to display inside slab picker window."
 size_flags_horizontal = 10
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3773,6 +3774,8 @@ margin_bottom = 91.0
 margin_left = 38.0
 margin_right = 112.0
 margin_bottom = 31.0
+hint_tooltip = "For gameplay purposes this is what the game will treat this custom slab as. Also determines what it may reset its appearance to."
+mouse_filter = 1
 size_flags_horizontal = 4
 max_value = 255.0
 value = 50.0
@@ -3805,9 +3808,30 @@ margin_left = 132.0
 margin_top = 95.0
 margin_right = 282.0
 margin_bottom = 122.0
-text = "On"
-items = [ "Off", null, false, 0, null, "On", null, false, 1, null, "Animated", null, false, 2, null ]
+hint_tooltip = "Sets whether the slab will have a clean appearance, a deformed appearance, or a wavy appearance."
+text = "1 : On"
+items = [ "0 : Off", null, false, 0, null, "1 : On", null, false, 1, null, "2 : Animated", null, false, 2, null ]
 selected = 1
+
+[node name="WibbleEdgesSpacing" type="Control" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/GridContainer"]
+visible = false
+margin_top = 126.0
+margin_right = 128.0
+margin_bottom = 155.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WibbleEdgesCheckBox" type="CheckBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/GridContainer"]
+visible = false
+margin_top = 126.0
+margin_right = 148.0
+margin_bottom = 155.0
+hint_tooltip = "Set the wibble value of the position inbetween slabs as well."
+text = "Include edges"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label4" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/GridContainer"]
 margin_top = 129.0
@@ -3823,8 +3847,9 @@ margin_left = 132.0
 margin_top = 126.0
 margin_right = 282.0
 margin_bottom = 153.0
-text = "No"
-items = [ "No", null, false, 0, null, "Lava", null, false, 1, null, "Water", null, false, 2, null ]
+hint_tooltip = "If a bridge is placed on this slab, this indicates what's underneath the bridge."
+text = "0 : No"
+items = [ "0 : No", null, false, 0, null, "1 : Lava", null, false, 1, null, "2 : Water", null, false, 2, null ]
 selected = 0
 
 [node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer"]
@@ -4166,6 +4191,7 @@ script = ExtResource( 88 )
 [connection signal="tab_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs" to="Ui/UiSystem/SlabColumnEditor" method="_on_VoxelTabs_tab_changed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/HelpCustomSlabsButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_HelpCustomSlabsButton_pressed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/GridContainer/HBoxContainer/SlabRecognizedAs" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_SlabRecognizedAs_value_changed"]
+[connection signal="item_selected" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/GridContainer/SlabWibbleOptionButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_SlabWibbleOptionButton_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/AddCustomSlabButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_AddCustomSlabButton_pressed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/VBoxContainer/HBoxContainer/ColumnViewSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/ColumnVoxelView" method="_on_ColumnViewSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/VBoxContainer/HBoxContainer/ColumnViewDeleteButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer/ColumnVoxelView" method="_on_ColumnViewDeleteButton_pressed"]
