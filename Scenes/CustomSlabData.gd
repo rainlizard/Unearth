@@ -1,11 +1,10 @@
 extends Node
 onready var oDataClm = Nodelist.list["oDataClm"]
+onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 
-var customSlabsFile = File.new()
+var data = {}
+var slabsFile = ConfigFile.new()
 
-var data = {
-	
-}
 enum {
 	GENERAL
 	RECOGNIZED_AS
@@ -13,15 +12,39 @@ enum {
 	FLOOR_DATA
 }
 
+func _ready():
+	load_file()
+
 func add_custom_slab(newID, general, recognizedAs, slabCubeData, slabFloorData):
 	
 	data[newID] = [general, recognizedAs, slabCubeData, slabFloorData]
 	
 	Slabs.data[newID] = general
 	
-	customSlabsFile.open(Settings.unearthdata.plus_file("unearthcustomslabs.cfg"),File.READ)
+	slabsFile.set_value('SLAB'+str(newID),"GENERAL",general)
+	slabsFile.set_value('SLAB'+str(newID),"RECOGNIZED_AS",int(recognizedAs))
+	for i in 9:
+		slabsFile.set_value('SLAB'+str(newID),"CUBES"+str(i),slabCubeData[i])
+	for i in 9:
+		slabsFile.set_value('SLAB'+str(newID),"FLOOR"+str(i),slabFloorData[i])
 	
-	customSlabsFile.close()
+	slabsFile.save(Settings.unearthdata.plus_file("unearthcustomslabs.cfg"))
+
+
+func load_file():
+	slabsFile.load(Settings.unearthdata.plus_file("unearthcustomslabs.cfg"))
+	
+	for sectionName in slabsFile.get_sections():
+		var newID = int(sectionName.trim_prefix("SLAB"))
+		var generalArray = slabsFile.get_value(sectionName, "GENERAL")
+		var recognizedAs = slabsFile.get_value(sectionName, "RECOGNIZED_AS")
+		
+		var slabCubeData = []
+		var slabFloorData = []
+		for i in 9:
+			slabCubeData.append( slabsFile.get_value(sectionName, "CUBES"+str(i)) )
+			slabFloorData.append( slabsFile.get_value(sectionName, "FLOOR"+str(i)) )
+		add_custom_slab(newID, generalArray, recognizedAs, slabCubeData, slabFloorData)
 
 # The purpose of this function is so I don't have to index the columns into clm for simply displaying within the slab window. Only index when PLACING the custom slab.
 func get_top_cube_face(indexIn3x3, slabID):
@@ -32,3 +55,18 @@ func get_top_cube_face(indexIn3x3, slabID):
 	else:
 		var cubeID = cubesArray[get_height-1]
 		return Cube.tex[cubeID][Cube.SIDE_TOP]
+
+func remove_custom_slab(slabID):
+	if slabID < 1000: return # means it's not a custom slab
+	
+	print('Attempting to remove custom slab:' + str(slabID))
+	oPickSlabWindow.set_selection(null)
+	
+	if data.has(slabID):
+		data.erase(slabID)
+	
+	var section = 'SLAB'+str(slabID)
+	if slabsFile.has_section(section):
+		slabsFile.erase_section(section)
+	
+	slabsFile.save(Settings.unearthdata.plus_file("unearthcustomslabs.cfg"))

@@ -254,7 +254,7 @@ shader = ExtResource( 106 )
 shader_param/flashSpecific = Color( 1e-05, 2e-05, 3e-05, 4e-05 )
 
 [sub_resource type="DynamicFont" id=16]
-size = 24
+size = 20
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 122 )
@@ -3730,7 +3730,7 @@ __meta__ = {
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer"]
 margin_top = 31.0
 margin_right = 282.0
-margin_bottom = 122.0
+margin_bottom = 184.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3774,7 +3774,7 @@ margin_left = 38.0
 margin_right = 112.0
 margin_bottom = 31.0
 size_flags_horizontal = 4
-max_value = 999.0
+max_value = 255.0
 value = 50.0
 rounded = true
 align = 1
@@ -3791,20 +3791,63 @@ text = "Test"
 align = 1
 autowrap = true
 
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/GridContainer"]
+margin_top = 98.0
+margin_right = 128.0
+margin_bottom = 119.0
+text = "Wibble:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SlabWibbleOptionButton" type="OptionButton" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/GridContainer"]
+margin_left = 132.0
+margin_top = 95.0
+margin_right = 282.0
+margin_bottom = 122.0
+text = "On"
+items = [ "Off", null, false, 0, null, "On", null, false, 1, null, "Animated", null, false, 2, null ]
+selected = 1
+
+[node name="Label4" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/GridContainer"]
+margin_top = 129.0
+margin_right = 128.0
+margin_bottom = 150.0
+text = "Liquid:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SlabLiquidOptionButton" type="OptionButton" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer/GridContainer"]
+margin_left = 132.0
+margin_top = 126.0
+margin_right = 282.0
+margin_bottom = 153.0
+text = "No"
+items = [ "No", null, false, 0, null, "Lava", null, false, 1, null, "Water", null, false, 2, null ]
+selected = 0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer"]
+margin_top = 188.0
+margin_right = 282.0
+margin_bottom = 209.0
+text = "Columns"
+align = 1
+
 [node name="GridContainerForChoosing3x3" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer"]
 margin_left = 141.0
-margin_top = 126.0
+margin_top = 213.0
 margin_right = 141.0
-margin_bottom = 126.0
+margin_bottom = 213.0
 size_flags_horizontal = 6
 size_flags_vertical = 4
 columns = 3
 
 [node name="AddCustomSlabButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/VBoxContainer"]
 margin_left = 117.0
-margin_top = 130.0
+margin_top = 217.0
 margin_right = 164.0
-margin_bottom = 157.0
+margin_bottom = 244.0
 size_flags_horizontal = 6
 size_flags_vertical = 8
 text = "Add"

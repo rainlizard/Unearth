@@ -2,87 +2,75 @@ extends FileDialog
 onready var oGame = Nodelist.list["oGame"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 
 var lineEdit
-var regex = RegEx.new()
-var oldtext = ""
+var lineEditPreviousText = "sadfdfgfdhgfds" # this should be something that won't be initially written in linedit
 
 func _ready():
-	#print(get_vbox().get_child(3).get_children())
-#	print(get_vbox().get_child(0).get_children())
-#	print(get_vbox().get_child(1).get_children())
-#	print(get_vbox().get_child(2).get_children())
-#	print(get_vbox().get_child(3).get_children())
 	var optionButton = get_vbox().get_child(3).get_child(2)
 	optionButton.visible = false
-	
-	var tree = get_vbox().get_children()[2].get_children()[0]
-	tree.connect("item_selected",self,"_on_Tree_item_selected") # File is clicked once in the window
-	
 	lineEdit = get_line_edit()
-	lineEdit.connect("text_changed",self,"_on_LineEdit_text_changed")
-	regex.compile("^[0-9]*$")
 
 func _on_FileDialogSaveAs_about_to_show():
-	
 	var path = oGame.SAVE_AS_DIRECTORY
 	if oGame.SAVE_AS_DIRECTORY == "":
 		path = oGame.EXECUTABLE_PATH
-	
 	current_path = path
 	current_dir = path
 	
-	lineEdit.placeholder_text = "(Enter numbers only)"
-	lineEdit.placeholder_alpha = 0.15
-	
-	
-	
 	yield(get_tree(),'idle_frame')
-	deselect_items()
-	lineEdit.text = ""
-	_on_LineEdit_text_changed("")
-	
-	for i in 2:
-		yield(get_tree(),'idle_frame')
-		lineEdit.grab_focus()
-		lineEdit.caret_position=3
+	var currentMapNumber = oCurrentMap.path.get_file().to_upper().trim_prefix("MAP")
+	lineEdit.text = "map" + str(currentMapNumber)
+	lineEdit.caret_position = lineEdit.text.length()
+	lineEdit.grab_focus()
 
-func _on_Tree_item_selected():
-	# This sometimes fails the first time
-	yield(get_tree(),'idle_frame')
-	lineEdit.text = lineEdit.text.to_lower().trim_suffix('.slb')
-	yield(get_tree(),'idle_frame')
-	lineEdit.text = lineEdit.text.to_lower().trim_suffix('.slb')
+func _process(delta):
+	if visible == false: return
+	
+	# This is better than a signal because it covers more cases, such as when clicking on a file in the dialog
+	if lineEditPreviousText != lineEdit.text:
+		linedit_was_changed()
+		lineEditPreviousText = lineEdit.text
 
-func _on_LineEdit_text_changed(new_text):
+func linedit_was_changed():
 	
-	var okButton = get_ok()
-	if new_text.length() < 8:
-		okButton.hint_tooltip = "Map name must contain 5 digits"
-		okButton.disabled = true
-	else:
-		okButton.hint_tooltip = ""
-		okButton.disabled = false
+	var rememberCaretPos = lineEdit.caret_position
 	
-	if new_text.length() > 8:
-		new_text = new_text.left(8)
-	
-	new_text = new_text.to_lower().trim_prefix("m").trim_prefix("a").trim_prefix("p") # Doing this prevents a bug
-	if int(new_text) > 32767: # Map IDs above 32767 don't work correctly (their scripts don't work)
-		new_text = "32767"
-	
-	if regex.search(new_text):
-		lineEdit.text = new_text
-		oldtext = lineEdit.text
-		lineEdit.text = 'map'+new_text
-	else:
+	# remove the letters "m-a-p" when checking whether the string has letters. removing the prefix isn't good enough here.
+	if Utils.string_has_letters(lineEdit.text.replace("m","").replace("a","").replace("p","").trim_suffix(".slb")) == true:
 		oMessage.quick("Use only digits in map name")
-		lineEdit.text = 'map'+oldtext
 	
-	lineEdit.set_cursor_position(lineEdit.text.length())
-
-#func get_value():
-#	return(int(lineEdit.text))
+	if lineEdit.text.length() < 8:
+		rememberCaretPos += 2
+	
+	# If you begin typing while the caret is on "map", skip to the beginning of the digits
+	if lineEdit.text.length() > 8:
+		if rememberCaretPos <= 3:
+			rememberCaretPos = 4
+	
+	
+	
+	var numberString = Utils.strip_letters_from_string(lineEdit.text)
+	
+	lineEdit.text = 'map'+numberString
+	
+	while lineEdit.text.length() > 8:
+		var eraseTxt = lineEdit.text
+		if rememberCaretPos > 8:
+			eraseTxt.erase(3, 1)
+		else:
+			eraseTxt.erase(8, 1)
+		lineEdit.text = eraseTxt
+	
+	while lineEdit.text.length() < 8:
+		lineEdit.text = lineEdit.text.insert(3,"0")
+	
+	if int(lineEdit.text) > 32767:
+		lineEdit.text = "map32767"
+		oMessage.quick("Map number can be no larger than 32767")
+	
+	lineEdit.caret_position = rememberCaretPos
 
 
 func _on_FileDialogSaveAs_visibility_changed():

@@ -87,7 +87,7 @@ func add_slabs():
 					for i in 9:
 						id.columns[i] = oSlabPalette.slabPal[slabVariation][i]
 				_:
-					if slabID <= 60:
+					if slabID < 1000:
 						if slabID <= 42: # 1176 variations
 							slabVariation = slabID*28
 						else:
@@ -124,6 +124,7 @@ func add_child_to_grid(tabID, id, set_text):
 	id.connect("mouse_entered", self, "_on_hovered_over_item", [id])
 	id.connect("mouse_exited", self, "_on_hovered_none")
 	id.connect("pressed",self,"pressed",[id])
+	id.connect('gui_input',self,"_on_slab_portrait_gui_input",[id])
 	id.rect_min_size = Vector2(grid_item_size.x * grid_window_scale, grid_item_size.y * grid_window_scale)
 	oGridFunctions._on_GridWindow_resized(self)
 
@@ -188,3 +189,15 @@ func update_scale(setvalue):
 func _on_SlabTabs_tab_changed(tab):
 	# When you change to or from tab 2, need to update grid to hide or show numbers
 	oDisplaySlxNumbers.update_grid()
+
+func _on_slab_portrait_gui_input(event, id):
+	if event.is_action_pressed("mouse_right"):
+		var slabID = id.get_meta("ID_of_slab")
+		if slabID >= 1000:
+			oCustomSlabData.remove_custom_slab(slabID)
+			
+			for child in current_grid_container().get_children():
+				if child.get_meta("ID_of_slab") == slabID:
+					child.queue_free()
+			
+			_on_hovered_none()

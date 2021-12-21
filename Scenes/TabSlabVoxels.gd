@@ -10,6 +10,8 @@ onready var oNewSlabName = Nodelist.list["oNewSlabName"]
 onready var oSlabTabs = Nodelist.list["oSlabTabs"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
+onready var oSlabWibbleOptionButton = Nodelist.list["oSlabWibbleOptionButton"]
+onready var oSlabLiquidOptionButton = Nodelist.list["oSlabLiquidOptionButton"]
 
 var cssb = preload('res://Scenes/CustomSlabSpinBox.tscn')
 
@@ -31,7 +33,12 @@ func _on_SlabRecognizedAs_value_changed(value):
 
 
 func _on_AddCustomSlabButton_pressed():
-	var newID = 61+oCustomSlabData.data.size() #we'll consider 0-60 as taken by the game
+	var newID = 1000 # We'll say custom slabs are ID 1000 and up
+	while true: # Find an unused ID within the custom data dictionary
+		if oCustomSlabData.data.has(newID) == false:
+			break
+		else:
+			newID += 1
 	
 	var slabName = oNewSlabName.text
 	var bitmaskType = Slabs.BITMASK_TALL
@@ -39,9 +46,12 @@ func _on_AddCustomSlabButton_pressed():
 	var panelView = Slabs.PANEL_TOP_VIEW
 	var sideViewZOffset = 0
 	var editorTab = Slabs.TAB_CUSTOM
-	var wibbleType = Slabs.WIBBLE_ON
-	var liquidType = Slabs.NOT_LIQUID
+	var wibbleType = oSlabWibbleOptionButton.get_selected_id()#Slabs.WIBBLE_ON
+	var liquidType = oSlabLiquidOptionButton.get_selected_id()#Slabs.NOT_LIQUID
 	var isOwnable = Slabs.OWNABLE
+	
+	
+	
 	
 	var generalArray = [slabName, isSolid, bitmaskType, panelView, sideViewZOffset, editorTab, wibbleType, liquidType, isOwnable]
 	
@@ -60,7 +70,7 @@ func _on_AddCustomSlabButton_pressed():
 
 func _on_HelpCustomSlabsButton_pressed():
 	var helptext = "\n"
-	helptext += "In both editor and game, placing/claiming slabs next to a custom slab may reset the slab's appearance to the value of 'Recognized as'.\n"
-	helptext += "With the following exceptions: Slab 50, Impenetrable Rock, Water, Lava, Gold, Bridge, Gems, Guard post, Doors without door object. (may need further testing)\n"
+	helptext += "With a few exceptions, most custom slabs will reset their appearance when placing on or claiming an adjacent slab. \n"
+	helptext += "To avoid this, set 'Recognized as' to one of the following: Slab 50, Impenetrable Rock, Gold, Bridge, Gems, Guard post, Water and Lava (while not marked as liquid), Doors (without door object). Needs further testing.\n"
+	helptext += "To remove custom slabs, right click their portrait within the slab picker window."
 	oMessage.big("Help",helptext)
-	pass # Replace with function body.

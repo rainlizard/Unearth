@@ -13,7 +13,8 @@ func big(windowTitle,dialogText):
 	var id = scnBigMsg.instance()
 	# Don't go smaller than 250 pixels wide
 	# For longer lines, put message on two lines
-	id.rect_size.x = max(250, (dialogText.length()*11) * 0.5)
+	id.rect_size.x = (dialogText.length()*11) * 0.5
+	id.rect_size.x = clamp(id.rect_size.x, 240, 1280)
 	id.rect_size.y = 0
 	id.window_title = windowTitle
 	id.dialog_text = dialogText

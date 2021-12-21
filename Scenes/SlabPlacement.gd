@@ -95,7 +95,7 @@ func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 
 
 func do_slab(xSlab, ySlab, slabID, ownership):
-	if slabID > 60: # Custom Slab IDs
+	if slabID >= 1000: # Custom Slab IDs
 		if oCustomSlabData.data.has(slabID):
 			slab_place_custom(xSlab, ySlab, slabID, ownership)
 		return
@@ -124,8 +124,17 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 
 
 func slab_place_custom(xSlab, ySlab, slabID, ownership):
-	# Wibble?
-	# WLB?
+	var recognizedAsID = oCustomSlabData.data[slabID][oCustomSlabData.RECOGNIZED_AS]
+	
+	var wibbleValue = oCustomSlabData.data[slabID][oCustomSlabData.GENERAL][Slabs.WIBBLE_TYPE]
+	
+	
+	# WIB (wibble)
+	#update_wibble(xSlab, ySlab, slabID, surrID)
+	# WLB (Water Lava Block)
+	if recognizedAsID != Slabs.BRIDGE:
+		var liquidValue = oCustomSlabData.data[slabID][oCustomSlabData.GENERAL][Slabs.LIQUID_TYPE]
+		oDataLiquid.set_cell(xSlab, ySlab, liquidValue)
 	
 	var clmIndexArray = []
 	for i in 9:
@@ -136,7 +145,7 @@ func slab_place_custom(xSlab, ySlab, slabID, ownership):
 	
 	set_columns(xSlab, ySlab, clmIndexArray)
 	
-	var recognizedAsID = oCustomSlabData.data[slabID][oCustomSlabData.RECOGNIZED_AS]
+	
 	oDataSlab.set_cell(xSlab, ySlab, recognizedAsID)
 
 

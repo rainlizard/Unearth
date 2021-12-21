@@ -148,7 +148,7 @@ func _init():
 	#var CODETIME_START = OS.get_ticks_msec()
 	# Fill empty entries to prevent crashes, takes 0ms
 	
-	for i in 1000: 
+	for i in 2000:
 		if data.has(i) == false:
 			data[i] = data[-1]
 	#print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')

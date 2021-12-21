@@ -12,3 +12,19 @@ func popup_centered(node):
 func _input(_event):
 	if Input.is_action_just_pressed("toggle_fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
+
+
+var regex = RegEx.new()
+func _ready():
+	regex.compile("^[0-9]*$")
+
+func strip_letters_from_string(string):
+	for character in string:
+		if regex.search(character) == null:
+			string = string.replace(character,"")
+	return string
+
+func string_has_letters(string):
+	if regex.search(string) == null:
+		return true
+	return false

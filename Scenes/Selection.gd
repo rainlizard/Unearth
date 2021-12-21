@@ -89,7 +89,7 @@ func update_paint():
 				newOwnership(cursorOverSlabOwner)
 				oOnlyOwnership.select_appropriate_button()
 			else:
-				if cursorOverSlab > 60:
+				if cursorOverSlab >= 1000:
 					return # Selecting these as paint is a bad idea right now, it allows you too place IDs without changing slab appearances
 				
 				if Slabs.data.has(cursorOverSlab) == true:
