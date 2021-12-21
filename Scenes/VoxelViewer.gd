@@ -122,9 +122,17 @@ func _on_ColumnViewDeleteButton_pressed():
 
 
 func _on_ColumnViewSpinBox_value_changed(value):
+	if oAllVoxelObjects.visible == false: # Update what was invisible
+		do_all()
 	set_object(value)
 
 func _on_CustomSlabSpinBox_value_changed(value):
 	do_one()
 	oColumnDetails.update_details()
 	#set_object(0)
+
+func update_column_view():
+	oAllVoxelObjects.visible = false
+	oSelectedVoxelObject.visible = true
+	do_one()
+	oColumnDetails.update_details()
