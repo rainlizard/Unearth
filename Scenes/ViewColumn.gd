@@ -9,6 +9,7 @@ onready var oColumnListData = Nodelist.list["oColumnListData"]
 onready var oColumnVoxelView = Nodelist.list["oColumnVoxelView"]
 onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
 
 var currentlyLookingAtNode = null
 var instanceType = 0
@@ -39,13 +40,14 @@ func update_details():
 #				oColumnListData.clear()
 #				return
 	
-	if oColumnVoxelView.visible == true:
-		entryIndex = oColumnVoxelView.viewObject
-	if oSlabVoxelView.visible == true:
-		if is_instance_valid(get_focus_owner()):
-			if is_instance_valid(get_focus_owner().get_parent()):
-				if get_focus_owner().get_parent() is SpinBox:
-					entryIndex = get_focus_owner().get_parent().value
+	if oSlabColumnEditor.visible == true:
+		if oColumnVoxelView.visible == true:
+			entryIndex = oColumnVoxelView.viewObject
+		if oSlabVoxelView.visible == true:
+			if is_instance_valid(get_focus_owner()):
+				if is_instance_valid(get_focus_owner().get_parent()):
+					if get_focus_owner().get_parent() is SpinBox:
+						entryIndex = get_focus_owner().get_parent().value
 	
 	for i in 16:
 		var description

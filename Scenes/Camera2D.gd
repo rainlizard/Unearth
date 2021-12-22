@@ -12,11 +12,12 @@ var SMOOTHING_RATE = 10
 var ZOOM_STEP = 0.5
 var SMOOTH_PAN_ENABLED = false
 var MOUSE_EDGE_PANNING = true
-var DIRECTIONAL_PAN_SPEED = 1500
+var DIRECTIONAL_PAN_SPEED = 2250
 
-var desired_zoom = Vector2()
-var desired_offset = Vector2()
-var directionalPan = Vector2()
+var desired_zoom = Vector2(0,0)
+var desired_offset = Vector2(0,0)
+var panDirectionKeyboard = Vector2(0,0)
+var panDirectionMouse = Vector2(0,0)
 var middleMousePanning = false
 var mouseIsMoving = false
 
@@ -37,7 +38,9 @@ func _process(delta):
 		zoom = lerp(zoom, desired_zoom, clamp(SMOOTHING_RATE * delta, 0.0, 1.0))
 		emit_signal("zoom_level_changed", zoom)
 	
-	desired_offset += directionalPan * DIRECTIONAL_PAN_SPEED * zoom * delta
+	desired_offset += panDirectionMouse * DIRECTIONAL_PAN_SPEED * (zoom/Settings.UI_SCALE.x) * delta
+	desired_offset += panDirectionKeyboard * DIRECTIONAL_PAN_SPEED * (zoom/Settings.UI_SCALE.x) * delta
+	
 	var fieldSize = Vector2(32*255,32*255)
 	
 	var halfViewSize = ((get_viewport().size/Settings.UI_SCALE) * 0.5) * desired_zoom
@@ -50,16 +53,19 @@ func _process(delta):
 	
 	offset = lerp(offset, desired_offset, clamp(SMOOTHING_RATE * delta, 0.0, 1.0))
 	
+	
 	if OS.is_window_focused() == true:
 		if MOUSE_EDGE_PANNING == true and oUi.mouseOnUi == false and mouseIsMoving == true and middleMousePanning == false:
 			mouse_edge_pan()
 			mouseIsMoving = false
 	else:
 		#Do not allow mouse window edge panning if window is unfocused
-		directionalPan = Vector2()
-
-func _input(event):
-	directionalPan = Vector2() # This is good for when the mouse hovers over a UI element, so it can stop moving.
+		panDirectionMouse = Vector2(0,0)
+	
+	if oUi.mouseOnUi == false:
+		keyboard_pan()
+	else:
+		panDirectionKeyboard = Vector2(0,0)
 
 func _unhandled_input(event):
 	if oSettingsWindow.visible == true: return
@@ -85,40 +91,40 @@ func _unhandled_input(event):
 	# Edge pan idle reset
 	if event is InputEventMouseMotion:
 		mouseIsMoving = true
-	
-	directional_pan()
+
+func _input(event):
+	panDirectionMouse = Vector2(0,0) # This is good for when the mouse hovers over a UI element, so it can stop moving.
 
 func mouse_edge_pan():
-	directionalPan = Vector2()
+	panDirectionMouse = Vector2(0,0)
 	var zoomedViewSize = (get_viewport().size/Settings.UI_SCALE) * zoom
 	var topLeftOfView = offset - (zoomedViewSize*0.5)
 	var panBorder = zoomedViewSize * 0.15 # 0.15 is percentage of screen, panBorder.x is 10% of screen width
 	var mpos = get_global_mouse_position()
 	if (mpos.y < topLeftOfView.y+panBorder.y):
-		directionalPan.y = -1
+		panDirectionMouse.y = -1
 	if (mpos.y > topLeftOfView.y+zoomedViewSize.y-panBorder.y):
-		directionalPan.y = 1
+		panDirectionMouse.y = 1
 	if (mpos.x < topLeftOfView.x+panBorder.x):
-		directionalPan.x = -1
+		panDirectionMouse.x = -1
 	if (mpos.x > topLeftOfView.x+zoomedViewSize.x-panBorder.x):
-		directionalPan.x = 1
-	directionalPan = directionalPan.normalized()
+		panDirectionMouse.x = 1
+	panDirectionMouse = panDirectionMouse.normalized()
 
-func directional_pan():
+func keyboard_pan():
 	if Input.is_action_pressed('keyboard_zoom_in'): return
 	if Input.is_action_pressed('keyboard_zoom_out'): return
 	
-	directionalPan = Vector2()
-	
+	panDirectionKeyboard = Vector2(0,0)
 	if Input.is_action_pressed("pan_up"):
-		directionalPan.y = -1
+		panDirectionKeyboard.y = -1
 	if Input.is_action_pressed("pan_down"):
-		directionalPan.y = 1
+		panDirectionKeyboard.y = 1
 	if Input.is_action_pressed("pan_left"):
-		directionalPan.x = -1
+		panDirectionKeyboard.x = -1
 	if Input.is_action_pressed("pan_right"):
-		directionalPan.x = 1
-	directionalPan = directionalPan.normalized()
+		panDirectionKeyboard.x = 1
+	panDirectionKeyboard = panDirectionKeyboard.normalized()
 
 
 func zoom_camera(zoom_factor, mouse_position):

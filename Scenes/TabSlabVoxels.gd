@@ -15,12 +15,12 @@ onready var oSlabLiquidOptionButton = Nodelist.list["oSlabLiquidOptionButton"]
 onready var oWibbleEdgesCheckBox = Nodelist.list["oWibbleEdgesCheckBox"]
 onready var oWibbleEdgesSpacing = Nodelist.list["oWibbleEdgesSpacing"]
 
-var cssb = preload('res://Scenes/CustomSlabSpinBox.tscn')
-
 func _ready():
 	for number in 9:
-		var id = cssb.instance()
+		var id = CustomSpinBox.new()
+		id.max_value = 2047
 		id.connect("value_changed",oSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
+		
 		oGridContainerForChoosing3x3.add_child(id)
 	
 	_on_SlabRecognizedAs_value_changed(oSlabRecognizedAs.value)
@@ -69,10 +69,12 @@ func _on_AddCustomSlabButton_pressed():
 	oPickSlabWindow.set_selection(newID)
 
 func _on_HelpCustomSlabsButton_pressed():
-	var helptext = "\n"
-	helptext += "With a few exceptions, most custom slabs will reset their appearance when placing on or claiming an adjacent slab. \n"
-	helptext += "To avoid this, set 'Recognized as' to one of the following: Slab 50, Impenetrable Rock, Gold, Bridge, Gems, Guard post, Doors (without door object). Needs further testing.\n"
-	helptext += "To remove custom slabs, right click their portrait within the slab picker window."
+	var helptext = ""
+	helptext += "With a few exceptions, most custom slabs will reset their appearance in-game when placing or claiming an adjacent slab. To avoid this, set 'Recognized as' to one of the following: Slab 50, Impenetrable Rock, Gold, Bridge, Gems, Guard post, Doors (without door object). Needs further testing."
+	helptext += "\n\n"
+	helptext += "Right click their portrait within the slab picker window to remove custom slabs from the editor."
+	#helptext += "\n\n"
+	#helptext += "For now, placing a custom slab on a new/different map than the one you created it on, will not carry over the exact same column data."
 	oMessage.big("Help",helptext)
 
 

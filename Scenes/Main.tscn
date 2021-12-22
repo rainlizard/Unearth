@@ -80,7 +80,7 @@
 [ext_resource path="res://Scenes/Ui.gd" type="Script" id=78]
 [ext_resource path="res://Scenes/ThingDetails.gd" type="Script" id=79]
 [ext_resource path="res://Scenes/PlaceThingWithSlab.gd" type="Script" id=80]
-[ext_resource path="res://Scenes/CustomSlabSpinBox.gd" type="Script" id=81]
+[ext_resource path="res://Scenes/CustomSpinBox.gd" type="Script" id=81]
 [ext_resource path="res://Scenes/UniversalDetails.gd" type="Script" id=82]
 [ext_resource path="res://Scenes/SelectedRectangleDisplay.gd" type="Script" id=83]
 [ext_resource path="res://Art/Cursor96x96Blue.png" type="Texture" id=84]
@@ -379,7 +379,7 @@ transform = Transform( -0.707107, 0.707107, 1.15203e-07, 0, -1.62921e-07, 1, 0.7
 script = ExtResource( 21 )
 
 [node name="Player" type="KinematicBody" parent="Game3D"]
-transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 0, 10, 0 )
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 255, 10, 255 )
 script = ExtResource( 48 )
 
 [node name="Head" type="Spatial" parent="Game3D/Player"]
@@ -3715,31 +3715,21 @@ margin_right = 950.0
 margin_bottom = 655.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = 954.0
+margin_right = 1236.0
+margin_bottom = 655.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer"]
 margin_right = 282.0
-margin_bottom = 244.0
+margin_bottom = 655.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HelpCustomSlabsButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer"]
-margin_left = 228.0
-margin_right = 282.0
-margin_bottom = 27.0
-size_flags_horizontal = 8
-text = "Help"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 31.0
 margin_right = 282.0
-margin_bottom = 184.0
+margin_bottom = 153.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3862,29 +3852,41 @@ items = [ "0 : No", null, false, 0, null, "1 : Lava", null, false, 1, null, "2 :
 selected = 0
 
 [node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 188.0
+margin_top = 157.0
 margin_right = 282.0
-margin_bottom = 209.0
+margin_bottom = 178.0
 text = "Columns"
 align = 1
 
 [node name="GridContainerForChoosing3x3" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer"]
 margin_left = 141.0
-margin_top = 213.0
+margin_top = 182.0
 margin_right = 141.0
-margin_bottom = 213.0
+margin_bottom = 182.0
 size_flags_horizontal = 6
 size_flags_vertical = 4
 columns = 3
 
 [node name="AddCustomSlabButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer"]
 margin_left = 117.0
-margin_top = 217.0
+margin_top = 186.0
 margin_right = 164.0
-margin_bottom = 244.0
+margin_bottom = 213.0
 size_flags_horizontal = 6
 size_flags_vertical = 8
 text = "Add"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HelpCustomSlabsButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer"]
+margin_left = 228.0
+margin_top = 628.0
+margin_right = 282.0
+margin_bottom = 655.0
+size_flags_horizontal = 8
+size_flags_vertical = 10
+text = "Help"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -3896,8 +3898,6 @@ margin_left = 12.0
 margin_top = 43.0
 margin_right = -12.0
 margin_bottom = -12.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
 script = ExtResource( 128 )
 
 [node name="ColumnVoxelView" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" instance=ExtResource( 19 )]
@@ -3909,7 +3909,6 @@ displayingType = 1
 margin_left = 1028.0
 margin_right = 1236.0
 margin_bottom = 655.0
-size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer"]
@@ -3921,20 +3920,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColumnViewDeleteButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_right = 208.0
-margin_bottom = 27.0
-hint_tooltip = "Columns with a Utilized value of 0 can be safely deleted.
-
-Note: this might not be true at all. lol
-Needs testing."
-focus_mode = 0
-text = "Delete column"
-
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 31.0
 margin_right = 208.0
-margin_bottom = 62.0
+margin_bottom = 31.0
 
 [node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer"]
 margin_top = 5.0
@@ -3945,7 +3933,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColumnViewSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="ColumnIndexSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer"]
 margin_left = 134.0
 margin_right = 208.0
 margin_bottom = 31.0
@@ -3955,27 +3943,43 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
+[node name="ColumnFirstUnusedButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
+margin_top = 35.0
+margin_right = 208.0
+margin_bottom = 62.0
+text = "Go to unused"
+
+[node name="ColumnViewDeleteButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
 margin_top = 66.0
 margin_right = 208.0
-margin_bottom = 90.0
+margin_bottom = 93.0
+hint_tooltip = "Set all data of the column at this index to 0"
+focus_mode = 0
+size_flags_horizontal = 3
+text = "Delete column"
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
+margin_top = 97.0
+margin_right = 208.0
+margin_bottom = 121.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="CubesGridContainer" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 94.0
+margin_top = 125.0
 margin_right = 208.0
-margin_bottom = 94.0
-columns = 3
+margin_bottom = 125.0
+columns = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 98.0
+[node name="ExtraColumnStuff" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
+margin_top = 129.0
 margin_right = 208.0
-margin_bottom = 129.0
+margin_bottom = 363.0
+columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label6" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label6" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
 margin_top = 5.0
 margin_right = 119.0
 margin_bottom = 26.0
@@ -3984,105 +3988,131 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FloorTextureSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 123.0
-margin_right = 197.0
+[node name="FloorTextureSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
+margin_left = 134.0
+margin_right = 208.0
 margin_bottom = 31.0
+size_flags_horizontal = 10
 max_value = 999.0
+script = ExtResource( 81 )
 
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 133.0
-margin_right = 208.0
-margin_bottom = 157.0
-rect_min_size = Vector2( 24, 24 )
-
-[node name="ExtraColumnStuff" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 161.0
-margin_right = 208.0
-margin_bottom = 332.0
-columns = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 5.0
-margin_right = 109.0
-margin_bottom = 26.0
-text = "Utilized"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="UtilizedSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 113.0
-margin_right = 187.0
-margin_bottom = 31.0
-max_value = 99999.0
-
-[node name="Label2" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 40.0
-margin_right = 109.0
-margin_bottom = 61.0
-text = "Orientation"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="OrientationSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 113.0
+[node name="Spacing" type="Control" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
 margin_top = 35.0
-margin_right = 187.0
-margin_bottom = 66.0
-max_value = 99999.0
-
-[node name="Label3" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 75.0
-margin_right = 109.0
-margin_bottom = 96.0
-text = "Permanent"
+margin_right = 119.0
+margin_bottom = 59.0
+rect_min_size = Vector2( 24, 24 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PermanentSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 113.0
-margin_top = 70.0
-margin_right = 187.0
-margin_bottom = 101.0
-max_value = 99999.0
-
-[node name="Label4" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 110.0
-margin_right = 109.0
-margin_bottom = 131.0
-text = "Lintel"
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
+margin_left = 123.0
+margin_top = 35.0
+margin_right = 208.0
+margin_bottom = 59.0
+rect_min_size = Vector2( 24, 24 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="LintelSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 113.0
-margin_top = 105.0
-margin_right = 187.0
-margin_bottom = 136.0
-max_value = 99999.0
 
 [node name="Label5" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 145.0
-margin_right = 109.0
-margin_bottom = 166.0
+margin_top = 68.0
+margin_right = 119.0
+margin_bottom = 89.0
 text = "Height"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HeightSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 113.0
-margin_top = 140.0
-margin_right = 187.0
-margin_bottom = 171.0
+margin_left = 134.0
+margin_top = 63.0
+margin_right = 208.0
+margin_bottom = 94.0
+size_flags_horizontal = 10
 max_value = 99999.0
+script = ExtResource( 81 )
+
+[node name="Label7" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
+margin_top = 103.0
+margin_right = 119.0
+margin_bottom = 124.0
+text = "Solid mask"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SolidMaskSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
+margin_left = 134.0
+margin_top = 98.0
+margin_right = 208.0
+margin_bottom = 129.0
+size_flags_horizontal = 10
+max_value = 99999.0
+script = ExtResource( 81 )
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
+margin_top = 138.0
+margin_right = 119.0
+margin_bottom = 159.0
+text = "Permanent"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PermanentSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
+margin_left = 134.0
+margin_top = 133.0
+margin_right = 208.0
+margin_bottom = 164.0
+size_flags_horizontal = 10
+max_value = 99999.0
+script = ExtResource( 81 )
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
+margin_top = 173.0
+margin_right = 119.0
+margin_bottom = 194.0
+text = "Orientation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OrientationSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
+margin_left = 134.0
+margin_top = 168.0
+margin_right = 208.0
+margin_bottom = 199.0
+size_flags_horizontal = 10
+max_value = 99999.0
+script = ExtResource( 81 )
+
+[node name="Label4" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
+margin_top = 208.0
+margin_right = 119.0
+margin_bottom = 229.0
+text = "Lintel"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LintelSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
+margin_left = 134.0
+margin_top = 203.0
+margin_right = 208.0
+margin_bottom = 234.0
+size_flags_horizontal = 10
+max_value = 99999.0
+script = ExtResource( 81 )
+
+[node name="ColumnEditorHelpButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
+margin_left = 154.0
+margin_top = 628.0
+margin_right = 208.0
+margin_bottom = 655.0
+size_flags_horizontal = 8
+size_flags_vertical = 10
+text = "Help"
 
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
@@ -4326,16 +4356,19 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
 [connection signal="tab_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs" to="Ui/UiSystem/SlabColumnEditor" method="_on_VoxelTabs_tab_changed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/HelpCustomSlabsButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_HelpCustomSlabsButton_pressed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer/HBoxContainer/SlabRecognizedAs" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_SlabRecognizedAs_value_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer/SlabWibbleOptionButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_SlabWibbleOptionButton_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/AddCustomSlabButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_AddCustomSlabButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/HelpCustomSlabsButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_HelpCustomSlabsButton_pressed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer/ColumnIndexSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnIndexSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer/ColumnIndexSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ColumnVoxelView" method="_on_ColumnIndexSpinBox_value_changed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ColumnFirstUnusedButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnFirstUnusedButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ColumnViewDeleteButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ColumnVoxelView" method="_on_ColumnViewDeleteButton_pressed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer/ColumnViewSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ColumnVoxelView" method="_on_ColumnViewSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer2/FloorTextureSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_FloorTextureSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/UtilizedSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_UtilizedSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/OrientationSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_OrientationSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/PermanentSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_PermanentSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/LintelSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_LintelSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/FloorTextureSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_FloorTextureSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/HeightSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_HeightSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/SolidMaskSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_SolidMaskSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/PermanentSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_PermanentSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/OrientationSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_OrientationSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/LintelSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_LintelSpinBox_value_changed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ColumnEditorHelpButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnEditorHelpButton_pressed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

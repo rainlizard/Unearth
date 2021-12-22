@@ -49,13 +49,14 @@ func _on_any_window_was_dragged(callingNode):
 	callingNode.connect("item_rect_changed",self,"_on_any_window_was_dragged", [callingNode])
 
 func _input(event):
-	mouseOnUi = true # This line combined with the line in _unhandled_input can be used to determine whether the mouse is over UI.
+	if event is InputEventMouseMotion:
+		mouseOnUi = true # This line combined with the line in _unhandled_input can be used to determine whether the mouse is over UI.
 func _unhandled_input(event):
-	mouseOnUi = false # Used in combination with the line in _input()
-	
-	# There's a Godot bug where if you open an optionbutton, it treats it as if the mouse is not on UI.
-	if optionButtonIsOpened == true:
-		mouseOnUi = true
+	if event is InputEventMouseMotion:
+		mouseOnUi = false # Used in combination with the line in _input()
+		# There's a Godot bug where if you open an optionbutton, it treats it as if the mouse is not on UI.
+		if optionButtonIsOpened == true:
+			mouseOnUi = true
 
 
 

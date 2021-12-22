@@ -38,9 +38,6 @@ enum {
 }
 var GENERATED_TYPE = GEN_MAP
 
-# solidMask is good for optimization, it'll tell me if nearby columns are the same.
-# Gives the same speed as "standardTallSlabs". The problem is solidMask needs an additional check of whether coordinate is outside the blockmap chunk.
-
 func start(genType):
 	return #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	
@@ -131,7 +128,7 @@ func generation():
 					var x = (xSlab*3) + xSubtile
 					var z = (ySlab*3) + ySubtile
 					
-					#if oDataClm.solidMask[oDataClmPos.get_cell(x,z)] == 0:
+					
 					for y in TERRAIN_SIZE_Y:
 						var cubeID = blockMap[x][z][y]
 						if cubeID != EMPTY:
@@ -379,105 +376,3 @@ func get_block(pos):
 	if pos.z >= TERRAIN_SIZE_Z: return EMPTY
 	
 	return blockMap[pos.x][pos.z][pos.y]
-
-
-#			var minNeighborHeight = 1
-#			var maxNeighborHeight = 1
-#			for dir in [Vector3(1,0,0), Vector3(0,0,1), Vector3(-1,0,0), Vector3(0,0,-1)]:
-#				var clmIndex = oDataClmPos.get_cell(x+dir.x, z+dir.z)
-#				var clmData = oDataClm.data[clmIndex]
-#				var surroundingHeight = oDataClm.get_height(clmData)
-#				minNeighborHeight = min(minNeighborHeight, surroundingHeight)
-#				maxNeighborHeight = max(maxNeighborHeight, surroundingHeight)
-#
-#			for y in range(minNeighborHeight, maxNeighborHeight):#TERRAIN_SIZE_Y:
-
-#			var skip = true
-#			for dir in [Vector3(1,0,0), Vector3(0,0,1), Vector3(-1,0,0), Vector3(0,0,-1)]:
-#				var clmIndex = oDataClmPos.get_cell(x+dir.x, z+dir.z)
-#				if clmIndex != oDataClmPos.get_cell(x, z):
-#					skip = false
-#				#var clmData = oDataClm.data[clmIndex]
-#			if skip == true: continue
-			
-
-				
-	#			if Slabs.emptySlabs.has(oDataSlab.get_cell(xSlab,ySlab)) == true:
-	#				var surr = 0
-	#				if Slabs.emptySlabs.has(oDataSlab.get_cell(xSlab+1,ySlab)) == true: surr+=1
-	#				if Slabs.emptySlabs.has(oDataSlab.get_cell(xSlab-1,ySlab)) == true: surr+=1
-	#				if Slabs.emptySlabs.has(oDataSlab.get_cell(xSlab,ySlab+1)) == true: surr+=1
-	#				if Slabs.emptySlabs.has(oDataSlab.get_cell(xSlab,ySlab-1)) == true: surr+=1
-	#				if Slabs.emptySlabs.has(oDataSlab.get_cell(xSlab+1,ySlab+1)) == true: surr+=1
-	#				if Slabs.emptySlabs.has(oDataSlab.get_cell(xSlab-1,ySlab-1)) == true: surr+=1
-	#				if Slabs.emptySlabs.has(oDataSlab.get_cell(xSlab+1,ySlab-1)) == true: surr+=1
-	#				if Slabs.emptySlabs.has(oDataSlab.get_cell(xSlab-1,ySlab+1)) == true: surr+=1
-	#				if surr == 8:
-	#					standardEmptySlabs[Vector2(xSlab, ySlab)] = true
-	#
-	#			if Slabs.height1Slabs.has(oDataSlab.get_cell(xSlab,ySlab)) == true:
-	#				var surr = 0
-	#				if Slabs.height1Slabs.has(oDataSlab.get_cell(xSlab+1,ySlab)) == true: surr+=1
-	#				if Slabs.height1Slabs.has(oDataSlab.get_cell(xSlab-1,ySlab)) == true: surr+=1
-	#				if Slabs.height1Slabs.has(oDataSlab.get_cell(xSlab,ySlab+1)) == true: surr+=1
-	#				if Slabs.height1Slabs.has(oDataSlab.get_cell(xSlab,ySlab-1)) == true: surr+=1
-	#				if Slabs.height1Slabs.has(oDataSlab.get_cell(xSlab+1,ySlab+1)) == true: surr+=1
-	#				if Slabs.height1Slabs.has(oDataSlab.get_cell(xSlab-1,ySlab-1)) == true: surr+=1
-	#				if Slabs.height1Slabs.has(oDataSlab.get_cell(xSlab+1,ySlab-1)) == true: surr+=1
-	#				if Slabs.height1Slabs.has(oDataSlab.get_cell(xSlab-1,ySlab+1)) == true: surr+=1
-	#				if surr == 8:
-	#					standardHeight1Slabs[Vector2(xSlab, ySlab)] = true
-
-#			if do == 0:
-#				var sm = oDataClm.solidMask[oDataClmPos.get_cell(x,z)]
-#				if sm == 31:
-#					var surr = 0
-#					var idx
-#					idx = oDataClmPos.get_cell(x+1,z)
-#					if oDataClm.solidMask[idx] == sm: surr += 1
-#					idx = oDataClmPos.get_cell(x-1,z)
-#					if oDataClm.solidMask[idx] == sm: surr += 1
-#					idx = oDataClmPos.get_cell(x,z+1)
-#					if oDataClm.solidMask[idx] == sm: surr += 1
-#					idx = oDataClmPos.get_cell(x,z-1)
-#					if oDataClm.solidMask[idx] == sm: surr += 1
-#					if surr == 4:
-#						do = 1
-
-
-				
-				#elif standardEmptySlabs.has(slabPos) == true: do = 2
-				#elif standardHeight1Slabs.has(slabPos) == true: do = 3
-
-#			elif do == 2:
-#				# standard empty slab that's surrounded by empty slabs
-#				pass
-#			elif do == 3:
-#				# Standard 1 height slab that's surrounded by tall slabs
-#				var pos = Vector3(x, 0, z)
-#				var cubeID = blockMap[pos.x][pos.z][pos.y]
-#				add_face(pos, 4, cubeID, null, faceCount[slabStyleValue])
-#				tempMeshInfo[ARRAY_BLOCK_POSITION].append_array([pos])
-#				tempMeshInfo[ARRAY_SIDE_COUNT].append_array([1])
-#				faceCount[slabStyleValue] += 1
-
-	#standardTallSlabs.clear()
-	#standardEmptySlabs.clear()
-#	if GENERATED_TYPE == GEN_MAP:
-#		CODETIME_START = OS.get_ticks_msec()
-#		for xSlab in 85:
-#			for ySlab in 85:
-#				if Slabs.data[oDataSlab.get_cell(xSlab,ySlab)][Slabs.IS_SOLID] == true:
-#					var surr = 0
-#					if Slabs.data[oDataSlab.get_cell(xSlab+1,ySlab)][Slabs.IS_SOLID] == true: surr+=1
-#					if Slabs.data[oDataSlab.get_cell(xSlab-1,ySlab)][Slabs.IS_SOLID] == true: surr+=1
-#					if Slabs.data[oDataSlab.get_cell(xSlab,ySlab+1)][Slabs.IS_SOLID] == true: surr+=1
-#					if Slabs.data[oDataSlab.get_cell(xSlab,ySlab-1)][Slabs.IS_SOLID] == true: surr+=1
-#					if Slabs.data[oDataSlab.get_cell(xSlab+1,ySlab+1)][Slabs.IS_SOLID] == true: surr+=1
-#					if Slabs.data[oDataSlab.get_cell(xSlab-1,ySlab-1)][Slabs.IS_SOLID] == true: surr+=1
-#					if Slabs.data[oDataSlab.get_cell(xSlab+1,ySlab-1)][Slabs.IS_SOLID] == true: surr+=1
-#					if Slabs.data[oDataSlab.get_cell(xSlab-1,ySlab+1)][Slabs.IS_SOLID] == true: surr+=1
-#					if surr == 8:
-#						standardTallSlabs[Vector2(xSlab, ySlab)] = true
-#		print('surroundingcells '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-	

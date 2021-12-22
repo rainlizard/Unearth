@@ -78,10 +78,10 @@ func index_entry(cubeArray, setFloorID):
 	# Add new entry
 	var index = find_cubearray_index([0,0,0,0,0,0,0,0], 0)
 	if index != -1:
-		utilized[index] = 1000000
+		utilized[index] = 1 # This can be whatever, it's automatically set when saving
 		orientation[index] = 0
-		solidMask[index] = calculate_solid_mask(index, cubeArray)
-		permanent[index] = 0
+		solidMask[index] = calculate_solid_mask(cubeArray)
+		permanent[index] = 1 # Does this affect whether columns get reset?
 		lintel[index] = 0
 		height[index] = get_real_height(cubeArray)
 		cubes[index] = cubeArray
@@ -134,10 +134,10 @@ func update_all_utilized():
 func update_all_solid_mask():
 	var CODETIME_START = OS.get_ticks_msec()
 	for index in 2048:
-		solidMask[index] = calculate_solid_mask(index, cubes[index])
+		solidMask[index] = calculate_solid_mask(cubes[index])
 	print('All CLM solid bitmask updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-func calculate_solid_mask(index, cubeArray):
+func calculate_solid_mask(cubeArray):
 	# For each cube value that isn't 0, add a bitmask value.
 	# 0 = 1
 	# 1 = 2

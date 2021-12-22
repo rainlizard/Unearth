@@ -172,7 +172,6 @@ func write_dat(buffer):
 			buffer.put_16(value)
 
 func write_clm(buffer):
-	oDataClm.update_all_solid_mask()
 	oDataClm.update_all_utilized()
 	
 	var numberOfClmEntries = 2048
@@ -183,7 +182,8 @@ func write_clm(buffer):
 	
 	for entry in numberOfClmEntries:
 		buffer.put_16(oDataClm.utilized[entry]) # 0-1
-		buffer.put_8(oDataClm.permanent[entry] + (oDataClm.lintel[entry]*2) + (oDataClm.height[entry]*16)) # 2
+		#buffer.put_8(oDataClm.permanent[entry] + (oDataClm.lintel[entry]*2) + (oDataClm.height[entry]*16)) # 2
+		buffer.put_8((oDataClm.permanent[entry] & 1) + ((oDataClm.lintel[entry] & 7) << 1) + ((oDataClm.height[entry] & 15) << 4))
 		buffer.put_16(oDataClm.solidMask[entry]) # 3-4
 		buffer.put_16(oDataClm.floorTexture[entry]) # 5-6
 		buffer.put_8(oDataClm.orientation[entry]) # 7

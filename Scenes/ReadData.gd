@@ -99,15 +99,21 @@ func read_clm(buffer):
 		oDataClm.utilized.append(buffer.get_u16()) # 0-1
 		
 		var specialByte = buffer.get_u8() # 2
-		#oDataClm.testingSpecialByte.append(specialByte)
-		var get_height = specialByte / 16
-		oDataClm.height.append(get_height)
-		specialByte -= get_height * 16
-		var get_lintel = specialByte / 2
-		oDataClm.lintel.append(get_lintel)
-		specialByte -= get_lintel * 2
-		var get_permanent = specialByte
+		var get_permanent = specialByte & 1
+		var get_lintel = (specialByte >> 1) & 7
+		var get_height = (specialByte >> 4) & 15
 		oDataClm.permanent.append(get_permanent)
+		oDataClm.lintel.append(get_lintel)
+		oDataClm.height.append(get_height)
+		
+#		var get_height = specialByte / 16
+#		oDataClm.height.append(get_height)
+#		specialByte -= get_height * 16
+#		var get_lintel = specialByte / 2
+#		oDataClm.lintel.append(get_lintel)
+#		specialByte -= get_lintel * 2
+#		var get_permanent = specialByte
+#		oDataClm.permanent.append(get_permanent)
 		
 		oDataClm.solidMask.append(buffer.get_u16()) # 3-4
 		oDataClm.floorTexture.append(buffer.get_u16()) # 5-6

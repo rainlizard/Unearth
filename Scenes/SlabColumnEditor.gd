@@ -6,13 +6,11 @@ onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
 
 
 func _ready():
-	Utils.popup_centered(self)
-	
 	oVoxelTabs.set_tab_title(0, "Slabs")
 	oVoxelTabs.set_tab_title(1, "Columns")
-	
-	yield(get_tree(),'idle_frame')
-	_on_VoxelTabs_tab_changed(0)
+#	Utils.popup_centered(self)
+#	yield(get_tree(),'idle_frame')
+#	_on_VoxelTabs_tab_changed(0)
 
 func _on_VoxelTabs_tab_changed(tab):
 	match tab:
@@ -25,3 +23,5 @@ func _on_VoxelTabs_tab_changed(tab):
 			oSlabVoxelView.visible = false
 			oColumnVoxelView.initialize()
 			oColumnVoxelView.visible = true
+
+

@@ -38,12 +38,12 @@ func switch_camera_type(type):
 				oCamera3D.transform = rememberOrthogonal[2]
 			else:
 				# Default orthogonal camera position and rotation
-				rotation_degrees.y = -135
+				rotation_degrees.y = 45#-135
 				rotation_degrees.x = -45
 				oHead.rotation_degrees.x = 0
-				translation.x = 0
+				translation.x = 255#0
 				translation.y = 60
-				translation.z = 0
+				translation.z = 255#0
 		
 		oCamera3D.size = translation.y
 		
@@ -82,24 +82,31 @@ func _input(event):
 		else:
 			oUi.switch_to_1st_person()
 	
-	if Input.is_action_just_pressed("mouse_left"):
-		pass
 	
-	direction = Vector3()
 	if Input.is_action_just_pressed("zoom_in"):
 		if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
 			translation.y -= 3
 		else: #Camera.PROJECTION_ORTHOGONAL
-			translation.y -= 6
+			translation.y -= 9
 			oCamera3D.size = translation.y
 		
 	if Input.is_action_just_pressed("zoom_out"):
 		if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
 			translation.y += 3
 		else: #Camera.PROJECTION_ORTHOGONAL
-			translation.y += 6
+			translation.y += 9
 			oCamera3D.size = translation.y
+
+func _process(delta):
+	if oEditor.currentView != oEditor.VIEW_3D: return
 	
+	direction = Vector3(0,0,0)
+	if oUi.mouseOnUi == false:
+		keyboard_pan()
+	else:
+		direction = Vector3(0,0,0)
+
+func keyboard_pan():
 	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
 		direction.z = -1
 	elif Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):

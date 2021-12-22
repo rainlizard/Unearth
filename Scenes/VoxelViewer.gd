@@ -2,7 +2,7 @@ extends ViewportContainer
 onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oVoxelGen = Nodelist.list["oVoxelGen"]
 onready var oDataClm = Nodelist.list["oDataClm"]
-onready var oColumnViewSpinBox = Nodelist.list["oColumnViewSpinBox"]
+onready var oColumnIndexSpinBox = Nodelist.list["oColumnIndexSpinBox"]
 onready var oGridContainerForChoosing3x3 = Nodelist.list["oGridContainerForChoosing3x3"]
 
 
@@ -62,7 +62,7 @@ func set_object(setVal):
 	if displayingType == SLAB:
 		pass
 	if displayingType == COLUMN:
-		oColumnViewSpinBox.value = setVal
+		oColumnIndexSpinBox.value = setVal
 		oColumnDetails.update_details()
 		oAllVoxelObjects.visible = true
 		oSelectedVoxelObject.visible = false
@@ -121,15 +121,27 @@ func _on_ColumnViewDeleteButton_pressed():
 	do_all()
 
 
-func _on_ColumnViewSpinBox_value_changed(value):
-	if oAllVoxelObjects.visible == false: # Update what was invisible
-		do_all()
-	set_object(value)
+
 
 func _on_CustomSlabSpinBox_value_changed(value):
 	do_one()
+	
 	oColumnDetails.update_details()
 	#set_object(0)
+	
+	yield(get_tree(),'idle_frame')
+
+func _on_ColumnIndexSpinBox_value_changed(value):
+	oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
+	yield(get_tree(),'idle_frame')
+	
+	if oAllVoxelObjects.visible == false: # Update what was invisible
+		oAllVoxelObjects.visible = true
+		#print('why')
+		do_all()
+	
+	set_object(value)
+	oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 
 func update_column_view():
 	oAllVoxelObjects.visible = false

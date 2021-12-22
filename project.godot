@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "SpinBox",
 "class": "CustomSpinBox",
 "language": "GDScript",
-"path": "res://Scenes/CustomSlabSpinBox.gd"
+"path": "res://Scenes/CustomSpinBox.gd"
 }, {
 "base": "LineEdit",
 "class": "EditableLabel",
