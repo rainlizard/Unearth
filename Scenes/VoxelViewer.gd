@@ -116,8 +116,7 @@ func _on_ColumnViewDeleteButton_pressed():
 	oDataClm.delete_column(viewObject)
 	oColumnDetails.update_details()
 	do_all()
-
-
+	do_one()
 
 
 func _on_CustomSlabSpinBox_value_changed(value):
