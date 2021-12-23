@@ -3,6 +3,7 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oTerrainMesh = Nodelist.list["oTerrainMesh"]
 onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
+onready var oGame3D = Nodelist.list["oGame3D"]
 
 var blankArray = initalize_blank_array()
 
@@ -36,24 +37,34 @@ func column_gen(genArray, x, z, clmIndex, surrClmIndex, generateBottomFace):
 				add_face(genArray, pos, 4, textureID)
 
 func complete_mesh(genArray):
-	calculate_array_index(genArray)
-	
-	var newMeshArray = temparray_to_mesharray(genArray)
-	
 	var generatedMesh = ArrayMesh.new()
-	generatedMesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, newMeshArray)
-	var mat = initialize_material()
-	generatedMesh.surface_set_material(0, mat)
+	
+	if genArray[Mesh.ARRAY_VERTEX].size() > 0:
+		calculate_array_index(genArray)
+		var newMeshArray = temparray_to_mesharray(genArray)
+		generatedMesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, newMeshArray)
+		
+		var mat = oGame3D.create_material(oDataLevelStyle.data)
+		generatedMesh.surface_set_material(0, mat)
 	
 	return generatedMesh
 
-func initialize_material():
-	var mat = ShaderMaterial.new()
-	mat.shader = preload("res://Shaders/display_texture_3d.shader")
-	mat.set_shader_param("dkTextureMap_Split_A", oTextureCache.cachedTextures[oDataLevelStyle.data][0])
-	mat.set_shader_param("dkTextureMap_Split_B", oTextureCache.cachedTextures[oDataLevelStyle.data][1])
-	mat.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
-	return mat
+func complete_slx_mesh(arrayOfArrays):
+	var generatedMesh = ArrayMesh.new()
+	
+	oGame3D.create_material_array(arrayOfArrays.size())
+	
+	for i in arrayOfArrays.size():
+		var genArray = arrayOfArrays[i]
+		if genArray[Mesh.ARRAY_VERTEX].size() > 0:
+			calculate_array_index(genArray)
+			var newMeshArray = temparray_to_mesharray(genArray)
+			generatedMesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, newMeshArray)
+			
+			generatedMesh.surface_set_material(generatedMesh.get_surface_count()-1, oGame3D.materialArray[i])
+	
+	return generatedMesh
+
 
 static func add_face(array, pos, side, textureID):
 	var sideArray = vertex[side]
@@ -78,7 +89,7 @@ static func add_face(array, pos, side, textureID):
 
 static func calculate_array_index(array): # Calculate ARRAY_INDEX using the size of ARRAY_VERTEX/4
 	var numberOfFaces = array[Mesh.ARRAY_VERTEX].size() / 4
-
+	
 	var meshArrayIndex = []
 	meshArrayIndex.resize(numberOfFaces*6)
 	

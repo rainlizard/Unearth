@@ -5,7 +5,6 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oColumnIndexSpinBox = Nodelist.list["oColumnIndexSpinBox"]
 onready var oGridContainerForChoosing3x3 = Nodelist.list["oGridContainerForChoosing3x3"]
 
-
 onready var oAllVoxelObjects = $"VoxelViewport/VoxelCreator/AllVoxelObjects"
 onready var oSelectedVoxelObject = $"VoxelViewport/VoxelCreator/SelectedPivotPoint/SelectedVoxelObject"
 onready var oSelectedPivotPoint = $"VoxelViewport/VoxelCreator/SelectedPivotPoint"
@@ -43,11 +42,11 @@ func _input(event):
 
 	if displayingType == SLAB:
 		return
-	
+
 	if (event.is_action("ui_left") or event.is_action("ui_down")) and event.is_pressed():
 		get_tree().set_input_as_handled()
 		set_object(viewObject-1)
-		
+
 	if (event.is_action("ui_right") or event.is_action("ui_up")) and event.is_pressed():
 		get_tree().set_input_as_handled()
 		set_object(viewObject+1)
@@ -64,8 +63,6 @@ func set_object(setVal):
 	if displayingType == COLUMN:
 		oColumnIndexSpinBox.value = setVal
 		oColumnDetails.update_details()
-		oAllVoxelObjects.visible = true
-		oSelectedVoxelObject.visible = false
 	
 	 # Reset camera back
 	oVoxelCameraPivotPoint.rotation_degrees.z = -28.125
@@ -137,7 +134,6 @@ func _on_ColumnIndexSpinBox_value_changed(value):
 	
 	if oAllVoxelObjects.visible == false: # Update what was invisible
 		oAllVoxelObjects.visible = true
-		#print('why')
 		do_all()
 	
 	set_object(value)

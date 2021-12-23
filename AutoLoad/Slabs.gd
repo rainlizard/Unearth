@@ -135,7 +135,7 @@ enum {
 #	PURPLE_PATH3 = 56,
 #	PURPLE_PATH4 = 57,
 	# 58 doesn't exist within 1304 entries
-	WALL_AUTOMATIC = 99999,
+	WALL_AUTOMATIC = 999,
 }
 
 var rooms = {14:null,16:null,18:null,20:null,22:null,24:null,26:null,28:null,30:null,32:null,34:null,36:null,38:null,40:null}

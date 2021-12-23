@@ -22,6 +22,7 @@ onready var oRectangleSelection = Nodelist.list["oRectangleSelection"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oCustomSlabsTab = Nodelist.list["oCustomSlabsTab"]
+onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 
 var texBlueCursor = preload("res://Art/Cursor32x32Blue.png")
 var texGreenCursor = preload("res://Art/Cursor32x32.png")
@@ -89,8 +90,9 @@ func update_paint():
 				newOwnership(cursorOverSlabOwner)
 				oOnlyOwnership.select_appropriate_button()
 			else:
-				if cursorOverSlab >= 1000:
-					return # Selecting these as paint is a bad idea right now, it allows you too place IDs without changing slab appearances
+				# Do not allow grabbing paint of custom slabs
+				if oDataCustomSlab.get_cellv(oSelector.cursorTile) == 1:
+					return
 				
 				if Slabs.data.has(cursorOverSlab) == true:
 					if Slabs.data[cursorOverSlab][Slabs.BITMASK_TYPE] == Slabs.BITMASK_WALL:

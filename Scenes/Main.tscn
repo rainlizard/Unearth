@@ -329,6 +329,9 @@ script = ExtResource( 44 )
 [node name="DataScript" type="Node" parent="CurrentMap"]
 script = ExtResource( 117 )
 
+[node name="DataCustomSlab" type="TileMap" parent="CurrentMap"]
+format = 1
+
 [node name="OpenMap" type="Node" parent="."]
 script = ExtResource( 5 )
 
@@ -3701,7 +3704,6 @@ __meta__ = {
 }
 
 [node name="TabSlabVoxels" type="HBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -3892,6 +3894,7 @@ __meta__ = {
 }
 
 [node name="TabColumnVoxels" type="HBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -3939,9 +3942,7 @@ margin_right = 208.0
 margin_bottom = 31.0
 max_value = 2047.0
 rounded = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource( 81 )
 
 [node name="ColumnFirstUnusedButton" type="Button" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
 margin_top = 35.0

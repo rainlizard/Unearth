@@ -10,7 +10,7 @@ var rotationSensitivity = 0.5
 var clickedOnVoxelView = false
 #event is InputEventMouseMotion and 
 func _input(event):
-	if oVoxelObjectView.visible == false: return
+	if oVoxelObjectView.is_visible_in_tree() == false: return
 	
 	if event.is_action_pressed("mouse_left"):
 		if Rect2( oVoxelObjectView.rect_global_position, oVoxelObjectView.rect_size ).has_point(oVoxelObjectView.get_global_mouse_position()) == true:

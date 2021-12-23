@@ -107,7 +107,6 @@ func add_slabs():
 	
 	if visible == true:
 		set_selection(oSelection.paintSlab) # Default initial selection
-	
 
 func pressed(id):
 	var setValue = id.get_meta("ID_of_slab")

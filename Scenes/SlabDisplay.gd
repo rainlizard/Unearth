@@ -36,7 +36,7 @@ func set_visual():
 	
 	dataImage.lock()
 	if panelView == Slabs.PANEL_TOP_VIEW:
-		if slabID < 1000 or slabID == Slabs.WALL_AUTOMATIC:
+		if slabID < 1000:
 			for y in 3:
 				for x in 3:
 					var clmIndex = columns[(y*3) + x]

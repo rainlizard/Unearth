@@ -17,7 +17,7 @@ flags_transparent = true
 vertex_color_use_as_albedo = true
 albedo_color = Color( 0.752941, 0.752941, 1, 0.188235 )
 
-[node name="VoxelObjectView" type="ViewportContainer"]
+[node name="VoxelObjectView" type="ViewportContainer" groups=["VoxelViewer"]]
 margin_right = 1236.0
 margin_bottom = 620.0
 size_flags_horizontal = 3
@@ -44,7 +44,7 @@ transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6, 0, 
 projection = 1
 current = true
 fov = 90.0
-size = 10.0
+size = 8.5
 far = 8192.0
 script = ExtResource( 1 )
 

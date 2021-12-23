@@ -18,6 +18,7 @@ onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oOwnableNaturalTerrain = Nodelist.list["oOwnableNaturalTerrain"]
 onready var oBridgesOnlyOnLiquidCheckbox = Nodelist.list["oBridgesOnlyOnLiquidCheckbox"]
 onready var oCustomSlabData = Nodelist.list["oCustomSlabData"]
+onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 
 enum dir {
 	s = 0
@@ -46,6 +47,12 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	for pos in shapePositionArray:
+		
+		if slabID < 1000:
+			oDataCustomSlab.set_cellv(pos, 0)
+		else:
+			oDataCustomSlab.set_cellv(pos, 1)
+		
 		match slabID:
 			Slabs.BRIDGE:
 				if oBridgesOnlyOnLiquidCheckbox.pressed == true:
@@ -71,7 +78,6 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	
 	oOverheadOwnership.ownership_update_shape(shapePositionArray, ownership)
 	print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-
 
 func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 	oEditor.mapHasBeenEdited = true
@@ -106,6 +112,10 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 	if slabID >= 1000: # Custom Slab IDs
 		if oCustomSlabData.data.has(slabID):
 			slab_place_custom(xSlab, ySlab, slabID, ownership, surrID)
+		return
+	
+	# Do not update custom slabs
+	if oDataCustomSlab.get_cell(xSlab, ySlab) == 1:
 		return
 	
 	# WIB (wibble)
@@ -145,7 +155,6 @@ func slab_place_custom(xSlab, ySlab, slabID, ownership, surrID):
 		clmIndexArray.append(clmIndex)
 	
 	set_columns(xSlab, ySlab, clmIndexArray)
-	
 	
 	oDataSlab.set_cell(xSlab, ySlab, recognizedAsID)
 

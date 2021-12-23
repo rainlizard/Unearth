@@ -11,6 +11,9 @@ onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oReadPalette = Nodelist.list["oReadPalette"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oRNC = Nodelist.list["oRNC"]
+onready var oGame3D = Nodelist.list["oGame3D"]
+onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
+onready var oColumnVoxelView = Nodelist.list["oColumnVoxelView"]
 
 const IMAGE_FORMAT = Image.FORMAT_RGB8
 const textureWidth = 256
@@ -212,9 +215,17 @@ func set_current_texture_pack():
 		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
 	
 	# 3D
-	if oGenerateTerrain.materialArray.size() > 0:
-		oGenerateTerrain.materialArray[0].set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-		oGenerateTerrain.materialArray[0].set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+	if oGame3D.materialArray.size() > 0:
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+	
+	for nodeID in get_tree().get_nodes_in_group("VoxelViewer"):
+		if nodeID.oAllVoxelObjects.mesh != null:
+			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
+			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+		if nodeID.oSelectedVoxelObject.mesh != null:
+			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
+			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
 	
 	assign_textures_to_slab_window(value)
 
