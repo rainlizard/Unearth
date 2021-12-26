@@ -1,5 +1,6 @@
 extends VBoxContainer
-
+onready var oWarlockLevelSpinBox = Nodelist.list["oWarlockLevelSpinBox"]
+onready var oWarlockAmountSpinBox = Nodelist.list["oWarlockAmountSpinBox"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
 onready var oRoomsAvailable = Nodelist.list["oRoomsAvailable"]
@@ -25,7 +26,7 @@ onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
 onready var oConfirmGenerateScript = Nodelist.list["oConfirmGenerateScript"]
 onready var oKeeperFXScriptCheckBox = Nodelist.list["oKeeperFXScriptCheckBox"]
-
+onready var oResearchables = Nodelist.list["oResearchables"]
 
 var scnAvailableButton = preload('res://Scenes/AvailableButton.tscn')
 
@@ -65,24 +66,24 @@ var listCreature = [
 #[31, "FLOATING_SPIRIT", 0],
 
 var listMagic = [
-[11, "POWER_HAND", 1],
-[14, "POWER_SLAP", 1],
-[135, "POWER_POSSESS", 1],
-[12, "POWER_IMP", 1],
-[15, "POWER_SIGHT", 0],
-[21, "POWER_SPEED", 0],
-[13, "POWER_OBEY", 0],
-[16, "POWER_CALL_TO_ARMS", 0],
-[23, "POWER_CONCEAL", 0],
-[19, "POWER_HOLD_AUDIENCE", 0],
-[17, "POWER_CAVE_IN", 0],
-[18, "POWER_HEAL_CREATURE", 0],
-[20, "POWER_LIGHTNING", 0],
-[22, "POWER_PROTECT", 0],
-[46, "POWER_CHICKEN", 0],
-[45, "POWER_DISEASE", 0],
-[134, "POWER_ARMAGEDDON", 0],
-[47, "POWER_DESTROY_WALLS", 0],
+[Things.SPELLBOOK_HAND, "POWER_HAND", 1],
+[Things.SPELLBOOK_SLAP, "POWER_SLAP", 1],
+[Things.SPELLBOOK_POSSESS, "POWER_POSSESS", 1],
+[Things.SPELLBOOK_IMP, "POWER_IMP", 1],
+[Things.SPELLBOOK_SIGHT, "POWER_SIGHT", 0],
+[Things.SPELLBOOK_SPEED, "POWER_SPEED", 0],
+[Things.SPELLBOOK_OBEY, "POWER_OBEY", 0],
+[Things.SPELLBOOK_CALL_TO_ARMS, "POWER_CALL_TO_ARMS", 0],
+[Things.SPELLBOOK_CONCEAL, "POWER_CONCEAL", 0],
+[Things.SPELLBOOK_HOLD_AUDIENCE, "POWER_HOLD_AUDIENCE", 0],
+[Things.SPELLBOOK_CAVE_IN, "POWER_CAVE_IN", 0],
+[Things.SPELLBOOK_HEAL_CREATURE, "POWER_HEAL_CREATURE", 0],
+[Things.SPELLBOOK_LIGHTNING, "POWER_LIGHTNING", 0],
+[Things.SPELLBOOK_PROTECT, "POWER_PROTECT", 0],
+[Things.SPELLBOOK_CHICKEN, "POWER_CHICKEN", 0],
+[Things.SPELLBOOK_DISEASE, "POWER_DISEASE", 0],
+[Things.SPELLBOOK_ARMAGEDDON, "POWER_ARMAGEDDON", 0],
+[Things.SPELLBOOK_DESTROY_WALLS, "POWER_DESTROY_WALLS", 0],
 ]
 
 var listTrap = [
@@ -115,6 +116,44 @@ var listRoom = [
 [Slabs.GRAVEYARD, "GRAVEYARD", 0],
 [Slabs.SCAVENGER_ROOM, "SCAVENGER", 0],
 ]
+enum {
+	IS_MAGIC
+	IS_ROOM
+}
+var listResearchOrder = [
+[IS_MAGIC, Things.SPELLBOOK_HAND         ,    250],
+[IS_MAGIC, Things.SPELLBOOK_SLAP         ,    500],
+[IS_MAGIC, Things.SPELLBOOK_POSSESS      ,    500],
+[IS_MAGIC, Things.SPELLBOOK_IMP          ,   1000],
+[IS_ROOM , Slabs.TREASURE_ROOM           ,   1000],
+[IS_ROOM , Slabs.LAIR                    ,   1000],
+[IS_ROOM , Slabs.HATCHERY                ,   1000],
+[IS_ROOM , Slabs.TRAINING_ROOM           ,   1000],
+[IS_ROOM , Slabs.LIBRARY                 ,   1000],
+[IS_MAGIC, Things.SPELLBOOK_SIGHT        ,   3800],
+[IS_ROOM , Slabs.BRIDGE                  ,   4600],
+[IS_MAGIC, Things.SPELLBOOK_SPEED        ,   5700],
+[IS_MAGIC, Things.SPELLBOOK_OBEY         ,   6000],
+[IS_ROOM , Slabs.GUARD_POST              ,   6700],
+[IS_MAGIC, Things.SPELLBOOK_CALL_TO_ARMS ,   7400],
+[IS_ROOM , Slabs.WORKSHOP                ,   9000],
+[IS_MAGIC, Things.SPELLBOOK_CONCEAL      ,   9400],
+[IS_ROOM , Slabs.BARRACKS                ,  12000],
+[IS_MAGIC, Things.SPELLBOOK_HOLD_AUDIENCE,  11000],
+[IS_ROOM , Slabs.PRISON                  ,  20000],
+[IS_MAGIC, Things.SPELLBOOK_CAVE_IN      ,  25000],
+[IS_ROOM , Slabs.TORTURE_CHAMBER         ,  20000],
+[IS_MAGIC, Things.SPELLBOOK_HEAL_CREATURE,  14000],
+[IS_ROOM , Slabs.TEMPLE                  ,  25000],
+[IS_MAGIC, Things.SPELLBOOK_LIGHTNING    ,  15000],
+[IS_ROOM , Slabs.GRAVEYARD               ,  25000],
+[IS_MAGIC, Things.SPELLBOOK_PROTECT      ,  15000],
+[IS_ROOM , Slabs.SCAVENGER_ROOM          ,  27500],
+[IS_MAGIC, Things.SPELLBOOK_CHICKEN      ,  20000],
+[IS_MAGIC, Things.SPELLBOOK_DISEASE      ,  20000],
+[IS_MAGIC, Things.SPELLBOOK_ARMAGEDDON   , 100000],
+[IS_MAGIC, Things.SPELLBOOK_DESTROY_WALLS, 750000],
+]
 
 func _ready():
 	initialize_rooms_available()
@@ -122,21 +161,66 @@ func _ready():
 	initialize_traps_available()
 	initialize_magic_available()
 	initialize_doors_available()
+	
+	initialize_researchables()
+	adjust_estimated_time()
+	
+	for i in 2:
+		yield(get_tree(),'idle_frame')
+	get_parent().current_tab = 1
+	Utils.popup_centered(Nodelist.list["oMapSettingsWindow"])
+
+func initialize_researchables():
+	var labelNumber = 0
+	for i in listResearchOrder:
+		
+		var what = i[0]
+		var ID = i[1]
+		var cost = i[2]
+		
+		var scene = preload('res://Scenes/ResearchableItem.tscn')
+		var idItem = scene.instance()
+		
+		if what == IS_MAGIC:
+			for checkAll in listMagic:
+				if checkAll[0] == ID:
+					idItem.hint_tooltip = Things.DATA_OBJECT[ID][Things.NAME]
+					idItem.set_meta("variable",checkAll[1]) # function text
+					idItem.set_meta("ID", ID)
+					idItem.type = idItem.MAGIC
+					idItem.set_magic_texture(ID)
+					break
+		elif what == IS_ROOM:
+			for checkAll in listRoom:
+				if checkAll[0] == ID:
+					idItem.hint_tooltip = Slabs.data[ID][Slabs.NAME]
+					idItem.set_meta("variable",checkAll[1]) # function text
+					idItem.set_meta("ID", ID)
+					idItem.type = idItem.ROOM
+					idItem.set_room_texture(ID)
+					break
+		
+		labelNumber += 1
+		idItem.set_label_number(labelNumber)
+		idItem.set_research_required(cost)
+		
+		oResearchables.add_child(idItem)
 
 func initialize_rooms_available():
 	for i in listRoom:
 		var slabID = i[0]# listRoom[] #Slabs.roomMenuOrder[i]
 		var functionVariable = i[1]
-		var defaultValue = i[2]
+		var defaultAvailability = i[2]
 		
 		if Slabs.icons.has(slabID):
 			var id = scnAvailableButton.instance()
 			id.hint_tooltip = Slabs.data[slabID][Slabs.NAME] + ' availability'
 			id.get_node("IconTextureRect").texture = Slabs.icons[slabID]
 			id.set_meta("variable", functionVariable)
+			id.set_meta("ID", slabID)
 			id.get_node("TextEditableLabel").editable = false
 			
-			if defaultValue == 1:
+			if defaultAvailability == 1:
 				id.set_availability_state(id.OPTION_START)
 			else:
 				id.set_availability_state(id.OPTION_RESEARCH)
@@ -147,23 +231,23 @@ func initialize_creatures_available(): # oCreaturePool
 	for i in listCreature:
 		var thingID = i[0]
 		var functionVariable = i[1]
-		var defaultValue = i[2]
+		var defaultAvailability = i[2]
 		var id = scnAvailableButton.instance()
 		id.set_meta("variable", functionVariable)
 		var creatureName = Things.DATA_CREATURE[thingID][Things.NAME]
 		id.hint_tooltip = creatureName + ' availability'
 		id.get_node("IconTextureRect").texture = Things.DATA_CREATURE[thingID][Things.TEXTURE]
 		id.get_node("TextEditableLabel").hint_tooltip = creatureName + ' in pool'
-		id.get_node("TextEditableLabel").text = str(defaultValue)
+		id.get_node("TextEditableLabel").text = str(defaultAvailability)
 		id.get_node("TextEditableLabel").editable = true
 		id.get_node("TextEditableLabel").mouse_filter = Control.MOUSE_FILTER_PASS
 		
-		if defaultValue > 0:
+		if defaultAvailability > 0:
 			id.set_availability_state(id.ENABLED)
 		else:
 			id.set_availability_state(id.DISABLED)
 		
-		#id._on_EditableLabel_text_changed(str(defaultValue)) # To initialize the darkening
+		#id._on_EditableLabel_text_changed(str(defaultAvailability)) # To initialize the darkening
 		if listCreature.find(i) < 16:
 			oCreaturePool.add_child(id)
 		else:
@@ -173,14 +257,14 @@ func initialize_traps_available(): # oTrapsAvailable
 	for i in listTrap:
 		var thingID = i[0]
 		var functionVariable = i[1]
-		var defaultValue = i[2]
+		var defaultAvailability = i[2]
 		var id = scnAvailableButton.instance()
 		id.hint_tooltip = Things.DATA_TRAP[thingID][Things.NAME] + ' availability'
 		id.get_node("IconTextureRect").texture = Things.DATA_TRAP[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
 		id.get_node("TextEditableLabel").editable = false
 		
-		if defaultValue == 1:
+		if defaultAvailability == 1:
 			id.set_availability_state(id.ENABLED)
 		else:
 			id.set_availability_state(id.DISABLED)
@@ -191,14 +275,15 @@ func initialize_magic_available(): # oMagicAvailable
 	for i in listMagic:
 		var thingID = i[0]
 		var functionVariable = i[1]
-		var defaultValue = i[2]
+		var defaultAvailability = i[2]
 		var id = scnAvailableButton.instance()
 		id.hint_tooltip = Things.DATA_OBJECT[thingID][Things.NAME] + ' availability'
 		id.get_node("IconTextureRect").texture = Things.DATA_OBJECT[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
+		id.set_meta("ID", thingID)
 		id.get_node("TextEditableLabel").editable = false
 		
-		if defaultValue == 1:
+		if defaultAvailability == 1:
 			id.set_availability_state(id.OPTION_START)
 		else:
 			id.set_availability_state(id.OPTION_RESEARCH)
@@ -209,14 +294,14 @@ func initialize_doors_available(): # oDoorsAvailable
 	for i in listDoor:
 		var thingID = i[0]
 		var functionVariable = i[1]
-		var defaultValue = i[2]
+		var defaultAvailability = i[2]
 		var id = scnAvailableButton.instance()
 		id.hint_tooltip = Things.DATA_DOOR[thingID][Things.NAME] + ' availability'
 		id.get_node("IconTextureRect").texture = Things.DATA_DOOR[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
 		id.get_node("TextEditableLabel").editable = false
 		
-		if defaultValue == 1:
+		if defaultAvailability == 1:
 			id.set_availability_state(id.ENABLED)
 		else:
 			id.set_availability_state(id.DISABLED)
@@ -354,3 +439,31 @@ func add_one_extra_line(generateString):
 
 func _on_KeeperFXScriptCheckBox_toggled(button_pressed):
 	pass # Replace with function body.
+
+
+func _on_WarlockAmountSpinBox_value_changed(value):
+	adjust_estimated_time()
+
+
+func _on_WarlockLevelSpinBox_value_changed(value):
+	adjust_estimated_time()
+
+
+func adjust_estimated_time():
+	var warlockAmount = oWarlockAmountSpinBox.value
+	var warlockLevel = oWarlockLevelSpinBox.value
+	var warlockResearchSpeed = 4
+	
+	var speed = 0
+	for i in warlockAmount:
+		
+		speed += warlockResearchSpeed # level 1
+		for level in warlockLevel-1: # level 2-10
+			speed += floor(warlockResearchSpeed * 0.35)
+	
+	for id in get_tree().get_nodes_in_group("ResearchableItem"):
+		id.set_estimated_time(speed)
+
+
+
+	#var calculated = floor((warlockResearchSpeed + (warlockResearchSpeed * warlockLevel * 0.35 )) * warlockAmount)

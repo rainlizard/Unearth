@@ -5,6 +5,7 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oColumnIndexSpinBox = Nodelist.list["oColumnIndexSpinBox"]
 onready var oGridContainerForChoosing3x3 = Nodelist.list["oGridContainerForChoosing3x3"]
 
+onready var oVoxelCamera = $"VoxelViewport/VoxelCameraPivotPoint/VoxelCamera"
 onready var oAllVoxelObjects = $"VoxelViewport/VoxelCreator/AllVoxelObjects"
 onready var oSelectedVoxelObject = $"VoxelViewport/VoxelCreator/SelectedPivotPoint/SelectedVoxelObject"
 onready var oSelectedPivotPoint = $"VoxelViewport/VoxelCreator/SelectedPivotPoint"
@@ -18,6 +19,8 @@ enum {
 }
 
 var viewObject = 0 setget set_object
+
+var previousObject = 0
 
 func initialize():
 	if is_instance_valid(oDataClm) == false: return
@@ -38,7 +41,7 @@ func initialize():
 		oHighlightBase.mesh.size = Vector2(2,2)
 
 func _input(event):
-	if visible == false: return
+	if is_visible_in_tree() == false: return
 
 	if displayingType == SLAB:
 		return
@@ -53,7 +56,12 @@ func _input(event):
 
 func set_object(setVal):
 	setVal = clamp(setVal,0,2047)
+	previousObject = viewObject
 	viewObject = setVal
+	
+	# Speed up camera movement speed if you change the object value by a lot, to get there quicker
+	oVoxelCamera.cameraShiftSpeed = clamp(0.02 * abs(previousObject-viewObject), 0.02, 0.3)
+	
 	do_one()
 	
 	if displayingType == CUBE:

@@ -31,13 +31,13 @@ onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
 
+var fixMenuExpansion
+
 func _ready():
 	oMenuButtonFile.get_popup().connect("id_pressed",self,"_on_FileSubmenu_Pressed")
 	oMenuButtonEdit.get_popup().connect("id_pressed",self,"_on_EditSubmenu_Pressed")
 	oMenuButtonView.get_popup().connect("id_pressed",self,"_on_ViewSubmenu_Pressed")
 	oMenuButtonHelp.get_popup().connect("id_pressed",self,"_on_HelpSubmenu_Pressed")
-
-var fixMenuExpansion
 
 func _process(delta):
 	# Enable saving
@@ -48,8 +48,6 @@ func _process(delta):
 	# Enable Play button
 	oMenuButtonPlay.disabled = false
 	oMenuButtonPlay.hint_tooltip = ""
-	
-	
 	
 	var fixedBaseDir = oGame.EXECUTABLE_PATH.get_base_dir().to_upper().replace('\\','/')
 	var fixedMapPath = oCurrentMap.path.to_upper().replace('\\','/')
@@ -159,8 +157,14 @@ func _on_MenuButtonSettings_pressed():
 
 func _on_MenuButtonPlay_pressed():
 	oMenuButtonPlay.get_popup().visible = false
+	oMenuButtonPlay.get_popup().modulate = Color(0,0,0,0)
+	oMenuButtonPlay.pressed = false
+	oMenuButtonPlay.toggle_mode = false
 	oGame.menu_play_clicked()
-
+	
+	oMenuButtonPlay.disconnect("pressed",self,"_on_MenuButtonPlay_pressed")
+	yield(get_tree().create_timer(2.5), "timeout")
+	oMenuButtonPlay.connect("pressed",self,"_on_MenuButtonPlay_pressed")
 
 func _on_ConfirmDiscardChanges_confirmed():
 	oOpenMap.open_map(oCurrentMap.path)

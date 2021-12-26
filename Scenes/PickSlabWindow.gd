@@ -11,6 +11,8 @@ onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oCustomSlabData = Nodelist.list["oCustomSlabData"]
+onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
+onready var oVoxelTabs = Nodelist.list["oVoxelTabs"]
 
 
 onready var oSelectedRect = $Clippy/SelectedRect
@@ -105,8 +107,39 @@ func add_slabs():
 			id.set_visual()
 			add_child_to_grid(tabs[putIntoTab][GRIDCON_PATH], id, Slabs.data[slabID][Slabs.NAME])
 	
+	
+	custom_slab_add_new_button()
+	
+	
+	
 	if visible == true:
 		set_selection(oSelection.paintSlab) # Default initial selection
+
+func custom_slab_add_new_button():
+	var scene = preload('res://Scenes/GenericGridItem.tscn')
+	var id = scene.instance()
+	#id.set_meta("ID_of_slab", 0)
+	id.texture_normal = preload('res://Art/AddCustomSlab.png')
+	id.texture_hover = preload('res://Art/AddCustomSlabHover.png')
+	id.texture_pressed = preload('res://Art/AddCustomSlabPressed.png')
+	
+	var set_text = "Add new"
+	set_text = set_text.replace(" ","\n") # Use "New lines" wherever there was a space.
+	id.set_meta("grid_item_text", set_text)
+	id.connect("mouse_entered", self, "_on_hovered_over_item", [id])
+	id.connect("mouse_exited", self, "_on_hovered_none")
+	id.connect("pressed",self,"_on_pressed_add_new_custom_slab")
+	#id.connect('gui_input',self,"_on_slab_portrait_gui_input",[id])
+	id.rect_min_size = Vector2(grid_item_size.x * grid_window_scale, grid_item_size.y * grid_window_scale)
+	
+	var tabID = tabs[Slabs.TAB_CUSTOM][GRIDCON_PATH]
+	tabID.add_child(id)
+	
+	oGridFunctions._on_GridWindow_resized(self)
+
+func _on_pressed_add_new_custom_slab():
+	Utils.popup_centered(oSlabColumnEditor)
+	oVoxelTabs.current_tab = 0 # Select tab containing Custom Slab Editor
 
 func pressed(id):
 	var setValue = id.get_meta("ID_of_slab")

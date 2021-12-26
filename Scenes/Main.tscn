@@ -1,4 +1,4 @@
-[gd_scene load_steps=145 format=2]
+[gd_scene load_steps=147 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -128,6 +128,8 @@
 [ext_resource path="res://Scenes/TextureEditingWindow.gd" type="Script" id=126]
 [ext_resource path="res://Scenes/CustomSlabData.gd" type="Script" id=127]
 [ext_resource path="res://Scenes/TabColumnVoxels.gd" type="Script" id=128]
+[ext_resource path="res://Scenes/CustomTooltip.gd" type="Script" id=129]
+[ext_resource path="res://Theme/StyleBoxThinnerPanel.tres" type="StyleBox" id=130]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -548,7 +550,7 @@ script = ExtResource( 76 )
 [node name="PickSlabWindow" type="WindowDialog" parent="Ui/UiTools"]
 visible = true
 margin_top = 60.0
-margin_right = 308.0
+margin_right = 321.0
 margin_bottom = 707.0
 window_title = "Slab"
 resizable = true
@@ -567,19 +569,19 @@ __meta__ = {
 }
 
 [node name="TopTabsSection" parent="Ui/UiTools/PickSlabWindow/SlabTabs" instance=ExtResource( 105 )]
-margin_right = 308.0
+margin_right = 321.0
 margin_bottom = 31.0
 
 [node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs"]
 margin_top = 35.0
-margin_right = 308.0
+margin_right = 321.0
 margin_bottom = 647.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MainSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
-margin_right = 308.0
+margin_right = 321.0
 margin_bottom = 612.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -587,15 +589,15 @@ size_flags_vertical = 3
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 304.0
+margin_right = 317.0
 margin_bottom = 608.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs/ScrollContainer"]
-margin_left = 150.0
+margin_left = 156.0
 margin_top = 302.0
-margin_right = 150.0
+margin_right = 156.0
 margin_bottom = 302.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
@@ -733,7 +735,7 @@ __meta__ = {
 [node name="PickThingWindow" type="WindowDialog" parent="Ui/UiTools"]
 visible = true
 margin_top = 60.0
-margin_right = 750.0
+margin_right = 650.0
 margin_bottom = 268.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
@@ -755,19 +757,19 @@ __meta__ = {
 }
 
 [node name="TopTabsSection" parent="Ui/UiTools/PickThingWindow/ThingTabs" instance=ExtResource( 105 )]
-margin_right = 750.0
+margin_right = 650.0
 margin_bottom = 31.0
 
 [node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
 margin_top = 35.0
-margin_right = 750.0
+margin_right = 650.0
 margin_bottom = 208.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Creature" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
-margin_right = 750.0
+margin_right = 650.0
 margin_bottom = 173.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -775,15 +777,15 @@ size_flags_vertical = 3
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Creature"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 746.0
+margin_right = 646.0
 margin_bottom = 169.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Creature/ScrollContainer"]
-margin_left = 371.0
+margin_left = 321.0
 margin_top = 82.0
-margin_right = 371.0
+margin_right = 321.0
 margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
@@ -3112,22 +3114,27 @@ __meta__ = {
 }
 
 [node name="GeneratorContainer" type="ScrollContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator"]
-margin_right = 831.0
-margin_bottom = 1167.0
+margin_right = 835.0
+margin_bottom = 944.0
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer"]
-margin_right = 423.0
+[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer"]
+margin_right = 835.0
+margin_bottom = 727.0
+size_flags_horizontal = 3
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+margin_right = 835.0
 margin_bottom = 443.0
 custom_constants/hseparation = 28
 columns = 2
 
-[node name="ScriptSection1" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
-margin_right = 397.0
-margin_bottom = 323.0
+[node name="ScriptSection1" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
+margin_right = 335.0
+margin_bottom = 356.0
 
-[node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_right = 397.0
+[node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_right = 335.0
 margin_bottom = 21.0
 text = "Options"
 align = 1
@@ -3135,17 +3142,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
+[node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 25.0
-margin_right = 397.0
+margin_right = 335.0
 margin_bottom = 37.0
 rect_min_size = Vector2( 12, 12 )
 size_flags_horizontal = 3
 
-[node name="KeeperFXScriptCheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_top = 146.0
-margin_right = 397.0
-margin_bottom = 175.0
+[node name="KeeperFXScriptCheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 41.0
+margin_right = 335.0
+margin_bottom = 70.0
 hint_tooltip = "Adds LEVEL_VERSION at the top of the script, allowing for extended scripting.
 Keep in mind different arguments for CREATURE_AVAILABLE are used if LEVEL_VERSION is present."
 text = "KeeperFX script"
@@ -3153,12 +3160,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_top = 41.0
-margin_right = 397.0
-margin_bottom = 72.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 74.0
+margin_right = 335.0
+margin_bottom = 105.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer"]
 margin_top = 5.0
 margin_right = 201.0
 margin_bottom = 26.0
@@ -3166,7 +3173,7 @@ hint_tooltip = "SET_GENERATE_SPEED"
 mouse_filter = 1
 text = "Portal attraction rate:"
 
-[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer"]
+[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer"]
 margin_left = 205.0
 margin_right = 263.0
 margin_bottom = 31.0
@@ -3177,7 +3184,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PortalRateInSeconds" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer"]
+[node name="PortalRateInSeconds" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer"]
 margin_left = 267.0
 margin_top = 5.0
 margin_right = 335.0
@@ -3189,12 +3196,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_top = 76.0
-margin_right = 397.0
-margin_bottom = 107.0
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 109.0
+margin_right = 335.0
+margin_bottom = 140.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer2"]
+[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer2"]
 margin_top = 5.0
 margin_right = 126.0
 margin_bottom = 26.0
@@ -3202,7 +3209,7 @@ hint_tooltip = "START_MONEY"
 mouse_filter = 1
 text = "Starting gold:"
 
-[node name="GoldField" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer2"]
+[node name="GoldField" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer2"]
 margin_left = 130.0
 margin_right = 190.0
 margin_bottom = 31.0
@@ -3213,12 +3220,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_top = 111.0
-margin_right = 397.0
-margin_bottom = 142.0
+[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 144.0
+margin_right = 335.0
+margin_bottom = 175.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer3"]
+[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer3"]
 margin_top = 5.0
 margin_right = 184.0
 margin_bottom = 26.0
@@ -3226,7 +3233,7 @@ hint_tooltip = "MAX_CREATURES"
 mouse_filter = 1
 text = "Maximum creatures:"
 
-[node name="MaxCreaturesField" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer3"]
+[node name="MaxCreaturesField" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer3"]
 margin_left = 188.0
 margin_right = 246.0
 margin_bottom = 31.0
@@ -3237,71 +3244,71 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BlueAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_top = 146.0
-margin_right = 397.0
-margin_bottom = 175.0
+[node name="BlueAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 179.0
+margin_right = 335.0
+margin_bottom = 208.0
 hint_tooltip = "Computer PLAYER1"
 text = "Blue keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GreenAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_top = 179.0
-margin_right = 397.0
-margin_bottom = 208.0
+[node name="GreenAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 212.0
+margin_right = 335.0
+margin_bottom = 241.0
 hint_tooltip = "Computer PLAYER2"
 text = "Green keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="YellowAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_top = 212.0
-margin_right = 397.0
-margin_bottom = 241.0
+[node name="YellowAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 245.0
+margin_right = 335.0
+margin_bottom = 274.0
 hint_tooltip = "Computer PLAYER3"
 text = "Yellow keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WhiteAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_top = 245.0
-margin_right = 397.0
-margin_bottom = 274.0
+[node name="WhiteAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 278.0
+margin_right = 335.0
+margin_bottom = 307.0
 hint_tooltip = "Computer PLAYER_GOOD"
 text = "White keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WinConditionCheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_top = 278.0
-margin_right = 397.0
-margin_bottom = 307.0
+[node name="WinConditionCheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 311.0
+margin_right = 335.0
+margin_bottom = 340.0
 hint_tooltip = "Keep in mind if a keeper AI is not enabled then they'll be counted as defeated even if their dungeon heart has not been destroyed"
 text = "Win when all keepers are defeated"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1"]
-margin_top = 311.0
-margin_right = 397.0
-margin_bottom = 323.0
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 344.0
+margin_right = 335.0
+margin_bottom = 356.0
 rect_min_size = Vector2( 12, 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScriptSection4" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
-margin_left = 425.0
-margin_right = 485.0
-margin_bottom = 323.0
+[node name="ScriptSection4" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
+margin_left = 363.0
+margin_right = 423.0
+margin_bottom = 356.0
 
-[node name="HeaderLabel3" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection4"]
+[node name="HeaderLabel3" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection4"]
 margin_right = 60.0
 margin_bottom = 21.0
 text = "Rooms"
@@ -3310,19 +3317,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RoomsAvailable" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection4"]
+[node name="RoomsAvailable" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection4"]
 margin_top = 25.0
 margin_right = 60.0
 margin_bottom = 25.0
 columns = 4
 
-[node name="ScriptSection2" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
-margin_top = 327.0
-margin_right = 397.0
-margin_bottom = 352.0
+[node name="ScriptSection2" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
+margin_top = 360.0
+margin_right = 335.0
+margin_bottom = 385.0
 
-[node name="HeaderLabel" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection2"]
-margin_right = 397.0
+[node name="HeaderLabel" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection2"]
+margin_right = 335.0
 margin_bottom = 21.0
 text = "Creatures"
 align = 1
@@ -3330,19 +3337,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CreaturePool" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection2"]
+[node name="CreaturePool" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection2"]
 margin_top = 25.0
-margin_right = 397.0
+margin_right = 335.0
 margin_bottom = 25.0
 columns = 4
 
-[node name="ScriptSection5" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
-margin_left = 425.0
-margin_top = 327.0
-margin_right = 485.0
-margin_bottom = 352.0
+[node name="ScriptSection5" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
+margin_left = 363.0
+margin_top = 360.0
+margin_right = 423.0
+margin_bottom = 385.0
 
-[node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection5"]
+[node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection5"]
 margin_right = 60.0
 margin_bottom = 21.0
 text = "Magic"
@@ -3351,19 +3358,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MagicAvailable" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection5"]
+[node name="MagicAvailable" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection5"]
 margin_top = 25.0
 margin_right = 60.0
 margin_bottom = 25.0
 columns = 4
 
-[node name="ScriptSection3" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
-margin_top = 356.0
-margin_right = 397.0
-margin_bottom = 410.0
+[node name="ScriptSection3" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
+margin_top = 389.0
+margin_right = 335.0
+margin_bottom = 443.0
 
-[node name="HeaderLabel2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection3"]
-margin_right = 397.0
+[node name="HeaderLabel2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection3"]
+margin_right = 335.0
 margin_bottom = 21.0
 text = "Heroes"
 align = 1
@@ -3371,19 +3378,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HeroPool" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection3"]
+[node name="HeroPool" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection3"]
 margin_top = 25.0
-margin_right = 397.0
+margin_right = 335.0
 margin_bottom = 25.0
 columns = 4
 
-[node name="ScriptSection6" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer"]
-margin_left = 425.0
-margin_top = 356.0
-margin_right = 485.0
-margin_bottom = 410.0
+[node name="ScriptSection6" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
+margin_left = 363.0
+margin_top = 389.0
+margin_right = 423.0
+margin_bottom = 443.0
 
-[node name="HeaderLabel5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection6"]
+[node name="HeaderLabel5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection6"]
 margin_right = 60.0
 margin_bottom = 21.0
 text = "Traps"
@@ -3392,13 +3399,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TrapsAvailable" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection6"]
+[node name="TrapsAvailable" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection6"]
 margin_top = 25.0
 margin_right = 60.0
 margin_bottom = 25.0
 columns = 4
 
-[node name="HeaderLabel6" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection6"]
+[node name="HeaderLabel6" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection6"]
 margin_top = 29.0
 margin_right = 60.0
 margin_bottom = 50.0
@@ -3408,24 +3415,164 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DoorsAvailable" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection6"]
+[node name="DoorsAvailable" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection6"]
 margin_top = 54.0
 margin_right = 60.0
 margin_bottom = 54.0
 columns = 4
 
+[node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+margin_top = 447.0
+margin_right = 835.0
+margin_bottom = 468.0
+text = "Research order"
+align = 1
+
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+margin_top = 600.0
+margin_right = 835.0
+margin_bottom = 669.0
+text = "Calculate estimated time using:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+margin_top = 600.0
+margin_right = 589.0
+margin_bottom = 640.0
+
+[node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2"]
+margin_right = 835.0
+margin_bottom = 69.0
+text = "Warlocks"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WarlockAmountSpinBox" type="SpinBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2"]
+margin_right = 74.0
+margin_bottom = 31.0
+max_value = 255.0
+value = 4.0
+rounded = true
+script = ExtResource( 81 )
+
+[node name="Label5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2"]
+margin_right = 835.0
+margin_bottom = 69.0
+text = "Level"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WarlockLevelSpinBox" type="SpinBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2"]
+margin_right = 74.0
+margin_bottom = 31.0
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+rounded = true
+script = ExtResource( 81 )
+
+[node name="Spacing3" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+margin_top = 565.0
+margin_right = 835.0
+margin_bottom = 596.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+margin_right = 24.0
+margin_bottom = 43.0
+rect_min_size = Vector2( 24, 43 )
+
+[node name="Label5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+margin_top = 5.0
+margin_right = 64.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 64, 43 )
+valign = 1
+autowrap = true
+clip_text = true
+
+[node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+margin_top = 5.0
+margin_right = 100.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 100, 43 )
+text = "Research required"
+valign = 1
+autowrap = true
+clip_text = true
+
+[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+margin_top = 5.0
+margin_right = 130.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 130, 43 )
+text = "Estimated time"
+valign = 1
+autowrap = true
+clip_text = true
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+margin_top = 5.0
+margin_right = 130.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 130, 43 )
+text = "Total estimated time"
+valign = 1
+autowrap = true
+clip_text = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+margin_top = 472.0
+margin_right = 835.0
+margin_bottom = 536.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_vertical_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Researchables" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ScrollContainer"]
+margin_right = 835.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [node name="HBoxContainer4" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator"]
-margin_top = 1171.0
-margin_right = 831.0
-margin_bottom = 1198.0
+margin_top = 948.0
+margin_right = 835.0
+margin_bottom = 975.0
 alignment = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="GenerateScriptButton" type="Button" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/HBoxContainer4"]
-margin_left = 682.0
-margin_right = 831.0
+margin_left = 686.0
+margin_right = 835.0
 margin_bottom = 27.0
 text = "Generate script"
 
@@ -3451,7 +3598,7 @@ __meta__ = {
 }
 
 [node name="ScriptEmptyStatus" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer"]
-margin_right = 831.0
+margin_right = 835.0
 margin_bottom = 21.0
 size_flags_horizontal = 3
 text = "Your script file is empty!"
@@ -3459,8 +3606,8 @@ align = 1
 
 [node name="ScriptTextEdit" type="TextEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer"]
 margin_top = 25.0
-margin_right = 831.0
-margin_bottom = 700.0
+margin_right = 835.0
+margin_bottom = 975.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 16 )
@@ -4115,6 +4262,41 @@ size_flags_horizontal = 8
 size_flags_vertical = 10
 text = "Help"
 
+[node name="CustomTooltip" type="Control" parent="Ui/UiSystem"]
+margin_top = -10.5
+margin_bottom = 10.5
+script = ExtResource( 129 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/CustomTooltip"]
+self_modulate = Color( 1, 1, 1, 0.501961 )
+margin_left = -4.0
+margin_top = -4.0
+margin_right = 4.0
+margin_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 7
+custom_styles/panel = ExtResource( 130 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Ui/UiSystem/CustomTooltip/PanelContainer"]
+self_modulate = Color( 0.752941, 0.752941, 0.752941, 1 )
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 4.0
+margin_bottom = 25.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -4340,12 +4522,14 @@ script = ExtResource( 88 )
 [connection signal="file_selected" from="Ui/UiSystem/ChooseMapImageFileDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ChooseMapImageFileDialog_file_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapProperties_visibility_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/MapNameLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapNameLineEdit_text_changed"]
-[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/KeeperFXScriptCheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_KeeperFXScriptCheckBox_toggled"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/HBoxContainer/PortalRateField" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_PortalRateField_text_changed"]
-[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/BlueAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_BlueAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/GreenAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_GreenAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/YellowAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_YellowAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/GridContainer/ScriptSection1/WhiteAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WhiteAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/KeeperFXScriptCheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_KeeperFXScriptCheckBox_toggled"]
+[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer/PortalRateField" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_PortalRateField_text_changed"]
+[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlueAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_BlueAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/GreenAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_GreenAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/YellowAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_YellowAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/WhiteAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WhiteAICheckBox_toggled"]
+[connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2/WarlockAmountSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WarlockAmountSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2/WarlockLevelSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WarlockLevelSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/HBoxContainer4/GenerateScriptButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_GenerateScriptButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]

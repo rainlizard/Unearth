@@ -1,4 +1,5 @@
 extends VBoxContainer
+onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 onready var oIconTextureRect = $IconTextureRect
 onready var oIconHighlight = $IconTextureRect/IconHighlight
 onready var oIconColorRect = $IconTextureRect/IconColorRect
@@ -15,7 +16,6 @@ enum {
 	ENABLED
 	DISABLED
 }
-
 
 func _ready():
 	connect("mouse_entered", self, "_on_available_button_mouse_entered")
@@ -39,6 +39,7 @@ func _on_AvailableButton_gui_input(event):
 
 
 func _on_button_pressed():
+	
 	for id in get_tree().get_nodes_in_group("EditableLabel"):
 		id.release_focus()
 	
@@ -48,7 +49,9 @@ func _on_button_pressed():
 		OPTION_DISABLED: set_availability_state(OPTION_START)
 		DISABLED: set_availability_state(ENABLED)
 		ENABLED: set_availability_state(DISABLED)
-
+	
+	# Adjust estimated times when things become researchable or unresearchable
+	oScriptGenerator.adjust_estimated_time()
 
 func set_availability_state(setVal):
 	availabilityState = setVal

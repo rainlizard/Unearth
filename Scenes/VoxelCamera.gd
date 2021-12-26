@@ -3,7 +3,7 @@ onready var oVoxelObjectView = $"../../.."
 onready var oVoxelCameraPivotPoint = $".."
 
 var rotationSensitivity = 0.5
-
+var cameraShiftSpeed = 0.02
 
 func _input(event):
 	if oVoxelObjectView.is_visible_in_tree() == false: return
@@ -17,5 +17,5 @@ func _input(event):
 			size += 3
 
 func _process(delta):
-	oVoxelCameraPivotPoint.translation.z = lerp(oVoxelCameraPivotPoint.translation.z, oVoxelObjectView.viewObject*2, 0.02) #lerp(translation.z, oSlabColumnEditor.viewColumn*2, 0.01)
-	oVoxelCameraPivotPoint.translation.x = lerp(oVoxelCameraPivotPoint.translation.x, oVoxelObjectView.viewObject*2, 0.02)
+	oVoxelCameraPivotPoint.translation.z = lerp(oVoxelCameraPivotPoint.translation.z, oVoxelObjectView.viewObject*2, cameraShiftSpeed)
+	oVoxelCameraPivotPoint.translation.x = lerp(oVoxelCameraPivotPoint.translation.x, oVoxelObjectView.viewObject*2, cameraShiftSpeed)

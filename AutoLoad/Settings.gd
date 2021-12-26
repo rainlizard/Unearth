@@ -107,7 +107,8 @@ func executable_stuff():
 		Utils.popup_centered(oChooseDkExe)
 	else:
 		# Test whenever you restart, to always show the error if there's a problem
-		oGame.test_write_permissions()
+		if oGame.EXECUTABLE_PATH != "": # Don't provide an error when an executable hasn't even been set
+			oGame.test_write_permissions()
 
 func cfg_has_setting(setting):
 	return config.has_section_key("settings", setting)

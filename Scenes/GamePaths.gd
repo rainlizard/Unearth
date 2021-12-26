@@ -30,6 +30,8 @@ func launch_game():
 	var printOutput = []
 	OS.execute(COMMAND_LINE_CONSOLE, [COMMAND_LINE_CONSOLE_ARG, COMMAND_LINE], false, printOutput) # Make sure "false" is set so Unearth doesn't freeze
 	print(printOutput)
+	oMessage.quick("Launching...")
+
 
 func set_paths(path):
 	if path == null: path = ""
@@ -128,8 +130,6 @@ func get_subdirs(path):
 	return array
 
 func test_write_permissions():
-	if EXECUTABLE_PATH == "": return OK # Don't provide an error when an executable hasn't even been set
-	
 	# Test write permissions of DK directory
 	var testPath = EXECUTABLE_PATH.get_base_dir().plus_file('testing_write_permissions')
 	
@@ -142,8 +142,10 @@ func test_write_permissions():
 	removeFile.remove(testPath) # Be careful with this
 	
 	if err != OK:
-		oMessage.big("Error", "There are no write permissions for your Dungeon Keeper directory. Please exit the editor and move your entire Dungeon Keeper folder elsewhere, then choose the executable again.")
-	
+		if OS.get_name() == "X11":
+			oMessage.big("Error", "There are no write permissions for your Dungeon Keeper directory.")
+		if OS.get_name() == "Windows":
+			oMessage.big("Error", "There are no write permissions for your Dungeon Keeper directory. Maybe try moving your Dungeon Keeper folder elsewhere, then choose the executable again.")
 	return err
 
 

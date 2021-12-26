@@ -1,6 +1,6 @@
 extends VBoxContainer
 class_name SpecialTabContainer
-
+onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
 onready var oTopTabsSection = $TopTabsSection
 onready var tabFolder = $TabFolder
 var tabSystem
@@ -12,6 +12,7 @@ var current_tab setget set_current_tab,get_current_tab
 var fullNameTabsWidth = 0
 
 func _ready():
+	
 	tabSystem = oTopTabsSection.get_node("Tabs")
 	
 	btnLeft = oTopTabsSection.get_node("TextureButtonLeft")
@@ -45,8 +46,7 @@ func initialize(tabNameArray):
 	
 	set_icons()
 	
-	for i in 1:
-		yield(get_tree(),'idle_frame')
+	yield(get_tree(),'idle_frame')
 	fullNameTabsWidth = 32 # needs a little extra to work correctly
 	for i in get_tab_count():
 		fullNameTabsWidth += tabSystem.get_tab_rect(i).size.x
@@ -102,6 +102,7 @@ func _on_Tabs_reposition_active_tab_request(idx_to):
 
 
 func _on_Tabs_tab_changed(tab):
+	oCustomTooltip.set_text("")
 	set_current_tab(tab)
 	calculate_tab_title_width()
 
@@ -180,17 +181,27 @@ func _on_gui_input(event):
 
 # Show and hide tab name depending on mouse cursor hover
 func _on_tab_hover(hoveredTab):
-
+	tabSystem.ensure_tab_visible(hoveredTab) # Scroll when hovering over hidden tab on the side
+	
+	var txt = ""
 	for i in tabFolder.get_children():
 		var idx = i.get_index()
-		if idx == get_current_tab() or idx == hoveredTab:
-			tabSystem.set_tab_title(idx, i.get_meta("tab_name"))
-		else:
-			tabSystem.set_tab_title(idx, " ")
-
+		if idx == hoveredTab and idx != get_current_tab():
+			txt = i.get_meta("tab_name")
+	
+	oCustomTooltip.set_text(txt)
+	
+#	for i in tabFolder.get_children():
+#		var idx = i.get_index()
+#		if idx == get_current_tab() or idx == hoveredTab:
+#			tabSystem.set_tab_title(idx, i.get_meta("tab_name"))
+#		else:
+#			tabSystem.set_tab_title(idx, " ")
 	calculate_tab_title_width()
 
 func _on_mouse_exited():
+	oCustomTooltip.set_text("")
+	
 	for i in tabFolder.get_children():
 		var idx = i.get_index()
 		if idx == get_current_tab():
