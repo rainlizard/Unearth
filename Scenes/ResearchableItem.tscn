@@ -8,19 +8,31 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/separation = 10
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+use_parent_material = true
+margin_right = 1024.0
+margin_bottom = 576.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+use_parent_material = true
 margin_right = 24.0
 margin_bottom = 576.0
 custom_constants/separation = 0
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="OrderNumberLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+use_parent_material = true
 margin_right = 24.0
 margin_bottom = 576.0
 rect_min_size = Vector2( 24, 0 )
@@ -30,7 +42,8 @@ text = "1"
 align = 1
 valign = 1
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRectIcon" type="TextureRect" parent="HBoxContainer"]
+use_parent_material = true
 margin_left = 34.0
 margin_right = 98.0
 margin_bottom = 576.0
@@ -38,8 +51,9 @@ rect_min_size = Vector2( 64, 64 )
 expand = true
 stretch_mode = 6
 
-[node name="ColorRect" type="ColorRect" parent="TextureRect"]
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer/TextureRectIcon"]
 show_behind_parent = true
+use_parent_material = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
@@ -50,7 +64,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ResearchRequired" type="SpinBox" parent="."]
+[node name="ResearchRequired" type="SpinBox" parent="HBoxContainer"]
+use_parent_material = true
 margin_left = 108.0
 margin_top = 276.0
 margin_right = 208.0
@@ -64,7 +79,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="EstimatedTime" type="Label" parent="."]
+[node name="EstimatedTime" type="Label" parent="HBoxContainer"]
+use_parent_material = true
 margin_left = 218.0
 margin_top = 281.0
 margin_right = 348.0
@@ -75,7 +91,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="EstimatedTimeTotal" type="Label" parent="."]
+[node name="EstimatedTimeTotal" type="Label" parent="HBoxContainer"]
+use_parent_material = true
 margin_left = 358.0
 margin_top = 281.0
 margin_right = 488.0
@@ -86,6 +103,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[connection signal="gui_input" from="." to="." method="_on_ResearchableItem_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_ResearchableItem_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_ResearchableItem_mouse_exited"]
-[connection signal="value_changed" from="ResearchRequired" to="." method="_on_ResearchRequired_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/ResearchRequired" to="." method="_on_ResearchRequired_value_changed"]

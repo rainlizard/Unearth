@@ -1,4 +1,4 @@
-[gd_scene load_steps=147 format=2]
+[gd_scene load_steps=150 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -130,6 +130,7 @@
 [ext_resource path="res://Scenes/TabColumnVoxels.gd" type="Script" id=128]
 [ext_resource path="res://Scenes/CustomTooltip.gd" type="Script" id=129]
 [ext_resource path="res://Theme/StyleBoxThinnerPanel.tres" type="StyleBox" id=130]
+[ext_resource path="res://Scenes/SGRectHighlighter.gd" type="Script" id=131]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -261,6 +262,37 @@ size = 20
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 122 )
+
+[sub_resource type="Animation" id=17]
+resource_name = "Flash"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( -0.1, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.25098 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=18]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 7 )
@@ -3120,7 +3152,7 @@ size_flags_vertical = 3
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer"]
 margin_right = 835.0
-margin_bottom = 727.0
+margin_bottom = 504.0
 size_flags_horizontal = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
@@ -3154,7 +3186,9 @@ margin_top = 41.0
 margin_right = 335.0
 margin_bottom = 70.0
 hint_tooltip = "Adds LEVEL_VERSION at the top of the script, allowing for extended scripting.
-Keep in mind different arguments for CREATURE_AVAILABLE are used if LEVEL_VERSION is present."
+- Different arguments for CREATURE_AVAILABLE are used
+- RESEARCH_ORDER function is used instead of RESEARCH function"
+pressed = true
 text = "KeeperFX script"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3426,85 +3460,41 @@ margin_right = 24.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 24, 24 )
 
-[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+[node name="AdjustResearchCheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+margin_right = 24.0
+margin_bottom = 29.0
+focus_mode = 0
+size_flags_horizontal = 6
+text = "Adjust research order"
+
+[node name="ResearchOrderCategory" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+visible = false
 margin_top = 447.0
-margin_right = 835.0
-margin_bottom = 468.0
-text = "Research order"
-align = 1
+margin_right = 40.0
+margin_bottom = 487.0
+size_flags_horizontal = 2
 
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
+[node name="Spacing3" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
+margin_top = -447.0
 margin_right = 24.0
-margin_bottom = 24.0
+margin_bottom = -423.0
 rect_min_size = Vector2( 24, 24 )
 
-[node name="Label3" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-margin_top = 600.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
+margin_top = 118.0
 margin_right = 835.0
-margin_bottom = 669.0
-text = "Calculate estimated time using:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-margin_top = 600.0
-margin_right = 589.0
-margin_bottom = 640.0
-
-[node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2"]
-margin_right = 835.0
-margin_bottom = 69.0
-text = "Warlocks"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="WarlockAmountSpinBox" type="SpinBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2"]
-margin_right = 74.0
-margin_bottom = 31.0
-max_value = 255.0
-value = 4.0
-rounded = true
-script = ExtResource( 81 )
-
-[node name="Label5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2"]
-margin_right = 835.0
-margin_bottom = 69.0
-text = "Level"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="WarlockLevelSpinBox" type="SpinBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2"]
-margin_right = 74.0
-margin_bottom = 31.0
-min_value = 1.0
-max_value = 10.0
-value = 1.0
-rounded = true
-script = ExtResource( 81 )
-
-[node name="Spacing3" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-margin_right = 24.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-margin_top = 565.0
-margin_right = 835.0
-margin_bottom = 596.0
+margin_bottom = 161.0
 custom_constants/separation = 10
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+[node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer"]
 margin_right = 24.0
 margin_bottom = 43.0
 rect_min_size = Vector2( 24, 43 )
 
-[node name="Label5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+[node name="Label5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer"]
 margin_top = 5.0
 margin_right = 64.0
 margin_bottom = 48.0
@@ -3513,7 +3503,7 @@ valign = 1
 autowrap = true
 clip_text = true
 
-[node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+[node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer"]
 margin_top = 5.0
 margin_right = 100.0
 margin_bottom = 48.0
@@ -3523,7 +3513,7 @@ valign = 1
 autowrap = true
 clip_text = true
 
-[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer"]
 margin_top = 5.0
 margin_right = 130.0
 margin_bottom = 48.0
@@ -3533,7 +3523,7 @@ valign = 1
 autowrap = true
 clip_text = true
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer"]
 margin_top = 5.0
 margin_right = 130.0
 margin_bottom = 48.0
@@ -3543,10 +3533,10 @@ valign = 1
 autowrap = true
 clip_text = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-margin_top = 472.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
+margin_top = 25.0
 margin_right = 835.0
-margin_bottom = 536.0
+margin_bottom = 89.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_enabled = false
@@ -3554,12 +3544,65 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Researchables" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ScrollContainer"]
+[node name="Researchables" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/ScrollContainer"]
 margin_right = 835.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 64, 64 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
+margin_top = -447.0
+margin_right = 24.0
+margin_bottom = -423.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
+margin_top = 153.0
+margin_right = 835.0
+margin_bottom = 222.0
+text = "Calculate estimated time using:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
+margin_top = 153.0
+margin_right = 589.0
+margin_bottom = 193.0
+
+[node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2"]
+margin_right = 835.0
+margin_bottom = 69.0
+text = "Warlocks"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WarlockAmountSpinBox" type="SpinBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2"]
+margin_right = 74.0
+margin_bottom = 31.0
+max_value = 255.0
+value = 4.0
+rounded = true
+script = ExtResource( 81 )
+
+[node name="Label5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2"]
+margin_right = 835.0
+margin_bottom = 69.0
+text = "Level"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WarlockLevelSpinBox" type="SpinBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2"]
+margin_right = 74.0
+margin_bottom = 31.0
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+rounded = true
+script = ExtResource( 81 )
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator"]
 margin_top = 948.0
@@ -3638,6 +3681,24 @@ __meta__ = {
 grow_horizontal = 0
 grow_vertical = 0
 text = "Help"
+
+[node name="SGRectHighlighter" type="ColorRect" parent="Ui/UiSystem/MapSettingsWindow"]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = -344.0
+margin_top = 1923.0
+margin_right = -344.0
+margin_bottom = 1923.0
+mouse_filter = 2
+script = ExtResource( 131 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Ui/UiSystem/MapSettingsWindow/SGRectHighlighter"]
+autoplay = "Flash"
+reset_on_save = false
+anims/Flash = SubResource( 17 )
+anims/RESET = SubResource( 18 )
 
 [node name="ChooseFileListFileDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
@@ -4528,8 +4589,9 @@ script = ExtResource( 88 )
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/GreenAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_GreenAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/YellowAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_YellowAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/WhiteAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WhiteAICheckBox_toggled"]
-[connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2/WarlockAmountSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WarlockAmountSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/HBoxContainer2/WarlockLevelSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WarlockLevelSpinBox_value_changed"]
+[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/AdjustResearchCheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_AdjustResearchCheckBox_toggled"]
+[connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockAmountSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WarlockAmountSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockLevelSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WarlockLevelSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/HBoxContainer4/GenerateScriptButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_GenerateScriptButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]

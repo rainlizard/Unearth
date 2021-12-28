@@ -27,6 +27,8 @@ onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
 onready var oConfirmGenerateScript = Nodelist.list["oConfirmGenerateScript"]
 onready var oKeeperFXScriptCheckBox = Nodelist.list["oKeeperFXScriptCheckBox"]
 onready var oResearchables = Nodelist.list["oResearchables"]
+onready var oResearchOrderCategory = Nodelist.list["oResearchOrderCategory"]
+onready var oAdjustResearchCheckBox = Nodelist.list["oAdjustResearchCheckBox"]
 
 var scnAvailableButton = preload('res://Scenes/AvailableButton.tscn')
 
@@ -423,6 +425,24 @@ func _on_ConfirmGenerateScript_confirmed():
 	
 	generateString = add_one_extra_line(generateString)
 	
+	if oAdjustResearchCheckBox.pressed == true:
+		for i in oResearchables.get_children():
+			if i.visible == false:
+				continue
+			var variableName = i.get_meta("variable")
+			var typeName = "ROOM"
+			var costName = str(i.get_research_required())
+			if i.type == i.MAGIC:
+				typeName = "MAGIC"
+			
+			var researchFunction = "RESEARCH"
+			if oKeeperFXScriptCheckBox.pressed == true:
+				researchFunction = "RESEARCH_ORDER"
+			
+			generateString += researchFunction + "(ALL_PLAYERS," + typeName + "," + variableName + ',' + costName + ')' + '\n'
+		
+		generateString = add_one_extra_line(generateString)
+	
 	if oWinConditionCheckBox.pressed == true:
 		generateString += "IF(PLAYER0,ALL_DUNGEONS_DESTROYED == 1)" + '\n'
 		generateString += "	WIN_GAME" + '\n'
@@ -454,6 +474,7 @@ func adjust_estimated_time():
 	var warlockLevel = oWarlockLevelSpinBox.value
 	var warlockResearchSpeed = 4
 	
+	#var calculated = floor((warlockResearchSpeed + (warlockResearchSpeed * warlockLevel * 0.35 )) * warlockAmount)
 	var speed = 0
 	for i in warlockAmount:
 		
@@ -463,7 +484,18 @@ func adjust_estimated_time():
 	
 	for id in get_tree().get_nodes_in_group("ResearchableItem"):
 		id.set_estimated_time(speed)
+	
+	# redo label number text
+	var markNumber = 0
+	for id in oResearchables.get_children():
+		if id.visible == true:
+			markNumber += 1
+			id.set_label_number(markNumber)
 
 
-
-	#var calculated = floor((warlockResearchSpeed + (warlockResearchSpeed * warlockLevel * 0.35 )) * warlockAmount)
+func _on_AdjustResearchCheckBox_toggled(button_pressed):
+	oResearchOrderCategory.visible = button_pressed
+	yield(get_tree(),'idle_frame')
+	yield(get_tree(),'idle_frame')
+	if oResearchOrderCategory.visible == true:
+		oGeneratorContainer.scroll_vertical += 200
