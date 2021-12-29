@@ -39,6 +39,7 @@ func _ready():
 	oMenuButtonView.get_popup().connect("id_pressed",self,"_on_ViewSubmenu_Pressed")
 	oMenuButtonHelp.get_popup().connect("id_pressed",self,"_on_HelpSubmenu_Pressed")
 
+
 func _process(delta):
 	# Enable saving
 	oMenuButtonFile.get_popup().set_item_disabled(3,false)

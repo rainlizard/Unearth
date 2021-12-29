@@ -30,14 +30,12 @@ func clm_asset():
 		
 		var specialByte = file.get_8() # 2
 		
-		var get_height = specialByte / 16
-		height.append(get_height)
-		specialByte -= get_height * 16
-		var get_lintel = specialByte / 2
-		lintel.append(get_lintel)
-		specialByte -= get_lintel * 2
-		var get_permanent = specialByte
+		var get_permanent = specialByte & 1
+		var get_lintel = (specialByte >> 1) & 7
+		var get_height = (specialByte >> 4) & 15
 		permanent.append(get_permanent)
+		lintel.append(get_lintel)
+		height.append(get_height)
 		
 		solidMask.append(file.get_16()) # 3-4
 		floorTexture.append(file.get_16()) # 5-6

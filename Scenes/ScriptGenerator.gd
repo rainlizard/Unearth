@@ -167,10 +167,10 @@ func _ready():
 	initialize_researchables()
 	adjust_estimated_time()
 	
-	for i in 2:
-		yield(get_tree(),'idle_frame')
-	get_parent().current_tab = 1
-	Utils.popup_centered(Nodelist.list["oMapSettingsWindow"])
+#	for i in 2:
+#		yield(get_tree(),'idle_frame')
+#	get_parent().current_tab = 1
+#	Utils.popup_centered(Nodelist.list["oMapSettingsWindow"])
 
 func initialize_researchables():
 	var labelNumber = 0

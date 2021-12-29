@@ -1,4 +1,4 @@
-[gd_scene load_steps=150 format=2]
+[gd_scene load_steps=151 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -131,6 +131,7 @@
 [ext_resource path="res://Scenes/CustomTooltip.gd" type="Script" id=129]
 [ext_resource path="res://Theme/StyleBoxThinnerPanel.tres" type="StyleBox" id=130]
 [ext_resource path="res://Scenes/SGRectHighlighter.gd" type="Script" id=131]
+[ext_resource path="res://Scenes/ModifyDynamicSlabsWindow.gd" type="Script" id=132]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -3923,6 +3924,7 @@ script = ExtResource( 47 )
 [node name="SlabVoxelView" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels" instance=ExtResource( 19 )]
 margin_right = 950.0
 margin_bottom = 655.0
+displayingType = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels"]
 margin_left = 954.0
@@ -4114,7 +4116,7 @@ script = ExtResource( 128 )
 [node name="ColumnVoxelView" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" instance=ExtResource( 19 )]
 margin_right = 1024.0
 margin_bottom = 655.0
-displayingType = 1
+displayingType = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels"]
 margin_left = 1028.0
@@ -4322,6 +4324,55 @@ margin_bottom = 655.0
 size_flags_horizontal = 8
 size_flags_vertical = 10
 text = "Help"
+
+[node name="ModifyDynamicSlabsWindow" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -2945.0
+margin_top = -1513.0
+margin_right = -1665.0
+margin_bottom = -793.0
+script = ExtResource( 132 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DynamicSlabVoxelView" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer" instance=ExtResource( 19 )]
+margin_right = 1131.0
+margin_bottom = 720.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer"]
+margin_left = 1135.0
+margin_right = 1280.0
+margin_bottom = 720.0
+scroll_horizontal_enabled = false
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer"]
+margin_right = 145.0
+margin_bottom = 31.0
+columns = 2
+
+[node name="Label" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/GridContainer"]
+margin_top = 5.0
+margin_right = 67.0
+margin_bottom = 26.0
+text = "Slab ID"
+
+[node name="DynamicSlabIDSpinBox" type="SpinBox" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/GridContainer"]
+margin_left = 71.0
+margin_right = 145.0
+margin_bottom = 31.0
+max_value = 57.0
+rounded = true
+script = ExtResource( 81 )
 
 [node name="CustomTooltip" type="Control" parent="Ui/UiSystem"]
 margin_top = -10.5
@@ -4618,4 +4669,5 @@ script = ExtResource( 88 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/OrientationSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_OrientationSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/LintelSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_LintelSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ColumnEditorHelpButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnEditorHelpButton_pressed"]
+[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/GridContainer/DynamicSlabIDSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/DynamicSlabVoxelView" method="_on_DynamicSlabIDSpinBox_value_changed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

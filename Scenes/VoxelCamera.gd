@@ -17,5 +17,9 @@ func _input(event):
 			size += 3
 
 func _process(delta):
-	oVoxelCameraPivotPoint.translation.z = lerp(oVoxelCameraPivotPoint.translation.z, oVoxelObjectView.viewObject*2, cameraShiftSpeed)
-	oVoxelCameraPivotPoint.translation.x = lerp(oVoxelCameraPivotPoint.translation.x, oVoxelObjectView.viewObject*2, cameraShiftSpeed)
+	if oVoxelObjectView.displayingType == oVoxelObjectView.DK_SLAB:
+		oVoxelCameraPivotPoint.translation.z = lerp(oVoxelCameraPivotPoint.translation.z, (oVoxelObjectView.viewObject*4), cameraShiftSpeed)
+		oVoxelCameraPivotPoint.translation.x = lerp(oVoxelCameraPivotPoint.translation.x, (oVoxelObjectView.viewObject*4), cameraShiftSpeed)
+	else:
+		oVoxelCameraPivotPoint.translation.z = lerp(oVoxelCameraPivotPoint.translation.z, oVoxelObjectView.viewObject*2, cameraShiftSpeed)
+		oVoxelCameraPivotPoint.translation.x = lerp(oVoxelCameraPivotPoint.translation.x, oVoxelObjectView.viewObject*2, cameraShiftSpeed)

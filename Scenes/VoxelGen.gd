@@ -7,8 +7,8 @@ onready var oGame3D = Nodelist.list["oGame3D"]
 
 var blankArray = initalize_blank_array()
 
-func column_gen(genArray, x, z, clmIndex, surrClmIndex, generateBottomFace):
-	var cubeArray = oDataClm.cubes[clmIndex]
+func column_gen(genArray, x, z, clmIndex, surrClmIndex, generateBottomFace, sourceDataClm):
+	var cubeArray = sourceDataClm.cubes[clmIndex]
 	for y in 8:
 		var cubeID = cubeArray[y]
 		if cubeID != 0:
@@ -33,7 +33,7 @@ func column_gen(genArray, x, z, clmIndex, surrClmIndex, generateBottomFace):
 			if y == 0:
 				# Place floor as a "top side" on cube position 0 minus 1
 				var pos = Vector3(x,y-1,z)
-				var textureID = oDataClm.floorTexture[clmIndex]
+				var textureID = sourceDataClm.floorTexture[clmIndex]
 				add_face(genArray, pos, 4, textureID)
 
 func complete_mesh(genArray):

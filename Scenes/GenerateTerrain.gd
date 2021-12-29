@@ -5,7 +5,7 @@ onready var oTerrainMesh = Nodelist.list["oTerrainMesh"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oTextureCache = Nodelist.list["oTextureCache"]
-
+onready var oDataClm = Nodelist.list["oDataClm"]
 
 
 func start():
@@ -43,7 +43,7 @@ func start():
 					if x+1 >= 255: surrClmIndex[1] = TileMap.INVALID_CELL
 					if z+1 >= 255: surrClmIndex[2] = TileMap.INVALID_CELL
 					
-					oVoxelGen.column_gen(arrayOfArrays[slabStyleValue], x, z, clmIndex, surrClmIndex, false)
+					oVoxelGen.column_gen(arrayOfArrays[slabStyleValue], x, z, clmIndex, surrClmIndex, false, oDataClm)
 	
 	loading_bar_end()
 	
