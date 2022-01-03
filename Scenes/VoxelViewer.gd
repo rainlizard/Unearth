@@ -77,6 +77,10 @@ func set_object(setVal):
 	
 	do_one()
 	
+	if displayingType == DK_SLAB:
+		if oAllVoxelObjects.visible == false: # Update what was invisible
+			oAllVoxelObjects.visible = true
+			do_all()
 	if displayingType == CUBE:
 		pass
 	if displayingType == CUSTOM_SLAB:
@@ -125,37 +129,35 @@ func do_all():
 		var separation = 0
 		
 		for variation in numberOfVariations:
-			
-			for subtile in 9:
-				var ySubtile = subtile/3
-				var xSubtile = subtile-(ySubtile*3)
-				
-				var x = (variation*3) + xSubtile + separation
-				var z = (variation*3) + ySubtile + separation
-				
-				var clmIndex = oDkSlabs.dat[variationStart+variation][subtile]
-				var surrClmIndex = [-1,-1,-1,-1]
-				
-				oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, false, oDkSlabs)
+			var surrClmIndex = [-1,-1,-1,-1]
+			for ySubtile in 3:
+				for xSubtile in 3:
+					var subtile = (ySubtile*3) + xSubtile
+					
+					var x = (variation*3) + xSubtile + separation
+					var z = (variation*3) + ySubtile + separation
+					
+					var clmIndex = oDkSlabs.dat[variationStart+variation][subtile]
+					
+					
+					oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, true, oDkSlabs)
 			
 			separation += 1
 		
 		oAllVoxelObjects.mesh = oVoxelGen.complete_mesh(genArray)
-		oSelectedVoxelObject.translation.z = 0.0
-		oSelectedVoxelObject.translation.x = 0.0
-		oSelectedPivotPoint.translation.z = 0.0
-		oSelectedPivotPoint.translation.x = 0.0
+		
 	print('Codetime DYNAMIC: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func do_one():
 	var genArray = oVoxelGen.blankArray.duplicate(true)
 	
 	if displayingType == CUSTOM_SLAB:
-		var surrClmIndex = [-1,-1,-1,-1] # Code this properly later for a slight performance boost
+		var surrClmIndex = [-1,-1,-1,-1]
 		for y in 3:
 			for x in 3:
 				var i = (y*3) + x #((y*3)-x)
 				var clmIndex = oGridContainerForChoosing3x3.get_child(i).value
+				
 				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true, oDataClm)
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
 		oSelectedVoxelObject.translation.z = 0.0
@@ -173,7 +175,6 @@ func do_one():
 		oSelectedPivotPoint.translation.x = (viewObject * 2)
 	
 	
-	
 	if displayingType == DK_SLAB: # This is not for custom slab, this is for dynamic slabs
 		
 		var slabID = oDynamicSlabIDSpinBox.value
@@ -184,25 +185,24 @@ func do_one():
 		
 		var variation = variationStart+viewObject
 		
-		for subtile in 9:
-			var ySubtile = subtile/3
-			var xSubtile = subtile-(ySubtile*3)
-			
-			var x = (variation*3) + xSubtile + viewObject
-			var z = (variation*3) + ySubtile + viewObject
-			
-			var clmIndex = oDkSlabs.dat[variation][subtile]
-			var surrClmIndex = [-1,-1,-1,-1]
-			
-			oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, false, oDkSlabs)
+		var surrClmIndex = [-1,-1,-1,-1]
+		for ySubtile in 3:
+			for xSubtile in 3:
+				var subtile = (ySubtile*3) + xSubtile
+				
+				var clmIndex = oDkSlabs.dat[variation][subtile]
+				
+				oVoxelGen.column_gen(genArray, xSubtile-1.5, ySubtile-1.5, clmIndex, surrClmIndex, true, oDkSlabs)
 		
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
-		oSelectedVoxelObject.translation.z = 0.0
-		oSelectedVoxelObject.translation.x = 0.0
-		oSelectedPivotPoint.translation.z = 0.0
-		oSelectedPivotPoint.translation.x = 0.0
-	
-	
+		oSelectedPivotPoint.translation.z = (viewObject * 4)
+		oSelectedPivotPoint.translation.x = (viewObject * 4)
+		oSelectedVoxelObject.translation.z = 0
+		oSelectedVoxelObject.translation.x = 0
+
+#func _process(delta):
+#	print(viewObject)
+
 
 func _on_ColumnViewDeleteButton_pressed():
 	oDataClm.delete_column(viewObject)
@@ -241,8 +241,7 @@ func _on_DynamicSlabIDSpinBox_value_changed(value):
 	oDynamicSlabIDSpinBox.disconnect("value_changed",self,"_on_DynamicSlabIDSpinBox_value_changed")
 	yield(get_tree(),'idle_frame')
 	
-	#do_all()
-	do_one()
+	do_all()
 	
 	set_object(viewObject) #for clamping the selection
 	oDynamicSlabIDSpinBox.connect("value_changed",self,"_on_DynamicSlabIDSpinBox_value_changed")

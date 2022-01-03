@@ -25,4 +25,5 @@ const TEXTURE_MAP_NAMES = {
 8: "Desert Tomb",
 9: "Gypsum",
 10: "Lilac Stone",
+11: "Swamp Serpent",
 }

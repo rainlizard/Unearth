@@ -4331,6 +4331,8 @@ margin_left = -2945.0
 margin_top = -1513.0
 margin_right = -1665.0
 margin_bottom = -793.0
+window_title = "Dynamic slabs"
+resizable = true
 script = ExtResource( 132 )
 __meta__ = {
 "_edit_use_anchors_": false
