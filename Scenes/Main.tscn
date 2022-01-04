@@ -1470,7 +1470,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Help"
 align = 0
-items = [ "Controls", null, 0, false, false, 0, 0, null, "", false, "About", null, 0, false, false, 1, 0, null, "", false ]
+items = [ "DK script commands", null, 0, false, false, 0, 0, null, "", false, "KeeperFX script commands", null, 0, false, false, 1, 0, null, "", false, "Controls", null, 0, false, false, 2, 0, null, "", false, "About", null, 0, false, false, 3, 0, null, "", false ]
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -2637,8 +2637,8 @@ __meta__ = {
 visible = true
 margin_left = -976.0
 margin_top = 672.0
-margin_right = -319.0
-margin_bottom = 854.0
+margin_right = -293.0
+margin_bottom = 900.0
 window_title = "About"
 script = ExtResource( 119 )
 __meta__ = {
@@ -2657,20 +2657,115 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AboutWindow/ScrollContainer"]
-margin_right = 616.0
-margin_bottom = 141.0
+margin_right = 640.0
+margin_bottom = 174.0
 
 [node name="AboutDescriptionLabel" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer"]
-margin_right = 616.0
-margin_bottom = 141.0
+margin_right = 640.0
+margin_bottom = 21.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
-text = "Dungeon Keeper 1 map editor made by rainlizard using Godot Engine.
+text = "Dungeon Keeper 1 map editor made by rainlizard using Godot Engine."
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-Contact:
-Keeperklan forums and discord
-https://rainlizard.itch.io/unearth
-ludorverr@gmail.com"
+[node name="Control" type="Control" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer"]
+margin_top = 25.0
+margin_right = 640.0
+margin_bottom = 49.0
+rect_min_size = Vector2( 24, 24 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AboutGridContainer" type="GridContainer" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer"]
+margin_top = 53.0
+margin_right = 640.0
+margin_bottom = 174.0
+columns = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label1" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_right = 71.0
+margin_bottom = 21.0
+text = "Github"
+
+[node name="LinkButton1" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_left = 75.0
+margin_right = 640.0
+margin_bottom = 21.0
+text = "https://github.com/rainlizard/Unearth"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_top = 25.0
+margin_right = 71.0
+margin_bottom = 46.0
+text = "Itch.io"
+
+[node name="LinkButton2" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_left = 75.0
+margin_top = 25.0
+margin_right = 640.0
+margin_bottom = 46.0
+focus_mode = 2
+text = "https://rainlizard.itch.io/unearth"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_top = 50.0
+margin_right = 71.0
+margin_bottom = 71.0
+text = "Forum"
+
+[node name="LinkButton3" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_left = 75.0
+margin_top = 50.0
+margin_right = 640.0
+margin_bottom = 71.0
+focus_mode = 2
+text = "https://keeperklan.com/threads/7321-Unearth-DK1-map-editor"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label4" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_top = 75.0
+margin_right = 71.0
+margin_bottom = 96.0
+text = "Discord"
+
+[node name="LinkButton4" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_left = 75.0
+margin_top = 75.0
+margin_right = 640.0
+margin_bottom = 96.0
+focus_mode = 2
+text = "https://discord.com/invite/zKTjfDh"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label5" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_top = 100.0
+margin_right = 71.0
+margin_bottom = 121.0
+text = "Email"
+
+[node name="LinkButton5" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_left = 75.0
+margin_top = 100.0
+margin_right = 640.0
+margin_bottom = 121.0
+focus_mode = 2
+text = "ludorverr@gmail.com"
 __meta__ = {
 "_edit_use_anchors_": false
 }

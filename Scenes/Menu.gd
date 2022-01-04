@@ -132,8 +132,12 @@ func _on_slab_style_window_close_button_clicked():
 func _on_HelpSubmenu_Pressed(pressedID):
 	match pressedID:
 		0:
-			Utils.popup_centered(oControlsWindow)
+			OS.shell_open("https://lubiki.keeperklan.com/dk1_docs/dk_scripting_ref.htm")
 		1:
+			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/New-and-Modified-Level-Script-Commands")
+		2:
+			Utils.popup_centered(oControlsWindow)
+		3:
 			Utils.popup_centered(oAboutWindow)
 
 func _on_ViewSubmenu_Pressed(pressedID):
