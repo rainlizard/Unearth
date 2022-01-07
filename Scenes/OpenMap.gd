@@ -23,6 +23,7 @@ onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
 onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
+onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -121,7 +122,7 @@ func finish_opening_map(map):
 	oDynamicMapTree.highlight_current_map()
 	oEditor.mapHasBeenEdited = false
 	oOverheadOwnership.start()
-	
+	oScriptHelpers.start()
 	oCamera2D.reset_camera()
 	
 	oSlabPalette.start()

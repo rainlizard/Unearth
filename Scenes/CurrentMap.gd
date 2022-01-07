@@ -18,6 +18,7 @@ onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oMain = Nodelist.list["oMain"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataScript = Nodelist.list["oDataScript"]
+onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 
 
 var path = ""
@@ -76,4 +77,5 @@ func clear_map():
 	#"TXT"
 	oDataScript.data = ""
 	
+	oScriptHelpers.clear()
 	print('Cleared map in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')

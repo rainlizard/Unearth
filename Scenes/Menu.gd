@@ -30,6 +30,7 @@ onready var oConfirmDiscardChanges = Nodelist.list["oConfirmDiscardChanges"]
 onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oModifyDynamicSlabsWindow = Nodelist.list["oModifyDynamicSlabsWindow"]
 
 var fixMenuExpansion
 
@@ -125,6 +126,9 @@ func _on_EditSubmenu_Pressed(pressedID):
 		7:
 			# Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
+		8:
+			# Modify dynamic slabs
+			Utils.popup_centered(oModifyDynamicSlabsWindow)
 
 func _on_slab_style_window_close_button_clicked():
 	oMenuButtonEdit.get_popup().set_item_checked(0, false)

@@ -154,7 +154,7 @@ func _init():
 	#print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 var data = {
-	-1:                  ["Unrecognized Slab ID",  BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       REMEMBER_PATH,   OWNABLE], # -1
+	-1:                  ["Unknown",               BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       REMEMBER_PATH,   OWNABLE], # -1
 	ROCK:                ["Impenetrable Rock",     BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       REMEMBER_PATH,   NOT_OWNABLE], # 0
 	GOLD:                ["Gold Seam",             BLOCK_SLAB, BITMASK_TALL,    PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       REMEMBER_PATH,   NOT_OWNABLE], # 1
 	EARTH:               ["Earth",                 BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       REMEMBER_PATH,   NOT_OWNABLE], # 2

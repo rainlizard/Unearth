@@ -6,6 +6,8 @@ onready var oColumnIndexSpinBox = Nodelist.list["oColumnIndexSpinBox"]
 onready var oGridContainerForChoosing3x3 = Nodelist.list["oGridContainerForChoosing3x3"]
 onready var oDkSlabs = Nodelist.list["oDkSlabs"]
 onready var oDynamicSlabIDSpinBox = Nodelist.list["oDynamicSlabIDSpinBox"]
+onready var oModifyDynamicSlabsWindow = Nodelist.list["oModifyDynamicSlabsWindow"]
+onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 
 
 onready var oVoxelCamera = $"VoxelViewport/VoxelCameraPivotPoint/VoxelCamera"
@@ -78,6 +80,8 @@ func set_object(setVal):
 	do_one()
 	
 	if displayingType == DK_SLAB:
+		oVariationNumberSpinBox.value = setVal
+		oModifyDynamicSlabsWindow.variation_changed(viewObject)
 		if oAllVoxelObjects.visible == false: # Update what was invisible
 			oAllVoxelObjects.visible = true
 			do_all()
@@ -245,3 +249,9 @@ func _on_DynamicSlabIDSpinBox_value_changed(value):
 	
 	set_object(viewObject) #for clamping the selection
 	oDynamicSlabIDSpinBox.connect("value_changed",self,"_on_DynamicSlabIDSpinBox_value_changed")
+
+
+func _on_VariationNumberSpinBox_value_changed(value):
+	oVariationNumberSpinBox.disconnect("value_changed",self,"_on_VariationNumberSpinBox_value_changed")
+	set_object(value)
+	oVariationNumberSpinBox.connect("value_changed",self,"_on_VariationNumberSpinBox_value_changed")

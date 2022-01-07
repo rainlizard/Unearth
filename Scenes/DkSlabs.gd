@@ -19,16 +19,15 @@ var floorTexture = []
 func clm_asset():
 	CODETIME_START = OS.get_ticks_msec()
 	
-	var file = File.new()
+	var buffer = Filetypes.file_path_to_buffer(Settings.unearthdata.plus_file("slabs.clm"))
 	
-	file.open(Settings.unearthdata.plus_file("slabs.clm"),File.READ)
-	file.seek(0)
-	var numberOfClmEntries = file.get_16()
-	file.seek(4) # For reading slabs.clm. (THIS IS DIFFERENT TO READING MAPS)
+	buffer.seek(0)
+	var numberOfClmEntries = buffer.get_u16()
+	buffer.seek(4) # For reading slabs.clm. (THIS IS DIFFERENT TO READING MAPS)
 	for entry in numberOfClmEntries:
-		use.append(file.get_16()) # 0-1
+		use.append(buffer.get_u16()) # 0-1
 		
-		var specialByte = file.get_8() # 2
+		var specialByte = buffer.get_u8() # 2
 		
 		var get_permanent = specialByte & 1
 		var get_lintel = (specialByte >> 1) & 7
@@ -37,33 +36,29 @@ func clm_asset():
 		lintel.append(get_lintel)
 		height.append(get_height)
 		
-		solidMask.append(file.get_16()) # 3-4
-		floorTexture.append(file.get_16()) # 5-6
-		orientation.append(file.get_8()) # 7
+		solidMask.append(buffer.get_u16()) # 3-4
+		floorTexture.append(buffer.get_u16()) # 5-6
+		orientation.append(buffer.get_u8()) # 7
 		
 		cubes.append([])
 		cubes[entry].resize(8)
 		for cubeNumber in 8:
-			cubes[entry][cubeNumber] = file.get_16() # 8-23
-	
-	file.close()
+			cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
 	
 	print('Created CLM asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 func dat_asset():
 	CODETIME_START = OS.get_ticks_msec()
 	
-	var file = File.new()
-	file.open(Settings.unearthdata.plus_file("slabs.dat"), File.READ)
-	file.seek(2)
+	var buffer = Filetypes.file_path_to_buffer(Settings.unearthdata.plus_file("slabs.dat"))
+	buffer.seek(2)
 	var numberOfSets = 1304
 	dat.resize(numberOfSets)
 	for i in dat.size():
 		dat[i] = []
 		dat[i].resize(9)
 		for subtile in 9:
-			var value = 65536 - file.get_16()
+			var value = 65536 - buffer.get_u16()
 			dat[i][subtile] = value
-	file.close()
 	
 	print('Created DAT asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')

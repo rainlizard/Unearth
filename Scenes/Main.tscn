@@ -1,4 +1,4 @@
-[gd_scene load_steps=151 format=2]
+[gd_scene load_steps=152 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -132,6 +132,7 @@
 [ext_resource path="res://Theme/StyleBoxThinnerPanel.tres" type="StyleBox" id=130]
 [ext_resource path="res://Scenes/SGRectHighlighter.gd" type="Script" id=131]
 [ext_resource path="res://Scenes/ModifyDynamicSlabsWindow.gd" type="Script" id=132]
+[ext_resource path="res://Scenes/ScriptHelpers.gd" type="Script" id=133]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -520,6 +521,9 @@ script = ExtResource( 101 )
 
 [node name="RectangleSelection" type="Node2D" parent="Game2D"]
 script = ExtResource( 114 )
+
+[node name="ScriptHelpers" type="Node2D" parent="Game2D"]
+script = ExtResource( 133 )
 
 [node name="Ui" type="CanvasLayer" parent="."]
 script = ExtResource( 78 )
@@ -1409,7 +1413,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Custom slabs", null, 0, false, false, 3, 0, null, "", false, "Slab placement", null, 0, false, false, 4, 0, null, "", false, "Update all slabs", null, 0, false, false, 5, 0, null, "", false, "Add custom object", null, 0, false, false, 6, 0, null, "", false, "Texture editing", null, 0, false, false, 7, 0, null, "", false ]
+items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Custom slabs", null, 0, false, false, 3, 0, null, "", false, "Slab placement", null, 0, false, false, 4, 0, null, "", false, "Update all slabs", null, 0, false, false, 5, 0, null, "", false, "Add custom object", null, 0, false, false, 6, 0, null, "", false, "Texture editing", null, 0, false, false, 7, 0, null, "", false, "Modify dynamic slabs", null, 0, false, false, 8, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -4426,7 +4430,7 @@ margin_left = -2945.0
 margin_top = -1513.0
 margin_right = -1665.0
 margin_bottom = -793.0
-window_title = "Dynamic slabs"
+window_title = "Dynamic slabs (viewer only)"
 resizable = true
 script = ExtResource( 132 )
 __meta__ = {
@@ -4436,6 +4440,10 @@ __meta__ = {
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -4443,33 +4451,84 @@ __meta__ = {
 }
 
 [node name="DynamicSlabVoxelView" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 1131.0
-margin_bottom = 720.0
+margin_right = 1088.0
+margin_bottom = 700.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer"]
-margin_left = 1135.0
-margin_right = 1280.0
-margin_bottom = 720.0
+margin_left = 1092.0
+margin_right = 1260.0
+margin_bottom = 700.0
 scroll_horizontal_enabled = false
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer"]
-margin_right = 145.0
-margin_bottom = 31.0
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer"]
+margin_right = 168.0
+margin_bottom = 116.0
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_left = 1.0
+margin_right = 168.0
+margin_bottom = 66.0
+size_flags_horizontal = 10
 columns = 2
 
-[node name="Label" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/GridContainer"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 5.0
-margin_right = 67.0
+margin_right = 89.0
 margin_bottom = 26.0
 text = "Slab ID"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="DynamicSlabIDSpinBox" type="SpinBox" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/GridContainer"]
-margin_left = 71.0
-margin_right = 145.0
+[node name="DynamicSlabIDSpinBox" type="SpinBox" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+margin_left = 93.0
+margin_right = 167.0
 margin_bottom = 31.0
+mouse_filter = 1
+size_flags_horizontal = 4
 max_value = 57.0
 rounded = true
+align = 1
 script = ExtResource( 81 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+margin_top = 40.0
+margin_right = 89.0
+margin_bottom = 61.0
+text = "Variation"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VariationNumberSpinBox" type="SpinBox" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+margin_left = 93.0
+margin_top = 35.0
+margin_right = 167.0
+margin_bottom = 66.0
+mouse_filter = 1
+size_flags_horizontal = 4
+max_value = 27.0
+rounded = true
+align = 1
+script = ExtResource( 81 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DynamicSlabIDLabel" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 70.0
+margin_right = 168.0
+margin_bottom = 91.0
+text = "Impenetrable Rock"
+
+[node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 95.0
+margin_right = 168.0
+margin_bottom = 116.0
+text = "Variation info"
 
 [node name="CustomTooltip" type="Control" parent="Ui/UiSystem"]
 margin_top = -10.5
@@ -4766,5 +4825,7 @@ script = ExtResource( 88 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/OrientationSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_OrientationSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/LintelSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_LintelSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ColumnEditorHelpButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnEditorHelpButton_pressed"]
-[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/GridContainer/DynamicSlabIDSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/DynamicSlabVoxelView" method="_on_DynamicSlabIDSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/DynamicSlabIDSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow" method="_on_DynamicSlabIDSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/DynamicSlabIDSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/DynamicSlabVoxelView" method="_on_DynamicSlabIDSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/DynamicSlabVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

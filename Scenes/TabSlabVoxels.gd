@@ -27,7 +27,7 @@ func _ready():
 
 
 func _on_SlabRecognizedAs_value_changed(value):
-	var slabName = "Unrecognized Slab ID"
+	var slabName = "Unknown"
 	value = int(value)
 	if Slabs.data.has(value):
 		slabName = Slabs.data[value][Slabs.NAME]

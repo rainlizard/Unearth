@@ -8,7 +8,7 @@ func _process(delta):
 	if oSelector.visible == false: return
 	var slabID = oDataSlab.get_cell(oSelector.cursorTile.x,oSelector.cursorTile.y)
 	
-	var slabName = "Unrecognized Slab ID"
+	var slabName = "Unknown"
 	if Slabs.data.has(slabID):
 		slabName = Slabs.data[slabID][Slabs.NAME]
 	

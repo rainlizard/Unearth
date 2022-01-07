@@ -276,7 +276,7 @@ func retrieve_thing_name(t_type, s_type): # called by ThingInstance too
 		Things.TYPE.EXTRA:
 			if Things.DATA_EXTRA.has(s_type):
 				return Things.DATA_EXTRA[s_type][Things.NAME]
-	return "Unrecognized Thing ID"
+	return "Unknown"
 
 func retrieve_subtype_value(t_type, s_type):
 	match t_type:
@@ -290,7 +290,7 @@ func retrieve_subtype_value(t_type, s_type):
 #			match s_type:
 #				1: return "Action point : " + str(s_type)
 #				2: return "Light : " + str(s_type)
-	return "Unrecognized Thing ID"
+	return "Unknown"
 
 func _on_thing_portrait_mouse_entered(nodeId):
 	# Don't display data if something is selected

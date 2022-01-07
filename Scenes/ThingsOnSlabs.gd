@@ -5,18 +5,16 @@ var tngIndex = []
 var tngObject = []
 var numberOfThings = 0
 
-var file = File.new()
-
 func slabtng_assets():
-	file.open(Settings.unearthdata.plus_file("slabs.tng"),File.READ)
-	file.seek(0)
-	numberOfThings = file.get_16() # It says 359, however there are actually 362 entries in the file.
+	
+	var buffer = Filetypes.file_path_to_buffer(Settings.unearthdata.plus_file("slabs.tng"))
+	
+	buffer.seek(0)
+	numberOfThings = buffer.get_u16() # It says 359, however there are actually 362 entries in the file.
 	print('Number of Things: '+str(numberOfThings))
 	
-	slabtng_index_asset()
-	slabtng_object_entry_asset()
-	
-	file.close()
+	slabtng_index_asset(buffer)
+	slabtng_object_entry_asset(buffer)
 	
 	#test_creation_of_object()
 
@@ -27,27 +25,27 @@ func slabtng_assets():
 #			create_obj_on_slab(xTile, yTile, idx)
 #			idx += 1
 
-func slabtng_index_asset():
+func slabtng_index_asset(buffer):
 	CODETIME_START = OS.get_ticks_msec()
 	
 #	var textFile = File.new()
 #	textFile.open("res://slabtng_index_asset.txt", File.WRITE)
 	
-	file.seek(2)
+	buffer.seek(2)
 	var numberOfSets = 1304
 	tngIndex.resize(numberOfSets)
 	for i in tngIndex.size():
-		var value = file.get_16()
+		var value = buffer.get_u16()
 		tngIndex[i] = value
 		#textFile.store_line(str(value))
 	
 	#textFile.close()
 	print('slabtng_index_asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-func slabtng_object_entry_asset():
+func slabtng_object_entry_asset(buffer):
 	CODETIME_START = OS.get_ticks_msec()
 	
-	file.seek(2 + (1304*2))
+	buffer.seek(2 + (1304*2))
 	
 #	var textFile = File.new()
 #	textFile.open("res://slabtng_object_entry_asset.txt", File.WRITE)
@@ -57,28 +55,28 @@ func slabtng_object_entry_asset():
 		
 		tngObject[i] = []
 		tngObject[i].resize(9) #(this is coincidentally size 9, it has nothing to do with subtiles)
-		tngObject[i][0] = file.get_8() # 0 = object/effectgen, 1 = light
-		tngObject[i][1] = file.get_16() # slabVariation
-		tngObject[i][2] = file.get_8() # subtile (between 0 and 8)
+		tngObject[i][0] = buffer.get_u8() # 0 = object/effectgen, 1 = light
+		tngObject[i][1] = buffer.get_u16() # slabVariation
+		tngObject[i][2] = buffer.get_u8() # subtile (between 0 and 8)
 		
 		var datnum
 		
 		# Location values can look like 255.75, this is supposed to be -0.25
-		datnum = file.get_16() / 256.0
+		datnum = buffer.get_u16() / 256.0
 		if datnum > 255: datnum -= 256
 		tngObject[i][3] = datnum
 		
-		datnum = file.get_16() / 256.0
+		datnum = buffer.get_u16() / 256.0
 		if datnum > 255: datnum -= 256
 		tngObject[i][4] = datnum
 		
-		datnum = file.get_16() / 256.0
+		datnum = buffer.get_u16() / 256.0
 		if datnum > 255: datnum -= 256
 		tngObject[i][5] = datnum
 		
-		tngObject[i][6] = file.get_8() # Thing type
-		tngObject[i][7] = file.get_8() # Thing subtype
-		tngObject[i][8] = file.get_8() # Effect range
+		tngObject[i][6] = buffer.get_u8() # Thing type
+		tngObject[i][7] = buffer.get_u8() # Thing subtype
+		tngObject[i][8] = buffer.get_u8() # Effect range
 		
 #		textFile.store_line(str(i)+'---------------------')
 #		for blah in 9:
@@ -88,9 +86,9 @@ func slabtng_object_entry_asset():
 	
 	print('slabtng_object_entry_asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-#		tngObject[i][3] = wrapi(file.get_16(), -511, 65025) / 256.0
-#		tngObject[i][4] = wrapi(file.get_16(), -511, 65025) / 256.0
-#		tngObject[i][5] = wrapi(file.get_16(), -511, 65025) / 256.0
+#		tngObject[i][3] = wrapi(file.get_u16(), -511, 65025) / 256.0
+#		tngObject[i][4] = wrapi(file.get_u16(), -511, 65025) / 256.0
+#		tngObject[i][5] = wrapi(file.get_u16(), -511, 65025) / 256.0
 
 
 #
