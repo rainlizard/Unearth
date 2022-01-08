@@ -203,7 +203,7 @@ func set_current_texture_pack():
 	var value = oDataLevelStyle.data
 	
 	if cachedTextures.empty() == true:
-		oMessage.big("Error", "No texture maps could be loaded. Try pressing the [Reload texture map cache] button in Settings.")
+		oMessage.big("Error", "No texture maps could be loaded. Try pressing the [Reload texture map cache] button in Settings and then reopen the map.")
 		return
 	if cachedTextures[value] == null or cachedTextures[value][0] == null or cachedTextures[value][1] == null:
 		oMessage.big("Error", "Unable to load texture map number " + str(value) + ". Try pressing the [Reload texture map cache] button in Settings.")

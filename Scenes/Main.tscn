@@ -2220,7 +2220,7 @@ scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView"]
 margin_right = 414.0
-margin_bottom = 262.0
+margin_bottom = 332.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -2310,6 +2310,24 @@ margin_top = 196.0
 margin_right = 414.0
 margin_bottom = 227.0
 settingText = "Creature level font size max zoom"
+
+[node name="SciptIconScale" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 196.0
+margin_right = 414.0
+margin_bottom = 227.0
+settingText = "Script icon scale"
+
+[node name="SciptIconMaxZoom" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 196.0
+margin_right = 414.0
+margin_bottom = 227.0
+settingText = "Script icon max zoom"
 
 [node name="Tab3DView" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings"]
 visible = false
@@ -4533,6 +4551,7 @@ text = "Variation info"
 [node name="CustomTooltip" type="Control" parent="Ui/UiSystem"]
 margin_top = -10.5
 margin_bottom = 10.5
+mouse_filter = 2
 script = ExtResource( 129 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -4546,6 +4565,7 @@ margin_right = 4.0
 margin_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 size_flags_horizontal = 6
 size_flags_vertical = 7
 custom_styles/panel = ExtResource( 130 )

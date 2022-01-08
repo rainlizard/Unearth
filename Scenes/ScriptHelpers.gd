@@ -1,5 +1,9 @@
 extends Node2D
 onready var oDataScript = Nodelist.list["oDataScript"]
+onready var oCamera2D = Nodelist.list["oCamera2D"]
+
+var SCRIPT_ICON_SIZE_MAX = 8 setget script_icon_size_max
+var SCRIPT_ICON_SIZE_BASE = 0.5 setget script_icon_size_base
 
 var scnScriptHelperObject = preload('res://Scenes/ScriptHelperObject.tscn')
 
@@ -27,17 +31,17 @@ func start():
 			if commandsTileCoords[i] + '(' in line.to_upper():
 				var argumentsArray = get_arguments_from_line(line)
 				if argumentsArray.size() >= 2:
-					var x = (float(argumentsArray[0])*96) + 48
-					var y = (float(argumentsArray[1])*96) + 48
-					create_helper_object(x, y, line, lineNumber)
+					var x = (int(argumentsArray[0])*96) + 48
+					var y = (int(argumentsArray[1])*96) + 48
+					create_helper_object(x, y, line, lineNumber+1)
 		
 		for i in commandsSubtileCoords.size():
 			if commandsSubtileCoords[i] + '(' in line.to_upper():
 				var argumentsArray = get_arguments_from_line(line)
 				if argumentsArray.size() >= 3:
-					var x = float(argumentsArray[1])*32
-					var y = float(argumentsArray[2])*32
-					create_helper_object(x, y, line, lineNumber)
+					var x = (int(argumentsArray[1])*32) + 16
+					var y = (int(argumentsArray[2])*32) + 16
+					create_helper_object(x, y, line, lineNumber+1)
 	
 	print('Script helpers created ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
@@ -55,7 +59,9 @@ func get_arguments_from_line(line):
 	if rightBracketPos == -1: return []
 	lineArgumentsOnly.erase(rightBracketPos,lineArgumentsOnly.length())
 	
-	return lineArgumentsOnly.split(',',false)
+	lineArgumentsOnly = Array(lineArgumentsOnly.split(',',false))
+	
+	return lineArgumentsOnly # Note: this may return non-english characters depending on the script
 
 func create_helper_object(x,y,line,lineNumber):
 	#print(argumentsArray)
@@ -63,5 +69,14 @@ func create_helper_object(x,y,line,lineNumber):
 	id.position = Vector2(x, y)
 	#print(x)
 	#print(y)
-	id.set_meta('line', line + '\n Line ' + str(lineNumber)+'')
+	id.set_meta('line', line + '\nLine ' + str(lineNumber)+'')
 	add_child(id)
+
+func script_icon_size_max(setVal):
+	for id in get_tree().get_nodes_in_group("ScriptHelperObject"):
+		id._on_zoom_level_changed(oCamera2D.zoom)
+	SCRIPT_ICON_SIZE_MAX = setVal
+func script_icon_size_base(setVal):
+	for id in get_tree().get_nodes_in_group("ScriptHelperObject"):
+		id._on_zoom_level_changed(oCamera2D.zoom)
+	SCRIPT_ICON_SIZE_BASE = setVal

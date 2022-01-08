@@ -31,3 +31,4 @@ __meta__ = {
 rect = Rect2( -32, -32, 64, 64 )
 
 [connection signal="mouse_entered" from="MouseDetection" to="." method="_on_MouseDetection_mouse_entered"]
+[connection signal="mouse_exited" from="MouseDetection" to="." method="_on_MouseDetection_mouse_exited"]

@@ -6,8 +6,8 @@ onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
 
 
 func _ready():
-	oVoxelTabs.set_tab_title(0, "Slabs")
-	oVoxelTabs.set_tab_title(1, "Columns")
+	oVoxelTabs.set_tab_title(0, "Add custom slab")
+	oVoxelTabs.set_tab_title(1, "Edit columns")
 #	Utils.popup_centered(self)
 #	yield(get_tree(),'idle_frame')
 #	_on_VoxelTabs_tab_changed(0)

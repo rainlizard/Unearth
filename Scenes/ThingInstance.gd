@@ -128,9 +128,10 @@ func set_texture_based_on_thingtype():
 		Things.TYPE.NONE:
 			pass
 		Things.TYPE.OBJECT:
-			tex = Things.DATA_OBJECT[subtype][Things.TEXTURE]
-			if subtype in [49, 111,120,121,122]: # Heart Flame and Gate
-				$ThingTexture.self_modulate = "a0ffffff"
+			if Things.DATA_OBJECT.has(subtype) == true:
+				tex = Things.DATA_OBJECT[subtype][Things.TEXTURE]
+				if subtype in [49, 111,120,121,122]: # Heart Flame and Gate
+					$ThingTexture.self_modulate = "a0ffffff"
 		Things.TYPE.CREATURE:
 			if Things.DATA_CREATURE.has(subtype) == true:
 				tex = Things.DATA_CREATURE[subtype][Things.TEXTURE]

@@ -1,6 +1,7 @@
 extends Node2D
-onready var oMessage = Nodelist.list["oMessage"]
+onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
+onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 
 
 # Declare member variables here. Examples:
@@ -14,21 +15,21 @@ func _ready():
 	_on_zoom_level_changed(oCamera2D.zoom)
 
 
-func _on_MouseDetection_mouse_entered():
-	oMessage.quick(get_meta('line'))
-
-var SCRIPT_ICON_SIZE_MAX = 10
-var SCRIPT_ICON_SIZE_BASE = 0.5
-
 func _on_zoom_level_changed(zoom):
-	var oUi = Nodelist.list["oUi"]
 	var inventScale = Vector2()
-	inventScale.x = clamp(zoom.x, 0.0, SCRIPT_ICON_SIZE_MAX)
-	inventScale.y = clamp(zoom.y, 0.0, SCRIPT_ICON_SIZE_MAX)
+	inventScale.x = clamp(zoom.x, 0.0, oScriptHelpers.SCRIPT_ICON_SIZE_MAX)
+	inventScale.y = clamp(zoom.y, 0.0, oScriptHelpers.SCRIPT_ICON_SIZE_MAX)
 	
-	if zoom.x > SCRIPT_ICON_SIZE_MAX:
+	if zoom.x > oScriptHelpers.SCRIPT_ICON_SIZE_MAX:
 		visible = false
 	else:
 		visible = true
 	
-	scale = inventScale * SCRIPT_ICON_SIZE_BASE
+	scale = inventScale * oScriptHelpers.SCRIPT_ICON_SIZE_BASE
+
+
+func _on_MouseDetection_mouse_entered():
+	oCustomTooltip.set_text(get_meta('line'))
+
+func _on_MouseDetection_mouse_exited():
+	oCustomTooltip.set_text("")

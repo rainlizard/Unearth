@@ -20,6 +20,9 @@ onready var oThingWindowScale = Nodelist.list["oThingWindowScale"]
 onready var oTabSettings = Nodelist.list["oTabSettings"]
 onready var oCreatureLevelFontSizeScale = Nodelist.list["oCreatureLevelFontSizeScale"]
 onready var oCreatureLevelFontSizeMaxZoom = Nodelist.list["oCreatureLevelFontSizeMaxZoom"]
+onready var oSciptIconScale = Nodelist.list["oSciptIconScale"]
+onready var oSciptIconMaxZoom = Nodelist.list["oSciptIconMaxZoom"]
+
 onready var oUiScale = Nodelist.list["oUiScale"]
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
@@ -71,6 +74,8 @@ func _on_SettingsWindow_about_to_show():
 	oOwnerAlphaSlider.value = Settings.get_setting("graphics_ownership_alpha")
 	oCreatureLevelFontSizeScale.line.text = str(Settings.get_setting("font_size_creature_level_scale")).pad_decimals(2)
 	oCreatureLevelFontSizeMaxZoom.line.text = str(Settings.get_setting("font_size_creature_level_max")).pad_decimals(2)
+	oSciptIconScale.line.text = str(Settings.get_setting("script_icon_scale")).pad_decimals(2)
+	oSciptIconMaxZoom.line.text = str(Settings.get_setting("script_icon_max")).pad_decimals(2)
 
 func _on_CheckBoxVsync_toggled(button_pressed):
 	Settings.set_setting("vsync", button_pressed)
@@ -132,6 +137,12 @@ func edited_CreatureLevelFontSizeScale(new_text):
 
 func edited_CreatureLevelFontSizeMaxZoom(new_text):
 	Settings.set_setting("font_size_creature_level_max", float(new_text))
+
+func edited_SciptIconScale(new_text):
+	Settings.set_setting("script_icon_scale", float(new_text))
+
+func edited_SciptIconMaxZoom(new_text):
+	Settings.set_setting("script_icon_max", float(new_text))
 
 func edited_ThingWindowScale(new_text):
 	Settings.set_setting("thing_window_scale", float(new_text))
