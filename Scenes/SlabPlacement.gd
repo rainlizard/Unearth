@@ -322,15 +322,15 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 	if wallS == bitmaskType and wallW == bitmaskType and Slabs.data[ surrID[dir.sw] ][Slabs.IS_SOLID] == false:
 		asset3x3group[6] = ((slabVariation + dir.all) * 9) + 6
 	
-	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
-	asset3x3group = modify_room_face(asset3x3group, surrID, slabID)
+	asset3x3group = modify_wall_based_on_nearby_room_and_liquid(asset3x3group, surrID, slabID)
+	
 	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
 	var clmIndexArray = asset_position_to_column_index(asset3x3group)
 	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
 	
 	if slabID == Slabs.WALL_WITH_TORCH:
 		clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
-	
+
 	if bitmaskType == Slabs.BITMASK_WALL:
 		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL, slabID)
 		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL_NEARBY_WATER, slabID)
@@ -573,8 +573,12 @@ func adjust_torch_cubes(clmIndexArray, torchSideToKeep):
 		side += 1
 	return clmIndexArray
 
-func modify_room_face(asset3x3group, surrID, slabID):
+func modify_wall_based_on_nearby_room_and_liquid(asset3x3group, surrID, slabID):
+	# Combined modify_room_face() and modify_for_liquid() so that there won't be a conflict.
+	# This function should opnly be used by Walls.
+	
 	var modify0 = 0; var modify1 = 0; var modify2 = 0; var modify3 = 0; var modify4 = 0; var modify5 = 0; var modify6 = 0; var modify7 = 0; var modify8 = 0
+	
 	if Slabs.rooms.has(surrID[dir.s]):
 		var roomFace = surrID[dir.s] + 1
 		var offset = ((roomFace-slabID)*28)*9
@@ -609,6 +613,42 @@ func modify_room_face(asset3x3group, surrID, slabID):
 		modify5 = offset
 		modify8 = offset
 	
+	if surrID[dir.s] == Slabs.LAVA:
+		modify6 = 9*9
+		modify7 = 9*9
+		modify8 = 9*9
+	elif surrID[dir.s] == Slabs.WATER:
+		modify6 = 18*9
+		modify7 = 18*9
+		modify8 = 18*9
+	
+	if surrID[dir.w] == Slabs.LAVA:
+		modify0 = 9*9
+		modify3 = 9*9
+		modify6 = 9*9
+	elif surrID[dir.w] == Slabs.WATER:
+		modify0 = 18*9
+		modify3 = 18*9
+		modify6 = 18*9
+	
+	if surrID[dir.n] == Slabs.LAVA:
+		modify0 = 9*9
+		modify1 = 9*9
+		modify2 = 9*9
+	elif surrID[dir.n] == Slabs.WATER:
+		modify0 = 18*9
+		modify1 = 18*9
+		modify2 = 18*9
+	
+	if surrID[dir.e] == Slabs.LAVA:
+		modify2 = 9*9
+		modify5 = 9*9
+		modify8 = 9*9
+	elif surrID[dir.e] == Slabs.WATER:
+		modify2 = 18*9
+		modify5 = 18*9
+		modify8 = 18*9
+	
 	asset3x3group[0] += modify0
 	asset3x3group[1] += modify1
 	asset3x3group[2] += modify2
@@ -622,6 +662,7 @@ func modify_room_face(asset3x3group, surrID, slabID):
 	return asset3x3group
 
 func modify_for_liquid(asset3x3group, surrID, slabID):
+	
 	# Don't modify slab if slab is liquid
 	if slabID == Slabs.WATER or slabID == Slabs.LAVA:
 		return asset3x3group
