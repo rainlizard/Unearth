@@ -9,7 +9,7 @@ onready var oMenuButtonFile = Nodelist.list["oMenuButtonFile"]
 onready var oMenuButtonEdit = Nodelist.list["oMenuButtonEdit"]
 onready var oMenuButtonSettings = Nodelist.list["oMenuButtonSettings"]
 onready var oMenuButtonView = Nodelist.list["oMenuButtonView"]
-onready var oMenuButtonPlay = Nodelist.list["oMenuButtonPlay"]
+onready var oPlayButton = Nodelist.list["oPlayButton"]
 onready var oFileDialogSaveAs = Nodelist.list["oFileDialogSaveAs"]
 onready var oFileDialogOpen = Nodelist.list["oFileDialogOpen"]
 onready var oConfirmAutoGen = Nodelist.list["oConfirmAutoGen"]
@@ -48,8 +48,8 @@ func _process(delta):
 	oMenuButtonEdit.get_popup().set_item_disabled(2,false) # Open map folder
 	
 	# Enable Play button
-	oMenuButtonPlay.disabled = false
-	oMenuButtonPlay.hint_tooltip = ""
+	oPlayButton.disabled = false
+	oPlayButton.hint_tooltip = ""
 	
 	var fixedBaseDir = oGame.EXECUTABLE_PATH.get_base_dir().to_upper().replace('\\','/')
 	var fixedMapPath = oCurrentMap.path.to_upper().replace('\\','/')
@@ -61,8 +61,8 @@ func _process(delta):
 		pass
 	else:
 		# Is not a playable path
-		oMenuButtonPlay.hint_tooltip = "Map must be saved in the correct directory in order to play."
-		oMenuButtonPlay.disabled = true
+		oPlayButton.hint_tooltip = "Map must be saved in the correct directory in order to play."
+		oPlayButton.disabled = true
 	
 	if oCurrentMap.path == "":
 		# "Save" should only be available to maps that exist - that have already been "Saved as".
@@ -70,12 +70,12 @@ func _process(delta):
 		oMenuButtonEdit.get_popup().set_item_disabled(1,true) # Open script file
 		oMenuButtonEdit.get_popup().set_item_disabled(2,true) # Open map folder
 		# Can only play a map that has been "Saved as"
-		oMenuButtonPlay.disabled = true
+		oPlayButton.disabled = true
 	
 	if oEditor.mapHasBeenEdited == true:
-		oMenuButtonPlay.text = "Save & Play"
+		oPlayButton.text = "Save & Play"
 	else:
-		oMenuButtonPlay.text = "Play"
+		oPlayButton.text = "Play"
 	
 	# Fix button being stretched
 	if visible == true and fixMenuExpansion != oEditor.mapHasBeenEdited:
@@ -164,16 +164,12 @@ func _on_MenuButtonSettings_pressed():
 	oMenuButtonSettings.get_popup().visible = false
 	oSettingsWindow._on_ButtonSettings_pressed()
 
-func _on_MenuButtonPlay_pressed():
-	oMenuButtonPlay.get_popup().visible = false
-	oMenuButtonPlay.get_popup().modulate = Color(0,0,0,0)
-	oMenuButtonPlay.pressed = false
-	oMenuButtonPlay.toggle_mode = false
+func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in combination with OS.execute otherwise a Godot bug occurs
 	oGame.menu_play_clicked()
 	
-	oMenuButtonPlay.disconnect("pressed",self,"_on_MenuButtonPlay_pressed")
+	oPlayButton.disconnect("pressed",self,"_on_PlayButton_pressed")
 	yield(get_tree().create_timer(2.5), "timeout")
-	oMenuButtonPlay.connect("pressed",self,"_on_MenuButtonPlay_pressed")
+	oPlayButton.connect("pressed",self,"_on_PlayButton_pressed")
 
 func _on_ConfirmDiscardChanges_confirmed():
 	oOpenMap.open_map(oCurrentMap.path)
