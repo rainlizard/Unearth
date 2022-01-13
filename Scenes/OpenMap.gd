@@ -24,6 +24,7 @@ onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oMenu = Nodelist.list["oMenu"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -49,7 +50,8 @@ func start():
 			#open_map("F:/Games/Dungeon Keeper/campgns/keeporig/map00020.slb")
 			#open_map("F:/Games/Dungeon Keeper/campgns/ancntkpr/map00001.slb")
 			#open_map("F:/Games/Dungeon Keeper/ADiKtEd/levels/map00001.slb")
-			open_map("F:/Games/Dungeon Keeper/levels/personal/map00001.slb")
+			#open_map("F:/Games/Dungeon Keeper/levels/personal/map00001.slb")
+			open_map("F:/Games/Dungeon Keeper/campgns/UndivineD/map00001.slb")
 			pass
 		else:
 			oCurrentMap.clear_map()
@@ -138,6 +140,7 @@ func finish_opening_map(map):
 	
 	oEditor.set_view_2d()
 	
+	oMenu.add_recent(map)
 	
 #	var cubeArray = [1,0,1,1,0,1,1,0]
 #	var idx = oDataClm.index_entry(cubeArray, 1)

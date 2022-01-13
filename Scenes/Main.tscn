@@ -1396,7 +1396,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "File"
 align = 0
-items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Save map", null, 0, false, false, 3, 0, null, "", false, "Save map as", null, 0, false, false, 4, 0, null, "", false, "Reload map", null, 0, false, false, 5, 0, null, "", false, "Load image as map", null, 0, false, false, 6, 0, null, "", false, "Exit", null, 0, false, false, 7, 0, null, "", false ]
+items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Open recent", null, 0, false, false, 3, 0, null, "", false, "Save map", null, 0, false, false, 4, 0, null, "", false, "Save map as", null, 0, false, false, 5, 0, null, "", false, "Reload map", null, 0, false, false, 6, 0, null, "", false, "Load image as map", null, 0, false, false, 7, 0, null, "", false, "Exit", null, 0, false, false, 8, 0, null, "", false ]
 switch_on_hover = true
 
 [node name="VSeparator1" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
@@ -3272,18 +3272,18 @@ size_flags_vertical = 3
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer"]
 margin_right = 835.0
-margin_bottom = 504.0
+margin_bottom = 471.0
 size_flags_horizontal = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
 margin_right = 835.0
-margin_bottom = 443.0
+margin_bottom = 410.0
 custom_constants/hseparation = 28
 columns = 2
 
 [node name="ScriptSection1" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
 margin_right = 335.0
-margin_bottom = 356.0
+margin_bottom = 323.0
 
 [node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_right = 335.0
@@ -3428,20 +3428,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WhiteAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+[node name="WinConditionCheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 278.0
 margin_right = 335.0
 margin_bottom = 307.0
-hint_tooltip = "Computer PLAYER_GOOD"
-text = "White keeper AI"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="WinConditionCheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
-margin_top = 311.0
-margin_right = 335.0
-margin_bottom = 340.0
 hint_tooltip = "Keep in mind if a keeper AI is not enabled then they'll be counted as defeated even if their dungeon heart has not been destroyed"
 text = "Win when all keepers are defeated"
 __meta__ = {
@@ -3449,9 +3439,9 @@ __meta__ = {
 }
 
 [node name="Spacing2" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
-margin_top = 344.0
+margin_top = 311.0
 margin_right = 335.0
-margin_bottom = 356.0
+margin_bottom = 323.0
 rect_min_size = Vector2( 12, 12 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3460,7 +3450,7 @@ __meta__ = {
 [node name="ScriptSection4" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
 margin_left = 363.0
 margin_right = 423.0
-margin_bottom = 356.0
+margin_bottom = 323.0
 
 [node name="HeaderLabel3" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection4"]
 margin_right = 60.0
@@ -3478,9 +3468,9 @@ margin_bottom = 25.0
 columns = 4
 
 [node name="ScriptSection2" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
-margin_top = 360.0
+margin_top = 327.0
 margin_right = 335.0
-margin_bottom = 385.0
+margin_bottom = 352.0
 
 [node name="HeaderLabel" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection2"]
 margin_right = 335.0
@@ -3499,9 +3489,9 @@ columns = 4
 
 [node name="ScriptSection5" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
 margin_left = 363.0
-margin_top = 360.0
+margin_top = 327.0
 margin_right = 423.0
-margin_bottom = 385.0
+margin_bottom = 352.0
 
 [node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection5"]
 margin_right = 60.0
@@ -3519,9 +3509,9 @@ margin_bottom = 25.0
 columns = 4
 
 [node name="ScriptSection3" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
-margin_top = 389.0
+margin_top = 356.0
 margin_right = 335.0
-margin_bottom = 443.0
+margin_bottom = 410.0
 
 [node name="HeaderLabel2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection3"]
 margin_right = 335.0
@@ -3540,9 +3530,9 @@ columns = 4
 
 [node name="ScriptSection6" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
 margin_left = 363.0
-margin_top = 389.0
+margin_top = 356.0
 margin_right = 423.0
-margin_bottom = 443.0
+margin_bottom = 410.0
 
 [node name="HeaderLabel5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection6"]
 margin_right = 60.0
@@ -3576,13 +3566,16 @@ margin_bottom = 54.0
 columns = 4
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-margin_right = 24.0
-margin_bottom = 24.0
+margin_top = 414.0
+margin_right = 835.0
+margin_bottom = 438.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="AdjustResearchCheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-margin_right = 24.0
-margin_bottom = 29.0
+margin_left = 306.0
+margin_top = 442.0
+margin_right = 528.0
+margin_bottom = 471.0
 focus_mode = 0
 size_flags_horizontal = 6
 text = "Adjust research order"
@@ -3733,6 +3726,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="SendToClipboardButton" type="Button" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/HBoxContainer4"]
+margin_left = 512.0
+margin_right = 682.0
+margin_bottom = 27.0
+text = "Send to clipboard"
+
 [node name="GenerateScriptButton" type="Button" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/HBoxContainer4"]
 margin_left = 686.0
 margin_right = 835.0
@@ -3803,7 +3802,7 @@ grow_vertical = 0
 text = "Help"
 
 [node name="SGRectHighlighter" type="ColorRect" parent="Ui/UiSystem/MapSettingsWindow"]
-modulate = Color( 1, 1, 1, 0 )
+modulate = Color( 1, 1, 1, 0.04183 )
 margin_left = -344.0
 margin_top = 1923.0
 margin_right = -344.0
@@ -4817,10 +4816,10 @@ script = ExtResource( 88 )
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlueAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_BlueAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/GreenAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_GreenAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/YellowAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_YellowAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/WhiteAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WhiteAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/AdjustResearchCheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_AdjustResearchCheckBox_toggled"]
 [connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockAmountSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WarlockAmountSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockLevelSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WarlockLevelSpinBox_value_changed"]
+[connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/HBoxContainer4/SendToClipboardButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_SendToClipboardButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/HBoxContainer4/GenerateScriptButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_GenerateScriptButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]

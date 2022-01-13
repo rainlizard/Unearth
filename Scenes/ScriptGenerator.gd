@@ -8,7 +8,6 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oBlueAICheckBox = Nodelist.list["oBlueAICheckBox"]
 onready var oGreenAICheckBox = Nodelist.list["oGreenAICheckBox"]
 onready var oYellowAICheckBox = Nodelist.list["oYellowAICheckBox"]
-onready var oWhiteAICheckBox = Nodelist.list["oWhiteAICheckBox"]
 onready var oPortalRateField = Nodelist.list["oPortalRateField"]
 onready var oGoldField = Nodelist.list["oGoldField"]
 onready var oMaxCreaturesField = Nodelist.list["oMaxCreaturesField"]
@@ -328,9 +327,6 @@ func _on_YellowAICheckBox_toggled(button_pressed):
 	if button_pressed == true:
 		if check_for_dungeon_heart(3) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
-func _on_WhiteAICheckBox_toggled(button_pressed):
-	# This player does not require a Dungeon heart.
-	pass
 
 func check_for_dungeon_heart(ownership):
 	for id in get_tree().get_nodes_in_group("Instance"):
@@ -339,18 +335,22 @@ func check_for_dungeon_heart(ownership):
 				return true
 	return false
 
-
-
-
 func _on_GenerateScriptButton_pressed():
 	oMapSettingsTabs.current_tab = 2
 	Utils.popup_centered(oConfirmGenerateScript)
 
 func _on_ConfirmGenerateScript_confirmed():
 	oScriptTextEdit.text = ""
-	
+	var generateString = execute_gen()
+	oScriptEditor.set_text(generateString)
 	oMessage.quick("Cleared existing script and placed generated script")
-	
+
+func _on_SendToClipboardButton_pressed():
+	var generateString = execute_gen()
+	OS.set_clipboard(generateString)
+	oMessage.quick("Generated script copied to clipboard. Paste it somewhere.")
+
+func execute_gen():
 	var generateString = ""
 	
 	var argumentForCreatureAvailable = ",1,1)"
@@ -368,7 +368,6 @@ func _on_ConfirmGenerateScript_confirmed():
 	if oBlueAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER1,0)" + '\n'
 	if oGreenAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER2,0)" + '\n'
 	if oYellowAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER3,0)" + '\n'
-	if oWhiteAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER_GOOD,0)" + '\n'
 	
 	generateString = add_one_extra_line(generateString)
 	
@@ -447,8 +446,7 @@ func _on_ConfirmGenerateScript_confirmed():
 		generateString += "IF(PLAYER0,ALL_DUNGEONS_DESTROYED == 1)" + '\n'
 		generateString += "	WIN_GAME" + '\n'
 		generateString += "ENDIF" + '\n'
-	
-	oScriptEditor.set_text(generateString)
+	return generateString
 
 func add_one_extra_line(generateString):
 	if generateString.c_unescape().ends_with('\n\n'):
@@ -499,3 +497,4 @@ func _on_AdjustResearchCheckBox_toggled(button_pressed):
 	yield(get_tree(),'idle_frame')
 	if oResearchOrderCategory.visible == true:
 		oGeneratorContainer.scroll_vertical += 200
+

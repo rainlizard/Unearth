@@ -27,21 +27,24 @@ func start():
 	for lineNumber in scriptLines.size():
 		var line = scriptLines[lineNumber]
 		
-		for i in commandsTileCoords.size():
-			if commandsTileCoords[i] + '(' in line.to_upper():
-				var argumentsArray = get_arguments_from_line(line)
-				if argumentsArray.size() >= 2:
-					var x = (int(argumentsArray[0])*96) + 48
-					var y = (int(argumentsArray[1])*96) + 48
-					create_helper_object(x, y, line, lineNumber+1)
+		# Ignore commented lines (REM)
+		if line.to_upper().strip_edges(true,true).begins_with("REM") == false:
 		
-		for i in commandsSubtileCoords.size():
-			if commandsSubtileCoords[i] + '(' in line.to_upper():
-				var argumentsArray = get_arguments_from_line(line)
-				if argumentsArray.size() >= 3:
-					var x = (int(argumentsArray[1])*32) + 16
-					var y = (int(argumentsArray[2])*32) + 16
-					create_helper_object(x, y, line, lineNumber+1)
+			for i in commandsTileCoords.size():
+				if commandsTileCoords[i] + '(' in line.to_upper():
+					var argumentsArray = get_arguments_from_line(line)
+					if argumentsArray.size() >= 2:
+						var x = (int(argumentsArray[0])*96) + 48
+						var y = (int(argumentsArray[1])*96) + 48
+						create_helper_object(x, y, line, lineNumber+1)
+			
+			for i in commandsSubtileCoords.size():
+				if commandsSubtileCoords[i] + '(' in line.to_upper():
+					var argumentsArray = get_arguments_from_line(line)
+					if argumentsArray.size() >= 3:
+						var x = (int(argumentsArray[1])*32) + 16
+						var y = (int(argumentsArray[2])*32) + 16
+						create_helper_object(x, y, line, lineNumber+1)
 	
 	print('Script helpers created ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
@@ -69,7 +72,8 @@ func create_helper_object(x,y,line,lineNumber):
 	id.position = Vector2(x, y)
 	#print(x)
 	#print(y)
-	id.set_meta('line', line + '\nLine ' + str(lineNumber)+'')
+	#id.set_meta('line', line + '\nLine ' + str(lineNumber)+'')
+	id.set_meta('line', 'Line ' + str(lineNumber) + ': ' + line)
 	add_child(id)
 
 func script_icon_size_max(setVal):

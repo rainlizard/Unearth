@@ -73,7 +73,9 @@ margin_bottom = 300.0
 rect_min_size = Vector2( 100, 0 )
 size_flags_vertical = 4
 max_value = 1e+09
+step = 100.0
 value = 27000.0
+rounded = true
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -105,5 +107,4 @@ __meta__ = {
 
 [connection signal="gui_input" from="." to="." method="_on_ResearchableItem_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_ResearchableItem_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_ResearchableItem_mouse_exited"]
 [connection signal="value_changed" from="HBoxContainer/ResearchRequired" to="." method="_on_ResearchRequired_value_changed"]

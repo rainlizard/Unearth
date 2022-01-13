@@ -32,13 +32,46 @@ onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oModifyDynamicSlabsWindow = Nodelist.list["oModifyDynamicSlabsWindow"]
 
+var recentlyOpened = []
+var recentlyOpenedPopupMenu = PopupMenu.new()
 var fixMenuExpansion
 
 func _ready():
+	recentlyOpenedPopupMenu.set_name("recentlyOpened")
+	var popup = oMenuButtonFile.get_popup()
+	popup.add_child(recentlyOpenedPopupMenu)
+	popup.set_item_submenu(3, "recentlyOpened")
+	
+	recentlyOpenedPopupMenu.connect("id_pressed",self,"_on_RecentSubmenu_Pressed")
+	
 	oMenuButtonFile.get_popup().connect("id_pressed",self,"_on_FileSubmenu_Pressed")
 	oMenuButtonEdit.get_popup().connect("id_pressed",self,"_on_EditSubmenu_Pressed")
 	oMenuButtonView.get_popup().connect("id_pressed",self,"_on_ViewSubmenu_Pressed")
 	oMenuButtonHelp.get_popup().connect("id_pressed",self,"_on_HelpSubmenu_Pressed")
+
+func add_recent(map):
+	var findExisting = recentlyOpened.find(map)
+	if findExisting == -1:
+		recentlyOpened.push_front(map)
+		if recentlyOpened.size() > 10:
+			recentlyOpened.pop_back()
+	else:
+		recentlyOpened.push_front(recentlyOpened.pop_at(findExisting))
+	
+	recentlyOpenedPopupMenu.clear()
+	for i in recentlyOpened:
+		recentlyOpenedPopupMenu.add_item(i)
+	
+	Settings.write_cfg("recently_opened", recentlyOpened)
+
+func _on_RecentSubmenu_Pressed(pressedID):
+	var map = recentlyOpenedPopupMenu.get_item_text(pressedID)
+	oOpenMap.open_map(map)
+
+func initialize_recently_opened(value):
+	recentlyOpened = value
+	for i in recentlyOpened:
+		recentlyOpenedPopupMenu.add_item(i)
 
 
 func _process(delta):
@@ -88,11 +121,12 @@ func _on_FileSubmenu_Pressed(pressedID):
 		0: oCurrentMap._on_ButtonNewMap_pressed() # New
 		1: oMapBrowser._on_ButtonOpenMap_pressed() # Browse maps
 		2: Utils.popup_centered(oFileDialogOpen) # Open
-		3: oSaveMap.clicked_save_on_menu() # Save
-		4: Utils.popup_centered(oFileDialogSaveAs) # Save as
-		5: Utils.popup_centered(oConfirmDiscardChanges) # Reload map
-		6: Utils.popup_centered(oImageAsMapDialog) # Load image as map
-		7: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
+		#3: Open recent
+		4: oSaveMap.clicked_save_on_menu() # Save
+		5: Utils.popup_centered(oFileDialogSaveAs) # Save as
+		6: Utils.popup_centered(oConfirmDiscardChanges) # Reload map
+		7: Utils.popup_centered(oImageAsMapDialog) # Load image as map
+		8: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:

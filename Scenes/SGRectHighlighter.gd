@@ -1,6 +1,9 @@
 extends ColorRect
 
 var clingTo = null
+var allowDragRelease = false
+
+
 
 func highlight(node):
 	clingTo = node
@@ -19,8 +22,12 @@ func _process(delta):
 func _input(event):
 	if visible == false: return
 	
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed == true:
-		yield(get_tree(),'idle_frame') # otherwise is overwritten by what's inside of ResearchableItem gui_input
-		clingTo = null
-		visible = false
-
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+		if event.pressed == true:
+			yield(get_tree(),'idle_frame') # otherwise is overwritten by what's inside of ResearchableItem gui_input
+			clingTo = null
+			visible = false
+		else:
+			if allowDragRelease == true:
+				clingTo = null
+				visible = false

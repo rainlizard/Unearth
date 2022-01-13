@@ -60,7 +60,7 @@ var listOfSettings = [
 	"bridges_only_on_liquid",
 	"wallauto_art",
 	"wallauto_damaged",
-	
+	"recently_opened"
 	# These four are read inside Viewport script
 #	"editor_window_position",
 #	"editor_window_size",
@@ -321,6 +321,10 @@ func game_setting(doWhat,string,value):
 			var oDamagedWallLineEdit = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit'
 			if doWhat == SET: oDamagedWallLineEdit.text = value
 			if doWhat == GET: return oDamagedWallLineEdit.text
+		"recently_opened":
+			var oMenu = $'../Main/Ui/UiSystem/Menu'
+			if doWhat == SET: oMenu.initialize_recently_opened(value)
+			if doWhat == GET: return oMenu.recentlyOpened
 
 func delete_settings():
 	var dir = Directory.new()

@@ -42,17 +42,6 @@ func set_room_texture(slabID):
 	var oTextureRectIcon = $"HBoxContainer/TextureRectIcon"
 	oTextureRectIcon.texture = Slabs.icons[slabID]
 
-func _on_ResearchableItem_mouse_entered():
-	var highlightedID = get_currently_dragging()
-	if highlightedID != null and highlightedID != self:
-		# Move highlighted to current's position
-		get_parent().move_child(highlightedID, get_index())
-		oScriptGenerator.adjust_estimated_time()
-		if oKeeperFXScriptCheckBox.pressed == false:
-			oMessage.quick("'KeeperFX script' must be enabled for order rearrangement to take effect")
-
-func _on_ResearchableItem_mouse_exited():
-	pass
 
 var storeSeconds = 0 # used for caculating total time of all nodes
 
@@ -95,22 +84,31 @@ func set_estimated_time(speedNumber):
 
 func _on_ResearchableItem_gui_input(event):
 	# pressed
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed == true:
-		var highlightedID = get_currently_dragging()
-		if highlightedID != self:
-			oSGRectHighlighter.clingTo = null
-			
-			# Highlight current
-			oSGRectHighlighter.clingTo = self
-			oSGRectHighlighter.highlight(self)
-		else:
-			oSGRectHighlighter.clingTo = null
-			oSGRectHighlighter.visible = false
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+		
+		if event.pressed == true:
+			# Workaround to allow detecting mouse_entered while holding down left click
+			visible = false
+			visible = true
+			var highlightedID = get_currently_dragging()
+			if highlightedID != self:
+				oSGRectHighlighter.allowDragRelease = false
+				oSGRectHighlighter.clingTo = null
+				
+				# Highlight current
+				oSGRectHighlighter.clingTo = self
+				oSGRectHighlighter.highlight(self)
+			else:
+				oSGRectHighlighter.clingTo = null
+				oSGRectHighlighter.visible = false
 
 func get_currently_dragging():
 	return oSGRectHighlighter.clingTo
 
-var flashPercent = 0.0
+
+
+
+#var flashPercent = 0.0
 
 #func _process(delta):
 #	print(flashPercent)
@@ -190,3 +188,15 @@ func check_if_researchable():
 						visible = false
 						return false
 	return false
+
+
+func _on_ResearchableItem_mouse_entered():
+	var highlightedID = get_currently_dragging()
+	
+	if highlightedID != null and highlightedID != self:
+		oSGRectHighlighter.allowDragRelease = true
+		# Move highlighted to current's position
+		get_parent().move_child(highlightedID, get_index())
+		oScriptGenerator.adjust_estimated_time()
+		if oKeeperFXScriptCheckBox.pressed == false:
+			oMessage.quick("'KeeperFX script' must be enabled for order rearrangement to take effect")
