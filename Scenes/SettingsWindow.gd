@@ -129,11 +129,10 @@ func edited_FieldOfView(new_text):
 
 func edited_UiScale(new_text):
 	Settings.set_setting("ui_scale", float(new_text))
-	#oPickSlabWindow.rect_position.x-=1
-	#oPickThingWindow.rect_position.x-=1
 	
-	oPickSlabWindow.rect_position = oPickSlabWindow.rect_position
-	oPickThingWindow.rect_position = oPickThingWindow.rect_position
+	# Fix to Slab/Thing window position going off screen when changing UI scale
+	oPickSlabWindow.rect_position.x -= 1 # This will trigger the signal that keeps the window on screen
+	oPickThingWindow.rect_position.x -= 1
 
 func edited_SlabWindowScale(new_text):
 	Settings.set_setting("slab_window_scale", float(new_text))
