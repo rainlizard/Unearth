@@ -7,14 +7,17 @@ var thingType = Things.TYPE.EXTRA
 var subtype = 1 # As written in Things.DATA_EXTRA
 
 
-var locationX = null
-var locationY = null
+var locationX = null setget set_location_x
+var locationY = null setget set_location_y
 var pointRange = null setget set_pointrange
 var pointNumber = null setget set_pointNumber
 var data7 = null
 
-func _enter_tree():
+func set_location_x(setVal):
+	locationX = setVal
 	position.x = locationX * 32
+func set_location_y(setVal):
+	locationY = setVal
 	position.y = locationY * 32
 
 func set_pointNumber(setval):

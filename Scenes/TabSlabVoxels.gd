@@ -5,7 +5,7 @@ onready var oSlabRecognizedAs = Nodelist.list["oSlabRecognizedAs"]
 onready var oSlabRecognizedAsName = Nodelist.list["oSlabRecognizedAsName"]
 onready var oCustomSlabsTab = Nodelist.list["oCustomSlabsTab"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
-onready var oCustomSlabData = Nodelist.list["oCustomSlabData"]
+onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oNewSlabName = Nodelist.list["oNewSlabName"]
 onready var oSlabTabs = Nodelist.list["oSlabTabs"]
 onready var oMessage = Nodelist.list["oMessage"]
@@ -37,7 +37,7 @@ func _on_SlabRecognizedAs_value_changed(value):
 func _on_AddCustomSlabButton_pressed():
 	var newID = 1000 # We'll say custom slabs are ID 1000 and up
 	while true: # Find an unused ID within the custom data dictionary
-		if oCustomSlabData.data.has(newID) == false:
+		if oCustomSlabSystem.data.has(newID) == false:
 			break
 		else:
 			newID += 1
@@ -62,7 +62,7 @@ func _on_AddCustomSlabButton_pressed():
 		slabCubeData.append(oDataClm.cubes[clmIndex])
 		slabFloorData.append(oDataClm.floorTexture[clmIndex])
 	
-	oCustomSlabData.add_custom_slab(newID, generalArray, oSlabRecognizedAs.value, slabCubeData, slabFloorData, oWibbleEdgesCheckBox.pressed)
+	oCustomSlabSystem.add_custom_slab(newID, generalArray, oSlabRecognizedAs.value, slabCubeData, slabFloorData, oWibbleEdgesCheckBox.pressed)
 	
 	oPickSlabWindow.add_slabs()
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM

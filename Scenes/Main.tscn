@@ -389,7 +389,7 @@ script = ExtResource( 36 )
 [node name="CustomData" type="Node" parent="."]
 script = ExtResource( 92 )
 
-[node name="CustomSlabData" type="Node" parent="CustomData"]
+[node name="CustomSlabSystem" type="Node" parent="CustomData"]
 script = ExtResource( 127 )
 
 [node name="Game3D" type="Spatial" parent="."]

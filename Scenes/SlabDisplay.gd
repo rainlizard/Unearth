@@ -49,13 +49,13 @@ func set_visual():
 					var b = clamp(valueInput, 0, 255)
 					dataImage.set_pixel(x, y, Color8(r,g,b))
 		else:
-			var oCustomSlabData = Nodelist.list["oCustomSlabData"]
+			var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 			for y in 3:
 				for x in 3:
 					var cubeFace = 0
-					if oCustomSlabData.data.has(slabID):
+					if oCustomSlabSystem.data.has(slabID):
 						var indexIn3x3 = (y*3) + x
-						cubeFace = oCustomSlabData.get_top_cube_face(indexIn3x3, slabID)
+						cubeFace = oCustomSlabSystem.get_top_cube_face(indexIn3x3, slabID)
 					
 					var valueInput = cubeFace
 					var r = clamp(valueInput, 0, 255)

@@ -24,6 +24,7 @@ onready var oEditingTools = Nodelist.list["oEditingTools"]
 onready var oRectangleSelection = Nodelist.list["oRectangleSelection"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
+onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -225,3 +226,10 @@ func position_meeting(checkPos, checkGroup):
 		if i["collider"].get_parent().is_in_group(checkGroup):
 			return true
 	return false
+
+func get_slabID_under_cursor():
+	var customSlabID = oDataCustomSlab.get_cellv(cursorTile)
+	if customSlabID != 0:
+		return customSlabID
+	else:
+		return oDataSlab.get_cellv(cursorTile)

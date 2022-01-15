@@ -10,7 +10,7 @@ onready var oSlabStyle = Nodelist.list["oSlabStyle"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
-onready var oCustomSlabData = Nodelist.list["oCustomSlabData"]
+onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
 onready var oVoxelTabs = Nodelist.list["oVoxelTabs"]
 
@@ -70,7 +70,7 @@ func add_slabs():
 	
 	var allSlabIDs = []
 	allSlabIDs.append_array(Slabs.slabOrder)
-	allSlabIDs.append_array(oCustomSlabData.data.keys())
+	allSlabIDs.append_array(oCustomSlabSystem.data.keys())
 	
 	for slabID in allSlabIDs:
 		var putIntoTab = Slabs.data[slabID][Slabs.EDITOR_TAB]
@@ -101,7 +101,7 @@ func add_slabs():
 						# Custom slab
 						pass
 #						for i in 9:
-#							id.columns[i] = oCustomSlabData.data[slabID][oCustomSlabData.SLAB_DATA][i]
+#							id.columns[i] = oCustomSlabSystem.data[slabID][oCustomSlabSystem.SLAB_DATA][i]
 			id.set_meta("ID_of_slab", slabID)
 			id.panelView = Slabs.data[slabID][Slabs.PANEL_VIEW]
 			id.set_visual()
@@ -226,7 +226,7 @@ func _on_slab_portrait_gui_input(event, id):
 	if event.is_action_pressed("mouse_right"):
 		var slabID = id.get_meta("ID_of_slab")
 		if slabID >= 1000:
-			oCustomSlabData.remove_custom_slab(slabID)
+			oCustomSlabSystem.remove_custom_slab(slabID)
 			
 			for child in current_grid_container().get_children():
 				if child.get_meta("ID_of_slab") == slabID:

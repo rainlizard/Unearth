@@ -1,12 +1,11 @@
 extends Label
-
-onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oSelector = Nodelist.list["oSelector"]
-onready var oDataOwnership = Nodelist.list["oDataOwnership"]
+onready var oSelection = Nodelist.list["oSelection"]
 
 func _process(delta):
 	if oSelector.visible == false: return
-	var slabID = oDataSlab.get_cell(oSelector.cursorTile.x,oSelector.cursorTile.y)
+	
+	var slabID = oSelection.cursorOverSlab
 	
 	var slabName = "Unknown"
 	if Slabs.data.has(slabID):

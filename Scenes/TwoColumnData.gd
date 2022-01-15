@@ -64,6 +64,12 @@ func add_item(leftText, rightText):
 			nameValue.theme = thinLineEditTheme
 			nameValue.connect("focus_exited",self,"_on_lineedit_focus_exited", [nameValue,leftText])
 			nameValue.connect("text_entered",self,"_on_lineedit_text_entered", [nameValue])
+		"Position":
+			var scn = preload('res://Scenes/PositionEditor.tscn')
+			nameValue = scn.instance()
+			nameValue.set_txt(rightText.split(' '))
+			nameValue.connect("position_editor_focus_exited",self,"_on_lineedit_focus_exited", [nameValue,leftText])
+			nameValue.connect("position_editor_text_entered",self,"_on_lineedit_text_entered", [nameValue])
 		_:
 			nameValue = Label.new()
 			nameValue.autowrap = true
@@ -121,6 +127,14 @@ func _on_lineedit_focus_exited(lineEditId, leftText): # This signal will go off 
 	var inst = oInspector.inspectingInstance
 	
 	match leftText:
+		"Position":
+			valueNumber = float(valueNumber)
+			match name:
+				"ThingListData": if is_instance_valid(inst):
+					inst.locationX = float(lineEditId.oLineEditX.text)
+					inst.locationY = float(lineEditId.oLineEditY.text)
+					inst.locationZ = float(lineEditId.oLineEditZ.text)
+					oInspector.set_inspector_subtile(Vector2(inst.locationX,inst.locationY))
 		"Custom box":
 			valueNumber = clamp(int(valueNumber), 0, 255)
 			match name:

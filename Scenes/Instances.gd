@@ -254,7 +254,7 @@ func get_free_index_number():
 func get_free_hero_gate_number():
 	var listOfHeroGateNumbers = []
 	for id in get_tree().get_nodes_in_group("Thing"):
-		if id.thingType == Things.TYPE.OBJECT and id.subtype == 49:
+		if id.thingType == Things.TYPE.OBJECT and id.subtype == 49: # Hero gate
 			listOfHeroGateNumbers.append(id.herogateNumber)
 	
 	var newNumber = 1
@@ -276,6 +276,32 @@ func get_free_action_point_number():
 		else:
 			return newNumber
 
+func return_dungeon_heart(ownership):
+	for id in get_tree().get_nodes_in_group("Instance"):
+		if id.thingType == Things.TYPE.OBJECT and id.subtype == 5: # Dungeon Heart
+			if id.ownership == ownership:
+				return id
+	return null
+
+func return_hero_gate(number):
+	for id in get_tree().get_nodes_in_group("Thing"):
+		if id.thingType == Things.TYPE.OBJECT and id.subtype == 49: # Hero gate
+			if id.herogateNumber == number:
+				return id
+	return null
+
+func return_action_point(number):
+	for id in get_tree().get_nodes_in_group("ActionPoint"):
+		if id.pointNumber == number:
+			return id
+	return null
+
+func check_for_dungeon_heart(ownership):
+	for id in get_tree().get_nodes_in_group("Instance"):
+		if id.thingType == Things.TYPE.OBJECT and id.subtype == 5: # Dungeon Heart
+			if id.ownership == ownership:
+				return true
+	return false
 
 #var ts = Constants.TILE_SIZE
 		#delete_within_range(ts*3, Vector2(cursorTile.x*ts,cursorTile.y*ts)+Vector2(ts/2,ts/2))

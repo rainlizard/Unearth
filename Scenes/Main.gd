@@ -30,7 +30,11 @@ func initialize_window_settings():
 		var sameSize = OS.get_screen_size().y * 0.9
 		OS.window_size = Vector2(sameSize, sameSize)
 	if Settings.cfg_has_setting("editor_window_position") == true:
-		OS.window_position = Settings.read_cfg("editor_window_position")
+		var newPos = Settings.read_cfg("editor_window_position")
+		var desktopRes = OS.get_screen_size(-1)
+		newPos.x = clamp(newPos.x, 0, desktopRes.x-(desktopRes.x*0.05)) # 5% from the edge
+		newPos.y = clamp(newPos.y, 0, desktopRes.y-(desktopRes.y*0.05))
+		OS.window_position = newPos
 	else:
 		OS.center_window()
 	if Settings.cfg_has_setting("editor_window_maximized_state") == true:

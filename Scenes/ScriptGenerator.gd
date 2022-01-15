@@ -28,6 +28,7 @@ onready var oKeeperFXScriptCheckBox = Nodelist.list["oKeeperFXScriptCheckBox"]
 onready var oResearchables = Nodelist.list["oResearchables"]
 onready var oResearchOrderCategory = Nodelist.list["oResearchOrderCategory"]
 onready var oAdjustResearchCheckBox = Nodelist.list["oAdjustResearchCheckBox"]
+onready var oInstances = Nodelist.list["oInstances"]
 
 var scnAvailableButton = preload('res://Scenes/AvailableButton.tscn')
 
@@ -317,23 +318,17 @@ func _on_PortalRateField_text_changed(new_text):
 
 func _on_BlueAICheckBox_toggled(button_pressed):
 	if button_pressed == true:
-		if check_for_dungeon_heart(1) == false:
+		if oInstances.check_for_dungeon_heart(1) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 func _on_GreenAICheckBox_toggled(button_pressed):
 	if button_pressed == true:
-		if check_for_dungeon_heart(2) == false:
+		if oInstances.check_for_dungeon_heart(2) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 func _on_YellowAICheckBox_toggled(button_pressed):
 	if button_pressed == true:
-		if check_for_dungeon_heart(3) == false:
+		if oInstances.check_for_dungeon_heart(3) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 
-func check_for_dungeon_heart(ownership):
-	for id in get_tree().get_nodes_in_group("Instance"):
-		if id.thingType == Things.TYPE.OBJECT and id.subtype == 5: # Dungeon Heart
-			if id.ownership == ownership:
-				return true
-	return false
 
 func _on_GenerateScriptButton_pressed():
 	oMapSettingsTabs.current_tab = 2

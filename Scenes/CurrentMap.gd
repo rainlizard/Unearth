@@ -19,6 +19,7 @@ onready var oMain = Nodelist.list["oMain"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 
 
 var path = ""
@@ -76,6 +77,8 @@ func clear_map():
 	oGenerateTerrain.clear()
 	#"TXT"
 	oDataScript.data = ""
+	# "UNE"
+	oDataCustomSlab.clear()
 	
 	oScriptHelpers.clear()
 	print('Cleared map in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')

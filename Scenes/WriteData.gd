@@ -11,6 +11,7 @@ onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataScript = Nodelist.list["oDataScript"]
+onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 
 var value # just so I don't have to initialize the var in every function
 
@@ -31,6 +32,12 @@ func write_txt(buffer):
 	# Old Notepad will not display TXT files correctly.
 	# Notepad++ displays correctly and apparently so does Notepad on Windows 10.
 	buffer.put_data(value.to_ascii())
+
+func write_une(buffer):
+	for ySlab in 85:
+		for xSlab in 85:
+			value = oDataCustomSlab.get_cell(xSlab,ySlab)
+			buffer.put_16(value)
 
 func write_wlb(buffer):
 	for ySlab in 85:

@@ -21,7 +21,7 @@ func update_source_tree(): # Call this whenever there's an update to the filesys
 	get_root().set_text(0,"SourceMapTree root")
 	
 	scan_all_paths(oGame.GAME_DIRECTORY)
-	
+
 	# For the remaining items without lif names
 	for BASENAME in treeItemsThatWantNames:
 		var fetchItem = treeItemsThatWantNames[BASENAME]

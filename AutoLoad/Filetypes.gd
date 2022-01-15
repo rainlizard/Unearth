@@ -14,6 +14,7 @@ const FILE_TYPES = [
 	"SLX",
 	"WLB",
 	"TXT",
+	"UNE",
 ]
 
 func read(filePath, EXT):
@@ -42,6 +43,7 @@ func read(filePath, EXT):
 		"SLX" : oReadData.read_slx(buffer)
 		"WLB" : oReadData.read_wlb(buffer)
 		"TXT" : oReadData.read_txt(buffer)
+		"UNE" : oReadData.read_une(buffer)
 	
 	print('.'+EXT+' read success in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
@@ -65,6 +67,7 @@ func write(filePath, EXT):
 		"SLX" : oWriteData.write_slx(buffer)
 		"WLB" : oWriteData.write_wlb(buffer)
 		"TXT" : oWriteData.write_txt(buffer)
+		"UNE" : oWriteData.write_une(buffer)
 	
 	var file = File.new()
 	file.open(filePath,File.WRITE)

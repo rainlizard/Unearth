@@ -11,6 +11,7 @@ onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oDataScript = Nodelist.list["oDataScript"]
+onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -32,6 +33,13 @@ func read_slx(buffer):
 			oDataSlx.slxImgData.set_pixel(xSlab, ySlab, Color8(lower4bits,0,0,255))
 	oDataSlx.slxImgData.unlock()
 	oDataSlx.slxTexData.set_data(oDataSlx.slxImgData)
+
+func read_une(buffer):
+	buffer.seek(0)
+	for ySlab in 85:
+		for xSlab in 85:
+			value = buffer.get_u16()
+			oDataCustomSlab.set_cell(xSlab,ySlab,value)
 
 func read_wlb(buffer):
 	buffer.seek(0)

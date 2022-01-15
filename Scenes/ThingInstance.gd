@@ -7,9 +7,9 @@ onready var oInstances = Nodelist.list["oInstances"]
 #onready var oSelection = $'../../Selector/Selection'
 #onready var oInstanceOwnership = $'../../OverheadOwnership/InstanceOwnership'
 
-var locationX = null
-var locationY = null
-var locationZ = null
+var locationX = null setget set_location_x
+var locationY = null setget set_location_y
+var locationZ = null setget set_location_z
 var thingType = null
 var subtype = null
 var ownership = null setget set_ownership
@@ -37,8 +37,6 @@ var data19 = null
 var data20 = null
 
 func _enter_tree():
-	position.x = locationX * 32
-	position.y = locationY * 32
 	set_texture_based_on_thingtype()
 	set_grow_direction()
 	
@@ -62,6 +60,15 @@ func _enter_tree():
 			var oCamera2D = Nodelist.list["oCamera2D"]
 			oCamera2D.connect("zoom_level_changed",self,"_on_zoom_level_changed")
 			_on_zoom_level_changed(oCamera2D.zoom)
+
+func set_location_x(setVal):
+	locationX = setVal
+	position.x = locationX * 32
+func set_location_y(setVal):
+	locationY = setVal
+	position.y = locationY * 32
+func set_location_z(setVal):
+	locationZ = setVal
 
 func _on_zoom_level_changed(zoom):
 	var oUi = Nodelist.list["oUi"]

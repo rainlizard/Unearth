@@ -17,7 +17,7 @@ onready var oDataWibble = Nodelist.list["oDataWibble"]
 onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oOwnableNaturalTerrain = Nodelist.list["oOwnableNaturalTerrain"]
 onready var oBridgesOnlyOnLiquidCheckbox = Nodelist.list["oBridgesOnlyOnLiquidCheckbox"]
-onready var oCustomSlabData = Nodelist.list["oCustomSlabData"]
+onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 
 enum dir {
@@ -51,7 +51,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 		if slabID < 1000:
 			oDataCustomSlab.set_cellv(pos, 0)
 		else:
-			oDataCustomSlab.set_cellv(pos, 1)
+			oDataCustomSlab.set_cellv(pos, slabID)
 		
 		match slabID:
 			Slabs.BRIDGE:
@@ -110,12 +110,12 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
 	
 	if slabID >= 1000: # Custom Slab IDs
-		if oCustomSlabData.data.has(slabID):
+		if oCustomSlabSystem.data.has(slabID):
 			slab_place_custom(xSlab, ySlab, slabID, ownership, surrID)
 		return
 	
 	# Do not update custom slabs
-	if oDataCustomSlab.get_cell(xSlab, ySlab) == 1:
+	if oDataCustomSlab.get_cell(xSlab, ySlab) != 0:
 		return
 	
 	# WIB (wibble)
@@ -135,9 +135,9 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 
 
 func slab_place_custom(xSlab, ySlab, slabID, ownership, surrID):
-	var recognizedAsID = oCustomSlabData.data[slabID][oCustomSlabData.RECOGNIZED_AS]
+	var recognizedAsID = oCustomSlabSystem.data[slabID][oCustomSlabSystem.RECOGNIZED_AS]
 	
-	var wibbleNearby = oCustomSlabData.data[slabID][oCustomSlabData.WIBBLE_NEARBY]
+	var wibbleNearby = oCustomSlabSystem.data[slabID][oCustomSlabSystem.WIBBLE_NEARBY]
 	
 	# WIB (wibble)
 	update_wibble(xSlab, ySlab, slabID, wibbleNearby)
@@ -149,8 +149,8 @@ func slab_place_custom(xSlab, ySlab, slabID, ownership, surrID):
 	
 	var clmIndexArray = []
 	for i in 9:
-		var cubeArray = oCustomSlabData.data[slabID][oCustomSlabData.CUBE_DATA][i]
-		var setFloorID = oCustomSlabData.data[slabID][oCustomSlabData.FLOOR_DATA][i]
+		var cubeArray = oCustomSlabSystem.data[slabID][oCustomSlabSystem.CUBE_DATA][i]
+		var setFloorID = oCustomSlabSystem.data[slabID][oCustomSlabSystem.FLOOR_DATA][i]
 		var clmIndex = oDataClm.index_entry(cubeArray, setFloorID) # Uses an existing entry, or creates a new one.
 		clmIndexArray.append(clmIndex)
 	

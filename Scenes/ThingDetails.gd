@@ -53,7 +53,7 @@ func actionpoint_details(id):
 				value = "Action point"
 			1:
 				description = "Position"
-				value = str(id.locationX)+',  '+str(id.locationY)
+				value = str(id.locationX)+' '+str(id.locationY)
 			2:
 				description = "Point range"
 				value = id.pointRange
@@ -90,7 +90,7 @@ func light_details(id):
 				value = "Light"
 			1:
 				description = "Position"
-				value = str(id.locationX)+',  '+str(id.locationY)+',  '+str(id.locationZ)
+				value = str(id.locationX)+' '+str(id.locationY)+' '+str(id.locationZ)
 			2:
 				description = "Light range" # 9-10
 				value = id.lightRange
@@ -158,7 +158,7 @@ func thing_details(id):
 				value = retrieve_subtype_value(id.thingType, id.subtype)
 			2:
 				description = "Position"
-				value = str(id.locationX)+',  '+str(id.locationY)+',  '+str(id.locationZ)
+				value = str(id.locationX)+' '+str(id.locationY)+' '+str(id.locationZ)
 			3:
 				description = "Ownership"
 				value = Constants.ownershipNames[id.ownership]

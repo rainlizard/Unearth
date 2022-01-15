@@ -78,7 +78,7 @@ func newPaintSlab(value):
 	paintSlab = value
 
 func get_slab_under_cursor():
-	cursorOverSlab = oDataSlab.get_cellv(oSelector.cursorTile)
+	cursorOverSlab = oSelector.get_slabID_under_cursor()#oDataSlab.get_cellv(oSelector.cursorTile)
 	cursorOverSlabOwner = oDataOwnership.get_cellv(oSelector.cursorTile)
 
 func update_paint():
@@ -90,11 +90,7 @@ func update_paint():
 				newOwnership(cursorOverSlabOwner)
 				oOnlyOwnership.select_appropriate_button()
 			else:
-				# Do not allow grabbing paint of custom slabs
-				if oDataCustomSlab.get_cellv(oSelector.cursorTile) == 1:
-					return
-				
-				if Slabs.data.has(cursorOverSlab) == true:
+				if Slabs.data.has(cursorOverSlab) == true and cursorOverSlab < 1000:
 					if Slabs.data[cursorOverSlab][Slabs.BITMASK_TYPE] == Slabs.BITMASK_WALL:
 						# When you right click on a wall, select "Wall (Automatic)"
 						cursorOverSlab = Slabs.WALL_AUTOMATIC
