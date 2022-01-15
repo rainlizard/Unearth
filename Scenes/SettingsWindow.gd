@@ -22,7 +22,8 @@ onready var oCreatureLevelFontSizeScale = Nodelist.list["oCreatureLevelFontSizeS
 onready var oCreatureLevelFontSizeMaxZoom = Nodelist.list["oCreatureLevelFontSizeMaxZoom"]
 onready var oSciptIconScale = Nodelist.list["oSciptIconScale"]
 onready var oSciptIconMaxZoom = Nodelist.list["oSciptIconMaxZoom"]
-
+onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
+onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oUiScale = Nodelist.list["oUiScale"]
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
@@ -128,6 +129,11 @@ func edited_FieldOfView(new_text):
 
 func edited_UiScale(new_text):
 	Settings.set_setting("ui_scale", float(new_text))
+	#oPickSlabWindow.rect_position.x-=1
+	#oPickThingWindow.rect_position.x-=1
+	
+	oPickSlabWindow.rect_position = oPickSlabWindow.rect_position
+	oPickThingWindow.rect_position = oPickThingWindow.rect_position
 
 func edited_SlabWindowScale(new_text):
 	Settings.set_setting("slab_window_scale", float(new_text))
