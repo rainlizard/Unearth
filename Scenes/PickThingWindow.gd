@@ -4,7 +4,7 @@ onready var oSelection = Nodelist.list["oSelection"]
 onready var oThingTabs = Nodelist.list["oThingTabs"]
 onready var oActionPointOptions = Nodelist.list["oActionPointOptions"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
-onready var oCustomData = Nodelist.list["oCustomData"]
+onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oGridFunctions = Nodelist.list["oGridFunctions"]
 onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
@@ -219,4 +219,4 @@ func remove_all_grid_items():
 func _on_thing_portrait_gui_input(event, id):
 	if event.is_action_pressed("mouse_right"):
 		oPropertiesWindow.oPropertiesTabs.current_tab = 0
-		oCustomData.remove_object(id.get_meta("thingType"), id.get_meta("thingSubtype"))
+		oCustomObjectSystem.remove_object(id.get_meta("thingType"), id.get_meta("thingSubtype"))

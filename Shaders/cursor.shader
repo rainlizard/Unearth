@@ -2,12 +2,14 @@ shader_type canvas_item;
 
 uniform float zoom = 1.00;
 
+const float animationRate = 0.15;
+
 void fragment() {
 	float textureWidth = float(textureSize(TEXTURE,0).x);
 	float textureHeight = float(textureSize(TEXTURE,0).y);
 	vec2 texel = vec2(1.0/textureWidth, 1.0/textureHeight);
 	
-	vec4 baseCol = texture(TEXTURE, UV + (TIME*0.15));
+	vec4 baseCol = texture(TEXTURE, UV + (TIME*animationRate));
 	
 	baseCol.a = 0.0;
 	

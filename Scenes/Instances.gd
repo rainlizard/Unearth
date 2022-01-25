@@ -200,12 +200,20 @@ func delete_all_objects_on_slab(xSlab, ySlab):
 		if id.locationX >= xSlab*3 and id.locationX < (xSlab+1) * 3 and id.locationY >= ySlab*3 and id.locationY < (ySlab+1) * 3:
 			id.queue_free()
 
-func get_node_of_group_on_subtile(nodegroup, xSubtile, ySubtile):
+func get_node_on_subtile(nodegroup, xSubtile, ySubtile):
 	for id in get_tree().get_nodes_in_group(nodegroup):
 		if id.is_queued_for_deletion() == false:
 			if id.locationX >= floor(xSubtile) and id.locationX < floor(xSubtile)+1 and id.locationY >= floor(ySubtile) and id.locationY < floor(ySubtile)+1:
 				return id
 	return null
+
+#func get_all_on_slab(nodegroup, xSlab, ySlab):
+#	var array = []
+#	for id in get_tree().get_nodes_in_group(nodegroup):
+#		if id.is_queued_for_deletion() == false:
+#			if id.locationX >= xSlab*3 and id.locationX < (xSlab+1) * 3 and id.locationY >= ySlab*3 and id.locationY < (ySlab+1) * 3:
+#				array.append(id)
+#	return array
 
 #func delete_objects_on_subtile(xSubtile,ySubtile):
 #	for id in get_tree().get_nodes_in_group("Thing"):

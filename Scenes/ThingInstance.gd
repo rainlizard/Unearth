@@ -51,6 +51,8 @@ func _enter_tree():
 		Things.TYPE.OBJECT:
 			if subtype == 44: # Spinning Key
 				add_to_group("Key")
+			if subtype in Things.LIST_OF_SPELLBOOKS:
+				add_to_group("Spellbook")
 #			if subtype == 49:
 #				var oCamera2D = Nodelist.list["oCamera2D"]
 #				oCamera2D.connect("zoom_level_changed",self,"_on_zoom_level_changed")
@@ -190,7 +192,7 @@ func toggle_spinning_key(): # Called when you manually change the lock state
 	# If door has no key, then create a key.
 	# If door has key, then destroy the key.
 	
-	var keyID = oInstances.get_node_of_group_on_subtile("Key", locationX, locationY)
+	var keyID = oInstances.get_node_on_subtile("Key", locationX, locationY)
 	if is_instance_valid(keyID) == true:
 		if doorLocked == 0:
 			keyID.queue_free()

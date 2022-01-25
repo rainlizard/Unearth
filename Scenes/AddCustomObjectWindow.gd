@@ -7,7 +7,7 @@ onready var oNewObjectType = Nodelist.list["oNewObjectType"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oThingTabs = Nodelist.list["oThingTabs"]
-onready var oCustomData = Nodelist.list["oCustomData"]
+onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oWarningIdInUse = Nodelist.list["oWarningIdInUse"]
 
 var tab = Things.TAB_CREATURE
@@ -24,10 +24,7 @@ func _process(delta):
 	if visible == false: return
 	
 	var value = int(oNewObjectSubtypeID.text)
-	if value <= thing_list_size(get_thingType()):
-		oWarningIdInUse.visible = true
-	else:
-		oWarningIdInUse.visible = false
+	oWarningIdInUse.visible = thinglist_has_subtype(get_thingType(), value)
 
 func _on_AddCustomObjectButton_pressed():
 	var givenName = oNewObjectName.text
@@ -41,18 +38,14 @@ func _on_AddCustomObjectButton_pressed():
 	
 	var tabToPlaceIn = oNewObjectTab.get_item_metadata(oNewObjectTab.selected)
 	
-	var array = [
+	oCustomObjectSystem.add_object([
+	get_thingType(), # thingType
+	int(oNewObjectSubtypeID.text), # subtype
 	givenName, # Name
-	null, # Image
-	null, # Portrait
+	"", # Image
+	"", # Portrait
 	tabToPlaceIn,
-	]
-	
-	var subtype = int(oNewObjectSubtypeID.text)
-	
-	var thingType = get_thingType()
-	
-	oCustomData.add_object(thingType, subtype, array)
+	])
 	
 	# Close window
 	visible = false
@@ -75,6 +68,21 @@ func _on_NewObjectSubtypeID_focus_exited():
 	oNewObjectSubtypeID.text = str(value)
 
 
+
+func _on_NewObjectType_item_selected(index):
+	auto_fill_subtype_field()
+
+
+func _on_AddCustomObjectWindow_visibility_changed():
+	if visible == true:
+		auto_fill_subtype_field()
+
+func auto_fill_subtype_field():
+	var theNextEmptySubtypeID = get_empty_entry_thinglist(get_thingType())
+	oNewObjectSubtypeID.text = str(theNextEmptySubtypeID)
+
+
+
 func get_thingType():
 	match oNewObjectType.selected:
 		0: return Things.TYPE.OBJECT
@@ -83,22 +91,29 @@ func get_thingType():
 		3: return Things.TYPE.TRAP
 		4: return Things.TYPE.DOOR
 
-func thing_list_size(type):
-	match type:
-		Things.TYPE.OBJECT: return Things.DATA_OBJECT.size()
-		Things.TYPE.CREATURE: return Things.DATA_CREATURE.size()
-		Things.TYPE.EFFECT: return Things.DATA_EFFECT.size()
-		Things.TYPE.TRAP: return Things.DATA_TRAP.size()
-		Things.TYPE.DOOR: return Things.DATA_DOOR.size()
-		Things.TYPE.EXTRA: return Things.DATA_EXTRA.size()
+func thinglist_has_subtype(thingType, subtype):
+	if subtype == 0: return true # Don't allow 0 to be recognized as empty
+	
+	match thingType:
+		Things.TYPE.OBJECT: return Things.DATA_OBJECT.has(subtype)
+		Things.TYPE.CREATURE: return Things.DATA_CREATURE.has(subtype)
+		Things.TYPE.EFFECT: return Things.DATA_EFFECT.has(subtype)
+		Things.TYPE.TRAP: return Things.DATA_TRAP.has(subtype)
+		Things.TYPE.DOOR: return Things.DATA_DOOR.has(subtype)
+		Things.TYPE.EXTRA: return Things.DATA_EXTRA.has(subtype)
 
-func _on_NewObjectType_item_selected(index):
-	autoFillSubtypeField()
-
-func autoFillSubtypeField():
-	var theNextEmptySubtypeID = thing_list_size(get_thingType()) + 1
-	oNewObjectSubtypeID.text = str(theNextEmptySubtypeID)
-
-func _on_AddCustomObjectWindow_visibility_changed():
-	if visible == true:
-		autoFillSubtypeField()
+func get_empty_entry_thinglist(thingType):
+	var db
+	match thingType:
+		Things.TYPE.OBJECT:  db = Things.DATA_OBJECT
+		Things.TYPE.CREATURE:  db = Things.DATA_CREATURE
+		Things.TYPE.EFFECT:  db = Things.DATA_EFFECT
+		Things.TYPE.TRAP:  db = Things.DATA_TRAP
+		Things.TYPE.DOOR:  db = Things.DATA_DOOR
+		Things.TYPE.EXTRA:  db = Things.DATA_EXTRA
+	
+	var i = 1 # These arrays don't start at 0
+	while true:
+		if db.has(i) == false:
+			return i
+		i += 1

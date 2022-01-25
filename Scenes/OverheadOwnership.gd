@@ -4,6 +4,7 @@ onready var oSelector = Nodelist.list["oSelector"]
 onready var oDataOwnership = Nodelist.list["oDataOwnership"]
 onready var oColorRectSlabOwner = Nodelist.list["oColorRectSlabOwner"]
 onready var oInstanceOwnership = Nodelist.list["oInstanceOwnership"]
+onready var oInstances = Nodelist.list["oInstances"]
 
 onready var oMain = Nodelist.list["oMain"]
 var OWNERSHIP_ALPHA = 0.5 setget set_ownership_alpha_graphics
@@ -64,6 +65,13 @@ func ownership_update_shape(shapePositionArray, ownership):
 	slabOwnershipImage.unlock()
 	
 	slabOwnershipTexture.set_data(slabOwnershipImage)
+
+func ownership_update_things(shapePositionArray, paintOwnership):
+	# Change ownership of spellbooks when placing slab ownership (Ownership tab)
+	for id in get_tree().get_nodes_in_group("Spellbook"):
+		var slabPos = Vector2(int(id.locationX/3),int(id.locationY/3))
+		if slabPos in shapePositionArray:
+			id.ownership = paintOwnership
 
 #func ownership_update_rect(rectStart, rectEnd, ownership):
 #	rectStart = Vector2(clamp(rectStart.x, 0, 84), clamp(rectStart.y, 0, 84))

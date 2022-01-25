@@ -15,12 +15,12 @@ var config = ConfigFile.new()
 
 var listOfSettings = [
 	"REMEMBER_TMAPA_PATHS",
-	"custom_objects",
 	"executable_path",
 	"save_path",
 	"file_viewer_window_size",
 	"file_viewer_window_position",
 	"vsync",
+	"framerate_limit",
 	"always_decompress",
 	"msaa",
 	"dk_commands",
@@ -145,10 +145,6 @@ func game_setting(doWhat,string,value):
 			var oTextureCache = $'../Main/TextureCache'
 			if doWhat == SET: oTextureCache.LOAD_TMAPA_PATHS_FROM_SETTINGS(value)
 			if doWhat == GET: return oTextureCache.REMEMBER_TMAPA_PATHS
-		"custom_objects":
-			var oCustomData = $'../Main/CustomData'
-			if doWhat == SET: oCustomData.load_custom_objects(value)
-			if doWhat == GET: return oCustomData.CUSTOM_OBJECTS
 		"executable_path":
 			var oGame = $'../Main/Game'
 			if doWhat == SET: oGame.set_paths(value)
@@ -168,6 +164,9 @@ func game_setting(doWhat,string,value):
 		"vsync":
 			if doWhat == SET: OS.vsync_enabled = value
 			if doWhat == GET: return OS.vsync_enabled
+		"framerate_limit":
+			if doWhat == SET: Engine.target_fps = value
+			if doWhat == GET: return Engine.target_fps
 		"always_decompress":
 			var oOpenMap = $'../Main/OpenMap'
 			if doWhat == SET: oOpenMap.ALWAYS_DECOMPRESS = value

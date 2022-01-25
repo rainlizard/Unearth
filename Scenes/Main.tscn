@@ -91,7 +91,7 @@
 [ext_resource path="res://Scenes/LineEditFloat.gd" type="Script" id=89]
 [ext_resource path="res://Scenes/SlabNameDisplay.gd" type="Script" id=90]
 [ext_resource path="res://Scenes/AddCustomObjectWindow.gd" type="Script" id=91]
-[ext_resource path="res://Scenes/CustomStuff.gd" type="Script" id=92]
+[ext_resource path="res://Scenes/CustomObjectSystem.gd" type="Script" id=92]
 [ext_resource path="res://Scenes/SlabOwnerCheckBox.gd" type="Script" id=93]
 [ext_resource path="res://Scenes/Inspector.gd" type="Script" id=94]
 [ext_resource path="res://Shaders/cursorMat.tres" type="Material" id=95]
@@ -126,7 +126,7 @@
 [ext_resource path="res://Scenes/ScriptEditor.gd" type="Script" id=124]
 [ext_resource path="res://Scenes/ScriptWindow.gd" type="Script" id=125]
 [ext_resource path="res://Scenes/TextureEditingWindow.gd" type="Script" id=126]
-[ext_resource path="res://Scenes/CustomSlabData.gd" type="Script" id=127]
+[ext_resource path="res://Scenes/CustomSlabSystem.gd" type="Script" id=127]
 [ext_resource path="res://Scenes/TabColumnVoxels.gd" type="Script" id=128]
 [ext_resource path="res://Scenes/CustomTooltip.gd" type="Script" id=129]
 [ext_resource path="res://Theme/StyleBoxThinnerPanel.tres" type="StyleBox" id=130]
@@ -386,10 +386,10 @@ script = ExtResource( 32 )
 [node name="DeleteMap" type="Node" parent="."]
 script = ExtResource( 36 )
 
-[node name="CustomData" type="Node" parent="."]
+[node name="CustomObjectSystem" type="Node" parent="."]
 script = ExtResource( 92 )
 
-[node name="CustomSlabSystem" type="Node" parent="CustomData"]
+[node name="CustomSlabSystem" type="Node" parent="."]
 script = ExtResource( 127 )
 
 [node name="Game3D" type="Spatial" parent="."]
@@ -2138,6 +2138,13 @@ margin_top = 31.0
 margin_right = 577.0
 margin_bottom = 60.0
 text = "Vsync"
+
+[node name="FramerateLimit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer" instance=ExtResource( 16 )]
+margin_left = -0.793701
+margin_top = 31.0
+margin_right = 46.2063
+margin_bottom = 31.0
+settingText = "Framerate limit"
 
 [node name="CheckBoxDisplayFPS" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer"]
 margin_top = 64.0

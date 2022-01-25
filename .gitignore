@@ -2,8 +2,12 @@
 settings.cfg
 unearthcustomslabs.cfg
 
-unearthdata/tmapa0*
+custom_slabs.cfg
 
+custom_objects.cfg
+
+unearthdata/tmapa0*
+textures
 
 ### Godot ###
 .import/

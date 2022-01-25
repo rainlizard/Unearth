@@ -32,6 +32,7 @@ func reset_camera():
 	desired_zoom = zoom
 
 func _process(delta):
+	if OS.is_window_focused() == false: return
 	if current == false: return #View is 3D
 	
 	if zoom != desired_zoom:
@@ -40,19 +41,14 @@ func _process(delta):
 	
 	desired_offset += panDirectionMouse * DIRECTIONAL_PAN_SPEED * (zoom/Settings.UI_SCALE.x) * delta
 	desired_offset += panDirectionKeyboard * DIRECTIONAL_PAN_SPEED * (zoom/Settings.UI_SCALE.x) * delta
-	
 	var fieldSize = Vector2(32*255,32*255)
-	
 	var halfViewSize = ((get_viewport().size/Settings.UI_SCALE) * 0.5) * desired_zoom
-	
 	# The point of this is just so you can't move the map COMPLETELY off the screen
 	var allowLittleExtraVisible = halfViewSize * 0.10
-	
 	desired_offset.x = clamp(desired_offset.x, -(halfViewSize.x-allowLittleExtraVisible.x), fieldSize.x+(halfViewSize.x-allowLittleExtraVisible.x))
 	desired_offset.y = clamp(desired_offset.y, -(halfViewSize.y-allowLittleExtraVisible.y), fieldSize.y+(halfViewSize.y-allowLittleExtraVisible.y))
 	
 	offset = lerp(offset, desired_offset, clamp(SMOOTHING_RATE * delta, 0.0, 1.0))
-	
 	
 	if OS.is_window_focused() == true:
 		if MOUSE_EDGE_PANNING == true and oUi.mouseOnUi == false and mouseIsMoving == true and middleMousePanning == false:
@@ -66,6 +62,15 @@ func _process(delta):
 		keyboard_pan()
 	else:
 		panDirectionKeyboard = Vector2(0,0)
+	
+	# Close enough
+	if (offset-desired_offset).abs() < Vector2(0.0001,0.0001):
+		offset = desired_offset
+	if (zoom-desired_zoom).abs() < Vector2(0.0001,0.0001):
+		zoom = desired_zoom
+	
+#	print('offset : ' + str((offset-desired_offset).abs()))
+#	print('zoom : ' + str((zoom-desired_zoom).abs()))
 
 func _unhandled_input(event):
 	if oSettingsWindow.visible == true: return

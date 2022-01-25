@@ -148,7 +148,8 @@ func place_shape(beginTile,endTile):
 		oDataSlx.set_tileset_shape(shapePositionArray)
 	elif oOnlyOwnership.visible == true:
 		oOverheadOwnership.ownership_update_shape(shapePositionArray, paintOwnership)
-		oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd)
+		oOverheadOwnership.ownership_update_things(shapePositionArray, paintOwnership)
+		oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd, true)
 	else:
 		# Slab placement
 		var useOwner = paintOwnership

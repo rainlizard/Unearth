@@ -34,7 +34,7 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask,
 func create_door_thing(xSlab, ySlab, ownership):
 	var createAtPos = Vector3((xSlab*3)+1.5, (ySlab*3)+1.5, 5)
 	
-	var doorID = oInstances.get_node_of_group_on_subtile("Door", createAtPos.x, createAtPos.y)
+	var doorID = oInstances.get_node_on_subtile("Door", createAtPos.x, createAtPos.y)
 	if is_instance_valid(doorID) == false:
 		oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership) #subtype determined in oInstances
 

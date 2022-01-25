@@ -25,6 +25,8 @@ onready var oSciptIconMaxZoom = Nodelist.list["oSciptIconMaxZoom"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oUiScale = Nodelist.list["oUiScale"]
+onready var oFramerateLimit = Nodelist.list["oFramerateLimit"]
+
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
 #onready var oTabGraphics = Nodelist.list["oTabGraphics"]
@@ -67,6 +69,7 @@ func _on_SettingsWindow_about_to_show():
 	oSmoothingRate.line.text = str(Settings.get_setting("smoothing_rate")).pad_decimals(2)
 	oMouseSensitivity.line.text = str(Settings.get_setting("mouse_sensitivity")).pad_decimals(2)
 	oFieldOfView.line.text = str(Settings.get_setting("fov"))
+	oFramerateLimit.line.text = str(Settings.get_setting("framerate_limit"))
 	oCheckBoxDisplay3dInfo.pressed = Settings.get_setting("display_3d_info")
 	oUiScale.line.text = str(Settings.get_setting("ui_scale")).pad_decimals(2)
 	oSlabWindowScale.line.text = str(Settings.get_setting("slab_window_scale")).pad_decimals(2)
@@ -126,6 +129,10 @@ func edited_MouseSensitivity(new_text):
 
 func edited_FieldOfView(new_text):
 	Settings.set_setting("fov", float(new_text))
+
+func edited_FramerateLimit(new_text):
+	oFramerateLimit.line.text = str(int(new_text))
+	Settings.set_setting("framerate_limit", int(new_text))
 
 func edited_UiScale(new_text):
 	Settings.set_setting("ui_scale", float(new_text))

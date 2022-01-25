@@ -65,6 +65,10 @@ func _notification(what):
 				Utils.popup_centered(oConfirmQuit)
 		else:
 			get_tree().quit()
+#	elif what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+#		Engine.target_fps = 0
+#	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
+#		Engine.target_fps = 12
 
 func just_opened_editor():
 	yield(get_tree(),'idle_frame')
