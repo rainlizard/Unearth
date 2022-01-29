@@ -43,17 +43,10 @@ func _on_AddCustomSlabButton_pressed():
 			newID += 1
 	
 	var slabName = oNewSlabName.text
-	var bitmaskType = Slabs.BITMASK_TALL
-	var isSolid = Slabs.BLOCK_SLAB
-	var panelView = Slabs.PANEL_TOP_VIEW
-	var sideViewZOffset = 0
-	var editorTab = Slabs.TAB_CUSTOM
-	var wibbleType = oSlabWibbleOptionButton.get_selected_id()#Slabs.WIBBLE_ON
+	var recognizedAs = oSlabRecognizedAs.value
 	var liquidType = oSlabLiquidOptionButton.get_selected_id()
-	var isOwnable = Slabs.OWNABLE
-	
-	
-	var generalArray = [slabName, isSolid, bitmaskType, panelView, sideViewZOffset, editorTab, wibbleType, liquidType, isOwnable]
+	var wibbleType = oSlabWibbleOptionButton.get_selected_id() #Slabs.WIBBLE_ON
+	var wibbleEdges = oWibbleEdgesCheckBox.pressed
 	
 	var slabCubeData = []
 	var slabFloorData = []
@@ -62,7 +55,7 @@ func _on_AddCustomSlabButton_pressed():
 		slabCubeData.append(oDataClm.cubes[clmIndex])
 		slabFloorData.append(oDataClm.floorTexture[clmIndex])
 	
-	oCustomSlabSystem.add_custom_slab(newID, generalArray, oSlabRecognizedAs.value, slabCubeData, slabFloorData, oWibbleEdgesCheckBox.pressed)
+	oCustomSlabSystem.add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData)
 	
 	oPickSlabWindow.add_slabs()
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM

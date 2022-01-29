@@ -74,27 +74,29 @@ func start():
 					match positionType:
 						IS_TILE:
 							var tileDistance = 96
-							if argumentsArray.size() >= argNumber+1:
+							if argumentsArray.size() > argNumber:
 								x = (int(argumentsArray[argNumber])*tileDistance) + (tileDistance*0.5)
+							if argumentsArray.size() > argNumber+1:
 								y = (int(argumentsArray[argNumber+1])*tileDistance) + (tileDistance*0.5)
 						IS_SUBTILE:
 							var tileDistance = 32
-							if argumentsArray.size() >= argNumber+1:
+							if argumentsArray.size() > argNumber:
 								x = (int(argumentsArray[argNumber])*tileDistance) + (tileDistance*0.5)
+							if argumentsArray.size() > argNumber+1:
 								y = (int(argumentsArray[argNumber+1])*tileDistance) + (tileDistance*0.5)
 						IS_LOCATION:
-							# PLAYERx - zoom to player's dungeon heart
-							var heartID = null
-							if "PLAYER0" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(0)
-							if "PLAYER1" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(1)
-							if "PLAYER2" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(2)
-							if "PLAYER3" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(3)
-							if "PLAYER_GOOD" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(4)
-							if is_instance_valid(heartID):
-								x = heartID.position.x
-								y = heartID.position.y
-							else:
-								if argumentsArray.size() >= argNumber:
+							if argumentsArray.size() > argNumber:
+								# PLAYERx - zoom to player's dungeon heart
+								var heartID = null
+								if "PLAYER0" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(0)
+								if "PLAYER1" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(1)
+								if "PLAYER2" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(2)
+								if "PLAYER3" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(3)
+								if "PLAYER_GOOD" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(4)
+								if is_instance_valid(heartID):
+									x = heartID.position.x
+									y = heartID.position.y
+								else:
 									var positiveOrNegative = sign(float(argumentsArray[argNumber]))
 									match int(positiveOrNegative): # int() required for 'match' to work for negative integers
 										1: # Positive integer - zoom to Action Point of given number

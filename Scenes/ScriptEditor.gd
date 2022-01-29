@@ -48,11 +48,8 @@ func _on_ScriptTextEdit_text_changed():
 	
 	var updateHelpers = false
 	var line = oScriptTextEdit.get_line(oScriptTextEdit.cursor_get_line())
-	for i in oScriptHelpers.commandsTileCoords.size():
-		if oScriptHelpers.commandsTileCoords[i] in line.to_upper():
-			updateHelpers = true
-	for i in oScriptHelpers.commandsSubtileCoords.size():
-		if oScriptHelpers.commandsSubtileCoords[i] in line.to_upper():
+	for i in oScriptHelpers.commandsWithPositions.size():
+		if oScriptHelpers.commandsWithPositions[i][0] in line.to_upper():
 			updateHelpers = true
 	if updateHelpers == true:
 		oScriptHelpers.start() # in the case of updating a line (with coords) in the built-in Script Editor

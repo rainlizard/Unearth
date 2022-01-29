@@ -2116,8 +2116,8 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics"]
-margin_right = 138.0
-margin_bottom = 93.0
+margin_right = 210.0
+margin_bottom = 128.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -4130,49 +4130,10 @@ text = "Test"
 align = 1
 autowrap = true
 
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label4" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 98.0
 margin_right = 128.0
 margin_bottom = 119.0
-text = "Wibble:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SlabWibbleOptionButton" type="OptionButton" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
-margin_left = 132.0
-margin_top = 95.0
-margin_right = 282.0
-margin_bottom = 122.0
-hint_tooltip = "Sets whether the slab will have a clean appearance, a deformed appearance, or a wavy appearance."
-text = "1 : On"
-items = [ "0 : Off", null, false, 0, null, "1 : On", null, false, 1, null, "2 : Animated", null, false, 2, null ]
-selected = 1
-
-[node name="WibbleEdgesSpacing" type="Control" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
-visible = false
-margin_top = 126.0
-margin_right = 128.0
-margin_bottom = 155.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="WibbleEdgesCheckBox" type="CheckBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
-visible = false
-margin_top = 126.0
-margin_right = 148.0
-margin_bottom = 155.0
-hint_tooltip = "Set the wibble value of the position inbetween slabs as well."
-text = "Include edges"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label4" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
-margin_top = 129.0
-margin_right = 128.0
-margin_bottom = 150.0
 text = "Liquid:"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -4180,13 +4141,52 @@ __meta__ = {
 
 [node name="SlabLiquidOptionButton" type="OptionButton" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
 margin_left = 132.0
-margin_top = 126.0
+margin_top = 95.0
 margin_right = 282.0
-margin_bottom = 153.0
+margin_bottom = 122.0
 hint_tooltip = "If a bridge is placed on this slab, this indicates what's underneath the bridge."
 text = "0 : No"
 items = [ "0 : No", null, false, 0, null, "1 : Lava", null, false, 1, null, "2 : Water", null, false, 2, null ]
 selected = 0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
+margin_top = 129.0
+margin_right = 128.0
+margin_bottom = 150.0
+text = "Wibble:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SlabWibbleOptionButton" type="OptionButton" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
+margin_left = 132.0
+margin_top = 126.0
+margin_right = 282.0
+margin_bottom = 153.0
+hint_tooltip = "Sets whether the slab will have a clean appearance, a deformed appearance, or a wavy appearance."
+text = "1 : On"
+items = [ "0 : Off", null, false, 0, null, "1 : On", null, false, 1, null, "2 : Animated", null, false, 2, null ]
+selected = 1
+
+[node name="WibbleEdgesSpacing" type="Control" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
+visible = false
+margin_top = 157.0
+margin_right = 128.0
+margin_bottom = 186.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WibbleEdgesCheckBox" type="CheckBox" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer"]
+visible = false
+margin_top = 157.0
+margin_right = 148.0
+margin_bottom = 186.0
+hint_tooltip = "Set the wibble value of the position inbetween slabs as well."
+text = "Include edges"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label" type="Label" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer"]
 margin_top = 157.0

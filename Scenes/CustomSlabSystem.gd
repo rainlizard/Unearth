@@ -7,36 +7,51 @@ var slabsFile = ConfigFile.new()
 
 enum {
 	RECOGNIZED_AS
+	WIBBLE_EDGES
 	CUBE_DATA
 	FLOOR_DATA
-	WIBBLE_NEARBY
 }
 
 func _ready():
 	load_file()
 
-func add_custom_slab(newID, general, recognizedAs, slabCubeData, slabFloorData, wibbleNearby):
-	Slabs.data[newID] = general
-	data[newID] = [recognizedAs, slabCubeData, slabFloorData, wibbleNearby]
+func add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData):
+	Slabs.data[newID] = [
+		slabName,
+		Slabs.BLOCK_SLAB,
+		Slabs.BITMASK_TALL,
+		Slabs.PANEL_TOP_VIEW,
+		0,
+		Slabs.TAB_CUSTOM,
+		wibbleType,
+		liquidType,
+		Slabs.NOT_OWNABLE
+	]
 	
-	slabsFile.set_value('SLAB'+str(newID),"GENERAL", general)
+	data[newID] = [recognizedAs, wibbleEdges, slabCubeData, slabFloorData]
+	
+	slabsFile.set_value('SLAB'+str(newID),"NAME", slabName)
 	slabsFile.set_value('SLAB'+str(newID),"RECOGNIZED_AS",int(recognizedAs))
+	slabsFile.set_value('SLAB'+str(newID),"LIQUID_TYPE", liquidType)
+	slabsFile.set_value('SLAB'+str(newID),"WIBBLE_TYPE", wibbleType)
+	slabsFile.set_value('SLAB'+str(newID),"WIBBLE_EDGES", wibbleEdges)
+	
 	for i in 9:
 		slabsFile.set_value('SLAB'+str(newID),"CUBES"+str(i),slabCubeData[i])
-	for i in 9:
 		slabsFile.set_value('SLAB'+str(newID),"FLOOR"+str(i),slabFloorData[i])
 	
-	slabsFile.set_value('SLAB'+str(newID),"WIBBLE_NEARBY", wibbleNearby)
-	
-	slabsFile.save(Settings.unearthdata.plus_file("unearthcustomslabs.cfg"))
+	slabsFile.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
 
 func load_file():
-	slabsFile.load(Settings.unearthdata.plus_file("unearthcustomslabs.cfg"))
+	slabsFile.load(Settings.unearthdata.plus_file("custom_slabs.cfg"))
 	
 	for sectionName in slabsFile.get_sections():
 		var newID = int(sectionName.trim_prefix("SLAB"))
-		var generalArray = slabsFile.get_value(sectionName, "GENERAL")
+		var slabName = slabsFile.get_value(sectionName, "NAME")
 		var recognizedAs = slabsFile.get_value(sectionName, "RECOGNIZED_AS")
+		var liquidType = slabsFile.get_value(sectionName, "LIQUID_TYPE")
+		var wibbleType = slabsFile.get_value(sectionName, "WIBBLE_TYPE")
+		var wibbleEdges = slabsFile.get_value(sectionName, "WIBBLE_EDGES")
 		
 		var slabCubeData = []
 		var slabFloorData = []
@@ -44,9 +59,7 @@ func load_file():
 			slabCubeData.append( slabsFile.get_value(sectionName, "CUBES"+str(i)) )
 			slabFloorData.append( slabsFile.get_value(sectionName, "FLOOR"+str(i)) )
 		
-		var extraSlabData = slabsFile.get_value(sectionName, "WIBBLE_NEARBY")
-		
-		add_custom_slab(newID, generalArray, recognizedAs, slabCubeData, slabFloorData, extraSlabData)
+		add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData)
 
 # The purpose of this function is so I don't have to index the columns into clm for simply displaying within the slab window. Only index when PLACING the custom slab.
 func get_top_cube_face(indexIn3x3, slabID):
@@ -71,4 +84,4 @@ func remove_custom_slab(slabID):
 	if slabsFile.has_section(section):
 		slabsFile.erase_section(section)
 	
-	slabsFile.save(Settings.unearthdata.plus_file("unearthcustomslabs.cfg"))
+	slabsFile.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))

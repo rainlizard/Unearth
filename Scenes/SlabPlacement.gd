@@ -137,10 +137,10 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 func slab_place_custom(xSlab, ySlab, slabID, ownership, surrID):
 	var recognizedAsID = oCustomSlabSystem.data[slabID][oCustomSlabSystem.RECOGNIZED_AS]
 	
-	var wibbleNearby = oCustomSlabSystem.data[slabID][oCustomSlabSystem.WIBBLE_NEARBY]
+	var wibbleEdges = oCustomSlabSystem.data[slabID][oCustomSlabSystem.WIBBLE_EDGES]
 	
 	# WIB (wibble)
-	update_wibble(xSlab, ySlab, slabID, wibbleNearby)
+	update_wibble(xSlab, ySlab, slabID, wibbleEdges)
 	
 	# WLB (Water Lava Block)
 	if recognizedAsID != Slabs.BRIDGE:
