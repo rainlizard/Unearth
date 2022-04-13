@@ -3,12 +3,15 @@ onready var oDynamicSlabVoxelView = Nodelist.list["oDynamicSlabVoxelView"]
 onready var oVariationInfoLabel = Nodelist.list["oVariationInfoLabel"]
 onready var oDynamicSlabIDSpinBox = Nodelist.list["oDynamicSlabIDSpinBox"]
 onready var oDynamicSlabIDLabel = Nodelist.list["oDynamicSlabIDLabel"]
-
+onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
+onready var oDkSlabs = Nodelist.list["oDkSlabs"]
+onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
+onready var oSlabPalette = Nodelist.list["oSlabPalette"]
 
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-
+var columnSpinBoxArray = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -16,9 +19,20 @@ func _ready():
 #		yield(get_tree(),'idle_frame')
 #	Utils.popup_centered(self)
 	
+	for number in 9:
+		var id = CustomSpinBox.new()
+		id.max_value = 2047
+		id.connect("value_changed",oDynamicSlabVoxelView,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+		id.connect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+		oGridContainerDynamicColumns3x3.add_child(id)
+		columnSpinBoxArray.append(id)
+	
 	oDynamicSlabVoxelView.initialize()
 	
-	variation_changed(0)
+	yield(get_tree(),'idle_frame')
+	#_on_DynamicSlabIDSpinBox_value_changed(0)
+	
+	#variation_changed(0)
 
 func variation_changed(variation):
 	variation = int(variation)
@@ -75,4 +89,43 @@ func _on_DynamicSlabIDSpinBox_value_changed(value):
 	if Slabs.data.has(value):
 		slabName = Slabs.data[value][Slabs.NAME]
 	oDynamicSlabIDLabel.text = slabName
+	
+	update_columns_ui()
 
+func _on_VariationNumberSpinBox_value_changed(value):
+	update_columns_ui()
+
+func update_columns_ui():
+	
+	var variation = int(oVariationNumberSpinBox.value)
+	var slabID = int(oDynamicSlabIDSpinBox.value)
+	
+	var variationStart = (slabID * 28)
+	if slabID >= 42:
+		variationStart = (42 * 28) + (8 * (slabID - 42))
+	variation += variationStart
+	
+	if variation >= 1304:
+		return
+	
+	for i in columnSpinBoxArray.size():
+		columnSpinBoxArray[i].disconnect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+		var clmIndex = oDkSlabs.dat[variation][i]
+		columnSpinBoxArray[i].value = clmIndex
+		columnSpinBoxArray[i].connect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+
+func _on_DynamicSlab3x3ColumnSpinBox_value_changed(value):
+	var variation = int(oVariationNumberSpinBox.value)
+	var slabID = int(oDynamicSlabIDSpinBox.value)
+	
+	var variationStart = (slabID * 28)
+	if slabID >= 42:
+		variationStart = (42 * 28) + (8 * (slabID - 42))
+	variation += variationStart
+	
+	for y in 3:
+		for x in 3:
+			var i = (y*3) + x
+			var clmIndex = oGridContainerDynamicColumns3x3.get_child(i).value
+			oDkSlabs.dat[variation][i] = clmIndex
+			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working

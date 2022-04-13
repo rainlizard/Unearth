@@ -1375,9 +1375,6 @@ self_modulate = Color( 0.831373, 0.831373, 0.831373, 1 )
 margin_right = 431.0
 margin_bottom = 35.0
 script = ExtResource( 71 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/Menu"]
 margin_left = 4.0
@@ -1413,7 +1410,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Custom slabs", null, 0, false, false, 3, 0, null, "", false, "Slab placement", null, 0, false, false, 4, 0, null, "", false, "Update all slabs", null, 0, false, false, 5, 0, null, "", false, "Add custom object", null, 0, false, false, 6, 0, null, "", false, "Texture editing", null, 0, false, false, 7, 0, null, "", false, "Modify dynamic slabs", null, 0, false, false, 8, 0, null, "", false ]
+items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Custom slabs", null, 0, false, false, 3, 0, null, "", false, "Slab placement", null, 0, false, false, 4, 0, null, "", false, "Update all slabs", null, 0, false, false, 5, 0, null, "", false, "Add custom object", null, 0, false, false, 6, 0, null, "", false, "Texture editing", null, 0, false, false, 7, 0, null, "", false, "Slab editor", null, 0, false, false, 8, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -4033,9 +4030,6 @@ anchor_bottom = 1.0
 margin_left = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TabSlabVoxels" type="HBoxContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs"]
 anchor_right = 1.0
@@ -4195,7 +4189,7 @@ margin_bottom = 178.0
 text = "Columns"
 align = 1
 
-[node name="GridContainerForChoosing3x3" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer"]
+[node name="GridContainerCustomColumns3x3" type="GridContainer" parent="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer"]
 margin_left = 141.0
 margin_top = 182.0
 margin_right = 141.0
@@ -4456,48 +4450,58 @@ margin_left = -2945.0
 margin_top = -1513.0
 margin_right = -1665.0
 margin_bottom = -793.0
-window_title = "Dynamic slabs (viewer only)"
+window_title = "Slab editor"
 resizable = true
 script = ExtResource( 132 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="DynamicSlabVoxelView" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 1088.0
-margin_bottom = 700.0
+[node name="Spacing" type="Control" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer"]
+margin_right = 1280.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 12, 12 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer"]
-margin_left = 1092.0
-margin_right = 1260.0
-margin_bottom = 700.0
+[node name="LabelHIDDENFORNOW" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer"]
+visible = false
+margin_top = 16.0
+margin_right = 1280.0
+margin_bottom = 37.0
+text = "Loaded from slabs.dat and slabs.clm in DK's /data/ directory. Click Export File to save changes."
+align = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer"]
+margin_top = 16.0
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DynamicSlabVoxelView" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer" instance=ExtResource( 19 )]
+margin_right = 1108.0
+margin_bottom = 704.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer"]
+margin_left = 1112.0
+margin_right = 1280.0
+margin_bottom = 704.0
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer"]
 margin_right = 168.0
-margin_bottom = 116.0
+margin_bottom = 173.0
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
 margin_left = 1.0
 margin_right = 168.0
 margin_bottom = 66.0
 size_flags_horizontal = 10
 columns = 2
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 5.0
 margin_right = 89.0
 margin_bottom = 26.0
@@ -4506,7 +4510,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DynamicSlabIDSpinBox" type="SpinBox" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="DynamicSlabIDSpinBox" type="SpinBox" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
 margin_left = 93.0
 margin_right = 167.0
 margin_bottom = 31.0
@@ -4520,7 +4524,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 40.0
 margin_right = 89.0
 margin_bottom = 61.0
@@ -4529,7 +4533,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VariationNumberSpinBox" type="SpinBox" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="VariationNumberSpinBox" type="SpinBox" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
 margin_left = 93.0
 margin_top = 35.0
 margin_right = 167.0
@@ -4544,17 +4548,39 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DynamicSlabIDLabel" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="DynamicSlabIDLabel" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 70.0
 margin_right = 168.0
 margin_bottom = 91.0
 text = "Impenetrable Rock"
 
-[node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 95.0
 margin_right = 168.0
 margin_bottom = 116.0
 text = "Variation info"
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 120.0
+margin_right = 168.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="Label" type="Label" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 148.0
+margin_right = 168.0
+margin_bottom = 169.0
+text = "Columns"
+align = 1
+
+[node name="GridContainerDynamicColumns3x3" type="GridContainer" parent="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_left = 84.0
+margin_top = 173.0
+margin_right = 84.0
+margin_bottom = 173.0
+size_flags_horizontal = 6
+size_flags_vertical = 4
+columns = 3
 
 [node name="CustomTooltip" type="Control" parent="Ui/UiSystem"]
 margin_top = -10.5
@@ -4853,7 +4879,8 @@ script = ExtResource( 88 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/OrientationSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_OrientationSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/LintelSpinBox" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_LintelSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ColumnEditorHelpButton" to="Ui/UiSystem/SlabColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnEditorHelpButton_pressed"]
-[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/DynamicSlabIDSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow" method="_on_DynamicSlabIDSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/DynamicSlabIDSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/DynamicSlabVoxelView" method="_on_DynamicSlabIDSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow/HBoxContainer/DynamicSlabVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/DynamicSlabIDSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow" method="_on_DynamicSlabIDSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/DynamicSlabIDSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/DynamicSlabVoxelView" method="_on_DynamicSlabIDSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/ModifyDynamicSlabsWindow/VBoxContainer/HBoxContainer/DynamicSlabVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

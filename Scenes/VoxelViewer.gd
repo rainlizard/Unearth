@@ -3,7 +3,8 @@ onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oVoxelGen = Nodelist.list["oVoxelGen"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oColumnIndexSpinBox = Nodelist.list["oColumnIndexSpinBox"]
-onready var oGridContainerForChoosing3x3 = Nodelist.list["oGridContainerForChoosing3x3"]
+onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
+onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
 onready var oDkSlabs = Nodelist.list["oDkSlabs"]
 onready var oDynamicSlabIDSpinBox = Nodelist.list["oDynamicSlabIDSpinBox"]
 onready var oModifyDynamicSlabsWindow = Nodelist.list["oModifyDynamicSlabsWindow"]
@@ -68,7 +69,7 @@ func set_object(setVal):
 		if oDynamicSlabIDSpinBox.value < 42:
 			setVal = clamp(setVal,0,27)
 		else:
-			setVal = clamp(setVal,0,3)
+			setVal = clamp(setVal,0,7)
 	if displayingType == COLUMN:
 		setVal = clamp(setVal,0,2047)
 	previousObject = viewObject
@@ -128,7 +129,7 @@ func do_all():
 		
 		if slabID >= 42:
 			variationStart = (42 * 28) + (8 * (slabID - 42))
-			numberOfVariations = 4
+			numberOfVariations = 8
 		
 		var separation = 0
 		
@@ -159,8 +160,8 @@ func do_one():
 		var surrClmIndex = [-1,-1,-1,-1]
 		for y in 3:
 			for x in 3:
-				var i = (y*3) + x #((y*3)-x)
-				var clmIndex = oGridContainerForChoosing3x3.get_child(i).value
+				var i = (y*3) + x
+				var clmIndex = oGridContainerCustomColumns3x3.get_child(i).value
 				
 				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true, oDataClm)
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
@@ -178,7 +179,6 @@ func do_one():
 		oSelectedPivotPoint.translation.z = (viewObject * 2)
 		oSelectedPivotPoint.translation.x = (viewObject * 2)
 	
-	
 	if displayingType == DK_SLAB: # This is not for custom slab, this is for dynamic slabs
 		
 		var slabID = oDynamicSlabIDSpinBox.value
@@ -186,17 +186,15 @@ func do_one():
 		
 		if slabID >= 42:
 			variationStart = (42 * 28) + (8 * (slabID - 42))
-		
 		var variation = variationStart+viewObject
 		
 		var surrClmIndex = [-1,-1,-1,-1]
-		for ySubtile in 3:
-			for xSubtile in 3:
-				var subtile = (ySubtile*3) + xSubtile
+		for y in 3:
+			for x in 3:
+				var i = (y*3) + x
+				var clmIndex = oGridContainerDynamicColumns3x3.get_child(i).value
 				
-				var clmIndex = oDkSlabs.dat[variation][subtile]
-				
-				oVoxelGen.column_gen(genArray, xSubtile-1.5, ySubtile-1.5, clmIndex, surrClmIndex, true, oDkSlabs)
+				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true, oDkSlabs)
 		
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
 		oSelectedPivotPoint.translation.z = (viewObject * 4)
@@ -214,20 +212,31 @@ func _on_ColumnViewDeleteButton_pressed():
 	do_all()
 	do_one()
 
-
-func _on_CustomSlabSpinBox_value_changed(value):
+func _on_DynamicSlab3x3ColumnSpinBox_value_changed(value):
+	#oDynamicSlabIDSpinBox.disconnect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+	oAllVoxelObjects.visible = false
+	oSelectedVoxelObject.visible = true
 	do_one()
-	
 	oColumnDetails.update_details()
-	#set_object(0)
-	
-	yield(get_tree(),'idle_frame')
+	#set_object(oVariationNumberSpinBox.value)
+	#oDynamicSlabIDSpinBox.connect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+
+
+
+#func _on_DynamicSlabSpinBox_value_changed(value):
+#	do_one()
+#	oColumnDetails.update_details()
+#
+#	if oAllVoxelObjects.visible == false: # If was previously invisible (meaning you were editing "one") then update ALL
+#		oAllVoxelObjects.visible = true
+#		do_all()
+
 
 func _on_ColumnIndexSpinBox_value_changed(value):
 	oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 	yield(get_tree(),'idle_frame')
 	
-	if oAllVoxelObjects.visible == false: # Update what was invisible
+	if oAllVoxelObjects.visible == false: # If was previously invisible (meaning you were editing "one") then update ALL
 		oAllVoxelObjects.visible = true
 		do_all()
 	
@@ -242,16 +251,25 @@ func update_column_view():
 
 
 func _on_DynamicSlabIDSpinBox_value_changed(value):
+	#oDynamicSlabIDSpinBox.disconnect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
 	oDynamicSlabIDSpinBox.disconnect("value_changed",self,"_on_DynamicSlabIDSpinBox_value_changed")
 	yield(get_tree(),'idle_frame')
 	
 	do_all()
 	
 	set_object(viewObject) #for clamping the selection
+	#oDynamicSlabIDSpinBox.connect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
 	oDynamicSlabIDSpinBox.connect("value_changed",self,"_on_DynamicSlabIDSpinBox_value_changed")
 
 
 func _on_VariationNumberSpinBox_value_changed(value):
 	oVariationNumberSpinBox.disconnect("value_changed",self,"_on_VariationNumberSpinBox_value_changed")
+	yield(get_tree(),'idle_frame')
+	
+	if oAllVoxelObjects.visible == false: # If was previously invisible (meaning you were editing "one") then update ALL
+		oAllVoxelObjects.visible = true
+		do_all()
+	
 	set_object(value)
 	oVariationNumberSpinBox.connect("value_changed",self,"_on_VariationNumberSpinBox_value_changed")
+	

@@ -1,5 +1,5 @@
 extends HBoxContainer
-onready var oGridContainerForChoosing3x3 = Nodelist.list["oGridContainerForChoosing3x3"]
+onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
 onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
 onready var oSlabRecognizedAs = Nodelist.list["oSlabRecognizedAs"]
 onready var oSlabRecognizedAsName = Nodelist.list["oSlabRecognizedAsName"]
@@ -19,9 +19,9 @@ func _ready():
 	for number in 9:
 		var id = CustomSpinBox.new()
 		id.max_value = 2047
-		id.connect("value_changed",oSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
+		id.connect("value_changed",oSlabVoxelView,"_on_DynamicSlabSpinBox_value_changed")
 		
-		oGridContainerForChoosing3x3.add_child(id)
+		oGridContainerCustomColumns3x3.add_child(id)
 	
 	_on_SlabRecognizedAs_value_changed(oSlabRecognizedAs.value)
 
@@ -50,7 +50,7 @@ func _on_AddCustomSlabButton_pressed():
 	
 	var slabCubeData = []
 	var slabFloorData = []
-	for i in oGridContainerForChoosing3x3.get_children():
+	for i in oGridContainerCustomColumns3x3.get_children():
 		var clmIndex = i.value
 		slabCubeData.append(oDataClm.cubes[clmIndex])
 		slabFloorData.append(oDataClm.floorTexture[clmIndex])

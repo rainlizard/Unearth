@@ -34,21 +34,23 @@ func slabtng_index_asset(buffer):
 	buffer.seek(2)
 	var numberOfSets = 1304
 	tngIndex.resize(numberOfSets)
+	
 	for i in tngIndex.size():
 		var value = buffer.get_u16()
 		tngIndex[i] = value
-		#textFile.store_line(str(value))
+		#var lineOfText = str(value)
+		#textFile.store_line(lineOfText)
 	
 	#textFile.close()
-	print('slabtng_index_asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	#print('slabtng_index_asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 func slabtng_object_entry_asset(buffer):
 	CODETIME_START = OS.get_ticks_msec()
 	
 	buffer.seek(2 + (1304*2))
 	
-#	var textFile = File.new()
-#	textFile.open("res://slabtng_object_entry_asset.txt", File.WRITE)
+	#var textFile = File.new()
+	#textFile.open("res://slabtng_object_entry_asset.txt", File.WRITE)
 	
 	tngObject.resize(numberOfThings)
 	for i in tngObject.size():
@@ -114,7 +116,7 @@ func slabtng_object_entry_asset(buffer):
 #2
 #1: field A: "objclass": Can be: 0, 1 or 7. Might be "thing subtype" so 7 might be "roomeffect".
 #2: sofield B: "objmodel" (Item/decoration subtype values, 1-134, see "Map Files Format Reference" page.
-#0: sofield C: ? Maybe "minimum room size needed to display", or maybe a "maximum" amount you can have of this thing.
+#0: sofield C: effect range
 #
 ##define SLABSET_COUNT        1304
 ##define SLABOBJS_COUNT        512

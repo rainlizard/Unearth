@@ -24,9 +24,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
 script = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VoxelViewport" type="Viewport" parent="."]
 size = Vector2( 1236, 620 )
@@ -44,7 +41,7 @@ transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6, 0, 
 projection = 1
 current = true
 fov = 90.0
-size = 8.5
+size = 11.5
 far = 8192.0
 script = ExtResource( 1 )
 

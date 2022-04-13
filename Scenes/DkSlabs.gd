@@ -23,6 +23,7 @@ func clm_asset():
 	
 	buffer.seek(0)
 	var numberOfClmEntries = buffer.get_u16()
+	
 	buffer.seek(4) # For reading slabs.clm. (THIS IS DIFFERENT TO READING MAPS)
 	for entry in numberOfClmEntries:
 		use.append(buffer.get_u16()) # 0-1
