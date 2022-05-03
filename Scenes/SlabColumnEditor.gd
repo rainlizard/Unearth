@@ -4,24 +4,23 @@ onready var oVoxelTabs = Nodelist.list["oVoxelTabs"]
 onready var oColumnVoxelView = Nodelist.list["oColumnVoxelView"]
 onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
 
-
 func _ready():
-	oVoxelTabs.set_tab_title(0, "Add custom slab")
-	oVoxelTabs.set_tab_title(1, "Edit columns")
-#	Utils.popup_centered(self)
-#	yield(get_tree(),'idle_frame')
-#	_on_VoxelTabs_tab_changed(0)
+	oVoxelTabs.set_tab_title(0, "Edit columns")
+	oVoxelTabs.set_tab_title(1, "Add custom slab")
+
+# When re-opening window or opening for first time
+func _on_ColumnEditor_visibility_changed():
+	if visible == true:
+		_on_VoxelTabs_tab_changed(oVoxelTabs.current_tab)
 
 func _on_VoxelTabs_tab_changed(tab):
 	match tab:
 		0:
-			oColumnVoxelView.visible = false
-			oSlabVoxelView.initialize()
-			oSlabVoxelView.visible = true
-		1:
-			oPropertiesTabs.set_current_tab(2)
 			oSlabVoxelView.visible = false
-			oColumnVoxelView.initialize()
 			oColumnVoxelView.visible = true
-
-
+			oColumnVoxelView.initialize()
+			oPropertiesTabs.set_current_tab(2)
+		1:
+			oColumnVoxelView.visible = false
+			oSlabVoxelView.visible = true
+			oSlabVoxelView.initialize()

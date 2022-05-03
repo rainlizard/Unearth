@@ -9,7 +9,7 @@ onready var oColumnListData = Nodelist.list["oColumnListData"]
 onready var oColumnVoxelView = Nodelist.list["oColumnVoxelView"]
 onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
 onready var oUi = Nodelist.list["oUi"]
-onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
+onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 
 var currentlyLookingAtNode = null
 var instanceType = 0
@@ -40,7 +40,7 @@ func update_details():
 #				oColumnListData.clear()
 #				return
 	
-	if oSlabColumnEditor.visible == true:
+	if oColumnEditor.visible == true:
 		if oColumnVoxelView.visible == true:
 			entryIndex = oColumnVoxelView.viewObject
 		if oSlabVoxelView.visible == true:

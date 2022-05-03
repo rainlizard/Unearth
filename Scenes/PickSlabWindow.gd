@@ -11,7 +11,7 @@ onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
-onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
+onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oVoxelTabs = Nodelist.list["oVoxelTabs"]
 
 
@@ -138,8 +138,8 @@ func custom_slab_add_new_button():
 	oGridFunctions._on_GridWindow_resized(self)
 
 func _on_pressed_add_new_custom_slab():
-	Utils.popup_centered(oSlabColumnEditor)
-	oVoxelTabs.current_tab = 0 # Select tab containing Custom Slab Editor
+	Utils.popup_centered(oColumnEditor)
+	oVoxelTabs.current_tab = 1 # Select tab containing Custom Slab Editor
 
 func pressed(id):
 	var setValue = id.get_meta("ID_of_slab")

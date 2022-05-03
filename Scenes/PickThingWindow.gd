@@ -139,7 +139,21 @@ func _on_hovered_over_item(id):
 func add_item_to_grid(tabID, id, set_text):
 	tabID.add_child(id)
 	
-	set_text = set_text.replace(" ","\n") # Use "New lines" wherever there was a space.
+	var textArray = set_text.split(" ")
+	var textLine1 = ""
+	var textLine2 = ""
+#	if set_text == "Hell Hound":
+#		print(textArray.size())
+	
+	for i in textArray.size():
+		if i < textArray.size()*0.5:
+			textLine1 += textArray[i] + ' '
+		else:
+			textLine2 += textArray[i] + ' '
+	
+	set_text = textLine1 + '\n' + textLine2
+	
+	
 	id.set_meta("grid_item_text", set_text)
 	id.connect("mouse_entered", self, "_on_hovered_over_item", [id])
 	id.connect("mouse_exited", self, "_on_hovered_none", [id])

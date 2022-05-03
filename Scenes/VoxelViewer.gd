@@ -6,8 +6,8 @@ onready var oColumnIndexSpinBox = Nodelist.list["oColumnIndexSpinBox"]
 onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
 onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
 onready var oDkSlabs = Nodelist.list["oDkSlabs"]
-onready var oDynamicSlabIDSpinBox = Nodelist.list["oDynamicSlabIDSpinBox"]
-onready var oModifyDynamicSlabsWindow = Nodelist.list["oModifyDynamicSlabsWindow"]
+onready var oSlabsetIDSpinBox = Nodelist.list["oSlabsetIDSpinBox"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 
 
@@ -66,7 +66,7 @@ func _input(event):
 
 func set_object(setVal):
 	if displayingType == DK_SLAB:
-		if oDynamicSlabIDSpinBox.value < 42:
+		if oSlabsetIDSpinBox.value < 42:
 			setVal = clamp(setVal,0,27)
 		else:
 			setVal = clamp(setVal,0,7)
@@ -82,7 +82,7 @@ func set_object(setVal):
 	
 	if displayingType == DK_SLAB:
 		oVariationNumberSpinBox.value = setVal
-		oModifyDynamicSlabsWindow.variation_changed(viewObject)
+		oSlabsetWindow.variation_changed(viewObject)
 		if oAllVoxelObjects.visible == false: # Update what was invisible
 			oAllVoxelObjects.visible = true
 			do_all()
@@ -123,7 +123,7 @@ func do_all():
 	
 	if displayingType == DK_SLAB: # This is not for custom slab, this is for dynamic slabs
 		
-		var slabID = oDynamicSlabIDSpinBox.value
+		var slabID = oSlabsetIDSpinBox.value
 		var variationStart = (slabID * 28)
 		var numberOfVariations = 28
 		
@@ -181,7 +181,7 @@ func do_one():
 	
 	if displayingType == DK_SLAB: # This is not for custom slab, this is for dynamic slabs
 		
-		var slabID = oDynamicSlabIDSpinBox.value
+		var slabID = oSlabsetIDSpinBox.value
 		var variationStart = (slabID * 28)
 		
 		if slabID >= 42:
@@ -212,24 +212,24 @@ func _on_ColumnViewDeleteButton_pressed():
 	do_all()
 	do_one()
 
-func _on_DynamicSlab3x3ColumnSpinBox_value_changed(value):
-	#oDynamicSlabIDSpinBox.disconnect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+func _on_Slabset3x3ColumnSpinBox_value_changed(value):
+	#oSlabsetIDSpinBox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 	oAllVoxelObjects.visible = false
 	oSelectedVoxelObject.visible = true
 	do_one()
 	oColumnDetails.update_details()
 	#set_object(oVariationNumberSpinBox.value)
-	#oDynamicSlabIDSpinBox.connect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+	#oSlabsetIDSpinBox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
 
 
-#func _on_DynamicSlabSpinBox_value_changed(value):
-#	do_one()
-#	oColumnDetails.update_details()
-#
-#	if oAllVoxelObjects.visible == false: # If was previously invisible (meaning you were editing "one") then update ALL
-#		oAllVoxelObjects.visible = true
-#		do_all()
+func _on_CustomSlabSpinBox_value_changed(value):
+	do_one()
+	oColumnDetails.update_details()
+
+	if oAllVoxelObjects.visible == false: # If was previously invisible (meaning you were editing "one") then update ALL
+		oAllVoxelObjects.visible = true
+		do_all()
 
 
 func _on_ColumnIndexSpinBox_value_changed(value):
@@ -250,16 +250,16 @@ func update_column_view():
 	oColumnDetails.update_details()
 
 
-func _on_DynamicSlabIDSpinBox_value_changed(value):
-	#oDynamicSlabIDSpinBox.disconnect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
-	oDynamicSlabIDSpinBox.disconnect("value_changed",self,"_on_DynamicSlabIDSpinBox_value_changed")
+func _on_SlabsetIDSpinBox_value_changed(value):
+	#oSlabsetIDSpinBox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
+	oSlabsetIDSpinBox.disconnect("value_changed",self,"_on_SlabsetIDSpinBox_value_changed")
 	yield(get_tree(),'idle_frame')
 	
 	do_all()
 	
 	set_object(viewObject) #for clamping the selection
-	#oDynamicSlabIDSpinBox.connect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
-	oDynamicSlabIDSpinBox.connect("value_changed",self,"_on_DynamicSlabIDSpinBox_value_changed")
+	#oSlabsetIDSpinBox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
+	oSlabsetIDSpinBox.connect("value_changed",self,"_on_SlabsetIDSpinBox_value_changed")
 
 
 func _on_VariationNumberSpinBox_value_changed(value):

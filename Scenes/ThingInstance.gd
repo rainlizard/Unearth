@@ -51,7 +51,9 @@ func _enter_tree():
 		Things.TYPE.OBJECT:
 			if subtype == 44: # Spinning Key
 				add_to_group("Key")
-			if subtype in Things.LIST_OF_SPELLBOOKS:
+			elif subtype in [52,53,54,55,56]:
+				add_to_group("TreasuryGold")
+			elif subtype in Things.LIST_OF_SPELLBOOKS:
 				add_to_group("Spellbook")
 #			if subtype == 49:
 #				var oCamera2D = Nodelist.list["oCamera2D"]

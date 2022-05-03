@@ -19,7 +19,7 @@ func _ready():
 	for number in 9:
 		var id = CustomSpinBox.new()
 		id.max_value = 2047
-		id.connect("value_changed",oSlabVoxelView,"_on_DynamicSlabSpinBox_value_changed")
+		id.connect("value_changed",oSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
 		
 		oGridContainerCustomColumns3x3.add_child(id)
 	

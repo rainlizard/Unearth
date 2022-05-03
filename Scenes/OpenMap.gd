@@ -25,6 +25,8 @@ onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oMenu = Nodelist.list["oMenu"]
+onready var oDataSlab = Nodelist.list["oDataSlab"]
+onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -104,7 +106,15 @@ func open_map(filePath): # auto opens other files
 					var mapName = oDataLif.get_special_lif_text(filePath)
 					if mapName != "":
 						oDataLif.data = mapName
-		
+				
+				# Some maps can function without WLB files. So build them here.
+				# Generate WLB values from SLB. This is dependent on SLB being ordered before WLB inside Filetypes.FILE_TYPES
+				if EXT == "WLB":
+					for ySlab in 85:
+						for xSlab in 85:
+							var slabID = oDataSlab.get_cell(xSlab, ySlab)
+							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.REMEMBER_TYPE])
+				
 		finish_opening_map(map)
 	else:
 		if ALWAYS_DECOMPRESS == false:

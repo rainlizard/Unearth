@@ -1,8 +1,8 @@
 extends WindowDialog
-onready var oDynamicSlabVoxelView = Nodelist.list["oDynamicSlabVoxelView"]
+onready var oSlabsetVoxelView = Nodelist.list["oSlabsetVoxelView"]
 onready var oVariationInfoLabel = Nodelist.list["oVariationInfoLabel"]
-onready var oDynamicSlabIDSpinBox = Nodelist.list["oDynamicSlabIDSpinBox"]
-onready var oDynamicSlabIDLabel = Nodelist.list["oDynamicSlabIDLabel"]
+onready var oSlabsetIDSpinBox = Nodelist.list["oSlabsetIDSpinBox"]
+onready var oSlabsetIDLabel = Nodelist.list["oSlabsetIDLabel"]
 onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
 onready var oDkSlabs = Nodelist.list["oDkSlabs"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
@@ -22,21 +22,28 @@ func _ready():
 	for number in 9:
 		var id = CustomSpinBox.new()
 		id.max_value = 2047
-		id.connect("value_changed",oDynamicSlabVoxelView,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
-		id.connect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+		id.connect("value_changed",oSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
+		id.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		oGridContainerDynamicColumns3x3.add_child(id)
 		columnSpinBoxArray.append(id)
 	
-	oDynamicSlabVoxelView.initialize()
+	oSlabsetVoxelView.initialize()
 	
-	yield(get_tree(),'idle_frame')
-	#_on_DynamicSlabIDSpinBox_value_changed(0)
+	#yield(get_tree(),'idle_frame')
+	#_on_SlabsetIDSpinBox_value_changed(0)
 	
 	#variation_changed(0)
 
+
+func _on_SlabsetWindow_visibility_changed():
+	if visible == true:
+		oSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
+		_on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
+
+
 func variation_changed(variation):
 	variation = int(variation)
-	var slabID = oDynamicSlabIDSpinBox.value
+	var slabID = oSlabsetIDSpinBox.value
 	#variation
 	var constructString = ""
 	#var byte = (slabID * 28) + variation
@@ -83,12 +90,12 @@ func variation_changed(variation):
 #}
 
 
-func _on_DynamicSlabIDSpinBox_value_changed(value):
+func _on_SlabsetIDSpinBox_value_changed(value):
 	var slabName = "Unknown"
 	value = int(value)
 	if Slabs.data.has(value):
 		slabName = Slabs.data[value][Slabs.NAME]
-	oDynamicSlabIDLabel.text = slabName
+	oSlabsetIDLabel.text = slabName
 	
 	update_columns_ui()
 
@@ -98,7 +105,7 @@ func _on_VariationNumberSpinBox_value_changed(value):
 func update_columns_ui():
 	
 	var variation = int(oVariationNumberSpinBox.value)
-	var slabID = int(oDynamicSlabIDSpinBox.value)
+	var slabID = int(oSlabsetIDSpinBox.value)
 	
 	var variationStart = (slabID * 28)
 	if slabID >= 42:
@@ -109,14 +116,14 @@ func update_columns_ui():
 		return
 	
 	for i in columnSpinBoxArray.size():
-		columnSpinBoxArray[i].disconnect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+		columnSpinBoxArray[i].disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		var clmIndex = oDkSlabs.dat[variation][i]
 		columnSpinBoxArray[i].value = clmIndex
-		columnSpinBoxArray[i].connect("value_changed",self,"_on_DynamicSlab3x3ColumnSpinBox_value_changed")
+		columnSpinBoxArray[i].connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
-func _on_DynamicSlab3x3ColumnSpinBox_value_changed(value):
+func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 	var variation = int(oVariationNumberSpinBox.value)
-	var slabID = int(oDynamicSlabIDSpinBox.value)
+	var slabID = int(oSlabsetIDSpinBox.value)
 	
 	var variationStart = (slabID * 28)
 	if slabID >= 42:
@@ -129,3 +136,4 @@ func _on_DynamicSlab3x3ColumnSpinBox_value_changed(value):
 			var clmIndex = oGridContainerDynamicColumns3x3.get_child(i).value
 			oDkSlabs.dat[variation][i] = clmIndex
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
+

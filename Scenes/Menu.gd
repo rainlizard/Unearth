@@ -27,10 +27,10 @@ onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oTextureEditingWindow = Nodelist.list["oTextureEditingWindow"]
 onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oConfirmDiscardChanges = Nodelist.list["oConfirmDiscardChanges"]
-onready var oSlabColumnEditor = Nodelist.list["oSlabColumnEditor"]
+onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
-onready var oModifyDynamicSlabsWindow = Nodelist.list["oModifyDynamicSlabsWindow"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -149,7 +149,7 @@ func _on_EditSubmenu_Pressed(pressedID):
 			else:
 				oMessage.quick("No map path detected. Try saving first.")
 		3: # Custom slabs
-			Utils.popup_centered(oSlabColumnEditor)
+			Utils.popup_centered(oColumnEditor)
 		4: # Slab placement
 			Utils.popup_centered(oSlabSettingsWindow)
 		5: # Update all slabs
@@ -162,7 +162,7 @@ func _on_EditSubmenu_Pressed(pressedID):
 			Utils.popup_centered(oTextureEditingWindow)
 		8:
 			# Modify dynamic slabs
-			Utils.popup_centered(oModifyDynamicSlabsWindow)
+			Utils.popup_centered(oSlabsetWindow)
 
 func _on_slab_style_window_close_button_clicked():
 	oMenuButtonEdit.get_popup().set_item_checked(0, false)
