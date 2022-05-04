@@ -20,6 +20,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 
 
 var path = ""

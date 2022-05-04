@@ -1,4 +1,4 @@
-[gd_scene load_steps=152 format=2]
+[gd_scene load_steps=154 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -133,6 +133,8 @@
 [ext_resource path="res://Scenes/SGRectHighlighter.gd" type="Script" id=131]
 [ext_resource path="res://Scenes/ModifyDynamicSlabsWindow.gd" type="Script" id=132]
 [ext_resource path="res://Scenes/ScriptHelpers.gd" type="Script" id=133]
+[ext_resource path="res://Scenes/GenerateBorderWindow.gd" type="Script" id=134]
+[ext_resource path="res://Class/SliderSetting.tscn" type="PackedScene" id=135]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -2455,9 +2457,6 @@ window_title = "Confirm"
 dialog_text = "Every slab on the map will be updated, this means column appearance and \"attached\" objects will be reset."
 dialog_autowrap = true
 script = ExtResource( 61 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ConfirmGenerateScript" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true
@@ -4604,6 +4603,67 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="GenerateBorderWindow" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -1352.0
+margin_top = -416.0
+margin_right = -1009.0
+margin_bottom = -105.0
+rect_min_size = Vector2( 320, 280 )
+window_title = "Generate border"
+script = ExtResource( 134 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/GenerateBorderWindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = -20.0
+
+[node name="NoisePersistence" parent="Ui/UiSystem/GenerateBorderWindow/VBoxContainer" instance=ExtResource( 135 )]
+margin_top = 0.0
+margin_right = 303.0
+margin_bottom = 41.0
+label_setting = "Persistence"
+max_value = 1.0
+step = 0.001
+value = 0.85
+
+[node name="NoisePeriod" parent="Ui/UiSystem/GenerateBorderWindow/VBoxContainer" instance=ExtResource( 135 )]
+margin_top = 45.0
+margin_right = 303.0
+margin_bottom = 86.0
+label_setting = "Period"
+min_value = 0.001
+max_value = 1.0
+step = 0.001
+value = 0.15
+
+[node name="NoiseLacunarity" parent="Ui/UiSystem/GenerateBorderWindow/VBoxContainer" instance=ExtResource( 135 )]
+margin_top = 90.0
+margin_right = 303.0
+margin_bottom = 131.0
+label_setting = "Lacunarity"
+max_value = 4.0
+step = 0.01
+
+[node name="NoiseOctaves" parent="Ui/UiSystem/GenerateBorderWindow/VBoxContainer" instance=ExtResource( 135 )]
+margin_top = 135.0
+margin_right = 303.0
+margin_bottom = 176.0
+label_setting = "Octaves"
+min_value = 1.0
+max_value = 9.0
+step = 1.0
+value = 9.0
+
+[node name="NoiseButtonApply" type="Button" parent="Ui/UiSystem/GenerateBorderWindow/VBoxContainer"]
+margin_top = 180.0
+margin_right = 303.0
+margin_bottom = 207.0
+text = "Apply"
+
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -4611,9 +4671,6 @@ mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 17 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Message" type="Control" parent="Ui/UiMessages"]
 anchor_left = 0.5
@@ -4870,4 +4927,5 @@ script = ExtResource( 88 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/SlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/SlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="pressed" from="Ui/UiSystem/GenerateBorderWindow/VBoxContainer/NoiseButtonApply" to="Ui/UiSystem/GenerateBorderWindow" method="_on_NoiseButtonApply_pressed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

@@ -114,7 +114,7 @@ func open_map(filePath): # auto opens other files
 						for xSlab in 85:
 							var slabID = oDataSlab.get_cell(xSlab, ySlab)
 							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.REMEMBER_TYPE])
-				
+		
 		finish_opening_map(map)
 	else:
 		if ALWAYS_DECOMPRESS == false:
