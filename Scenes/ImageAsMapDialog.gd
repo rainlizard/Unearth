@@ -5,7 +5,6 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
-onready var oImageAsMapHelpText = Nodelist.list["oImageAsMapHelpText"]
 onready var oUi = Nodelist.list["oUi"]
 
 var imageData = Image.new()
@@ -32,7 +31,12 @@ func _ready():
 			$HBoxContainer/VBoxContainer2/ScrollContainer/GridContainer.add_child(buttonID)
 
 func _on_ImgMapButtonHelp_pressed():
-	oImageAsMapHelpText.visible = !oImageAsMapHelpText.visible
+	var helptxt = ""
+	helptxt += "Load a .png file from your file system, images larger than 85x85 will be resized."
+	helptxt += "\n"
+	helptxt += "Click on a pixel within the image to highlight its colour, then click a slab button to instantly place slabs on the map. Repeat until all colours are assigned."
+	oMessage.big("Help",helptxt)
+
 
 
 func _on_ImgMapButtonSelectImage_pressed():

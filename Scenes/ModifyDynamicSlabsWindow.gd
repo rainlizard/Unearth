@@ -7,6 +7,7 @@ onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynam
 onready var oDkSlabs = Nodelist.list["oDkSlabs"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oSlabPalette = Nodelist.list["oSlabPalette"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -137,3 +138,12 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 			oDkSlabs.dat[variation][i] = clmIndex
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
 
+
+
+func _on_SlabsetHelpButton_pressed():
+	var helptxt = ""
+	helptxt += "This feature is for viewing and editing slabs.dat and slabs.clm from DK's /data/ directory."
+	#helptxt += '\n'
+	#helptxt += '\n'
+	#helptxt += ""
+	oMessage.big("Help",helptxt)

@@ -31,6 +31,7 @@ onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -118,7 +119,7 @@ func _process(delta):
 
 func _on_FileSubmenu_Pressed(pressedID):
 	match pressedID:
-		0: oCurrentMap._on_ButtonNewMap_pressed() # New
+		0: Utils.popup_centered(oNewMapWindow)#oCurrentMap._on_ButtonNewMap_pressed() # New
 		1: oMapBrowser._on_ButtonOpenMap_pressed() # Browse maps
 		2: Utils.popup_centered(oFileDialogOpen) # Open
 		#3: Open recent

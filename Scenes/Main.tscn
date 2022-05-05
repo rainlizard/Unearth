@@ -3012,9 +3012,6 @@ rect_min_size = Vector2( 568, 233 )
 window_title = "Load image as map"
 resizable = true
 script = ExtResource( 104 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog"]
 anchor_right = 1.0
@@ -3055,7 +3052,6 @@ text = "Apply all"
 margin_left = 326.0
 margin_right = 380.0
 margin_bottom = 27.0
-toggle_mode = true
 text = "Help"
 
 [node name="MapImageTextureRect" type="TextureRect" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer"]
@@ -3074,15 +3070,6 @@ margin_bottom = 423.0
 rect_min_size = Vector2( 185, 0 )
 size_flags_horizontal = 8
 size_flags_vertical = 3
-
-[node name="ImageAsMapHelpText" type="Label" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer2"]
-visible = false
-margin_right = 215.0
-margin_bottom = 285.0
-size_flags_vertical = 1
-text = "Load a .png file from your file system, images larger than 85x85 will be resized.
-Click a pixel within the image to highlight its colour, then click a slab button to instantly place slabs on the map. Repeat until all colours are assigned."
-autowrap = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer2"]
 margin_right = 185.0
@@ -4444,21 +4431,7 @@ anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer"]
-margin_right = 1280.0
-margin_bottom = 12.0
-rect_min_size = Vector2( 12, 12 )
-
-[node name="LabelHIDDENFORNOW" type="Label" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer"]
-visible = false
-margin_top = 16.0
-margin_right = 1280.0
-margin_bottom = 37.0
-text = "Loaded from slabs.dat and slabs.clm in DK's /data/ directory. Click Export File to save changes."
-align = 1
-
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer"]
-margin_top = 16.0
 margin_right = 1280.0
 margin_bottom = 720.0
 size_flags_horizontal = 3
@@ -4466,17 +4439,19 @@ size_flags_vertical = 3
 
 [node name="SlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer" instance=ExtResource( 19 )]
 margin_right = 1108.0
-margin_bottom = 704.0
+margin_bottom = 720.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer"]
 margin_left = 1112.0
 margin_right = 1280.0
-margin_bottom = 704.0
+margin_bottom = 720.0
+size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer"]
 margin_right = 168.0
-margin_bottom = 173.0
+margin_bottom = 720.0
+size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
 margin_left = 1.0
@@ -4566,6 +4541,15 @@ size_flags_horizontal = 6
 size_flags_vertical = 4
 columns = 3
 
+[node name="SlabsetHelpButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_left = 114.0
+margin_top = 693.0
+margin_right = 168.0
+margin_bottom = 720.0
+size_flags_horizontal = 10
+size_flags_vertical = 10
+text = "Help"
+
 [node name="CustomTooltip" type="Control" parent="Ui/UiSystem"]
 margin_top = -10.5
 margin_bottom = 10.5
@@ -4603,17 +4587,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GenerateBorderWindow" type="WindowDialog" parent="Ui/UiSystem"]
+[node name="NewMapWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -1352.0
 margin_top = -416.0
 margin_right = -1009.0
 margin_bottom = -105.0
 rect_min_size = Vector2( 320, 280 )
-window_title = "Generate border"
+window_title = "New map"
 script = ExtResource( 134 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/GenerateBorderWindow"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 20.0
@@ -4621,48 +4605,62 @@ margin_top = 20.0
 margin_right = -20.0
 margin_bottom = -20.0
 
-[node name="NoisePersistence" parent="Ui/UiSystem/GenerateBorderWindow/VBoxContainer" instance=ExtResource( 135 )]
-margin_top = 0.0
+[node name="ButtonBlankMap" type="Button" parent="Ui/UiSystem/NewMapWindow/VBoxContainer"]
 margin_right = 303.0
-margin_bottom = 41.0
+margin_bottom = 27.0
+text = "Blank map"
+
+[node name="NoiseButtonApplyBorder" type="Button" parent="Ui/UiSystem/NewMapWindow/VBoxContainer"]
+margin_top = 31.0
+margin_right = 303.0
+margin_bottom = 58.0
+text = "Border map"
+
+[node name="NoisePersistence" parent="Ui/UiSystem/NewMapWindow/VBoxContainer" instance=ExtResource( 135 )]
+margin_top = 62.0
+margin_right = 303.0
+margin_bottom = 103.0
 label_setting = "Persistence"
 max_value = 1.0
-step = 0.001
-value = 0.85
-
-[node name="NoisePeriod" parent="Ui/UiSystem/GenerateBorderWindow/VBoxContainer" instance=ExtResource( 135 )]
-margin_top = 45.0
-margin_right = 303.0
-margin_bottom = 86.0
-label_setting = "Period"
-min_value = 0.001
-max_value = 1.0
-step = 0.001
-value = 0.15
-
-[node name="NoiseLacunarity" parent="Ui/UiSystem/GenerateBorderWindow/VBoxContainer" instance=ExtResource( 135 )]
-margin_top = 90.0
-margin_right = 303.0
-margin_bottom = 131.0
-label_setting = "Lacunarity"
-max_value = 4.0
 step = 0.01
+value = 1.0
 
-[node name="NoiseOctaves" parent="Ui/UiSystem/GenerateBorderWindow/VBoxContainer" instance=ExtResource( 135 )]
-margin_top = 135.0
+[node name="NoisePeriod" parent="Ui/UiSystem/NewMapWindow/VBoxContainer" instance=ExtResource( 135 )]
+margin_top = 107.0
 margin_right = 303.0
-margin_bottom = 176.0
+margin_bottom = 148.0
+label_setting = "Period"
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 0.1
+
+[node name="NoiseLacunarity" parent="Ui/UiSystem/NewMapWindow/VBoxContainer" instance=ExtResource( 135 )]
+margin_top = 152.0
+margin_right = 303.0
+margin_bottom = 193.0
+label_setting = "Lacunarity"
+max_value = 1.0
+step = 0.01
+value = 0.2
+
+[node name="NoiseOctaves" parent="Ui/UiSystem/NewMapWindow/VBoxContainer" instance=ExtResource( 135 )]
+visible = false
+margin_top = 197.0
+margin_right = 303.0
+margin_bottom = 238.0
 label_setting = "Octaves"
 min_value = 1.0
 max_value = 9.0
 step = 1.0
 value = 9.0
 
-[node name="NoiseButtonApply" type="Button" parent="Ui/UiSystem/GenerateBorderWindow/VBoxContainer"]
-margin_top = 180.0
+[node name="NewMapCloseButton" type="Button" parent="Ui/UiSystem/NewMapWindow/VBoxContainer"]
+margin_top = 244.0
 margin_right = 303.0
-margin_bottom = 207.0
-text = "Apply"
+margin_bottom = 271.0
+size_flags_vertical = 10
+text = "Close"
 
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
@@ -4927,5 +4925,8 @@ script = ExtResource( 88 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/SlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/SlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="pressed" from="Ui/UiSystem/GenerateBorderWindow/VBoxContainer/NoiseButtonApply" to="Ui/UiSystem/GenerateBorderWindow" method="_on_NoiseButtonApply_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/ButtonBlankMap" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonBlankMap_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NoiseButtonApplyBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseButtonApply_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapCloseButton" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapCloseButton_pressed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]
