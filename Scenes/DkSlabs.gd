@@ -1,4 +1,6 @@
 extends Node
+onready var oGame = Nodelist.list["oGame"]
+
 var CODETIME_START
 
 var dat = [] # 1304 sets of 9 column indexes
@@ -19,7 +21,8 @@ var floorTexture = []
 func clm_asset():
 	CODETIME_START = OS.get_ticks_msec()
 	
-	var buffer = Filetypes.file_path_to_buffer(Settings.unearthdata.plus_file("slabs.clm"))
+	var filePath = dk_data_get_filepath("SLABS.CLM")
+	var buffer = Filetypes.file_path_to_buffer(filePath)
 	
 	buffer.seek(0)
 	var numberOfClmEntries = buffer.get_u16()
@@ -51,7 +54,8 @@ func clm_asset():
 func dat_asset():
 	CODETIME_START = OS.get_ticks_msec()
 	
-	var buffer = Filetypes.file_path_to_buffer(Settings.unearthdata.plus_file("slabs.dat"))
+	var filePath = dk_data_get_filepath("SLABS.DAT")
+	var buffer = Filetypes.file_path_to_buffer(filePath)
 	buffer.seek(2)
 	var numberOfSets = 1304
 	dat.resize(numberOfSets)
@@ -63,3 +67,16 @@ func dat_asset():
 			dat[i][subtile] = value
 	
 	print('Created DAT asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+
+
+func dk_data_get_filepath(lookForFileName):
+	var dir = Directory.new()
+	if dir.open(oGame.DK_DATA_DIRECTORY) == OK:
+		dir.list_dir_begin(true, false)
+		var fileName = dir.get_next()
+		while fileName != "":
+			if dir.current_is_dir() == false:
+				if fileName.to_upper() == lookForFileName.to_upper(): # Get file regardless of case (case insensitive)
+					return oGame.DK_DATA_DIRECTORY.plus_file(fileName)
+			fileName = dir.get_next()
+	return ""

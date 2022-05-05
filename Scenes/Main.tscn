@@ -2653,12 +2653,9 @@ visible = true
 margin_left = -976.0
 margin_top = 672.0
 margin_right = -293.0
-margin_bottom = 900.0
+margin_bottom = 886.0
 window_title = "About"
 script = ExtResource( 119 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/AboutWindow"]
 anchor_right = 1.0
@@ -2667,16 +2664,13 @@ margin_left = 20.0
 margin_top = 20.0
 margin_right = -20.0
 margin_bottom = -20.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AboutWindow/ScrollContainer"]
-margin_right = 640.0
+margin_right = 616.0
 margin_bottom = 174.0
 
 [node name="AboutDescriptionLabel" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer"]
-margin_right = 640.0
+margin_right = 616.0
 margin_bottom = 21.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
@@ -2687,7 +2681,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer"]
 margin_top = 25.0
-margin_right = 640.0
+margin_right = 616.0
 margin_bottom = 49.0
 rect_min_size = Vector2( 24, 24 )
 __meta__ = {
@@ -2696,7 +2690,7 @@ __meta__ = {
 
 [node name="AboutGridContainer" type="GridContainer" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer"]
 margin_top = 53.0
-margin_right = 640.0
+margin_right = 616.0
 margin_bottom = 174.0
 columns = 2
 __meta__ = {
@@ -2710,7 +2704,7 @@ text = "Github"
 
 [node name="LinkButton1" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
 margin_left = 75.0
-margin_right = 640.0
+margin_right = 544.0
 margin_bottom = 21.0
 text = "https://github.com/rainlizard/Unearth"
 __meta__ = {
@@ -2726,7 +2720,7 @@ text = "Itch.io"
 [node name="LinkButton2" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
 margin_left = 75.0
 margin_top = 25.0
-margin_right = 640.0
+margin_right = 544.0
 margin_bottom = 46.0
 focus_mode = 2
 text = "https://rainlizard.itch.io/unearth"
@@ -2734,53 +2728,47 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label3" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
 margin_top = 50.0
 margin_right = 71.0
 margin_bottom = 71.0
-text = "Forum"
+
+[node name="LabelBlank" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_left = 75.0
+margin_top = 50.0
+margin_right = 544.0
+margin_bottom = 71.0
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_top = 75.0
+margin_right = 71.0
+margin_bottom = 96.0
+text = "Forums"
 
 [node name="LinkButton3" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
 margin_left = 75.0
-margin_top = 50.0
-margin_right = 640.0
-margin_bottom = 71.0
+margin_top = 75.0
+margin_right = 544.0
+margin_bottom = 96.0
 focus_mode = 2
-text = "https://keeperklan.com/threads/7321-Unearth-DK1-map-editor"
+text = "https://keeperklan.com/forums/22-DK1-Mapmaking"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label4" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
-margin_top = 75.0
+margin_top = 100.0
 margin_right = 71.0
-margin_bottom = 96.0
+margin_bottom = 121.0
 text = "Discord"
 
 [node name="LinkButton4" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
 margin_left = 75.0
-margin_top = 75.0
-margin_right = 640.0
-margin_bottom = 96.0
+margin_top = 100.0
+margin_right = 544.0
+margin_bottom = 121.0
 focus_mode = 2
 text = "https://discord.com/invite/zKTjfDh"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label5" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
-margin_top = 100.0
-margin_right = 71.0
-margin_bottom = 121.0
-text = "Email"
-
-[node name="LinkButton5" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
-margin_left = 75.0
-margin_top = 100.0
-margin_right = 640.0
-margin_bottom = 121.0
-focus_mode = 2
-text = "ludorverr@gmail.com"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -4421,7 +4409,7 @@ margin_left = -2945.0
 margin_top = -1513.0
 margin_right = -1665.0
 margin_bottom = -793.0
-window_title = "Slabset"
+window_title = "Slabset [WIP]"
 resizable = true
 script = ExtResource( 132 )
 
@@ -4540,6 +4528,14 @@ margin_bottom = 173.0
 size_flags_horizontal = 6
 size_flags_vertical = 4
 columns = 3
+
+[node name="SlabsetButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_left = 5.0
+margin_top = 177.0
+margin_right = 163.0
+margin_bottom = 204.0
+size_flags_horizontal = 4
+text = "Export slabs.dat"
 
 [node name="SlabsetHelpButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
 margin_left = 114.0

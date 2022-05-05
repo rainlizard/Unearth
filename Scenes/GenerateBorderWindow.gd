@@ -7,6 +7,7 @@ onready var oNoisePeriod = Nodelist.list["oNoisePeriod"]
 onready var oNoisePersistence = Nodelist.list["oNoisePersistence"]
 onready var oNoiseLacunarity = Nodelist.list["oNoiseLacunarity"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
+onready var oDataClm = Nodelist.list["oDataClm"]
 
 var noise = OpenSimplexNoise.new()
 
@@ -20,8 +21,13 @@ func _process(delta):
 
 func _on_NoiseButtonApply_pressed():
 	var CODETIME_START = OS.get_ticks_msec()
-	print(oCurrentMap.path)
+	
+	# If a map is open, then clear it (remove objects and ownership and such)
 	if oCurrentMap.path != "":
+		oCurrentMap._on_ButtonNewMap_pressed()
+	
+	# If field is black (no map has been opened), then we need something to start with
+	if oDataClm.cubes.empty() == true:
 		oCurrentMap._on_ButtonNewMap_pressed()
 	
 	# Make fully rock and clear previous

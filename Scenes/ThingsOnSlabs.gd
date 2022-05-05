@@ -1,13 +1,14 @@
 extends Node
-var CODETIME_START
+onready var oDkSlabs = Nodelist.list["oDkSlabs"]
 
+var CODETIME_START
 var tngIndex = []
 var tngObject = []
 var numberOfThings = 0
 
 func slabtng_assets():
-	
-	var buffer = Filetypes.file_path_to_buffer(Settings.unearthdata.plus_file("slabs.tng"))
+	var filePath = oDkSlabs.dk_data_get_filepath("SLABS.TNG")
+	var buffer = Filetypes.file_path_to_buffer(filePath)
 	
 	buffer.seek(0)
 	numberOfThings = buffer.get_u16() # It says 359, however there are actually 362 entries in the file.

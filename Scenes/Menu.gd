@@ -50,6 +50,10 @@ func _ready():
 	oMenuButtonView.get_popup().connect("id_pressed",self,"_on_ViewSubmenu_Pressed")
 	oMenuButtonHelp.get_popup().connect("id_pressed",self,"_on_HelpSubmenu_Pressed")
 
+func _on_RecentSubmenu_Pressed(pressedID):
+	var map = recentlyOpenedPopupMenu.get_item_text(pressedID)
+	oOpenMap.open_map(map)
+
 func add_recent(map):
 	var findExisting = recentlyOpened.find(map)
 	if findExisting == -1:
@@ -59,20 +63,19 @@ func add_recent(map):
 	else:
 		recentlyOpened.push_front(recentlyOpened.pop_at(findExisting))
 	
-	recentlyOpenedPopupMenu.clear()
-	for i in recentlyOpened:
-		recentlyOpenedPopupMenu.add_item(i)
+	populate_recently_opened()
 	
 	Settings.write_cfg("recently_opened", recentlyOpened)
 
-func _on_RecentSubmenu_Pressed(pressedID):
-	var map = recentlyOpenedPopupMenu.get_item_text(pressedID)
-	oOpenMap.open_map(map)
-
 func initialize_recently_opened(value):
 	recentlyOpened = value
-	for i in recentlyOpened:
-		recentlyOpenedPopupMenu.add_item(i)
+	populate_recently_opened()
+
+func populate_recently_opened():
+	recentlyOpenedPopupMenu.clear()
+	for filePath in recentlyOpened:
+		filePath = filePath.replace("\\", "/")
+		recentlyOpenedPopupMenu.add_item(filePath)
 
 
 func _process(delta):

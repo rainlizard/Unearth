@@ -52,9 +52,11 @@ func start():
 			#open_map("G:/Games/Dungeon Keeper/campgns/keeporig/map00003.slb")
 			#open_map("G:/Games/Dungeon Keeper/campgns/ancntkpr/map00001.slb")
 			#open_map("G:/Games/Dungeon Keeper/ADiKtEd/levels/map00001.slb")
-			open_map("G:/Games/Dungeon Keeper/levels/personal/map00001.slb")
+			
 			#open_map("G:/Games/Dungeon Keeper/campgns/UndivineD/map00001.slb")
-			pass
+			open_map("G:/Games/Dungeon Keeper/levels/personal/map00001.slb")
+			#oCurrentMap.clear_map()
+			#pass
 		else:
 			oCurrentMap.clear_map()
 
@@ -62,6 +64,9 @@ func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
 func open_map(filePath): # auto opens other files
+	
+	# This will replace \ with /, just for the sake of fixing ugliness
+	filePath = filePath.replace("\\", "/")
 	
 	# Prevent opening any maps under any circumstance if you haven't set the dk exe yet. (Fix to launching via file association)
 	if oGame.EXECUTABLE_PATH == "":
