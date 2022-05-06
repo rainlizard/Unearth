@@ -2406,9 +2406,9 @@ __meta__ = {
 visible = true
 margin_left = -2006.0
 margin_top = 2227.0
-margin_right = -1329.0
-margin_bottom = 2789.0
-rect_min_size = Vector2( 300, 105 )
+margin_right = -1326.0
+margin_bottom = 2787.0
+rect_min_size = Vector2( 250, 87.5 )
 popup_exclusive = true
 window_title = "Save as"
 resizable = true
@@ -2419,9 +2419,6 @@ show_hidden_files = true
 current_dir = "/Godot/MyProjects/Unearth"
 current_path = "/Godot/MyProjects/Unearth/"
 script = ExtResource( 51 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="FileDialogOpen" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
@@ -3789,8 +3786,8 @@ anims/RESET = SubResource( 18 )
 visible = true
 margin_left = -2004.0
 margin_top = 1631.0
-margin_right = -1326.0
-margin_bottom = 2186.0
+margin_right = -1324.0
+margin_bottom = 2191.0
 rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 resizable = true
@@ -3809,8 +3806,8 @@ __meta__ = {
 visible = true
 margin_left = -1278.0
 margin_top = 2226.0
-margin_right = -607.0
-margin_bottom = 2792.0
+margin_right = -598.0
+margin_bottom = 2786.0
 rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 resizable = true
@@ -3833,8 +3830,8 @@ __meta__ = {
 visible = true
 margin_left = -1278.0
 margin_top = 1626.0
-margin_right = -607.0
-margin_bottom = 2190.0
+margin_right = -598.0
+margin_bottom = 2186.0
 rect_min_size = Vector2( 250, 87.5 )
 resizable = true
 dialog_text = "Any colours used that aren't in the DK palette will be set as bright purple.
@@ -3857,9 +3854,6 @@ margin_bottom = 1345.0
 window_title = "Texture editing"
 resizable = true
 script = ExtResource( 126 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow"]
 anchor_right = 1.0
@@ -4409,36 +4403,40 @@ margin_left = -2945.0
 margin_top = -1513.0
 margin_right = -1665.0
 margin_bottom = -793.0
-window_title = "Slabset [WIP]"
+window_title = "Slabset"
 resizable = true
 script = ExtResource( 132 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer"]
-margin_right = 1280.0
-margin_bottom = 720.0
+margin_right = 1260.0
+margin_bottom = 700.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="SlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 1108.0
-margin_bottom = 720.0
+margin_right = 1088.0
+margin_bottom = 700.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer"]
-margin_left = 1112.0
-margin_right = 1280.0
-margin_bottom = 720.0
+margin_left = 1092.0
+margin_right = 1260.0
+margin_bottom = 700.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer"]
 margin_right = 168.0
-margin_bottom = 720.0
+margin_bottom = 700.0
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
@@ -4529,19 +4527,24 @@ size_flags_horizontal = 6
 size_flags_vertical = 4
 columns = 3
 
-[node name="SlabsetButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
-margin_left = 5.0
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 177.0
-margin_right = 163.0
-margin_bottom = 204.0
-size_flags_horizontal = 4
+margin_right = 168.0
+margin_bottom = 201.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="SlabsetExportButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 205.0
+margin_right = 168.0
+margin_bottom = 232.0
+size_flags_horizontal = 9
 text = "Export slabs.dat"
 
 [node name="SlabsetHelpButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
 margin_left = 114.0
-margin_top = 693.0
+margin_top = 673.0
 margin_right = 168.0
-margin_bottom = 720.0
+margin_bottom = 700.0
 size_flags_horizontal = 10
 size_flags_vertical = 10
 text = "Help"
@@ -4657,6 +4660,18 @@ margin_right = 303.0
 margin_bottom = 271.0
 size_flags_vertical = 10
 text = "Close"
+
+[node name="ExportSlabsetDatDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -2004.0
+margin_top = 2858.0
+margin_right = -1324.0
+margin_bottom = 3418.0
+rect_min_size = Vector2( 250, 87.5 )
+access = 2
+show_hidden_files = true
+current_dir = "/Godot/MyProjects/Unearth"
+current_path = "/Godot/MyProjects/Unearth/"
 
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
@@ -4921,8 +4936,10 @@ script = ExtResource( 88 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/SlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/SlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/SlabsetExportButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetExportButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/ButtonBlankMap" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonBlankMap_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NoiseButtonApplyBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseButtonApply_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapCloseButton" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapCloseButton_pressed"]
+[connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetDatDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetDatDialog_file_selected"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

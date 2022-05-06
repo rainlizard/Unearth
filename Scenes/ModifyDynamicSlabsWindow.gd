@@ -8,6 +8,9 @@ onready var oDkSlabs = Nodelist.list["oDkSlabs"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oSlabPalette = Nodelist.list["oSlabPalette"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oExportSlabsetDatDialog = Nodelist.list["oExportSlabsetDatDialog"]
+onready var oGame = Nodelist.list["oGame"]
+
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -147,3 +150,24 @@ func _on_SlabsetHelpButton_pressed():
 	#helptxt += '\n'
 	#helptxt += ""
 	oMessage.big("Help",helptxt)
+
+
+func _on_SlabsetExportButton_pressed():
+	Utils.popup_centered(oExportSlabsetDatDialog)
+	oExportSlabsetDatDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetDatDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetDatDialog.current_file = "slabs.dat"
+
+func _on_ExportSlabsetDatDialog_file_selected(filePath):
+	var buffer = StreamPeerBuffer.new()
+	
+	buffer.put_u16(1304)
+	for slab in 1304:
+		for subtile in 9:
+			var value = 65536 - oDkSlabs.dat[slab][subtile]
+			buffer.put_u16(value)
+	
+	var file = File.new()
+	file.open(filePath,File.WRITE)
+	file.store_buffer(buffer.data_array)
+	file.close()
