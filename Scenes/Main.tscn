@@ -1359,9 +1359,6 @@ mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 17 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Menu" type="PanelContainer" parent="Ui/UiSystem"]
 self_modulate = Color( 0.831373, 0.831373, 0.831373, 1 )
@@ -1559,9 +1556,6 @@ rect_min_size = Vector2( 185, 0 )
 window_title = "Browse maps"
 resizable = true
 script = ExtResource( 54 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/MapBrowser"]
 anchor_right = 1.0
@@ -1616,7 +1610,7 @@ __meta__ = {
 [node name="DynamicMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
 margin_top = 50.0
 margin_right = 326.0
-margin_bottom = 760.0
+margin_bottom = 757.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1649,9 +1643,9 @@ __meta__ = {
 }
 
 [node name="HSeparator2" type="HSeparator" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 760.0
+margin_top = 757.0
 margin_right = 326.0
-margin_bottom = 768.0
+margin_bottom = 765.0
 mouse_filter = 1
 custom_constants/separation = 8
 custom_styles/separator = SubResource( 11 )
@@ -1660,16 +1654,16 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 768.0
+margin_top = 765.0
 margin_right = 326.0
-margin_bottom = 795.0
+margin_bottom = 789.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="TextureButton" type="TextureButton" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer"]
 margin_right = 24.0
-margin_bottom = 27.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Open directory in OS"
 focus_mode = 0
@@ -1699,8 +1693,8 @@ __meta__ = {
 
 [node name="BrowserFilename" type="Label" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer"]
 margin_left = 28.0
-margin_right = 263.0
-margin_bottom = 27.0
+margin_right = 326.0
+margin_bottom = 24.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 align = 2
@@ -1710,16 +1704,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ButtonFilename" type="Button" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 267.0
-margin_right = 326.0
-margin_bottom = 27.0
-text = "Open"
-
 [node name="HSeparator3" type="HSeparator" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 795.0
+margin_top = 789.0
 margin_right = 326.0
-margin_bottom = 803.0
+margin_bottom = 797.0
 mouse_filter = 1
 custom_constants/separation = 8
 custom_styles/separator = SubResource( 11 )
@@ -1728,12 +1716,36 @@ __meta__ = {
 }
 
 [node name="DateSaved" type="Label" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 803.0
+visible = false
+margin_top = 776.0
 margin_right = 326.0
-margin_bottom = 824.0
+margin_bottom = 797.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+align = 2
+valign = 1
+clip_text = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
+margin_top = 797.0
+margin_right = 326.0
+margin_bottom = 824.0
+
+[node name="BrowsePlayButton" type="Button" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer2"]
+visible = false
+margin_right = 161.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Play"
+
+[node name="BrowseOpenButton" type="Button" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer2"]
+margin_right = 326.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Open"
 
 [node name="FocusController" type="Control" parent="Ui/UiSystem"]
 margin_right = 40.0
@@ -2480,9 +2492,6 @@ margin_bottom = 1531.0
 rect_min_size = Vector2( 314, 220 )
 window_title = "Slab placement"
 script = ExtResource( 103 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/SlabSettingsWindow"]
 anchor_right = 1.0
@@ -3841,9 +3850,6 @@ filters = PoolStringArray( "*.dat" )
 show_hidden_files = true
 current_dir = "/Godot/MyProjects/Unearth"
 current_path = "/Godot/MyProjects/Unearth/"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TextureEditingWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -4533,12 +4539,39 @@ margin_right = 168.0
 margin_bottom = 201.0
 rect_min_size = Vector2( 24, 24 )
 
-[node name="SlabsetExportButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ExportSlabsDat" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 205.0
 margin_right = 168.0
 margin_bottom = 232.0
 size_flags_horizontal = 9
 text = "Export slabs.dat"
+
+[node name="Spacing3" type="Control" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 236.0
+margin_right = 168.0
+margin_bottom = 260.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 264.0
+margin_right = 168.0
+margin_bottom = 285.0
+text = "Export .cfg"
+align = 1
+
+[node name="ExportSlabsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 289.0
+margin_right = 168.0
+margin_bottom = 316.0
+size_flags_horizontal = 9
+text = "Slabset"
+
+[node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 320.0
+margin_right = 168.0
+margin_bottom = 347.0
+size_flags_horizontal = 9
+text = "Columns"
 
 [node name="SlabsetHelpButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
 margin_left = 114.0
@@ -4663,10 +4696,34 @@ text = "Close"
 
 [node name="ExportSlabsetDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -2004.0
-margin_top = 2858.0
-margin_right = -1324.0
-margin_bottom = 3418.0
+margin_left = -3731.0
+margin_top = 2286.0
+margin_right = -3051.0
+margin_bottom = 2846.0
+rect_min_size = Vector2( 250, 87.5 )
+access = 2
+show_hidden_files = true
+current_dir = "/Godot/MyProjects/Unearth"
+current_path = "/Godot/MyProjects/Unearth/"
+
+[node name="ExportSlabsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -2797.0
+margin_top = 3062.0
+margin_right = -2117.0
+margin_bottom = 3622.0
+rect_min_size = Vector2( 250, 87.5 )
+access = 2
+show_hidden_files = true
+current_dir = "/Godot/MyProjects/Unearth"
+current_path = "/Godot/MyProjects/Unearth/"
+
+[node name="ExportColumnCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -2834.0
+margin_top = 2262.0
+margin_right = -2154.0
+margin_bottom = 2822.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
 show_hidden_files = true
@@ -4839,7 +4896,8 @@ script = ExtResource( 88 )
 [connection signal="item_selected" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser" method="_on_DynamicMapTree_item_selected"]
 [connection signal="item_selected" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" method="_on_DynamicMapTree_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer/TextureButton" to="Ui/UiSystem/MapBrowser" method="_on_TextureButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer/ButtonFilename" to="Ui/UiSystem/MapBrowser" method="_on_ButtonFilename_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer2/BrowsePlayButton" to="Ui/UiSystem/MapBrowser" method="_on_BrowsePlayButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer2/BrowseOpenButton" to="Ui/UiSystem/MapBrowser" method="_on_BrowseOpenButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/ChooseDkExe" method="_on_ChooseDkExe_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/SettingsWindow" method="_on_ChooseDkExe_file_selected"]
 [connection signal="dir_selected" from="Ui/UiSystem/ChooseDefaultSaveFolder" to="Ui/UiSystem/ChooseDefaultSaveFolder" method="_on_ChooseDefaultSaveFolder_dir_selected"]
@@ -4936,10 +4994,14 @@ script = ExtResource( 88 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/SlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/SlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/SlabsetExportButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetExportButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/ExportSlabsDat" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsDat_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/ExportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/ButtonBlankMap" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonBlankMap_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NoiseButtonApplyBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseButtonApply_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapCloseButton" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapCloseButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetDatDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetDatDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetCfgDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ExportColumnCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnCfgDialog_file_selected"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

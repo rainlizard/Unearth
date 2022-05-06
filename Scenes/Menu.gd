@@ -103,9 +103,9 @@ func _process(delta):
 	
 	if oCurrentMap.path == "":
 		# "Save" should only be available to maps that exist - that have already been "Saved as".
-		oMenuButtonFile.get_popup().set_item_disabled(3,true)
-		oMenuButtonEdit.get_popup().set_item_disabled(1,true) # Open script file
-		oMenuButtonEdit.get_popup().set_item_disabled(2,true) # Open map folder
+		oMenuButtonFile.get_popup().set_item_disabled(4,true) # "Save"
+		oMenuButtonEdit.get_popup().set_item_disabled(1,true) # Open map folder
+		oMenuButtonEdit.get_popup().set_item_disabled(2,true) # Open script file
 		# Can only play a map that has been "Saved as"
 		oPlayButton.disabled = true
 	

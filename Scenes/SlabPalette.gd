@@ -3,6 +3,7 @@ onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDkSlabs = Nodelist.list["oDkSlabs"]
 onready var oDkSlabThings = Nodelist.list["oDkSlabThings"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 var slabPal = []
 
@@ -48,9 +49,6 @@ func start():
 	if oDkSlabs.cubes.empty() == true: oDkSlabs.clm_asset()
 	if oDkSlabs.dat.empty() == true: oDkSlabs.dat_asset()
 	if oDkSlabThings.tngIndex.empty() == true: oDkSlabThings.slabtng_assets()
-	
-	#create_keeperfx_cfg_slab_autotile_data()
-	#create_keeperfx_cfg_columns()
 	
 	# Create the slabPal based on the assetDat, but use the currently opened map's CLM.
 	CODETIME_START = OS.get_ticks_msec()
@@ -549,86 +547,89 @@ func edit_damaged_wall():
 				slabPal[slabVariation + dir.all + 9][5] = dmgWallLava2
 				slabPal[slabVariation + dir.all + 9][7] = dmgWallLava2
 
-func create_keeperfx_cfg_columns():
+func create_keeperfx_cfg_columns(filePath): #"res://columns.cfg"
 	var textFile = File.new()
-	textFile.open("res://columns.cfg", File.WRITE)
+	if textFile.open(filePath, File.WRITE) == OK:
 	
-	textFile.store_line('[common]')
-	textFile.store_line('ColumnsCount = 2048')
-	textFile.store_line('\r')
-	
-	for i in oDkSlabs.use.size():
-		textFile.store_line('[column' + str(i) +']')
-		textFile.store_line('Utilized(0-1) = ' + str(oDkSlabs.use[i]))
-		textFile.store_line('Permanent(2) = ' + str(oDkSlabs.permanent[i]))
-		textFile.store_line('Lintel(2) = ' + str(oDkSlabs.lintel[i]))
-		textFile.store_line('Height(2) = ' + str(oDkSlabs.height[i]))
-		textFile.store_line('SolidMask(3-4) = ' + str(oDkSlabs.solidMask[i]))
-		textFile.store_line('FloorTexture(5-6) = ' + str(oDkSlabs.floorTexture[i]))
-		textFile.store_line('Orientation(7) = ' + str(oDkSlabs.orientation[i]))
-		textFile.store_line('Cubes(8-23) = ' + str(oDkSlabs.cubes[i]))
+		textFile.store_line('[common]')
+		textFile.store_line('ColumnsCount = 2048')
 		textFile.store_line('\r')
+		
+		for i in oDkSlabs.use.size():
+			textFile.store_line('[column' + str(i) +']')
+			textFile.store_line('Utilized = ' + str(oDkSlabs.use[i])) #(0-1)
+			textFile.store_line('Permanent = ' + str(oDkSlabs.permanent[i])) #(2)
+			textFile.store_line('Lintel = ' + str(oDkSlabs.lintel[i])) #(2)
+			textFile.store_line('Height = ' + str(oDkSlabs.height[i])) #(2)
+			textFile.store_line('SolidMask = ' + str(oDkSlabs.solidMask[i])) #(3-4)
+			textFile.store_line('FloorTexture = ' + str(oDkSlabs.floorTexture[i])) #(5-6)
+			textFile.store_line('Orientation = ' + str(oDkSlabs.orientation[i])) #(7)
+			textFile.store_line('Cubes = ' + str(oDkSlabs.cubes[i])) #(8-23)
+			textFile.store_line('\r')
+		oMessage.quick("Saved: " + filePath)
+	else:
+		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
-func create_keeperfx_cfg_slab_autotile_data():
+func create_keeperfx_cfg_slab_autotile_data(filePath): #"res://slab_autotile_data.cfg"
 	var textFile = File.new()
-	textFile.open("res://slab_autotile_data.cfg", File.WRITE)
-	
-	textFile.close()
-	
-	var slabSection = 0
-	
-	for slabID in 58:
-		#textFile.store_line('[[slab' + str(slabSection) + '.columns]]')
+	if textFile.open(filePath, File.WRITE) == OK:
+		var slabSection = 0
 		
-		var variationStart = (slabID * 28)
-		if slabID >= 42:
-			variationStart = (42 * 28) + (8 * (slabID - 42))
-		
-		var variationCount = 28
-		if slabID >= 42:
-			variationCount = 8
-		
-		for variationNumber in variationCount:
-			if variationStart + variationNumber < oDkSlabs.dat.size():
-				var beginLine = get_dir_text(variationNumber) + ' = '
-				textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + ']')
-				textFile.store_line('columns = ' + String(oDkSlabs.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
+		for slabID in 58:
+			#textFile.store_line('[[slab' + str(slabSection) + '.columns]]')
 			
-			var hasObjects = false
-			for i in oDkSlabThings.tngObject.size():
-				if oDkSlabThings.tngObject[i][1] == variationStart + variationNumber: #VariationIndex
-					textFile.store_line("\r")
-					hasObjects = true
-					textFile.store_line('[[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '.objects]]')
-					for z in 9:
-						var val = oDkSlabThings.tngObject[i][z]
-						var beginLine = ''
-						match z:
-							0: beginLine = 'IsLight'
-							1: beginLine = 'VariationIndex'
-							2: beginLine = 'Subtile'
-							3: beginLine = 'RelativeX'
-							4: beginLine = 'RelativeY'
-							5: beginLine = 'RelativeZ'
-							6: beginLine = 'ThingType'
-							7: beginLine = 'ThingSubtype'
-							8: beginLine = 'EffectRange'
-						if z == 1: continue # skip "VariationIndex"
-						
-						beginLine += ' = '
-						
-						textFile.store_line(beginLine + String(val))
+			var variationStart = (slabID * 28)
+			if slabID >= 42:
+				variationStart = (42 * 28) + (8 * (slabID - 42))
 			
-			if hasObjects == false:
-				textFile.store_line('objects = []')
+			var variationCount = 28
+			if slabID >= 42:
+				variationCount = 8
 			
+			for variationNumber in variationCount:
+				if variationStart + variationNumber < oDkSlabs.dat.size():
+					var beginLine = get_dir_text(variationNumber) + ' = '
+					textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + ']')
+					textFile.store_line('columns = ' + String(oDkSlabs.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
+				
+				var hasObjects = false
+				for i in oDkSlabThings.tngObject.size():
+					if oDkSlabThings.tngObject[i][1] == variationStart + variationNumber: #VariationIndex
+						textFile.store_line("\r")
+						hasObjects = true
+						textFile.store_line('[[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '.objects]]')
+						for z in 9:
+							var val = oDkSlabThings.tngObject[i][z]
+							var beginLine = ''
+							match z:
+								0: beginLine = 'IsLight'
+								1: beginLine = 'VariationIndex'
+								2: beginLine = 'Subtile'
+								3: beginLine = 'RelativeX'
+								4: beginLine = 'RelativeY'
+								5: beginLine = 'RelativeZ'
+								6: beginLine = 'ThingType'
+								7: beginLine = 'ThingSubtype'
+								8: beginLine = 'EffectRange'
+							if z == 1: continue # skip "VariationIndex"
+							
+							beginLine += ' = '
+							
+							textFile.store_line(beginLine + String(val))
+				
+				if hasObjects == false:
+					textFile.store_line('objects = []')
+				
+				textFile.store_line("\r")
+				
 			textFile.store_line("\r")
 			
-		textFile.store_line("\r")
+			slabSection += 1
 		
-		slabSection += 1
-	
-	textFile.close()
+		textFile.close()
+		oMessage.quick("Saved: " + filePath)
+	else:
+		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
 func get_dir_text(variationNumber):
 	match variationNumber:

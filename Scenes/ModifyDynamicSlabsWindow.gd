@@ -10,6 +10,8 @@ onready var oSlabPalette = Nodelist.list["oSlabPalette"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oExportSlabsetDatDialog = Nodelist.list["oExportSlabsetDatDialog"]
 onready var oGame = Nodelist.list["oGame"]
+onready var oExportColumnCfgDialog = Nodelist.list["oExportColumnCfgDialog"]
+onready var oExportSlabsetCfgDialog = Nodelist.list["oExportSlabsetCfgDialog"]
 
 
 # Declare member variables here. Examples:
@@ -145,18 +147,12 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 
 func _on_SlabsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "This feature is for viewing and editing slabs.dat and slabs.clm from DK's /data/ directory."
+	helptxt += "This feature is for viewing and editing slabs.dat from DK's /data/ directory. Export and replace slabs.dat to mod the game. The cfg exports are useless at this moment."
 	#helptxt += '\n'
 	#helptxt += '\n'
 	#helptxt += ""
 	oMessage.big("Help",helptxt)
 
-
-func _on_SlabsetExportButton_pressed():
-	Utils.popup_centered(oExportSlabsetDatDialog)
-	oExportSlabsetDatDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportSlabsetDatDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportSlabsetDatDialog.current_file = "slabs.dat"
 
 func _on_ExportSlabsetDatDialog_file_selected(filePath):
 	var buffer = StreamPeerBuffer.new()
@@ -168,6 +164,34 @@ func _on_ExportSlabsetDatDialog_file_selected(filePath):
 			buffer.put_u16(value)
 	
 	var file = File.new()
-	file.open(filePath,File.WRITE)
-	file.store_buffer(buffer.data_array)
-	file.close()
+	
+	if file.open(filePath,File.WRITE) == OK:
+		file.store_buffer(buffer.data_array)
+		file.close()
+		oMessage.quick("Saved: " + filePath)
+	else:
+		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
+
+func _on_ExportSlabsetCfgDialog_file_selected(filePath):
+	oSlabPalette.create_keeperfx_cfg_slab_autotile_data(filePath)
+
+func _on_ExportColumnCfgDialog_file_selected(filePath):
+	oSlabPalette.create_keeperfx_cfg_columns(filePath)
+
+func _on_ExportSlabsDat_pressed():
+	Utils.popup_centered(oExportSlabsetDatDialog)
+	oExportSlabsetDatDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetDatDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetDatDialog.current_file = "slabs.dat"
+
+func _on_ExportSlabsCfg_pressed():
+	Utils.popup_centered(oExportSlabsetCfgDialog)
+	#oExportSlabsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	#oExportSlabsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetCfgDialog.current_file = "slabset.cfg"
+
+func _on_ExportColumnsCfg_pressed():
+	Utils.popup_centered(oExportColumnCfgDialog)
+	#oExportColumnCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	#oExportColumnCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportColumnCfgDialog.current_file = "columns.cfg"

@@ -4,7 +4,8 @@ onready var oSaveMap = Nodelist.list["oSaveMap"]
 onready var oDeleteMap = Nodelist.list["oDeleteMap"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oLineEditFilter = Nodelist.list["oLineEditFilter"]
-onready var oButtonFilename = Nodelist.list["oButtonFilename"]
+onready var oBrowseOpenButton = Nodelist.list["oBrowseOpenButton"]
+#onready var oBrowsePlayButton = Nodelist.list["oBrowsePlayButton"]
 onready var oDynamicMapTree = Nodelist.list["oDynamicMapTree"]
 onready var oSourceMapTree = Nodelist.list["oSourceMapTree"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
@@ -16,7 +17,8 @@ onready var oUi = Nodelist.list["oUi"]
 
 func _ready():
 	oBrowserFilename.text = oGame.GAME_DIRECTORY
-	oButtonFilename.visible = false
+	oBrowseOpenButton.visible = false
+	#oBrowsePlayButton.visible = false
 
 func _on_MapBrowser_about_to_show():
 	oSourceMapTree.update_source_tree()
@@ -33,9 +35,6 @@ func _on_DynamicMapTree_item_activated():
 	if selectedTreeItem.get_metadata(1) == "is_a_file":
 		activate(path)
 
-func _on_ButtonFilename_pressed():
-	var path = oBrowserFilename.text
-	activate(path)
 
 func activate(path):
 	path = path.get_basename()
@@ -46,16 +45,18 @@ func _on_DynamicMapTree_item_selected():
 	var path = selectedTreeItem.get_metadata(0)
 	# Set modified time, if it's a file
 	if selectedTreeItem.get_metadata(1) == "is_a_file":
-		oButtonFilename.visible = true
+		oBrowseOpenButton.visible = true
+		#oBrowsePlayButton.visible = true
 		var file = File.new()
 		var modifiedTime = file.get_modified_time(path + '.slb') # This might cause case-sensitive issues but I don't care right now.
-		oDateSaved.text = convert_unix_time_to_readable(modifiedTime)
+		oDateSaved.text = convert_unix_time_to_readable(modifiedTime) #'Last modified: '+
 		file.close()
 		
 		# Set filename field to selected item
 		
 	else:
-		oButtonFilename.visible = false
+		oBrowseOpenButton.visible = false
+		#oBrowsePlayButton.visible = false
 		# "Directory" modified time is not shown
 		oDateSaved.text = ""
 		#oBrowserFilename.text = ""
@@ -130,3 +131,12 @@ func _on_MapBrowser_visibility_changed():
 		oUi.hide_tools()
 	else:
 		oUi.show_tools()
+
+
+func _on_BrowsePlayButton_pressed():
+	pass # Replace with function body.
+
+
+func _on_BrowseOpenButton_pressed():
+	var path = oBrowserFilename.text
+	activate(path)
