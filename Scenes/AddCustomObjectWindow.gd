@@ -9,6 +9,8 @@ onready var oSelector = Nodelist.list["oSelector"]
 onready var oThingTabs = Nodelist.list["oThingTabs"]
 onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oWarningIdInUse = Nodelist.list["oWarningIdInUse"]
+onready var oCustomObjectImageFileDialog = Nodelist.list["oCustomObjectImageFileDialog"]
+onready var oLabelCustomObjectImagePath = Nodelist.list["oLabelCustomObjectImagePath"]
 
 var tab = Things.TAB_CREATURE
 
@@ -27,6 +29,15 @@ func _process(delta):
 	oWarningIdInUse.visible = thinglist_has_subtype(get_thingType(), value)
 
 func _on_AddCustomObjectButton_pressed():
+	var imgSrc = oLabelCustomObjectImagePath.text
+	if imgSrc != "":
+		var imgDest = Settings.unearthdata.plus_file("custom-object-images").plus_file(imgSrc.get_file())
+		var dir = Directory.new()
+		var successOrFailure = dir.copy(imgSrc, imgDest)
+		if successOrFailure != OK:
+			oMessage.quick("Error " + str(successOrFailure) + ": failed copying image.")
+			return
+	
 	var givenName = oNewObjectName.text
 	
 	if givenName == "":
@@ -38,12 +49,16 @@ func _on_AddCustomObjectButton_pressed():
 	
 	var tabToPlaceIn = oNewObjectTab.get_item_metadata(oNewObjectTab.selected)
 	
+	
+	
+	Settings.unearthdata.plus_file("custom-object-images").plus_file(filename)
+	
 	oCustomObjectSystem.add_object([
 	get_thingType(), # thingType
 	int(oNewObjectSubtypeID.text), # subtype
 	givenName, # Name
-	"", # Image
-	"", # Portrait
+	imgSrc.get_file(), # Image
+	imgSrc.get_file(), # Portrait
 	tabToPlaceIn,
 	])
 	
@@ -76,6 +91,9 @@ func _on_NewObjectType_item_selected(index):
 func _on_AddCustomObjectWindow_visibility_changed():
 	if visible == true:
 		auto_fill_subtype_field()
+	else:
+		yield(get_tree(),'idle_frame')
+		oLabelCustomObjectImagePath.text = ""
 
 func auto_fill_subtype_field():
 	var theNextEmptySubtypeID = get_empty_entry_thinglist(get_thingType())
@@ -117,3 +135,11 @@ func get_empty_entry_thinglist(thingType):
 		if db.has(i) == false:
 			return i
 		i += 1
+
+
+func _on_NewObjectImage_pressed():
+	Utils.popup_centered(oCustomObjectImageFileDialog)
+
+
+func _on_CustomObjectImageFileDialog_file_selected(filePath):
+	oLabelCustomObjectImagePath.text = filePath

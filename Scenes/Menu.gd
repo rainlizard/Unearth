@@ -32,6 +32,7 @@ onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
+onready var oDataLif = Nodelist.list["oDataLif"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -50,14 +51,18 @@ func _ready():
 	oMenuButtonView.get_popup().connect("id_pressed",self,"_on_ViewSubmenu_Pressed")
 	oMenuButtonHelp.get_popup().connect("id_pressed",self,"_on_HelpSubmenu_Pressed")
 
-func _on_RecentSubmenu_Pressed(pressedID):
-	var map = recentlyOpenedPopupMenu.get_item_text(pressedID)
-	oOpenMap.open_map(map)
 
-func add_recent(map):
-	var findExisting = recentlyOpened.find(map)
+func _on_RecentSubmenu_Pressed(pressedID):
+	var recentString = recentlyOpenedPopupMenu.get_item_metadata(pressedID)
+	oOpenMap.open_map(recentString)
+
+
+func add_recent(filePath):
+	var recentString = filePath
+	
+	var findExisting = recentlyOpened.find(recentString)
 	if findExisting == -1:
-		recentlyOpened.push_front(map)
+		recentlyOpened.push_front(recentString)
 		if recentlyOpened.size() > 10:
 			recentlyOpened.pop_back()
 	else:
@@ -67,15 +72,29 @@ func add_recent(map):
 	
 	Settings.write_cfg("recently_opened", recentlyOpened)
 
+
 func initialize_recently_opened(value):
 	recentlyOpened = value
 	populate_recently_opened()
 
+
 func populate_recently_opened():
 	recentlyOpenedPopupMenu.clear()
-	for filePath in recentlyOpened:
+	for i in recentlyOpened.size():
+		var filePath = recentlyOpened[i]
 		filePath = filePath.replace("\\", "/")
-		recentlyOpenedPopupMenu.add_item(filePath)
+		
+		var mapName = oDataLif.lif_name_text(filePath + '.lif')
+		if mapName == "":
+			mapName = oDataLif.lif_name_text(filePath + '.LIF')
+		if mapName == "":
+			mapName = oDataLif.get_special_lif_text(filePath)
+		if mapName == "":
+			mapName = oDataLif.get_special_lif_text(filePath)
+		
+		recentlyOpenedPopupMenu.add_item(mapName + ' - ' + filePath, i)
+		
+		recentlyOpenedPopupMenu.set_item_metadata(i, filePath)
 
 
 func _process(delta):
@@ -119,6 +138,7 @@ func _process(delta):
 		fixMenuExpansion = oEditor.mapHasBeenEdited
 		hide()
 		show()
+
 
 func _on_FileSubmenu_Pressed(pressedID):
 	match pressedID:

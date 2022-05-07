@@ -19,6 +19,8 @@ func add_object(array):
 	oPickThingWindow.initialize_thing_grid_items()
 
 func load_file():
+	var LOAD_CUSTOM_OBJECTS_CODETIME_START = OS.get_ticks_msec()
+	
 	objectsFile.load(Settings.unearthdata.plus_file("custom_objects.cfg"))
 	
 	for sectionName in objectsFile.get_sections():
@@ -30,8 +32,24 @@ func load_file():
 		var objImage = objectsFile.get_value(sectionName, "IMAGE", "")
 		var objPortrait = objectsFile.get_value(sectionName, "PORTRAIT", "")
 		var objTab = objectsFile.get_value(sectionName, "TAB", 0)
-		if objImage == "": objImage = null # This is to prevent an annoying line in the Debugger
-		if objPortrait == "": objPortrait = null
+		
+		if objImage == "":
+			objImage = null # This is to prevent an annoying line in the Debugger
+		else:
+			var img = Image.new()
+			var tex = ImageTexture.new()
+			img.load(Settings.unearthdata.plus_file("custom-object-images").plus_file(objImage))
+			tex.create_from_image(img)
+			objImage = tex
+		
+		if objPortrait == "":
+			objPortrait = null
+		else:
+			var img = Image.new()
+			var tex = ImageTexture.new()
+			img.load(Settings.unearthdata.plus_file("custom-object-images").plus_file(objPortrait))
+			tex.create_from_image(img)
+			objPortrait = tex
 		
 		var constructArray = [
 			objName,
@@ -48,7 +66,7 @@ func load_file():
 		
 		#print(Things.DATA_OBJECT[objSubtype])
 	
-	print('Custom objects loaded into memory')
+	print('Loaded custom objects: ' + str(OS.get_ticks_msec() - LOAD_CUSTOM_OBJECTS_CODETIME_START) + 'ms')
 
 func remove_object(thingType, subtype):
 	oPickThingWindow.set_selection(null, null)

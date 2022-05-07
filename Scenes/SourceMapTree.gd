@@ -124,7 +124,7 @@ func SLB_WANTS_NAME(pathString,newTreeItem):
 
 
 func LIF_WANTS_TO_GIVE_NAME(pathString):
-	var lifNameText = lif_name_text(pathString)
+	var lifNameText = oDataLif.lif_name_text(pathString)
 	var BASENAME = pathString.get_basename().to_upper()
 	if treeItemsThatWantNames.has(BASENAME):
 		var fetchItem = treeItemsThatWantNames[BASENAME]
@@ -134,8 +134,3 @@ func LIF_WANTS_TO_GIVE_NAME(pathString):
 		lifNames[BASENAME] = lifNameText
 
 
-func lif_name_text(pathString):
-	var buffer = Filetypes.file_path_to_buffer(pathString)
-	var array = oReadData.lif_buffer_to_array(buffer)
-	var mapName = oReadData.lif_array_to_map_name(array)
-	return mapName

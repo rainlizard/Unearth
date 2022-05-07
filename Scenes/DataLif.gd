@@ -15,6 +15,14 @@ func clear():
 	
 	data = constructString
 
+
+func lif_name_text(pathString):
+	var buffer = Filetypes.file_path_to_buffer(pathString)
+	var array = oReadData.lif_buffer_to_array(buffer)
+	var mapName = oReadData.lif_array_to_map_name(array)
+	return mapName
+
+
 func get_special_lif_text(pathString): # Uses the path only as a string rather than reading it as a file
 	
 	var PATH_UPPERCASE = pathString.to_upper()

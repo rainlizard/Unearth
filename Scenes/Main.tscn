@@ -2833,9 +2833,6 @@ margin_right = 977.0
 margin_bottom = 978.0
 window_title = "Add custom object"
 script = ExtResource( 91 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AddCustomObjectWindow"]
 anchor_right = 1.0
@@ -2925,31 +2922,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label4" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
+[node name="Label5" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
 margin_top = 153.0
 margin_right = 59.0
 margin_bottom = 174.0
-text = "Image:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NewObjectImage" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-self_modulate = Color( 1, 1, 1, 0.145098 )
-margin_left = 122.0
-margin_top = 150.0
-margin_right = 289.0
-margin_bottom = 177.0
-size_flags_horizontal = 8
-text = "Not implemented"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label5" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_top = 184.0
-margin_right = 59.0
-margin_bottom = 205.0
 text = "Tab:"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2957,26 +2933,53 @@ __meta__ = {
 
 [node name="NewObjectTab" type="OptionButton" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
 margin_left = 158.0
-margin_top = 181.0
+margin_top = 150.0
 margin_right = 289.0
-margin_bottom = 208.0
+margin_bottom = 177.0
 size_flags_horizontal = 10
 text = "Decoration"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
+[node name="Label4" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
+margin_top = 184.0
+margin_right = 59.0
+margin_bottom = 205.0
+text = "Image:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NewObjectImage" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
+margin_left = 153.0
+margin_top = 181.0
+margin_right = 289.0
+margin_bottom = 208.0
+size_flags_horizontal = 8
+text = "Choose image"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LabelCustomObjectImagePath" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
 margin_top = 212.0
 margin_right = 289.0
-margin_bottom = 237.0
+margin_bottom = 233.0
+align = 2
+clip_text = true
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
+margin_top = 237.0
+margin_right = 289.0
+margin_bottom = 262.0
 rect_min_size = Vector2( 25, 25 )
 
 [node name="AddCustomObjectButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
 margin_left = 121.0
-margin_top = 241.0
+margin_top = 266.0
 margin_right = 168.0
-margin_bottom = 268.0
+margin_bottom = 293.0
 size_flags_horizontal = 6
 size_flags_vertical = 10
 text = "Add"
@@ -2986,9 +2989,9 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
 modulate = Color( 1, 1, 1, 0.25098 )
-margin_top = 272.0
+margin_top = 297.0
 margin_right = 289.0
-margin_bottom = 293.0
+margin_bottom = 318.0
 text = "Right click its portrait to delete."
 align = 1
 autowrap = true
@@ -3807,9 +3810,6 @@ filters = PoolStringArray( "*.txt" )
 show_hidden_files = true
 current_dir = "/Godot/MyProjects/Unearth"
 current_path = "/Godot/MyProjects/Unearth/"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ChooseTmapaFileDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
@@ -3834,6 +3834,25 @@ current_path = "/Godot/MyProje"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="CustomObjectImageFileDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -2004.0
+margin_top = 2879.0
+margin_right = -1324.0
+margin_bottom = 3439.0
+rect_min_size = Vector2( 250, 87.5 )
+window_title = "Open a File"
+resizable = true
+dialog_text = "The image you select will be copied to /unearthdata/.
+Be sure it has a unique filename.
+"
+mode = 0
+access = 2
+filters = PoolStringArray( "*.png" )
+show_hidden_files = true
+current_dir = "/Godot/MyProjects/Unearth"
+current_path = "/Godot/MyProjects/Unearth/"
 
 [node name="ExportTmapaDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
@@ -4943,6 +4962,7 @@ script = ExtResource( 88 )
 [connection signal="visibility_changed" from="Ui/UiSystem/AddCustomObjectWindow" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_AddCustomObjectWindow_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer/NewObjectType" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectType_item_selected"]
 [connection signal="focus_exited" from="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer/VBoxContainer/NewObjectSubtypeID" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectSubtypeID_focus_exited"]
+[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer/NewObjectImage" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectImage_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/AddCustomObjectButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_AddCustomObjectButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ImageAsMapDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImageAsMapDialog_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonNewMap" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonNewMap_pressed"]
@@ -4968,6 +4988,7 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/HelpButtonPosition/UNNEEDEDScriptHelpButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptHelpButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseFileListFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseFileListFileDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseTmapaFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseTmapaFileDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/CustomObjectImageFileDialog" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_CustomObjectImageFileDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportTmapaDatDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaDatDialog_file_selected"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/CreateFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_CreateFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]
