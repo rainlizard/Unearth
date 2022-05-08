@@ -130,16 +130,19 @@ func get_subdirs(path):
 	return array
 
 func test_write_permissions():
+	
 	# Test write permissions of DK directory
-	var testPath = EXECUTABLE_PATH.get_base_dir().plus_file('testing_write_permissions')
+	var testPath = EXECUTABLE_PATH.get_base_dir().plus_file('testing_write_permissions.test')
+	
+	print(testPath)
 	
 	var file = File.new()
 	var err = file.open(testPath, File.WRITE)
-	
 	file.close()
 	
-	var removeFile = Directory.new()
-	removeFile.remove(testPath) # Be careful with this
+	var dir = Directory.new()
+	if dir.file_exists(testPath) == true: # Ensure any files being removed are definitely files and never directories
+		dir.remove(testPath)
 	
 	if err != OK:
 		if OS.get_name() == "X11":

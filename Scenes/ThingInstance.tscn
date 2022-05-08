@@ -50,9 +50,6 @@ mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch_mode = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CreatureLevel" type="AnimatedSprite" parent="ThingTexture"]
 visible = false
@@ -73,9 +70,6 @@ custom_constants/shadow_as_outline = 1
 custom_fonts/font = SubResource( 2 )
 align = 1
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 rect = Rect2( -32, -32, 64, 64 )

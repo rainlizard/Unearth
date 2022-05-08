@@ -1,7 +1,6 @@
 extends WindowDialog
 onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oSaveMap = Nodelist.list["oSaveMap"]
-onready var oDeleteMap = Nodelist.list["oDeleteMap"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oLineEditFilter = Nodelist.list["oLineEditFilter"]
 onready var oBrowseOpenButton = Nodelist.list["oBrowseOpenButton"]
@@ -14,6 +13,7 @@ onready var oCannotDelete = Nodelist.list["oCannotDelete"]
 onready var oConfirmDelete = Nodelist.list["oConfirmDelete"]
 onready var oBrowserFilename = Nodelist.list["oBrowserFilename"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
 
 func _ready():
 	oBrowserFilename.text = oGame.GAME_DIRECTORY
@@ -41,26 +41,26 @@ func activate(path):
 	oOpenMap.open_map(path)
 
 func _on_DynamicMapTree_item_selected():
+	
 	var selectedTreeItem = oDynamicMapTree.get_selected()
 	var path = selectedTreeItem.get_metadata(0)
 	# Set modified time, if it's a file
 	if selectedTreeItem.get_metadata(1) == "is_a_file":
 		oBrowseOpenButton.visible = true
 		#oBrowsePlayButton.visible = true
-		var file = File.new()
-		var modifiedTime = file.get_modified_time(path + '.slb') # This might cause case-sensitive issues but I don't care right now.
-		oDateSaved.text = convert_unix_time_to_readable(modifiedTime) #'Last modified: '+
-		file.close()
+#		var file = File.new()
+#		var modifiedTime = file.get_modified_time(path + '.slb') # This might cause case-sensitive issues but I don't care right now.
+#		oDateSaved.text = convert_unix_time_to_readable(modifiedTime) #'Last modified: '+
+#		file.close()
 		
-		# Set filename field to selected item
-		
+		oQuickMapPreview.update_img(path)
 	else:
 		oBrowseOpenButton.visible = false
 		#oBrowsePlayButton.visible = false
 		# "Directory" modified time is not shown
 		oDateSaved.text = ""
 		#oBrowserFilename.text = ""
-	oBrowserFilename.text = path
+	oBrowserFilename.text = path.get_basename()
 
 func _on_LineEdit_text_changed(new_text):
 	oDynamicMapTree.search_tree(new_text, false)
@@ -77,7 +77,6 @@ func _on_LineEdit_text_changed(new_text):
 #				Utils.popup_centered(oConfirmDelete)
 
 #func _on_ConfirmDelete_confirmed():
-#	oDeleteMap.delete_map(mapPathDelete)
 #	oLineEditFilter.text = ""
 #	oBrowserFilename.text = ""
 #	oSourceMapTree.updateSourceMapTree()

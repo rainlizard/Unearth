@@ -49,8 +49,10 @@ func delete_existing_files(map):
 			if MAP_NAME in fileName.to_upper():
 				# Only delete the accompanying file types that I'm about to write
 				if Filetypes.FILE_TYPES.has(fileName.get_extension().to_upper()):
-					print("Deleted: " + fileName)
-					dir.remove(fileName)
+					
+					if dir.file_exists(fileName) == true: # Ensure any files being removed are definitely files and never directories
+						print("Deleted: " + fileName)
+						dir.remove(fileName)
 			fileName = dir.get_next()
 	else:
 		print("An error occurred when trying to access the path.")

@@ -96,7 +96,7 @@ func add_tree_dir(theTree, parentItem, path): # theTree argument is important be
 func add_tree_file(theTree, parentItem, path):
 	var newTreeItem = theTree.create_item(parentItem)
 	newTreeItem.set_text(0, path.get_file().get_basename().to_lower())
-	newTreeItem.set_metadata(0, path.get_basename())
+	newTreeItem.set_metadata(0, path)
 	newTreeItem.set_metadata(1, "is_a_file")
 	return newTreeItem
 

@@ -37,19 +37,25 @@ func load_file():
 			objImage = null # This is to prevent an annoying line in the Debugger
 		else:
 			var img = Image.new()
-			var tex = ImageTexture.new()
-			img.load(Settings.unearthdata.plus_file("custom-object-images").plus_file(objImage))
-			tex.create_from_image(img)
-			objImage = tex
+			var err = img.load(Settings.unearthdata.plus_file("custom-object-images").plus_file(objImage))
+			if err == OK:
+				var tex = ImageTexture.new()
+				tex.create_from_image(img)
+				objImage = tex
+			else:
+				objImage = null
 		
 		if objPortrait == "":
 			objPortrait = null
 		else:
 			var img = Image.new()
-			var tex = ImageTexture.new()
-			img.load(Settings.unearthdata.plus_file("custom-object-images").plus_file(objPortrait))
-			tex.create_from_image(img)
-			objPortrait = tex
+			var err = img.load(Settings.unearthdata.plus_file("custom-object-images").plus_file(objPortrait))
+			if err == OK:
+				var tex = ImageTexture.new()
+				tex.create_from_image(img)
+				objPortrait = tex
+			else:
+				objPortrait = null
 		
 		var constructArray = [
 			objName,

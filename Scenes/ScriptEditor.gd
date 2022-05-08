@@ -6,6 +6,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oScriptEmptyStatus = Nodelist.list["oScriptEmptyStatus"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oUi = Nodelist.list["oUi"]
 
 func _ready():
 	loop_check_if_txt_file_has_been_modified()
@@ -116,3 +117,8 @@ func update_empty_script_status():
 
 func _on_ScriptHelpButton_pressed():
 	oMessage.big("Help","Changes made to the script in this window are only committed to file upon saving the map. Changes made to the script externally using a text editor such as Notepad are instantly reloaded into Unearth, replacing any work done in this window. \nUse Google to learn more about Dungeon Keeper Script Commands.")
+
+func _input(event):
+	if event is InputEventMouseButton and (event.is_pressed()):
+		if Rect2( oScriptTextEdit.rect_global_position, oScriptTextEdit.rect_size ).has_point(oScriptTextEdit.get_global_mouse_position()) == false:
+			oScriptTextEdit.release_focus()

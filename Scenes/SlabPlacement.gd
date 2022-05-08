@@ -59,18 +59,19 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 					if oDataSlab.get_cellv(pos) != Slabs.WATER and oDataSlab.get_cellv(pos) != Slabs.LAVA:
 						removeFromShape.append(pos) # This prevents ownership from changing if placing a bridge on something that's not liquid
 				if removeFromShape.has(pos) == false:
-					oInstances.delete_all_objects_on_slab(pos.x,pos.y)
+					manage_things_on_slab(pos, slabID)
 					oDataSlab.set_cellv(pos, slabID)
 			Slabs.EARTH:
-				oInstances.delete_all_objects_on_slab(pos.x,pos.y)
+				manage_things_on_slab(pos, slabID)
 				var autoEarthID = auto_torch_earth(pos.x, pos.y)
 				oDataSlab.set_cellv(pos, autoEarthID)
 			Slabs.WALL_AUTOMATIC:
-				oInstances.delete_all_objects_on_slab(pos.x,pos.y)
+				manage_things_on_slab(pos, slabID)
 				var autoWallID = auto_wall(pos.x, pos.y)
 				oDataSlab.set_cellv(pos, autoWallID)
 			_:
-				oInstances.delete_all_objects_on_slab(pos.x,pos.y)
+				manage_things_on_slab(pos, slabID)
+				
 				oDataSlab.set_cellv(pos, slabID)
 	
 	for i in removeFromShape:
@@ -78,6 +79,13 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	
 	oOverheadOwnership.ownership_update_shape(shapePositionArray, ownership)
 	print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+
+func manage_things_on_slab(pos, slabID):
+	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
+		oInstances.delete_all_objects_on_slab(pos.x,pos.y)
+	else:
+		pass
+
 
 func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 	oEditor.mapHasBeenEdited = true

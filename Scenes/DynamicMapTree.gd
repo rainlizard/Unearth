@@ -3,6 +3,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oSourceMapTree = Nodelist.list["oSourceMapTree"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oLineEditFilter = Nodelist.list["oLineEditFilter"]
+onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 
 
 
@@ -77,12 +78,14 @@ func _on_DynamicMapTree_item_selected():
 	# Never collapse root node
 	var item = get_selected()
 	if item == get_root(): return
-	
+
 	# Selected item signal is firing when changing "collapsed"
 	disconnect('item_selected',self,"_on_DynamicMapTree_item_selected")
+	disconnect('item_selected',oMapBrowser,"_on_DynamicMapTree_item_selected")
+	
 	item.collapsed = !item.collapsed
 	connect('item_selected',self,"_on_DynamicMapTree_item_selected")
-
+	connect('item_selected',oMapBrowser,"_on_DynamicMapTree_item_selected")
 
 func highlight_current_map():
 	var path = oCurrentMap.path

@@ -35,7 +35,6 @@
 [ext_resource path="res://Scenes/Message.gd" type="Script" id=33]
 [ext_resource path="res://Scenes/ThingsOnSlabs.gd" type="Script" id=34]
 [ext_resource path="res://Scenes/ConfirmDecompression.gd" type="Script" id=35]
-[ext_resource path="res://Scenes/DeleteMap.gd" type="Script" id=36]
 [ext_resource path="res://Scenes/Editor.gd" type="Script" id=37]
 [ext_resource path="res://Art/Wibble_2.png" type="Texture" id=38]
 [ext_resource path="res://Scenes/DataClm.gd" type="Script" id=39]
@@ -135,6 +134,7 @@
 [ext_resource path="res://Scenes/ScriptHelpers.gd" type="Script" id=133]
 [ext_resource path="res://Scenes/GenerateBorderWindow.gd" type="Script" id=134]
 [ext_resource path="res://Class/SliderSetting.tscn" type="PackedScene" id=135]
+[ext_resource path="res://Scenes/QuickMapPreview.gd" type="Script" id=136]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -385,9 +385,6 @@ script = ExtResource( 31 )
 [node name="WriteData" type="Node" parent="SaveMap"]
 script = ExtResource( 32 )
 
-[node name="DeleteMap" type="Node" parent="."]
-script = ExtResource( 36 )
-
 [node name="CustomObjectSystem" type="Node" parent="."]
 script = ExtResource( 92 )
 
@@ -526,6 +523,12 @@ script = ExtResource( 114 )
 
 [node name="ScriptHelpers" type="Node2D" parent="Game2D"]
 script = ExtResource( 133 )
+
+[node name="QuickMapPreview" type="Sprite" parent="Game2D"]
+scale = Vector2( 100, 100 )
+z_index = 100
+centered = false
+script = ExtResource( 136 )
 
 [node name="Ui" type="CanvasLayer" parent="."]
 script = ExtResource( 78 )
@@ -1564,9 +1567,6 @@ margin_left = 10.0
 margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/PanelContainer"]
 margin_left = 4.0
@@ -1867,9 +1867,6 @@ popup_exclusive = true
 window_title = "Confirm discard changes"
 dialog_text = "Are you sure you want to discard changes and reload the map?"
 script = ExtResource( 61 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ConfirmQuit" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true
@@ -2479,9 +2476,6 @@ window_title = "Generate script"
 dialog_text = "This will clear and replace your existing script, are you sure?"
 dialog_autowrap = true
 script = ExtResource( 61 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="SlabSettingsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -3129,9 +3123,6 @@ __meta__ = {
 [node name="MapSettingsTabs" type="TabContainer" parent="Ui/UiSystem/MapSettingsWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MapProperties" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs"]
 anchor_right = 1.0

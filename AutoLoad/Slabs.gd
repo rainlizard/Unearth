@@ -213,7 +213,7 @@ var data = {
 #	PURPLE_PATH2:        ["Purple Path 2",         FLOOR_SLAB, BITMASK_OTHER,    PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_OFF,      REMEMBER_PATH,   true], # 55
 #	PURPLE_PATH3:        ["Purple Path 3",         FLOOR_SLAB, BITMASK_OTHER,    PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_OFF,      REMEMBER_PATH,   true], # 56
 #	PURPLE_PATH4:        ["Purple Path 4",         FLOOR_SLAB, BITMASK_OTHER,    PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_OFF,      REMEMBER_PATH,   true], # 57
-	WALL_AUTOMATIC:      ["Wall Automatic",        FLOOR_SLAB, BITMASK_WALL,    PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       REMEMBER_PATH,   true], # 99999
+	WALL_AUTOMATIC:      ["Wall Automatic",        BLOCK_SLAB, BITMASK_WALL,    PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       REMEMBER_PATH,   true], # 99999
 }
 var icons = {
 	BARRACKS: preload("res://dk_images/room_64/armory_std.png"),

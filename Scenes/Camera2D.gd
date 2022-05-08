@@ -5,6 +5,7 @@ onready var oSettingsWindow = Nodelist.list["oSettingsWindow"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oMain = Nodelist.list["oMain"]
+onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
 
 signal zoom_level_changed
 
@@ -58,7 +59,7 @@ func _process(delta):
 		#Do not allow mouse window edge panning if window is unfocused
 		panDirectionMouse = Vector2(0,0)
 	
-	if oUi.mouseOnUi == false:
+	if oUi.mouseOnUi == false and oScriptTextEdit.has_focus() == false:
 		keyboard_pan()
 	else:
 		panDirectionKeyboard = Vector2(0,0)

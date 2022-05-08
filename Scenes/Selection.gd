@@ -164,32 +164,6 @@ func place_shape(beginTile,endTile):
 		
 		oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd, updateNearby)
 
-#func place_tile(placeTile):
-#	if placeTile.x < 0 or placeTile.y < 0 or placeTile.x >= 85 or placeTile.y >= 85:
-#		return
-#
-#	oEditor.mapHasBeenEdited = true
-#
-#	if oSlabStyle.visible == true: # Texture placement
-#		oDataSlx.set_tileset_shape([placeTile])
-#	elif oOnlyOwnership.visible == true: # Ownership placement
-#		oOverheadOwnership.ownership_update_shape([placeTile], paintOwnership)
-#		oSlabPlacement.generate_slabs_based_on_id(placeTile, placeTile)
-#	else: # Slab placement
-#		var CODETIME_START = OS.get_ticks_msec()
-#		oInstances.delete_all_objects_on_slab(placeTile.x,placeTile.y)
-#
-#		var useOwner = paintOwnership
-#		if oOwnableNaturalTerrain.pressed == false and Slabs.data[paintSlab][Slabs.IS_OWNABLE] == false:
-#			useOwner = 5
-#
-#		oSlabPlacement.place_slab(placeTile.x, placeTile.y, paintSlab, useOwner, true)
-#
-#		print('Slab manually placed in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-		
-#			oGraphics.erase_slab(x, y)
-#			oGraphics.place_slab(x, y, paintSlab)
-#			oGraphics.apply_autotile( Vector2((x-1)*3,(y-1)*3), Vector2(((x+1)*3)+2,((y+1)*3)+2) )
 
 func place_subtile(placeSubtile):
 	if placeSubtile.x < 0 or placeSubtile.y < 0 or placeSubtile.x >= 255 or placeSubtile.y >= 255:
