@@ -21,12 +21,12 @@ onready var mat = oColorRectSlabOwner.get_material()
 
 func _ready():
 	slabOwnershipImage.create(85,85,false,Image.FORMAT_RGBA8)
-	mat.set_shader_param("color0", Constants.ownershipColors[0])
-	mat.set_shader_param("color1", Constants.ownershipColors[1])
-	mat.set_shader_param("color2", Constants.ownershipColors[2])
-	mat.set_shader_param("color3", Constants.ownershipColors[3])
-	mat.set_shader_param("color4", Constants.ownershipColors[4])
-	mat.set_shader_param("color5", Constants.ownershipColors[5])
+	mat.set_shader_param("color0", Constants.ownerRoomCol[0])
+	mat.set_shader_param("color1", Constants.ownerRoomCol[1])
+	mat.set_shader_param("color2", Constants.ownerRoomCol[2])
+	mat.set_shader_param("color3", Constants.ownerRoomCol[3])
+	mat.set_shader_param("color4", Constants.ownerRoomCol[4])
+	mat.set_shader_param("color5", Constants.ownerRoomCol[5])
 	
 	set_ownership_alpha_graphics(OWNERSHIP_ALPHA)
 
@@ -39,7 +39,7 @@ func set_ownership_alpha_graphics(value):
 		oInstanceOwnership.materialInstanceOwnership[i].set_shader_param("alphaFilled", value)
 
 func clear():
-	slabOwnershipImage.fill(Constants.ownershipColors[5])
+	slabOwnershipImage.fill(Constants.ownerRoomCol[5])
 	slabOwnershipTexture.create_from_image(slabOwnershipImage, 0)
 
 func start():
@@ -47,7 +47,7 @@ func start():
 	slabOwnershipImage.lock()
 	for ySlab in 85:
 		for xSlab in 85:
-			var setValue = Constants.ownershipColors[oDataOwnership.get_cell(xSlab,ySlab)]
+			var setValue = Constants.ownerRoomCol[oDataOwnership.get_cell(xSlab,ySlab)]
 			slabOwnershipImage.set_pixel(xSlab, ySlab, setValue)
 	slabOwnershipImage.unlock()
 	
@@ -56,7 +56,7 @@ func start():
 
 func ownership_update_shape(shapePositionArray, ownership):
 	
-	var setColour = Constants.ownershipColors[ownership]
+	var setColour = Constants.ownerRoomCol[ownership]
 	
 	slabOwnershipImage.lock()
 	for pos in shapePositionArray:
@@ -77,7 +77,7 @@ func ownership_update_things(shapePositionArray, paintOwnership):
 #	rectStart = Vector2(clamp(rectStart.x, 0, 84), clamp(rectStart.y, 0, 84))
 #	rectEnd = Vector2(clamp(rectEnd.x, 0, 84), clamp(rectEnd.y, 0, 84))
 #
-#	var setColour = Constants.ownershipColors[ownership]
+#	var setColour = Constants.ownerRoomCol[ownership]
 #
 #	slabOwnershipImage.lock()
 #	for ySlab in range(rectStart.y, rectEnd.y+1):
@@ -104,7 +104,7 @@ func _process(delta):
 		mat.set_shader_param("cursorOnColor", cursorOnColor)
 	
 	for i in 6:
-		if cursorOnColor == Constants.ownershipColors[i]:
+		if cursorOnColor == Constants.ownerRoomCol[i]:
 			alphaFadeColor[i] = lerp(alphaFadeColor[i], 1.00, fadeSpeed*delta)
 		else:
 			alphaFadeColor[i] = lerp(alphaFadeColor[i], 0.00, fadeSpeed*delta)

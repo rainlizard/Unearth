@@ -14,6 +14,7 @@ onready var oConfirmDelete = Nodelist.list["oConfirmDelete"]
 onready var oBrowserFilename = Nodelist.list["oBrowserFilename"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
+onready var oSelector = Nodelist.list["oSelector"]
 
 func _ready():
 	oBrowserFilename.text = oGame.GAME_DIRECTORY
@@ -53,8 +54,10 @@ func _on_DynamicMapTree_item_selected():
 #		oDateSaved.text = convert_unix_time_to_readable(modifiedTime) #'Last modified: '+
 #		file.close()
 		
+		oQuickMapPreview.visible = true
 		oQuickMapPreview.update_img(path)
 	else:
+		oQuickMapPreview.visible = false
 		oBrowseOpenButton.visible = false
 		#oBrowsePlayButton.visible = false
 		# "Directory" modified time is not shown
@@ -128,9 +131,10 @@ func _on_MapBrowser_visibility_changed():
 	if is_instance_valid(oUi) == false: return
 	if visible == true:
 		oUi.hide_tools()
+		oQuickMapPreview.visible = true
 	else:
 		oUi.show_tools()
-
+		oQuickMapPreview.visible = false
 
 func _on_BrowsePlayButton_pressed():
 	pass # Replace with function body.

@@ -18,7 +18,7 @@ func initialize_grid_items():
 		id.set_meta("ownershipID",i)
 		id.set_meta("grid_item_text",Constants.ownershipNames[i])
 		
-		#var col = Constants.ownershipColors[i]
+		#var col = Constants.ownerRoomCol[i]
 		if i == oSelection.paintOwnership:
 			id.pressed = true
 		

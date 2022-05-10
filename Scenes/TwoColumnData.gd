@@ -70,6 +70,7 @@ func add_item(leftText, rightText):
 			nameValue.set_txt(rightText.split(' '))
 			nameValue.connect("position_editor_focus_exited",self,"_on_lineedit_focus_exited", [nameValue,leftText])
 			nameValue.connect("position_editor_text_entered",self,"_on_lineedit_text_entered", [nameValue])
+			
 		_:
 			nameValue = Label.new()
 			nameValue.autowrap = true

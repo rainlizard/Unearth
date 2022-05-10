@@ -248,7 +248,7 @@ func _on_VisibilityNotifier2D_screen_exited():
 #	if value == 5:
 #		col = Color.cyan # White
 #	else:
-#		col = Constants.ownershipColors[value]
+#		col = Constants.ownerRoomCol[value]
 #
 #func setPosition():
 #	position.x = data[SUBTILE_X] * SUBTILE_SIZE

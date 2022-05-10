@@ -59,19 +59,14 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 					if oDataSlab.get_cellv(pos) != Slabs.WATER and oDataSlab.get_cellv(pos) != Slabs.LAVA:
 						removeFromShape.append(pos) # This prevents ownership from changing if placing a bridge on something that's not liquid
 				if removeFromShape.has(pos) == false:
-					manage_things_on_slab(pos, slabID)
 					oDataSlab.set_cellv(pos, slabID)
 			Slabs.EARTH:
-				manage_things_on_slab(pos, slabID)
 				var autoEarthID = auto_torch_earth(pos.x, pos.y)
 				oDataSlab.set_cellv(pos, autoEarthID)
 			Slabs.WALL_AUTOMATIC:
-				manage_things_on_slab(pos, slabID)
 				var autoWallID = auto_wall(pos.x, pos.y)
 				oDataSlab.set_cellv(pos, autoWallID)
 			_:
-				manage_things_on_slab(pos, slabID)
-				
 				oDataSlab.set_cellv(pos, slabID)
 	
 	for i in removeFromShape:
@@ -82,9 +77,9 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 
 func manage_things_on_slab(pos, slabID):
 	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
-		oInstances.delete_all_objects_on_slab(pos.x,pos.y)
+		oInstances.delete_all_on_slab(pos.x, pos.y, ["Thing"])
 	else:
-		pass
+		oInstances.update_height_of_things_on_slab(pos.x,pos.y)
 
 
 func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
@@ -102,8 +97,12 @@ func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 			var slabID = oDataSlab.get_cell(xSlab, ySlab)
 			var ownership = oDataOwnership.get_cell(xSlab, ySlab)
 			do_slab(xSlab, ySlab, slabID, ownership)
+			
+			manage_things_on_slab(Vector2(xSlab,ySlab), slabID)
 	
 	print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	
+	
 	
 	oOverheadGraphics.overhead2d_update_rect(rectStart, rectEnd)
 

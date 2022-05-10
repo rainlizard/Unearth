@@ -2,6 +2,8 @@ extends Node2D
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
+onready var oDataClm = Nodelist.list["oDataClm"]
+onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
 var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
@@ -208,10 +210,20 @@ func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng 
 #			3: partnerArrow.texture = preload("res://Art/torchdir3.png")
 #		id.add_child(partnerArrow)
 
-func delete_all_objects_on_slab(xSlab, ySlab):
-	for id in get_tree().get_nodes_in_group("Instance"):
+func update_height_of_things_on_slab(xSlab, ySlab):
+	for id in get_tree().get_nodes_in_group("Thing"):
 		if id.locationX >= xSlab*3 and id.locationX < (xSlab+1) * 3 and id.locationY >= ySlab*3 and id.locationY < (ySlab+1) * 3:
-			id.queue_free()
+			if id.sensitiveTile == 65535: # None. Not attached to any slab.
+				var xSubtile = floor(id.locationX)
+				var ySubtile = floor(id.locationY)
+				var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(xSubtile,ySubtile)]
+				id.locationZ = detectTerrainHeight
+
+func delete_all_on_slab(xSlab, ySlab, arrayOfGroupNameStrings):
+	for groupName in arrayOfGroupNameStrings:
+		for id in get_tree().get_nodes_in_group(groupName):
+			if id.locationX >= xSlab*3 and id.locationX < (xSlab+1) * 3 and id.locationY >= ySlab*3 and id.locationY < (ySlab+1) * 3:
+				id.queue_free()
 
 func get_node_on_subtile(nodegroup, xSubtile, ySubtile):
 	for id in get_tree().get_nodes_in_group(nodegroup):

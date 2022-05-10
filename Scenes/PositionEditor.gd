@@ -8,9 +8,16 @@ onready var oLineEditY = $"HBoxContainer1/LineEditY"
 onready var oLineEditZ = $"HBoxContainer2/LineEditZ"
 
 func set_txt(array):
-	if array.size() >= 1: $"HBoxContainer1/LineEditX".text = str(array[0])
-	if array.size() >= 2: $"HBoxContainer1/LineEditY".text = str(array[1])
-	if array.size() >= 3: $"HBoxContainer2/LineEditZ".text = str(array[2])
+	if array.size() >= 1:
+		$"HBoxContainer1/LineEditX".text = str(array[0])
+	if array.size() >= 2:
+		$"HBoxContainer1/LineEditY".text = str(array[1])
+	
+	
+	if array.size() >= 3:
+		$"HBoxContainer2/LineEditZ".text = str(array[2])
+	else:
+		$"HBoxContainer2".visible = false # For Action Point, don't display Z field
 
 #$LinEditX.hint_tooltip =
 

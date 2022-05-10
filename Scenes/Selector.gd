@@ -25,6 +25,8 @@ onready var oRectangleSelection = Nodelist.list["oRectangleSelection"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
+
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -53,11 +55,12 @@ func _process(delta):
 	update_cursor_position()
 	
 	visible = true
-	if oUi.mouseOnUi == true or oEditor.currentView == oEditor.VIEW_3D or oUiTools.visible == false or oSettingsWindow.visible == true: # Prevent placing stuff in 3D view
-		visible = false
-	
-	if oEditor.fieldBoundary.has_point(cursorTile) == false:
-		visible = false
+	if oUi.mouseOnUi == true: visible = false
+	if oEditor.currentView == oEditor.VIEW_3D: visible = false
+	if oUiTools.visible == false: visible = false
+	if oSettingsWindow.visible == true: visible = false
+	if oQuickMapPreview.visible == true: visible = false
+	if oEditor.fieldBoundary.has_point(cursorTile) == false: visible = false
 	
 	if oEditor.currentView == oEditor.VIEW_2D:
 		mouse_button_anywhere()
@@ -138,7 +141,8 @@ func mouse_button_on_field():
 						oSelection.delete_instance(oSelection.cursorOnInstancesArray[0])
 			
 			MODE_TILE:
-				oInstances.delete_all_objects_on_slab(cursorTile.x,cursorTile.y)
+				
+				oInstances.delete_all_on_slab(cursorTile.x,cursorTile.y, ["Thing","ActionPoint","Light"])
 
 
 #func _unhandled_input(event):
@@ -233,3 +237,10 @@ func get_slabID_under_cursor():
 		return customSlabID
 	else:
 		return oDataSlab.get_cellv(cursorTile)
+
+
+func _on_Selector_visibility_changed():
+	# If suddenly becoming visible due to a menu closing, then don't place until you move the cursor
+	# For example, this prevents placing a block when closing the map browser
+	if visible == true:
+		canPlace = false
