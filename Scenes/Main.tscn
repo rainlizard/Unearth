@@ -1,4 +1,4 @@
-[gd_scene load_steps=156 format=2]
+[gd_scene load_steps=157 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -136,6 +136,7 @@
 [ext_resource path="res://Scenes/GenerateBorderWindow.gd" type="Script" id=134]
 [ext_resource path="res://Class/SliderSetting.tscn" type="PackedScene" id=135]
 [ext_resource path="res://Scenes/QuickMapPreview.gd" type="Script" id=136]
+[ext_resource path="res://Scenes/ColumnEditorControls.tscn" type="PackedScene" id=137]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -4014,216 +4015,25 @@ margin_right = -12.0
 margin_bottom = -12.0
 script = ExtResource( 128 )
 
-[node name="ColumnVoxelView" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" instance=ExtResource( 19 )]
-margin_right = 1024.0
+[node name="ColumnEditorVoxelView" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" instance=ExtResource( 19 )]
+margin_right = 1012.0
 margin_bottom = 655.0
 displayingType = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels"]
-margin_left = 1028.0
+[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels"]
+margin_left = 1016.0
 margin_right = 1236.0
 margin_bottom = 655.0
-scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer"]
-margin_right = 208.0
-margin_bottom = 655.0
-size_flags_horizontal = 11
-size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="ColumnEditorControls" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer2" instance=ExtResource( 137 )]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_right = 208.0
-margin_bottom = 31.0
-
-[node name="Label" type="Label" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer"]
-margin_top = 5.0
-margin_right = 130.0
-margin_bottom = 26.0
-text = "Column index:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColumnIndexSpinBox" type="SpinBox" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer"]
-margin_left = 134.0
-margin_right = 208.0
-margin_bottom = 31.0
-max_value = 2047.0
-rounded = true
-script = ExtResource( 81 )
-
-[node name="ColumnFirstUnusedButton" type="Button" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 35.0
-margin_right = 208.0
-margin_bottom = 62.0
-text = "Go to unused"
-
-[node name="ColumnViewDeleteButton" type="Button" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 66.0
-margin_right = 208.0
-margin_bottom = 93.0
-hint_tooltip = "Set all data of the column at this index to 0"
-focus_mode = 0
-size_flags_horizontal = 3
-text = "Delete column"
-
-[node name="Spacing" type="Control" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 97.0
-margin_right = 208.0
-margin_bottom = 121.0
-rect_min_size = Vector2( 24, 24 )
-
-[node name="CubesGridContainer" type="GridContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 125.0
-margin_right = 208.0
-margin_bottom = 125.0
-columns = 2
-
-[node name="ExtraColumnStuff" type="GridContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_top = 129.0
-margin_right = 208.0
-margin_bottom = 363.0
-columns = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label6" type="Label" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 5.0
-margin_right = 119.0
-margin_bottom = 26.0
-text = "Floor texture"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="FloorTextureSpinBox" type="SpinBox" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 134.0
-margin_right = 208.0
-margin_bottom = 31.0
-size_flags_horizontal = 10
-max_value = 999.0
-script = ExtResource( 81 )
-
-[node name="Spacing" type="Control" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 35.0
-margin_right = 119.0
-margin_bottom = 59.0
-rect_min_size = Vector2( 24, 24 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 123.0
-margin_top = 35.0
-margin_right = 208.0
-margin_bottom = 59.0
-rect_min_size = Vector2( 24, 24 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label5" type="Label" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 68.0
-margin_right = 119.0
-margin_bottom = 89.0
-text = "Height"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HeightSpinBox" type="SpinBox" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 134.0
-margin_top = 63.0
-margin_right = 208.0
-margin_bottom = 94.0
-size_flags_horizontal = 10
-max_value = 99999.0
-script = ExtResource( 81 )
-
-[node name="Label7" type="Label" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 103.0
-margin_right = 119.0
-margin_bottom = 124.0
-text = "Solid mask"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SolidMaskSpinBox" type="SpinBox" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 134.0
-margin_top = 98.0
-margin_right = 208.0
-margin_bottom = 129.0
-size_flags_horizontal = 10
-max_value = 99999.0
-script = ExtResource( 81 )
-
-[node name="Label3" type="Label" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 138.0
-margin_right = 119.0
-margin_bottom = 159.0
-text = "Permanent"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PermanentSpinBox" type="SpinBox" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 134.0
-margin_top = 133.0
-margin_right = 208.0
-margin_bottom = 164.0
-size_flags_horizontal = 10
-max_value = 99999.0
-script = ExtResource( 81 )
-
-[node name="Label2" type="Label" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 173.0
-margin_right = 119.0
-margin_bottom = 194.0
-text = "Orientation"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="OrientationSpinBox" type="SpinBox" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 134.0
-margin_top = 168.0
-margin_right = 208.0
-margin_bottom = 199.0
-size_flags_horizontal = 10
-max_value = 99999.0
-script = ExtResource( 81 )
-
-[node name="Label4" type="Label" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_top = 208.0
-margin_right = 119.0
-margin_bottom = 229.0
-text = "Lintel"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="LintelSpinBox" type="SpinBox" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff"]
-margin_left = 134.0
-margin_top = 203.0
-margin_right = 208.0
-margin_bottom = 234.0
-size_flags_horizontal = 10
-max_value = 99999.0
-script = ExtResource( 81 )
-
-[node name="ColumnEditorHelpButton" type="Button" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer"]
-margin_left = 154.0
+[node name="ColumnEditorHelpButton" type="Button" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer2"]
+margin_left = 166.0
 margin_top = 628.0
-margin_right = 208.0
+margin_right = 220.0
 margin_bottom = 655.0
 size_flags_horizontal = 8
-size_flags_vertical = 10
+size_flags_vertical = 8
 text = "Help"
 
 [node name="TabSlabVoxels" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs"]
@@ -4428,7 +4238,7 @@ window_title = "Slabset"
 resizable = true
 script = ExtResource( 132 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow"]
+[node name="SlabsetTabs" type="TabContainer" parent="Ui/UiSystem/SlabsetWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 10.0
@@ -4438,36 +4248,40 @@ margin_bottom = -10.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer"]
-margin_right = 1260.0
-margin_bottom = 700.0
+[node name="TabMainSlabset" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 43.0
+margin_right = -12.0
+margin_bottom = -12.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 1088.0
-margin_bottom = 700.0
+[node name="SlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset" instance=ExtResource( 19 )]
+margin_right = 1064.0
+margin_bottom = 645.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer"]
-margin_left = 1092.0
-margin_right = 1260.0
-margin_bottom = 700.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset"]
+margin_left = 1068.0
+margin_right = 1236.0
+margin_bottom = 645.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer"]
 margin_right = 168.0
-margin_bottom = 700.0
+margin_bottom = 645.0
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_left = 1.0
 margin_right = 168.0
 margin_bottom = 66.0
 size_flags_horizontal = 10
 columns = 2
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 5.0
 margin_right = 89.0
 margin_bottom = 26.0
@@ -4476,7 +4290,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SlabsetIDSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="SlabsetIDSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer"]
 margin_left = 93.0
 margin_right = 167.0
 margin_bottom = 31.0
@@ -4490,7 +4304,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 40.0
 margin_right = 89.0
 margin_bottom = 61.0
@@ -4499,7 +4313,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VariationNumberSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="VariationNumberSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer"]
 margin_left = 93.0
 margin_top = 35.0
 margin_right = 167.0
@@ -4514,32 +4328,32 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SlabsetIDLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="SlabsetIDLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 70.0
 margin_right = 168.0
 margin_bottom = 91.0
 text = "Impenetrable Rock"
 
-[node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 95.0
 margin_right = 168.0
 margin_bottom = 116.0
 text = "Variation info"
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="Spacing" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 120.0
 margin_right = 168.0
 margin_bottom = 144.0
 rect_min_size = Vector2( 24, 24 )
 
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 148.0
 margin_right = 168.0
 margin_bottom = 169.0
 text = "Columns"
 align = 1
 
-[node name="GridContainerDynamicColumns3x3" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="GridContainerDynamicColumns3x3" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_left = 84.0
 margin_top = 173.0
 margin_right = 84.0
@@ -4548,51 +4362,51 @@ size_flags_horizontal = 6
 size_flags_vertical = 4
 columns = 3
 
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 177.0
 margin_right = 168.0
 margin_bottom = 201.0
 rect_min_size = Vector2( 24, 24 )
 
-[node name="ExportSlabsDat" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ExportSlabsDat" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 205.0
 margin_right = 168.0
 margin_bottom = 232.0
 size_flags_horizontal = 9
 text = "Export slabs.dat"
 
-[node name="Spacing3" type="Control" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="Spacing3" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 236.0
 margin_right = 168.0
 margin_bottom = 260.0
 rect_min_size = Vector2( 24, 24 )
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 264.0
 margin_right = 168.0
 margin_bottom = 285.0
 text = "Export .cfg"
 align = 1
 
-[node name="ExportSlabsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ExportSlabsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 289.0
 margin_right = 168.0
 margin_bottom = 316.0
 size_flags_horizontal = 9
 text = "Slabset"
 
-[node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 320.0
 margin_right = 168.0
 margin_bottom = 347.0
 size_flags_horizontal = 9
 text = "Columns"
 
-[node name="SlabsetHelpButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="SlabsetHelpButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
 margin_left = 114.0
-margin_top = 673.0
+margin_top = 618.0
 margin_right = 168.0
-margin_bottom = 700.0
+margin_bottom = 645.0
 size_flags_horizontal = 10
 size_flags_vertical = 10
 text = "Help"
@@ -4992,30 +4806,20 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ColumnEditor" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditor_visibility_changed"]
 [connection signal="tab_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs" to="Ui/UiSystem/ColumnEditor" method="_on_VoxelTabs_tab_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer/ColumnIndexSpinBox" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnIndexSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/HBoxContainer/ColumnIndexSpinBox" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ColumnVoxelView" method="_on_ColumnIndexSpinBox_value_changed"]
-[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ColumnFirstUnusedButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnFirstUnusedButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ColumnViewDeleteButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ColumnVoxelView" method="_on_ColumnViewDeleteButton_pressed"]
-[connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/FloorTextureSpinBox" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_FloorTextureSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/HeightSpinBox" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_HeightSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/SolidMaskSpinBox" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_SolidMaskSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/PermanentSpinBox" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_PermanentSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/OrientationSpinBox" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_OrientationSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ExtraColumnStuff/LintelSpinBox" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_LintelSpinBox_value_changed"]
-[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/ScrollContainer/VBoxContainer/ColumnEditorHelpButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnEditorHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer2/ColumnEditorHelpButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnEditorHelpButton_pressed"]
 [connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer/HBoxContainer/SlabRecognizedAs" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_SlabRecognizedAs_value_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer/SlabWibbleOptionButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_SlabWibbleOptionButton_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/AddCustomSlabButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_AddCustomSlabButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/HelpCustomSlabsButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_HelpCustomSlabsButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/SlabsetWindow" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetWindow_visibility_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetIDSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/SlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/SlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/ExportSlabsDat" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsDat_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/ExportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsCfg_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetIDSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/SlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/SlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/ExportSlabsDat" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsDat_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/ExportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/ButtonBlankMap" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonBlankMap_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NoiseButtonApplyBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseButtonApply_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapCloseButton" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapCloseButton_pressed"]

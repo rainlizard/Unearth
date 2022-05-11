@@ -206,12 +206,6 @@ func do_one():
 #	print(viewObject)
 
 
-func _on_ColumnViewDeleteButton_pressed():
-	oDataClm.delete_column(viewObject)
-	oColumnDetails.update_details()
-	do_all()
-	do_one()
-
 func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 	#oSlabsetIDSpinBox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 	oAllVoxelObjects.visible = false
@@ -220,8 +214,6 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 	oColumnDetails.update_details()
 	#set_object(oVariationNumberSpinBox.value)
 	#oSlabsetIDSpinBox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
-
-
 
 func _on_CustomSlabSpinBox_value_changed(value):
 	do_one()

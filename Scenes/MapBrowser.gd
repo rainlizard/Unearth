@@ -54,8 +54,11 @@ func _on_DynamicMapTree_item_selected():
 #		oDateSaved.text = convert_unix_time_to_readable(modifiedTime) #'Last modified: '+
 #		file.close()
 		
-		oQuickMapPreview.visible = true
-		oQuickMapPreview.update_img(path)
+		var successOrFailure = oQuickMapPreview.update_img(path)
+		if successOrFailure == OK:
+			oQuickMapPreview.visible = true
+		else:
+			oQuickMapPreview.visible = false
 	else:
 		oQuickMapPreview.visible = false
 		oBrowseOpenButton.visible = false

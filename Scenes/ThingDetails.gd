@@ -6,6 +6,7 @@ onready var oUi = Nodelist.list["oUi"]
 onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oSelectionStatusButton = Nodelist.list["oSelectionStatusButton"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
+onready var oDataSlab = Nodelist.list["oDataSlab"]
 
 
 var HIDE_UNKNOWN_DATA = true
@@ -176,11 +177,21 @@ func thing_details(id):
 			7:
 				description = "Attached to" # 11-12
 				if id.sensitiveTile != null:
+					
+					
 					var sensY = int(id.sensitiveTile/85)
 					var sensX = id.sensitiveTile - (sensY*85)
-					value = str(sensX) + ',  '+str(sensY)
+					value = Slabs.data[oDataSlab.get_cell(sensX,sensY)][Slabs.NAME]
+					
+					if sensX == 0 and sensY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
+					
+					value += ' (' + str(sensX) + ','+str(sensY) + ')'
+					
+					
+					
+					
 				if id.sensitiveTile == 65535:
-					value = "None"
+					value = "Manually placed"
 			8:
 				description = "Index" # 11-12
 				value = id.index

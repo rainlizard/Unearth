@@ -1,5 +1,6 @@
 extends Sprite
 onready var oOpenMap = Nodelist.list["oOpenMap"]
+onready var oRNC = Nodelist.list["oRNC"]
 
 
 var img = Image.new()
@@ -80,6 +81,8 @@ func _ready():
 
 func update_img(slbFilePath):
 	
+	
+	
 	if File.new().file_exists(slbFilePath) == false:
 		print("File not found : " + slbFilePath)
 		return
@@ -92,6 +95,9 @@ func update_img(slbFilePath):
 		ownFilePath = slbFilePath.get_basename()+".own"
 	elif File.new().file_exists(slbFilePath.get_basename()+".OWN") == true:
 		ownFilePath = slbFilePath.get_basename()+".OWN"
+	
+	if oRNC.check_for_rnc_compression(slbFilePath) == true: return
+	if oRNC.check_for_rnc_compression(ownFilePath) == true: return
 	
 	var ownBuffer = null
 	if ownFilePath != "":
@@ -134,3 +140,4 @@ func update_img(slbFilePath):
 	texture = tex
 	
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	return OK

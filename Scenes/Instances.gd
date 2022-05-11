@@ -72,18 +72,16 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			elif id.subtype == 133: # Mysterious Box
 				id.boxNumber = oPlacingSettings.boxNumber
 			elif id.subtype in [2,7]: # Torch and Unlit Torch
-				id.locationZ = 2.875
-				
-				if Slabs.data[oDataSlab.get_cell(floor((newPosition.x+1)/3),floor(newPosition.y/3))][Slabs.IS_SOLID] == true : id.locationX += 0.25
-				if Slabs.data[oDataSlab.get_cell(floor((newPosition.x-1)/3),floor(newPosition.y/3))][Slabs.IS_SOLID] == true : id.locationX -= 0.25
-				if Slabs.data[oDataSlab.get_cell(floor(newPosition.x/3),floor((newPosition.y+1)/3))][Slabs.IS_SOLID] == true : id.locationY += 0.25
-				if Slabs.data[oDataSlab.get_cell(floor(newPosition.x/3),floor((newPosition.y-1)/3))][Slabs.IS_SOLID] == true : id.locationY -= 0.25
-			
+				if Slabs.data[oDataSlab.get_cell(floor((id.locationX+1)/3),floor(id.locationY/3))][Slabs.IS_SOLID] == true : id.locationX += 0.25
+				if Slabs.data[oDataSlab.get_cell(floor((id.locationX-1)/3),floor(id.locationY/3))][Slabs.IS_SOLID] == true : id.locationX -= 0.25
+				if Slabs.data[oDataSlab.get_cell(floor(id.locationX/3),floor((id.locationY+1)/3))][Slabs.IS_SOLID] == true : id.locationY += 0.25
+				if Slabs.data[oDataSlab.get_cell(floor(id.locationX/3),floor((id.locationY-1)/3))][Slabs.IS_SOLID] == true : id.locationY -= 0.25
+				update_stray_torch_height(id)
 			# Whether the object is "Attached to tile" or not.
-			if id.subtype in [2, 5, 7, 9,10,40,41,42, 50, 57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85, 126, 128]:
-				id.sensitiveTile = (floor(newPosition.y/3) * 85) + floor(newPosition.x/3)
-			else:
-				id.sensitiveTile = 65535 # "None"
+#			if id.subtype in [2, 5, 7, 9,10,40,41,42, 50, 57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85, 126, 128]:
+#				id.sensitiveTile = (floor(newPosition.y/3) * 85) + floor(newPosition.x/3)
+#			else:
+			id.sensitiveTile = 65535 # "None"
 			
 		Things.TYPE.CREATURE:
 			id.creatureLevel = oPlacingSettings.creatureLevel
@@ -218,6 +216,12 @@ func update_height_of_things_on_slab(xSlab, ySlab):
 				var ySubtile = floor(id.locationY)
 				var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(xSubtile,ySubtile)]
 				id.locationZ = detectTerrainHeight
+				
+				if id.subtype in [2,7]:
+					update_stray_torch_height(id)
+
+func update_stray_torch_height(id):
+	id.locationZ = 2.875
 
 func delete_all_on_slab(xSlab, ySlab, arrayOfGroupNameStrings):
 	for groupName in arrayOfGroupNameStrings:

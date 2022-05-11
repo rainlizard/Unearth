@@ -13,7 +13,7 @@ onready var oGame = Nodelist.list["oGame"]
 onready var oRNC = Nodelist.list["oRNC"]
 onready var oGame3D = Nodelist.list["oGame3D"]
 onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
-onready var oColumnVoxelView = Nodelist.list["oColumnVoxelView"]
+onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 
 const IMAGE_FORMAT = Image.FORMAT_RGB8
 const textureWidth = 256
