@@ -2,13 +2,15 @@ extends ViewportContainer
 onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oVoxelGen = Nodelist.list["oVoxelGen"]
 onready var oDataClm = Nodelist.list["oDataClm"]
-onready var oColumnIndexSpinBox = Nodelist.list["oColumnIndexSpinBox"]
 onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
 onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
-onready var oDkSlabs = Nodelist.list["oDkSlabs"]
+onready var oDkClm = Nodelist.list["oDkClm"]
+onready var oDkDat = Nodelist.list["oDkDat"]
 onready var oSlabsetIDSpinBox = Nodelist.list["oSlabsetIDSpinBox"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
+onready var oDkClmControls = Nodelist.list["oDkClmControls"]
+onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
 
 
 onready var oVoxelCamera = $"VoxelViewport/VoxelCameraPivotPoint/VoxelCamera"
@@ -18,12 +20,12 @@ onready var oSelectedPivotPoint = $"VoxelViewport/VoxelCreator/SelectedPivotPoin
 onready var oVoxelCameraPivotPoint = $"VoxelViewport/VoxelCameraPivotPoint"
 onready var oHighlightBase = $"VoxelViewport/VoxelCreator/HighlightBase"
 
-export(int, "DK_SLAB", "CUSTOM_SLAB", "COLUMN", "CUBE") var displayingType
+export(int, "MAP_CUSTOM_SLAB", "MAP_COLUMN", "DK_SLABSET", "DK_COLUMN") var displayingType
 enum {
-	DK_SLAB
-	CUSTOM_SLAB
-	COLUMN
-	CUBE
+	MAP_CUSTOM_SLAB
+	MAP_COLUMN
+	DK_SLABSET
+	DK_COLUMN
 }
 
 var viewObject = 0 setget set_object
@@ -37,22 +39,24 @@ func initialize():
 	#if visible == true:
 	var CODETIME_START = OS.get_ticks_msec()
 	
-	if displayingType == COLUMN: do_all()
-	if displayingType == DK_SLAB: do_all()
+	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
+		do_all()
+	if displayingType == DK_SLABSET:
+		do_all()
 	
 	do_one()
 	
 	print('Columns generated in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
-	if displayingType == DK_SLAB or displayingType == CUSTOM_SLAB:
+	if displayingType == DK_SLABSET or displayingType == MAP_CUSTOM_SLAB:
 		oHighlightBase.mesh.size = Vector2(4,4)
-	if displayingType == COLUMN:
+	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
 		oHighlightBase.mesh.size = Vector2(2,2)
 
 func _input(event):
 	if is_visible_in_tree() == false: return
 
-	if displayingType == CUSTOM_SLAB:
+	if displayingType == MAP_CUSTOM_SLAB:
 		return
 
 	if (event.is_action("ui_left") or event.is_action("ui_down")) and event.is_pressed():
@@ -65,12 +69,12 @@ func _input(event):
 
 
 func set_object(setVal):
-	if displayingType == DK_SLAB:
+	if displayingType == DK_SLABSET:
 		if oSlabsetIDSpinBox.value < 42:
 			setVal = clamp(setVal,0,27)
 		else:
 			setVal = clamp(setVal,0,7)
-	if displayingType == COLUMN:
+	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
 		setVal = clamp(setVal,0,2047)
 	previousObject = viewObject
 	viewObject = setVal
@@ -80,26 +84,27 @@ func set_object(setVal):
 	
 	do_one()
 	
-	if displayingType == DK_SLAB:
+	if displayingType == DK_SLABSET:
 		oVariationNumberSpinBox.value = setVal
-		oSlabsetWindow.variation_changed(viewObject)
+		oSlabsetWindow.variation_changed(setVal)
 		if oAllVoxelObjects.visible == false: # Update what was invisible
 			oAllVoxelObjects.visible = true
 			do_all()
-	if displayingType == CUBE:
+	if displayingType == MAP_CUSTOM_SLAB:
 		pass
-	if displayingType == CUSTOM_SLAB:
-		pass
-	if displayingType == COLUMN:
-		oColumnIndexSpinBox.value = setVal
+	
+	if displayingType == MAP_COLUMN:
+		oColumnEditorControls.oColumnIndexSpinBox.value = setVal
 		oColumnDetails.update_details()
+	if displayingType == DK_COLUMN:
+		oDkClmControls.oColumnIndexSpinBox.value = setVal
 	
 	 # Reset camera back
 	oVoxelCameraPivotPoint.rotation_degrees.z = -28.125
 	oSelectedPivotPoint.rotation_degrees.y = 0
 	oHighlightBase.visible = true
 	
-	if displayingType == DK_SLAB:
+	if displayingType == DK_SLABSET:
 		oHighlightBase.translation.z = viewObject*4
 		oHighlightBase.translation.x = viewObject*4
 	else:
@@ -110,18 +115,27 @@ func set_object(setVal):
 func do_all():
 	var genArray = oVoxelGen.blankArray.duplicate(true)
 	
-	if displayingType == COLUMN:
+	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
 		var surrClmIndex = [-1,-1,-1,-1]
-		for clmIndex in 2048:
-			var x = clmIndex*2
-			var y = clmIndex*2
-			oVoxelGen.column_gen(genArray, x, y, clmIndex, surrClmIndex, true, oDataClm)
+		
+		match displayingType:
+			MAP_COLUMN:
+				for clmIndex in 2048:
+					var x = clmIndex*2
+					var y = clmIndex*2
+					oVoxelGen.column_gen(genArray, x, y, clmIndex, surrClmIndex, true, oDataClm)
+			DK_COLUMN:
+				for clmIndex in 2048:
+					var x = clmIndex*2
+					var y = clmIndex*2
+					oVoxelGen.column_gen(genArray, x, y, clmIndex, surrClmIndex, true, oDkClm)
+		
 		oAllVoxelObjects.mesh = oVoxelGen.complete_mesh(genArray)
 		oAllVoxelObjects.translation.z = -0.5
 		oAllVoxelObjects.translation.x = -0.5
 	var CODETIME_START = OS.get_ticks_msec()
 	
-	if displayingType == DK_SLAB: # This is not for custom slab, this is for dynamic slabs
+	if displayingType == DK_SLABSET: # This is not for custom slab, this is for dynamic slabs
 		
 		var slabID = oSlabsetIDSpinBox.value
 		var variationStart = (slabID * 28)
@@ -142,10 +156,10 @@ func do_all():
 					var x = (variation*3) + xSubtile + separation
 					var z = (variation*3) + ySubtile + separation
 					
-					var clmIndex = oDkSlabs.dat[variationStart+variation][subtile]
+					var clmIndex = oDkDat.dat[variationStart+variation][subtile]
 					
 					
-					oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, true, oDkSlabs)
+					oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, true, oDkClm)
 			
 			separation += 1
 		
@@ -156,7 +170,7 @@ func do_all():
 func do_one():
 	var genArray = oVoxelGen.blankArray.duplicate(true)
 	
-	if displayingType == CUSTOM_SLAB:
+	if displayingType == MAP_CUSTOM_SLAB:
 		var surrClmIndex = [-1,-1,-1,-1]
 		for y in 3:
 			for x in 3:
@@ -170,23 +184,24 @@ func do_one():
 		oSelectedPivotPoint.translation.z = 0.0
 		oSelectedPivotPoint.translation.x = 0.0
 	
-	if displayingType == COLUMN:
+	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
 		var surrClmIndex = [-1,-1,-1,-1]
 		
-		oVoxelGen.column_gen(genArray, 0, 0, viewObject, surrClmIndex, true, oDataClm)
+		match displayingType:
+			MAP_COLUMN: oVoxelGen.column_gen(genArray, 0, 0, viewObject, surrClmIndex, true, oDataClm)
+			DK_COLUMN: oVoxelGen.column_gen(genArray, 0, 0, viewObject, surrClmIndex, true, oDkClm)
 		
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
 		oSelectedPivotPoint.translation.z = (viewObject * 2)
 		oSelectedPivotPoint.translation.x = (viewObject * 2)
 	
-	if displayingType == DK_SLAB: # This is not for custom slab, this is for dynamic slabs
+	if displayingType == DK_SLABSET: # This is not for custom slab, this is for dynamic slabs
 		
-		var slabID = oSlabsetIDSpinBox.value
-		var variationStart = (slabID * 28)
-		
-		if slabID >= 42:
-			variationStart = (42 * 28) + (8 * (slabID - 42))
-		var variation = variationStart+viewObject
+#		var slabID = oSlabsetIDSpinBox.value
+#		var variationStart = (slabID * 28)
+#		if slabID >= 42:
+#			variationStart = (42 * 28) + (8 * (slabID - 42))
+#		var variation = variationStart+viewObject
 		
 		var surrClmIndex = [-1,-1,-1,-1]
 		for y in 3:
@@ -194,7 +209,7 @@ func do_one():
 				var i = (y*3) + x
 				var clmIndex = oGridContainerDynamicColumns3x3.get_child(i).value
 				
-				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true, oDkSlabs)
+				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true, oDkClm)
 		
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
 		oSelectedPivotPoint.translation.z = (viewObject * 4)
@@ -223,17 +238,6 @@ func _on_CustomSlabSpinBox_value_changed(value):
 		oAllVoxelObjects.visible = true
 		do_all()
 
-
-func _on_ColumnIndexSpinBox_value_changed(value):
-	oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
-	yield(get_tree(),'idle_frame')
-	
-	if oAllVoxelObjects.visible == false: # If was previously invisible (meaning you were editing "one") then update ALL
-		oAllVoxelObjects.visible = true
-		do_all()
-	
-	set_object(value)
-	oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 
 func update_column_view():
 	oAllVoxelObjects.visible = false
@@ -265,3 +269,19 @@ func _on_VariationNumberSpinBox_value_changed(value):
 	set_object(value)
 	oVariationNumberSpinBox.connect("value_changed",self,"_on_VariationNumberSpinBox_value_changed")
 	
+
+func _on_ColumnIndexSpinBox_value_changed(value):
+	
+	if oAllVoxelObjects.visible == false: # If was previously invisible (meaning you were editing "one") then update ALL
+		oAllVoxelObjects.visible = true
+		do_all()
+	
+	match displayingType:
+		MAP_COLUMN:
+			oColumnEditorControls.oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
+			set_object(value)
+			oColumnEditorControls.oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
+		DK_COLUMN:
+			oDkClmControls.oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
+			set_object(value)
+			oDkClmControls.oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")

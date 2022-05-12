@@ -1,5 +1,5 @@
 extends Node
-onready var oDkSlabs = Nodelist.list["oDkSlabs"]
+onready var oDkDat = Nodelist.list["oDkDat"]
 
 var CODETIME_START
 var tngIndex = []
@@ -7,7 +7,7 @@ var tngObject = []
 var numberOfThings = 0
 
 func slabtng_assets():
-	var filePath = oDkSlabs.dk_data_get_filepath("SLABS.TNG")
+	var filePath = oDkDat.dk_data_get_filepath("SLABS.TNG")
 	var buffer = Filetypes.file_path_to_buffer(filePath)
 	
 	buffer.seek(0)

@@ -65,7 +65,7 @@
 [ext_resource path="res://Scenes/OptionButtonMSAA.gd" type="Script" id=63]
 [ext_resource path="res://Scenes/OverheadGraphics.gd" type="Script" id=64]
 [ext_resource path="res://Scenes/SlabPalette.gd" type="Script" id=65]
-[ext_resource path="res://Scenes/DkSlabs.gd" type="Script" id=66]
+[ext_resource path="res://Scenes/DkClm.gd" type="Script" id=66]
 [ext_resource path="res://Scenes/ChooseDkExe.gd" type="Script" id=67]
 [ext_resource path="res://Scenes/PickSlabWindow.gd" type="Script" id=68]
 [ext_resource path="res://Art/IconRectangle.png" type="Texture" id=69]
@@ -127,7 +127,7 @@
 [ext_resource path="res://Scenes/ScriptWindow.gd" type="Script" id=125]
 [ext_resource path="res://Scenes/TextureEditingWindow.gd" type="Script" id=126]
 [ext_resource path="res://Scenes/CustomSlabSystem.gd" type="Script" id=127]
-[ext_resource path="res://Scenes/TabColumnVoxels.gd" type="Script" id=128]
+[ext_resource path="res://Scenes/DkDat.gd" type="Script" id=128]
 [ext_resource path="res://Scenes/CustomTooltip.gd" type="Script" id=129]
 [ext_resource path="res://Theme/StyleBoxThinnerPanel.tres" type="StyleBox" id=130]
 [ext_resource path="res://Scenes/SGRectHighlighter.gd" type="Script" id=131]
@@ -136,7 +136,7 @@
 [ext_resource path="res://Scenes/GenerateBorderWindow.gd" type="Script" id=134]
 [ext_resource path="res://Class/SliderSetting.tscn" type="PackedScene" id=135]
 [ext_resource path="res://Scenes/QuickMapPreview.gd" type="Script" id=136]
-[ext_resource path="res://Scenes/ColumnEditorControls.tscn" type="PackedScene" id=137]
+[ext_resource path="res://Scenes/ClmControls.tscn" type="PackedScene" id=137]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -327,10 +327,13 @@ script = ExtResource( 80 )
 [node name="SlabPalette" type="Node" parent="."]
 script = ExtResource( 65 )
 
-[node name="DkSlabs" type="Node" parent="SlabPalette"]
+[node name="DkDat" type="Node" parent="SlabPalette"]
+script = ExtResource( 128 )
+
+[node name="DkClm" type="Node" parent="SlabPalette"]
 script = ExtResource( 66 )
 
-[node name="DkSlabThings" type="Node" parent="SlabPalette"]
+[node name="DkTng" type="Node" parent="SlabPalette"]
 script = ExtResource( 34 )
 
 [node name="CurrentMap" type="Node" parent="."]
@@ -4006,28 +4009,29 @@ margin_left = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
 
-[node name="TabColumnVoxels" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
 margin_top = 43.0
 margin_right = -12.0
 margin_bottom = -12.0
-script = ExtResource( 128 )
 
-[node name="ColumnEditorVoxelView" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" instance=ExtResource( 19 )]
+[node name="ColumnEditorVoxelView" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/HBoxContainer" instance=ExtResource( 19 )]
 margin_right = 1012.0
 margin_bottom = 655.0
-displayingType = 2
+displayingType = 1
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/HBoxContainer"]
 margin_left = 1016.0
 margin_right = 1236.0
 margin_bottom = 655.0
 
-[node name="ColumnEditorControls" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer2" instance=ExtResource( 137 )]
+[node name="ColumnEditorControls" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/HBoxContainer/VBoxContainer2" instance=ExtResource( 137 )]
+nodeClm = NodePath("../../../../../../../CurrentMap/DataClm")
+nodeVoxelView = NodePath("../../ColumnEditorVoxelView")
 
-[node name="ColumnEditorHelpButton" type="Button" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer2"]
+[node name="ColumnEditorHelpButton" type="Button" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/HBoxContainer/VBoxContainer2"]
 margin_left = 166.0
 margin_top = 628.0
 margin_right = 220.0
@@ -4046,10 +4050,9 @@ margin_right = -12.0
 margin_bottom = -12.0
 script = ExtResource( 47 )
 
-[node name="SlabVoxelView" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels" instance=ExtResource( 19 )]
+[node name="CustomSlabVoxelView" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels" instance=ExtResource( 19 )]
 margin_right = 950.0
 margin_bottom = 655.0
-displayingType = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels"]
 margin_left = 954.0
@@ -4248,7 +4251,7 @@ margin_bottom = -10.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TabMainSlabset" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
+[node name="TabSlabset" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -4258,30 +4261,31 @@ margin_bottom = -12.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset" instance=ExtResource( 19 )]
+[node name="DkSlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset" instance=ExtResource( 19 )]
 margin_right = 1064.0
 margin_bottom = 645.0
+displayingType = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset"]
 margin_left = 1068.0
 margin_right = 1236.0
 margin_bottom = 645.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer"]
 margin_right = 168.0
 margin_bottom = 645.0
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_left = 1.0
 margin_right = 168.0
 margin_bottom = 66.0
 size_flags_horizontal = 10
 columns = 2
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 5.0
 margin_right = 89.0
 margin_bottom = 26.0
@@ -4290,7 +4294,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SlabsetIDSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="SlabsetIDSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/GridContainer"]
 margin_left = 93.0
 margin_right = 167.0
 margin_bottom = 31.0
@@ -4304,7 +4308,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 40.0
 margin_right = 89.0
 margin_bottom = 61.0
@@ -4313,7 +4317,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VariationNumberSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="VariationNumberSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/GridContainer"]
 margin_left = 93.0
 margin_top = 35.0
 margin_right = 167.0
@@ -4328,32 +4332,32 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SlabsetIDLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="SlabsetIDLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 70.0
 margin_right = 168.0
 margin_bottom = 91.0
 text = "Impenetrable Rock"
 
-[node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 95.0
 margin_right = 168.0
 margin_bottom = 116.0
 text = "Variation info"
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="Spacing" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 120.0
 margin_right = 168.0
 margin_bottom = 144.0
 rect_min_size = Vector2( 24, 24 )
 
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 148.0
 margin_right = 168.0
 margin_bottom = 169.0
 text = "Columns"
 align = 1
 
-[node name="GridContainerDynamicColumns3x3" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="GridContainerDynamicColumns3x3" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_left = 84.0
 margin_top = 173.0
 margin_right = 84.0
@@ -4362,47 +4366,47 @@ size_flags_horizontal = 6
 size_flags_vertical = 4
 columns = 3
 
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 177.0
 margin_right = 168.0
 margin_bottom = 201.0
 rect_min_size = Vector2( 24, 24 )
 
-[node name="ExportSlabsDat" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="ExportSlabsDat" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 205.0
 margin_right = 168.0
 margin_bottom = 232.0
 size_flags_horizontal = 9
 text = "Export slabs.dat"
 
-[node name="Spacing3" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="Spacing3" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 236.0
 margin_right = 168.0
 margin_bottom = 260.0
 rect_min_size = Vector2( 24, 24 )
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 264.0
 margin_right = 168.0
 margin_bottom = 285.0
 text = "Export .cfg"
 align = 1
 
-[node name="ExportSlabsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="ExportSlabsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 289.0
 margin_right = 168.0
 margin_bottom = 316.0
 size_flags_horizontal = 9
 text = "Slabset"
 
-[node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_top = 320.0
 margin_right = 168.0
 margin_bottom = 347.0
 size_flags_horizontal = 9
 text = "Columns"
 
-[node name="SlabsetHelpButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer"]
+[node name="SlabsetHelpButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer"]
 margin_left = 114.0
 margin_top = 618.0
 margin_right = 168.0
@@ -4411,14 +4415,35 @@ size_flags_horizontal = 10
 size_flags_vertical = 10
 text = "Help"
 
+[node name="TabDkClm" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 43.0
+margin_right = -12.0
+margin_bottom = -12.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DkClmVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm" instance=ExtResource( 19 )]
+margin_right = 1024.0
+margin_bottom = 645.0
+displayingType = 3
+
+[node name="DkClmControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm" instance=ExtResource( 137 )]
+margin_left = 1028.0
+margin_right = 1236.0
+margin_bottom = 645.0
+size_flags_horizontal = 1
+nodeClm = NodePath("../../../../../../SlabPalette/DkClm")
+nodeVoxelView = NodePath("../DkClmVoxelView")
+
 [node name="CustomTooltip" type="Control" parent="Ui/UiSystem"]
 margin_top = -10.5
 margin_bottom = 10.5
 mouse_filter = 2
 script = ExtResource( 129 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/CustomTooltip"]
 self_modulate = Color( 1, 1, 1, 0.501961 )
@@ -4806,20 +4831,21 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ColumnEditor" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditor_visibility_changed"]
 [connection signal="tab_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs" to="Ui/UiSystem/ColumnEditor" method="_on_VoxelTabs_tab_changed"]
-[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels/VBoxContainer2/ColumnEditorHelpButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabColumnVoxels" method="_on_ColumnEditorHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/HBoxContainer/VBoxContainer2/ColumnEditorHelpButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorHelpButton_pressed"]
 [connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer/HBoxContainer/SlabRecognizedAs" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_SlabRecognizedAs_value_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/GridContainer/SlabWibbleOptionButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_SlabWibbleOptionButton_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/AddCustomSlabButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_AddCustomSlabButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels/ScrollContainer/VBoxContainer/HelpCustomSlabsButton" to="Ui/UiSystem/ColumnEditor/VoxelTabs/TabSlabVoxels" method="_on_HelpCustomSlabsButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/SlabsetWindow" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetWindow_visibility_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetIDSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/SlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/SlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/ExportSlabsDat" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsDat_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/ExportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsCfg_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabMainSlabset/ScrollContainer/VBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
+[connection signal="tab_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetTabs_tab_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetIDSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/DkSlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/DkSlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/ExportSlabsDat" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsDat_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/ExportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/ScrollContainer/VBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/ButtonBlankMap" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonBlankMap_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NoiseButtonApplyBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseButtonApply_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapCloseButton" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapCloseButton_pressed"]

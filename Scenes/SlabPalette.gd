@@ -1,8 +1,9 @@
 extends Node
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oDataClm = Nodelist.list["oDataClm"]
-onready var oDkSlabs = Nodelist.list["oDkSlabs"]
-onready var oDkSlabThings = Nodelist.list["oDkSlabThings"]
+onready var oDkDat = Nodelist.list["oDkDat"]
+onready var oDkClm = Nodelist.list["oDkClm"]
+onready var oDkTng = Nodelist.list["oDkTng"]
 onready var oMessage = Nodelist.list["oMessage"]
 
 var slabPal = []
@@ -46,9 +47,9 @@ var randomColumns = []
 
 func start():
 	# Do this only once.
-	if oDkSlabs.cubes.empty() == true: oDkSlabs.clm_asset()
-	if oDkSlabs.dat.empty() == true: oDkSlabs.dat_asset()
-	if oDkSlabThings.tngIndex.empty() == true: oDkSlabThings.slabtng_assets()
+	if oDkDat.dat.empty() == true: oDkDat.dat_asset()
+	if oDkClm.cubes.empty() == true: oDkClm.clm_asset()
+	if oDkTng.tngIndex.empty() == true: oDkTng.slabtng_assets()
 	
 	# Create the slabPal based on the assetDat, but use the currently opened map's CLM.
 	CODETIME_START = OS.get_ticks_msec()
@@ -64,10 +65,10 @@ func start():
 	#blah()
 
 #func blah():
-#	viewDKclm()
+#	viewoDkClm()
 #	viewDKdat()
 #
-#func viewDKclm():
+#func viewoDkClm():
 #	var numberOfClmEntries = 2048
 #	for entry in numberOfClmEntries:
 #		var twentyFourByteArray = oAssets.clm[entry]
@@ -82,7 +83,7 @@ func start():
 ##			var slabVariation = slabID*28
 #			if slabVariation >= 1304: slabVariation = 0
 #			for subtile in 9:
-#				var value = oDkSlabs.dat[slabVariation][subtile] # slab variation - subtile of that variation				
+#				var value = oDkClm.dat[slabVariation][subtile] # slab variation - subtile of that variation				
 #				var ySubtile = subtile/3
 #				var xSubtile = subtile-(ySubtile*3)
 #				oDataClmPos.set_cell( (xSlab*3)+xSubtile, (ySlab*3)+ySubtile, value)
@@ -109,7 +110,7 @@ func update_slab_palette_for_map():
 		
 		for subtile in 9:
 			# Get the column array from the assets
-			var assetClmIndex = oDkSlabs.dat[i][subtile]
+			var assetClmIndex = oDkDat.dat[i][subtile]
 			
 			var newClmIndex
 			if dictionary.has(assetClmIndex) == true: # Quicker subsequent lookup
@@ -117,8 +118,8 @@ func update_slab_palette_for_map():
 				newClmIndex = dictionary[assetClmIndex]
 			else:
 				# Put that column inside our map's DataClm.
-				var cubeArray = oDkSlabs.cubes[assetClmIndex]
-				var floorID = oDkSlabs.floorTexture[assetClmIndex]
+				var cubeArray = oDkClm.cubes[assetClmIndex]
+				var floorID = oDkClm.floorTexture[assetClmIndex]
 				newClmIndex = oDataClm.index_entry(cubeArray, floorID)
 				# Store for quicker subsequent lookup
 				dictionary[assetClmIndex] = newClmIndex
@@ -555,16 +556,16 @@ func create_keeperfx_cfg_columns(filePath): #"res://columns.cfg"
 		textFile.store_line('ColumnsCount = 2048')
 		textFile.store_line('\r')
 		
-		for i in oDkSlabs.use.size():
+		for i in oDkClm.use.size():
 			textFile.store_line('[column' + str(i) +']')
-			textFile.store_line('Utilized = ' + str(oDkSlabs.use[i])) #(0-1)
-			textFile.store_line('Permanent = ' + str(oDkSlabs.permanent[i])) #(2)
-			textFile.store_line('Lintel = ' + str(oDkSlabs.lintel[i])) #(2)
-			textFile.store_line('Height = ' + str(oDkSlabs.height[i])) #(2)
-			textFile.store_line('SolidMask = ' + str(oDkSlabs.solidMask[i])) #(3-4)
-			textFile.store_line('FloorTexture = ' + str(oDkSlabs.floorTexture[i])) #(5-6)
-			textFile.store_line('Orientation = ' + str(oDkSlabs.orientation[i])) #(7)
-			textFile.store_line('Cubes = ' + str(oDkSlabs.cubes[i])) #(8-23)
+			textFile.store_line('Utilized = ' + str(oDkClm.use[i])) #(0-1)
+			textFile.store_line('Permanent = ' + str(oDkClm.permanent[i])) #(2)
+			textFile.store_line('Lintel = ' + str(oDkClm.lintel[i])) #(2)
+			textFile.store_line('Height = ' + str(oDkClm.height[i])) #(2)
+			textFile.store_line('SolidMask = ' + str(oDkClm.solidMask[i])) #(3-4)
+			textFile.store_line('FloorTexture = ' + str(oDkClm.floorTexture[i])) #(5-6)
+			textFile.store_line('Orientation = ' + str(oDkClm.orientation[i])) #(7)
+			textFile.store_line('Cubes = ' + str(oDkClm.cubes[i])) #(8-23)
 			textFile.store_line('\r')
 		oMessage.quick("Saved: " + filePath)
 	else:
@@ -587,19 +588,19 @@ func create_keeperfx_cfg_slab_autotile_data(filePath): #"res://slab_autotile_dat
 				variationCount = 8
 			
 			for variationNumber in variationCount:
-				if variationStart + variationNumber < oDkSlabs.dat.size():
-					var beginLine = get_dir_text(variationNumber) + ' = '
+				if variationStart + variationNumber < oDkClm.dat.size():
+					#var beginLine = get_dir_text(variationNumber) + ' = '
 					textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + ']')
-					textFile.store_line('columns = ' + String(oDkSlabs.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
+					textFile.store_line('columns = ' + String(oDkClm.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
 				
 				var hasObjects = false
-				for i in oDkSlabThings.tngObject.size():
-					if oDkSlabThings.tngObject[i][1] == variationStart + variationNumber: #VariationIndex
+				for i in oDkTng.tngObject.size():
+					if oDkTng.tngObject[i][1] == variationStart + variationNumber: #VariationIndex
 						textFile.store_line("\r")
 						hasObjects = true
 						textFile.store_line('[[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '.objects]]')
 						for z in 9:
-							var val = oDkSlabThings.tngObject[i][z]
+							var val = oDkTng.tngObject[i][z]
 							var beginLine = ''
 							match z:
 								0: beginLine = 'IsLight'

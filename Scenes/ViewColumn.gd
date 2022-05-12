@@ -7,7 +7,7 @@ onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oColumnListData = Nodelist.list["oColumnListData"]
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
-onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
+onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 
@@ -43,7 +43,7 @@ func update_details():
 	if oColumnEditor.visible == true:
 		if oColumnEditorVoxelView.visible == true:
 			entryIndex = oColumnEditorVoxelView.viewObject
-		if oSlabVoxelView.visible == true:
+		if oCustomSlabVoxelView.visible == true:
 			if is_instance_valid(get_focus_owner()):
 				if is_instance_valid(get_focus_owner().get_parent()):
 					if get_focus_owner().get_parent() is SpinBox:

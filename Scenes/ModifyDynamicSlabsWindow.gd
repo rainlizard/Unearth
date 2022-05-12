@@ -1,10 +1,12 @@
 extends WindowDialog
-onready var oSlabsetVoxelView = Nodelist.list["oSlabsetVoxelView"]
+onready var oDkSlabsetVoxelView = Nodelist.list["oDkSlabsetVoxelView"]
+onready var oDkClmVoxelView = Nodelist.list["oDkClmVoxelView"]
 onready var oVariationInfoLabel = Nodelist.list["oVariationInfoLabel"]
 onready var oSlabsetIDSpinBox = Nodelist.list["oSlabsetIDSpinBox"]
 onready var oSlabsetIDLabel = Nodelist.list["oSlabsetIDLabel"]
 onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
-onready var oDkSlabs = Nodelist.list["oDkSlabs"]
+onready var oDkClm = Nodelist.list["oDkClm"]
+onready var oDkDat = Nodelist.list["oDkDat"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oSlabPalette = Nodelist.list["oSlabPalette"]
 onready var oMessage = Nodelist.list["oMessage"]
@@ -12,6 +14,7 @@ onready var oExportSlabsetDatDialog = Nodelist.list["oExportSlabsetDatDialog"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oExportColumnCfgDialog = Nodelist.list["oExportColumnCfgDialog"]
 onready var oExportSlabsetCfgDialog = Nodelist.list["oExportSlabsetCfgDialog"]
+onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
 
 
 # Declare member variables here. Examples:
@@ -21,6 +24,8 @@ var columnSpinBoxArray = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	oSlabsetTabs.set_tab_title(0, "slabs.dat")
+	oSlabsetTabs.set_tab_title(1, "slabs.clm")
 #	for i in 2:
 #		yield(get_tree(),'idle_frame')
 #	Utils.popup_centered(self)
@@ -28,12 +33,12 @@ func _ready():
 	for number in 9:
 		var id = CustomSpinBox.new()
 		id.max_value = 2047
-		id.connect("value_changed",oSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
+		id.connect("value_changed",oDkSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		id.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		oGridContainerDynamicColumns3x3.add_child(id)
 		columnSpinBoxArray.append(id)
 	
-	oSlabsetVoxelView.initialize()
+	oDkSlabsetVoxelView.initialize()
 	
 	#yield(get_tree(),'idle_frame')
 	#_on_SlabsetIDSpinBox_value_changed(0)
@@ -43,8 +48,28 @@ func _ready():
 
 func _on_SlabsetWindow_visibility_changed():
 	if visible == true:
-		oSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
+		_on_SlabsetTabs_tab_changed(oSlabsetTabs.current_tab)
+		
+		oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 		_on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
+
+
+func _on_SlabsetTabs_tab_changed(tab):
+	match tab:
+		0:
+			oDkClmVoxelView.visible = false
+			oDkSlabsetVoxelView.visible = true
+			oDkSlabsetVoxelView.initialize()
+		1:
+			oDkSlabsetVoxelView.visible = false
+			oDkClmVoxelView.visible = true
+			oDkClmVoxelView.initialize()
+
+
+
+
+
+
 
 
 func variation_changed(variation):
@@ -123,7 +148,7 @@ func update_columns_ui():
 	
 	for i in columnSpinBoxArray.size():
 		columnSpinBoxArray[i].disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
-		var clmIndex = oDkSlabs.dat[variation][i]
+		var clmIndex = oDkDat.dat[variation][i]
 		columnSpinBoxArray[i].value = clmIndex
 		columnSpinBoxArray[i].connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
@@ -140,7 +165,7 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 		for x in 3:
 			var i = (y*3) + x
 			var clmIndex = oGridContainerDynamicColumns3x3.get_child(i).value
-			oDkSlabs.dat[variation][i] = clmIndex
+			oDkDat.dat[variation][i] = clmIndex
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
 
 
@@ -160,7 +185,7 @@ func _on_ExportSlabsetDatDialog_file_selected(filePath):
 	buffer.put_u16(1304)
 	for slab in 1304:
 		for subtile in 9:
-			var value = 65536 - oDkSlabs.dat[slab][subtile]
+			var value = 65536 - oDkClm.dat[slab][subtile]
 			buffer.put_u16(value)
 	
 	var file = File.new()

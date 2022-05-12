@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scenes/CustomSpinBox.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/ColumnEditorControls.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/ClmControls.gd" type="Script" id=2]
 
-[node name="ColumnEditorControls" type="ScrollContainer"]
+[node name="ClmControls" type="ScrollContainer"]
 margin_right = 220.0
 margin_bottom = 624.0
 size_flags_horizontal = 3
@@ -339,3 +339,13 @@ margin_bottom = 416.0
 size_flags_horizontal = 10
 max_value = 99999.0
 script = ExtResource( 1 )
+
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/ColumnIndexSpinBox" to="." method="_on_ColumnIndexSpinBox_value_changed"]
+[connection signal="pressed" from="VBoxContainer/ColumnFirstUnusedButton" to="." method="_on_ColumnFirstUnusedButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/ColumnViewDeleteButton" to="." method="_on_ColumnViewDeleteButton_pressed"]
+[connection signal="value_changed" from="VBoxContainer/ColumnGridContainer/FloorTextureSpinBox" to="." method="_on_FloorTextureSpinBox_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/ColumnGridContainer/HeightSpinBox" to="." method="_on_HeightSpinBox_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/ColumnGridContainer/SolidMaskSpinBox" to="." method="_on_SolidMaskSpinBox_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/ColumnGridContainer/PermanentSpinBox" to="." method="_on_PermanentSpinBox_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/ColumnGridContainer/OrientationSpinBox" to="." method="_on_OrientationSpinBox_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/ColumnGridContainer/LintelSpinBox" to="." method="_on_LintelSpinBox_value_changed"]

@@ -2,7 +2,9 @@ extends WindowDialog
 onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oVoxelTabs = Nodelist.list["oVoxelTabs"]
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
-onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
+onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
+onready var oMessage = Nodelist.list["oMessage"]
+onready var oAllVoxelObjects = Nodelist.list["oAllVoxelObjects"]
 
 func _ready():
 	oVoxelTabs.set_tab_title(0, "Edit columns")
@@ -16,12 +18,19 @@ func _on_ColumnEditor_visibility_changed():
 func _on_VoxelTabs_tab_changed(tab):
 	match tab:
 		0:
-			oSlabVoxelView.visible = false
+			oCustomSlabVoxelView.visible = false
 			oColumnEditorVoxelView.visible = true
 			oColumnEditorVoxelView.initialize()
 			oPropertiesTabs.set_current_tab(2)
 		1:
 			oColumnEditorVoxelView.visible = false
-			oSlabVoxelView.visible = true
-			oSlabVoxelView.initialize()
+			oCustomSlabVoxelView.visible = true
+			oCustomSlabVoxelView.initialize()
 
+func _on_ColumnEditorHelpButton_pressed():
+	var helptxt = ""
+	helptxt += "Use middle mouse to zoom in and out, left click and drag to rotate view. You can use the arrow keys to switch between columns faster and also use arrow keys while a field's selected to navigate cubes faster." #Holding left click on a field's little arrows while moving the mouse up or down provides speedy navigation too.
+	helptxt += '\n'
+	helptxt += '\n'
+	helptxt += "If your column has multiple gaps then some of the top/bottom cube faces may not display in-game."
+	oMessage.big("Help",helptxt)

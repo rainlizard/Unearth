@@ -268,9 +268,9 @@ func delete_attached_objects_on_slab(xSlab, ySlab):
 		#id.remove_child()
 		id.queue_free()
 
-#			if oDkSlabThings.tngObject[idx][8] != 0:
-#				var id = oDkSlabThings.tngObject[idx][7]
-#				print(Things.DATA_OBJECT[id][Things.NAME] + ". Unknown value: " + str(oDkSlabThings.tngObject[idx][8]))
+#			if oDkTng.tngObject[idx][8] != 0:
+#				var id = oDkTng.tngObject[idx][7]
+#				print(Things.DATA_OBJECT[id][Things.NAME] + ". Unknown value: " + str(oDkTng.tngObject[idx][8]))
 
 func get_free_index_number():
 	var listOfThingNumbers = []

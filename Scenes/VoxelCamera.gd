@@ -17,7 +17,7 @@ func _input(event):
 			size += 3
 
 func _process(delta):
-	if oVoxelObjectView.displayingType == oVoxelObjectView.DK_SLAB:
+	if oVoxelObjectView.displayingType == oVoxelObjectView.DK_SLABSET:
 		oVoxelCameraPivotPoint.translation.z = lerp(oVoxelCameraPivotPoint.translation.z, (oVoxelObjectView.viewObject*4), cameraShiftSpeed)
 		oVoxelCameraPivotPoint.translation.x = lerp(oVoxelCameraPivotPoint.translation.x, (oVoxelObjectView.viewObject*4), cameraShiftSpeed)
 	else:

@@ -1,6 +1,6 @@
 extends HBoxContainer
 onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
-onready var oSlabVoxelView = Nodelist.list["oSlabVoxelView"]
+onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oSlabRecognizedAs = Nodelist.list["oSlabRecognizedAs"]
 onready var oSlabRecognizedAsName = Nodelist.list["oSlabRecognizedAsName"]
 onready var oCustomSlabsTab = Nodelist.list["oCustomSlabsTab"]
@@ -19,7 +19,7 @@ func _ready():
 	for number in 9:
 		var id = CustomSpinBox.new()
 		id.max_value = 2047
-		id.connect("value_changed",oSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
+		id.connect("value_changed",oCustomSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
 		
 		oGridContainerCustomColumns3x3.add_child(id)
 	

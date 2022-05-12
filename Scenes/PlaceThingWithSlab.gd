@@ -1,6 +1,6 @@
 extends Node
 onready var oInstances = Nodelist.list["oInstances"]
-onready var oDkSlabThings = Nodelist.list["oDkSlabThings"]
+onready var oDkTng = Nodelist.list["oDkTng"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 
 onready var dir = oSlabPlacement.dir
@@ -29,7 +29,7 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask,
 	for subtile in 9:
 		var idx = get_obj_idx(slabVariation + constructedSlab[subtile], subtile)
 		if idx != -1:
-			oInstances.spawn(xSlab, ySlab, slabID, ownership, subtile, oDkSlabThings.tngObject[idx])
+			oInstances.spawn(xSlab, ySlab, slabID, ownership, subtile, oDkTng.tngObject[idx])
 
 func create_door_thing(xSlab, ySlab, ownership):
 	var createAtPos = Vector3((xSlab*3)+1.5, (ySlab*3)+1.5, 5)
@@ -47,17 +47,17 @@ func determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner):
 func get_obj_idx(newSlabVar, subtile):
 	if newSlabVar >= 1304: return -1 # Out of bounds, causes crash
 	
-	var idx = oDkSlabThings.tngIndex[newSlabVar]
-	if idx >= oDkSlabThings.numberOfThings: return -1
+	var idx = oDkTng.tngIndex[newSlabVar]
+	if idx >= oDkTng.numberOfThings: return -1
 	# "tngIndex" has one index per slabVariation.
 	# But there are actually multiple entries inside "tngObject" with the same slabVariation value. Their index is grouped up, that's why I do idx+=1.
 	while true:
-		if subtile == oDkSlabThings.tngObject[idx][2]:
+		if subtile == oDkTng.tngObject[idx][2]:
 			return idx
 		
 		idx += 1
-		if idx >= oDkSlabThings.numberOfThings: return -1
-		if oDkSlabThings.tngObject[idx][1] != newSlabVar:
+		if idx >= oDkTng.numberOfThings: return -1
+		if oDkTng.tngObject[idx][1] != newSlabVar:
 			return -1
 
 func prison_bar_bitmask(slabID, surrID):

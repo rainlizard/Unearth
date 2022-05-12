@@ -32,7 +32,7 @@ func clm_data_exists():
 	else:
 		return true # Something in arrays, so column data exists
 
-func clearAll():
+func clear_all():
 	utilized.clear()
 	orientation.clear()
 	solidMask.clear()
