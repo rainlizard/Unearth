@@ -12,7 +12,7 @@ onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
-onready var oVoxelTabs = Nodelist.list["oVoxelTabs"]
+onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 
 
 onready var oSelectedRect = $Clippy/SelectedRect
@@ -139,7 +139,7 @@ func custom_slab_add_new_button():
 
 func _on_pressed_add_new_custom_slab():
 	Utils.popup_centered(oColumnEditor)
-	oVoxelTabs.current_tab = 1 # Select tab containing Custom Slab Editor
+	oColumnEditorTabs.current_tab = 1 # Select tab containing Custom Slab Editor
 
 func pressed(id):
 	var setValue = id.get_meta("ID_of_slab")

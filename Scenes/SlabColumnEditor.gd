@@ -1,21 +1,23 @@
 extends WindowDialog
 onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
-onready var oVoxelTabs = Nodelist.list["oVoxelTabs"]
+onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oAllVoxelObjects = Nodelist.list["oAllVoxelObjects"]
+onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 
 func _ready():
-	oVoxelTabs.set_tab_title(0, "Edit columns")
-	oVoxelTabs.set_tab_title(1, "Add custom slab")
+	oColumnEditorTabs.set_tab_title(0, "Name is set below")
+	oColumnEditorTabs.set_tab_title(1, "Add custom slab")
 
 # When re-opening window or opening for first time
 func _on_ColumnEditor_visibility_changed():
 	if visible == true:
-		_on_VoxelTabs_tab_changed(oVoxelTabs.current_tab)
+		oColumnEditorTabs.set_tab_title(0, oCurrentMap.path.get_file().get_basename() + ".clm")
+		_on_ColumnEditorTabs_tab_changed(oColumnEditorTabs.current_tab)
 
-func _on_VoxelTabs_tab_changed(tab):
+func _on_ColumnEditorTabs_tab_changed(tab):
 	match tab:
 		0:
 			oCustomSlabVoxelView.visible = false

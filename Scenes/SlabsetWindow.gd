@@ -15,12 +15,12 @@ onready var oGame = Nodelist.list["oGame"]
 onready var oExportColumnCfgDialog = Nodelist.list["oExportColumnCfgDialog"]
 onready var oExportSlabsetCfgDialog = Nodelist.list["oExportSlabsetCfgDialog"]
 onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
-
+var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
 
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-var columnSpinBoxArray = []
+var columnSettersArray = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -31,12 +31,13 @@ func _ready():
 #	Utils.popup_centered(self)
 	
 	for number in 9:
-		var id = CustomSpinBox.new()
-		id.max_value = 2047
-		id.connect("value_changed",oDkSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
-		id.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
+		var id = scnColumnSetter.instance()
+		var spinbox = id.get_node("CustomSpinBox")
+		spinbox.max_value = 2047
+		spinbox.connect("value_changed",oDkSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
+		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		oGridContainerDynamicColumns3x3.add_child(id)
-		columnSpinBoxArray.append(id)
+		columnSettersArray.append(id)
 	
 	oDkSlabsetVoxelView.initialize()
 	
@@ -52,7 +53,9 @@ func _on_SlabsetWindow_visibility_changed():
 		
 		oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 		_on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
-
+		
+		yield(get_tree(),'idle_frame')
+		oDkSlabsetVoxelView.oAllVoxelObjects.visible = true
 
 func _on_SlabsetTabs_tab_changed(tab):
 	match tab:
@@ -146,11 +149,12 @@ func update_columns_ui():
 	if variation >= 1304:
 		return
 	
-	for i in columnSpinBoxArray.size():
-		columnSpinBoxArray[i].disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
+	for i in columnSettersArray.size():
+		var spinbox = columnSettersArray[i].get_node("CustomSpinBox")
+		spinbox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		var clmIndex = oDkDat.dat[variation][i]
-		columnSpinBoxArray[i].value = clmIndex
-		columnSpinBoxArray[i].connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
+		spinbox.value = clmIndex
+		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
 func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 	var variation = int(oVariationNumberSpinBox.value)
@@ -164,7 +168,10 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 	for y in 3:
 		for x in 3:
 			var i = (y*3) + x
-			var clmIndex = oGridContainerDynamicColumns3x3.get_child(i).value
+			var id = oGridContainerDynamicColumns3x3.get_child(i)
+			var spinbox = id.get_node("CustomSpinBox")
+			var clmIndex = spinbox.value
+			
 			oDkDat.dat[variation][i] = clmIndex
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
 
@@ -172,7 +179,7 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 
 func _on_SlabsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "This feature is for viewing and editing slabs.dat from DK's /data/ directory. Export and replace slabs.dat to mod the game. The cfg exports have no use at the moment."
+	helptxt += "This feature is for viewing and editing slabs.dat and slabs.clm from DK's /data/ directory. Export and replace files to mod the game. The cfg exports have no use at the moment."
 	#helptxt += '\n'
 	#helptxt += '\n'
 	#helptxt += ""

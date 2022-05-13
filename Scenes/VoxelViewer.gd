@@ -166,6 +166,7 @@ func do_all():
 	print('Codetime DYNAMIC: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func do_one():
+	
 	var genArray = oVoxelGen.blankArray.duplicate(true)
 	
 	if displayingType == MAP_CUSTOM_SLAB:
@@ -173,7 +174,9 @@ func do_one():
 		for y in 3:
 			for x in 3:
 				var i = (y*3) + x
-				var clmIndex = oGridContainerCustomColumns3x3.get_child(i).value
+				var id = oGridContainerCustomColumns3x3.get_child(i)
+				var spinbox = id.get_node("CustomSpinBox")
+				var clmIndex = spinbox.value
 				
 				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true, oDataClm)
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
@@ -205,7 +208,9 @@ func do_one():
 		for y in 3:
 			for x in 3:
 				var i = (y*3) + x
-				var clmIndex = oGridContainerDynamicColumns3x3.get_child(i).value
+				var id = oGridContainerDynamicColumns3x3.get_child(i)
+				var spinbox = id.get_node("CustomSpinBox")
+				var clmIndex = spinbox.value
 				
 				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true, oDkClm)
 		

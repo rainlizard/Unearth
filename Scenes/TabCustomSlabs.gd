@@ -14,12 +14,15 @@ onready var oSlabWibbleOptionButton = Nodelist.list["oSlabWibbleOptionButton"]
 onready var oSlabLiquidOptionButton = Nodelist.list["oSlabLiquidOptionButton"]
 onready var oWibbleEdgesCheckBox = Nodelist.list["oWibbleEdgesCheckBox"]
 onready var oWibbleEdgesSpacing = Nodelist.list["oWibbleEdgesSpacing"]
+var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
+
 
 func _ready():
 	for number in 9:
-		var id = CustomSpinBox.new()
-		id.max_value = 2047
-		id.connect("value_changed",oCustomSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
+		var id = scnColumnSetter.instance()
+		var spinbox = id.get_node("CustomSpinBox")
+		spinbox.max_value = 2047
+		spinbox.connect("value_changed",oCustomSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
 		
 		oGridContainerCustomColumns3x3.add_child(id)
 	
@@ -50,8 +53,9 @@ func _on_AddCustomSlabButton_pressed():
 	
 	var slabCubeData = []
 	var slabFloorData = []
-	for i in oGridContainerCustomColumns3x3.get_children():
-		var clmIndex = i.value
+	for id in oGridContainerCustomColumns3x3.get_children():
+		var spinbox = id.get_node("CustomSpinBox")
+		var clmIndex = spinbox.value
 		slabCubeData.append(oDataClm.cubes[clmIndex])
 		slabFloorData.append(oDataClm.floorTexture[clmIndex])
 	
