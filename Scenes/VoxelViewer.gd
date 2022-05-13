@@ -87,9 +87,7 @@ func set_object(setVal):
 	if displayingType == DK_SLABSET:
 		oVariationNumberSpinBox.value = setVal
 		oSlabsetWindow.variation_changed(setVal)
-		if oAllVoxelObjects.visible == false: # Update what was invisible
-			oAllVoxelObjects.visible = true
-			do_all()
+	
 	if displayingType == MAP_CUSTOM_SLAB:
 		pass
 	
@@ -221,14 +219,7 @@ func do_one():
 #	print(viewObject)
 
 
-func _on_Slabset3x3ColumnSpinBox_value_changed(value):
-	#oSlabsetIDSpinBox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
-	oAllVoxelObjects.visible = false
-	oSelectedVoxelObject.visible = true
-	do_one()
-	oColumnDetails.update_details()
-	#set_object(oVariationNumberSpinBox.value)
-	#oSlabsetIDSpinBox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
+
 
 func _on_CustomSlabSpinBox_value_changed(value):
 	do_one()
@@ -245,31 +236,6 @@ func update_column_view():
 	do_one()
 	oColumnDetails.update_details()
 
-
-func _on_SlabsetIDSpinBox_value_changed(value):
-	#oSlabsetIDSpinBox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
-	oSlabsetIDSpinBox.disconnect("value_changed",self,"_on_SlabsetIDSpinBox_value_changed")
-	yield(get_tree(),'idle_frame')
-	
-	do_all()
-	
-	set_object(viewObject) #for clamping the selection
-	#oSlabsetIDSpinBox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
-	oSlabsetIDSpinBox.connect("value_changed",self,"_on_SlabsetIDSpinBox_value_changed")
-
-
-func _on_VariationNumberSpinBox_value_changed(value):
-	oVariationNumberSpinBox.disconnect("value_changed",self,"_on_VariationNumberSpinBox_value_changed")
-	yield(get_tree(),'idle_frame')
-	
-	if oAllVoxelObjects.visible == false: # If was previously invisible (meaning you were editing "one") then update ALL
-		oAllVoxelObjects.visible = true
-		do_all()
-	
-	set_object(value)
-	oVariationNumberSpinBox.connect("value_changed",self,"_on_VariationNumberSpinBox_value_changed")
-	
-
 func _on_ColumnIndexSpinBox_value_changed(value):
 	
 	if oAllVoxelObjects.visible == false: # If was previously invisible (meaning you were editing "one") then update ALL
@@ -285,3 +251,34 @@ func _on_ColumnIndexSpinBox_value_changed(value):
 			oDkClmControls.oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 			set_object(value)
 			oDkClmControls.oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
+
+
+
+
+var skip3x3function = false
+func _on_Slabset3x3ColumnSpinBox_value_changed(value): # Runs 9 times when switching variation or ID. First.
+	yield(get_tree(),'idle_frame') # Important so that it runs after _on_VariationNumberSpinBox_value_changed()
+	if skip3x3function == true: return
+	do_one()
+	oColumnDetails.update_details()
+	oAllVoxelObjects.visible = false
+	oSelectedVoxelObject.visible = true
+func _on_VariationNumberSpinBox_value_changed(value):
+	set_object(value)
+	if oAllVoxelObjects.visible == false:
+		oAllVoxelObjects.visible = true
+		do_all()
+	skip3x3function = true
+	yield(get_tree(),'idle_frame')
+	skip3x3function = false
+
+
+func _on_SlabsetIDSpinBox_value_changed(value):
+	oAllVoxelObjects.visible = true
+	oSelectedVoxelObject.visible = false
+	do_all()
+	set_object(viewObject) #for clamping the selection
+	
+	skip3x3function = true
+	yield(get_tree(),'idle_frame')
+	skip3x3function = false

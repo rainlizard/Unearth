@@ -1,8 +1,8 @@
-extends Node
+extends 'res://Class/ColumnEditClass.gd'
 onready var oGame = Nodelist.list["oGame"]
 onready var oDkDat = Nodelist.list["oDkDat"]
 
-var use = []
+var utilized = []
 var orientation = []
 var solidMask = []
 var permanent = []
@@ -26,7 +26,7 @@ func clm_asset():
 	
 	buffer.seek(4) # For reading slabs.clm. (THIS IS DIFFERENT TO READING MAPS)
 	for entry in numberOfClmEntries:
-		use.append(buffer.get_u16()) # 0-1
+		utilized.append(buffer.get_u16()) # 0-1
 		
 		var specialByte = buffer.get_u8() # 2
 		

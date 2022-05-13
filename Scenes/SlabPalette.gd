@@ -556,9 +556,9 @@ func create_keeperfx_cfg_columns(filePath): #"res://columns.cfg"
 		textFile.store_line('ColumnsCount = 2048')
 		textFile.store_line('\r')
 		
-		for i in oDkClm.use.size():
+		for i in oDkClm.utilized.size():
 			textFile.store_line('[column' + str(i) +']')
-			textFile.store_line('Utilized = ' + str(oDkClm.use[i])) #(0-1)
+			textFile.store_line('Utilized = ' + str(oDkClm.utilized[i])) #(0-1)
 			textFile.store_line('Permanent = ' + str(oDkClm.permanent[i])) #(2)
 			textFile.store_line('Lintel = ' + str(oDkClm.lintel[i])) #(2)
 			textFile.store_line('Height = ' + str(oDkClm.height[i])) #(2)
@@ -588,10 +588,10 @@ func create_keeperfx_cfg_slab_autotile_data(filePath): #"res://slab_autotile_dat
 				variationCount = 8
 			
 			for variationNumber in variationCount:
-				if variationStart + variationNumber < oDkClm.dat.size():
+				if variationStart + variationNumber < oDkDat.dat.size():
 					#var beginLine = get_dir_text(variationNumber) + ' = '
 					textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + ']')
-					textFile.store_line('columns = ' + String(oDkClm.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
+					textFile.store_line('columns = ' + String(oDkDat.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
 				
 				var hasObjects = false
 				for i in oDkTng.tngObject.size():

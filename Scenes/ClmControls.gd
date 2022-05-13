@@ -1,6 +1,8 @@
 extends ScrollContainer
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oColumnDetails = Nodelist.list["oColumnDetails"]
+onready var oMessage = Nodelist.list["oMessage"]
+
 
 export(NodePath) onready var nodeClm = get_node(nodeClm) as Node
 export(NodePath) onready var nodeVoxelView = get_node(nodeVoxelView) as Node
@@ -115,7 +117,11 @@ func _on_SolidMaskSpinBox_value_changed(value):
 
 func _on_ColumnFirstUnusedButton_pressed():
 	var findUnusedIndex = nodeClm.find_cubearray_index([0,0,0,0, 0,0,0,0], 0)
-	oColumnIndexSpinBox.value = findUnusedIndex
+	
+	if findUnusedIndex != -1:
+		oColumnIndexSpinBox.value = findUnusedIndex
+	else:
+		oMessage.quick("There are no empty columns")
 
 func _on_ColumnViewDeleteButton_pressed():
 	var clmIndex = int(oColumnIndexSpinBox.value)

@@ -172,7 +172,7 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 
 func _on_SlabsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "This feature is for viewing and editing slabs.dat from DK's /data/ directory. Export and replace slabs.dat to mod the game. The cfg exports are useless at this moment."
+	helptxt += "This feature is for viewing and editing slabs.dat from DK's /data/ directory. Export and replace slabs.dat to mod the game. The cfg exports have no use at the moment."
 	#helptxt += '\n'
 	#helptxt += '\n'
 	#helptxt += ""
@@ -185,7 +185,7 @@ func _on_ExportSlabsetDatDialog_file_selected(filePath):
 	buffer.put_u16(1304)
 	for slab in 1304:
 		for subtile in 9:
-			var value = 65536 - oDkClm.dat[slab][subtile]
+			var value = 65536 - oDkDat.dat[slab][subtile]
 			buffer.put_u16(value)
 	
 	var file = File.new()

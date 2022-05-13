@@ -1,4 +1,4 @@
-extends Node
+extends 'res://Class/ColumnEditClass.gd'
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oTimerUpdateColumnEntries = Nodelist.list["oTimerUpdateColumnEntries"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
@@ -12,19 +12,12 @@ var lintel = []
 var height = []
 var cubes = []
 var floorTexture = []
+
+
+
 #var testingSpecialByte = []
 
 var unknownData #The second 4 bytes
-
-func delete_column(index):
-	utilized[index] = 0
-	orientation[index] = 0
-	solidMask[index] = 0
-	permanent[index] = 0
-	lintel[index] = 0
-	height[index] = 0
-	cubes[index] = [0,0,0,0, 0,0,0,0]
-	floorTexture[index] = 0
 
 func clm_data_exists():
 	if cubes.empty() == true:
@@ -53,11 +46,7 @@ func get_top_cube_face(index, slabID):
 		var cubeID = cubes[index][get_height-1] #get_height
 		return Cube.tex[cubeID][Cube.SIDE_TOP]
 
-func get_real_height(cubeArray):
-	for cubeNumber in 8:
-		if cubeArray[7-cubeNumber] != 0:
-			return 8-cubeNumber
-	return 0
+
 
 func count_filled_clm_entries():
 	var numberOfFilledEntries = 0
@@ -94,32 +83,6 @@ func index_entry(cubeArray, setFloorID):
 	print("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
 	return 0
 
-func find_cubearray_index(cubeArray, floorID):
-	var compareFloorTexture = false
-	# If the lowest cube is missing that means the floor is visible, therefore the floor should be compared too
-	if cubeArray[0] == 0:
-		compareFloorTexture = true
-	
-	var searchFrom = 1 # Skip 1st entry which should remain 0
-	while true:
-		var idx = cubes.find(cubeArray, searchFrom)
-		if idx != -1:
-			# Matching cubes were found, should the floor texture be compared now?
-			if compareFloorTexture == true:
-				if floorTexture[idx] == floorID:
-					# Found matching cubes and matching floor
-					return idx
-				else:
-					# Did not find matching floor with matching cubes, so search again starting from the next entry
-					searchFrom = idx+1
-			else:
-				# Found matching cubes, floor is irrelevant
-				return idx
-		else:
-			# Found no matching cubes
-			break
-	return -1
-
 func update_all_utilized():
 	var CODETIME_START = OS.get_ticks_msec()
 	for clearIndex in 2048:
@@ -137,21 +100,6 @@ func update_all_solid_mask():
 		solidMask[index] = calculate_solid_mask(cubes[index])
 	print('All CLM solid bitmask updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-func calculate_solid_mask(cubeArray):
-	# For each cube value that isn't 0, add a bitmask value.
-	# 0 = 1
-	# 1 = 2
-	# 2 = 4
-	# 3 = 8
-	# 4 = 16
-	# 5 = 32
-	# 6 = 64
-	# 7 = 128
-	var setSolidBitmask:int = 0
-	for i in 8:
-		if cubeArray[i] != 0:
-			setSolidBitmask += int(pow(2, i))
-	return setSolidBitmask
 
 #func find_blank_slot():
 #	var index = cubes.find([0,0,0,0, 0,0,0,0], 1) # Skip looking at index 0
