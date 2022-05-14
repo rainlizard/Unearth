@@ -34,6 +34,16 @@ func delete_column(index):
 	self.cubes[index] = [0,0,0,0, 0,0,0,0]
 	self.floorTexture[index] = 0
 
+func copy_column(indexSrc, indexDest):
+	self.utilized[indexDest] = self.utilized[indexSrc]
+	self.orientation[indexDest] = self.orientation[indexSrc]
+	self.solidMask[indexDest] = self.solidMask[indexSrc]
+	self.permanent[indexDest] = self.permanent[indexSrc]
+	self.lintel[indexDest] = self.lintel[indexSrc]
+	self.height[indexDest] = self.height[indexSrc]
+	self.cubes[indexDest] = self.cubes[indexSrc]
+	self.floorTexture[indexDest] = self.floorTexture[indexSrc]
+
 func find_cubearray_index(cubeArray, floorID):
 	var compareFloorTexture = false
 	# If the lowest cube is missing that means the floor is visible, therefore the floor should be compared too

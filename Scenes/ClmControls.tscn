@@ -55,16 +55,24 @@ hint_tooltip = "Set all data of the column at this index to 0"
 size_flags_horizontal = 3
 text = "Delete column"
 
-[node name="Spacing" type="Control" parent="VBoxContainer"]
+[node name="ColumnDuplicateButton" type="Button" parent="VBoxContainer"]
 margin_top = 76.0
 margin_right = 220.0
-margin_bottom = 100.0
+margin_bottom = 96.0
+hint_tooltip = "Set all data of the column at this index to 0"
+size_flags_horizontal = 3
+text = "Duplicate column"
+
+[node name="Spacing" type="Control" parent="VBoxContainer"]
+margin_top = 100.0
+margin_right = 220.0
+margin_bottom = 124.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="ColumnGridContainer" type="GridContainer" parent="VBoxContainer"]
-margin_top = 104.0
+margin_top = 128.0
 margin_right = 220.0
-margin_bottom = 520.0
+margin_bottom = 544.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -343,6 +351,7 @@ script = ExtResource( 1 )
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/ColumnIndexSpinBox" to="." method="_on_ColumnIndexSpinBox_value_changed"]
 [connection signal="pressed" from="VBoxContainer/ColumnFirstUnusedButton" to="." method="_on_ColumnFirstUnusedButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/ColumnViewDeleteButton" to="." method="_on_ColumnViewDeleteButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/ColumnDuplicateButton" to="." method="_on_ColumnDuplicateButton_pressed"]
 [connection signal="value_changed" from="VBoxContainer/ColumnGridContainer/FloorTextureSpinBox" to="." method="_on_FloorTextureSpinBox_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/ColumnGridContainer/HeightSpinBox" to="." method="_on_HeightSpinBox_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/ColumnGridContainer/SolidMaskSpinBox" to="." method="_on_SolidMaskSpinBox_value_changed"]

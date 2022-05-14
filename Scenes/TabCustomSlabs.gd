@@ -14,6 +14,11 @@ onready var oSlabWibbleOptionButton = Nodelist.list["oSlabWibbleOptionButton"]
 onready var oSlabLiquidOptionButton = Nodelist.list["oSlabLiquidOptionButton"]
 onready var oWibbleEdgesCheckBox = Nodelist.list["oWibbleEdgesCheckBox"]
 onready var oWibbleEdgesSpacing = Nodelist.list["oWibbleEdgesSpacing"]
+onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
+onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
+onready var oDkClm = Nodelist.list["oDkClm"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
 
 
@@ -21,6 +26,8 @@ func _ready():
 	for number in 9:
 		var id = scnColumnSetter.instance()
 		var spinbox = id.get_node("CustomSpinBox")
+		var shortcut = id.get_node("ButtonShortcut")
+		shortcut.connect("pressed",self,"shortcut_pressed",[id])
 		spinbox.max_value = 2047
 		spinbox.connect("value_changed",oCustomSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
 		
@@ -28,6 +35,11 @@ func _ready():
 	
 	_on_SlabRecognizedAs_value_changed(oSlabRecognizedAs.value)
 
+func shortcut_pressed(id):
+	var spinbox = id.get_node("CustomSpinBox")
+	var clmIndex = spinbox.value
+	oColumnEditorTabs.set_current_tab(0)
+	oColumnEditorControls.oColumnIndexSpinBox.value = clmIndex
 
 func _on_SlabRecognizedAs_value_changed(value):
 	var slabName = "Unknown"
@@ -82,3 +94,22 @@ func _on_SlabWibbleOptionButton_item_selected(index):
 	else:
 		oWibbleEdgesSpacing.visible = false
 		oWibbleEdgesCheckBox.visible = false
+
+func copy_values_from_slabset_and_index_them():
+	var customSlabArrayOfSpinbox = []
+	for id in oGridContainerCustomColumns3x3.get_children():
+		customSlabArrayOfSpinbox.append(id.get_node("CustomSpinBox"))
+	
+	for i in 9:
+		var srcClmIndex = oSlabsetWindow.columnSettersArray[i].get_node("CustomSpinBox").value
+		
+		var cubeArray = oDkClm.cubes[srcClmIndex]
+		var setFloorID = oDkClm.floorTexture[srcClmIndex]
+		
+		var newIndex = oDataClm.index_entry(cubeArray, setFloorID)
+		
+		print(newIndex)
+		print(customSlabArrayOfSpinbox[i])
+		customSlabArrayOfSpinbox[i].value = newIndex
+	
+	#oMessage.big("", "Columns in your map's .clm file have been found that match the columns from slabs.clm/dat. Any that weren't found were added.")

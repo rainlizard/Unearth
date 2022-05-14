@@ -1,4 +1,4 @@
-extends 'res://Class/ColumnEditClass.gd'
+extends 'res://Class/ClmClass.gd'
 onready var oGame = Nodelist.list["oGame"]
 onready var oDkDat = Nodelist.list["oDkDat"]
 

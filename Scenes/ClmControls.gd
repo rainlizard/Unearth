@@ -7,6 +7,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 export(NodePath) onready var nodeClm = get_node(nodeClm) as Node
 export(NodePath) onready var nodeVoxelView = get_node(nodeVoxelView) as Node
 
+onready var oColumnGridContainer = $"VBoxContainer/ColumnGridContainer"
 onready var oColumnIndexSpinBox = $"VBoxContainer/HBoxContainer/ColumnIndexSpinBox"
 onready var oColumnFirstUnusedButton = $"VBoxContainer/ColumnFirstUnusedButton"
 onready var oColumnViewDeleteButton = $"VBoxContainer/ColumnViewDeleteButton"
@@ -36,6 +37,24 @@ func _ready():
 	oCube2SpinBox.connect("value_changed", self, "_on_cube_value_changed", [2])
 	oCube1SpinBox.connect("value_changed", self, "_on_cube_value_changed", [1])
 	oCube0SpinBox.connect("value_changed", self, "_on_cube_value_changed", [0])
+
+func _on_ColumnDuplicateButton_pressed():
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	
+	var findUnusedIndex = nodeClm.find_cubearray_index([0,0,0,0, 0,0,0,0], 0)
+	
+	if findUnusedIndex != -1:
+		nodeClm.copy_column(clmIndex, findUnusedIndex)
+		oMessage.quick('Copied ' + str(clmIndex) + ' --> ' + str(findUnusedIndex))
+		
+		nodeVoxelView.update_column_view()
+		
+		oColumnIndexSpinBox.value = findUnusedIndex
+		
+		
+	else:
+		oMessage.quick("There are no empty columns to copy to")
+
 
 func _on_ColumnIndexSpinBox_value_changed(value):
 	var clmIndex = int(value)
@@ -155,3 +174,5 @@ func _on_ColumnViewDeleteButton_pressed():
 #	$"VBoxContainer/ColumnGridContainer/PermanentSpinBox".connect("value_changed", connectToNode, "_on_PermanentSpinBox_value_changed")
 #	$"VBoxContainer/ColumnGridContainer/OrientationSpinBox".connect("value_changed", connectToNode, "_on_OrientationSpinBox_value_changed")
 #	$"VBoxContainer/ColumnGridContainer/LintelSpinBox".connect("value_changed", connectToNode, "_on_LintelSpinBox_value_changed")
+
+

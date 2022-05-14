@@ -15,6 +15,10 @@ onready var oGame = Nodelist.list["oGame"]
 onready var oExportColumnCfgDialog = Nodelist.list["oExportColumnCfgDialog"]
 onready var oExportSlabsetCfgDialog = Nodelist.list["oExportSlabsetCfgDialog"]
 onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
+onready var oDkClmControls = Nodelist.list["oDkClmControls"]
+onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
+onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
+
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
 
 # Declare member variables here. Examples:
@@ -33,6 +37,8 @@ func _ready():
 	for number in 9:
 		var id = scnColumnSetter.instance()
 		var spinbox = id.get_node("CustomSpinBox")
+		var shortcut = id.get_node("ButtonShortcut")
+		shortcut.connect("pressed",self,"shortcut_pressed",[id])
 		spinbox.max_value = 2047
 		spinbox.connect("value_changed",oDkSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
@@ -46,6 +52,11 @@ func _ready():
 	
 	#variation_changed(0)
 
+func shortcut_pressed(id):
+	var spinbox = id.get_node("CustomSpinBox")
+	var clmIndex = spinbox.value
+	oSlabsetTabs.set_current_tab(1)
+	oDkClmControls.oColumnIndexSpinBox.value = clmIndex
 
 func _on_SlabsetWindow_visibility_changed():
 	if visible == true:
@@ -227,3 +238,10 @@ func _on_ExportColumnsCfg_pressed():
 	#oExportColumnCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
 	#oExportColumnCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oExportColumnCfgDialog.current_file = "columns.cfg"
+
+
+func _on_SlabsetCopyValues_pressed():
+	oTabCustomSlabs.copy_values_from_slabset_and_index_them()
+	
+	visible = false
+	oPickSlabWindow._on_pressed_add_new_custom_slab()

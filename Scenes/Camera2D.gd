@@ -21,7 +21,9 @@ var desired_offset = Vector2(0,0)
 var panDirectionKeyboard = Vector2(0,0)
 var panDirectionMouse = Vector2(0,0)
 var middleMousePanning = false
-var mouseIsMoving = false
+#var mouseIsMoving = false
+
+var mouseInWindow = true
 
 func _ready():
 	reset_camera()
@@ -34,12 +36,16 @@ func reset_camera():
 	desired_zoom = zoom
 
 func _process(delta):
+	
+	
 	if OS.is_window_focused() == false: return
 	if current == false: return #View is 3D
 	
 	if zoom != desired_zoom:
 		zoom = lerp(zoom, desired_zoom, clamp(SMOOTHING_RATE * delta, 0.0, 1.0))
 		emit_signal("zoom_level_changed", zoom)
+	
+	
 	
 	desired_offset += panDirectionMouse * DIRECTIONAL_PAN_SPEED * (zoom/Settings.UI_SCALE.x) * delta
 	desired_offset += panDirectionKeyboard * DIRECTIONAL_PAN_SPEED * (zoom/Settings.UI_SCALE.x) * delta
@@ -52,10 +58,11 @@ func _process(delta):
 	
 	offset = lerp(offset, desired_offset, clamp(SMOOTHING_RATE * delta, 0.0, 1.0))
 	
-	if OS.is_window_focused() == true:
-		if MOUSE_EDGE_PANNING == true and oUi.mouseOnUi == false and mouseIsMoving == true and middleMousePanning == false:
+	
+	if OS.is_window_focused() == true and mouseInWindow == true:
+		if MOUSE_EDGE_PANNING == true and oUi.mouseOnUi == false and middleMousePanning == false: #and mouseIsMoving == true
 			mouse_edge_pan()
-			mouseIsMoving = false
+			#mouseIsMoving = false
 	else:
 		#Do not allow mouse window edge panning if window is unfocused
 		panDirectionMouse = Vector2(0,0)
@@ -96,8 +103,8 @@ func _unhandled_input(event):
 			offset = desired_offset
 	
 	# Edge pan idle reset
-	if event is InputEventMouseMotion:
-		mouseIsMoving = true
+#	if event is InputEventMouseMotion:
+#		mouseIsMoving = true
 
 func _input(event):
 	panDirectionMouse = Vector2(0,0) # This is good for when the mouse hovers over a UI element, so it can stop moving.
@@ -106,15 +113,18 @@ func mouse_edge_pan():
 	panDirectionMouse = Vector2(0,0)
 	var zoomedViewSize = (get_viewport().size/Settings.UI_SCALE) * zoom
 	var topLeftOfView = offset - (zoomedViewSize*0.5)
-	var panBorder = zoomedViewSize * 0.15 # 0.15 is percentage of screen, panBorder.x is 10% of screen width
+	
+	# make panBorder the same for each side, by using the larger screen value for all calculations
+	var panBorder = max(zoomedViewSize.x, zoomedViewSize.y) * 0.05 # 0.15 is percentage of screen, panBorder.x is 10% of screen width
+	
 	var mpos = get_global_mouse_position()
-	if (mpos.y < topLeftOfView.y+panBorder.y):
+	if (mpos.y < topLeftOfView.y+panBorder):
 		panDirectionMouse.y = -1
-	if (mpos.y > topLeftOfView.y+zoomedViewSize.y-panBorder.y):
+	if (mpos.y > topLeftOfView.y+zoomedViewSize.y-panBorder):
 		panDirectionMouse.y = 1
-	if (mpos.x < topLeftOfView.x+panBorder.x):
+	if (mpos.x < topLeftOfView.x+panBorder):
 		panDirectionMouse.x = -1
-	if (mpos.x > topLeftOfView.x+zoomedViewSize.x-panBorder.x):
+	if (mpos.x > topLeftOfView.x+zoomedViewSize.x-panBorder):
 		panDirectionMouse.x = 1
 	panDirectionMouse = panDirectionMouse.normalized()
 
@@ -141,3 +151,10 @@ func zoom_camera(zoom_factor, mouse_position):
 	
 	desired_zoom += desired_zoom * zoom_factor
 	desired_offset += ((viewport_size * 0.5) - mouse_position) * (desired_zoom-previous_zoom)
+
+func _notification(blah):
+	match blah:
+		NOTIFICATION_WM_MOUSE_EXIT:
+			mouseInWindow = false
+		NOTIFICATION_WM_MOUSE_ENTER:
+			mouseInWindow = true

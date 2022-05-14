@@ -1,4 +1,4 @@
-extends 'res://Class/ColumnEditClass.gd'
+extends 'res://Class/ClmClass.gd'
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oTimerUpdateColumnEntries = Nodelist.list["oTimerUpdateColumnEntries"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
@@ -79,7 +79,7 @@ func index_entry(cubeArray, setFloorID):
 		oTimerUpdateColumnEntries.start()
 		return index
 
-	oMessage.quick("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
+	oMessage.quick("Error: Cannot add clm entry, ran out of blank clm entries.")
 	print("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
 	return 0
 
