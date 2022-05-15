@@ -6,6 +6,9 @@ onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oAllVoxelObjects = Nodelist.list["oAllVoxelObjects"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oDataClm = Nodelist.list["oDataClm"]
+onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
+onready var oConfirmClmClearUnused = Nodelist.list["oConfirmClmClearUnused"]
 
 func _ready():
 	oColumnEditorTabs.set_tab_title(0, "Name is set below")
@@ -14,8 +17,14 @@ func _ready():
 # When re-opening window or opening for first time
 func _on_ColumnEditor_visibility_changed():
 	if visible == true:
+		oDataClm.update_all_utilized() # Run this before _on_ColumnEditorTabs_tab_changed()
+		# Update spinbox for currently viewed column
+		oColumnEditorControls.oUtilizedSpinBox.value = oDataClm.utilized[oColumnEditorControls.oColumnIndexSpinBox.value]
+		
 		oColumnEditorTabs.set_tab_title(0, oCurrentMap.path.get_file().get_basename() + ".clm")
 		_on_ColumnEditorTabs_tab_changed(oColumnEditorTabs.current_tab)
+		
+		
 
 func _on_ColumnEditorTabs_tab_changed(tab):
 	match tab:
@@ -36,3 +45,11 @@ func _on_ColumnEditorHelpButton_pressed():
 	helptxt += '\n'
 	helptxt += "If your column has multiple gaps then some of the top/bottom cube faces may not display in-game."
 	oMessage.big("Help",helptxt)
+
+
+func _on_ColumnEditorClearUnusedButton_pressed():
+	Utils.popup_centered(oConfirmClmClearUnused)
+
+
+func _on_ConfirmClmClearUnused_confirmed():
+	oDataClm.clear_unused_entries()

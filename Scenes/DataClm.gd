@@ -100,6 +100,12 @@ func update_all_solid_mask():
 		solidMask[index] = calculate_solid_mask(cubes[index])
 	print('All CLM solid bitmask updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
+func clear_unused_entries():
+	for clmIndex in 2048:
+		if utilized[clmIndex] == 0:
+			delete_column(clmIndex)
+
+
 
 #func find_blank_slot():
 #	var index = cubes.find([0,0,0,0, 0,0,0,0], 1) # Skip looking at index 0
@@ -199,3 +205,5 @@ func update_all_solid_mask():
 #	var C = C0 + (2*cubeNumber)
 #	return array[C] | (array[C+1] << 8)
 #
+
+

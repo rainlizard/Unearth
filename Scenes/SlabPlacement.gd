@@ -75,11 +75,11 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	oOverheadOwnership.ownership_update_shape(shapePositionArray, ownership)
 	print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-func manage_things_on_slab(pos, slabID):
+func manage_things_on_slab(xSlab, ySlab, slabID):
 	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
-		oInstances.delete_all_on_slab(pos.x, pos.y, ["Thing"])
+		oInstances.delete_all_on_slab(xSlab, ySlab, ["Thing"])
 	else:
-		oInstances.update_height_of_things_on_slab(pos.x,pos.y)
+		oInstances.update_height_of_things_on_slab(xSlab, ySlab)
 
 
 func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
@@ -98,7 +98,7 @@ func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 			var ownership = oDataOwnership.get_cell(xSlab, ySlab)
 			do_slab(xSlab, ySlab, slabID, ownership)
 			
-			manage_things_on_slab(Vector2(xSlab,ySlab), slabID)
+			manage_things_on_slab(xSlab, ySlab, slabID)
 	
 	print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
@@ -484,6 +484,25 @@ func asset_position_to_column_index(array):
 		
 		array[i] = oSlabPalette.slabPal[slabVariation][newSubtile] # slab variation - subtile of that variation
 	return array
+
+#var positionsArray3x3 = [
+#	Vector2(0,0),
+#	Vector2(1,0),
+#	Vector2(2,0),
+#	Vector2(0,1),
+#	Vector2(1,1),
+#	Vector2(2,1),
+#	Vector2(0,2),
+#	Vector2(1,2),
+#	Vector2(2,2),
+#]
+#
+#func set_columns(xSlab, ySlab, array):
+#
+#	for i in 9:
+#		var ySubtile = positionsArray3x3[i].y#i/3
+#		var xSubtile = positionsArray3x3[i].x#i - (ySubtile*3)
+#		oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
 
 func set_columns(xSlab, ySlab, array):
 	for i in 9:

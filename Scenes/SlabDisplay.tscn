@@ -13,9 +13,6 @@ focus_mode = 0
 texture_normal = ExtResource( 4 )
 expand = true
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
 anchor_left = 0.5

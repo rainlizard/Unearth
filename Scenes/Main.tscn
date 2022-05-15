@@ -2486,6 +2486,19 @@ dialog_text = "This will clear and replace your existing script, are you sure?"
 dialog_autowrap = true
 script = ExtResource( 61 )
 
+[node name="ConfirmClmClearUnused" type="ConfirmationDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -456.0
+margin_top = 304.0
+margin_right = -16.0
+margin_bottom = 409.0
+rect_min_size = Vector2( 300, 105 )
+popup_exclusive = true
+window_title = "Delete all unused columns"
+dialog_text = "Warning: This is untested and may possibly break your map. The theory is you don't need any clm entries except the ones that appear on the map."
+dialog_autowrap = true
+script = ExtResource( 61 )
+
 [node name="SlabSettingsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 832.0
@@ -4031,12 +4044,23 @@ margin_bottom = 655.0
 nodeClm = NodePath("../../../../../../../CurrentMap/DataClm")
 nodeVoxelView = NodePath("../../ColumnEditorVoxelView")
 
-[node name="ColumnEditorHelpButton" type="Button" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2"]
-margin_left = 166.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2"]
 margin_top = 628.0
 margin_right = 220.0
 margin_bottom = 655.0
-size_flags_horizontal = 8
+
+[node name="ColumnEditorClearUnusedButton" type="Button" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2/HBoxContainer"]
+margin_right = 130.0
+margin_bottom = 27.0
+size_flags_horizontal = 10
+size_flags_vertical = 8
+text = "Clear unused"
+
+[node name="ColumnEditorHelpButton" type="Button" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2/HBoxContainer"]
+margin_left = 134.0
+margin_right = 220.0
+margin_bottom = 27.0
+size_flags_horizontal = 11
 size_flags_vertical = 8
 text = "Help"
 
@@ -4809,6 +4833,7 @@ script = ExtResource( 88 )
 [connection signal="visibility_changed" from="Ui/UiSystem/FileDialogOpen" to="Ui/UiSystem/FileDialogOpen" method="_on_FileDialogOpen_visibility_changed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmAutoGen" to="SlabPlacement" method="_on_ConfirmAutoGen_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmGenerateScript" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_ConfirmGenerateScript_confirmed"]
+[connection signal="confirmed" from="Ui/UiSystem/ConfirmClmClearUnused" to="Ui/UiSystem/ColumnEditor" method="_on_ConfirmClmClearUnused_confirmed"]
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/OwnableNaturalTerrain" to="Ui/UiSystem/SlabSettingsWindow" method="_on_OwnableNaturalTerrain_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox" to="Editor" method="_on_EditableBordersCheckbox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox" to="Ui/UiSystem/SlabSettingsWindow" method="_on_EditableBordersCheckbox_toggled"]
@@ -4852,7 +4877,8 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ColumnEditor" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditor_visibility_changed"]
 [connection signal="tab_changed" from="Ui/UiSystem/ColumnEditor/ColumnEditorTabs" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorTabs_tab_changed"]
-[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2/ColumnEditorHelpButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2/HBoxContainer/ColumnEditorClearUnusedButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorClearUnusedButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2/HBoxContainer/ColumnEditorHelpButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorHelpButton_pressed"]
 [connection signal="value_changed" from="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/TabCustomSlabs/ScrollContainer/VBoxContainer/GridContainer/HBoxContainer/SlabRecognizedAs" to="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/TabCustomSlabs" method="_on_SlabRecognizedAs_value_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/TabCustomSlabs/ScrollContainer/VBoxContainer/GridContainer/SlabWibbleOptionButton" to="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/TabCustomSlabs" method="_on_SlabWibbleOptionButton_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/TabCustomSlabs/ScrollContainer/VBoxContainer/AddCustomSlabButton" to="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/TabCustomSlabs" method="_on_AddCustomSlabButton_pressed"]

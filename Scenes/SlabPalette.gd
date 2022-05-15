@@ -46,6 +46,8 @@ enum {
 var randomColumns = []
 
 func start():
+	
+	
 	# Do this only once.
 	if oDkDat.dat.empty() == true: oDkDat.dat_asset()
 	if oDkClm.cubes.empty() == true: oDkClm.clm_asset()
@@ -54,10 +56,15 @@ func start():
 	# Create the slabPal based on the assetDat, but use the currently opened map's CLM.
 	CODETIME_START = OS.get_ticks_msec()
 	update_slab_palette_for_map()
+	print('Slab palette: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
+	#return #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	CODETIME_START = OS.get_ticks_msec()
 	edit_impenetrable()
 	edit_walltorch_sw_ne_shadow()
 	edit_damaged_wall()
+	print('Various edits: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	CODETIME_START = OS.get_ticks_msec()
 	gather_columns_for_random_selection()
@@ -113,16 +120,17 @@ func update_slab_palette_for_map():
 			var assetClmIndex = oDkDat.dat[i][subtile]
 			
 			var newClmIndex
-			if dictionary.has(assetClmIndex) == true: # Quicker subsequent lookup
-				# Found!
+			if dictionary.has(assetClmIndex) == true: # Quicker subsequent lookups
+				# Reuse the same clmIndex that we've found before
 				newClmIndex = dictionary[assetClmIndex]
 			else:
-				# Put that column inside our map's DataClm.
+				# New column. Put that column inside our map's DataClm.
 				var cubeArray = oDkClm.cubes[assetClmIndex]
 				var floorID = oDkClm.floorTexture[assetClmIndex]
-				newClmIndex = oDataClm.index_entry(cubeArray, floorID)
-				# Store for quicker subsequent lookup
-				dictionary[assetClmIndex] = newClmIndex
+				
+				#newClmIndex = oDataClm.index_entry(cubeArray, floorID) #!!!!!!!!!!!!!!!!!!!!!!!!
+				
+				dictionary[assetClmIndex] = newClmIndex # Store for subsequent lookups to instantly find any duplicates
 			
 			# Put that column index inside the slabPal.
 			slabPal[i][subtile] = newClmIndex

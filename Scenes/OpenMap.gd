@@ -27,6 +27,7 @@ onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oDataLiquid = Nodelist.list["oDataLiquid"]
+onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -82,6 +83,7 @@ func open_map(filePath): # auto opens other files
 	
 	# Close windows that I want closed
 	oMapSettingsWindow.visible = false
+	oColumnEditor.visible = false
 	
 	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
 	var map = filePath.get_basename()
