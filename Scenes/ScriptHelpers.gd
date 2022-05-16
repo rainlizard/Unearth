@@ -2,6 +2,7 @@ extends Node2D
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oInstances = Nodelist.list["oInstances"]
+onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
 
 var SCRIPT_ICON_SIZE_MAX = 8 setget script_icon_size_max
 var SCRIPT_ICON_SIZE_BASE = 0.5 setget script_icon_size_base
@@ -116,6 +117,8 @@ func start():
 	print('Script helpers created ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func clear():
+	oCustomTooltip.set_text("") #Fixes an issue when deleting an action point while mouse is hovering a script helper
+	
 	for id in get_tree().get_nodes_in_group("ScriptHelperObject"):
 		id.position = Vector2(-100,-100)
 		id.queue_free()

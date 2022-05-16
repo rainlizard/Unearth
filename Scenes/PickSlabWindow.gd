@@ -13,6 +13,7 @@ onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
+onready var oDkDat = Nodelist.list["oDkDat"]
 
 
 onready var oSelectedRect = $Clippy/SelectedRect
@@ -79,15 +80,16 @@ func add_slabs():
 			var id = scene.instance()
 			var slabVariation
 			
+			var columnArray = [0,0,0, 0,0,0, 0,0,0]
 			match slabID:
 				Slabs.PORTAL:
 					slabVariation = (Slabs.PORTAL*28) + 8
 					for i in 9:
-						id.columns[i] = oSlabPalette.slabPal[slabVariation][i]
+						columnArray[i] = oDkDat.dat[slabVariation][i]
 				Slabs.WALL_AUTOMATIC:
 					slabVariation = Slabs.WALL_WITH_BANNER*28
 					for i in 9:
-						id.columns[i] = oSlabPalette.slabPal[slabVariation][i]
+						columnArray[i] = oDkDat.dat[slabVariation][i]
 				_:
 					if slabID < 1000:
 						if slabID <= 42: # 1176 variations
@@ -96,21 +98,16 @@ func add_slabs():
 							slabVariation = (42 * 28) + (8 * (slabID - 42))
 						
 						for i in 9:
-							id.columns[i] = oSlabPalette.slabPal[slabVariation][i]
+							columnArray[i] = oDkDat.dat[slabVariation][i] # !!!!!!!!!!!!!
 					else:
 						# Custom slab
 						pass
-#						for i in 9:
-#							id.columns[i] = oCustomSlabSystem.data[slabID][oCustomSlabSystem.SLAB_DATA][i]
 			id.set_meta("ID_of_slab", slabID)
 			id.panelView = Slabs.data[slabID][Slabs.PANEL_VIEW]
-			id.set_visual()
+			id.set_visual(columnArray)
 			add_child_to_grid(tabs[putIntoTab][GRIDCON_PATH], id, Slabs.data[slabID][Slabs.NAME])
 	
-	
 	custom_slab_add_new_button()
-	
-	
 	
 	if visible == true:
 		set_selection(oSelection.paintSlab) # Default initial selection

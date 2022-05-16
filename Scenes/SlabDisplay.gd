@@ -4,7 +4,7 @@ onready var oSelection = Nodelist.list["oSelection"]
 var dataImage = Image.new()
 var dataTexture = ImageTexture.new()
 
-var columns = [0,0,0, 0,0,0, 0,0,0]
+#var columns = [0,0,0, 0,0,0, 0,0,0]
 var panelView = Slabs.PANEL_TOP_VIEW
 func _ready():
 	add_to_group("SlabDisplay") #Import for when changing texture pack
@@ -14,8 +14,9 @@ func _ready():
 	$AspectRatioContainer.anchor_left -= iconSize
 	$AspectRatioContainer.anchor_right += iconSize
 
-func set_visual():
+func set_visual(columnArray):
 	var oDataClm = Nodelist.list["oDataClm"]
+	var oDkClm = Nodelist.list["oDkClm"]
 	
 	var slabID = get_meta("ID_of_slab")
 	
@@ -39,8 +40,8 @@ func set_visual():
 		if slabID < 1000:
 			for y in 3:
 				for x in 3:
-					var clmIndex = columns[(y*3) + x]
-					var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
+					var clmIndex = columnArray[(y*3) + x]
+					var cubeFace = oDkClm.get_top_cube_face(clmIndex, slabID)
 					var valueInput = cubeFace
 					var r = clamp(valueInput, 0, 255)
 					valueInput -= 255
@@ -73,9 +74,9 @@ func set_visual():
 		
 		for x in 3:
 			for z in range(0, 3):
-				var clmIndex = columns[(y*3) + x]
+				var clmIndex = columnArray[(y*3) + x]
 				
-				var cubeID = oDataClm.cubes[clmIndex][sideViewZoffset-z]
+				var cubeID = oDkClm.cubes[clmIndex][sideViewZoffset-z]
 				var cubeFace = Cube.tex[cubeID][Cube.SIDE_SOUTH]
 				
 				var valueInput = cubeFace

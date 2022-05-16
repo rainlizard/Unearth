@@ -6,7 +6,7 @@ onready var oDkClm = Nodelist.list["oDkClm"]
 onready var oDkTng = Nodelist.list["oDkTng"]
 onready var oMessage = Nodelist.list["oMessage"]
 
-var slabPal = []
+#var slabPal = []
 
 enum dir {
 	s = 0
@@ -46,29 +46,37 @@ enum {
 var randomColumns = []
 
 func start():
-	
+	randomColumns.resize(RNG_CLM_WALL_NEARBY_WATER+1)
+	for i in RNG_CLM_WALL_NEARBY_WATER+1:
+		randomColumns[i] = []
 	
 	# Do this only once.
 	if oDkDat.dat.empty() == true: oDkDat.dat_asset()
 	if oDkClm.cubes.empty() == true: oDkClm.clm_asset()
 	if oDkTng.tngIndex.empty() == true: oDkTng.slabtng_assets()
 	
+	
+	# Use this to show all the hidden slabs inside of slabs.clm, content unused by the game.
+#	for slabvar in 1304:
+#		for subtile in 9:
+#			var clmIndex = oDkDat.dat[slabvar][subtile]
+#			oDkClm.delete_column(clmIndex)
+	
+	
+	
 	# Create the slabPal based on the assetDat, but use the currently opened map's CLM.
-	CODETIME_START = OS.get_ticks_msec()
-	update_slab_palette_for_map()
-	print('Slab palette: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	#CODETIME_START = OS.get_ticks_msec()
+	#update_slab_palette_for_map()
+	#print('Slab palette: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
-	#return #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	
-	CODETIME_START = OS.get_ticks_msec()
-	edit_impenetrable()
-	edit_walltorch_sw_ne_shadow()
-	edit_damaged_wall()
-	print('Various edits: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
-	CODETIME_START = OS.get_ticks_msec()
-	gather_columns_for_random_selection()
-	print('Gathered random selection columns in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+#	CODETIME_START = OS.get_ticks_msec()
+#	edit_impenetrable()
+#	edit_walltorch_sw_ne_shadow()
+#	edit_damaged_wall()
+#	print('Various edits: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	
 	#blah()
 
 #func blah():
@@ -95,7 +103,6 @@ func start():
 #				var xSubtile = subtile-(ySubtile*3)
 #				oDataClmPos.set_cell( (xSlab*3)+xSubtile, (ySlab*3)+ySubtile, value)
 
-
 func test_write_to_file(data):
 	print('WRITING TO CLM.TXT')
 	var file = File.new()
@@ -104,93 +111,65 @@ func test_write_to_file(data):
 		file.store_line(str(i))
 	file.close()
 
-func update_slab_palette_for_map():
-	var dictionary = {}
-	
-	slabPal.clear()
-	
-	var numberOfSets = 1304
-	slabPal.resize(numberOfSets)
-	for i in slabPal.size():
-		slabPal[i] = []
-		slabPal[i].resize(9)
-		
-		for subtile in 9:
-			# Get the column array from the assets
-			var assetClmIndex = oDkDat.dat[i][subtile]
-			
-			var newClmIndex
-			if dictionary.has(assetClmIndex) == true: # Quicker subsequent lookups
-				# Reuse the same clmIndex that we've found before
-				newClmIndex = dictionary[assetClmIndex]
-			else:
-				# New column. Put that column inside our map's DataClm.
-				var cubeArray = oDkClm.cubes[assetClmIndex]
-				var floorID = oDkClm.floorTexture[assetClmIndex]
-				
-				#newClmIndex = oDataClm.index_entry(cubeArray, floorID) #!!!!!!!!!!!!!!!!!!!!!!!!
-				
-				dictionary[assetClmIndex] = newClmIndex # Store for subsequent lookups to instantly find any duplicates
-			
-			# Put that column index inside the slabPal.
-			slabPal[i][subtile] = newClmIndex
-	
-	# Add extra sets here for custom slabs
-	
+#func update_slab_palette_for_map():
+#	var dictionary = {}
+#
+#	slabPal.clear()
+#
+#	var numberOfSets = 1304
+#	slabPal.resize(numberOfSets)
+#	for i in slabPal.size():
+#		oDkDat.dat[i] = []
+#		oDkDat.dat[i].resize(9)
+#
+#		for subtile in 9:
+#			# Get the column array from the assets
+#			var assetClmIndex = oDkDat.dat[i][subtile]
+#
+#			var newClmIndex
+#			if dictionary.has(assetClmIndex) == true: # Quicker subsequent lookups
+#				# Reuse the same clmIndex that we've found before
+#				newClmIndex = dictionary[assetClmIndex]
+#			else:
+#				# New column. Put that column inside our map's DataClm.
+#				var cubeArray = oDkClm.cubes[assetClmIndex]
+#				var floorID = oDkClm.floorTexture[assetClmIndex]
+#
+#				#newClmIndex = oDataClm.index_entry(cubeArray, floorID) #!!!!!!!!!!!!!!!!!!!!!!!!
+#
+#				dictionary[assetClmIndex] = newClmIndex # Store for subsequent lookups to instantly find any duplicates
+#
+#			# Put that column index inside the slabPal.
+#			oDkDat.dat[i][subtile] = newClmIndex
+#
+#	# Add extra sets here for custom slabs
 
-func edit_impenetrable():
-	var slabVariation
-	slabVariation = 28 * Slabs.WATER
-	var waterColumn = slabPal[slabVariation + dir.s][0]
-	slabVariation = 28 * Slabs.LAVA
-	var lavaColumn = slabPal[slabVariation + dir.s][0]
-	
-	slabVariation = 28 * Slabs.ROCK
-	slabPal[slabVariation + dir.sw + 9][6] = lavaColumn
-	slabPal[slabVariation + dir.nw + 9][0] = lavaColumn
-	slabPal[slabVariation + dir.ne + 9][2] = lavaColumn
-	slabPal[slabVariation + dir.se + 9][8] = lavaColumn
-	slabPal[slabVariation + dir.sw + 18][6] = waterColumn
-	slabPal[slabVariation + dir.nw + 18][0] = waterColumn
-	slabPal[slabVariation + dir.ne + 18][2] = waterColumn
-	slabPal[slabVariation + dir.se + 18][8] = waterColumn
 
-func edit_walltorch_sw_ne_shadow(): # it's using the wrong side shadow
-	var slabVariation
-	slabVariation = 28 * Slabs.WALL_WITH_TORCH
+func get_random_column_array(RNG_CLM):
+	if randomColumns[RNG_CLM].empty() == true: # Only needs to do once!
+		match RNG_CLM:
+			RNG_CLM_GOLD:               randomColumns[RNG_CLM_GOLD] = rng_get_gold()
+			RNG_CLM_GOLD_NEARBY_LAVA:   randomColumns[RNG_CLM_GOLD_NEARBY_LAVA] = rng_get_gold_nearby_lava()
+			RNG_CLM_GOLD_NEARBY_WATER:  randomColumns[RNG_CLM_GOLD_NEARBY_WATER] = rng_get_gold_nearby_water()
+			RNG_CLM_LAVA:               randomColumns[RNG_CLM_LAVA] = rng_get_lava()
+			RNG_CLM_DIRTPATH:           randomColumns[RNG_CLM_DIRTPATH] = rng_get_dirtpath()
+			RNG_CLM_GEMS:               randomColumns[RNG_CLM_GEMS] = rng_get_gems()
+			RNG_CLM_CLAIMED_AREA:       randomColumns[RNG_CLM_CLAIMED_AREA] = rng_get_claimed_area()
+			RNG_CLM_LIBRARY:            randomColumns[RNG_CLM_LIBRARY] = rng_get_library()
+			RNG_CLM_EARTH:              randomColumns[RNG_CLM_EARTH] = rng_get_earth()
+			RNG_CLM_EARTH_NEARBY_WATER: randomColumns[RNG_CLM_EARTH_NEARBY_WATER] = rng_get_earth_nearby_water()
+			RNG_CLM_WALL:               randomColumns[RNG_CLM_WALL] = rng_get_wall()
+			RNG_CLM_WALL_NEARBY_LAVA:   randomColumns[RNG_CLM_WALL_NEARBY_LAVA] = rng_get_wall_nearby_lava()
+			RNG_CLM_WALL_NEARBY_WATER:  randomColumns[RNG_CLM_WALL_NEARBY_WATER] = rng_get_wall_nearby_water()
 	
-	# Use the "wall with drape" except add a torch cube to it. This custom column will be used to fix the incorrect shadows on the wall torch slab.
-	
-	var clmIndex = slabPal[(28 * Slabs.WALL_WITH_BANNER) + dir.sw][3]
-	var fixUsingColumn = oDataClm.index_entry_replace_one_cube(clmIndex, 3, 119) # 119 = torch cube
-	
-	slabPal[slabVariation + dir.sw][3] = fixUsingColumn
-	slabPal[slabVariation + dir.ne][1] = fixUsingColumn
+	return randomColumns[RNG_CLM]
 
-func gather_columns_for_random_selection():
-	randomColumns.resize(RNG_CLM_WALL_NEARBY_WATER+1)
-	randomColumns[RNG_CLM_GOLD] = get_gold()
-	randomColumns[RNG_CLM_GOLD_NEARBY_LAVA] = get_gold_nearby_lava()
-	randomColumns[RNG_CLM_GOLD_NEARBY_WATER] = get_gold_nearby_water()
-	randomColumns[RNG_CLM_DIRTPATH] = get_dirtpath()
-	randomColumns[RNG_CLM_LAVA] = get_lava()
-	randomColumns[RNG_CLM_GEMS] = get_gems()
-	randomColumns[RNG_CLM_CLAIMED_AREA] = get_claimed_area()
-	randomColumns[RNG_CLM_EARTH] = get_earth()
-	randomColumns[RNG_CLM_EARTH_NEARBY_WATER] = get_earth_nearby_water()
-	randomColumns[RNG_CLM_LIBRARY] = get_library()
-	randomColumns[RNG_CLM_WALL] = get_wall()
-	randomColumns[RNG_CLM_WALL_NEARBY_WATER] = get_wall_nearby_water()
-	randomColumns[RNG_CLM_WALL_NEARBY_LAVA] = get_wall_nearby_lava()
-	
-	#print(randomColumns[RNG_CLM_GOLD])
-
-func get_wall_nearby_lava():
-	var wallLava = []
+func rng_get_wall_nearby_lava(): # slabs.dat doesn't include these randomized columns, but the official editor does randomize them.
+	var clmIndexArray = []
 	for variant1 in range(72, 74+1):
 		for variant2 in range(72, 74+1):
 			for variant3 in range(72, 74+1):
-				wallLava.append(oDataClm.index_entry([
+				clmIndexArray.append(oDataClm.index_entry([
 					117,
 					variant1,
 					variant2,
@@ -200,14 +179,14 @@ func get_wall_nearby_lava():
 					0,
 					0,
 				], 27))
-	return wallLava
+	return clmIndexArray
 
-func get_wall_nearby_water():
-	var wallWater = []
+func rng_get_wall_nearby_water(): # slabs.dat doesn't include these randomized columns, but the official editor does randomize them.
+	var clmIndexArray = []
 	for variant1 in range(72, 74+1):
 		for variant2 in range(72, 74+1):
 			for variant3 in range(72, 74+1):
-				wallWater.append(oDataClm.index_entry([
+				clmIndexArray.append(oDataClm.index_entry([
 					118,
 					variant1,
 					variant2,
@@ -217,15 +196,15 @@ func get_wall_nearby_water():
 					0,
 					0,
 				], 27))
-	return wallWater
+	return clmIndexArray
 
-func get_wall():
-	var wall = []
+func rng_get_wall(): # slabs.dat doesn't include these randomized columns, but the official editor does randomize them.
+	var clmIndexArray = []
 	for variant1 in range(25, 29+1):
 		#print(25+variant1)
 		for variant2 in range(72, 74+1):
 			for variant3 in range(72, 74+1):
-				wall.append(oDataClm.index_entry([
+				clmIndexArray.append(oDataClm.index_entry([
 					variant1, # This is the dirt path cube, but we should add it anyway because when updating a column it checks if the column is inside this array.
 					82,
 					variant2,
@@ -235,14 +214,15 @@ func get_wall():
 					0,
 					0,
 				], 27))
-	return wall
+	return clmIndexArray
 
-func get_earth():
-	var earth = []
+
+func rng_get_earth(): # slabs.dat doesn't include these randomized columns, but the official editor does randomize them.
+	var clmIndexArray = []
 	for variant1 in range(25, 29+1):
 		for variant2 in range(1, 3+1):
 			for variant3 in range(1, 3+1):
-				earth.append(oDataClm.index_entry([
+				clmIndexArray.append(oDataClm.index_entry([
 					variant1,
 					10,
 					variant2,
@@ -252,14 +232,14 @@ func get_earth():
 					0,
 					0,
 				], 27))
-	return earth
+	return clmIndexArray
 
-func get_earth_nearby_water():
-	var earthWater = []
+func rng_get_earth_nearby_water(): # slabs.dat doesn't include these randomized columns, but the official editor does randomize them.
+	var clmIndexArray = []
 	for variant1 in range(1, 3+1):
 		for variant2 in range(1, 3+1):
 			for variant3 in range(1, 3+1):
-				earthWater.append(oDataClm.index_entry([
+				clmIndexArray.append(oDataClm.index_entry([
 					38,
 					variant1,
 					variant2,
@@ -269,292 +249,332 @@ func get_earth_nearby_water():
 					0,
 					0,
 				], 27))
-	return earthWater
+	return clmIndexArray
 
-func get_lava():
+func rng_get_lava(): # slabs.dat doesn't include these randomized columns, but the official editor does randomize them.
 	var lava = []
 	lava.append(oDataClm.index_entry([0,0,0,0, 0,0,0,0], 546))
 	lava.append(oDataClm.index_entry([0,0,0,0, 0,0,0,0], 547))
 	return lava
 
-func get_dirtpath():
-	var dirtPath = []
+func rng_get_dirtpath():
+	var clmIndexArray = []
 	var slabVariation = 28 * Slabs.PATH
-	var pal = slabPal[slabVariation + dir.sw]
-	for i in [1,2,4, 6,7]:
-		dirtPath.append(pal[i])
-	return dirtPath
+	var pal = oDkDat.dat[slabVariation + dir.sw]
+	
+	var selection = [1,2,4, 6,7]
+	for i in selection:
+		var dkClmIndex = pal[i]
+		var addIndex = oDataClm.index_entry( oDkClm.cubes[dkClmIndex], oDkClm.floorTexture[dkClmIndex])
+		if clmIndexArray.has(addIndex) == false:
+			clmIndexArray.append(addIndex)
+	
+	return clmIndexArray
 
-func get_claimed_area():
-	var claimedArea = []
+func rng_get_claimed_area():
+	var clmIndexArray = []
 	var slabVariation = 28 * Slabs.CLAIMED_GROUND
-	var pal = slabPal[slabVariation + dir.s]
-	for i in [0,1,2]:
-		claimedArea.append(pal[i])
-	return claimedArea
+	var pal = oDkDat.dat[slabVariation + dir.s]
+	var selection = [0,1,2]
+	for i in selection:
+		var dkClmIndex = pal[i]
+		var addIndex = oDataClm.index_entry( oDkClm.cubes[dkClmIndex], oDkClm.floorTexture[dkClmIndex])
+		if clmIndexArray.has(addIndex) == false:
+			clmIndexArray.append(addIndex)
+	return clmIndexArray
 
-func get_library():
-	var claimedArea = []
+func rng_get_library():
+	var clmIndexArray = []
 	var slabVariation = 28 * Slabs.LIBRARY
-	var pal = slabPal[slabVariation + dir.s]
-	for i in [0,1]:
-		claimedArea.append(pal[i])
-	return claimedArea
+	var pal = oDkDat.dat[slabVariation + dir.s]
+	var selection = [0,1]
+	for i in selection:
+		var dkClmIndex = pal[i]
+		var addIndex = oDataClm.index_entry( oDkClm.cubes[dkClmIndex], oDkClm.floorTexture[dkClmIndex])
+		if clmIndexArray.has(addIndex) == false:
+			clmIndexArray.append(addIndex)
+	return clmIndexArray
 
-func get_gems():
-	var dictionary = {}
+func rng_get_gems():
+	var clmIndexArray = []
 	var simpleVar = Slabs.GEMS - 42
 	var slabVariation = (42 * 28) + (8 * simpleVar)
 	
-	var pal = slabPal[slabVariation + dir.s]
-	for i in [0,1,2,3,4,5,6,7,8]:
-		var index = pal[i]
-		var cubeArray = oDataClm.cubes[index]
-		dictionary[cubeArray] = index
+	var pal = oDkDat.dat[slabVariation + dir.s]
+	var selection = [0,1,2,3,4,5,6,7,8]
+	for i in selection:
+		var dkClmIndex = pal[i]
+		var addIndex = oDataClm.index_entry( oDkClm.cubes[dkClmIndex], oDkClm.floorTexture[dkClmIndex])
+		if clmIndexArray.has(addIndex) == false:
+			clmIndexArray.append(addIndex)
 	
-	#print(dictionary.size())
-	#test_write_to_file(dictionary)
-	return dictionary.values()
+	return clmIndexArray
 
-func get_gold_nearby_water():
-	var dictionary = {}
-	var slabVariation = 28 * Slabs.GOLD
-	for pick in 9:
-		var pal
-		var selection
-		match pick:
-			0:
-				pal = slabPal[slabVariation + dir.s + 18]
-				selection = [6,7,8]
-			1:
-				pal = slabPal[slabVariation + dir.w + 18]
-				selection = [0,3,6]
-			2:
-				pal = slabPal[slabVariation + dir.n + 18]
-				selection = [0,1,2]
-			3:
-				pal = slabPal[slabVariation + dir.e + 18]
-				selection = [2,5,8]
-			4:
-				pal = slabPal[slabVariation + dir.sw + 18]
-				selection = [0,3,4,7,8]
-			5:
-				pal = slabPal[slabVariation + dir.nw + 18]
-				selection = [1,2,3,4,6]
-			6:
-				pal = slabPal[slabVariation + dir.ne + 18]
-				selection = [0,1,4,5,8]
-			7:
-				pal = slabPal[slabVariation + dir.se + 18]
-				selection = [2,4,5,6,7]
-			8:
-				pal = slabPal[slabVariation + dir.all + 18]
-				selection = [0,1,2,3,5,6,7,8]
-		for i in selection:
-			var index = pal[i]
-			var cubeArray = oDataClm.cubes[index]
-			dictionary[cubeArray] = index
-	
-	#print(dictionary.size())
-	#test_write_to_file(dictionary)
-	return dictionary.values()
-
-
-func get_gold_nearby_lava():
-	var dictionary = {}
-	var slabVariation = 28 * Slabs.GOLD
-	for pick in 9:
-		var pal
-		var selection
-		match pick:
-			0:
-				pal = slabPal[slabVariation + dir.s + 9]
-				selection = [6,7,8]
-			1:
-				pal = slabPal[slabVariation + dir.w + 9]
-				selection = [0,3,6]
-			2:
-				pal = slabPal[slabVariation + dir.n + 9]
-				selection = [0,1,2]
-			3:
-				pal = slabPal[slabVariation + dir.e + 9]
-				selection = [2,5,8]
-			4:
-				pal = slabPal[slabVariation + dir.sw + 9]
-				selection = [0,3,4,7,8]
-			5:
-				pal = slabPal[slabVariation + dir.nw + 9]
-				selection = [1,2,3,4,6]
-			6:
-				pal = slabPal[slabVariation + dir.ne + 9]
-				selection = [0,1,4,5,8]
-			7:
-				pal = slabPal[slabVariation + dir.se + 9]
-				selection = [2,4,5,6,7]
-			8:
-				pal = slabPal[slabVariation + dir.all + 9]
-				selection = [0,1,2,3,5,6,7,8]
-		for i in selection:
-			var index = pal[i]
-			var cubeArray = oDataClm.cubes[index]
-			dictionary[cubeArray] = index
-	
-	#print(dictionary.size())
-	#test_write_to_file(dictionary)
-	return dictionary.values()
-
-
-func get_gold():
-	var dictionary = {}
+func rng_get_gold():
+	var clmIndexArray = []
 	var slabVariation = 28 * Slabs.GOLD
 	for pick in 13:
 		var pal
 		var selection
 		match pick:
 			0:
-				pal = slabPal[slabVariation + dir.s]
+				pal = oDkDat.dat[slabVariation + dir.s]
 				selection = [0,1,2,3,4,5,6,7,8]
 			1:
-				pal = slabPal[slabVariation + dir.w]
+				pal = oDkDat.dat[slabVariation + dir.w]
 				selection = [0,1,2,3,4,5,6,7,8]
 			2:
-				pal = slabPal[slabVariation + dir.n]
+				pal = oDkDat.dat[slabVariation + dir.n]
 				selection = [0,1,2,3,4,5,6,7,8]
 			3:
-				pal = slabPal[slabVariation + dir.e]
+				pal = oDkDat.dat[slabVariation + dir.e]
 				selection = [0,1,2,3,4,5,6,7,8]
 			4:
-				pal = slabPal[slabVariation + dir.sw]
+				pal = oDkDat.dat[slabVariation + dir.sw]
 				selection = [0,1,2,4,5,8]
 			5:
-				pal = slabPal[slabVariation + dir.nw]
+				pal = oDkDat.dat[slabVariation + dir.nw]
 				selection = [2,4,5,6,7,8]
 			6:
-				pal = slabPal[slabVariation + dir.ne]
+				pal = oDkDat.dat[slabVariation + dir.ne]
 				selection = [0,3,4,6,7,8]
 			7:
-				pal = slabPal[slabVariation + dir.se]
+				pal = oDkDat.dat[slabVariation + dir.se]
 				selection = [0,1,2,3,4,6]
 			8:
-				pal = slabPal[slabVariation + dir.all]
+				pal = oDkDat.dat[slabVariation + dir.all]
 				selection = [1,3,4,5,7]
 			9:
-				pal = slabPal[slabVariation + dir.s + 9]
+				pal = oDkDat.dat[slabVariation + dir.s + 9]
 				selection = [0,1,2,3,4,5]
 			10:
-				pal = slabPal[slabVariation + dir.w + 9]
+				pal = oDkDat.dat[slabVariation + dir.w + 9]
 				selection = [1,2,4,5,7,8]
 			11:
-				pal = slabPal[slabVariation + dir.n + 9]
+				pal = oDkDat.dat[slabVariation + dir.n + 9]
 				selection = [3,4,5,6,7,8]
 			12:
-				pal = slabPal[slabVariation + dir.e + 9]
+				pal = oDkDat.dat[slabVariation + dir.e + 9]
 				selection = [0,1,3,4,6,7]
 		for i in selection:
-			var index = pal[i]
-			var cubeArray = oDataClm.cubes[index]
-			dictionary[cubeArray] = index
+			var dkClmIndex = pal[i]
+			var addIndex = oDataClm.index_entry( oDkClm.cubes[dkClmIndex], oDkClm.floorTexture[dkClmIndex])
+			if clmIndexArray.has(addIndex) == false:
+				clmIndexArray.append(addIndex)
 	
-	#print(dictionary.size())
-	#test_write_to_file(dictionary)
-	return dictionary.values()
+	return clmIndexArray
 
-func edit_damaged_wall():
-	var slabVariation = 28 * Slabs.WALL_DAMAGED
-	
-	var dmgWall1 = oDataClm.index_entry([25,82,123,120,77,0,0,0], 27)
-	var dmgWall2 = oDataClm.index_entry([25,82,124,121,77,0,0,0], 27)
-	var dmgWall3 = oDataClm.index_entry([25,82,125,122,77,0,0,0], 27)
+func rng_get_gold_nearby_water():
+	var clmIndexArray = []
+	var slabVariation = 28 * Slabs.GOLD
 	for pick in 9:
+		var pal
+		var selection
 		match pick:
 			0:
-				slabPal[slabVariation + dir.s][6] = dmgWall1
-				slabPal[slabVariation + dir.s][7] = dmgWall2
-				slabPal[slabVariation + dir.s][8] = dmgWall3
+				pal = oDkDat.dat[slabVariation + dir.s + 18]
+				selection = [6,7,8]
 			1:
-				slabPal[slabVariation + dir.w][0] = dmgWall1
-				slabPal[slabVariation + dir.w][3] = dmgWall2
-				slabPal[slabVariation + dir.w][6] = dmgWall3
+				pal = oDkDat.dat[slabVariation + dir.w + 18]
+				selection = [0,3,6]
 			2:
-				slabPal[slabVariation + dir.n][0] = dmgWall1
-				slabPal[slabVariation + dir.n][1] = dmgWall2
-				slabPal[slabVariation + dir.n][2] = dmgWall3
+				pal = oDkDat.dat[slabVariation + dir.n + 18]
+				selection = [0,1,2]
 			3:
-				slabPal[slabVariation + dir.e][2] = dmgWall1
-				slabPal[slabVariation + dir.e][5] = dmgWall2
-				slabPal[slabVariation + dir.e][8] = dmgWall3
+				pal = oDkDat.dat[slabVariation + dir.e + 18]
+				selection = [2,5,8]
 			4:
-				slabPal[slabVariation + dir.sw][0] = dmgWall1
-				slabPal[slabVariation + dir.sw][3] = dmgWall3
-				slabPal[slabVariation + dir.sw][7] = dmgWall1
-				slabPal[slabVariation + dir.sw][8] = dmgWall3
+				pal = oDkDat.dat[slabVariation + dir.sw + 18]
+				selection = [0,3,4,7,8]
 			5:
-				slabPal[slabVariation + dir.nw][1] = dmgWall1
-				slabPal[slabVariation + dir.nw][2] = dmgWall3
-				slabPal[slabVariation + dir.nw][3] = dmgWall1
-				slabPal[slabVariation + dir.nw][6] = dmgWall3
+				pal = oDkDat.dat[slabVariation + dir.nw + 18]
+				selection = [1,2,3,4,6]
 			6:
-				slabPal[slabVariation + dir.ne][0] = dmgWall1
-				slabPal[slabVariation + dir.ne][1] = dmgWall3
-				slabPal[slabVariation + dir.ne][5] = dmgWall1
-				slabPal[slabVariation + dir.ne][8] = dmgWall3
+				pal = oDkDat.dat[slabVariation + dir.ne + 18]
+				selection = [0,1,4,5,8]
 			7:
-				slabPal[slabVariation + dir.se][2] = dmgWall1
-				slabPal[slabVariation + dir.se][5] = dmgWall3
-				slabPal[slabVariation + dir.se][6] = dmgWall1
-				slabPal[slabVariation + dir.se][7] = dmgWall3
+				pal = oDkDat.dat[slabVariation + dir.se + 18]
+				selection = [2,4,5,6,7]
 			8:
-				slabPal[slabVariation + dir.all][1] = dmgWall2
-				slabPal[slabVariation + dir.all][3] = dmgWall2
-				slabPal[slabVariation + dir.all][5] = dmgWall2
-				slabPal[slabVariation + dir.all][7] = dmgWall2
+				pal = oDkDat.dat[slabVariation + dir.all + 18]
+				selection = [0,1,2,3,5,6,7,8]
+		for i in selection:
+			var dkClmIndex = pal[i]
+			var addIndex = oDataClm.index_entry( oDkClm.cubes[dkClmIndex], oDkClm.floorTexture[dkClmIndex])
+			if clmIndexArray.has(addIndex) == false:
+				clmIndexArray.append(addIndex)
 	
-	var dmgWallLava1 = oDataClm.index_entry([118,72,123,120,77,0,0,0], 27)
-	var dmgWallLava2 = oDataClm.index_entry([118,72,124,121,77,0,0,0], 27)
-	var dmgWallLava3 = oDataClm.index_entry([118,72,125,122,77,0,0,0], 27)
+	return clmIndexArray
+
+
+func rng_get_gold_nearby_lava():
+	var clmIndexArray = []
+	var slabVariation = 28 * Slabs.GOLD
 	for pick in 9:
+		var pal
+		var selection
 		match pick:
 			0:
-				slabPal[slabVariation + dir.s + 9][6] = dmgWallLava1
-				slabPal[slabVariation + dir.s + 9][7] = dmgWallLava2
-				slabPal[slabVariation + dir.s + 9][8] = dmgWallLava3
+				pal = oDkDat.dat[slabVariation + dir.s + 9]
+				selection = [6,7,8]
 			1:
-				slabPal[slabVariation + dir.w + 9][0] = dmgWallLava1
-				slabPal[slabVariation + dir.w + 9][3] = dmgWallLava2
-				slabPal[slabVariation + dir.w + 9][6] = dmgWallLava3
+				pal = oDkDat.dat[slabVariation + dir.w + 9]
+				selection = [0,3,6]
 			2:
-				slabPal[slabVariation + dir.n + 9][0] = dmgWallLava1
-				slabPal[slabVariation + dir.n + 9][1] = dmgWallLava2
-				slabPal[slabVariation + dir.n + 9][2] = dmgWallLava3
+				pal = oDkDat.dat[slabVariation + dir.n + 9]
+				selection = [0,1,2]
 			3:
-				slabPal[slabVariation + dir.e + 9][2] = dmgWallLava1
-				slabPal[slabVariation + dir.e + 9][5] = dmgWallLava2
-				slabPal[slabVariation + dir.e + 9][8] = dmgWallLava3
+				pal = oDkDat.dat[slabVariation + dir.e + 9]
+				selection = [2,5,8]
 			4:
-				slabPal[slabVariation + dir.sw + 9][0] = dmgWallLava1
-				slabPal[slabVariation + dir.sw + 9][3] = dmgWallLava3
-				slabPal[slabVariation + dir.sw + 9][7] = dmgWallLava1
-				slabPal[slabVariation + dir.sw + 9][8] = dmgWallLava3
+				pal = oDkDat.dat[slabVariation + dir.sw + 9]
+				selection = [0,3,4,7,8]
 			5:
-				slabPal[slabVariation + dir.nw + 9][1] = dmgWallLava1
-				slabPal[slabVariation + dir.nw + 9][2] = dmgWallLava3
-				slabPal[slabVariation + dir.nw + 9][3] = dmgWallLava1
-				slabPal[slabVariation + dir.nw + 9][6] = dmgWallLava3
+				pal = oDkDat.dat[slabVariation + dir.nw + 9]
+				selection = [1,2,3,4,6]
 			6:
-				slabPal[slabVariation + dir.ne + 9][0] = dmgWallLava1
-				slabPal[slabVariation + dir.ne + 9][1] = dmgWallLava3
-				slabPal[slabVariation + dir.ne + 9][5] = dmgWallLava1
-				slabPal[slabVariation + dir.ne + 9][8] = dmgWallLava3
+				pal = oDkDat.dat[slabVariation + dir.ne + 9]
+				selection = [0,1,4,5,8]
 			7:
-				slabPal[slabVariation + dir.se + 9][2] = dmgWallLava1
-				slabPal[slabVariation + dir.se + 9][5] = dmgWallLava3
-				slabPal[slabVariation + dir.se + 9][6] = dmgWallLava1
-				slabPal[slabVariation + dir.se + 9][7] = dmgWallLava3
+				pal = oDkDat.dat[slabVariation + dir.se + 9]
+				selection = [2,4,5,6,7]
 			8:
-				slabPal[slabVariation + dir.all + 9][1] = dmgWallLava2
-				slabPal[slabVariation + dir.all + 9][3] = dmgWallLava2
-				slabPal[slabVariation + dir.all + 9][5] = dmgWallLava2
-				slabPal[slabVariation + dir.all + 9][7] = dmgWallLava2
+				pal = oDkDat.dat[slabVariation + dir.all + 9]
+				selection = [0,1,2,3,5,6,7,8]
+		for i in selection:
+			var dkClmIndex = pal[i]
+			var addIndex = oDataClm.index_entry( oDkClm.cubes[dkClmIndex], oDkClm.floorTexture[dkClmIndex])
+			if clmIndexArray.has(addIndex) == false:
+				clmIndexArray.append(addIndex)
+	
+	return clmIndexArray
+
+
+#func edit_damaged_wall():
+#	var slabVariation = 28 * Slabs.WALL_DAMAGED
+#
+#	var dmgWall1 = oDataClm.index_entry([25,82,123,120,77,0,0,0], 27)
+#	var dmgWall2 = oDataClm.index_entry([25,82,124,121,77,0,0,0], 27)
+#	var dmgWall3 = oDataClm.index_entry([25,82,125,122,77,0,0,0], 27)
+#	for pick in 9:
+#		match pick:
+#			0:
+#				oDkDat.dat[slabVariation + dir.s][6] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.s][7] = dmgWall2
+#				oDkDat.dat[slabVariation + dir.s][8] = dmgWall3
+#			1:
+#				oDkDat.dat[slabVariation + dir.w][0] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.w][3] = dmgWall2
+#				oDkDat.dat[slabVariation + dir.w][6] = dmgWall3
+#			2:
+#				oDkDat.dat[slabVariation + dir.n][0] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.n][1] = dmgWall2
+#				oDkDat.dat[slabVariation + dir.n][2] = dmgWall3
+#			3:
+#				oDkDat.dat[slabVariation + dir.e][2] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.e][5] = dmgWall2
+#				oDkDat.dat[slabVariation + dir.e][8] = dmgWall3
+#			4:
+#				oDkDat.dat[slabVariation + dir.sw][0] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.sw][3] = dmgWall3
+#				oDkDat.dat[slabVariation + dir.sw][7] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.sw][8] = dmgWall3
+#			5:
+#				oDkDat.dat[slabVariation + dir.nw][1] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.nw][2] = dmgWall3
+#				oDkDat.dat[slabVariation + dir.nw][3] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.nw][6] = dmgWall3
+#			6:
+#				oDkDat.dat[slabVariation + dir.ne][0] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.ne][1] = dmgWall3
+#				oDkDat.dat[slabVariation + dir.ne][5] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.ne][8] = dmgWall3
+#			7:
+#				oDkDat.dat[slabVariation + dir.se][2] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.se][5] = dmgWall3
+#				oDkDat.dat[slabVariation + dir.se][6] = dmgWall1
+#				oDkDat.dat[slabVariation + dir.se][7] = dmgWall3
+#			8:
+#				oDkDat.dat[slabVariation + dir.all][1] = dmgWall2
+#				oDkDat.dat[slabVariation + dir.all][3] = dmgWall2
+#				oDkDat.dat[slabVariation + dir.all][5] = dmgWall2
+#				oDkDat.dat[slabVariation + dir.all][7] = dmgWall2
+#
+#	var dmgWallLava1 = oDataClm.index_entry([118,72,123,120,77,0,0,0], 27)
+#	var dmgWallLava2 = oDataClm.index_entry([118,72,124,121,77,0,0,0], 27)
+#	var dmgWallLava3 = oDataClm.index_entry([118,72,125,122,77,0,0,0], 27)
+#	for pick in 9:
+#		match pick:
+#			0:
+#				oDkDat.dat[slabVariation + dir.s + 9][6] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.s + 9][7] = dmgWallLava2
+#				oDkDat.dat[slabVariation + dir.s + 9][8] = dmgWallLava3
+#			1:
+#				oDkDat.dat[slabVariation + dir.w + 9][0] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.w + 9][3] = dmgWallLava2
+#				oDkDat.dat[slabVariation + dir.w + 9][6] = dmgWallLava3
+#			2:
+#				oDkDat.dat[slabVariation + dir.n + 9][0] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.n + 9][1] = dmgWallLava2
+#				oDkDat.dat[slabVariation + dir.n + 9][2] = dmgWallLava3
+#			3:
+#				oDkDat.dat[slabVariation + dir.e + 9][2] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.e + 9][5] = dmgWallLava2
+#				oDkDat.dat[slabVariation + dir.e + 9][8] = dmgWallLava3
+#			4:
+#				oDkDat.dat[slabVariation + dir.sw + 9][0] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.sw + 9][3] = dmgWallLava3
+#				oDkDat.dat[slabVariation + dir.sw + 9][7] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.sw + 9][8] = dmgWallLava3
+#			5:
+#				oDkDat.dat[slabVariation + dir.nw + 9][1] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.nw + 9][2] = dmgWallLava3
+#				oDkDat.dat[slabVariation + dir.nw + 9][3] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.nw + 9][6] = dmgWallLava3
+#			6:
+#				oDkDat.dat[slabVariation + dir.ne + 9][0] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.ne + 9][1] = dmgWallLava3
+#				oDkDat.dat[slabVariation + dir.ne + 9][5] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.ne + 9][8] = dmgWallLava3
+#			7:
+#				oDkDat.dat[slabVariation + dir.se + 9][2] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.se + 9][5] = dmgWallLava3
+#				oDkDat.dat[slabVariation + dir.se + 9][6] = dmgWallLava1
+#				oDkDat.dat[slabVariation + dir.se + 9][7] = dmgWallLava3
+#			8:
+#				oDkDat.dat[slabVariation + dir.all + 9][1] = dmgWallLava2
+#				oDkDat.dat[slabVariation + dir.all + 9][3] = dmgWallLava2
+#				oDkDat.dat[slabVariation + dir.all + 9][5] = dmgWallLava2
+#				oDkDat.dat[slabVariation + dir.all + 9][7] = dmgWallLava2
+
+#func edit_impenetrable():
+#	var slabVariation
+#	slabVariation = 28 * Slabs.WATER
+#	var waterColumn = oDkDat.dat[slabVariation + dir.s][0]
+#	slabVariation = 28 * Slabs.LAVA
+#	var lavaColumn = oDkDat.dat[slabVariation + dir.s][0]
+#
+#	slabVariation = 28 * Slabs.ROCK
+#	oDkDat.dat[slabVariation + dir.sw + 9][6] = lavaColumn
+#	oDkDat.dat[slabVariation + dir.nw + 9][0] = lavaColumn
+#	oDkDat.dat[slabVariation + dir.ne + 9][2] = lavaColumn
+#	oDkDat.dat[slabVariation + dir.se + 9][8] = lavaColumn
+#	oDkDat.dat[slabVariation + dir.sw + 18][6] = waterColumn
+#	oDkDat.dat[slabVariation + dir.nw + 18][0] = waterColumn
+#	oDkDat.dat[slabVariation + dir.ne + 18][2] = waterColumn
+#	oDkDat.dat[slabVariation + dir.se + 18][8] = waterColumn
+#
+#func edit_walltorch_sw_ne_shadow(): # it's using the wrong side shadow
+#	var slabVariation
+#	slabVariation = 28 * Slabs.WALL_WITH_TORCH
+#
+#	# Use the "wall with drape" except add a torch cube to it. This custom column will be used to fix the incorrect shadows on the wall torch slab.
+#
+#	var clmIndex = oDkDat.dat[(28 * Slabs.WALL_WITH_BANNER) + dir.sw][3]
+#	var fixUsingColumn = oDataClm.index_entry_replace_one_cube(clmIndex, 3, 119) # 119 = torch cube
+#
+#	oDkDat.dat[slabVariation + dir.sw][3] = fixUsingColumn
+#	oDkDat.dat[slabVariation + dir.ne][1] = fixUsingColumn
 
 func create_keeperfx_cfg_columns(filePath): #"res://columns.cfg"
 	var textFile = File.new()

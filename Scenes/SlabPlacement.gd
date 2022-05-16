@@ -19,6 +19,8 @@ onready var oOwnableNaturalTerrain = Nodelist.list["oOwnableNaturalTerrain"]
 onready var oBridgesOnlyOnLiquidCheckbox = Nodelist.list["oBridgesOnlyOnLiquidCheckbox"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oDkDat = Nodelist.list["oDkDat"]
+onready var oDkClm = Nodelist.list["oDkClm"]
 
 enum dir {
 	s = 0
@@ -276,7 +278,8 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	var asset3x3group = make_slab(slabID*28, bitmask)
 	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
 	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
-	var clmIndexArray = asset_position_to_column_index(asset3x3group)
+	
+	var clmIndexArray = dkdat_position_to_mapclm(asset3x3group)
 	
 	match slabID:
 		Slabs.EARTH:
@@ -331,7 +334,7 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 	asset3x3group = modify_wall_based_on_nearby_room_and_liquid(asset3x3group, surrID, slabID)
 	
 	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
-	var clmIndexArray = asset_position_to_column_index(asset3x3group)
+	var clmIndexArray = dkdat_position_to_mapclm(asset3x3group)
 	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
 	
 	if slabID == Slabs.WALL_WITH_TORCH:
@@ -368,7 +371,7 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 	var bitmask = 1
 	var asset3x3group = make_slab(slabVariation, bitmask)
 	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
-	var clmIndexArray = asset_position_to_column_index(asset3x3group)
+	var clmIndexArray = dkdat_position_to_mapclm(asset3x3group)
 	
 	match slabID:
 		Slabs.WOODEN_DOOR_1, Slabs.BRACED_DOOR_1, Slabs.IRON_DOOR_1, Slabs.MAGIC_DOOR_1:
@@ -384,7 +387,9 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 
 
 func randomize_columns(clmIndexArray, RNG_CLM, slabID):
-	var rngSelect = oSlabPalette.randomColumns[RNG_CLM]
+	
+	var rngSelect = oSlabPalette.get_random_column_array(RNG_CLM)
+	
 	
 	match slabID:
 		Slabs.PATH:
@@ -399,6 +404,7 @@ func randomize_columns(clmIndexArray, RNG_CLM, slabID):
 			for i in 9:
 				if rngSelect.has(clmIndexArray[i]): # If the column exists within the random column array, then replace it with a random one.
 					clmIndexArray[i] = rngSelect[randi() % rngSelect.size()]
+	
 	return clmIndexArray
 
 func set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_TYPE, bitmask, slabID):
@@ -472,18 +478,35 @@ func set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_TYPE, bit
 			
 	return clmIndexArray
 
-func asset_position_to_column_index(array):
+func dkdat_position_to_mapclm(asset3x3group):
+	var clmIndexArray = [0,0,0, 0,0,0, 0,0,0]
 	for i in 9:
-		var slabVariation = array[i] / 9
-		var newSubtile = array[i] - (slabVariation*9)
+		# Convert asset3x3group's index to slabvar and subtile then read it from oDkDat
+		var slabvar = asset3x3group[i] / 9
+		var subtile = asset3x3group[i] - (slabvar*9)
+		var dkClmIndex = oDkDat.dat[slabvar][subtile]
 		
-		# Prevent crash if I do something dumb, just show a purple tile
-		if slabVariation >= oSlabPalette.slabPal.size():
-			array[i] = oSlabPalette.slabPal[1303][0] # Show purple
-			continue
+		# Get the cube data from oDkClm, then index it into map's clm.
+		var cubeArray = oDkClm.cubes[dkClmIndex]
+		var floorTexture = oDkClm.floorTexture[dkClmIndex]
+		var clmIndex = oDataClm.index_entry(cubeArray, floorTexture)
 		
-		array[i] = oSlabPalette.slabPal[slabVariation][newSubtile] # slab variation - subtile of that variation
-	return array
+		clmIndexArray[i] = clmIndex
+	return clmIndexArray
+
+
+#	var clmIndexArray = [0,0,0, 0,0,0, 0,0,0]
+#	for i in 9:
+#		var slabVariation = asset3x3group[i] / 9
+#		var newSubtile = asset3x3group[i] - (slabVariation*9)
+#
+#		# Prevent crash if I do something dumb, just show a purple tile
+#		if slabVariation >= oSlabPalette.slabPal.size():
+#			clmIndexArray[i] = oSlabPalette.slabPal[1303][0] # Show purple
+#			continue
+#
+#		clmIndexArray[i] = oSlabPalette.slabPal[slabVariation][newSubtile] # slab variation - subtile of that variation
+#	return clmIndexArray
 
 #var positionsArray3x3 = [
 #	Vector2(0,0),

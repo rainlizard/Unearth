@@ -20,6 +20,8 @@ func dat_asset():
 	
 	print('Created DAT asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
+
+
 func dk_data_get_filepath(lookForFileName):
 	var dir = Directory.new()
 	if dir.open(oGame.DK_DATA_DIRECTORY) == OK:

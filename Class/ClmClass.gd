@@ -69,3 +69,13 @@ func find_cubearray_index(cubeArray, floorID):
 			# Found no matching cubes
 			break
 	return -1
+
+func get_top_cube_face(index, slabID):
+	var get_height = self.height[index]
+	if slabID == Slabs.PORTAL:
+		get_height = get_real_height(self.cubes[index])
+	if get_height == 0:
+		return self.floorTexture[index]
+	else:
+		var cubeID = self.cubes[index][get_height-1] #get_height
+		return Cube.tex[cubeID][Cube.SIDE_TOP]

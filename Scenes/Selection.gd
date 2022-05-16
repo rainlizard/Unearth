@@ -23,6 +23,7 @@ onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oCustomSlabsTab = Nodelist.list["oCustomSlabsTab"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 
 var texBlueCursor = preload("res://Art/Cursor32x32Blue.png")
 var texGreenCursor = preload("res://Art/Cursor32x32.png")
@@ -195,10 +196,14 @@ func clean_up_cursor_array():
 			if i.is_queued_for_deletion() == true:
 				cursorOnInstancesArray.erase(i)
 
-func delete_instance(inst):
+func manually_delete_one_instance(inst):
 	if is_instance_valid(inst) == true:
 		if oInspector.inspectingInstance == inst:
 			oInspector.deselect()
+		
+		if inst.is_in_group("ActionPoint"):
+			oScriptHelpers.start() # Update when action points change
+		
 		inst.queue_free()
 
 #func ui_hover():

@@ -138,7 +138,7 @@ func mouse_button_on_field():
 				
 				if doDelete == true:
 					if oSelection.cursorOnInstancesArray.empty() == false:
-						oSelection.delete_instance(oSelection.cursorOnInstancesArray[0])
+						oSelection.manually_delete_one_instance(oSelection.cursorOnInstancesArray[0])
 			
 			MODE_TILE:
 				

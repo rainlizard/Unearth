@@ -4,6 +4,7 @@ onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
+onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
 var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
@@ -38,6 +39,8 @@ func place_new_action_point(newThingType, newSubtype, newPosition, newOwnership)
 	id.pointNumber = get_free_action_point_number()
 	id.data7 = 0
 	add_child(id)
+	
+	oScriptHelpers.start() # Update when action points change
 
 func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Placed by hand
 	var CODETIME_START = OS.get_ticks_msec()

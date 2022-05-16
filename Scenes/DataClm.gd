@@ -36,16 +36,6 @@ func clear_all():
 	floorTexture.clear()
 #	testingSpecialByte.clear()
 
-func get_top_cube_face(index, slabID):
-	var get_height = height[index]
-	if slabID == Slabs.PORTAL:
-		get_height = get_real_height(cubes[index])
-	if get_height == 0:
-		return floorTexture[index]
-	else:
-		var cubeID = cubes[index][get_height-1] #get_height
-		return Cube.tex[cubeID][Cube.SIDE_TOP]
-
 
 
 func count_filled_clm_entries():

@@ -101,15 +101,6 @@ func populate_recently_opened():
 
 
 func _process(delta):
-	# Enable saving
-	oMenuButtonFile.get_popup().set_item_disabled(3,false)
-	oMenuButtonEdit.get_popup().set_item_disabled(1,false) # Open script file
-	oMenuButtonEdit.get_popup().set_item_disabled(2,false) # Open map folder
-	
-	# Enable Play button
-	oPlayButton.disabled = false
-	oPlayButton.hint_tooltip = ""
-	
 	var fixedBaseDir = oGame.EXECUTABLE_PATH.get_base_dir().to_upper().replace('\\','/')
 	var fixedMapPath = oCurrentMap.path.to_upper().replace('\\','/')
 	
@@ -117,19 +108,25 @@ func _process(delta):
 #	print('Checking for "'+fixedBaseDir.plus_file("CAMPGNS")+'"  in  "'+fixedMapPath+'"')
 	if fixedBaseDir.plus_file("LEVELS") in fixedMapPath or fixedBaseDir.plus_file("CAMPGNS") in fixedMapPath:
 		# Is playable path
-		pass
+		# Enable Play button
+		oPlayButton.disabled = false
+		oPlayButton.hint_tooltip = ""
 	else:
 		# Is not a playable path
+		oPlayButton.disabled = true
 		oPlayButton.hint_tooltip = "Map must be saved in the correct directory in order to play."
-		oPlayButton.disabled = true
 	
-	if oCurrentMap.path == "":
-		# "Save" should only be available to maps that exist - that have already been "Saved as".
-		oMenuButtonFile.get_popup().set_item_disabled(4,true) # "Save"
-		oMenuButtonEdit.get_popup().set_item_disabled(1,true) # Open map folder
-		oMenuButtonEdit.get_popup().set_item_disabled(2,true) # Open script file
-		# Can only play a map that has been "Saved as"
-		oPlayButton.disabled = true
+	
+	if oCurrentMap.path == "": # Certain features hould only be available to maps that exist as files - maps that have already been "Saved as".
+		oMenuButtonFile.get_popup().set_item_disabled(4,true) # Disable "Save map"
+		oMenuButtonEdit.get_popup().set_item_disabled(1,true) # Disable "Open map folder"
+		oMenuButtonEdit.get_popup().set_item_disabled(2,true) # Disable "Open script file"
+		oPlayButton.disabled = true # Can only play a map that has been "Saved as"
+	else:
+		oMenuButtonFile.get_popup().set_item_disabled(4,false) # Enable "Save map"
+		oMenuButtonEdit.get_popup().set_item_disabled(1,false) # Enable "Open script file"
+		oMenuButtonEdit.get_popup().set_item_disabled(2,false) # Enable "Open map folder"
+	
 	
 	if oEditor.mapHasBeenEdited == true:
 		oPlayButton.text = "Save & Play"

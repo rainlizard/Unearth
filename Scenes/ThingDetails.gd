@@ -254,7 +254,7 @@ func thing_details(id):
 			oThingListData.add_item(description, str(value))
 
 func _on_DeleteSelectedButton_pressed():
-	oSelection.delete_instance(oInspector.inspectingInstance)
+	oSelection.manually_delete_one_instance(oInspector.inspectingInstance)
 	oThingListData.clear()
 
 
