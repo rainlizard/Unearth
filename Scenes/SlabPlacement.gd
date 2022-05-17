@@ -156,14 +156,10 @@ func slab_place_custom(xSlab, ySlab, slabID, ownership, surrID):
 		var liquidValue = Slabs.data[slabID][Slabs.REMEMBER_TYPE]
 		oDataLiquid.set_cell(xSlab, ySlab, liquidValue)
 	
-	var clmIndexArray = []
-	for i in 9:
-		var cubeArray = oCustomSlabSystem.data[slabID][oCustomSlabSystem.CUBE_DATA][i]
-		var setFloorID = oCustomSlabSystem.data[slabID][oCustomSlabSystem.FLOOR_DATA][i]
-		var clmIndex = oDataClm.index_entry(cubeArray, setFloorID) # Uses an existing entry, or creates a new one.
-		clmIndexArray.append(clmIndex)
+	var slabCubes = oCustomSlabSystem.data[slabID][oCustomSlabSystem.CUBE_DATA]
+	var slabFloor = oCustomSlabSystem.data[slabID][oCustomSlabSystem.FLOOR_DATA]
 	
-	set_columns(xSlab, ySlab, clmIndexArray)
+	set_columns(xSlab, ySlab, slabCubes, slabFloor)
 	
 	oDataSlab.set_cell(xSlab, ySlab, recognizedAsID)
 
@@ -279,33 +275,24 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
 	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
 	
-	var clmIndexArray = dkdat_position_to_mapclm(asset3x3group)
+	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
+	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
+	var slabCubes = fullSlabData[0]
+	var slabFloor = fullSlabData[1]
 	
-	match slabID:
-		Slabs.EARTH:
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_EARTH, slabID)
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_EARTH_NEARBY_WATER, slabID)
-		Slabs.CLAIMED_GROUND:
-			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_FLOOR, bitmask, slabID)
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_CLAIMED_AREA, slabID)
-		Slabs.GOLD:
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD, slabID)
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD_NEARBY_LAVA, slabID)
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GOLD_NEARBY_WATER, slabID)
-		Slabs.PATH:
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_DIRTPATH, slabID)
-		Slabs.LAVA:
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_LAVA, slabID)
-		Slabs.DUNGEON_HEART:
-			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_HEART, bitmask, slabID)
-		Slabs.PORTAL:
-			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
-		Slabs.LIBRARY:
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_LIBRARY, slabID)
-		Slabs.EARTH_WITH_TORCH:
-			clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
 	
-	set_columns(xSlab, ySlab, clmIndexArray)
+	
+#	match slabID:
+#		Slabs.CLAIMED_GROUND:
+#			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_FLOOR, bitmask, slabID)
+#		Slabs.DUNGEON_HEART:
+#			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_HEART, bitmask, slabID)
+#		Slabs.PORTAL:
+#			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
+#		Slabs.EARTH_WITH_TORCH:
+#			clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
+	
+	set_columns(xSlab, ySlab, slabCubes, slabFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
 
 func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
@@ -334,18 +321,18 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 	asset3x3group = modify_wall_based_on_nearby_room_and_liquid(asset3x3group, surrID, slabID)
 	
 	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
-	var clmIndexArray = dkdat_position_to_mapclm(asset3x3group)
-	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
 	
-	if slabID == Slabs.WALL_WITH_TORCH:
-		clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
-
-	if bitmaskType == Slabs.BITMASK_WALL:
-		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL, slabID)
-		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL_NEARBY_WATER, slabID)
-		clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_WALL_NEARBY_LAVA, slabID)
+	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
+	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
+	var slabCubes = fullSlabData[0]
+	var slabFloor = fullSlabData[1]
 	
-	set_columns(xSlab, ySlab, clmIndexArray)
+#	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
+#
+#	if slabID == Slabs.WALL_WITH_TORCH:
+#		clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
+	
+	set_columns(xSlab, ySlab, slabCubes, slabFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
 
 
@@ -371,41 +358,137 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 	var bitmask = 1
 	var asset3x3group = make_slab(slabVariation, bitmask)
 	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
-	var clmIndexArray = dkdat_position_to_mapclm(asset3x3group)
 	
-	match slabID:
-		Slabs.WOODEN_DOOR_1, Slabs.BRACED_DOOR_1, Slabs.IRON_DOOR_1, Slabs.MAGIC_DOOR_1:
-			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_DOOR_1, 0, slabID)
-		Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_2:
-			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_DOOR_2, 0, slabID)
-		Slabs.GEMS:
-			clmIndexArray = randomize_columns(clmIndexArray, oSlabPalette.RNG_CLM_GEMS, slabID)
+	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
+	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
+	var slabCubes = fullSlabData[0]
+	var slabFloor = fullSlabData[1]
 	
-	set_columns(xSlab, ySlab, clmIndexArray)
+#	match slabID:
+#		Slabs.WOODEN_DOOR_1, Slabs.BRACED_DOOR_1, Slabs.IRON_DOOR_1, Slabs.MAGIC_DOOR_1:
+#			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_DOOR_1, 0, slabID)
+#		Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_2:
+#			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_DOOR_2, 0, slabID)
+	
+	set_columns(xSlab, ySlab, slabCubes, slabFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, null, null)
 
+#var localRandom = RandomNumberGenerator.new()
+const rngEarthPathUnderneath = [25,26,27,28,29]
+const rngEarth = [1,2,3]
+const rngClaimedGround = [126,127,128]
+const rngGold = [49,50,51]
+const rngGoldNearLava = [52,53,54]
+const rngPathClean = [25,26,27]
+const rngPathWithStones = [28,29]
+const rngLava = [546,547]
+const rngLibrary = [174,175]
+const rngGems = [441,442,443,444]
+const rngWall = [72,73,74]
+
+func randomize_columns(fullSlabData, slabID, bitmaskType):
+	var slabCubes = fullSlabData[0]
+	var slabFloor = fullSlabData[1]
+	
+	if bitmaskType == Slabs.BITMASK_WALL:
+		for i in 9:
+			if slabCubes[i][0] in rngEarthPathUnderneath:
+				slabCubes[i][0] = 25 # No need to randomize the path cube, it's not visible and the game overwrites it anyway.
+			if slabCubes[i][1] in rngWall:
+				slabCubes[i][1] = Random.choose(rngWall)
+			if slabCubes[i][2] in rngWall:
+				slabCubes[i][2] = Random.choose(rngWall)
+			if slabCubes[i][3] in rngWall:
+				slabCubes[i][3] = Random.choose(rngWall)
+	else:
+		match slabID:
+			Slabs.PATH:
+				var stoneRatio = 0.15
+				for i in 9:
+					if slabCubes[i][0] in rngPathClean or slabCubes[i][0] in rngPathWithStones:
+						if stoneRatio < randf():
+							slabCubes[i][0] = Random.choose(rngPathClean)
+						else:
+							slabCubes[i][0] = Random.choose(rngPathWithStones)
+			Slabs.EARTH:
+				for i in 9:
+					if slabCubes[i][0] in rngEarthPathUnderneath:
+						slabCubes[i][0] = 25 # No need to randomize the path cube, it's not visible and the game overwrites it anyway.
+					if slabCubes[i][1] in rngEarth: # This one applies when near water
+						slabCubes[i][1] = Random.choose(rngEarth)
+					if slabCubes[i][2] in rngEarth:
+						slabCubes[i][2] = Random.choose(rngEarth)
+					if slabCubes[i][3] in rngEarth:
+						slabCubes[i][3] = Random.choose(rngEarth)
+					
+			Slabs.CLAIMED_GROUND:
+				for i in 9:
+					if slabCubes[i][0] in rngClaimedGround:
+						slabCubes[i][0] = Random.choose(rngClaimedGround)
+			Slabs.GOLD:
+				for i in 9:
+					if slabCubes[i][1] in rngGold: # This one applies when near water
+						slabCubes[i][1] = Random.choose(rngGold)
+					if slabCubes[i][2] in rngGold:
+						slabCubes[i][2] = Random.choose(rngGold)
+					if slabCubes[i][3] in rngGold:
+						slabCubes[i][3] = Random.choose(rngGold)
+					if slabCubes[i][4] in rngGold:
+						slabCubes[i][4] = Random.choose(rngGold)
+					
+					if slabCubes[i][1] in rngGoldNearLava:
+						slabCubes[i][1] = Random.choose(rngGoldNearLava)
+					if slabCubes[i][2] in rngGoldNearLava:
+						slabCubes[i][2] = Random.choose(rngGoldNearLava)
+					if slabCubes[i][3] in rngGoldNearLava:
+						slabCubes[i][3] = Random.choose(rngGoldNearLava)
+					if slabCubes[i][4] in rngGoldNearLava:
+						slabCubes[i][4] = Random.choose(rngGoldNearLava)
+			Slabs.LAVA:
+				for i in 9:
+					if slabFloor[i] in rngLava:
+						slabFloor[i] = Random.choose(rngLava)
+			Slabs.LIBRARY:
+				for i in 9:
+					if slabCubes[i][0] in rngLibrary:
+						slabCubes[i][0] = Random.choose(rngLibrary)
+			Slabs.GEMS:
+				for i in 9:
+					if slabCubes[i][2] in rngGems:
+						slabCubes[i][2] = Random.choose(rngGems)
+					if slabCubes[i][3] in rngGems:
+						slabCubes[i][3] = Random.choose(rngGems)
+					if slabCubes[i][4] in rngGems:
+						slabCubes[i][4] = Random.choose(rngGems)
+	return fullSlabData
 
 
-func randomize_columns(clmIndexArray, RNG_CLM, slabID):
-	
-	var rngSelect = oSlabPalette.get_random_column_array(RNG_CLM)
-	
-	
-	match slabID:
-		Slabs.PATH:
-			var stoneRatio = 0.15
-			for i in 9:
-				if rngSelect.has(clmIndexArray[i]):
-					if stoneRatio < randf():
-						clmIndexArray[i] = rngSelect[Random.randi_range(0,2)] # Smooth path
-					else:
-						clmIndexArray[i] = rngSelect[Random.randi_range(3,4)] # Stony path
-		_:
-			for i in 9:
-				if rngSelect.has(clmIndexArray[i]): # If the column exists within the random column array, then replace it with a random one.
-					clmIndexArray[i] = rngSelect[randi() % rngSelect.size()]
-	
-	return clmIndexArray
+
+#func randomize_columns(clmIndexArray, RNG_CLM, slabID):
+#
+#	match slabID:
+#		Slabs.PATH:
+#			var stoneRatio = 0.15
+#			for i in 9:
+#				pass
+##				if rngSelect.has(clmIndexArray[i]):
+##					if stoneRatio < randf():
+##						clmIndexArray[i] = rngSelect[Random.randi_range(0,2)] # Smooth path
+##					else:
+##						clmIndexArray[i] = rngSelect[Random.randi_range(3,4)] # Stony path
+#		_:
+#			for i in 9:
+#				#if oSlabPalette.rngColumnsCubes[RNG_CLM].has()
+#				var choiceNumber = randi() % oSlabPalette.rngColumnsCubes[RNG_CLM].size()
+#				#print(choiceNumber)
+#				var cubeArray = oSlabPalette.rngColumnsCubes[RNG_CLM][choiceNumber]
+#				var floorTexture = oSlabPalette.rngColumnsFloor[RNG_CLM][choiceNumber]
+#				clmIndexArray[i] = oDataClm.index_entry(cubeArray, floorTexture)
+#				#print(clmIndexArray[i])
+##				if rngSelect.has(clmIndexArray[i]): # If the column exists within the random column array, then replace it with a random one.
+##					clmIndexArray[i] = rngSelect[randi() % rngSelect.size()]
+#
+#	return clmIndexArray
 
 func set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_TYPE, bitmask, slabID):
 	if ownership == 0: return clmIndexArray # Already red
@@ -478,21 +561,19 @@ func set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_TYPE, bit
 			
 	return clmIndexArray
 
-func dkdat_position_to_mapclm(asset3x3group):
-	var clmIndexArray = [0,0,0, 0,0,0, 0,0,0]
+func dkdat_position_to_column_data(asset3x3group):
+	var slabCubes = []
+	var slabFloor = []
 	for i in 9:
 		# Convert asset3x3group's index to slabvar and subtile then read it from oDkDat
 		var slabvar = asset3x3group[i] / 9
 		var subtile = asset3x3group[i] - (slabvar*9)
 		var dkClmIndex = oDkDat.dat[slabvar][subtile]
 		
-		# Get the cube data from oDkClm, then index it into map's clm.
-		var cubeArray = oDkClm.cubes[dkClmIndex]
-		var floorTexture = oDkClm.floorTexture[dkClmIndex]
-		var clmIndex = oDataClm.index_entry(cubeArray, floorTexture)
-		
-		clmIndexArray[i] = clmIndex
-	return clmIndexArray
+		# Get the cube data from oDkClm
+		slabCubes.append(oDkClm.cubes[dkClmIndex])
+		slabFloor.append(oDkClm.floorTexture[dkClmIndex])
+	return [slabCubes.duplicate(true), slabFloor.duplicate(true)] # So they're no longer references
 
 
 #	var clmIndexArray = [0,0,0, 0,0,0, 0,0,0]
@@ -527,11 +608,13 @@ func dkdat_position_to_mapclm(asset3x3group):
 #		var xSubtile = positionsArray3x3[i].x#i - (ySubtile*3)
 #		oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
 
-func set_columns(xSlab, ySlab, array):
+func set_columns(xSlab, ySlab, slabCubes, slabFloor):
 	for i in 9:
+		var clmIndex = oDataClm.index_entry(slabCubes[i], slabFloor[i])
+		
 		var ySubtile = i/3
 		var xSubtile = i - (ySubtile*3)
-		oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
+		oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, clmIndex)
 
 func get_tall_bitmask(surrID):
 	var bitmask = 0
