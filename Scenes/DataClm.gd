@@ -45,11 +45,6 @@ func count_filled_clm_entries():
 			numberOfFilledEntries += 1
 	return numberOfFilledEntries
 
-func index_entry_replace_one_cube(index, cubePosition, setCubeID):
-	var cubeArray = cubes[index].duplicate(true)
-	cubeArray[cubePosition] = setCubeID
-	return index_entry(cubeArray, floorTexture[index])
-
 func index_entry(cubeArray, setFloorID):
 	var idx = find_cubearray_index(cubeArray, setFloorID)
 	if idx != -1: return idx

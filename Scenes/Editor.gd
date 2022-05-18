@@ -24,7 +24,6 @@ var mapHasBeenEdited = false
 
 func _ready():
 	get_tree().set_auto_accept_quit(false)
-	
 	just_opened_editor()
 
 func _unhandled_input(event):

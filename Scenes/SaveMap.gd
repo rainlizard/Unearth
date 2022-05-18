@@ -6,6 +6,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oDataScript = Nodelist.list["oDataScript"]
+onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 
 var queueExit = false
 
@@ -20,6 +21,20 @@ func save_map(filePath): # auto opens other files
 	
 	for EXT in Filetypes.FILE_TYPES:
 		var saveToFilePath = map + '.' + EXT.to_lower()
+		
+		# Skip saving over existing script file unless it has been edited
+		if EXT == "TXT":
+			print('hi')
+			if File.new().file_exists(saveToFilePath) == true:
+				print('file exists')
+				if oScriptEditor.scriptHasBeenEditedInUnearth == false:
+					print('script has NOT been edited in unearth')
+					print('skip saving')
+					continue
+			else:
+				print("file doesn't exist")
+				pass
+		
 		Filetypes.write(saveToFilePath, EXT.to_upper())
 		
 		var getModifiedTime = File.new().get_modified_time(saveToFilePath)
@@ -31,6 +46,7 @@ func save_map(filePath): # auto opens other files
 	oMessage.quick('Saved map')
 	oCurrentMap.set_path_and_title(filePath)
 	oEditor.mapHasBeenEdited = false
+	oScriptEditor.set_script_as_edited(false)
 	oMapSettingsWindow.visible = false
 	
 	# This goes last. Queued from when doing "save before quitting" and "save as" before quitting.

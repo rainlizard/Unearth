@@ -28,6 +28,7 @@ onready var oMenu = Nodelist.list["oMenu"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
+onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -140,6 +141,7 @@ func finish_opening_map(map):
 	oCurrentMap.set_path_and_title(map)
 	oDynamicMapTree.highlight_current_map()
 	oEditor.mapHasBeenEdited = false
+	oScriptEditor.set_script_as_edited(false)
 	oOverheadOwnership.start()
 	oScriptHelpers.start()
 	oCamera2D.reset_camera()
@@ -158,11 +160,6 @@ func finish_opening_map(map):
 	oEditor.set_view_2d()
 	
 	oMenu.add_recent(map)
-	
-#	var cubeArray = [1,0,1,1,0,1,1,0]
-#	var idx = oDataClm.index_entry(cubeArray, 1)
-#	oDataClmPos.set_cell(63,38, idx)
-	
 	
 	print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 

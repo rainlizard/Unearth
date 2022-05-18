@@ -273,24 +273,25 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	
 	var asset3x3group = make_slab(slabID*28, bitmask)
 	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
-	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
+	asset3x3group = corner_filler_and_solo_slab(asset3x3group, surrID, bitmask, slabID)
 	
 	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
 	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
 	var slabCubes = fullSlabData[0]
 	var slabFloor = fullSlabData[1]
 	
-	
-	
-#	match slabID:
-#		Slabs.CLAIMED_GROUND:
-#			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_FLOOR, bitmask, slabID)
-#		Slabs.DUNGEON_HEART:
-#			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_HEART, bitmask, slabID)
-#		Slabs.PORTAL:
-#			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
-#		Slabs.EARTH_WITH_TORCH:
-#			clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
+	match slabID:
+		Slabs.ROCK:
+			fullSlabData = make_impenetrable_frail(fullSlabData, surrID)
+		Slabs.EARTH_WITH_TORCH:
+			slabCubes = adjust_torch_cubes(slabCubes, calculate_torch_side(xSlab, ySlab))
+		Slabs.CLAIMED_GROUND:
+			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_FLOOR, bitmask, slabID)
+		Slabs.DUNGEON_HEART:
+			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_HEART, bitmask, slabID)
+		Slabs.PORTAL:
+			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
+		
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
@@ -319,18 +320,19 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 		asset3x3group[6] = ((slabVariation + dir.all) * 9) + 6
 	
 	asset3x3group = modify_wall_based_on_nearby_room_and_liquid(asset3x3group, surrID, slabID)
-	
-	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
+	asset3x3group = corner_filler_and_solo_slab(asset3x3group, surrID, bitmask, slabID)
 	
 	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
 	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
 	var slabCubes = fullSlabData[0]
 	var slabFloor = fullSlabData[1]
 	
-#	clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
-#
-#	if slabID == Slabs.WALL_WITH_TORCH:
-#		clmIndexArray = adjust_torch_cubes(clmIndexArray, calculate_torch_side(xSlab, ySlab))
+	
+	
+	if slabID == Slabs.WALL_WITH_TORCH:
+		slabCubes = adjust_torch_cubes(slabCubes, calculate_torch_side(xSlab, ySlab))
+	
+	slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
@@ -357,18 +359,18 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 	var slabVariation = (42 * 28) + (8 * (slabID - 42))
 	var bitmask = 1
 	var asset3x3group = make_slab(slabVariation, bitmask)
-	asset3x3group = special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID)
+	asset3x3group = corner_filler_and_solo_slab(asset3x3group, surrID, bitmask, slabID)
 	
 	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
 	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
 	var slabCubes = fullSlabData[0]
 	var slabFloor = fullSlabData[1]
 	
-#	match slabID:
-#		Slabs.WOODEN_DOOR_1, Slabs.BRACED_DOOR_1, Slabs.IRON_DOOR_1, Slabs.MAGIC_DOOR_1:
-#			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_DOOR_1, 0, slabID)
-#		Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_2:
-#			clmIndexArray = set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_DOOR_2, 0, slabID)
+	match slabID:
+		Slabs.WOODEN_DOOR_1, Slabs.BRACED_DOOR_1, Slabs.IRON_DOOR_1, Slabs.MAGIC_DOOR_1:
+			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_DOOR_1, 0, slabID)
+		Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_2:
+			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_DOOR_2, 0, slabID)
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, null, null)
@@ -381,10 +383,10 @@ const rngGold = [49,50,51]
 const rngGoldNearLava = [52,53,54]
 const rngPathClean = [25,26,27]
 const rngPathWithStones = [28,29]
-const rngLava = [546,547]
 const rngLibrary = [174,175]
 const rngGems = [441,442,443,444]
 const rngWall = [72,73,74]
+const rngLava = [546,547] # This one is a FloorTexture
 
 func randomize_columns(fullSlabData, slabID, bitmaskType):
 	var slabCubes = fullSlabData[0]
@@ -463,52 +465,25 @@ func randomize_columns(fullSlabData, slabID, bitmaskType):
 	return fullSlabData
 
 
-
-#func randomize_columns(clmIndexArray, RNG_CLM, slabID):
-#
-#	match slabID:
-#		Slabs.PATH:
-#			var stoneRatio = 0.15
-#			for i in 9:
-#				pass
-##				if rngSelect.has(clmIndexArray[i]):
-##					if stoneRatio < randf():
-##						clmIndexArray[i] = rngSelect[Random.randi_range(0,2)] # Smooth path
-##					else:
-##						clmIndexArray[i] = rngSelect[Random.randi_range(3,4)] # Stony path
-#		_:
-#			for i in 9:
-#				#if oSlabPalette.rngColumnsCubes[RNG_CLM].has()
-#				var choiceNumber = randi() % oSlabPalette.rngColumnsCubes[RNG_CLM].size()
-#				#print(choiceNumber)
-#				var cubeArray = oSlabPalette.rngColumnsCubes[RNG_CLM][choiceNumber]
-#				var floorTexture = oSlabPalette.rngColumnsFloor[RNG_CLM][choiceNumber]
-#				clmIndexArray[i] = oDataClm.index_entry(cubeArray, floorTexture)
-#				#print(clmIndexArray[i])
-##				if rngSelect.has(clmIndexArray[i]): # If the column exists within the random column array, then replace it with a random one.
-##					clmIndexArray[i] = rngSelect[randi() % rngSelect.size()]
-#
-#	return clmIndexArray
-
-func set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_TYPE, bitmask, slabID):
-	if ownership == 0: return clmIndexArray # Already red
-	# index_entry_replace_one_cube() arguments: array, cubePosition, setCubeID
+func set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_TYPE, bitmask, slabID):
+	if ownership == 0: return slabCubes # It's already red
+	
 	match OWNERSHIP_GRAPHIC_TYPE:
 		OWNERSHIP_GRAPHIC_FLOOR:
-			clmIndexArray[4] = oDataClm.index_entry_replace_one_cube(clmIndexArray[4], 0, Cube.ownedCube[Cube.FLOOR_MARKER][ownership])
+			slabCubes[4][0] = Cube.ownedCube[Cube.FLOOR_MARKER][ownership]
 		OWNERSHIP_GRAPHIC_PORTAL:
 			if bitmask == 0:
-				clmIndexArray[4] = oDataClm.index_entry_replace_one_cube(clmIndexArray[4], 6, Cube.ownedCube[Cube.PORTAL_MARKER][ownership])
+				slabCubes[4][6] = Cube.ownedCube[Cube.PORTAL_MARKER][ownership]
 		OWNERSHIP_GRAPHIC_HEART:
 			match bitmask:
 				03: # sw bitmask
-					clmIndexArray[2] = oDataClm.index_entry_replace_one_cube(clmIndexArray[2], 7, Cube.ownedCube[Cube.HEART_MARKER][ownership])
+					slabCubes[2][7] = Cube.ownedCube[Cube.HEART_MARKER][ownership]
 				06: # nw bitmask
-					clmIndexArray[8] = oDataClm.index_entry_replace_one_cube(clmIndexArray[8], 7, Cube.ownedCube[Cube.HEART_MARKER][ownership])
+					slabCubes[8][7] = Cube.ownedCube[Cube.HEART_MARKER][ownership]
 				12: # ne bitmask
-					clmIndexArray[6] = oDataClm.index_entry_replace_one_cube(clmIndexArray[6], 7, Cube.ownedCube[Cube.HEART_MARKER][ownership])
+					slabCubes[6][7] = Cube.ownedCube[Cube.HEART_MARKER][ownership]
 				09: # se bitmask
-					clmIndexArray[0] = oDataClm.index_entry_replace_one_cube(clmIndexArray[0], 7, Cube.ownedCube[Cube.HEART_MARKER][ownership])
+					slabCubes[0][7] = Cube.ownedCube[Cube.HEART_MARKER][ownership]
 		OWNERSHIP_GRAPHIC_WALL:
 			for i in 9:
 				# 0 1 2
@@ -520,46 +495,33 @@ func set_ownership_graphic(clmIndexArray, ownership, OWNERSHIP_GRAPHIC_TYPE, bit
 				# Barracks: 1, 3, 5, 7
 				match i:
 					4: # Wall marker
-						clmIndexArray[i] = oDataClm.index_entry_replace_one_cube(clmIndexArray[i], 4, Cube.ownedCube[Cube.WALL_MARKER][ownership])
+						slabCubes[i][4] = Cube.ownedCube[Cube.WALL_MARKER][ownership]
 					1, 3, 5, 7: # Barracks, Red Banner Middle
-						if oDataClm.cubes[clmIndexArray[i]][4] == 161: # Red Banner Middle
-							clmIndexArray[i] = oDataClm.index_entry_replace_one_cube(clmIndexArray[i], 4, Cube.ownedCube[Cube.BANNER_MIDDLE][ownership])
-						elif oDataClm.cubes[clmIndexArray[i]][3] == 393: # Barracks flag
-							clmIndexArray[i] = oDataClm.index_entry_replace_one_cube(clmIndexArray[i], 3, Cube.ownedCube[Cube.BARRACKS_FLAG][ownership])
+						if slabCubes[i][4] == 161: # Red Banner Middle
+							slabCubes[i][4] = Cube.ownedCube[Cube.BANNER_MIDDLE][ownership]
+						elif slabCubes[i][3] == 393: # Barracks flag
+							slabCubes[i][3] = Cube.ownedCube[Cube.BARRACKS_FLAG][ownership]
 					0, 2, 6, 8: # Red Banner Left, Red Banner Right
-						var cube4 = oDataClm.cubes[clmIndexArray[i]][4]
+						var cube4 = slabCubes[i][4]
 						if cube4 == 160: # Red Banner Left
-							clmIndexArray[i] = oDataClm.index_entry_replace_one_cube(clmIndexArray[i], 4, Cube.ownedCube[Cube.BANNER_LEFT][ownership])
+							slabCubes[i][4] = Cube.ownedCube[Cube.BANNER_LEFT][ownership]
 						elif cube4 == 162: # Red Banner Right
-							clmIndexArray[i] = oDataClm.index_entry_replace_one_cube(clmIndexArray[i], 4, Cube.ownedCube[Cube.BANNER_RIGHT][ownership])
+							slabCubes[i][4] = Cube.ownedCube[Cube.BANNER_RIGHT][ownership]
 		OWNERSHIP_GRAPHIC_DOOR_1:
 			# Floor marker
-			#clmIndexArray[4] = oDataClm.index_entry_replace_one_cube(clmIndexArray[4], 0, Cube.ownedCube[Cube.FLOOR_MARKER][ownership])
+			slabCubes[4][0] = Cube.ownedCube[Cube.FLOOR_MARKER][ownership]
 			# Red Banner Left, Red Banner Middle, Red Banner Right
-			clmIndexArray[1] = oDataClm.index_entry_replace_one_cube(clmIndexArray[1], 4, Cube.ownedCube[Cube.BANNER_LEFT][ownership])
-			#clmIndexArray[4] = oDataClm.index_entry_replace_one_cube(clmIndexArray[4], 4, Cube.ownedCube[Cube.BANNER_MIDDLE][ownership])
-			clmIndexArray[7] = oDataClm.index_entry_replace_one_cube(clmIndexArray[7], 4, Cube.ownedCube[Cube.BANNER_RIGHT][ownership])
-			
-			# Change BOTH Red Banner Middle AND Floor marker in same column
-			var cubeArray = oDataClm.cubes[clmIndexArray[4]].duplicate(true)
-			cubeArray[0] = Cube.ownedCube[Cube.FLOOR_MARKER][ownership]
-			cubeArray[4] = Cube.ownedCube[Cube.BANNER_MIDDLE][ownership]
-			clmIndexArray[4] = oDataClm.index_entry(cubeArray, oDataClm.floorTexture[clmIndexArray[4]])
-			
+			slabCubes[1][4] = Cube.ownedCube[Cube.BANNER_LEFT][ownership]
+			slabCubes[4][4] = Cube.ownedCube[Cube.BANNER_MIDDLE][ownership]
+			slabCubes[7][4] = Cube.ownedCube[Cube.BANNER_RIGHT][ownership]
 		OWNERSHIP_GRAPHIC_DOOR_2:
 			# Floor marker
-			#clmIndexArray[4] = oDataClm.index_entry_replace_one_cube(clmIndexArray[4], 0, Cube.ownedCube[Cube.FLOOR_MARKER][ownership])
+			slabCubes[4][0] = Cube.ownedCube[Cube.FLOOR_MARKER][ownership]
 			# Red Banner Left, Red Banner Middle, Red Banner Right
-			clmIndexArray[3] = oDataClm.index_entry_replace_one_cube(clmIndexArray[3], 4, Cube.ownedCube[Cube.BANNER_LEFT][ownership])
-			#clmIndexArray[4] = oDataClm.index_entry_replace_one_cube(clmIndexArray[4], 4, Cube.ownedCube[Cube.BANNER_MIDDLE][ownership])
-			clmIndexArray[5] = oDataClm.index_entry_replace_one_cube(clmIndexArray[5], 4, Cube.ownedCube[Cube.BANNER_RIGHT][ownership])
-			
-			var cubeArray = oDataClm.cubes[clmIndexArray[4]].duplicate(true)
-			cubeArray[0] = Cube.ownedCube[Cube.FLOOR_MARKER][ownership]
-			cubeArray[4] = Cube.ownedCube[Cube.BANNER_MIDDLE][ownership]
-			clmIndexArray[4] = oDataClm.index_entry(cubeArray, oDataClm.floorTexture[clmIndexArray[4]])
-			
-	return clmIndexArray
+			slabCubes[3][4] = Cube.ownedCube[Cube.BANNER_LEFT][ownership]
+			slabCubes[4][4] = Cube.ownedCube[Cube.BANNER_MIDDLE][ownership]
+			slabCubes[5][4] = Cube.ownedCube[Cube.BANNER_RIGHT][ownership]
+	return slabCubes
 
 func dkdat_position_to_column_data(asset3x3group):
 	var slabCubes = []
@@ -691,18 +653,18 @@ func get_surrounding_ownership(xSlab, ySlab):
 	surrOwner[dir.sw] = oDataOwnership.get_cell(xSlab-1, ySlab+1)
 	return surrOwner
 
-func adjust_torch_cubes(clmIndexArray, torchSideToKeep):
+func adjust_torch_cubes(slabCubes, torchSideToKeep):
 	var side = 0
 	for i in [7,3,1,5]: # S W N E
 		if torchSideToKeep != side:
 			# Wall Torch Cube: 119
 			# Earth Torch Cube: 24
-			if oDataClm.cubes[clmIndexArray[i]][3] == 119 or oDataClm.cubes[clmIndexArray[i]][3] == 24:
+			if slabCubes[i][3] == 119 or slabCubes[i][3] == 24:
 				# Paint with "normal wall" cube.
-				var replaceUsingCubeBelow = oDataClm.cubes[clmIndexArray[i]][2]
-				clmIndexArray[i] = oDataClm.index_entry_replace_one_cube(clmIndexArray[i], 3, replaceUsingCubeBelow)
+				var replaceUsingCubeBelowIt = slabCubes[i][2]
+				slabCubes[i][3] = replaceUsingCubeBelowIt
 		side += 1
-	return clmIndexArray
+	return slabCubes
 
 func modify_wall_based_on_nearby_room_and_liquid(asset3x3group, surrID, slabID):
 	# Combined modify_room_face() and modify_for_liquid() so that there won't be a conflict.
@@ -1148,20 +1110,79 @@ var slabsThatCanBeUsedAsCornerFiller = {
 	Slabs.WATER:1,
 	Slabs.LAVA:2,
 }
-#var frailSlabs = {
-#}
 
-func special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID):
+const blankCubes = [0,0,0,0,0,0,0,0]
+
+func make_impenetrable_frail(fullSlabData, surrID):
+	var slabCubes = fullSlabData[0]
+	var slabFloor = fullSlabData[1]
+	
+	var checkN = 0
+	var checkS = 0
+	var checkE = 0
+	var checkW = 0
+	if surrID[dir.n] == Slabs.WATER or surrID[dir.n] == Slabs.LAVA:
+		checkN = surrID[dir.n]
+	if surrID[dir.s] == Slabs.WATER or surrID[dir.s] == Slabs.LAVA:
+		checkS = surrID[dir.s]
+	if surrID[dir.e] == Slabs.WATER or surrID[dir.e] == Slabs.LAVA:
+		checkE = surrID[dir.e]
+	if surrID[dir.w] == Slabs.WATER or surrID[dir.w] == Slabs.LAVA:
+		checkW = surrID[dir.w]
+	
+	# Water and lava in every direction, this is a single block.
+	if checkN != 0 and checkS != 0 and checkE != 0 and checkW != 0:
+		return fullSlabData
+	
+	if checkN != 0:
+		if checkE != 0:
+			match checkN:
+				Slabs.WATER:
+					slabCubes[2] = blankCubes.duplicate(true)
+					slabFloor[2] = 545
+				Slabs.LAVA:
+					slabCubes[2] = blankCubes.duplicate(true)
+					slabFloor[2] = Random.choose(rngLava)
+		if checkW != 0:
+			match checkN:
+				Slabs.WATER:
+					slabCubes[0] = blankCubes.duplicate(true)
+					slabFloor[0] = 545
+				Slabs.LAVA:
+					slabCubes[0] = blankCubes.duplicate(true)
+					slabFloor[0] = Random.choose(rngLava)
+	
+	if checkS != 0:
+		if checkW != 0:
+			match checkS:
+				Slabs.WATER:
+					slabCubes[6] = blankCubes.duplicate(true)
+					slabFloor[6] = 545
+				Slabs.LAVA:
+					slabCubes[6] = blankCubes.duplicate(true)
+					slabFloor[6] = Random.choose(rngLava)
+		if checkE != 0:
+			match checkS:
+				Slabs.WATER:
+					slabCubes[8] = blankCubes.duplicate(true)
+					slabFloor[8] = 545
+				Slabs.LAVA:
+					slabCubes[8] = blankCubes.duplicate(true)
+					slabFloor[8] = Random.choose(rngLava)
+	
+	return fullSlabData
+
+func corner_filler_and_solo_slab(asset3x3group, surrID, bitmask, slabID):
 	if bitmask != 15:
 		return asset3x3group
 	if slabID != Slabs.ROCK and slabID != Slabs.EARTH and slabID != Slabs.GOLD:
 		return asset3x3group
-	
+
 	var cornerTopLeft = null
 	var cornerTopRight = null
 	var cornerBottomLeft = null
 	var cornerBottomRight = null
-	
+
 	if surrID[dir.n] == surrID[dir.w]:
 		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.n]):
 			cornerTopLeft = surrID[dir.n]
@@ -1169,34 +1190,34 @@ func special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID):
 			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.n] != surrID[dir.nw] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.nw]):
 				if slabsThatCanBeUsedAsCornerFiller[cornerTopLeft] > slabsThatCanBeUsedAsCornerFiller[slabID]:
 					cornerTopLeft = null
-	
+
 	if surrID[dir.n] == surrID[dir.e]:
 		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.n]):
 			cornerTopRight = surrID[dir.n]
 			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.n] != surrID[dir.ne] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.ne]):
 				if slabsThatCanBeUsedAsCornerFiller[cornerTopRight] > slabsThatCanBeUsedAsCornerFiller[slabID]:
 					cornerTopRight = null
-	
+
 	if surrID[dir.s] == surrID[dir.w]:
 		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.s]):
 			cornerBottomLeft = surrID[dir.s]
 			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.s] != surrID[dir.sw] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.sw]):
 				if slabsThatCanBeUsedAsCornerFiller[cornerBottomLeft] > slabsThatCanBeUsedAsCornerFiller[slabID]:
 					cornerBottomLeft = null
-	
+
 	if surrID[dir.s] == surrID[dir.e]:
 		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.s]):
 			cornerBottomRight = surrID[dir.s]
 			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.s] != surrID[dir.se] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.se]):
 				if slabsThatCanBeUsedAsCornerFiller[cornerBottomRight] > slabsThatCanBeUsedAsCornerFiller[slabID]:
 					cornerBottomRight = null
-	
+
 	if cornerTopLeft != null and cornerTopRight != null and cornerBottomLeft != null and cornerBottomRight != null:
 		if Random.chance_int(50): cornerTopLeft = null
 		if Random.chance_int(50): cornerTopRight = null
 		if Random.chance_int(50): cornerBottomLeft = null
 		if Random.chance_int(50): cornerBottomRight = null
-	
+
 	if cornerTopLeft != null:
 		asset3x3group[0] = cornerTopLeft * 28 * 9
 	if cornerTopRight != null:
@@ -1205,5 +1226,5 @@ func special_feature_frail_corners(asset3x3group, surrID, bitmask, slabID):
 		asset3x3group[6] = cornerBottomLeft * 28 * 9
 	if cornerBottomRight != null:
 		asset3x3group[8] = cornerBottomRight * 28 * 9
-	
+
 	return asset3x3group

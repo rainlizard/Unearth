@@ -7,11 +7,15 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oScriptEmptyStatus = Nodelist.list["oScriptEmptyStatus"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
 
-func _ready():
-	loop_check_if_txt_file_has_been_modified()
+var scriptHasBeenEditedInUnearth = false
 
-func loop_check_if_txt_file_has_been_modified():
+func _notification(what: int):
+	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+		check_if_txt_file_has_been_modified()
+
+func check_if_txt_file_has_been_modified():
 	if oCurrentMap.currentFilePaths.has("TXT"):
 		var filePath = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
 		var getModifiedTime = File.new().get_modified_time(filePath)
@@ -21,14 +25,21 @@ func loop_check_if_txt_file_has_been_modified():
 			# Reload
 			Filetypes.read(filePath, "TXT")
 			reload_script_into_textedit()
-	
-	yield(get_tree().create_timer(1.0), "timeout")
-	loop_check_if_txt_file_has_been_modified()
+			set_script_as_edited(false)
 
 func set_text(setWithString):
 	oEditor.mapHasBeenEdited = true
+	set_script_as_edited(true)
 	oDataScript.data = setWithString
 	reload_script_into_textedit()
+
+
+func set_script_as_edited(edited):
+	scriptHasBeenEditedInUnearth = edited
+	match edited:
+		true: oMapSettingsTabs.set_tab_title(2, "Edit Script *")
+		false: oMapSettingsTabs.set_tab_title(2, "Edit Script")
+
 
 func _on_ScriptTextEdit_visibility_changed():
 	if visible == true:
@@ -37,13 +48,16 @@ func _on_ScriptTextEdit_visibility_changed():
 		# When you close the window, update script helpers. This is important to update here in case you remove any lines (helper related) in the script editor
 		oScriptHelpers.start()
 
+
 func reload_script_into_textedit():
 	oScriptTextEdit.text = oDataScript.data
 	update_empty_script_status()
 	oScriptHelpers.start() # in the case of editing text file outside of Unearth
 
+
 func _on_ScriptTextEdit_text_changed():
 	oEditor.mapHasBeenEdited = true
+	set_script_as_edited(true)
 	oDataScript.data = oScriptTextEdit.text
 	update_empty_script_status()
 	
@@ -54,6 +68,7 @@ func _on_ScriptTextEdit_text_changed():
 			updateHelpers = true
 	if updateHelpers == true:
 		oScriptHelpers.start() # in the case of updating a line (with coords) in the built-in Script Editor
+
 
 func update_empty_script_status():
 	if oScriptTextEdit.text == "":
