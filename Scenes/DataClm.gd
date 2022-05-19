@@ -2,6 +2,7 @@ extends 'res://Class/ClmClass.gd'
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oTimerUpdateColumnEntries = Nodelist.list["oTimerUpdateColumnEntries"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
+onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 
 # Storing these values outside of main array so I can do array comparisons
 var utilized = []
@@ -85,11 +86,75 @@ func update_all_solid_mask():
 		solidMask[index] = calculate_solid_mask(cubes[index])
 	print('All CLM solid bitmask updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
+
+
+
 func clear_unused_entries():
 	for clmIndex in 2048:
 		if utilized[clmIndex] == 0:
 			delete_column(clmIndex)
 
+
+
+
+
+func sort_columns_by_utilized():
+	oMessage.quick("Sorted columns by utilized value")
+	
+	var array = []
+	
+	var dictSrcDest = {}
+	
+	var CODETIME_START = OS.get_ticks_msec()
+	for i in 2048:
+		
+		# Each column gets its own array which contains all of its column values.
+		array.append([])
+		
+		array[i].append(i) #[0] # Its old original index before being sorted
+		array[i].append(utilized[i]) #[1]
+		array[i].append(orientation[i]) #[2]
+		array[i].append(solidMask[i]) #[3]
+		array[i].append(permanent[i]) #[4]
+		array[i].append(lintel[i]) #[5]
+		array[i].append(height[i]) #[6]
+		array[i].append(cubes[i].duplicate(true)) #[7]
+		array[i].append(floorTexture[i]) #[8]
+	
+	# Sort
+	array.sort_custom(self, "sorter_utilized")
+	for i in 2048:
+		var sourceIndex = array[i][0]
+		dictSrcDest[sourceIndex] = i # for swapping the column indexes easier in oDataClmPos
+	
+	# Move to new position
+	for i in 2048:
+		utilized[i] = array[i][1]
+		orientation[i] = array[i][2]
+		solidMask[i] = array[i][3]
+		permanent[i] = array[i][4]
+		lintel[i] = array[i][5]
+		height[i] = array[i][6]
+		cubes[i] = array[i][7]
+		floorTexture[i] = array[i][8]
+	
+
+	
+	#print(dictionary[419])
+	
+	for y in 255:
+		for x in 255:
+			var clmIndex = oDataClmPos.get_cell(x,y)
+			oDataClmPos.set_cell(x, y, dictSrcDest[clmIndex])
+	
+	oOverheadGraphics.overhead2d_update_rect(Vector2(0,0), Vector2(84,84))
+	
+	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+static func sorter_utilized(a, b): # Sort by an array value within the array
+	if a[1] > b[1]: # 1 is the utilized value of the column
+		return true
+	return false
 
 
 #func find_blank_slot():

@@ -26,3 +26,10 @@ func _on_DamagedWallLineEdit_focus_exited():
 
 func _on_BridgesOnlyOnLiquidCheckbox_toggled(button_pressed):
 	Settings.set_setting("bridges_only_on_liquid", button_pressed)
+
+
+func _on_FrailImpenetrableCheckbox_toggled(button_pressed):
+	Settings.set_setting("frail_impenetrable", button_pressed)
+
+func _on_FrailSoloSlabsCheckbox_toggled(button_pressed):
+	Settings.set_setting("frail_solo_slab", button_pressed)

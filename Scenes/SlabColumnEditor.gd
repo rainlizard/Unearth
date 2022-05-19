@@ -53,3 +53,7 @@ func _on_ColumnEditorClearUnusedButton_pressed():
 
 func _on_ConfirmClmClearUnused_confirmed():
 	oDataClm.clear_unused_entries()
+
+
+func _on_ColumnEditorSortButton_pressed():
+	oDataClm.sort_columns_by_utilized()

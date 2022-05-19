@@ -21,6 +21,8 @@ onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oDkDat = Nodelist.list["oDkDat"]
 onready var oDkClm = Nodelist.list["oDkClm"]
+onready var oFrailSoloSlabsCheckbox = Nodelist.list["oFrailSoloSlabsCheckbox"]
+onready var oFrailImpenetrableCheckbox = Nodelist.list["oFrailImpenetrableCheckbox"]
 
 enum dir {
 	s = 0
@@ -1114,6 +1116,9 @@ var slabsThatCanBeUsedAsCornerFiller = {
 const blankCubes = [0,0,0,0,0,0,0,0]
 
 func make_impenetrable_frail(fullSlabData, surrID):
+	if oFrailImpenetrableCheckbox.pressed == false:
+		return fullSlabData
+	
 	var slabCubes = fullSlabData[0]
 	var slabFloor = fullSlabData[1]
 	
@@ -1173,6 +1178,9 @@ func make_impenetrable_frail(fullSlabData, surrID):
 	return fullSlabData
 
 func corner_filler_and_solo_slab(asset3x3group, surrID, bitmask, slabID):
+	if oFrailSoloSlabsCheckbox.pressed == false:
+		return asset3x3group
+	
 	if bitmask != 15:
 		return asset3x3group
 	if slabID != Slabs.ROCK and slabID != Slabs.EARTH and slabID != Slabs.GOLD:
