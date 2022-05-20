@@ -44,6 +44,16 @@ func copy_column(indexSrc, indexDest):
 	self.cubes[indexDest] = self.cubes[indexSrc]
 	self.floorTexture[indexDest] = self.floorTexture[indexSrc]
 
+func clear_all_column_data():
+	self.utilized.clear()
+	self.orientation.clear()
+	self.solidMask.clear()
+	self.permanent.clear()
+	self.lintel.clear()
+	self.height.clear()
+	self.cubes.clear()
+	self.floorTexture.clear()
+
 func find_cubearray_index(cubeArray, floorID):
 	var compareFloorTexture = false
 	# If the lowest cube is missing that means the floor is visible, therefore the floor should be compared too

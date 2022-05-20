@@ -3,7 +3,7 @@ onready var oGame = Nodelist.list["oGame"]
 
 var dat = [] # 1304 sets of 9 column indexes
 
-func dat_asset():
+func dat_load_slabset():
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	var filePath = dk_data_get_filepath("SLABS.DAT")

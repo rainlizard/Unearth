@@ -43,6 +43,8 @@ func _enter_tree():
 	if sensitiveTile != null:
 		add_to_group('attachedtotile_'+str(sensitiveTile))
 	
+	add_to_group("slab_location_group_"+str(floor(locationX/3))+'_'+str(floor(locationY/3)))
+	
 	match thingType:
 		Things.TYPE.TRAP:
 			add_to_group("Trap")

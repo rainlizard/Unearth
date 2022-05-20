@@ -75,13 +75,11 @@ func load_file():
 	print('Loaded custom objects: ' + str(OS.get_ticks_msec() - LOAD_CUSTOM_OBJECTS_CODETIME_START) + 'ms')
 
 func remove_object(thingType, subtype):
-	oPickThingWindow.set_selection(null, null)
-	print('Attempting to remove thingType:' + str(thingType) + ', subtype:'+str(subtype))
-	
 	var section = 'OBJECT:'+str(thingType)+':'+str(subtype)
-	if objectsFile.has_section(section):
-		objectsFile.erase_section(section)
-		print('Removed custom object type: '+str(thingType) + ' subtype: '+ str(subtype))
+	if objectsFile.has_section(section) == false: return	
+	
+	objectsFile.erase_section(section)
+	
 	
 	match thingType:
 		Things.TYPE.OBJECT: Things.DATA_OBJECT.erase(subtype)
@@ -92,4 +90,7 @@ func remove_object(thingType, subtype):
 	
 	objectsFile.save(Settings.unearthdata.plus_file("custom_objects.cfg"))
 	load_file()
+	oPickThingWindow.set_selection(null, null)
 	oPickThingWindow.initialize_thing_grid_items()
+	
+	print('Removed custom object type: '+str(thingType) + ' subtype: '+ str(subtype))

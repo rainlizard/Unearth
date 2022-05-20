@@ -6,7 +6,7 @@ var tngIndex = []
 var tngObject = []
 var numberOfThings = 0
 
-func slabtng_assets():
+func tng_load_slabset():
 	var filePath = oDkDat.dk_data_get_filepath("SLABS.TNG")
 	var buffer = Filetypes.file_path_to_buffer(filePath)
 	

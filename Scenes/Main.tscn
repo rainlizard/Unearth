@@ -4506,6 +4506,14 @@ size_flags_horizontal = 1
 nodeClm = NodePath("../../../../../../../SlabPalette/DkClm")
 nodeVoxelView = NodePath("../../DkClmVoxelView")
 
+[node name="ExportSlabsClm" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer"]
+margin_left = 32.0
+margin_top = 556.0
+margin_right = 220.0
+margin_bottom = 583.0
+size_flags_horizontal = 9
+text = "Export slabs.clm"
+
 [node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer"]
 margin_top = 618.0
 margin_right = 220.0
@@ -4628,6 +4636,18 @@ margin_left = -3731.0
 margin_top = 2286.0
 margin_right = -3051.0
 margin_bottom = 2846.0
+rect_min_size = Vector2( 250, 87.5 )
+access = 2
+show_hidden_files = true
+current_dir = "/Godot/MyProjects/Unearth"
+current_path = "/Godot/MyProjects/Unearth/"
+
+[node name="ExportSlabsetClmDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -3724.0
+margin_top = 2905.0
+margin_right = -3044.0
+margin_bottom = 3465.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
 show_hidden_files = true
@@ -4925,11 +4945,13 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ExportSlabsDat" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsDat_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ExportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsCfg_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer/ExportSlabsClm" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsClm_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/ButtonBlankMap" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonBlankMap_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NoiseButtonApplyBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseButtonApply_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapCloseButton" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapCloseButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetDatDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetDatDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetClmDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetClmDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetCfgDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportColumnCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnCfgDialog_file_selected"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]

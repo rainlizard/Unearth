@@ -72,7 +72,7 @@ func clear_map():
 	# "dat"
 	oDataClmPos.clear() #create((85*3)+1, (85*3)+1, 0)
 	# "clm"
-	oDataClm.clear_all()
+	oDataClm.clear_all_column_data()
 	oOverheadGraphics.clear_img()
 	# 3D
 	oGenerateTerrain.clear()

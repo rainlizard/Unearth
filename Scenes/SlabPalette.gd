@@ -46,9 +46,9 @@ var CODETIME_START
 
 func start():
 	# Do this only once.
-	if oDkDat.dat.empty() == true: oDkDat.dat_asset()
-	if oDkClm.cubes.empty() == true: oDkClm.clm_asset()
-	if oDkTng.tngIndex.empty() == true: oDkTng.slabtng_assets()
+	if oDkDat.dat.empty() == true: oDkDat.dat_load_slabset()
+	if oDkClm.cubes.empty() == true: oDkClm.clm_load_slabset()
+	if oDkTng.tngIndex.empty() == true: oDkTng.tng_load_slabset()
 	
 	# Use this to show all the hidden slabs inside of slabs.clm, content unused by the game.
 #	for slabvar in 1304:

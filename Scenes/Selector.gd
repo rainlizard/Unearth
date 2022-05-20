@@ -67,6 +67,8 @@ func _process(delta):
 		if oUi.mouseOnUi == false:
 			mouse_button_on_field()
 
+
+
 func mouse_button_anywhere():
 	if Input.is_action_pressed("mouse_left") == false:
 		if oEditingTools.TOOL_SELECTED == oEditingTools.RECTANGLE:
@@ -220,14 +222,14 @@ func world2subtile(pos):
 func instance_position(checkPos, checkGroup):
 	var space = get_world_2d().direct_space_state
 	for i in space.intersect_point(oInstances.global_transform.translated(checkPos).get_origin(), 32, [], 0x7FFFFFFF, true, true):
-		if i["collider"].get_parent().is_in_group(checkGroup):
-			return i["collider"].get_parent()
+		if i.collider.get_parent().is_in_group(checkGroup):
+			return i.collider.get_parent()
 	return null
 
 func position_meeting(checkPos, checkGroup):
 	var space = get_world_2d().direct_space_state
 	for i in space.intersect_point(oInstances.global_transform.translated(checkPos).get_origin(), 32, [], 0x7FFFFFFF, true, true):
-		if i["collider"].get_parent().is_in_group(checkGroup):
+		if i.collider.get_parent().is_in_group(checkGroup):
 			return true
 	return false
 

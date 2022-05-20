@@ -2,6 +2,7 @@ extends ScrollContainer
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oDataClm = Nodelist.list["oDataClm"]
 
 
 export(NodePath) onready var nodeClm = get_node(nodeClm) as Node
@@ -46,13 +47,18 @@ func _on_ColumnDuplicateButton_pressed():
 	var findUnusedIndex = nodeClm.find_cubearray_index([0,0,0,0, 0,0,0,0], 0)
 	
 	if findUnusedIndex != -1:
+		if nodeClm == oDataClm:
+			oEditor.mapHasBeenEdited = true
+			oDataClm.count_filled_clm_entries() # Refresh "Clm entries" in Properties window
 		nodeClm.copy_column(clmIndex, findUnusedIndex)
 		oMessage.quick('Copied ' + str(clmIndex) + ' --> ' + str(findUnusedIndex))
 		
-		nodeVoxelView.update_column_view()
+		nodeVoxelView.do_all()
+		nodeVoxelView.do_one()
+		nodeVoxelView.oAllVoxelObjects.visible = true
+		nodeVoxelView.oSelectedVoxelObject.visible = false
 		
 		oColumnIndexSpinBox.value = findUnusedIndex
-		
 	else:
 		oMessage.quick("There are no empty columns to copy to")
 
@@ -88,7 +94,8 @@ func _on_ColumnIndexSpinBox_value_changed(value):
 
 
 func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
-	oEditor.mapHasBeenEdited = true
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.cubes[clmIndex][cubeNumber] = int(value)
 	nodeVoxelView.update_column_view()
@@ -98,45 +105,52 @@ func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
 
 
 func _on_FloorTextureSpinBox_value_changed(value):
-	oEditor.mapHasBeenEdited = true
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.floorTexture[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 
 func _on_LintelSpinBox_value_changed(value):
-	oEditor.mapHasBeenEdited = true
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.lintel[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 
 func _on_PermanentSpinBox_value_changed(value):
-	oEditor.mapHasBeenEdited = true
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.permanent[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 
 
 func _on_OrientationSpinBox_value_changed(value):
-	oEditor.mapHasBeenEdited = true
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.orientation[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 
 func _on_HeightSpinBox_value_changed(value):
-	oEditor.mapHasBeenEdited = true
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.height[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 
 func _on_SolidMaskSpinBox_value_changed(value):
-	oEditor.mapHasBeenEdited = true
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.solidMask[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 
 
 func _on_UtilizedSpinBox_value_changed(value):
-	oEditor.mapHasBeenEdited = true
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.utilized[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
@@ -151,6 +165,10 @@ func _on_ColumnFirstUnusedButton_pressed():
 		oMessage.quick("There are no empty columns")
 
 func _on_ColumnViewDeleteButton_pressed():
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
+		oDataClm.count_filled_clm_entries() # Refresh "Clm entries" in Properties window
+	
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.delete_column(clmIndex)
 	oColumnDetails.update_details()
@@ -160,6 +178,8 @@ func _on_ColumnViewDeleteButton_pressed():
 	nodeVoxelView.do_one()
 	nodeVoxelView.oAllVoxelObjects.visible = true
 	nodeVoxelView.oSelectedVoxelObject.visible = false
+
+
 
 
 #func connect_all_signals(connectToNode, voxelViewNode):

@@ -148,7 +148,7 @@ func finish_opening_map(map):
 	
 	oSlabPalette.start()
 	oOverheadGraphics.update_map_overhead_2d_textures()
-	oUniversalDetails.clmEntryCount = oDataClm.count_filled_clm_entries()
+	oDataClm.count_filled_clm_entries()
 	oPickSlabWindow.add_slabs()
 	oTextureCache.set_current_texture_pack()
 	

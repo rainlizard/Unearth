@@ -3,6 +3,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oTimerUpdateColumnEntries = Nodelist.list["oTimerUpdateColumnEntries"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
+onready var oUniversalDetails = Nodelist.list["oUniversalDetails"]
 
 # Storing these values outside of main array so I can do array comparisons
 var utilized = []
@@ -26,24 +27,13 @@ func clm_data_exists():
 	else:
 		return true # Something in arrays, so column data exists
 
-func clear_all():
-	utilized.clear()
-	orientation.clear()
-	solidMask.clear()
-	permanent.clear()
-	lintel.clear()
-	height.clear()
-	cubes.clear()
-	floorTexture.clear()
-#	testingSpecialByte.clear()
-
-
 
 func count_filled_clm_entries():
 	var numberOfFilledEntries = 0
 	for entry in 2048:
 		if cubes[entry] != [0,0,0,0, 0,0,0,0]:
 			numberOfFilledEntries += 1
+	oUniversalDetails.clmEntryCount = numberOfFilledEntries
 	return numberOfFilledEntries
 
 func index_entry(cubeArray, setFloorID):

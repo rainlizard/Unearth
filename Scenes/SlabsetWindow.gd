@@ -7,6 +7,7 @@ onready var oSlabsetIDLabel = Nodelist.list["oSlabsetIDLabel"]
 onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
 onready var oDkClm = Nodelist.list["oDkClm"]
 onready var oDkDat = Nodelist.list["oDkDat"]
+onready var oDkTng = Nodelist.list["oDkTng"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oSlabPalette = Nodelist.list["oSlabPalette"]
 onready var oMessage = Nodelist.list["oMessage"]
@@ -18,6 +19,7 @@ onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
 onready var oDkClmControls = Nodelist.list["oDkClmControls"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
+onready var oExportSlabsetClmDialog = Nodelist.list["oExportSlabsetClmDialog"]
 
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
 
@@ -70,20 +72,14 @@ func _on_SlabsetWindow_visibility_changed():
 
 func _on_SlabsetTabs_tab_changed(tab):
 	match tab:
-		0:
+		0: # dat
 			oDkClmVoxelView.visible = false
 			oDkSlabsetVoxelView.visible = true
 			oDkSlabsetVoxelView.initialize()
-		1:
-			oDkSlabsetVoxelView.visible = false
+		1: # clm
 			oDkClmVoxelView.visible = true
+			oDkSlabsetVoxelView.visible = false
 			oDkClmVoxelView.initialize()
-
-
-
-
-
-
 
 
 func variation_changed(variation):
@@ -197,6 +193,39 @@ func _on_SlabsetHelpButton_pressed():
 	oMessage.big("Help",helptxt)
 
 
+func _on_SlabsetCopyValues_pressed():
+	oTabCustomSlabs.copy_values_from_slabset_and_index_them()
+	
+	visible = false
+	oPickSlabWindow._on_pressed_add_new_custom_slab()
+
+
+func _on_ExportSlabsDat_pressed():
+	Utils.popup_centered(oExportSlabsetDatDialog)
+	oExportSlabsetDatDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetDatDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetDatDialog.current_file = "slabs.dat"
+func _on_ExportSlabsClm_pressed():
+	Utils.popup_centered(oExportSlabsetClmDialog)
+	oExportSlabsetClmDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetClmDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetClmDialog.current_file = "slabs.clm"
+func _on_ExportSlabsCfg_pressed():
+	Utils.popup_centered(oExportSlabsetCfgDialog)
+	#oExportSlabsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	#oExportSlabsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetCfgDialog.current_file = "slabset.cfg"
+func _on_ExportColumnsCfg_pressed():
+	Utils.popup_centered(oExportColumnCfgDialog)
+	#oExportColumnCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	#oExportColumnCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportColumnCfgDialog.current_file = "columns.cfg"
+
+func _on_ExportSlabsetCfgDialog_file_selected(filePath):
+	oSlabPalette.create_keeperfx_cfg_slab_autotile_data(filePath)
+func _on_ExportColumnCfgDialog_file_selected(filePath):
+	oSlabPalette.create_keeperfx_cfg_columns(filePath)
+
 func _on_ExportSlabsetDatDialog_file_selected(filePath):
 	var buffer = StreamPeerBuffer.new()
 	
@@ -207,7 +236,6 @@ func _on_ExportSlabsetDatDialog_file_selected(filePath):
 			buffer.put_u16(value)
 	
 	var file = File.new()
-	
 	if file.open(filePath,File.WRITE) == OK:
 		file.store_buffer(buffer.data_array)
 		file.close()
@@ -215,33 +243,32 @@ func _on_ExportSlabsetDatDialog_file_selected(filePath):
 	else:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
-func _on_ExportSlabsetCfgDialog_file_selected(filePath):
-	oSlabPalette.create_keeperfx_cfg_slab_autotile_data(filePath)
 
-func _on_ExportColumnCfgDialog_file_selected(filePath):
-	oSlabPalette.create_keeperfx_cfg_columns(filePath)
-
-func _on_ExportSlabsDat_pressed():
-	Utils.popup_centered(oExportSlabsetDatDialog)
-	oExportSlabsetDatDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportSlabsetDatDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportSlabsetDatDialog.current_file = "slabs.dat"
-
-func _on_ExportSlabsCfg_pressed():
-	Utils.popup_centered(oExportSlabsetCfgDialog)
-	#oExportSlabsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	#oExportSlabsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportSlabsetCfgDialog.current_file = "slabset.cfg"
-
-func _on_ExportColumnsCfg_pressed():
-	Utils.popup_centered(oExportColumnCfgDialog)
-	#oExportColumnCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	#oExportColumnCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportColumnCfgDialog.current_file = "columns.cfg"
-
-
-func _on_SlabsetCopyValues_pressed():
-	oTabCustomSlabs.copy_values_from_slabset_and_index_them()
+func _on_ExportSlabsetClmDialog_file_selected(filePath):
+	var buffer = StreamPeerBuffer.new()
 	
-	visible = false
-	oPickSlabWindow._on_pressed_add_new_custom_slab()
+	var numberOfClmEntries = 2048
+	buffer.put_16(numberOfClmEntries)
+	buffer.put_16(0)
+#	buffer.put_16(numberOfClmEntries)
+#	buffer.put_data([0,0])
+#	buffer.put_16(0)
+#	buffer.put_data([0,0])
+	
+	for entry in numberOfClmEntries:
+		buffer.put_16(oDkClm.utilized[entry]) # 0-1
+		buffer.put_8((oDkClm.permanent[entry] & 1) + ((oDkClm.lintel[entry] & 7) << 1) + ((oDkClm.height[entry] & 15) << 4))
+		buffer.put_16(oDkClm.solidMask[entry]) # 3-4
+		buffer.put_16(oDkClm.floorTexture[entry]) # 5-6
+		buffer.put_8(oDkClm.orientation[entry]) # 7
+		
+		for cubeNumber in 8:
+			buffer.put_16(oDkClm.cubes[entry][cubeNumber]) # 8-23
+	
+	var file = File.new()
+	if file.open(filePath,File.WRITE) == OK:
+		file.store_buffer(buffer.data_array)
+		file.close()
+		oMessage.quick("Saved: " + filePath)
+	else:
+		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")

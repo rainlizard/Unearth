@@ -9,6 +9,7 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
 onready var oConfirmClmClearUnused = Nodelist.list["oConfirmClmClearUnused"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 func _ready():
 	oColumnEditorTabs.set_tab_title(0, "Name is set below")
@@ -23,8 +24,10 @@ func _on_ColumnEditor_visibility_changed():
 		
 		oColumnEditorTabs.set_tab_title(0, oCurrentMap.path.get_file().get_basename() + ".clm")
 		_on_ColumnEditorTabs_tab_changed(oColumnEditorTabs.current_tab)
-		
-		
+	else:
+		# Update "Clm entries" in properties window
+		yield(get_tree(),'idle_frame')
+		oDataClm.count_filled_clm_entries()
 
 func _on_ColumnEditorTabs_tab_changed(tab):
 	match tab:
@@ -50,10 +53,29 @@ func _on_ColumnEditorHelpButton_pressed():
 func _on_ColumnEditorClearUnusedButton_pressed():
 	Utils.popup_centered(oConfirmClmClearUnused)
 
-
 func _on_ConfirmClmClearUnused_confirmed():
+	oEditor.mapHasBeenEdited = true
 	oDataClm.clear_unused_entries()
-
+	
+	# Refresh voxel view
+	oColumnEditorVoxelView.do_all()
+	oColumnEditorVoxelView.do_one()
+	oColumnEditorVoxelView.oAllVoxelObjects.visible = true
+	oColumnEditorVoxelView.oSelectedVoxelObject.visible = false
+	# Refresh controls
+	oColumnEditorControls._on_ColumnIndexSpinBox_value_changed(oColumnEditorControls.oColumnIndexSpinBox.value)
+	
+	# Refresh "Clm entries" in Properties window
+	oDataClm.count_filled_clm_entries()
 
 func _on_ColumnEditorSortButton_pressed():
+	oEditor.mapHasBeenEdited = true
 	oDataClm.sort_columns_by_utilized()
+	
+	# Refresh voxel view
+	oColumnEditorVoxelView.do_all()
+	oColumnEditorVoxelView.do_one()
+	oColumnEditorVoxelView.oAllVoxelObjects.visible = true
+	oColumnEditorVoxelView.oSelectedVoxelObject.visible = false
+	# Refresh controls
+	oColumnEditorControls._on_ColumnIndexSpinBox_value_changed(oColumnEditorControls.oColumnIndexSpinBox.value)

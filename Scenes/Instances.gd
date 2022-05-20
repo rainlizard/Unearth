@@ -211,31 +211,45 @@ func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng 
 #			3: partnerArrow.texture = preload("res://Art/torchdir3.png")
 #		id.add_child(partnerArrow)
 
+
 func update_height_of_things_on_slab(xSlab, ySlab):
-	for id in get_tree().get_nodes_in_group("Thing"):
-		if id.locationX >= xSlab*3 and id.locationX < (xSlab+1) * 3 and id.locationY >= ySlab*3 and id.locationY < (ySlab+1) * 3:
-			if id.sensitiveTile == 65535: # None. Not attached to any slab.
-				var xSubtile = floor(id.locationX)
-				var ySubtile = floor(id.locationY)
-				var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(xSubtile,ySubtile)]
-				id.locationZ = detectTerrainHeight
-				
-				if id.subtype in [2,7]:
-					update_stray_torch_height(id)
+#	var pos = Vector2(xSlab*96,ySlab*96)
+#	var arrayColliders = collision_rectangle_list(pos, pos+Vector2(96,96), "Thing")
+#
+#	for id in arrayColliders:
+	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
+	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
+		if id.sensitiveTile == 65535: # None. Not attached to any slab.
+			var xSubtile = floor(id.locationX)
+			var ySubtile = floor(id.locationY)
+			var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(xSubtile,ySubtile)]
+			id.locationZ = detectTerrainHeight
+			
+			if id.subtype in [2,7]:
+				update_stray_torch_height(id)
 
 func update_stray_torch_height(id):
 	id.locationZ = 2.875
 
 func delete_all_on_slab(xSlab, ySlab, arrayOfGroupNameStrings):
-	for groupName in arrayOfGroupNameStrings:
-		for id in get_tree().get_nodes_in_group(groupName):
-			if id.locationX >= xSlab*3 and id.locationX < (xSlab+1) * 3 and id.locationY >= ySlab*3 and id.locationY < (ySlab+1) * 3:
+	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
+	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
+		for groupName in arrayOfGroupNameStrings:
+			if id.is_in_group(groupName):
 				id.queue_free()
+	
+#	for groupName in arrayOfGroupNameStrings:
+#		var pos = Vector2(xSlab*96,ySlab*96)
+#		var arrayColliders = collision_rectangle_list(pos, pos+Vector2(96,96), groupName)
+#		for id in arrayColliders:
+#			id.queue_free()
+
+
 
 func get_node_on_subtile(nodegroup, xSubtile, ySubtile):
 	for id in get_tree().get_nodes_in_group(nodegroup):
 		if id.is_queued_for_deletion() == false:
-			if id.locationX >= floor(xSubtile) and id.locationX < floor(xSubtile)+1 and id.locationY >= floor(ySubtile) and id.locationY < floor(ySubtile)+1:
+			if floor(id.locationX) == floor(xSubtile) and floor(id.locationY) == floor(ySubtile):
 				return id
 	return null
 
@@ -379,3 +393,21 @@ func check_for_dungeon_heart(ownership):
 #			if thingId.subtype == 2 and thingId.thingType == Things.TYPE.OBJECT:
 #				return true
 #	return false
+
+#var colShape = RectangleShape2D.new()
+#func collision_rectangle_list(startPos, endPos, groupName):
+#
+#	var query = Physics2DShapeQueryParameters.new()
+#	colShape.extents = (endPos - startPos) / 2
+#	query.collide_with_areas = true # "Areas" are used by Instances
+#
+#	query.shape_rid = colShape
+#	query.transform = Transform2D(0, (endPos + startPos)/2)
+#
+#	var space = get_world_2d().direct_space_state
+#	var array = []
+#	for i in space.intersect_shape(query):
+#		var getInstance = i.collider.get_parent()
+#		if getInstance.is_in_group(groupName):
+#			array.append(getInstance)
+#	return array
