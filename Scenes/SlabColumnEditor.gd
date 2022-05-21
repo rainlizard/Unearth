@@ -19,11 +19,11 @@ func _ready():
 func _on_ColumnEditor_visibility_changed():
 	if visible == true:
 		oDataClm.update_all_utilized() # Run this before _on_ColumnEditorTabs_tab_changed()
-		# Update spinbox for currently viewed column
-		oColumnEditorControls.oUtilizedSpinBox.value = oDataClm.utilized[oColumnEditorControls.oColumnIndexSpinBox.value]
 		
 		oColumnEditorTabs.set_tab_title(0, oCurrentMap.path.get_file().get_basename() + ".clm")
 		_on_ColumnEditorTabs_tab_changed(oColumnEditorTabs.current_tab)
+		# Refresh controls
+		oColumnEditorControls._on_ColumnIndexSpinBox_value_changed(oColumnEditorControls.oColumnIndexSpinBox.value)
 	else:
 		# Update "Clm entries" in properties window
 		yield(get_tree(),'idle_frame')

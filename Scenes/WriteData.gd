@@ -31,7 +31,10 @@ func write_txt(buffer):
 	# I'm only using \n (LF) instead of \r\n (CRLF), because to_ascii() is removing the \r (CR) for some reason.
 	# Old Notepad will not display TXT files correctly.
 	# Notepad++ displays correctly and apparently so does Notepad on Windows 10.
-	buffer.put_data(value.to_ascii())
+	
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
+	var scriptBytes = value.to_ascii()
+	buffer.put_data(scriptBytes)
 
 func write_une(buffer):
 	for ySlab in 85:

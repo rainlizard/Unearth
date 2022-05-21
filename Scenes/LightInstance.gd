@@ -24,6 +24,9 @@ var data17 = null
 var data18 = null
 var data19 = null
 
+func _enter_tree():
+	add_to_group("slab_location_group_"+str(floor(locationX/3))+'_'+str(floor(locationY/3)))
+
 func set_location_x(setVal):
 	locationX = setVal
 	position.x = locationX * 32

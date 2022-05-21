@@ -63,6 +63,8 @@ func read_inf(buffer):
 func read_txt(buffer):
 	buffer.seek(0)
 	value = buffer.get_string(buffer.get_size())
+	
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	oDataScript.data = value
 
 func read_slb(buffer):

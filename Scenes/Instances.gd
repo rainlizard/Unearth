@@ -219,7 +219,7 @@ func update_height_of_things_on_slab(xSlab, ySlab):
 #	for id in arrayColliders:
 	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
 	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
-		if id.sensitiveTile == 65535: # None. Not attached to any slab.
+		if id.is_in_group("Thing") and id.sensitiveTile == 65535: # None. Not attached to any slab.
 			var xSubtile = floor(id.locationX)
 			var ySubtile = floor(id.locationY)
 			var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(xSubtile,ySubtile)]

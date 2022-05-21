@@ -6,12 +6,14 @@ var ownership = 5 # Not used by Dungeon Keeper, this is just to make it easy for
 var thingType = Things.TYPE.EXTRA
 var subtype = 1 # As written in Things.DATA_EXTRA
 
-
 var locationX = null setget set_location_x
 var locationY = null setget set_location_y
 var pointRange = null setget set_pointrange
 var pointNumber = null setget set_pointNumber
 var data7 = null
+
+func _enter_tree():
+	add_to_group("slab_location_group_"+str(floor(locationX/3))+'_'+str(floor(locationY/3)))
 
 func set_location_x(setVal):
 	locationX = setVal

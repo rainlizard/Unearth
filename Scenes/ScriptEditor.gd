@@ -11,54 +11,9 @@ onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
 
 var scriptHasBeenEditedInUnearth = false
 
-func _notification(what: int):
-	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
-		check_if_txt_file_has_been_modified()
-
-func check_if_txt_file_has_been_modified():
-	if oCurrentMap.currentFilePaths.has("TXT"):
-		var filePath = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
-		var getModifiedTime = File.new().get_modified_time(filePath)
-		if oCurrentMap.currentFilePaths["TXT"][oCurrentMap.MODIFIED_DATE] != getModifiedTime:
-			oMessage.quick("Script reloaded from file.") #"Script was reloaded from file."
-			oCurrentMap.currentFilePaths["TXT"][oCurrentMap.MODIFIED_DATE] = getModifiedTime
-			# Reload
-			Filetypes.read(filePath, "TXT")
-			reload_script_into_textedit()
-			set_script_as_edited(false)
-
-func set_text(setWithString):
-	oEditor.mapHasBeenEdited = true
-	set_script_as_edited(true)
-	oDataScript.data = setWithString
-	reload_script_into_textedit()
-
-
-func set_script_as_edited(edited):
-	scriptHasBeenEditedInUnearth = edited
-	match edited:
-		true: oMapSettingsTabs.set_tab_title(2, "Edit Script *")
-		false: oMapSettingsTabs.set_tab_title(2, "Edit Script")
-
-
-func _on_ScriptTextEdit_visibility_changed():
-	if visible == true:
-		reload_script_into_textedit()
-	else:
-		# When you close the window, update script helpers. This is important to update here in case you remove any lines (helper related) in the script editor
-		oScriptHelpers.start()
-
-
-func reload_script_into_textedit():
-	oScriptTextEdit.text = oDataScript.data
-	update_empty_script_status()
-	oScriptHelpers.start() # in the case of editing text file outside of Unearth
-
-
 func _on_ScriptTextEdit_text_changed():
-	oEditor.mapHasBeenEdited = true
 	set_script_as_edited(true)
-	oDataScript.data = oScriptTextEdit.text
+	set_script_data(oScriptTextEdit.text)
 	update_empty_script_status()
 	
 	var updateHelpers = false
@@ -70,11 +25,69 @@ func _on_ScriptTextEdit_text_changed():
 		oScriptHelpers.start() # in the case of updating a line (with coords) in the built-in Script Editor
 
 
+func set_script_as_edited(edited):
+	scriptHasBeenEditedInUnearth = edited
+	match edited:
+		true: oMapSettingsTabs.set_tab_title(2, "Edit Script *")
+		false: oMapSettingsTabs.set_tab_title(2, "Edit Script")
+	oEditor.mapHasBeenEdited = true
+
+
+func set_script_data(value):
+	value = value.replace(char(0x200B), "") # Remove Zero Width Spaces
+	oDataScript.data = value
+
+
 func update_empty_script_status():
 	if oScriptTextEdit.text == "":
 		oScriptEmptyStatus.visible = true
 	else:
 		oScriptEmptyStatus.visible = false
+
+
+func set_text(setWithString):
+	set_script_as_edited(true)
+	set_script_data(setWithString)
+	update_texteditor()
+
+func update_texteditor():
+	oScriptTextEdit.text = oDataScript.data
+	update_empty_script_status()
+	oScriptHelpers.start() # in the case of editing text file outside of Unearth
+
+
+func _notification(what: int):
+	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+		check_if_txt_file_has_been_modified()
+
+
+func check_if_txt_file_has_been_modified():
+	if oCurrentMap.currentFilePaths.has("TXT"):
+		var filePath = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
+		var getModifiedTime = File.new().get_modified_time(filePath)
+		if oCurrentMap.currentFilePaths["TXT"][oCurrentMap.MODIFIED_DATE] != getModifiedTime:
+			oMessage.quick("Script reloaded from file.") #"Script was reloaded from file."
+			oCurrentMap.currentFilePaths["TXT"][oCurrentMap.MODIFIED_DATE] = getModifiedTime
+			# Reload
+			Filetypes.read(filePath, "TXT")
+			update_texteditor()
+			set_script_as_edited(false)
+
+
+func _on_ScriptTextEdit_visibility_changed():
+	if visible == true:
+		update_texteditor()
+	else:
+		# When you close the window, update script helpers. This is important to update here in case you remove any lines (helper related) in the script editor
+		oScriptHelpers.start()
+
+
+
+
+
+
+
+
 
 
 #	if oCurrentMap.currentFilePaths.has("TXT"):
