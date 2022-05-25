@@ -1,10 +1,6 @@
 extends Tree
 
 onready var oGame = Nodelist.list["oGame"]
-onready var oEditor = Nodelist.list["oEditor"]
-onready var oReadData = Nodelist.list["oReadData"]
-onready var oCurrentMap = Nodelist.list["oCurrentMap"]
-onready var oDynamicMapTree = Nodelist.list["oDynamicMapTree"]
 onready var oDataLif = Nodelist.list["oDataLif"]
 
 var treeItemsThatWantNames = {} # <BASENAME> <TreeItem>
@@ -21,7 +17,7 @@ func update_source_tree(): # Call this whenever there's an update to the filesys
 	get_root().set_text(0,"SourceMapTree root")
 	
 	scan_all_paths(oGame.GAME_DIRECTORY)
-
+	
 	# For the remaining items without lif names
 	for BASENAME in treeItemsThatWantNames:
 		var fetchItem = treeItemsThatWantNames[BASENAME]

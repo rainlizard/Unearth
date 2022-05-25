@@ -1,4 +1,4 @@
-[gd_scene load_steps=157 format=2]
+[gd_scene load_steps=158 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -225,6 +225,11 @@ shader_param/color5 = null
 
 [sub_resource type="ShaderMaterial" id=20]
 shader = ExtResource( 36 )
+
+[sub_resource type="NoiseTexture" id=21]
+flags = 0
+width = 85
+height = 85
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = ExtResource( 8 )
@@ -538,6 +543,13 @@ scale = Vector2( 96, 96 )
 z_index = 100
 centered = false
 script = ExtResource( 136 )
+
+[node name="QuickNoisePreview" type="Sprite" parent="Game2D"]
+visible = false
+scale = Vector2( 96, 96 )
+z_index = 100
+texture = SubResource( 21 )
+centered = false
 
 [node name="Ui" type="CanvasLayer" parent="."]
 script = ExtResource( 78 )
@@ -1619,7 +1631,7 @@ __meta__ = {
 [node name="DynamicMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
 margin_top = 50.0
 margin_right = 326.0
-margin_bottom = 757.0
+margin_bottom = 781.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1652,9 +1664,9 @@ __meta__ = {
 }
 
 [node name="HSeparator2" type="HSeparator" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 757.0
+margin_top = 781.0
 margin_right = 326.0
-margin_bottom = 765.0
+margin_bottom = 789.0
 mouse_filter = 1
 custom_constants/separation = 8
 custom_styles/separator = SubResource( 11 )
@@ -1663,16 +1675,16 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 765.0
+margin_top = 789.0
 margin_right = 326.0
-margin_bottom = 789.0
+margin_bottom = 816.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="TextureButton" type="TextureButton" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer"]
 margin_right = 24.0
-margin_bottom = 24.0
+margin_bottom = 27.0
 rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Open directory in OS"
 focus_mode = 0
@@ -1702,8 +1714,8 @@ __meta__ = {
 
 [node name="BrowserFilename" type="Label" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer"]
 margin_left = 28.0
-margin_right = 326.0
-margin_bottom = 24.0
+margin_right = 263.0
+margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 align = 2
@@ -1713,10 +1725,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HSeparator3" type="HSeparator" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 789.0
+[node name="BrowseOpenButton" type="Button" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 267.0
 margin_right = 326.0
-margin_bottom = 797.0
+margin_bottom = 27.0
+text = "Open"
+
+[node name="HSeparator3" type="HSeparator" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
+margin_top = 816.0
+margin_right = 326.0
+margin_bottom = 824.0
 mouse_filter = 1
 custom_constants/separation = 8
 custom_styles/separator = SubResource( 11 )
@@ -1739,7 +1757,8 @@ __meta__ = {
 }
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer"]
-margin_top = 797.0
+visible = false
+margin_top = 824.0
 margin_right = 326.0
 margin_bottom = 824.0
 
@@ -1749,12 +1768,6 @@ margin_right = 161.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 text = "Play"
-
-[node name="BrowseOpenButton" type="Button" parent="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer2"]
-margin_right = 326.0
-margin_bottom = 27.0
-size_flags_horizontal = 3
-text = "Open"
 
 [node name="FocusController" type="Control" parent="Ui/UiSystem"]
 margin_right = 40.0
@@ -4845,8 +4858,8 @@ script = ExtResource( 88 )
 [connection signal="item_selected" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser" method="_on_DynamicMapTree_item_selected"]
 [connection signal="item_selected" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/DynamicMapTree" method="_on_DynamicMapTree_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer/TextureButton" to="Ui/UiSystem/MapBrowser" method="_on_TextureButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer/BrowseOpenButton" to="Ui/UiSystem/MapBrowser" method="_on_BrowseOpenButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer2/BrowsePlayButton" to="Ui/UiSystem/MapBrowser" method="_on_BrowsePlayButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/MapBrowser/PanelContainer/VBoxContainer/HBoxContainer2/BrowseOpenButton" to="Ui/UiSystem/MapBrowser" method="_on_BrowseOpenButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/ChooseDkExe" method="_on_ChooseDkExe_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/SettingsWindow" method="_on_ChooseDkExe_file_selected"]
 [connection signal="dir_selected" from="Ui/UiSystem/ChooseDefaultSaveFolder" to="Ui/UiSystem/ChooseDefaultSaveFolder" method="_on_ChooseDefaultSaveFolder_dir_selected"]

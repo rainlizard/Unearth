@@ -141,9 +141,9 @@ func mouse_button_on_field():
 				if doDelete == true:
 					if oSelection.cursorOnInstancesArray.empty() == false:
 						oSelection.manually_delete_one_instance(oSelection.cursorOnInstancesArray[0])
+						canPlace = true # Allow placing on the tile you just deleted, without needing to move cursor off of it
 			
 			MODE_TILE:
-				
 				oInstances.delete_all_on_slab(cursorTile.x,cursorTile.y, ["Thing","ActionPoint","Light"])
 
 

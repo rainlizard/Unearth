@@ -152,7 +152,7 @@ var DATA_OBJECT = {
 053 : ["Treasury Gold 2 (1200)", preload("res://dk_images/valuables/gold_hoard2_tp/r1frame01.png"), null, TAB_GOLD],
 054 : ["Treasury Gold 3 (1600)", preload("res://dk_images/valuables/gold_hoard3_tp/r1frame01.png"), null, TAB_GOLD],
 055 : ["Treasury Gold 4 (2000)", preload("res://dk_images/valuables/gold_hoard4_tp/r1frame01.png"), null, TAB_GOLD],
-056 : ["Treasury Gold 5 (2000)", preload("res://dk_images/valuables/gold_hoard5_tp/r1frame01.png"), null, TAB_GOLD],
+056 : ["Treasury Gold 5 (2400)", preload("res://dk_images/valuables/gold_hoard5_tp/r1frame01.png"), null, TAB_GOLD],
 057 : ["Lair: Wizard", preload("res://edited_images/lair/creature_generic/anim0126/r1frame01.png"), null, TAB_LAIR],
 058 : ["Lair: Barbarian", preload("res://edited_images/lair/creature_generic/anim0126/r1frame01.png"), null, TAB_LAIR],
 059 : ["Lair: Archer", preload("res://edited_images/lair/creature_generic/anim0126/r1frame01.png"), null, TAB_LAIR],

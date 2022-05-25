@@ -24,15 +24,15 @@ func save_map(filePath): # auto opens other files
 		
 		# Skip saving over existing script file unless it has been edited
 		if EXT == "TXT":
-			print('hi')
+#			print('hi')
 			if File.new().file_exists(saveToFilePath) == true:
-				print('file exists')
+#				print('file exists')
 				if oScriptEditor.scriptHasBeenEditedInUnearth == false:
-					print('script has NOT been edited in unearth')
-					print('skip saving')
+#					print('script has NOT been edited in unearth')
+#					print('skip saving')
 					continue
 			else:
-				print("file doesn't exist")
+#				print("file doesn't exist")
 				pass
 		
 		Filetypes.write(saveToFilePath, EXT.to_upper())

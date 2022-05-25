@@ -11,7 +11,7 @@ onready var oDataSlab = Nodelist.list["oDataSlab"]
 
 var HIDE_UNKNOWN_DATA = true
 
-var rememberInstance = null
+#var rememberInstance = null
 
 func _ready():
 	get_parent().set_tab_title(0, "Thing")
@@ -28,13 +28,13 @@ func _process(delta):
 	else:
 		if oUi.mouseOnUi == false:
 			oThingListData.clear()
-		rememberInstance = null
+		#rememberInstance = null
 		return
 	
-	if rememberInstance == id:
-		return
-	else:
-		rememberInstance = id
+#	if rememberInstance == id:
+#		return
+#	else:
+#		rememberInstance = id
 	
 	oThingListData.clear()
 	

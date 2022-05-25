@@ -143,7 +143,7 @@ func _process(delta):
 func _on_FileSubmenu_Pressed(pressedID):
 	match pressedID:
 		0: Utils.popup_centered(oNewMapWindow)#oCurrentMap._on_ButtonNewMap_pressed() # New
-		1: oMapBrowser._on_ButtonOpenMap_pressed() # Browse maps
+		1: oMapBrowser._on_BrowseMapsMenu_pressed() # Browse maps
 		2: Utils.popup_centered(oFileDialogOpen) # Open
 		#3: Open recent
 		4: oSaveMap.clicked_save_on_menu() # Save

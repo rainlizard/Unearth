@@ -1,5 +1,5 @@
 extends Node
-const VERSION = "0.19"
+const VERSION = "0.20"
 
 const TILE_SIZE = 96
 const SUBTILE_SIZE = 32
@@ -26,4 +26,5 @@ const TEXTURE_MAP_NAMES = {
 9: "Gypsum",
 10: "Lilac Stone",
 11: "Swamp Serpent",
+12: "Lava Cavern",
 }

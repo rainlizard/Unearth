@@ -8,6 +8,7 @@ onready var oNoisePersistence = Nodelist.list["oNoisePersistence"]
 onready var oNoiseLacunarity = Nodelist.list["oNoiseLacunarity"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oDataClm = Nodelist.list["oDataClm"]
+onready var oQuickNoisePreview = Nodelist.list["oQuickNoisePreview"]
 
 var noise = OpenSimplexNoise.new()
 
@@ -18,9 +19,11 @@ func _process(delta):
 	noise.period = oNoisePeriod.value
 	noise.persistence = oNoisePersistence.value
 	noise.lacunarity = oNoiseLacunarity.value
+	
+	oQuickNoisePreview.texture.noise = noise
 
 func _on_NoiseButtonApply_pressed():
-	var CODETIME_START = OS.get_ticks_msec()
+	var TOTALCODETIME_START = OS.get_ticks_msec()
 	
 	# If a map is open, then clear it (remove objects and ownership and such)
 	if oCurrentMap.path != "":
@@ -34,6 +37,8 @@ func _on_NoiseButtonApply_pressed():
 	for x in range(1, 84):
 		for y in range(1, 84):
 			oDataSlab.set_cell(x,y, Slabs.ROCK)
+	
+	var NOISECODETIME = OS.get_ticks_msec()
 	
 	randomize()
 	noise.seed = randi()
@@ -54,7 +59,7 @@ func _on_NoiseButtonApply_pressed():
 	
 	var coordsToCheck = [Vector2(42,42)]
 	
-	var CODETIMEFLOODFILL = OS.get_ticks_msec()
+	
 	while coordsToCheck.size() > 0:
 		var coord = coordsToCheck.pop_back()
 		if floodFillTileMap.get_cellv(coord) == 1:
@@ -67,10 +72,10 @@ func _on_NoiseButtonApply_pressed():
 			coordsToCheck.append(coord + Vector2(1,0))
 			coordsToCheck.append(coord + Vector2(-1,0))
 	
-	print('Floodfill time: ' + str(OS.get_ticks_msec() - CODETIMEFLOODFILL) + 'ms')
+	print('Noise time: ' + str(OS.get_ticks_msec() - NOISECODETIME) + 'ms')
 	
 	oSlabPlacement.generate_slabs_based_on_id(Vector2(0,0), Vector2(84,84), false)
-	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	print('Codetime: ' + str(OS.get_ticks_msec() - TOTALCODETIME_START) + 'ms')
 
 
 func _on_ButtonBlankMap_pressed():

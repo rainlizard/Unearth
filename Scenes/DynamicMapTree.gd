@@ -38,6 +38,10 @@ func search_tree(searchText, collapseResults):
 	highlight_current_map()
 
 func get_tree_items_recursively(fromItem, toItem, searchText, collapseResults):
+	var currentSlbPath = ""
+	if oCurrentMap.currentFilePaths.has("SLB") == true:
+		currentSlbPath = oCurrentMap.currentFilePaths["SLB"][oCurrentMap.PATHSTRING]
+	
 	fromItem = fromItem.get_children()
 	if fromItem != null:
 		while true:
@@ -45,7 +49,7 @@ func get_tree_items_recursively(fromItem, toItem, searchText, collapseResults):
 			if fromItem.get_metadata(1) == "is_a_directory":
 				newTreeItem = oSourceMapTree.add_tree_dir(self, toItem, fromItem.get_metadata(0))
 				
-				if fromItem.get_metadata(0).to_upper() in oCurrentMap.path.to_upper():
+				if fromItem.get_metadata(0).to_upper() in currentSlbPath.to_upper():
 					newTreeItem.set_collapsed(false)
 				else:
 					newTreeItem.set_collapsed(collapseResults)
@@ -66,7 +70,7 @@ func get_tree_items_recursively(fromItem, toItem, searchText, collapseResults):
 					newTreeItem.set_text(1, lifMapName)
 					
 					# Scrolls the tree to the map you've opened
-					if oCurrentMap.path == path:
+					if path == currentSlbPath:
 						newTreeItem.select(0)
 						ensure_cursor_is_visible()
 			
@@ -88,8 +92,13 @@ func _on_DynamicMapTree_item_selected():
 	connect('item_selected',oMapBrowser,"_on_DynamicMapTree_item_selected")
 
 func highlight_current_map():
-	var path = oCurrentMap.path
-	# Find "path" within the tree
+	var currentSlbPath = ""
+	if oCurrentMap.currentFilePaths.has("SLB") == true:
+		currentSlbPath = oCurrentMap.currentFilePaths["SLB"][oCurrentMap.PATHSTRING]
+	else:
+		return
+	
+	# Find "currentSlbPath" within the tree
 	# Highlight the item.
 	# Undo highlights for other items.
 	# call_recursive
@@ -102,22 +111,23 @@ func highlight_current_map():
 	get_root().call_recursive("clear_custom_color",0)
 	get_root().call_recursive("clear_custom_color",1)
 	
-	recursive_highlight(get_root(),path)
+	recursive_highlight(get_root(),currentSlbPath)
 	
 	print('Map highlighted in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 
-func recursive_highlight(item,path):
+func recursive_highlight(item,currentSlbPath):
 	item = item.get_children()
 	if item != null:
 		while true:
-			if item.get_metadata(0).to_upper() in path.to_upper():
+			if item.get_metadata(0).to_upper() in currentSlbPath.to_upper(): # In subdir
 				item.set_custom_color(0,Color(125/255.0, 133/255.0, 227/255.0, 1))
 				item.set_custom_color(1,Color(125/255.0, 133/255.0, 227/255.0, 1))
-				if item.get_metadata(0).to_upper() == path.to_upper():
+				
+				if item.get_metadata(0).to_upper() == currentSlbPath.to_upper(): # Same exact file
 					item.set_custom_bg_color(0,Color(58/255.0, 62/255.0, 105/255.0, 1))
 					item.set_custom_bg_color(1,Color(58/255.0, 62/255.0, 105/255.0, 1))
 			
-			recursive_highlight(item,path)
+			recursive_highlight(item,currentSlbPath)
 			item = item.get_next()
 			if item == null: break

@@ -71,7 +71,6 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			
 			if id.subtype == 49: # Hero Gate
 				id.herogateNumber = get_free_hero_gate_number() #originalInstance.herogateNumber
-				#Set all attached to tile: None, except for these: Torch, Heart, Unlit Torch, all Eggs and Chicken, Spinning Key, Spinning Key 2, all Lairs (don't forget Orc Lair!), Spinning Coin, and Effects.
 			elif id.subtype == 133: # Mysterious Box
 				id.boxNumber = oPlacingSettings.boxNumber
 			elif id.subtype in [2,7]: # Torch and Unlit Torch
@@ -80,8 +79,9 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 				if Slabs.data[oDataSlab.get_cell(floor(id.locationX/3),floor((id.locationY+1)/3))][Slabs.IS_SOLID] == true : id.locationY += 0.25
 				if Slabs.data[oDataSlab.get_cell(floor(id.locationX/3),floor((id.locationY-1)/3))][Slabs.IS_SOLID] == true : id.locationY -= 0.25
 				update_stray_torch_height(id)
-			# Whether the object is "Attached to tile" or not.
-#			if id.subtype in [2, 5, 7, 9,10,40,41,42, 50, 57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85, 126, 128]:
+			
+			# Whether the object is "Attached to slab" or not.
+#			if slabID == Slabs.TREASURE_ROOM and id.subtype in [52,53,54,55,56,3,6,43,136]: # Gold will be attached to treasure room
 #				id.sensitiveTile = (floor(newPosition.y/3) * 85) + floor(newPosition.x/3)
 #			else:
 			id.sensitiveTile = 65535 # "None"
@@ -212,24 +212,15 @@ func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng 
 #		id.add_child(partnerArrow)
 
 
-func update_height_of_things_on_slab(xSlab, ySlab):
-#	var pos = Vector2(xSlab*96,ySlab*96)
-#	var arrayColliders = collision_rectangle_list(pos, pos+Vector2(96,96), "Thing")
-#
-#	for id in arrayColliders:
-	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
-	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
-		if id.is_in_group("Thing") and id.sensitiveTile == 65535: # None. Not attached to any slab.
-			var xSubtile = floor(id.locationX)
-			var ySubtile = floor(id.locationY)
-			var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(xSubtile,ySubtile)]
-			id.locationZ = detectTerrainHeight
-			
-			if id.subtype in [2,7]:
-				update_stray_torch_height(id)
-
-func update_stray_torch_height(id):
-	id.locationZ = 2.875
+func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
+	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
+		delete_all_on_slab(xSlab, ySlab, ["Thing"])
+	else:
+		var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
+		for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
+			on_slab_update_thing_height(id)
+			on_slab_delete_stray_door_thing_and_key(id, slabID)
+			on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership)
 
 func delete_all_on_slab(xSlab, ySlab, arrayOfGroupNameStrings):
 	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
@@ -237,7 +228,31 @@ func delete_all_on_slab(xSlab, ySlab, arrayOfGroupNameStrings):
 		for groupName in arrayOfGroupNameStrings:
 			if id.is_in_group(groupName):
 				id.queue_free()
-	
+
+func on_slab_update_thing_height(id): # Update heights of any manually placed objects
+	if id.is_in_group("Thing"):
+		if id.sensitiveTile == 65535: # None. Not attached to any slab.
+			var xSubtile = floor(id.locationX)
+			var ySubtile = floor(id.locationY)
+			var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(xSubtile,ySubtile)]
+			id.locationZ = detectTerrainHeight
+			if id.subtype in [2,7]:
+				update_stray_torch_height(id)
+func update_stray_torch_height(id):
+	id.locationZ = 2.875
+
+func on_slab_delete_stray_door_thing_and_key(id, slabID):
+	if id.is_in_group("Thing"):
+		# Kill doors and keys that aren't on door slabIDs
+		if id.is_in_group("Door") or id.is_in_group("Key"):
+			if Slabs.doors.has(slabID) == false:
+				id.queue_free()
+
+func on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership):
+	if slabID == Slabs.TREASURE_ROOM and id.thingType == Things.TYPE.OBJECT and id.subtype in [52,53,54,55,56,3,6,43,136]:
+		id.ownership = ownership
+
+
 #	for groupName in arrayOfGroupNameStrings:
 #		var pos = Vector2(xSlab*96,ySlab*96)
 #		var arrayColliders = collision_rectangle_list(pos, pos+Vector2(96,96), groupName)

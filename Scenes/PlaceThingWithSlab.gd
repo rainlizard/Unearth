@@ -33,10 +33,18 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask,
 
 func create_door_thing(xSlab, ySlab, ownership):
 	var createAtPos = Vector3((xSlab*3)+1.5, (ySlab*3)+1.5, 5)
-	
 	var doorID = oInstances.get_node_on_subtile("Door", createAtPos.x, createAtPos.y)
-	if is_instance_valid(doorID) == false:
+	if is_instance_valid(doorID) == true:
+		# Change existing door thing's ownership
+		doorID.ownership = ownership
+	else:
+		# No door thing, so create it
 		oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership) #subtype determined in oInstances
+	
+	# This isn't important, key ownership doesn't matter, but change it anyway
+	var keyID = oInstances.get_node_on_subtile("Key", createAtPos.x, createAtPos.y)
+	if is_instance_valid(keyID) == true:
+		keyID.ownership = ownership
 
 func determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner):
 	if bitmask == 0:

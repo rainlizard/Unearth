@@ -79,13 +79,6 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	oOverheadOwnership.ownership_update_shape(shapePositionArray, ownership)
 	print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-func manage_things_on_slab(xSlab, ySlab, slabID):
-	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
-		oInstances.delete_all_on_slab(xSlab, ySlab, ["Thing"])
-	else:
-		oInstances.update_height_of_things_on_slab(xSlab, ySlab)
-
-
 func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 	oEditor.mapHasBeenEdited = true
 	if updateNearby == true:
@@ -102,7 +95,7 @@ func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 			var ownership = oDataOwnership.get_cell(xSlab, ySlab)
 			do_slab(xSlab, ySlab, slabID, ownership)
 			
-			manage_things_on_slab(xSlab, ySlab, slabID)
+			oInstances.manage_things_on_slab(xSlab, ySlab, slabID, ownership)
 	
 	print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	

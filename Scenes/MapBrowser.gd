@@ -21,6 +21,11 @@ func _ready():
 	oBrowseOpenButton.visible = false
 	#oBrowsePlayButton.visible = false
 
+func _on_BrowseMapsMenu_pressed():
+	match visible:
+		true: hide()
+		false: popup()
+
 func _on_MapBrowser_about_to_show():
 	oSourceMapTree.update_source_tree()
 	
@@ -36,13 +41,16 @@ func _on_DynamicMapTree_item_activated():
 	if selectedTreeItem.get_metadata(1) == "is_a_file":
 		activate(path)
 
+func _on_BrowseOpenButton_pressed():
+	var path = oBrowserFilename.text
+	activate(path)
 
 func activate(path):
 	path = path.get_basename()
 	oOpenMap.open_map(path)
+	toggle_map_preview(false)
 
 func _on_DynamicMapTree_item_selected():
-	
 	var selectedTreeItem = oDynamicMapTree.get_selected()
 	var path = selectedTreeItem.get_metadata(0)
 	# Set modified time, if it's a file
@@ -56,11 +64,11 @@ func _on_DynamicMapTree_item_selected():
 		
 		var successOrFailure = oQuickMapPreview.update_img(path)
 		if successOrFailure == OK:
-			oQuickMapPreview.visible = true
+			toggle_map_preview(true)
 		else:
-			oQuickMapPreview.visible = false
+			toggle_map_preview(false)
 	else:
-		oQuickMapPreview.visible = false
+		toggle_map_preview(false)
 		oBrowseOpenButton.visible = false
 		#oBrowsePlayButton.visible = false
 		# "Directory" modified time is not shown
@@ -119,10 +127,6 @@ func _on_TextureButton_pressed():
 		# Open containing folder
 		OS.shell_open(path.get_base_dir())
 
-func _on_ButtonOpenMap_pressed():
-	match visible:
-		true: hide()
-		false: popup()
 
 func _on_MapBrowser_item_rect_changed():
 	if Settings.haveInitializedAllSettings == false: return # Necessary because otherwise this signal is firing too early. Settings haven't loaded the values from the cfg file yet.
@@ -134,15 +138,22 @@ func _on_MapBrowser_visibility_changed():
 	if is_instance_valid(oUi) == false: return
 	if visible == true:
 		oUi.hide_tools()
-		oQuickMapPreview.visible = true
+		toggle_map_preview(true)
 	else:
 		oUi.show_tools()
-		oQuickMapPreview.visible = false
+		toggle_map_preview(false)
+
 
 func _on_BrowsePlayButton_pressed():
 	pass # Replace with function body.
 
 
-func _on_BrowseOpenButton_pressed():
-	var path = oBrowserFilename.text
-	activate(path)
+func toggle_map_preview(togglePreview):
+	oQuickMapPreview.visible = togglePreview
+	
+	# Toggle to false if currently selecting the opened map
+	if oCurrentMap.currentFilePaths.has("SLB") == true:
+		var currentSlbPath = oCurrentMap.currentFilePaths["SLB"][oCurrentMap.PATHSTRING]
+		
+		if currentSlbPath == oDynamicMapTree.get_selected().get_metadata(0):
+			oQuickMapPreview.visible = false
