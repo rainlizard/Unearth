@@ -95,8 +95,10 @@ func populate_recently_opened():
 		if mapName == "":
 			mapName = oDataLif.get_special_lif_text(filePath)
 		
-		recentlyOpenedPopupMenu.add_item(mapName + ' - ' + filePath, i)
+		# Trim game directory from path to make it look nicer
+		var baseDir = oGame.GAME_DIRECTORY.replace('\\','/')
 		
+		recentlyOpenedPopupMenu.add_item(mapName + ' - ' + filePath.trim_prefix(baseDir), i)
 		recentlyOpenedPopupMenu.set_item_metadata(i, filePath)
 
 

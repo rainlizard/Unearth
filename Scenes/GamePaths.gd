@@ -12,6 +12,7 @@ var EXECUTABLE_PATH = ""
 var SAVE_AS_DIRECTORY = ""
 var GAME_DIRECTORY = ""
 var DK_DATA_DIRECTORY = ""
+var DK_FXDATA_DIRECTORY = ""
 
 #var nosound = true
 #var cheats = true
@@ -38,9 +39,10 @@ func set_paths(path):
 	EXECUTABLE_PATH = path
 	GAME_DIRECTORY = path.get_base_dir()
 	
-	for i in get_subdirs(GAME_DIRECTORY):
-		if i.to_upper() == "DATA":
-			DK_DATA_DIRECTORY = GAME_DIRECTORY.plus_file(i)
+	for i in get_main_subdirectories(GAME_DIRECTORY): # Directories only
+		match i.to_upper():
+			"DATA": DK_DATA_DIRECTORY = GAME_DIRECTORY.plus_file(i)
+			"FXDATA": DK_FXDATA_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 
 func _on_CmdLineDkCommands_text_changed(new_text):
 	Settings.set_setting("dk_commands", new_text)
@@ -117,7 +119,7 @@ func menu_play_clicked():
 		oSaveMap.save_map(oCurrentMap.path)
 	launch_game()
 
-func get_subdirs(path):
+func get_main_subdirectories(path):
 	var array = []
 	var dir = Directory.new()
 	if dir.open(path) == OK:
@@ -151,6 +153,17 @@ func test_write_permissions():
 			oMessage.big("Error", "There are no write permissions for your Dungeon Keeper directory. Maybe try moving your Dungeon Keeper folder elsewhere, then choose the executable again.")
 	return err
 
+func get_precise_filepath(lookInDirectory, lookForFileName):
+	var dir = Directory.new()
+	if dir.open(lookInDirectory) == OK:
+		dir.list_dir_begin(true, false)
+		var fileName = dir.get_next()
+		while fileName != "":
+			if dir.current_is_dir() == false:
+				if fileName.to_upper() == lookForFileName.to_upper(): # Get file regardless of case (case insensitive)
+					return lookInDirectory.plus_file(fileName)
+			fileName = dir.get_next()
+	return ""
 
 
 #func load_command_line_from_settings(COMMAND_LINE):

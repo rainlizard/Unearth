@@ -29,6 +29,7 @@ onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
+onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -141,7 +142,7 @@ func finish_opening_map(map):
 	oCurrentMap.set_path_and_title(map)
 	oDynamicMapTree.highlight_current_map()
 	oEditor.mapHasBeenEdited = false
-	oScriptEditor.set_script_as_edited(false)
+	oScriptEditor.initialize_for_new_map()
 	oOverheadOwnership.start()
 	oScriptHelpers.start()
 	oCamera2D.reset_camera()

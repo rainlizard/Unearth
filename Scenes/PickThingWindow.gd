@@ -35,16 +35,20 @@ export var grid_window_scale : float setget update_scale
 onready var oSelectedRect = $Clippy/SelectedRect
 onready var oCenteredLabel = $Clippy/CenteredLabel
 var scnGridItem = preload("res://Scenes/GenericGridItem.tscn")
-
+var rectChangedTimer = Timer.new()
 ## The purpose of "Clippy" is to hide the blue cursor if you scroll it off the window.
 
 func _ready():
 	get_close_button().expand = true
 	get_close_button().hide()
 	connect("resized",oGridFunctions,"_on_GridWindow_resized", [self])
-	connect("item_rect_changed",oGridFunctions,"_on_GridWindow_item_rect_changed", [self])
 	connect("visibility_changed",oGridFunctions,"_on_GridWindow_visibility_changed",[self])
 	connect("gui_input",oGridFunctions,"_on_GridWindow_gui_input",[self])
+	connect("item_rect_changed",self,"rect_changed_start_timer")
+	rectChangedTimer.connect("timeout", oGridFunctions, "_on_GridWindow_item_rect_changed", [self])
+	rectChangedTimer.one_shot = true
+	add_child(rectChangedTimer)
+	
 	oThingTabs.tabSystem.connect("tab_changed",oGridFunctions,"_on_tab_changed",[self])
 	
 	grid_window_scale = 0.55
@@ -234,3 +238,6 @@ func _on_thing_portrait_gui_input(event, id):
 	if event.is_action_pressed("mouse_right"):
 		oPropertiesWindow.oPropertiesTabs.current_tab = 0
 		oCustomObjectSystem.remove_object(id.get_meta("thingType"), id.get_meta("thingSubtype"))
+
+func rect_changed_start_timer():
+	rectChangedTimer.start(0.2)

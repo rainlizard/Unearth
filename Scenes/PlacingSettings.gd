@@ -3,6 +3,8 @@ onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oPlacingListData = Nodelist.list["oPlacingListData"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
+onready var oPlacingTipsButton = Nodelist.list["oPlacingTipsButton"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 # Default values for placement
 var effectRange = 5
@@ -106,3 +108,16 @@ func update_and_set_placing_tab():
 
 		if value != null:
 			oPlacingListData.add_item(description, str(value))
+
+
+func _on_PlacingTipsButton_pressed():
+	var buildPlacingString = ""
+	buildPlacingString += "- Right click on a Slab or Thing on the map to quickly pick its type. This is much faster than choosing it within the Slab window or Thing window."
+	buildPlacingString += "\n"
+	buildPlacingString += "- Hold CTRL while left clicking on a Thing to place overlapping Things. Things are never placed overlapped unless you do this."
+	buildPlacingString += "\n"
+	buildPlacingString += "- Press the DELETE key to quickly delete Things under cursor."
+	buildPlacingString += "\n\n"
+	buildPlacingString += "Check the controls in Help -> Controls for more."
+	oMessage.big("Placing tips", buildPlacingString)
+	Settings.set_setting("placing_tutorial", false)

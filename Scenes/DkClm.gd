@@ -20,7 +20,7 @@ func clm_load_slabset():
 	clear_all_column_data() # Important, for reloading/refreshing slabs.clm
 	
 	
-	var filePath = oDkDat.dk_data_get_filepath("SLABS.CLM")
+	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.CLM")
 	var buffer = Filetypes.file_path_to_buffer(filePath)
 	
 	buffer.seek(0)

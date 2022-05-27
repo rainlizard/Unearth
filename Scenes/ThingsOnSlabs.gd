@@ -1,5 +1,5 @@
 extends Node
-onready var oDkDat = Nodelist.list["oDkDat"]
+onready var oGame = Nodelist.list["oGame"]
 
 var CODETIME_START
 var tngIndex = []
@@ -7,7 +7,7 @@ var tngObject = []
 var numberOfThings = 0
 
 func tng_load_slabset():
-	var filePath = oDkDat.dk_data_get_filepath("SLABS.TNG")
+	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG")
 	var buffer = Filetypes.file_path_to_buffer(filePath)
 	
 	buffer.seek(0)

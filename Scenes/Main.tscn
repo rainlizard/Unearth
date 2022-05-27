@@ -1,4 +1,4 @@
-[gd_scene load_steps=158 format=2]
+[gd_scene load_steps=159 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -137,6 +137,8 @@
 [ext_resource path="res://Class/SliderSetting.tscn" type="PackedScene" id=135]
 [ext_resource path="res://Scenes/QuickMapPreview.gd" type="Script" id=136]
 [ext_resource path="res://Scenes/ClmControls.tscn" type="PackedScene" id=137]
+[ext_resource path="res://Theme/ButtonGroupNewMap.tres" type="ButtonGroup" id=138]
+[ext_resource path="res://Scenes/ReadCubes.gd" type="Script" id=139]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -225,11 +227,6 @@ shader_param/color5 = null
 
 [sub_resource type="ShaderMaterial" id=20]
 shader = ExtResource( 36 )
-
-[sub_resource type="NoiseTexture" id=21]
-flags = 0
-width = 85
-height = 85
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = ExtResource( 8 )
@@ -322,6 +319,9 @@ script = ExtResource( 46 )
 
 [node name="ReadPalette" type="Node" parent="TextureCache"]
 script = ExtResource( 75 )
+
+[node name="ReadCubes" type="Node" parent="."]
+script = ExtResource( 139 )
 
 [node name="SlabPlacement" type="Node" parent="."]
 script = ExtResource( 2 )
@@ -543,13 +543,6 @@ scale = Vector2( 96, 96 )
 z_index = 100
 centered = false
 script = ExtResource( 136 )
-
-[node name="QuickNoisePreview" type="Sprite" parent="Game2D"]
-visible = false
-scale = Vector2( 96, 96 )
-z_index = 100
-texture = SubResource( 21 )
-centered = false
 
 [node name="Ui" type="CanvasLayer" parent="."]
 script = ExtResource( 78 )
@@ -1131,9 +1124,6 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="UniversalDetails" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer"]
 margin_right = 300.0
@@ -1174,7 +1164,6 @@ margin_bottom = 147.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
-drag_to_rearrange_enabled = true
 script = ExtResource( 118 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1352,6 +1341,11 @@ texture_normal = ExtResource( 69 )
 texture_pressed = ExtResource( 111 )
 texture_hover = ExtResource( 112 )
 expand = true
+
+[node name="PlacingTipsButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
+margin_right = 12.0
+margin_bottom = 27.0
+text = "Tips"
 
 [node name="ColumnDetails" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs"]
 visible = false
@@ -3166,9 +3160,6 @@ rect_min_size = Vector2( 200, 200 )
 window_title = "Map settings"
 resizable = true
 script = ExtResource( 125 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MapSettingsTabs" type="TabContainer" parent="Ui/UiSystem/MapSettingsWindow"]
 anchor_right = 1.0
@@ -4572,8 +4563,8 @@ __meta__ = {
 visible = true
 margin_left = -1352.0
 margin_top = -416.0
-margin_right = -1009.0
-margin_bottom = -105.0
+margin_right = -900.0
+margin_bottom = -5.0
 rect_min_size = Vector2( 320, 280 )
 window_title = "New map"
 script = ExtResource( 134 )
@@ -4586,62 +4577,87 @@ margin_top = 20.0
 margin_right = -20.0
 margin_bottom = -20.0
 
-[node name="ButtonBlankMap" type="Button" parent="Ui/UiSystem/NewMapWindow/VBoxContainer"]
-margin_right = 303.0
-margin_bottom = 27.0
-text = "Blank map"
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/VBoxContainer"]
+margin_right = 412.0
+margin_bottom = 29.0
 
-[node name="NoiseButtonApplyBorder" type="Button" parent="Ui/UiSystem/NewMapWindow/VBoxContainer"]
-margin_top = 31.0
-margin_right = 303.0
-margin_bottom = 58.0
-text = "Border map"
+[node name="CheckBoxNewMapBorder" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/VBoxContainer/HBoxContainer"]
+margin_right = 89.0
+margin_bottom = 29.0
+pressed = true
+group = ExtResource( 138 )
+text = "Border"
 
-[node name="NoisePersistence" parent="Ui/UiSystem/NewMapWindow/VBoxContainer" instance=ExtResource( 135 )]
-margin_top = 62.0
-margin_right = 303.0
-margin_bottom = 103.0
+[node name="CheckBoxNewMapBlank" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/VBoxContainer/HBoxContainer"]
+margin_left = 93.0
+margin_right = 175.0
+margin_bottom = 29.0
+group = ExtResource( 138 )
+text = "Blank"
+
+[node name="NewMapBorderOptions" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/VBoxContainer"]
+margin_top = 33.0
+margin_right = 412.0
+margin_bottom = 164.0
+
+[node name="NoisePersistence" parent="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapBorderOptions" instance=ExtResource( 135 )]
+margin_top = 0.0
+margin_right = 412.0
+margin_bottom = 41.0
 label_setting = "Persistence"
 max_value = 1.0
 step = 0.01
 value = 1.0
 
-[node name="NoisePeriod" parent="Ui/UiSystem/NewMapWindow/VBoxContainer" instance=ExtResource( 135 )]
-margin_top = 107.0
-margin_right = 303.0
-margin_bottom = 148.0
+[node name="NoisePeriod" parent="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapBorderOptions" instance=ExtResource( 135 )]
+margin_top = 45.0
+margin_right = 412.0
+margin_bottom = 86.0
 label_setting = "Period"
 min_value = 0.01
 max_value = 1.0
 step = 0.01
 value = 0.1
 
-[node name="NoiseLacunarity" parent="Ui/UiSystem/NewMapWindow/VBoxContainer" instance=ExtResource( 135 )]
-margin_top = 152.0
-margin_right = 303.0
-margin_bottom = 193.0
+[node name="NoiseLacunarity" parent="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapBorderOptions" instance=ExtResource( 135 )]
+margin_top = 90.0
+margin_right = 412.0
+margin_bottom = 131.0
 label_setting = "Lacunarity"
 max_value = 1.0
 step = 0.01
 value = 0.2
 
-[node name="NoiseOctaves" parent="Ui/UiSystem/NewMapWindow/VBoxContainer" instance=ExtResource( 135 )]
+[node name="NoiseOctaves" parent="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapBorderOptions" instance=ExtResource( 135 )]
 visible = false
-margin_top = 197.0
-margin_right = 303.0
-margin_bottom = 238.0
+margin_left = -12.0
+margin_top = 154.0
+margin_right = 291.0
+margin_bottom = 195.0
 label_setting = "Octaves"
 min_value = 1.0
 max_value = 9.0
 step = 1.0
 value = 9.0
 
-[node name="NewMapCloseButton" type="Button" parent="Ui/UiSystem/NewMapWindow/VBoxContainer"]
-margin_top = 244.0
-margin_right = 303.0
-margin_bottom = 271.0
-size_flags_vertical = 10
-text = "Close"
+[node name="NoiseUpdateTimer" type="Timer" parent="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapBorderOptions"]
+one_shot = true
+
+[node name="QuickNoisePreview" type="TextureRect" parent="Ui/UiSystem/NewMapWindow/VBoxContainer"]
+margin_left = 121.0
+margin_top = 169.0
+margin_right = 291.0
+margin_bottom = 339.0
+rect_min_size = Vector2( 170, 170 )
+size_flags_horizontal = 4
+size_flags_vertical = 6
+expand = true
+
+[node name="ButtonNewMapOK" type="Button" parent="Ui/UiSystem/NewMapWindow/VBoxContainer"]
+margin_top = 344.0
+margin_right = 412.0
+margin_bottom = 371.0
+text = "OK"
 
 [node name="ExportSlabsetDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
@@ -4847,6 +4863,7 @@ script = ExtResource( 88 )
 [connection signal="visibility_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" method="_on_UseSlabOwnerCheckBox_visibility_changed"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/ToolPencil" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPencil_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/ToolRectangle" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolRectangle_toggled"]
+[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/PlacingTipsButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_PlacingTipsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonSettings" to="Ui/UiSystem/Menu" method="_on_MenuButtonSettings_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/Menu/HBoxContainer2/PlayButton" to="Ui/UiSystem/Menu" method="_on_PlayButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/EditingMode/PanelContainer/HBoxContainer/ModeSwitchButton" to="Ui/UiSystem/EditingMode" method="_on_ModeSwitchButton_pressed"]
@@ -4960,9 +4977,15 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer/ExportSlabsClm" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsClm_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/ButtonBlankMap" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonBlankMap_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NoiseButtonApplyBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseButtonApply_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapCloseButton" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapCloseButton_pressed"]
+[connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
+[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/HBoxContainer/CheckBoxNewMapBorder" to="Ui/UiSystem/NewMapWindow" method="_on_CheckBoxNewMapBorder_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/HBoxContainer/CheckBoxNewMapBlank" to="Ui/UiSystem/NewMapWindow" method="_on_CheckBoxNewMapBlank_pressed"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapBorderOptions/NoisePersistence" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePersistence_sliderChanged"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapBorderOptions/NoisePeriod" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePeriod_sliderChanged"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapBorderOptions/NoiseLacunarity" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseLacunarity_sliderChanged"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapBorderOptions/NoiseOctaves" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseOctaves_sliderChanged"]
+[connection signal="timeout" from="Ui/UiSystem/NewMapWindow/VBoxContainer/NewMapBorderOptions/NoiseUpdateTimer" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseUpdateTimer_timeout"]
+[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/VBoxContainer/ButtonNewMapOK" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonNewMapOK_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetDatDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetDatDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetClmDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetClmDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetCfgDialog_file_selected"]

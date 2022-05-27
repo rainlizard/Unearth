@@ -11,6 +11,11 @@ onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
 
 var scriptHasBeenEditedInUnearth = false
 
+func initialize_for_new_map():
+	update_texteditor()
+	set_script_as_edited(false)
+	oScriptTextEdit.clear_undo_history() # Important so the 1st undo state is the loaded script
+
 func _on_ScriptTextEdit_text_changed():
 	set_script_as_edited(true)
 	set_script_data(oScriptTextEdit.text)
@@ -45,7 +50,7 @@ func update_empty_script_status():
 		oScriptEmptyStatus.visible = false
 
 
-func set_text(setWithString):
+func load_generated_text(setWithString):
 	set_script_as_edited(true)
 	set_script_data(setWithString)
 	update_texteditor()
@@ -75,9 +80,7 @@ func check_if_txt_file_has_been_modified():
 
 
 func _on_ScriptTextEdit_visibility_changed():
-	if visible == true:
-		update_texteditor()
-	else:
+	if visible == false:
 		# When you close the window, update script helpers. This is important to update here in case you remove any lines (helper related) in the script editor
 		oScriptHelpers.start()
 

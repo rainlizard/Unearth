@@ -20,6 +20,7 @@ onready var oSelectedRect = $Clippy/SelectedRect
 onready var oCenteredLabel = $Clippy/CenteredLabel
 export var grid_item_size : Vector2
 export var grid_window_scale : float setget update_scale
+var rectChangedTimer = Timer.new()
 
 enum {
 	GRIDCON_PATH
@@ -41,9 +42,13 @@ func _ready():
 	get_close_button().expand = true
 	get_close_button().hide()
 	connect("resized",oGridFunctions,"_on_GridWindow_resized", [self])
-	connect("item_rect_changed",oGridFunctions,"_on_GridWindow_item_rect_changed", [self])
 	connect("visibility_changed",oGridFunctions,"_on_GridWindow_visibility_changed",[self])
 	connect("gui_input",oGridFunctions,"_on_GridWindow_gui_input",[self])
+	connect("item_rect_changed",self,"rect_changed_start_timer") # Using a timer to reduce lag
+	rectChangedTimer.connect("timeout", oGridFunctions, "_on_GridWindow_item_rect_changed", [self])
+	rectChangedTimer.one_shot = true
+	add_child(rectChangedTimer)
+	
 	oSlabTabs.tabSystem.connect("tab_changed",oGridFunctions,"_on_tab_changed",[self])
 	oSlabTabs.tabSystem.connect("tab_changed",self,"_on_SlabTabs_tab_changed")
 	
@@ -230,3 +235,6 @@ func _on_slab_portrait_gui_input(event, id):
 					child.queue_free()
 			
 			_on_hovered_none()
+
+func rect_changed_start_timer():
+	rectChangedTimer.start(0.2)

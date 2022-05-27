@@ -21,6 +21,7 @@ onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
+onready var oMenu = Nodelist.list["oMenu"]
 
 
 var path = ""
@@ -40,6 +41,7 @@ func set_path_and_title(newpath):
 	
 	if newpath != "":
 		OS.set_window_title(newpath + ' - Unearth v'+Constants.VERSION)
+		oMenu.add_recent(newpath) # Add saved maps to the recent menu
 	else:
 		OS.set_window_title('Unearth v'+Constants.VERSION)
 	path = newpath

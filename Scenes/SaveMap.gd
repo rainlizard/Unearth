@@ -7,6 +7,7 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
+onready var oMenu = Nodelist.list["oMenu"]
 
 var queueExit = false
 

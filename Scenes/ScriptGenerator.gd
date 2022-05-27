@@ -337,7 +337,7 @@ func _on_GenerateScriptButton_pressed():
 func _on_ConfirmGenerateScript_confirmed():
 	oScriptTextEdit.text = ""
 	var generateString = execute_gen()
-	oScriptEditor.set_text(generateString)
+	oScriptEditor.load_generated_text(generateString)
 	oMessage.quick("Cleared existing script and placed generated script")
 
 func _on_SendToClipboardButton_pressed():

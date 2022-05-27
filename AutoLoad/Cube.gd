@@ -1,5 +1,12 @@
 extends Node
 
+var data = []
+
+#func _ready():
+#	var cubesCfgFilePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "CUBES.CFG")
+#	data.append(0)
+	
+
 enum {
 	RED = 0
 	BLUE = 1

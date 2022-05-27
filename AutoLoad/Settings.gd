@@ -62,7 +62,8 @@ var listOfSettings = [
 	"frail_impenetrable",
 	"wallauto_art",
 	"wallauto_damaged",
-	"recently_opened"
+	"recently_opened",
+	"placing_tutorial",
 	# These four are read inside Viewport script
 #	"editor_window_position",
 #	"editor_window_size",
@@ -334,6 +335,10 @@ func game_setting(doWhat,string,value):
 			var oMenu = $'../Main/Ui/UiSystem/Menu'
 			if doWhat == SET: oMenu.initialize_recently_opened(value)
 			if doWhat == GET: return oMenu.recentlyOpened
+		"placing_tutorial":
+			var oPlacingTipsButton = $"../Main/Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/PlacingTipsButton"
+			if doWhat == SET: oPlacingTipsButton.visible = value
+			if doWhat == GET: return oPlacingTipsButton.visible
 
 func delete_settings():
 	var dir = Directory.new()

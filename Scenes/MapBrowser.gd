@@ -44,6 +44,7 @@ func _on_DynamicMapTree_item_activated():
 func _on_BrowseOpenButton_pressed():
 	var path = oBrowserFilename.text
 	activate(path)
+	hide() # Hide map browser which clicking Open button. But keep it open when double clicking on maps to open them
 
 func activate(path):
 	path = path.get_basename()

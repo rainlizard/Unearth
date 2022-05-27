@@ -75,7 +75,7 @@ func add_item(leftText, rightText):
 			nameValue = Label.new()
 			nameValue.autowrap = true
 			nameValue.rect_min_size.x = columnRightSize
-			if name == "ColumnListData": nameValue.rect_min_size.x = columnRightSize-50
+			#if name == "ColumnListData": nameValue.rect_min_size.x = columnRightSize-50
 			# This is for when highlighting something in the Thing Window
 			if rightText == "":
 				nameValue.rect_min_size.x = 0
