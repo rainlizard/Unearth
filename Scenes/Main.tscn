@@ -1,4 +1,4 @@
-[gd_scene load_steps=159 format=2]
+[gd_scene load_steps=160 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -139,6 +139,7 @@
 [ext_resource path="res://Scenes/ClmControls.tscn" type="PackedScene" id=137]
 [ext_resource path="res://Theme/ButtonGroupNewMap.tres" type="ButtonGroup" id=138]
 [ext_resource path="res://Scenes/ReadCubes.gd" type="Script" id=139]
+[ext_resource path="res://Shaders/IndividualFloorTexture.tres" type="Material" id=140]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -4525,40 +4526,6 @@ margin_bottom = 645.0
 size_flags_horizontal = 9
 text = "Export columns.cfg"
 
-[node name="CustomTooltip" type="Control" parent="Ui/UiSystem"]
-margin_top = -10.5
-margin_bottom = 10.5
-mouse_filter = 2
-script = ExtResource( 129 )
-
-[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/CustomTooltip"]
-self_modulate = Color( 1, 1, 1, 0.501961 )
-margin_left = -4.0
-margin_top = -4.0
-margin_right = 4.0
-margin_bottom = 25.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-size_flags_horizontal = 6
-size_flags_vertical = 7
-custom_styles/panel = ExtResource( 130 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Ui/UiSystem/CustomTooltip/PanelContainer"]
-self_modulate = Color( 0.752941, 0.752941, 0.752941, 1 )
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 4.0
-margin_bottom = 25.0
-size_flags_horizontal = 6
-size_flags_vertical = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="NewMapWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -1352.0
@@ -4714,6 +4681,57 @@ mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 17 )
+
+[node name="CustomTooltip" type="Control" parent="Ui/UiMessages"]
+margin_top = -10.5
+margin_bottom = 10.5
+mouse_filter = 2
+script = ExtResource( 129 )
+
+[node name="PanelContainer" type="PanelContainer" parent="Ui/UiMessages/CustomTooltip"]
+self_modulate = Color( 1, 1, 1, 0.501961 )
+margin_left = -4.0
+margin_top = -4.0
+margin_right = 4.0
+margin_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+size_flags_horizontal = 6
+size_flags_vertical = 7
+custom_styles/panel = ExtResource( 130 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiMessages/CustomTooltip/PanelContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 36.0
+margin_bottom = 36.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="TooltipPicture" type="TextureRect" parent="Ui/UiMessages/CustomTooltip/PanelContainer/HBoxContainer"]
+material = ExtResource( 140 )
+margin_right = 32.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 26 )
+
+[node name="Label" type="Label" parent="Ui/UiMessages/CustomTooltip/PanelContainer/HBoxContainer"]
+self_modulate = Color( 0.752941, 0.752941, 0.752941, 1 )
+margin_left = 32.0
+margin_top = 5.0
+margin_right = 32.0
+margin_bottom = 26.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Message" type="Control" parent="Ui/UiMessages"]
 anchor_left = 0.5

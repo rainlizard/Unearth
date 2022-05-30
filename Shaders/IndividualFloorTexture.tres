@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+
+[ext_resource path="res://Shaders/display_texture_2d.shader" type="Shader" id=1]
+[ext_resource path="res://Shaders/textureanimationdatabase.png" type="Texture" id=2]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource( 1 )
+shader_param/showOnlySpecificStyle = 77777
+shader_param/fieldSizeInSubtiles = Vector2( 255, 255 )
+shader_param/animationDatabase = ExtResource( 2 )

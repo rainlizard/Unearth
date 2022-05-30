@@ -15,7 +15,6 @@ func _ready():
 	$AspectRatioContainer.anchor_right += iconSize
 
 func set_visual(columnArray):
-	var oDataClm = Nodelist.list["oDataClm"]
 	var oDkClm = Nodelist.list["oDkClm"]
 	
 	var slabID = get_meta("ID_of_slab")

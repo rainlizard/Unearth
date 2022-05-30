@@ -1,8 +1,8 @@
 extends Node
 var list = {}
 
-func start(callingScene): #Called by Main
-	Nodelist.list["oMain"] = callingScene # node_added signal doesn't include the root node, probably because it has no "owner"
+func start(callingScene): # Called by Main root scene
+	Nodelist.list["oMain"] = callingScene # Add callingScene manually since the node_added signal doesn't include adding it
 	get_tree().connect("node_added",self,"node_added")
 
 func done(): #Called by ViewportContainer

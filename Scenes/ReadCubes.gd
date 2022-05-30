@@ -18,8 +18,8 @@ func _ready():
 	var CODETIME_START = OS.get_ticks_msec()
 	while true:
 		var a = file.get_csv_line(" ")
-		if a[0] == "Name":
-			names.append(a[2].capitalize())#.to_lower().replace("_"," "))
+		if a.size() >= 3 and a[0] == "Name":
+			names.append(a[2].capitalize().replace(" ",""))#.to_lower().replace("_"," "))
 		
 		if file.eof_reached() == true:
 			break

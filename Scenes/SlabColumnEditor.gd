@@ -17,6 +17,8 @@ func _ready():
 
 # When re-opening window or opening for first time
 func _on_ColumnEditor_visibility_changed():
+	if is_instance_valid(oDataClm) == false: return
+	
 	if visible == true:
 		oDataClm.update_all_utilized() # Run this before _on_ColumnEditorTabs_tab_changed()
 		
