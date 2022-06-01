@@ -1,5 +1,5 @@
 extends Node
-const VERSION = "0.20"
+const VERSION = "0.21"
 
 const TILE_SIZE = 96
 const SUBTILE_SIZE = 32

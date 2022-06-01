@@ -145,7 +145,8 @@ func mouse_button_on_field():
 			
 			MODE_TILE:
 				oInstances.delete_all_on_slab(cursorTile.x,cursorTile.y, ["Thing","ActionPoint","Light"])
-
+		
+		oThingDetails.update_details()
 
 #func _unhandled_input(event):
 #	if event is InputEventMouseButton:

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/SpinBoxPropertiesValue.gd" type="Script" id=1]
+
+[node name="SpinBoxPropertiesValue" type="SpinBox"]
+max_value = 255.0
+script = ExtResource( 1 )
