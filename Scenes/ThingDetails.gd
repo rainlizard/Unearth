@@ -16,33 +16,24 @@ var HIDE_UNKNOWN_DATA = true
 func _ready():
 	get_parent().set_tab_title(0, "Thing")
 
-func _process(delta):
-	if visible == false: return
-	
-	# Prioritize displaying "Selected" instance instead of hovered instance.
-	var id
-	if is_instance_valid(oInspector.inspectingInstance) == true:
-		id = oInspector.inspectingInstance
-	elif oSelection.cursorOnInstancesArray.empty() == false and is_instance_valid(oSelection.cursorOnInstancesArray[0]) == true:
-		id = oSelection.cursorOnInstancesArray[0]
-	else:
-		if oUi.mouseOnUi == false:
-			oThingListData.clear()
-		#rememberInstance = null
-		return
-	
-#	if rememberInstance == id:
-#		return
-#	else:
-#		rememberInstance = id
-	
+func update_details():
 	oThingListData.clear()
-	
-	match id.filename.get_file():
-		"ActionPointInstance.tscn": actionpoint_details(id)
-		"LightInstance.tscn": light_details(id)
-		"ThingInstance.tscn": thing_details(id)
+	var id = get_selected_or_hovered_instance()
+	if is_instance_valid(id):
+		match id.filename.get_file():
+			"ActionPointInstance.tscn": actionpoint_details(id)
+			"LightInstance.tscn": light_details(id)
+			"ThingInstance.tscn": thing_details(id)
 
+func get_selected_or_hovered_instance():
+	# Prioritize displaying the currently selected instance instead of the instance under the cursor.
+	if is_instance_valid(oInspector.inspectingInstance):
+		return oInspector.inspectingInstance
+	if oSelection.cursorOnInstancesArray.size() > 0:
+		var topInst = oSelection.cursorOnInstancesArray[0]
+		if is_instance_valid(topInst):
+			return topInst
+	return null
 
 func actionpoint_details(id):
 	for i in 5:
@@ -255,12 +246,12 @@ func thing_details(id):
 
 func _on_DeleteSelectedButton_pressed():
 	oSelection.manually_delete_one_instance(oInspector.inspectingInstance)
-	oThingListData.clear()
-
+	update_details()
 
 func _on_SelectionStatusButton_pressed():
 	oSelectionStatusButton.text = "Selected"
 	oInspector.deselect()
+	update_details()
 
 func _on_SelectionStatusButton_mouse_entered():
 	oSelectionStatusButton.text = "Deselect"
@@ -328,7 +319,7 @@ func _on_thing_portrait_mouse_entered(nodeId):
 
 
 # Fixes an obscure issue where it would continue to show what you've highlighted in the Thing Window inside of the Properties' Thing column.
-func _on_PropertiesTabs_tab_changed(tab):
-	if tab == 0:
-		if is_instance_valid(oInspector.inspectingInstance) == false:
-			oThingListData.clear()
+#func _on_PropertiesTabs_tab_changed(tab):
+#	if tab == 0:
+#		if is_instance_valid(oInspector.inspectingInstance) == false:
+#			oThingListData.clear()

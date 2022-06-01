@@ -33,8 +33,8 @@ func _on_PropertiesTabs_item_rect_changed():
 	oPropertiesTabs.connect("item_rect_changed",self,"_on_PropertiesTabs_item_rect_changed")
 
 
-func _on_PropertiesTabs_tab_changed(tab):
-	pass # Replace with function body.
+#func _on_PropertiesTabs_tab_changed(tab):
+#	pass # Replace with function body.
 
 func rect_changed_start_timer():
 	rectChangedTimer.start(0.2)

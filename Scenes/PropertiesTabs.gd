@@ -1,4 +1,5 @@
 extends TabContainer
+onready var oThingDetails = Nodelist.list["oThingDetails"]
 
 func _on_PropertiesTabs_tab_changed(tab):
-	$ThingDetails.oThingListData.clear()
+	oThingDetails.update_details()

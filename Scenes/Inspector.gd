@@ -24,6 +24,8 @@ func set_inspector_instance(setval):
 	# Newly selected instance
 	inspectingInstance = setval
 	if is_instance_valid(setval): setval.instance_was_selected()
+	
+	oThingDetails.update_details()
 
 func inspect_something(id):
 	if is_instance_valid(id) and inspectingInstance != id: # Allow deselect by left clicking the same thing again
@@ -38,3 +40,5 @@ func deselect():
 	set_inspector_instance(null)
 	set_inspector_subtile(Vector2(-1000000,-1000000))
 	oSelectionStatus.visible = false
+	yield(get_tree(),'idle_frame')
+	oThingDetails.update_details()

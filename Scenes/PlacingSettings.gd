@@ -39,9 +39,10 @@ func editing_mode_was_switched(modeString):
 		update_and_set_placing_tab()
 
 func _on_PropertiesTabs_tab_changed(tab):
-	if tab == 1: update_and_set_placing_tab()
-	else:
-		oPlacingListData.clear()
+	if tab == 1:
+		update_and_set_placing_tab()
+#	else:
+#		oPlacingListData.clear()
 
 func update_and_set_placing_tab():
 	oPropertiesTabs.current_tab = 1

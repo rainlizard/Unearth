@@ -1,6 +1,7 @@
 extends Node2D
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oInspector = Nodelist.list["oInspector"]
+onready var oThingDetails = Nodelist.list["oThingDetails"]
 
 var ownership = 5 # Not used by Dungeon Keeper, this is just to make it easy for the editor.
 var thingType = Things.TYPE.EXTRA
@@ -40,12 +41,14 @@ func _on_MouseDetection_mouse_entered():
 	if oSelection.cursorOnInstancesArray.has(self) == false:
 		oSelection.cursorOnInstancesArray.append(self)
 	oSelection.clean_up_cursor_array()
+	oThingDetails.update_details()
 	update()
 
 func _on_MouseDetection_mouse_exited():
 	if oSelection.cursorOnInstancesArray.has(self):
 		oSelection.cursorOnInstancesArray.erase(self)
 	oSelection.clean_up_cursor_array()
+	oThingDetails.update_details()
 	update()
 
 func _on_VisibilityNotifier2D_screen_entered():

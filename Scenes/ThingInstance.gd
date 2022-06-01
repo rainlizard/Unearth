@@ -3,6 +3,7 @@ onready var oSelection = Nodelist.list["oSelection"]
 onready var oInstanceOwnership = Nodelist.list["oInstanceOwnership"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oInstances = Nodelist.list["oInstances"]
+onready var oThingDetails = Nodelist.list["oThingDetails"]
 
 #onready var oSelection = $'../../Selector/Selection'
 #onready var oInstanceOwnership = $'../../OverheadOwnership/InstanceOwnership'
@@ -177,13 +178,16 @@ func set_grow_direction():
 func _on_MouseDetection_mouse_entered():
 	if oSelection.cursorOnInstancesArray.has(self) == false:
 		oSelection.cursorOnInstancesArray.append(self)
+	
 	oSelection.clean_up_cursor_array()
+	oThingDetails.update_details()
 	update()
 
 func _on_MouseDetection_mouse_exited():
 	if oSelection.cursorOnInstancesArray.has(self):
 		oSelection.cursorOnInstancesArray.erase(self)
 	oSelection.clean_up_cursor_array()
+	oThingDetails.update_details()
 	update()
 
 func instance_was_selected(): update()
