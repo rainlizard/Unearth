@@ -55,7 +55,8 @@ func start():
 #		for subtile in 9:
 #			var clmIndex = oDkDat.dat[slabvar][subtile]
 #			oDkClm.delete_column(clmIndex)
-	#initialize_rng_columns()
+
+
 
 #func initialize_rng_columns():
 #	rngColumnsCubes.resize(RNG_CLM_WALL_NEARBY_WATER+1)
