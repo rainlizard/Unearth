@@ -18,9 +18,10 @@ onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
 onready var oDkClm = Nodelist.list["oDkClm"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
-
+var customSlabArrayOfSpinbox = []
 
 func _ready():
 	for number in 9:
@@ -30,7 +31,7 @@ func _ready():
 		shortcut.connect("pressed",self,"shortcut_pressed",[id])
 		spinbox.max_value = 2047
 		spinbox.connect("value_changed",oCustomSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
-		
+		customSlabArrayOfSpinbox.append(spinbox)
 		oGridContainerCustomColumns3x3.add_child(id)
 	
 	_on_SlabRecognizedAs_value_changed(oSlabRecognizedAs.value)
@@ -81,7 +82,9 @@ func _on_HelpCustomSlabsButton_pressed():
 	var helptext = ""
 	helptext += "With a few exceptions, most custom slabs will reset their appearance in-game when placing or claiming an adjacent slab. To avoid this, set 'Recognized as' to one of the following: Slab 50, Impenetrable Rock, Gold, Bridge, Gems, Guard post, Doors (without door object). Needs further testing."
 	helptext += "\n\n"
-	helptext += "Right click their portrait within the slab picker window to remove custom slabs from the editor."
+	helptext += "After adding one, right click on its portrait within the slab picker window to remove custom slabs from the editor."
+	helptext += "\n\n"
+	helptext += "Right click on the map while the custom slab menu is open to copy column index numbers into the window."
 	#helptext += "\n\n"
 	#helptext += "For now, placing a custom slab on a new/different map than the one you created it on, will not carry over the exact same column data."
 	oMessage.big("Help",helptext)
@@ -96,20 +99,18 @@ func _on_SlabWibbleOptionButton_item_selected(index):
 		oWibbleEdgesCheckBox.visible = false
 
 func copy_values_from_slabset_and_index_them():
-	var customSlabArrayOfSpinbox = []
-	for id in oGridContainerCustomColumns3x3.get_children():
-		customSlabArrayOfSpinbox.append(id.get_node("CustomSpinBox"))
-	
 	for i in 9:
 		var srcClmIndex = oSlabsetWindow.columnSettersArray[i].get_node("CustomSpinBox").value
-		
 		var cubeArray = oDkClm.cubes[srcClmIndex]
 		var setFloorID = oDkClm.floorTexture[srcClmIndex]
-		
 		var newIndex = oDataClm.index_entry(cubeArray, setFloorID)
-		
-		print(newIndex)
-		print(customSlabArrayOfSpinbox[i])
 		customSlabArrayOfSpinbox[i].value = newIndex
 	
 	#oMessage.big("", "Columns in your map's .clm file have been found that match the columns from slabs.clm/dat. Any that weren't found were added.")
+
+func get_column_indexes_on_tile(cursorTile):
+	for ySubtile in 3:
+		for xSubtile in 3:
+			var newIndex = oDataClmPos.get_cell((cursorTile.x*3)+xSubtile, (cursorTile.y*3)+ySubtile)
+			var i = (ySubtile*3) + xSubtile
+			customSlabArrayOfSpinbox[i].value = newIndex

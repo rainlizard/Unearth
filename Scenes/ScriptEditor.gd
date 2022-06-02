@@ -33,9 +33,11 @@ func _on_ScriptTextEdit_text_changed():
 func set_script_as_edited(edited):
 	scriptHasBeenEditedInUnearth = edited
 	match edited:
-		true: oMapSettingsTabs.set_tab_title(2, "Edit Script *")
-		false: oMapSettingsTabs.set_tab_title(2, "Edit Script")
-	oEditor.mapHasBeenEdited = true
+		true:
+			oMapSettingsTabs.set_tab_title(2, "Edit Script *")
+			oEditor.mapHasBeenEdited = true
+		false:
+			oMapSettingsTabs.set_tab_title(2, "Edit Script")
 
 
 func set_script_data(value):

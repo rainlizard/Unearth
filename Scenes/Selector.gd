@@ -26,6 +26,10 @@ onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
+onready var oColumnEditor = Nodelist.list["oColumnEditor"]
+onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
+onready var oMessage = Nodelist.list["oMessage"]
+onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
 
 
 onready var TILE_SIZE = Constants.TILE_SIZE
@@ -78,11 +82,10 @@ func mouse_button_anywhere():
 
 func mouse_button_on_field():
 	if Input.is_action_just_pressed("mouse_left"):
-		
 		if Input.is_action_pressed("place_overlapping"):
 			canPlace = true
 		else:
-			if oSelection.cursorOnInstancesArray.empty() == false:
+			if oSelection.cursorOnInstancesArray.empty() == false and mode == MODE_SUBTILE:
 				if is_instance_valid(oSelection.cursorOnInstancesArray[0]) == true:
 					oPropertiesWindow.oPropertiesTabs.current_tab = 0
 					oInspector.inspect_something(oSelection.cursorOnInstancesArray[0])
@@ -96,12 +99,10 @@ func mouse_button_on_field():
 				oRectangleSelection.set_initial_position(cursorTile)
 	
 	if Input.is_action_pressed("mouse_left"):
-		
 			match oEditingTools.TOOL_SELECTED:
 				oEditingTools.PENCIL:
 					if canPlace == true and visible == true:
 						canPlace = false
-						
 						match mode:
 							MODE_SUBTILE:
 								var placeSubtile = world2subtile(get_global_mouse_position())
@@ -121,6 +122,13 @@ func mouse_button_on_field():
 				change_mode(MODE_TILE)
 			oPlacingSettings.update_and_set_placing_tab()
 			oSelection.update_paint()
+	
+	if Input.is_action_pressed("mouse_right"):
+		if visible == true:
+			if oColumnEditor.visible == true and oColumnEditorTabs.current_tab == 1:
+				#oMessage.quick("Sent column indexes to Custom Slab window")
+				oTabCustomSlabs.get_column_indexes_on_tile(cursorTile)
+				
 	
 	# Lose inspection when right clicking
 	if Input.is_action_just_released("mouse_right"):
