@@ -2503,8 +2503,7 @@ margin_bottom = 409.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Clear unused columns"
-dialog_text = "Delete all columns which have no presence on the map? (a utilized value of 0)
-Warning: this hasn't been thoroughly tested yet and may break your map."
+dialog_text = "Delete all columns which have no presence on the map? (a utilized value of 0)"
 dialog_autowrap = true
 script = ExtResource( 61 )
 

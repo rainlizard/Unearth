@@ -4,6 +4,7 @@ onready var oInstanceOwnership = Nodelist.list["oInstanceOwnership"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
+onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 
 #onready var oSelection = $'../../Selector/Selection'
 #onready var oInstanceOwnership = $'../../OverheadOwnership/InstanceOwnership'
@@ -143,9 +144,15 @@ func set_texture_based_on_thingtype():
 			pass
 		Things.TYPE.OBJECT:
 			if Things.DATA_OBJECT.has(subtype) == true:
+				
 				tex = Things.DATA_OBJECT[subtype][Things.TEXTURE]
+				
 				if subtype in [49, 111,120,121,122]: # Heart Flame and Gate
 					$ThingTexture.self_modulate = "a0ffffff"
+				elif Things.LIST_OF_BOXES.has(subtype):
+					$ThingTexture.rect_position += Vector2(-1,9)
+					var oPickThingWindow = Nodelist.list["oPickThingWindow"]
+					oPickThingWindow.add_workshop_item_sprite_overlay($ThingTexture, subtype)
 		Things.TYPE.CREATURE:
 			if Things.DATA_CREATURE.has(subtype) == true:
 				tex = Things.DATA_CREATURE[subtype][Things.TEXTURE]

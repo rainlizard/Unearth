@@ -74,39 +74,49 @@ func initialize_thing_grid_items():
 			Things.TYPE.OBJECT:
 				for subtype in Things.DATA_OBJECT:
 					var putIntoTab = Things.DATA_OBJECT[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_OBJECT, thingCategory, subtype, Things.TEXTURE)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_OBJECT, thingCategory, subtype)
 			Things.TYPE.CREATURE:
 				for subtype in Things.DATA_CREATURE:
 					var putIntoTab = Things.DATA_CREATURE[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_CREATURE, thingCategory, subtype, Things.PORTRAIT)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_CREATURE, thingCategory, subtype)
 			Things.TYPE.TRAP:
 				for subtype in Things.DATA_TRAP:
 					var putIntoTab = Things.DATA_TRAP[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_TRAP, thingCategory, subtype, Things.TEXTURE)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_TRAP, thingCategory, subtype)
 			Things.TYPE.DOOR:
 				for subtype in Things.DATA_DOOR:
 					var putIntoTab = Things.DATA_DOOR[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_DOOR, thingCategory, subtype, Things.TEXTURE)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_DOOR, thingCategory, subtype)
 			Things.TYPE.EFFECT:
 				for subtype in Things.DATA_EFFECT:
 					var putIntoTab = Things.DATA_EFFECT[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EFFECT, thingCategory, subtype, Things.TEXTURE)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EFFECT, thingCategory, subtype)
 			Things.TYPE.EXTRA:
 				for subtype in Things.DATA_EXTRA:
 					var putIntoTab = Things.DATA_EXTRA[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EXTRA, thingCategory, subtype, Things.TEXTURE)
+					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EXTRA, thingCategory, subtype)
 	
 	print('Initialized Things window: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
-func add_to_category(tabNode, thingsData, type, subtype, portrait_or_texture):
+func add_to_category(tabNode, thingsData, type, subtype):
 	var gridcontainer = tabNode.get_node("ScrollContainer/GridContainer")
 	var id = scnGridItem.instance()
 	id.connect('mouse_entered',oThingDetails,"_on_thing_portrait_mouse_entered",[id])
 	id.connect('gui_input',self,"_on_thing_portrait_gui_input",[id])
 	id.set_meta("thingSubtype", subtype)
 	id.set_meta("thingType", type)
-	id.texture_normal = thingsData[subtype][portrait_or_texture]
-	if id.texture_normal == null: id.texture_normal = preload('res://Art/ThingDarkened.png')
+	
+	# Appearance prioritization: Portrait > Texture > ThingDarkened.png
+	var portraitTex = thingsData[subtype][Things.PORTRAIT]
+	if portraitTex != null:
+		id.texture_normal = portraitTex
+	else:
+		var textureTex = thingsData[subtype][Things.TEXTURE]
+		if textureTex != null:
+			id.texture_normal = textureTex
+		else:
+			id.texture_normal = preload('res://Art/ThingDarkened.png')
+	
 	var setText = thingsData[subtype][Things.NAME]
 	
 	add_item_to_grid(gridcontainer, id, setText)
@@ -126,19 +136,27 @@ func update_selection_position():
 
 func _on_hovered_none(id):
 	oCenteredLabel.get_node("Label").text = ""
-	
-	# Change creature texture to portrait
-	if id.get_meta("thingType") == Things.TYPE.CREATURE:
-		id.texture_normal = Things.DATA_CREATURE[id.get_meta("thingSubtype")][Things.PORTRAIT]
+	change_portrait_on_hover(id, Things.PORTRAIT)
+
 
 func _on_hovered_over_item(id):
 	var offset = Vector2(id.rect_size.x * 0.5, id.rect_size.y * 0.5)
 	oCenteredLabel.rect_global_position = id.rect_global_position + offset
 	oCenteredLabel.get_node("Label").text = id.get_meta("grid_item_text")
 	
-	# Change creature portrait to texture
-	if id.get_meta("thingType") == Things.TYPE.CREATURE:
-		id.texture_normal = Things.DATA_CREATURE[id.get_meta("thingSubtype")][Things.TEXTURE]
+	change_portrait_on_hover(id, Things.TEXTURE)
+
+func change_portrait_on_hover(id, textureOrPortrait):
+	var portraitTex
+	match id.get_meta("thingType"):
+		Things.TYPE.OBJECT: portraitTex = Things.DATA_OBJECT[id.get_meta("thingSubtype")][textureOrPortrait]
+		Things.TYPE.CREATURE: portraitTex = Things.DATA_CREATURE[id.get_meta("thingSubtype")][textureOrPortrait]
+		Things.TYPE.EFFECT: portraitTex = Things.DATA_EFFECT[id.get_meta("thingSubtype")][textureOrPortrait]
+		Things.TYPE.TRAP: portraitTex = Things.DATA_TRAP[id.get_meta("thingSubtype")][textureOrPortrait]
+		Things.TYPE.DOOR: portraitTex = Things.DATA_DOOR[id.get_meta("thingSubtype")][textureOrPortrait]
+		Things.TYPE.EXTRA: portraitTex = Things.DATA_EXTRA[id.get_meta("thingSubtype")][textureOrPortrait]
+	if portraitTex != null:
+		id.texture_normal = portraitTex
 
 func add_item_to_grid(tabID, id, set_text):
 	tabID.add_child(id)
@@ -163,6 +181,48 @@ func add_item_to_grid(tabID, id, set_text):
 	id.connect("mouse_exited", self, "_on_hovered_none", [id])
 	id.connect("pressed",self,"pressed",[id])
 	id.rect_min_size = Vector2(grid_item_size.x * grid_window_scale, grid_item_size.y * grid_window_scale)
+	
+	yield(get_tree(),'idle_frame')
+	var subtype = id.get_meta("thingSubtype")
+	if Things.LIST_OF_BOXES.has(subtype):
+		add_workshop_item_sprite_overlay(id, subtype)
+
+func add_workshop_item_sprite_overlay(textureParent, subtype):
+	var itemType = Things.LIST_OF_BOXES[subtype][0]
+	var itemSubtype = Things.LIST_OF_BOXES[subtype][1]
+	
+	var workshopItemInTheBox = TextureRect.new()
+	
+	match itemType:
+		Things.TYPE.TRAP:
+			workshopItemInTheBox.texture = Things.DATA_TRAP[itemSubtype][Things.TEXTURE]
+		Things.TYPE.DOOR:
+			workshopItemInTheBox.texture = Things.DATA_DOOR[itemSubtype][Things.TEXTURE]
+	
+	workshopItemInTheBox.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	#workshopItemInTheBox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	#workshopItemInTheBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	workshopItemInTheBox.expand = true
+	
+	# It was tricky to get them consistent with each other (in ThingPickerWindow and on map), so just did it manually.
+	if textureParent is TextureButton:
+		workshopItemInTheBox.anchor_left = 0.25
+		workshopItemInTheBox.anchor_top = 0.25
+		workshopItemInTheBox.anchor_right = 0.75
+		workshopItemInTheBox.anchor_bottom = 0.75
+	else:
+		workshopItemInTheBox.anchor_left = 0.15
+		workshopItemInTheBox.anchor_top = 0.15
+		workshopItemInTheBox.anchor_right = 0.85
+		workshopItemInTheBox.anchor_bottom = 0.85
+	
+	workshopItemInTheBox.rect_position.x += 2
+	workshopItemInTheBox.rect_position.y -= 1
+	
+	workshopItemInTheBox.modulate = Color(1,1,1,0.5)
+	workshopItemInTheBox.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	textureParent.add_child(workshopItemInTheBox)
 
 func current_grid_container():
 	return oThingTabs.get_current_tab_control().get_node("ScrollContainer/GridContainer")

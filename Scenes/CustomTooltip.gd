@@ -2,6 +2,9 @@ extends Control
 
 var offset = Vector2(0,-35)
 
+func _ready():
+	visible = false
+
 func _process(delta):
 	if visible == true:
 		rect_global_position = get_global_mouse_position() + offset

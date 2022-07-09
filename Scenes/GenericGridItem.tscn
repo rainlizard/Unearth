@@ -6,6 +6,3 @@ anchor_bottom = 1.0
 focus_mode = 0
 expand = true
 stretch_mode = 5
-__meta__ = {
-"_edit_use_anchors_": false
-}

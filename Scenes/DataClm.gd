@@ -91,9 +91,11 @@ func clear_unused_entries():
 func sort_columns_by_utilized():
 	oMessage.quick("Sorted columns by utilized value")
 	
-	var array = []
 	
+	var array = []
 	var dictSrcDest = {}
+	
+	utilized[0] = 999999 # Pretend that the utilized value is maximum for column 0, so it's placed first when sorted. Set it back to 0 afterwards.
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	for i in 2048:
@@ -138,6 +140,9 @@ func sort_columns_by_utilized():
 			oDataClmPos.set_cell(x, y, dictSrcDest[clmIndex])
 	
 	oOverheadGraphics.overhead2d_update_rect(Vector2(0,0), Vector2(84,84))
+	
+	
+	utilized[0] = 0 # Pretend that the utilized value is maximum for column 0, so it's placed first. Set it back to 0 afterwards.
 	
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 

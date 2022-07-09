@@ -57,7 +57,8 @@ func start():
 			#open_map("G:/Games/Dungeon Keeper/ADiKtEd/levels/map00001.slb")
 			
 			#open_map("G:/Games/Dungeon Keeper/campgns/UndivineD/map00001.slb")
-			open_map("G:/Games/Dungeon Keeper/levels/personal/map00001.slb")
+			open_map("D:/keeperfx-source/bin/levels/personal/map00001.slb")
+			
 			#oCurrentMap.clear_map()
 			#pass
 		else:
@@ -161,6 +162,14 @@ func finish_opening_map(map):
 	oEditor.set_view_2d()
 	
 	oMenu.add_recent(map)
+	
+	# When opening a map, be sure that column 0 is empty. Otherwise apply a fix.
+	if oDataClm.permanent[0] != 0 or oDataClm.cubes[0] != [0,0,0,0, 0,0,0,0]:
+		# Make column 0 empty while preserving the column that was there.
+		oDataClm.sort_columns_by_utilized()
+		oDataClm.delete_column(0)
+		oEditor.mapHasBeenEdited = true
+		oMessage.quick("Fixed column index 0, re-save your map.")
 	
 	print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 
