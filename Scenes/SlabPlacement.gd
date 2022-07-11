@@ -21,8 +21,7 @@ onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oDkDat = Nodelist.list["oDkDat"]
 onready var oDkClm = Nodelist.list["oDkClm"]
-onready var oFrailSoloSlabsCheckbox = Nodelist.list["oFrailSoloSlabsCheckbox"]
-onready var oFrailImpenetrableCheckbox = Nodelist.list["oFrailImpenetrableCheckbox"]
+onready var oFrailColumnsCheckbox = Nodelist.list["oFrailColumnsCheckbox"]
 
 enum dir {
 	s = 0
@@ -98,8 +97,6 @@ func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 			oInstances.manage_things_on_slab(xSlab, ySlab, slabID, ownership)
 	
 	print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-	
-	
 	
 	oOverheadGraphics.overhead2d_update_rect(rectStart, rectEnd)
 
@@ -190,8 +187,8 @@ func auto_wall(xSlab, ySlab):
 		"Random":
 			newSlabID = Random.choose([Slabs.WALL_WITH_TWINS, Slabs.WALL_WITH_WOMAN, Slabs.WALL_WITH_PAIR])
 	
-	if Random.chance_int(int(oDamagedWallLineEdit.text)) == true:
-		newSlabID = Slabs.WALL_DAMAGED
+	#if Random.chance_int(int(oDamagedWallLineEdit.text)) == true:
+	#	newSlabID = Slabs.WALL_DAMAGED
 	
 	# Checkerboard
 	if (int(xSlab) % 2 == 0 and int(ySlab) % 2 == 0) or (int(xSlab) % 2 == 1 and int(ySlab) % 2 == 1):
@@ -268,7 +265,6 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	
 	var asset3x3group = make_slab(slabID*28, bitmask)
 	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
-	asset3x3group = corner_filler_and_solo_slab(asset3x3group, surrID, bitmask, slabID)
 	
 	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
 	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
@@ -277,7 +273,26 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	
 	match slabID:
 		Slabs.ROCK:
-			fullSlabData = make_impenetrable_frail(fullSlabData, surrID)
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.PATH, false)
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, false)
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, false)
+		Slabs.GOLD:
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.PATH, false)
+			# Only solo blocks are adjusted for gold. Because there's already frailness going on by default
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, true)
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, true)
+		Slabs.EARTH:
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.PATH, false)
+			# Only solo blocks are adjusted for earth. Because there's already frailness going on by default
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, true)
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, true)
+		Slabs.PATH:
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, false) # This plays better than the inversion of it. (WATER->PATH VS PATH->WATER)
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, false) # This plays better than the inversion of it. (LAVA->PATH VS PATH->LAVA)
+		Slabs.LAVA:
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, false)
+		Slabs.WATER:
+			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, false)
 		Slabs.EARTH_WITH_TORCH:
 			slabCubes = adjust_torch_cubes(slabCubes, calculate_torch_side(xSlab, ySlab))
 		Slabs.CLAIMED_GROUND:
@@ -315,7 +330,6 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 		asset3x3group[6] = ((slabVariation + dir.all) * 9) + 6
 	
 	asset3x3group = modify_wall_based_on_nearby_room_and_liquid(asset3x3group, surrID, slabID)
-	asset3x3group = corner_filler_and_solo_slab(asset3x3group, surrID, bitmask, slabID)
 	
 	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
 	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
@@ -354,7 +368,6 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 	var slabVariation = (42 * 28) + (8 * (slabID - 42))
 	var bitmask = 1
 	var asset3x3group = make_slab(slabVariation, bitmask)
-	asset3x3group = corner_filler_and_solo_slab(asset3x3group, surrID, bitmask, slabID)
 	
 	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
 	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
@@ -382,6 +395,7 @@ const rngLibrary = [174,175]
 const rngGems = [441,442,443,444]
 const rngWall = [72,73,74]
 const rngLava = [546,547] # This one is a FloorTexture
+const stoneRatio = 0.15
 
 func randomize_columns(fullSlabData, slabID, bitmaskType):
 	var slabCubes = fullSlabData[0]
@@ -400,7 +414,6 @@ func randomize_columns(fullSlabData, slabID, bitmaskType):
 	else:
 		match slabID:
 			Slabs.PATH:
-				var stoneRatio = 0.15
 				for i in 9:
 					if slabCubes[i][0] in rngPathClean or slabCubes[i][0] in rngPathWithStones:
 						if stoneRatio < randf():
@@ -1100,132 +1113,188 @@ func update_wibble(xSlab, ySlab, slabID, includeNearby):
 		if seCheck == myWibble and sCheck == myWibble and eCheck == myWibble:
 			oDataWibble.set_cellv(sePos, myWibble)
 
-var slabsThatCanBeUsedAsCornerFiller = {
-	Slabs.PATH:0,
-	Slabs.WATER:1,
-	Slabs.LAVA:2,
-}
-
 const blankCubes = [0,0,0,0,0,0,0,0]
 
-func make_impenetrable_frail(fullSlabData, surrID):
-	if oFrailImpenetrableCheckbox.pressed == false:
+
+func make_frail(fullSlabData, slabID, surrID, frailCornerType, onlyAdjustSoloBlocks):
+	if oFrailColumnsCheckbox.pressed == false:
 		return fullSlabData
 	
 	var slabCubes = fullSlabData[0]
 	var slabFloor = fullSlabData[1]
 	
-	var checkN = 0
-	var checkS = 0
-	var checkE = 0
-	var checkW = 0
-	if surrID[dir.n] == Slabs.WATER or surrID[dir.n] == Slabs.LAVA:
+	var checkN = -1
+	var checkS = -1
+	var checkE = -1
+	var checkW = -1
+	
+	if surrID[dir.n] == frailCornerType and surrID[dir.n] != slabID:
 		checkN = surrID[dir.n]
-	if surrID[dir.s] == Slabs.WATER or surrID[dir.s] == Slabs.LAVA:
+	if surrID[dir.s] == frailCornerType and surrID[dir.s] != slabID:
 		checkS = surrID[dir.s]
-	if surrID[dir.e] == Slabs.WATER or surrID[dir.e] == Slabs.LAVA:
+	if surrID[dir.e] == frailCornerType and surrID[dir.e] != slabID:
 		checkE = surrID[dir.e]
-	if surrID[dir.w] == Slabs.WATER or surrID[dir.w] == Slabs.LAVA:
+	if surrID[dir.w] == frailCornerType and surrID[dir.w] != slabID:
 		checkW = surrID[dir.w]
 	
-	# Water and lava in every direction, this is a single block.
-	if checkN != 0 and checkS != 0 and checkE != 0 and checkW != 0:
-		return fullSlabData
+	# Solo block
+	if checkN != -1 and checkS != -1 and checkE != -1 and checkW != -1:
+		if Random.chance_int(50): checkN = -1
+		if Random.chance_int(50): checkS = -1
+		if Random.chance_int(50): checkE = -1
+		if Random.chance_int(50): checkW = -1
+	else:
+		if onlyAdjustSoloBlocks == true:
+			return fullSlabData
 	
-	if checkN != 0:
-		if checkE != 0:
-			match checkN:
-				Slabs.WATER:
-					slabCubes[2] = blankCubes.duplicate(true)
-					slabFloor[2] = 545
-				Slabs.LAVA:
-					slabCubes[2] = blankCubes.duplicate(true)
-					slabFloor[2] = Random.choose(rngLava)
-		if checkW != 0:
-			match checkN:
-				Slabs.WATER:
-					slabCubes[0] = blankCubes.duplicate(true)
-					slabFloor[0] = 545
-				Slabs.LAVA:
-					slabCubes[0] = blankCubes.duplicate(true)
-					slabFloor[0] = Random.choose(rngLava)
+	if checkN == checkE:
+		if slabID < checkN: # Decide which one to prioritize
+			if checkN == surrID[dir.n] and checkE == surrID[dir.e]:
+				frail_fill_corner(checkN, 2, slabCubes, slabFloor)
+		else:
+			if checkN == surrID[dir.ne]:
+				frail_fill_corner(checkN, 2, slabCubes, slabFloor)
 	
-	if checkS != 0:
-		if checkW != 0:
-			match checkS:
-				Slabs.WATER:
-					slabCubes[6] = blankCubes.duplicate(true)
-					slabFloor[6] = 545
-				Slabs.LAVA:
-					slabCubes[6] = blankCubes.duplicate(true)
-					slabFloor[6] = Random.choose(rngLava)
-		if checkE != 0:
-			match checkS:
-				Slabs.WATER:
-					slabCubes[8] = blankCubes.duplicate(true)
-					slabFloor[8] = 545
-				Slabs.LAVA:
-					slabCubes[8] = blankCubes.duplicate(true)
-					slabFloor[8] = Random.choose(rngLava)
+	if checkN == checkW:
+		if slabID < checkW: # Decide which one to prioritize
+			if checkN == surrID[dir.n] and checkW == surrID[dir.w]:
+				frail_fill_corner(checkW, 0, slabCubes, slabFloor)
+		else:
+			if checkW == surrID[dir.nw]:
+				frail_fill_corner(checkW, 0, slabCubes, slabFloor)
+	
+	if checkS == checkW:
+		if slabID < checkS: # Decide which one to prioritize
+			if checkS == surrID[dir.s] and checkW == surrID[dir.w]:
+				frail_fill_corner(checkS, 6, slabCubes, slabFloor)
+		else:
+			if checkS == surrID[dir.sw]:
+				frail_fill_corner(checkS, 6, slabCubes, slabFloor)
+	
+	if checkS == checkE:
+		if slabID < checkE: # Decide which one to prioritize
+			if checkS == surrID[dir.s] and checkE == surrID[dir.e]:
+				frail_fill_corner(checkE, 8, slabCubes, slabFloor)
+		else:
+			if checkE == surrID[dir.se]:
+				frail_fill_corner(checkE, 8, slabCubes, slabFloor)
 	
 	return fullSlabData
 
-func corner_filler_and_solo_slab(asset3x3group, surrID, bitmask, slabID):
-	if oFrailSoloSlabsCheckbox.pressed == false:
-		return asset3x3group
-	
-	if bitmask != 15:
-		return asset3x3group
-	if slabID != Slabs.ROCK and slabID != Slabs.EARTH and slabID != Slabs.GOLD:
-		return asset3x3group
+func frail_fill_corner(slabID, index, slabCubes, slabFloor):
+	match slabID:
+		Slabs.WATER:
+			slabFloor[index] = 545
+			slabCubes[index] = blankCubes.duplicate(true)
+		Slabs.LAVA:
+			slabFloor[index] = Random.choose(rngLava)
+			slabCubes[index] = blankCubes.duplicate(true)
+		Slabs.PATH:
+			slabFloor[index] = 207
+			slabCubes[index] = blankCubes.duplicate(true)
+			if stoneRatio < randf():
+				slabCubes[index] = blankCubes.duplicate(true)
+				slabCubes[index][0] = Random.choose(rngPathClean)
+			else:
+				slabCubes[index] = blankCubes.duplicate(true)
+				slabCubes[index][0] = Random.choose(rngPathWithStones)
+		Slabs.EARTH:
+			slabFloor[index] = 27
+			slabCubes[index] = blankCubes.duplicate(true)
+			slabCubes[index][0] = 25 # No need to randomize the path cube, it's not visible and the game overwrites it anyway.
+			slabCubes[index][1] = Random.choose(rngEarth)
+			slabCubes[index][2] = Random.choose(rngEarth)
+			slabCubes[index][3] = Random.choose(rngEarth)
+			slabCubes[index][4] = 5
+		Slabs.GOLD:
+			slabFloor[index] = 27
+			slabCubes[index] = blankCubes.duplicate(true)
+			slabCubes[index][0] = 25
+			slabCubes[index][1] = Random.choose(rngGold)
+			slabCubes[index][2] = Random.choose(rngGold)
+			slabCubes[index][3] = Random.choose(rngGold)
+			slabCubes[index][4] = Random.choose(rngGold)
+		Slabs.ROCK:
+			slabFloor[index] = 29
+			slabCubes[index] = blankCubes.duplicate(true)
+			slabCubes[index][0] = 45
+			slabCubes[index][1] = 45
+			slabCubes[index][2] = 44
+			slabCubes[index][3] = 44
+			slabCubes[index][4] = 43
 
-	var cornerTopLeft = null
-	var cornerTopRight = null
-	var cornerBottomLeft = null
-	var cornerBottomRight = null
+#var frailCornerTypes = [
+#	Slabs.PATH,
+#	Slabs.WATER,
+#	Slabs.LAVA,
+#]
 
-	if surrID[dir.n] == surrID[dir.w]:
-		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.n]):
-			cornerTopLeft = surrID[dir.n]
-			# In the case of how two filler slabs decide to fill their corners
-			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.n] != surrID[dir.nw] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.nw]):
-				if slabsThatCanBeUsedAsCornerFiller[cornerTopLeft] > slabsThatCanBeUsedAsCornerFiller[slabID]:
-					cornerTopLeft = null
-
-	if surrID[dir.n] == surrID[dir.e]:
-		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.n]):
-			cornerTopRight = surrID[dir.n]
-			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.n] != surrID[dir.ne] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.ne]):
-				if slabsThatCanBeUsedAsCornerFiller[cornerTopRight] > slabsThatCanBeUsedAsCornerFiller[slabID]:
-					cornerTopRight = null
-
-	if surrID[dir.s] == surrID[dir.w]:
-		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.s]):
-			cornerBottomLeft = surrID[dir.s]
-			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.s] != surrID[dir.sw] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.sw]):
-				if slabsThatCanBeUsedAsCornerFiller[cornerBottomLeft] > slabsThatCanBeUsedAsCornerFiller[slabID]:
-					cornerBottomLeft = null
-
-	if surrID[dir.s] == surrID[dir.e]:
-		if slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.s]):
-			cornerBottomRight = surrID[dir.s]
-			if slabsThatCanBeUsedAsCornerFiller.has(slabID) and surrID[dir.s] != surrID[dir.se] and slabsThatCanBeUsedAsCornerFiller.has(surrID[dir.se]):
-				if slabsThatCanBeUsedAsCornerFiller[cornerBottomRight] > slabsThatCanBeUsedAsCornerFiller[slabID]:
-					cornerBottomRight = null
-
-	if cornerTopLeft != null and cornerTopRight != null and cornerBottomLeft != null and cornerBottomRight != null:
-		if Random.chance_int(50): cornerTopLeft = null
-		if Random.chance_int(50): cornerTopRight = null
-		if Random.chance_int(50): cornerBottomLeft = null
-		if Random.chance_int(50): cornerBottomRight = null
-
-	if cornerTopLeft != null:
-		asset3x3group[0] = cornerTopLeft * 28 * 9
-	if cornerTopRight != null:
-		asset3x3group[2] = cornerTopRight * 28 * 9
-	if cornerBottomLeft != null:
-		asset3x3group[6] = cornerBottomLeft * 28 * 9
-	if cornerBottomRight != null:
-		asset3x3group[8] = cornerBottomRight * 28 * 9
-
-	return asset3x3group
+#asset3x3group = frail_solo_slab(asset3x3group, surrID, bitmask, slabID)
+#func frail_solo_slab(asset3x3group, surrID, bitmask, slabID):
+#	if oFrailSoloSlabsCheckbox.pressed == false:
+#		return asset3x3group
+#	if bitmask != 15: # must be a solo slab
+#		return asset3x3group
+#
+#	# Can be any slab ID
+#	var cornerTopLeft = null
+#	var cornerTopRight = null
+#	var cornerBottomLeft = null
+#	var cornerBottomRight = null
+#
+#	if surrID[dir.n] == surrID[dir.w]:
+#		var getType = frailCornerTypes.find(surrID[dir.n])
+#		if getType != -1:
+#			cornerTopLeft = frailCornerTypes[getType]
+#			# Decide which filler slab to prioritize for a conflicting corner
+#			var prioritySlabID = frailCornerTypes.find(slabID)
+#			if prioritySlabID != -1 and surrID[dir.n] != surrID[dir.nw] and frailCornerTypes.has(surrID[dir.nw]):
+#				if getType > prioritySlabID:
+#					cornerTopLeft = null
+#
+#	if surrID[dir.n] == surrID[dir.e]:
+#		var getType = frailCornerTypes.find(surrID[dir.n])
+#		if getType != -1:
+#			cornerTopRight = frailCornerTypes[getType]
+#			# Decide which filler slab to prioritize for a conflicting corner
+#			var prioritySlabID = frailCornerTypes.find(slabID)
+#			if prioritySlabID != -1 and surrID[dir.n] != surrID[dir.ne] and frailCornerTypes.has(surrID[dir.ne]):
+#				if getType > prioritySlabID:
+#					cornerTopRight = null
+#
+#	if surrID[dir.s] == surrID[dir.w]:
+#		var getType = frailCornerTypes.find(surrID[dir.s])
+#		if getType != -1:
+#			cornerBottomLeft = frailCornerTypes[getType]
+#			# Decide which filler slab to prioritize for a conflicting corner
+#			var prioritySlabID = frailCornerTypes.find(slabID)
+#			if prioritySlabID != -1 and surrID[dir.s] != surrID[dir.sw] and frailCornerTypes.has(surrID[dir.sw]):
+#				if getType > prioritySlabID:
+#					cornerBottomLeft = null
+#
+#	if surrID[dir.s] == surrID[dir.e]:
+#		var getType = frailCornerTypes.find(surrID[dir.s])
+#		if getType != -1:
+#			cornerBottomRight = frailCornerTypes[getType]
+#			# Decide which filler slab to prioritize for a conflicting corner
+#			var prioritySlabID = frailCornerTypes.find(slabID)
+#			if prioritySlabID != -1 and surrID[dir.s] != surrID[dir.se] and frailCornerTypes.has(surrID[dir.se]):
+#				if getType > prioritySlabID:
+#					cornerBottomRight = null
+#
+#	if cornerTopLeft != null and cornerTopRight != null and cornerBottomLeft != null and cornerBottomRight != null:
+#		if Random.chance_int(50): cornerTopLeft = null
+#		if Random.chance_int(50): cornerTopRight = null
+#		if Random.chance_int(50): cornerBottomLeft = null
+#		if Random.chance_int(50): cornerBottomRight = null
+#
+#	if cornerTopLeft != null:
+#		asset3x3group[0] = cornerTopLeft * 28 * 9
+#	if cornerTopRight != null:
+#		asset3x3group[2] = cornerTopRight * 28 * 9
+#	if cornerBottomLeft != null:
+#		asset3x3group[6] = cornerBottomLeft * 28 * 9
+#	if cornerBottomRight != null:
+#		asset3x3group[8] = cornerBottomRight * 28 * 9
+#
+#	return asset3x3group

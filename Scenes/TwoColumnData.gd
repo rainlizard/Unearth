@@ -1,6 +1,8 @@
 extends GridContainer
 
 const scnSpinBoxPropertiesValue = preload("res://Scenes/SpinBoxPropertiesValue.tscn")
+const scnLevelChanger = preload("res://Scenes/LevelChanger.tscn")
+
 const thinLineEditTheme = preload("res://Theme/ThinLineEdit.tres")
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oSelection = Nodelist.list["oSelection"]
@@ -58,14 +60,19 @@ func add_item(leftText, rightText):
 			for i in nameValue.get_item_count():
 				if nameValue.get_item_text(nameValue.get_item_index(i)) == rightText:
 					nameValue.selected = i
-	
-		"Level","Effect range","Light range","Intensity","Gate #","Point range","Point #","Custom box","Unknown 9","Unknown 10","Unknown 11-12","Unknown 13","Unknown 14","Unknown 15","Unknown 16","Unknown 17","Unknown 18","Unknown 19","Unknown 20":
+		"Level":
+			nameValue = scnLevelChanger.instance()
+			#nameValue.expand_to_text_length = true
+			nameValue.theme = thinLineEditTheme #!!!!!!!!!!!!!
+			nameValue.connect("value_changed", self, "_on_property_value_changed", [nameValue, leftText])
+			nameValue.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nameValue, leftText])
+			nameValue.value = float(rightText)
+		"Effect range","Light range","Intensity","Gate #","Point range","Point #","Custom box","Unknown 9","Unknown 10","Unknown 11-12","Unknown 13","Unknown 14","Unknown 15","Unknown 16","Unknown 17","Unknown 18","Unknown 19","Unknown 20":
 			nameValue = scnSpinBoxPropertiesValue.instance()
 			#nameValue.expand_to_text_length = true
 			nameValue.theme = thinLineEditTheme #!!!!!!!!!!!!!
 			nameValue.connect("value_changed", self, "_on_property_value_changed", [nameValue, leftText])
 			nameValue.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nameValue, leftText])
-			
 			nameValue.value = float(rightText)
 		"Position":
 			var scn = preload('res://Scenes/PositionEditor.tscn')

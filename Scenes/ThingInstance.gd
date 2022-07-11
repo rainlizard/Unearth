@@ -151,8 +151,7 @@ func set_texture_based_on_thingtype():
 					$ThingTexture.self_modulate = "a0ffffff"
 				elif Things.LIST_OF_BOXES.has(subtype):
 					$ThingTexture.rect_position += Vector2(-1,9)
-					var oPickThingWindow = Nodelist.list["oPickThingWindow"]
-					oPickThingWindow.add_workshop_item_sprite_overlay($ThingTexture, subtype)
+					Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($ThingTexture, subtype)
 		Things.TYPE.CREATURE:
 			if Things.DATA_CREATURE.has(subtype) == true:
 				tex = Things.DATA_CREATURE[subtype][Things.TEXTURE]

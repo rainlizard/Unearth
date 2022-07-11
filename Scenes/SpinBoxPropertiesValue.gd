@@ -1,4 +1,5 @@
 extends SpinBox
+class_name SpinBoxPropertiesValue
 
 func _ready():
 	get_line_edit().expand_to_text_length = true

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://LevelChanger.gd" type="Script" id=1]
+
+[node name="LevelChanger" type="SpinBox"]
+script = ExtResource( 1 )

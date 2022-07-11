@@ -10,6 +10,7 @@ onready var oChooseTmapaFileDialog = Nodelist.list["oChooseTmapaFileDialog"]
 onready var oRNC = Nodelist.list["oRNC"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oExportTmapaButton = Nodelist.list["oExportTmapaButton"]
 
 
 var filelistfile = File.new()
@@ -20,12 +21,16 @@ var editingImg = Image.new()
 func _ready():
 	editingImg.create(8*32, 68*32, false, Image.FORMAT_RGB8)
 	oReloaderContainer.visible = false
+	oExportTmapaButton.disabled = true
+	oExportTmapaButton.set_tooltip("A filelist pack must be loaded first in order to export")
 
 func _on_ChooseFileListFileDialog_file_selected(path):
 	fileListFilePath = path
 	oReloaderPathLabel.text = path
 	
 	oReloaderContainer.visible = true
+	oExportTmapaButton.disabled = false
+	oExportTmapaButton.set_tooltip("")
 	reloader_loop()
 
 func reloader_loop():

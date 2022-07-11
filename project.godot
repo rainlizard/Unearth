@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "SpecialTabContainer",
 "language": "GDScript",
 "path": "res://Class/SpecialTabs.gd"
+}, {
+"base": "SpinBox",
+"class": "SpinBoxPropertiesValue",
+"language": "GDScript",
+"path": "res://Scenes/SpinBoxPropertiesValue.gd"
 } ]
 _global_script_class_icons={
 "CustomSpinBox": "",
 "EditableLabel": "",
-"SpecialTabContainer": ""
+"SpecialTabContainer": "",
+"SpinBoxPropertiesValue": ""
 }
 
 [application]

@@ -52,15 +52,7 @@ func start():
 		if OS.has_feature("standalone") == false:
 			#yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
-			#open_map("G:/Games/Dungeon Keeper/campgns/keeporig/map00003.slb")
-			#open_map("G:/Games/Dungeon Keeper/campgns/ancntkpr/map00001.slb")
-			#open_map("G:/Games/Dungeon Keeper/ADiKtEd/levels/map00001.slb")
-			
-			#open_map("G:/Games/Dungeon Keeper/campgns/UndivineD/map00001.slb")
-			open_map("D:/keeperfx-source/bin/levels/personal/map00001.slb")
-			
-			#oCurrentMap.clear_map()
-			#pass
+			open_map("D:/DungeonKeeper/levels/personal/map00001.slb")
 		else:
 			oCurrentMap.clear_map()
 

@@ -58,8 +58,7 @@ var listOfSettings = [
 	"ownable_natural_terrain",
 	"editable_borders",
 	"bridges_only_on_liquid",
-	"frail_solo_slab",
-	"frail_impenetrable",
+	"frail_columns",
 	"wallauto_art",
 	"wallauto_damaged",
 	"recently_opened",
@@ -315,14 +314,10 @@ func game_setting(doWhat,string,value):
 			var oBridgesOnlyOnLiquidCheckbox = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox'
 			if doWhat == SET: oBridgesOnlyOnLiquidCheckbox.pressed = value
 			if doWhat == GET: return oBridgesOnlyOnLiquidCheckbox.pressed
-		"frail_impenetrable":
-			var oFrailImpenetrableCheckbox = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/FrailImpenetrableCheckbox'
-			if doWhat == SET: oFrailImpenetrableCheckbox.pressed = value
-			if doWhat == GET: return oFrailImpenetrableCheckbox.pressed
-		"frail_solo_slab":
-			var oFrailSoloSlabsCheckbox = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/FrailSoloSlabsCheckbox'
-			if doWhat == SET: oFrailSoloSlabsCheckbox.pressed = value
-			if doWhat == GET: return oFrailSoloSlabsCheckbox.pressed
+		"frail_columns":
+			var oFrailColumnsCheckbox = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/FrailColumnsCheckbox'
+			if doWhat == SET: oFrailColumnsCheckbox.pressed = value
+			if doWhat == GET: return oFrailColumnsCheckbox.pressed
 		"wallauto_art":
 			var oAutoWallArtButton = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton'
 			if doWhat == SET: oAutoWallArtButton.text = value

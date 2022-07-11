@@ -30,7 +30,7 @@ enum FIELDS {
 }
 
 func _ready():
-	get_parent().set_tab_title(1, "Placing")
+	get_parent().set_tab_title(1, "Create")
 
 func editing_mode_was_switched(modeString):
 	if modeString == "Slab":

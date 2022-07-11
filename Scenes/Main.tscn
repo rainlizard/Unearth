@@ -1117,7 +1117,6 @@ size_flags_vertical = 2
 window_title = "Properties"
 script = ExtResource( 72 )
 __meta__ = {
-"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 
@@ -1984,9 +1983,6 @@ rect_clip_content = true
 mouse_filter = 2
 size_flags_horizontal = 7
 size_flags_vertical = 7
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TabSettings" type="TabContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer"]
 margin_right = 568.0
@@ -2512,7 +2508,7 @@ visible = true
 margin_left = 832.0
 margin_top = 1216.0
 margin_right = 1146.0
-margin_bottom = 1590.0
+margin_bottom = 1478.0
 rect_min_size = Vector2( 314, 220 )
 window_title = "Placement options"
 script = ExtResource( 103 )
@@ -2530,7 +2526,7 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer"]
 margin_right = 278.0
-margin_bottom = 334.0
+margin_bottom = 222.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2554,41 +2550,34 @@ margin_bottom = 95.0
 pressed = true
 text = "Place bridges only on liquid"
 
-[node name="FrailImpenetrableCheckbox" type="CheckBox" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
+[node name="FrailColumnsCheckbox" type="CheckBox" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
 margin_top = 99.0
 margin_right = 278.0
 margin_bottom = 128.0
 pressed = true
-text = "Frail impenetrable"
-
-[node name="FrailSoloSlabsCheckbox" type="CheckBox" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 132.0
-margin_right = 278.0
-margin_bottom = 161.0
-pressed = true
-text = "Frail solo slabs"
+text = "Frail columns"
 
 [node name="Spacing2" type="Control" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 165.0
+margin_top = 132.0
 margin_right = 278.0
-margin_bottom = 189.0
+margin_bottom = 156.0
 rect_min_size = Vector2( 24, 24 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 193.0
+margin_top = 160.0
 margin_right = 278.0
-margin_bottom = 214.0
+margin_bottom = 181.0
 text = "Wall Automatic"
 align = 1
 autowrap = true
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 218.0
+margin_top = 185.0
 margin_right = 278.0
-margin_bottom = 280.0
+margin_bottom = 212.0
 columns = 2
 
 [node name="ArtLabel" type="Label" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer"]
@@ -2611,15 +2600,16 @@ __meta__ = {
 }
 
 [node name="DamagedWallLabel" type="Label" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer"]
+visible = false
 margin_top = 36.0
 margin_right = 181.0
 margin_bottom = 57.0
 text = "Damaged Wall %"
 
 [node name="DamagedWallLineEdit" type="LineEdit" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 185.0
+visible = false
 margin_top = 31.0
-margin_right = 273.0
+margin_right = 181.0
 margin_bottom = 62.0
 text = "0"
 __meta__ = {
@@ -2627,10 +2617,11 @@ __meta__ = {
 }
 
 [node name="WarningLabel" type="Label" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
+visible = false
 self_modulate = Color( 1, 1, 1, 0.25098 )
-margin_top = 284.0
+margin_top = 216.0
 margin_right = 278.0
-margin_bottom = 329.0
+margin_bottom = 261.0
 text = "Warning: Damaged Walls may display buggy behaviour"
 autowrap = true
 __meta__ = {
@@ -2685,7 +2676,7 @@ text = "Controls
 - Mouse: Look
 - Mouse wheel up: Descend
 - Mouse wheel down: Ascend
-- Spacebar: toggle 1st person mode
+- Spacebar: unlock mouse capture
 - Right click: exit 1st person mode
 - ESC: Exit 3D view"
 __meta__ = {
@@ -3245,17 +3236,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DungeonStyleList" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/HBoxContainer/ScrollContainer"]
+[node name="DungeonStyleList" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/HBoxContainer/ScrollContainer"]
 margin_left = 417.0
 margin_right = 417.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 6
 size_flags_vertical = 2
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+columns = 2
 
 [node name="ScriptGenerator" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs"]
 visible = false
@@ -3906,8 +3894,8 @@ current_path = "/Godot/MyProjects/Unearth/"
 visible = true
 margin_left = -1273.0
 margin_top = 954.0
-margin_right = -694.0
-margin_bottom = 1345.0
+margin_right = -741.0
+margin_bottom = 1377.0
 window_title = "Texture editing"
 resizable = true
 script = ExtResource( 126 )
@@ -3924,25 +3912,25 @@ __meta__ = {
 }
 
 [node name="CreateFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_right = 559.0
+margin_right = 512.0
 margin_bottom = 27.0
-text = "Convert tmapa*.dat to filelist pack"
+text = "Convert tmapa*.dat file to filelist pack"
 
 [node name="LoadFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_top = 31.0
-margin_right = 559.0
+margin_right = 512.0
 margin_bottom = 58.0
-text = "Load filelist pack for auto updating"
+text = "Load filelist pack"
 
 [node name="ReloaderContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_top = 62.0
-margin_right = 559.0
-margin_bottom = 371.0
+margin_right = 512.0
+margin_bottom = 372.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_right = 559.0
+margin_right = 512.0
 margin_bottom = 21.0
 scroll_vertical_enabled = false
 
@@ -3953,13 +3941,13 @@ text = "<>"
 
 [node name="Spacing3" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
 margin_top = 25.0
-margin_right = 559.0
+margin_right = 512.0
 margin_bottom = 49.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
 margin_top = 53.0
-margin_right = 559.0
+margin_right = 512.0
 margin_bottom = 84.0
 
 [node name="label" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/HBoxContainer"]
@@ -3993,32 +3981,32 @@ __meta__ = {
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
 margin_top = 88.0
-margin_right = 559.0
+margin_right = 512.0
 margin_bottom = 112.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="ReloaderLoopLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
 margin_top = 116.0
-margin_right = 559.0
-margin_bottom = 233.0
-text = "Now actively reloading files from filelist pack folder. For your edits to be visible be sure to set your Dungeon style in Map settings to match the pack number you're editing.
+margin_right = 512.0
+margin_bottom = 281.0
+text = "Now actively reloading files from filelist pack folder, this means as you edit and save those .PNGs, any changes you make will be shown in Unearth (in 3D view too).
 
-Restart the editor when you want to stop."
+Be sure to set your Dungeon style in Map settings to match the pack number you're editing. Restart the editor when you want to stop."
 autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Spacing2" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_top = 237.0
-margin_right = 559.0
-margin_bottom = 261.0
+margin_top = 285.0
+margin_right = 512.0
+margin_bottom = 309.0
 rect_min_size = Vector2( 24, 24 )
 
-[node name="ExportTmapaButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_top = 265.0
-margin_right = 559.0
-margin_bottom = 292.0
+[node name="ExportTmapaButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+margin_top = 376.0
+margin_right = 512.0
+margin_bottom = 403.0
 text = "Export as tmapa*.dat"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -4933,8 +4921,7 @@ script = ExtResource( 88 )
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox" to="Editor" method="_on_EditableBordersCheckbox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox" to="Ui/UiSystem/SlabSettingsWindow" method="_on_EditableBordersCheckbox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox" to="Ui/UiSystem/SlabSettingsWindow" method="_on_BridgesOnlyOnLiquidCheckbox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/FrailImpenetrableCheckbox" to="Ui/UiSystem/SlabSettingsWindow" method="_on_FrailImpenetrableCheckbox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/FrailSoloSlabsCheckbox" to="Ui/UiSystem/SlabSettingsWindow" method="_on_FrailSoloSlabsCheckbox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/FrailColumnsCheckbox" to="Ui/UiSystem/SlabSettingsWindow" method="_on_FrailColumnsCheckbox_toggled"]
 [connection signal="pressed" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton" to="Ui/UiSystem/SlabSettingsWindow" method="_on_AutoWallArtButton_pressed"]
 [connection signal="focus_exited" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit" to="Ui/UiSystem/SlabSettingsWindow" method="_on_DamagedWallLineEdit_focus_exited"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
@@ -4971,7 +4958,7 @@ script = ExtResource( 88 )
 [connection signal="file_selected" from="Ui/UiSystem/ExportTmapaDatDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaDatDialog_file_selected"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/CreateFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_CreateFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ColumnEditor" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditor_visibility_changed"]
 [connection signal="tab_changed" from="Ui/UiSystem/ColumnEditor/ColumnEditorTabs" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorTabs_tab_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorClearUnusedButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorClearUnusedButton_pressed"]

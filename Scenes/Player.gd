@@ -76,12 +76,11 @@ func _input(event):
 	if Input.is_key_pressed(KEY_SHIFT):
 		speed_multiplier = 10
 	
-	if Input.is_action_just_pressed("change_3d_mouse_mode"):
+	if Input.is_action_just_pressed("change_3d_mouse_mode") and oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-			oUi.switch_to_3D_overhead()
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		else:
-			oUi.switch_to_1st_person()
-	
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 	if Input.is_action_just_pressed("zoom_in"):
 		if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:

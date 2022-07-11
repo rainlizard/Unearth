@@ -14,6 +14,7 @@ onready var oRNC = Nodelist.list["oRNC"]
 onready var oGame3D = Nodelist.list["oGame3D"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
+onready var oMapProperties = Nodelist.list["oMapProperties"]
 
 const IMAGE_FORMAT = Image.FORMAT_RGB8
 const textureWidth = 256
@@ -39,7 +40,10 @@ func _notification(what: int):
 				start()
 	#		else:
 	#			print('Nothing differs')
-
+		
+		for i in 100: # wait until file appears. an estimate is fine. this isn't super important, because the list is also refreshed whenever switching to the tab or reopening the window.
+			yield(get_tree(),'idle_frame')
+		oMapProperties._on_MapProperties_visibility_changed() # Refresh list of styles if it's visible
 
 func _on_ReloadTextureMapsButton_pressed():
 	if texturesLoadedState != LOADING_IN_PROGRESS: # Don't do anything if it's already doing something
@@ -144,7 +148,7 @@ func save_image_as_png(img, inputPath):
 	var savePath = Settings.unearthdata.plus_file(fileName)
 	ResourceSaver.save(savePath, imgTex)
 	oMessage.quick("Caching texture maps : unearthdata".plus_file(fileName))
-	#return savePath
+
 
 func load_cache_filename(path):
 	var fileName = path.get_file().get_basename().to_lower()
