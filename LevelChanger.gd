@@ -11,13 +11,11 @@ func _input(event):
 		var allowKeyShortcuts = false
 		match get_parent().name:
 			"PlacingListData": # Placing
-				if get_focus_owner() == null:
+				if get_focus_owner() == null or get_focus_owner().get_parent() == self:
 					allowKeyShortcuts = true
 			"ThingListData": # Hover
 				if oInspector.inspectingInstance != null:
-					#if get_focus_owner() != null and get_focus_owner().get_parent() == self:
 					allowKeyShortcuts = true
-		
 		
 		yield(get_tree(),'idle_frame')
 		if allowKeyShortcuts == true:

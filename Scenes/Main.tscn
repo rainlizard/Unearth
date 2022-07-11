@@ -3925,7 +3925,7 @@ text = "Load filelist pack"
 [node name="ReloaderContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_top = 62.0
 margin_right = 512.0
-margin_bottom = 372.0
+margin_bottom = 383.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -4004,9 +4004,9 @@ margin_bottom = 309.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="ExportTmapaButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_top = 376.0
+margin_top = 387.0
 margin_right = 512.0
-margin_bottom = 403.0
+margin_bottom = 414.0
 text = "Export as tmapa*.dat"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -4038,23 +4038,24 @@ margin_right = -12.0
 margin_bottom = -12.0
 
 [node name="ColumnEditorVoxelView" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 1012.0
+margin_right = 1024.0
 margin_bottom = 655.0
 displayingType = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer"]
-margin_left = 1016.0
+margin_left = 1028.0
 margin_right = 1236.0
 margin_bottom = 655.0
 
 [node name="ColumnEditorControls" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2" instance=ExtResource( 137 )]
+margin_right = 208.0
 margin_bottom = 593.0
 nodeClm = NodePath("../../../../../../../CurrentMap/DataClm")
 nodeVoxelView = NodePath("../../ColumnEditorVoxelView")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2"]
 margin_top = 597.0
-margin_right = 220.0
+margin_right = 208.0
 margin_bottom = 624.0
 size_flags_horizontal = 3
 
@@ -4067,7 +4068,7 @@ text = "Clear unused"
 
 [node name="ColumnEditorSortButton" type="Button" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2/HBoxContainer2"]
 margin_left = 134.0
-margin_right = 220.0
+margin_right = 208.0
 margin_bottom = 27.0
 size_flags_horizontal = 11
 size_flags_vertical = 10
@@ -4075,11 +4076,11 @@ text = "Sort"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2"]
 margin_top = 628.0
-margin_right = 220.0
+margin_right = 208.0
 margin_bottom = 655.0
 
 [node name="ColumnEditorHelpButton" type="Button" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2/HBoxContainer"]
-margin_right = 220.0
+margin_right = 208.0
 margin_bottom = 27.0
 size_flags_horizontal = 11
 size_flags_vertical = 8
