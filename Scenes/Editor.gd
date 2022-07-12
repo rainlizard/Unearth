@@ -12,7 +12,6 @@ onready var oEditingMode = Nodelist.list["oEditingMode"]
 onready var oEditableBordersCheckbox = Nodelist.list["oEditableBordersCheckbox"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oConfirmSaveBeforeQuit = Nodelist.list["oConfirmSaveBeforeQuit"]
-onready var oReadCubes = Nodelist.list["oReadCubes"]
 
 enum {
 	VIEW_2D = 0

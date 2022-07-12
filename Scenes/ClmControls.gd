@@ -4,8 +4,6 @@ onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
-onready var oReadCubes = Nodelist.list["oReadCubes"]
-
 
 export(NodePath) onready var nodeClm = get_node(nodeClm) as Node
 export(NodePath) onready var nodeVoxelView = get_node(nodeVoxelView) as Node
@@ -63,8 +61,8 @@ func _on_floortexture_mouse_exited():
 
 func _on_cube_mouse_entered(cubeNumber):
 	var cubeIndex = int(cubeSpinBoxArray[cubeNumber].value)
-	if cubeIndex < oReadCubes.names.size():
-		oCustomTooltip.set_text(oReadCubes.names[cubeIndex])
+	if cubeIndex < Cube.names.size():
+		oCustomTooltip.set_text(Cube.names[cubeIndex])
 
 func _on_cube_mouse_exited(cubeNumber):
 	oCustomTooltip.set_text("")

@@ -132,6 +132,9 @@ func open_map(filePath): # auto opens other files
 #		oMessage.quick("Error: Map files not found")
 
 func finish_opening_map(map):
+	if Cube.tex.empty() == true:
+		Cube.read_cubes_cfg()
+	
 	oCurrentMap.set_path_and_title(map)
 	oDynamicMapTree.highlight_current_map()
 	oEditor.mapHasBeenEdited = false
@@ -141,9 +144,12 @@ func finish_opening_map(map):
 	oCamera2D.reset_camera()
 	
 	oSlabPalette.start()
+	
 	oOverheadGraphics.update_map_overhead_2d_textures()
-	oDataClm.count_filled_clm_entries()
 	oPickSlabWindow.add_slabs()
+	
+	oDataClm.count_filled_clm_entries()
+	
 	oTextureCache.set_current_texture_pack()
 	
 	if oCurrentMap.path == "":

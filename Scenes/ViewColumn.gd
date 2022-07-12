@@ -10,7 +10,6 @@ onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
-onready var oReadCubes = Nodelist.list["oReadCubes"]
 
 var currentlyLookingAtNode = null
 var instanceType = 0
@@ -79,50 +78,50 @@ func update_details():
 				description = "Cube 8"
 				var cubeNumber = oDataClm.cubes[entryIndex][7]
 				value = str(cubeNumber)
-				if cubeNumber < oReadCubes.names.size():
-					value += ' : '+ oReadCubes.names[cubeNumber]
+				if cubeNumber < Cube.names.size():
+					value += ' : '+ Cube.names[cubeNumber]
 			8:
 				description = "Cube 7"
 				var cubeNumber = oDataClm.cubes[entryIndex][6]
 				value = str(cubeNumber)
-				if cubeNumber < oReadCubes.names.size():
-					value += ' : '+ oReadCubes.names[cubeNumber]
+				if cubeNumber < Cube.names.size():
+					value += ' : '+ Cube.names[cubeNumber]
 			9:
 				description = "Cube 6"
 				var cubeNumber = oDataClm.cubes[entryIndex][5]
 				value = str(cubeNumber)
-				if cubeNumber < oReadCubes.names.size():
-					value += ' : '+ oReadCubes.names[cubeNumber]
+				if cubeNumber < Cube.names.size():
+					value += ' : '+ Cube.names[cubeNumber]
 			10:
 				description = "Cube 5"
 				var cubeNumber = oDataClm.cubes[entryIndex][4]
 				value = str(cubeNumber)
-				if cubeNumber < oReadCubes.names.size():
-					value += ' : '+ oReadCubes.names[cubeNumber]
+				if cubeNumber < Cube.names.size():
+					value += ' : '+ Cube.names[cubeNumber]
 			11:
 				description = "Cube 4"
 				var cubeNumber = oDataClm.cubes[entryIndex][3]
 				value = str(cubeNumber)
-				if cubeNumber < oReadCubes.names.size():
-					value += ' : '+ oReadCubes.names[cubeNumber]
+				if cubeNumber < Cube.names.size():
+					value += ' : '+ Cube.names[cubeNumber]
 			12:
 				description = "Cube 3"
 				var cubeNumber = oDataClm.cubes[entryIndex][2]
 				value = str(cubeNumber)
-				if cubeNumber < oReadCubes.names.size():
-					value += ' : '+ oReadCubes.names[cubeNumber]
+				if cubeNumber < Cube.names.size():
+					value += ' : '+ Cube.names[cubeNumber]
 			13:
 				description = "Cube 2"
 				var cubeNumber = oDataClm.cubes[entryIndex][1]
 				value = str(cubeNumber)
-				if cubeNumber < oReadCubes.names.size():
-					value += ' : '+ oReadCubes.names[cubeNumber]
+				if cubeNumber < Cube.names.size():
+					value += ' : '+ Cube.names[cubeNumber]
 			14:
 				description = "Cube 1"
 				var cubeNumber = oDataClm.cubes[entryIndex][0]
 				value = str(cubeNumber)
-				if cubeNumber < oReadCubes.names.size():
-					value += ' : '+ oReadCubes.names[cubeNumber]
+				if cubeNumber < Cube.names.size():
+					value += ' : '+ Cube.names[cubeNumber]
 			15:
 				description = "Floor texture"
 				value = oDataClm.floorTexture[entryIndex]
