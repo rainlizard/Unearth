@@ -1,6 +1,8 @@
 extends Node
 
-var data = []
+var tex = []
+var names = []
+var cubesCfgLastModifiedTime = 0
 
 enum {
 	RED = 0
@@ -40,9 +42,7 @@ enum {
 	SIDE_BOTTOM = 5,
 }
 
-var tex = []
-var names = []
-var cubesCfgLastModifiedTime = 0
+
 
 func get_cubescfg_modified_time():
 	var oGame = Nodelist.list["oGame"]
@@ -116,6 +116,12 @@ func read_cubes_cfg():
 			])
 	
 	print('Cube names read in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	
+	
+	var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
+	var oDkClmControls = Nodelist.list["oDkClmControls"]
+	oColumnEditorControls.establish_maximum_cube_field_values()
+	oDkClmControls.establish_maximum_cube_field_values()
 
 func load_dk_original_cubes():
 	tex = [

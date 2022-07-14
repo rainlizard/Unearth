@@ -29,6 +29,7 @@ onready var oCube4SpinBox = $"VBoxContainer/GridSimpleValues/Cube4SpinBox"
 onready var oCube3SpinBox = $"VBoxContainer/GridSimpleValues/Cube3SpinBox"
 onready var oCube2SpinBox = $"VBoxContainer/GridSimpleValues/Cube2SpinBox"
 onready var oCube1SpinBox = $"VBoxContainer/GridSimpleValues/Cube1SpinBox"
+
 onready var cubeSpinBoxArray = [
 	oCube1SpinBox,
 	oCube2SpinBox,
@@ -53,8 +54,16 @@ func _ready():
 	
 	oGridAdvancedValues.visible = false
 
+
+func establish_maximum_cube_field_values():
+	for i in cubeSpinBoxArray.size():
+		cubeSpinBoxArray[i].max_value = Cube.tex.size()-1
+
+
 func _on_floortexture_mouse_entered():
 	oCustomTooltip.set_floortexture(oFloorTextureSpinBox.value)
+
+
 func _on_floortexture_mouse_exited():
 	oCustomTooltip.set_text("")
 
@@ -64,8 +73,10 @@ func _on_cube_mouse_entered(cubeNumber):
 	if cubeIndex < Cube.names.size():
 		oCustomTooltip.set_text(Cube.names[cubeIndex])
 
+
 func _on_cube_mouse_exited(cubeNumber):
 	oCustomTooltip.set_text("")
+
 
 func _on_ColumnDuplicateButton_pressed():
 	var clmIndex = int(oColumnIndexSpinBox.value)
