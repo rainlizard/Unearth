@@ -57,7 +57,7 @@ func _ready():
 
 func establish_maximum_cube_field_values():
 	for i in cubeSpinBoxArray.size():
-		cubeSpinBoxArray[i].max_value = Cube.tex.size()-1
+		cubeSpinBoxArray[i].max_value = Cube.CUBES_COUNT
 
 
 func _on_floortexture_mouse_entered():
@@ -195,7 +195,6 @@ func _on_UtilizedSpinBox_value_changed(value):
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.utilized[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
-
 
 func _on_ColumnFirstUnusedButton_pressed():
 	var findUnusedIndex = nodeClm.find_cubearray_index([0,0,0,0, 0,0,0,0], 0)

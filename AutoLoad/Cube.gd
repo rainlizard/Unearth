@@ -4,6 +4,8 @@ var tex = []
 var names = []
 var cubesCfgLastModifiedTime = 0
 
+var CUBES_COUNT
+
 enum {
 	RED = 0
 	BLUE = 1
@@ -120,6 +122,9 @@ func read_cubes_cfg():
 	
 	var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
 	var oDkClmControls = Nodelist.list["oDkClmControls"]
+	
+	CUBES_COUNT = Cube.tex.size()-1
+	
 	oColumnEditorControls.establish_maximum_cube_field_values()
 	oDkClmControls.establish_maximum_cube_field_values()
 

@@ -88,4 +88,6 @@ func get_top_cube_face(index, slabID):
 		return self.floorTexture[index]
 	else:
 		var cubeID = self.cubes[index][get_height-1] #get_height
+		if cubeID > Cube.CUBES_COUNT:
+			return 1
 		return Cube.tex[cubeID][Cube.SIDE_TOP]

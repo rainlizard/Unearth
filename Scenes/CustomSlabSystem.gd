@@ -69,6 +69,8 @@ func get_top_cube_face(indexIn3x3, slabID):
 		return data[slabID][FLOOR_DATA][indexIn3x3]
 	else:
 		var cubeID = cubesArray[get_height-1]
+		if cubeID > Cube.CUBES_COUNT:
+			return 1
 		return Cube.tex[cubeID][Cube.SIDE_TOP]
 
 func remove_custom_slab(slabID):
