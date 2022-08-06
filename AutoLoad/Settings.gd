@@ -45,6 +45,7 @@ var listOfSettings = [
 	"thing_window_size",
 	"thing_window_position",
 	"thing_window_scale",
+	"script_editor_font_size",
 	
 #	"owner_window_size",
 #	"owner_window_position",
@@ -334,6 +335,14 @@ func game_setting(doWhat,string,value):
 			var oPlacingTipsButton = $"../Main/Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/PlacingTipsButton"
 			if doWhat == SET: oPlacingTipsButton.visible = value
 			if doWhat == GET: return oPlacingTipsButton.visible
+		"script_editor_font_size":
+			var oScriptEditor = $'../Main/Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor'
+			if doWhat == SET: oScriptEditor.set_SCRIPT_EDITOR_FONT_SIZE(value)
+			if doWhat == GET: return oScriptEditor.get_SCRIPT_EDITOR_FONT_SIZE()
+		"editor_font_size":
+			var oUiSystem = $'../Main/Ui/UiSystem'
+			if doWhat == SET: oUiSystem.theme.get_font("font","").size = value
+			if doWhat == GET: return oUiSystem.theme.get_font("font","").size
 
 func delete_settings():
 	var dir = Directory.new()

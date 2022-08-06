@@ -4,7 +4,6 @@ export var settingText = "SettingName" setget set_label
 export var slider_step : float = 0.01
 export var minimum_value : float = 0.0
 export var maximum_value : float = 1.0
-export var allow_manually_set_to_anything : bool = true
 onready var lineEdit = $'%LineEdit'
 
 func _enter_tree():
@@ -30,12 +29,6 @@ func _on_LineEdit_focus_exited():
 	_on_LineEdit_text_entered(lineEdit.text)
 func _on_LineEdit_text_entered(new_text):
 	var new_value = float(new_text)
-	if allow_manually_set_to_anything == false:
-		if new_value < minimum_value:
-			new_value = minimum_value
-		if new_value > maximum_value:
-			new_value = maximum_value
-	
 	update_appearance(new_value)
 	update_value(new_value)
 

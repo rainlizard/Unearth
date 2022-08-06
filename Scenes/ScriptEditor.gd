@@ -11,6 +11,17 @@ onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
 
 var scriptHasBeenEditedInUnearth = false
 
+var SCRIPT_EDITOR_FONT_SIZE = 20 setget set_SCRIPT_EDITOR_FONT_SIZE, get_SCRIPT_EDITOR_FONT_SIZE
+
+func set_SCRIPT_EDITOR_FONT_SIZE(setVal):
+	SCRIPT_EDITOR_FONT_SIZE = setVal
+	var current_font = oScriptTextEdit.get_font("font").duplicate()
+	current_font.size = SCRIPT_EDITOR_FONT_SIZE
+	oScriptTextEdit.add_font_override("font", current_font)
+
+func get_SCRIPT_EDITOR_FONT_SIZE():
+	return SCRIPT_EDITOR_FONT_SIZE
+
 func initialize_for_new_map():
 	update_texteditor()
 	set_script_as_edited(false)

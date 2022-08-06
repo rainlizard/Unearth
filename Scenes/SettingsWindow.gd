@@ -27,7 +27,8 @@ onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oUiScale = Nodelist.list["oUiScale"]
 onready var oFramerateLimit = Nodelist.list["oFramerateLimit"]
 onready var oOwnerAlpha = Nodelist.list["oOwnerAlpha"]
-
+onready var oScriptEditorFontSize = Nodelist.list["oScriptEditorFontSize"]
+onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
 #onready var oTabGraphics = Nodelist.list["oTabGraphics"]
@@ -80,7 +81,10 @@ func _on_SettingsWindow_about_to_show():
 	oCreatureLevelFontSizeMaxZoom.update_appearance(Settings.get_setting("font_size_creature_level_max"))
 	oSciptIconScale.update_appearance(Settings.get_setting("script_icon_scale"))
 	oSciptIconMaxZoom.update_appearance(Settings.get_setting("script_icon_max"))
-
+	oEditorFontSize.update_appearance(Settings.get_setting("editor_font_size"))
+	oScriptEditorFontSize.update_appearance(Settings.get_setting("script_editor_font_size"))
+	
+	
 func _on_CheckBoxVsync_toggled(button_pressed):
 	Settings.set_setting("vsync", button_pressed)
 
@@ -146,6 +150,12 @@ func edited_UiScale(new_text):
 
 func edited_SlabWindowScale(new_text):
 	Settings.set_setting("slab_window_scale", float(new_text))
+
+func edited_EditorFontSize(new_text):
+	Settings.set_setting("editor_font_size", int(new_text))
+
+func edited_ScriptEditorFontSize(new_text):
+	Settings.set_setting("script_editor_font_size", int(new_text))
 
 func edited_CreatureLevelFontSizeScale(new_text):
 	Settings.set_setting("font_size_creature_level_scale", float(new_text))

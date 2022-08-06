@@ -2156,6 +2156,30 @@ settingText = "Thing window scale"
 minimum_value = 0.1
 maximum_value = 4.0
 
+[node name="EditorFontSize" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 70.0
+margin_right = 544.0
+margin_bottom = 101.0
+settingText = "Editor font size"
+slider_step = 1.0
+minimum_value = 1.0
+maximum_value = 24.0
+
+[node name="ScriptEditorFontSize" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 70.0
+margin_right = 544.0
+margin_bottom = 101.0
+settingText = "Script editor font size"
+slider_step = 1.0
+minimum_value = 1.0
+maximum_value = 72.0
+
 [node name="CheckBoxHideUnknown" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer"]
 margin_top = 105.0
 margin_right = 544.0
