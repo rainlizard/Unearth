@@ -52,7 +52,7 @@ func start():
 		if OS.has_feature("standalone") == false:
 			#yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
-			open_map("D:/DungeonKeeper/levels/personal/map00001.slb")
+			open_map("D:/DungeonKeeper/levels/personal/map00002.slb")
 		else:
 			oCurrentMap.clear_map()
 

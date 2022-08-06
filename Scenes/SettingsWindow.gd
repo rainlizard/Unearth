@@ -26,6 +26,7 @@ onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oUiScale = Nodelist.list["oUiScale"]
 onready var oFramerateLimit = Nodelist.list["oFramerateLimit"]
+onready var oOwnerAlpha = Nodelist.list["oOwnerAlpha"]
 
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
@@ -35,14 +36,13 @@ onready var oFramerateLimit = Nodelist.list["oFramerateLimit"]
 #onready var oTab3DView = Nodelist.list["oTab3DView"]
 
 onready var oCheckBoxHideUnknown = Nodelist.list["oCheckBoxHideUnknown"]
-onready var oOwnerAlphaSlider = Nodelist.list["oOwnerAlphaSlider"]
 
 func _ready():
 	oTabSettings.set_tab_title(0,"Editor")
-	oTabSettings.set_tab_title(1,"Graphics")
-	oTabSettings.set_tab_title(2,"General view")
-	oTabSettings.set_tab_title(3,"2D view")
-	oTabSettings.set_tab_title(4,"3D view")
+	oTabSettings.set_tab_title(1,"General")
+	oTabSettings.set_tab_title(2,"2D view")
+	oTabSettings.set_tab_title(3,"3D view")
+	oTabSettings.set_tab_title(4,"Graphics")
 
 func _on_ButtonSettings_pressed():
 	Utils.popup_centered(self)
@@ -64,22 +64,22 @@ func _on_SettingsWindow_about_to_show():
 	oCheckBoxMouseEdgePanning.pressed = Settings.get_setting("mouse_edge_panning")
 	oCheckBoxSmoothPan.pressed = Settings.get_setting("smooth_pan_enabled")
 	oCheckBoxDisplayFPS.pressed = Settings.get_setting("display_fps")
-	oDirectionalPanSpeed.line.text = str(Settings.get_setting("pan_speed"))
-	oZoomStep.line.text = str(Settings.get_setting("zoom_step")).pad_decimals(2)
-	oSmoothingRate.line.text = str(Settings.get_setting("smoothing_rate")).pad_decimals(2)
-	oMouseSensitivity.line.text = str(Settings.get_setting("mouse_sensitivity")).pad_decimals(2)
-	oFieldOfView.line.text = str(Settings.get_setting("fov"))
-	oFramerateLimit.line.text = str(Settings.get_setting("framerate_limit"))
+	oDirectionalPanSpeed.update_appearance(Settings.get_setting("pan_speed"))
+	oZoomStep.update_appearance(Settings.get_setting("zoom_step"))
+	oSmoothingRate.update_appearance(Settings.get_setting("smoothing_rate"))
+	oMouseSensitivity.update_appearance(Settings.get_setting("mouse_sensitivity"))
+	oFieldOfView.update_appearance(Settings.get_setting("fov"))
+	oFramerateLimit.update_appearance(Settings.get_setting("framerate_limit"))
 	oCheckBoxDisplay3dInfo.pressed = Settings.get_setting("display_3d_info")
-	oUiScale.line.text = str(Settings.get_setting("ui_scale")).pad_decimals(2)
-	oSlabWindowScale.line.text = str(Settings.get_setting("slab_window_scale")).pad_decimals(2)
-	oThingWindowScale.line.text = str(Settings.get_setting("thing_window_scale")).pad_decimals(2)
+	oUiScale.update_appearance(Settings.get_setting("ui_scale"))
+	oSlabWindowScale.update_appearance(Settings.get_setting("slab_window_scale"))
+	oThingWindowScale.update_appearance(Settings.get_setting("thing_window_scale"))
 	oCheckBoxHideUnknown.pressed = Settings.get_setting("hide_unknown_data")
-	oOwnerAlphaSlider.value = Settings.get_setting("graphics_ownership_alpha")
-	oCreatureLevelFontSizeScale.line.text = str(Settings.get_setting("font_size_creature_level_scale")).pad_decimals(2)
-	oCreatureLevelFontSizeMaxZoom.line.text = str(Settings.get_setting("font_size_creature_level_max")).pad_decimals(2)
-	oSciptIconScale.line.text = str(Settings.get_setting("script_icon_scale")).pad_decimals(2)
-	oSciptIconMaxZoom.line.text = str(Settings.get_setting("script_icon_max")).pad_decimals(2)
+	oOwnerAlpha.update_appearance(Settings.get_setting("graphics_ownership_alpha"))
+	oCreatureLevelFontSizeScale.update_appearance(Settings.get_setting("font_size_creature_level_scale"))
+	oCreatureLevelFontSizeMaxZoom.update_appearance(Settings.get_setting("font_size_creature_level_max"))
+	oSciptIconScale.update_appearance(Settings.get_setting("script_icon_scale"))
+	oSciptIconMaxZoom.update_appearance(Settings.get_setting("script_icon_max"))
 
 func _on_CheckBoxVsync_toggled(button_pressed):
 	Settings.set_setting("vsync", button_pressed)
@@ -131,15 +131,18 @@ func edited_FieldOfView(new_text):
 	Settings.set_setting("fov", float(new_text))
 
 func edited_FramerateLimit(new_text):
-	oFramerateLimit.line.text = str(int(new_text))
 	Settings.set_setting("framerate_limit", int(new_text))
 
 func edited_UiScale(new_text):
+	if float(new_text) < 0.5: return # don't allow, otherwise you can't navigate
+	
 	Settings.set_setting("ui_scale", float(new_text))
 	
 	# Fix to Slab/Thing window position going off screen when changing UI scale
 	oPickSlabWindow.rect_position.x -= 1 # This will trigger the signal that keeps the window on screen
 	oPickThingWindow.rect_position.x -= 1
+	
+	rect_position.x -= 1 # Settings window too
 
 func edited_SlabWindowScale(new_text):
 	Settings.set_setting("slab_window_scale", float(new_text))
@@ -161,6 +164,9 @@ func edited_ThingWindowScale(new_text):
 
 func edited_OwnerWindowScale(new_text):
 	Settings.set_setting("owner_window_scale", float(new_text))
+
+func edited_OwnerAlpha(new_text):
+	Settings.set_setting("graphics_ownership_alpha", float(new_text))
 
 func _on_CheckBoxDisplay3dInfo_toggled(button_pressed):
 	Settings.set_setting("display_3d_info", button_pressed)

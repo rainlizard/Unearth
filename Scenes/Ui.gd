@@ -44,8 +44,16 @@ func _on_any_window_was_dragged(callingNode):
 	var viewSize = get_viewport().size/Settings.UI_SCALE
 	callingNode.rect_size.x = clamp(callingNode.rect_size.x, 0, viewSize.x)
 	callingNode.rect_size.y = clamp(callingNode.rect_size.y, 0, viewSize.y-58)
-	callingNode.rect_position.x = clamp(callingNode.rect_position.x, 0, viewSize.x-callingNode.rect_size.x) #	Keep on screen
-	callingNode.rect_position.y = clamp(callingNode.rect_position.y, 58, viewSize.y-callingNode.rect_size.y)
+	
+	# Don't use clamp for rect_position, prioritize the window being above 0,0 by checking that last
+	if callingNode.rect_position.x > viewSize.x-callingNode.rect_size.x:
+		callingNode.rect_position.x = viewSize.x-callingNode.rect_size.x
+	if callingNode.rect_position.y > viewSize.y-callingNode.rect_size.y:
+		callingNode.rect_position.y = viewSize.y-callingNode.rect_size.y
+	if callingNode.rect_position.x < 0:
+		callingNode.rect_position.x = 0
+	if callingNode.rect_position.y < 58:
+		callingNode.rect_position.y = 58
 	callingNode.connect("item_rect_changed",self,"_on_any_window_was_dragged", [callingNode])
 
 func _input(event):

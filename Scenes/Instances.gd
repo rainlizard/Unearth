@@ -44,7 +44,9 @@ func place_new_action_point(newThingType, newSubtype, newPosition, newOwnership)
 
 func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Placed by hand
 	var CODETIME_START = OS.get_ticks_msec()
-	var slabID = oDataSlab.get_cell(newPosition.x/3,newPosition.y/3)
+	var xSlab = floor(newPosition.x / 3)
+	var ySlab = floor(newPosition.y / 3)
+	var slabID = oDataSlab.get_cell(xSlab, ySlab)
 	var id = thingScn.instance()
 	
 	id.data9 = 0
@@ -68,24 +70,26 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 	
 	match id.thingType:
 		Things.TYPE.OBJECT:
+			id.sensitiveTile = 65535 # "None"
 			
 			if id.subtype == 49: # Hero Gate
 				id.herogateNumber = get_free_hero_gate_number() #originalInstance.herogateNumber
 			elif id.subtype == 133: # Mysterious Box
 				id.boxNumber = oPlacingSettings.boxNumber
 			elif id.subtype in [2,7]: # Torch and Unlit Torch
-				if Slabs.data[oDataSlab.get_cell(floor((id.locationX+1)/3),floor(id.locationY/3))][Slabs.IS_SOLID] == true : id.locationX += 0.25
-				if Slabs.data[oDataSlab.get_cell(floor((id.locationX-1)/3),floor(id.locationY/3))][Slabs.IS_SOLID] == true : id.locationX -= 0.25
-				if Slabs.data[oDataSlab.get_cell(floor(id.locationX/3),floor((id.locationY+1)/3))][Slabs.IS_SOLID] == true : id.locationY += 0.25
-				if Slabs.data[oDataSlab.get_cell(floor(id.locationX/3),floor((id.locationY-1)/3))][Slabs.IS_SOLID] == true : id.locationY -= 0.25
+				if Slabs.data[oDataSlab.get_cell(xSlab+1,ySlab)][Slabs.IS_SOLID] == true:
+					id.locationX += 0.25
+					id.sensitiveTile = (xSlab+1) + ((ySlab) * 85)
+				if Slabs.data[oDataSlab.get_cell(xSlab-1,ySlab)][Slabs.IS_SOLID] == true:
+					id.locationX -= 0.25
+					id.sensitiveTile = (xSlab-1) + ((ySlab) * 85)
+				if Slabs.data[oDataSlab.get_cell(xSlab,ySlab+1)][Slabs.IS_SOLID] == true:
+					id.locationY += 0.25
+					id.sensitiveTile = (xSlab) + ((ySlab+1) * 85)
+				if Slabs.data[oDataSlab.get_cell(xSlab,ySlab-1)][Slabs.IS_SOLID] == true:
+					id.locationY -= 0.25
+					id.sensitiveTile = (xSlab) + ((ySlab-1) * 85)
 				update_stray_torch_height(id)
-			
-			# Whether the object is "Attached to slab" or not.
-#			if slabID == Slabs.TREASURE_ROOM and id.subtype in [52,53,54,55,56,3,6,43,136]: # Gold will be attached to treasure room
-#				id.sensitiveTile = (floor(newPosition.y/3) * 85) + floor(newPosition.x/3)
-#			else:
-			id.sensitiveTile = 65535 # "None"
-			
 		Things.TYPE.CREATURE:
 			id.creatureLevel = oPlacingSettings.creatureLevel
 			id.index = get_free_index_number()
