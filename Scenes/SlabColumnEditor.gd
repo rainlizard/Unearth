@@ -45,10 +45,11 @@ func _on_ColumnEditorTabs_tab_changed(tab):
 
 func _on_ColumnEditorHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "Use middle mouse to zoom in and out, left click and drag to rotate view. You can use the arrow keys to switch between columns faster and also use arrow keys while a field's selected to navigate cubes faster." #Holding left click on a field's little arrows while moving the mouse up or down provides speedy navigation too.
+	helptxt += "- Use middle mouse to zoom in and out, left click and drag to rotate view. You can use the arrow keys to switch between columns faster and also use arrow keys while a field's selected to navigate cubes faster." #Holding left click on a field's little arrows while moving the mouse up or down provides speedy navigation too.
 	helptxt += '\n'
+	helptxt += "- If your column has multiple gaps then some of the top/bottom cube faces may not display in-game."
 	helptxt += '\n'
-	helptxt += "If your column has multiple gaps then some of the top/bottom cube faces may not display in-game."
+	helptxt += "- Don't edit column 0, keep it blank."
 	oMessage.big("Help",helptxt)
 
 

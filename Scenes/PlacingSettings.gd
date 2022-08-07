@@ -5,6 +5,7 @@ onready var oSelection = Nodelist.list["oSelection"]
 onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oPlacingTipsButton = Nodelist.list["oPlacingTipsButton"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oLimitThing = Nodelist.list["oLimitThing"]
 
 # Default values for placement
 var effectRange = 5
@@ -41,8 +42,6 @@ func editing_mode_was_switched(modeString):
 func _on_PropertiesTabs_tab_changed(tab):
 	if tab == 1:
 		update_and_set_placing_tab()
-#	else:
-#		oPlacingListData.clear()
 
 func update_and_set_placing_tab():
 	oPropertiesTabs.current_tab = 1
@@ -53,19 +52,26 @@ func update_and_set_placing_tab():
 	
 	var availableFields = []
 	match thingType:
-		Things.TYPE.NONE: availableFields = [FIELDS.NAME]
+		Things.TYPE.NONE:
+			availableFields = [FIELDS.NAME]
 		Things.TYPE.OBJECT:
 			availableFields = [FIELDS.NAME, FIELDS.TYPE]
 			if subtype == 133: #Mysterious Box
 				availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.CUSTOM_BOX_ID]
-		Things.TYPE.CREATURE: availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.CREATURE_LEVEL]
-		Things.TYPE.EFFECT: availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.EFFECT_RANGE]
-		Things.TYPE.TRAP: availableFields = [FIELDS.NAME, FIELDS.TYPE]
-		Things.TYPE.DOOR: availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.DOOR_LOCKED]
+		Things.TYPE.CREATURE:
+			availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.CREATURE_LEVEL]
+		Things.TYPE.EFFECT:
+			availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.EFFECT_RANGE]
+		Things.TYPE.TRAP:
+			availableFields = [FIELDS.NAME, FIELDS.TYPE]
+		Things.TYPE.DOOR:
+			availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.DOOR_LOCKED]
 		Things.TYPE.EXTRA:
 			match subtype:
-				1: availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.POINT_RANGE] # Action point
-				2: availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.LIGHT_RANGE, FIELDS.LIGHT_INTENSITY] # Light
+				1:
+					availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.POINT_RANGE] # Action point
+				2:
+					availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.LIGHT_RANGE, FIELDS.LIGHT_INTENSITY] # Light
 	
 	
 	

@@ -82,11 +82,9 @@ func _on_HelpCustomSlabsButton_pressed():
 	var helptext = ""
 	helptext += "With a few exceptions, most custom slabs will reset their appearance in-game when placing or claiming an adjacent slab. To avoid this, set 'Recognized as' to one of the following: Slab 50, Impenetrable Rock, Gold, Bridge, Gems, Guard post, Doors (without door object). Needs further testing."
 	helptext += "\n\n"
-	helptext += "After adding one, right click on its portrait within the slab picker window to remove custom slabs from the editor."
+	helptext += "After adding one, right click on its portrait within the slab selection window to remove custom slabs from the editor."
 	helptext += "\n\n"
 	helptext += "Right click on the map while the custom slab menu is open to copy column index numbers into the window."
-	#helptext += "\n\n"
-	#helptext += "For now, placing a custom slab on a new/different map than the one you created it on, will not carry over the exact same column data."
 	oMessage.big("Help",helptext)
 
 

@@ -54,11 +54,9 @@ func _ready():
 	
 	oGridAdvancedValues.visible = false
 
-
 func establish_maximum_cube_field_values():
 	for i in cubeSpinBoxArray.size():
 		cubeSpinBoxArray[i].max_value = Cube.CUBES_COUNT
-
 
 func _on_floortexture_mouse_entered():
 	oCustomTooltip.set_floortexture(oFloorTextureSpinBox.value)

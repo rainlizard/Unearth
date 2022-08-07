@@ -143,3 +143,27 @@ func _on_NewObjectImage_pressed():
 
 func _on_CustomObjectImageFileDialog_file_selected(filePath):
 	oLabelCustomObjectImagePath.text = filePath
+
+
+func _on_CustomObjectHelpButton_pressed():
+	var helptext = ""
+	helptext += "'Type' and 'ID' are the important fields that affect how the custom object will be read by the game. The other fields only affect how it appears within the Unearth Editor."
+	helptext += "\n\n"
+	helptext += "A quick guide on adding KeeperFX objects:"
+	helptext += "\n"
+	helptext += "1. Browse to your Dungeon Keeper directory and open the file: /fxdata/objects.cfg in a text editor."
+	helptext += "\n"
+	helptext += "2. Scroll down to [object137], this is the ID that represents the Fern. 137+ are all new KeeperFX objects."
+	helptext += "\n"
+	helptext += "3. In Unearth set the Type to 'Object' and write the ID: 137."
+	helptext += "\n"
+	helptext += "4. Fill out the other fields with whatever you like and then click Add. Remember which 'Editor tab' you've chosen."
+	helptext += "\n"
+	helptext += "5. In the Thing selection window, look for the object you've added inside the Editor tab you chose and place it on your map."
+	helptext += "\n"
+	helptext += "Keep in mind a custom object without an Editor Image will appear as a diamond shape, but it will appear correctly in-game."
+	helptext += "\n\n"
+	helptext += "After adding one, right click on its portrait within the thing selection window to remove custom things from the editor."
+	#helptext += "\n\n"
+	#helptext += "For now, placing a custom slab on a new/different map than the one you created it on, will not carry over the exact same column data."
+	oMessage.big("Help",helptext)

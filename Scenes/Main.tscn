@@ -1,4 +1,4 @@
-[gd_scene load_steps=159 format=2]
+[gd_scene load_steps=160 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -138,6 +138,7 @@
 [ext_resource path="res://Scenes/QuickMapPreview.gd" type="Script" id=136]
 [ext_resource path="res://Scenes/ClmControls.tscn" type="PackedScene" id=137]
 [ext_resource path="res://Theme/ButtonGroupNewMap.tres" type="ButtonGroup" id=138]
+[ext_resource path="res://Scenes/LimitThing.gd" type="Script" id=139]
 [ext_resource path="res://Shaders/IndividualFloorTexture.tres" type="Material" id=140]
 
 [sub_resource type="TileSet" id=1]
@@ -230,7 +231,7 @@ shader = ExtResource( 36 )
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = ExtResource( 8 )
-shader_param/zoom = 2.0
+shader_param/zoom = 1.0
 
 [sub_resource type="StyleBoxFlat" id=15]
 content_margin_left = 12.0
@@ -1112,9 +1113,6 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 window_title = "Properties"
 script = ExtResource( 72 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow"]
 anchor_right = 1.0
@@ -1240,34 +1238,36 @@ script = ExtResource( 42 )
 [node name="OwnerSelection" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 4.0
 margin_right = 276.0
-margin_bottom = 41.0
+margin_bottom = 46.0
 script = ExtResource( 73 )
 
 [node name="HSeparator2" type="HSeparator" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
-self_modulate = Color( 0.4165, 0.3825, 0.51, 1 )
-margin_right = 3.0
-margin_bottom = 4.0
+margin_right = 276.0
+margin_bottom = 1.0
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
+margin_top = 5.0
 margin_right = 276.0
+margin_bottom = 5.0
+size_flags_horizontal = 3
 columns = 6
 
 [node name="UseSlabOwnerCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
-margin_left = 103.0
-margin_top = 4.0
-margin_right = 172.0
-margin_bottom = 33.0
+margin_top = 9.0
+margin_right = 276.0
+margin_bottom = 38.0
 focus_mode = 0
-size_flags_horizontal = 6
 pressed = true
 text = "Use slab ownership"
-align = 1
 script = ExtResource( 93 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Control" type="Control" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
+margin_top = 42.0
+margin_right = 276.0
+margin_bottom = 42.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1279,15 +1279,9 @@ mouse_filter = 2
 texture = ExtResource( 84 )
 expand = true
 script = ExtResource( 83 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CenteredLabel" type="Control" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/Control"]
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/Control/CenteredLabel"]
 grow_horizontal = 2
@@ -1299,13 +1293,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HSeparator" type="HSeparator" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
-self_modulate = Color( 0.4165, 0.3825, 0.51, 1 )
+[node name="HSeparator" type="HSeparator" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
+margin_top = 50.0
+margin_right = 276.0
+margin_bottom = 51.0
 
 [node name="EditingTools" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 4.0
-margin_right = 68.0
-margin_bottom = 44.0
+margin_top = 55.0
+margin_right = 276.0
+margin_bottom = 103.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 109 )
@@ -1325,7 +1321,8 @@ texture_hover = ExtResource( 113 )
 expand = true
 
 [node name="ToolRectangle" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
-margin_right = 48.0
+margin_left = 52.0
+margin_right = 100.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Rectangle tool"
@@ -1338,9 +1335,29 @@ texture_pressed = ExtResource( 111 )
 texture_hover = ExtResource( 112 )
 expand = true
 
+[node name="LimitThing" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
+margin_top = 107.0
+margin_right = 276.0
+margin_bottom = 128.0
+size_flags_horizontal = 3
+columns = 2
+script = ExtResource( 139 )
+
+[node name="LimitThingName" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/LimitThing"]
+margin_right = 120.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 120, 0 )
+
+[node name="LimitThingNumber" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/LimitThing"]
+modulate = Color( 1, 0.501961, 0.501961, 1 )
+margin_left = 124.0
+margin_right = 124.0
+margin_bottom = 21.0
+
 [node name="PlacingTipsButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_right = 12.0
-margin_bottom = 27.0
+margin_top = 132.0
+margin_right = 276.0
+margin_bottom = 159.0
 text = "Tips"
 
 [node name="ColumnDetails" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs"]
@@ -2878,60 +2895,65 @@ __meta__ = {
 visible = true
 margin_left = 648.0
 margin_top = 687.0
-margin_right = 977.0
-margin_bottom = 978.0
+margin_right = 1010.0
+margin_bottom = 1007.0
+rect_min_size = Vector2( 329, 320 )
 window_title = "Add custom object"
+resizable = true
 script = ExtResource( 91 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AddCustomObjectWindow"]
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/AddCustomObjectWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 20.0
-margin_top = 20.0
-margin_right = -20.0
-margin_bottom = -20.0
+margin_left = 15.0
+margin_top = 15.0
+margin_right = -15.0
+margin_bottom = -15.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer"]
+margin_right = 332.0
+margin_bottom = 290.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CustomObjectHelpButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
+margin_right = 54.0
+margin_bottom = 27.0
+size_flags_horizontal = 0
+text = "Help"
+
+[node name="WarningIdInUse" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
+modulate = Color( 1, 0.28, 0.28, 1 )
+margin_top = 31.0
+margin_right = 332.0
+margin_bottom = 52.0
+text = "Warning: ID already in use by editor."
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
-margin_right = 289.0
-margin_bottom = 208.0
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
+margin_top = 56.0
+margin_right = 332.0
+margin_bottom = 215.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label3" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_top = 5.0
-margin_right = 59.0
-margin_bottom = 26.0
-text = "Name:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NewObjectName" type="LineEdit" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_left = 139.0
-margin_right = 289.0
-margin_bottom = 31.0
-rect_min_size = Vector2( 150, 0 )
-size_flags_horizontal = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_top = 38.0
-margin_right = 59.0
-margin_bottom = 59.0
+[node name="Label" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
+margin_top = 3.0
+margin_right = 120.0
+margin_bottom = 24.0
 text = "Type:"
 
-[node name="NewObjectType" type="OptionButton" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_left = 201.0
-margin_top = 35.0
-margin_right = 289.0
-margin_bottom = 62.0
+[node name="NewObjectType" type="OptionButton" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
+margin_left = 244.0
+margin_right = 332.0
+margin_bottom = 27.0
 size_flags_horizontal = 10
 text = "Object"
 items = [ "Object", null, false, 0, null, "Creature", null, false, 1, null, "Effect", null, false, 2, null, "Trap", null, false, 3, null, "Door", null, false, 4, null ]
@@ -2940,110 +2962,98 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_top = 95.0
-margin_right = 59.0
-margin_bottom = 116.0
+[node name="Label2" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
+margin_top = 36.0
+margin_right = 120.0
+margin_bottom = 57.0
 text = "ID:"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_left = 63.0
-margin_top = 66.0
-margin_right = 289.0
-margin_bottom = 146.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NewObjectSubtypeID" type="LineEdit" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer/VBoxContainer"]
-margin_left = 168.0
-margin_right = 226.0
-margin_bottom = 31.0
+[node name="NewObjectSubtypeID" type="LineEdit" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
+margin_left = 274.0
+margin_top = 31.0
+margin_right = 332.0
+margin_bottom = 62.0
 size_flags_horizontal = 10
 
-[node name="WarningIdInUse" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer/VBoxContainer"]
-margin_top = 35.0
-margin_right = 226.0
-margin_bottom = 80.0
-text = "Warning: ID already in use."
-autowrap = true
+[node name="Label3" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
+margin_top = 71.0
+margin_right = 120.0
+margin_bottom = 92.0
+text = "Editor name:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label5" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_top = 153.0
-margin_right = 59.0
-margin_bottom = 174.0
-text = "Tab:"
+[node name="NewObjectName" type="LineEdit" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
+margin_left = 182.0
+margin_top = 66.0
+margin_right = 332.0
+margin_bottom = 97.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 10
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NewObjectTab" type="OptionButton" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_left = 158.0
-margin_top = 150.0
-margin_right = 289.0
-margin_bottom = 177.0
+[node name="Label5" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
+margin_top = 104.0
+margin_right = 120.0
+margin_bottom = 125.0
+text = "Editor tab:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NewObjectTab" type="OptionButton" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
+margin_left = 201.0
+margin_top = 101.0
+margin_right = 332.0
+margin_bottom = 128.0
 size_flags_horizontal = 10
 text = "Decoration"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label4" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_top = 184.0
-margin_right = 59.0
-margin_bottom = 205.0
-text = "Image:"
+[node name="Label4" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
+margin_top = 135.0
+margin_right = 120.0
+margin_bottom = 156.0
+text = "Editor image:"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NewObjectImage" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer"]
-margin_left = 153.0
-margin_top = 181.0
-margin_right = 289.0
-margin_bottom = 208.0
+[node name="NewObjectImage" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
+margin_left = 196.0
+margin_top = 132.0
+margin_right = 332.0
+margin_bottom = 159.0
 size_flags_horizontal = 8
 text = "Choose image"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LabelCustomObjectImagePath" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
-margin_top = 212.0
-margin_right = 289.0
-margin_bottom = 233.0
+[node name="LabelCustomObjectImagePath" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
+margin_top = 219.0
+margin_right = 332.0
+margin_bottom = 240.0
 align = 2
 clip_text = true
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
-margin_top = 237.0
-margin_right = 289.0
-margin_bottom = 262.0
-rect_min_size = Vector2( 25, 25 )
-
-[node name="AddCustomObjectButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
-margin_left = 121.0
-margin_top = 266.0
-margin_right = 168.0
-margin_bottom = 293.0
-size_flags_horizontal = 6
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
+margin_top = 263.0
+margin_right = 332.0
+margin_bottom = 290.0
 size_flags_vertical = 10
-text = "Add"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Label" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer"]
-modulate = Color( 1, 1, 1, 0.25098 )
-margin_top = 297.0
-margin_right = 289.0
-margin_bottom = 318.0
-text = "Right click its portrait to delete."
-align = 1
-autowrap = true
+[node name="AddCustomObjectButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 142.0
+margin_right = 189.0
+margin_bottom = 27.0
+size_flags_horizontal = 6
+text = "Add"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -4926,10 +4936,11 @@ script = ExtResource( 88 )
 [connection signal="focus_exited" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit" to="Ui/UiSystem/SlabSettingsWindow" method="_on_DamagedWallLineEdit_focus_exited"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/AddCustomObjectWindow" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_AddCustomObjectWindow_visibility_changed"]
-[connection signal="item_selected" from="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer/NewObjectType" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectType_item_selected"]
-[connection signal="focus_exited" from="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer/VBoxContainer/NewObjectSubtypeID" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectSubtypeID_focus_exited"]
-[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/GridContainer/NewObjectImage" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectImage_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/VBoxContainer/AddCustomObjectButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_AddCustomObjectButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/CustomObjectHelpButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_CustomObjectHelpButton_pressed"]
+[connection signal="item_selected" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer/NewObjectType" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectType_item_selected"]
+[connection signal="focus_exited" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer/NewObjectSubtypeID" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectSubtypeID_focus_exited"]
+[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer/NewObjectImage" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectImage_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/HBoxContainer/AddCustomObjectButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_AddCustomObjectButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ImageAsMapDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImageAsMapDialog_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonNewMap" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonNewMap_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonSelectImage" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonSelectImage_pressed"]

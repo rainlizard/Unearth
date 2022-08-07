@@ -1,6 +1,7 @@
 extends VBoxContainer
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
+onready var oUseSlabOwnerCheckBox = Nodelist.list["oUseSlabOwnerCheckBox"]
 
 #onready var oEditor = Nodelist.list["oEditor"]
 onready var gridItemScene = preload("res://Scenes/GenericGridItem.tscn")
@@ -43,6 +44,8 @@ func add_child_to_grid(id, set_text):
 
 func pressed(id):
 	var setValue = id.get_meta("grid_value")
+	if oUseSlabOwnerCheckBox.pressed == true and oUseSlabOwnerCheckBox.visible == true:
+		setValue = 5
 	oSelection.paintOwnership = setValue
 	set_selection(setValue)
 	oOnlyOwnership.select_appropriate_button()
@@ -53,6 +56,10 @@ func _process(delta): # It's necessary to use _process to update selection, beca
 func update_selection():
 	if oSelectedRect == null: return
 	if is_instance_valid(oSelectedRect.boundToItem) == false: return
+	# If checkbox is checked then don't do anything
+	if oUseSlabOwnerCheckBox.pressed == true and oUseSlabOwnerCheckBox.visible == true:
+		oSelectedRect.visible = false
+		return
 	oSelectedRect.visible = true
 	oSelectedRect.rect_global_position = oSelectedRect.boundToItem.rect_global_position
 	oSelectedRect.rect_size = oSelectedRect.boundToItem.rect_size

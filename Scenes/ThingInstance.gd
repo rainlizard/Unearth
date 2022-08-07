@@ -68,7 +68,9 @@ func _enter_tree():
 			var oCamera2D = Nodelist.list["oCamera2D"]
 			oCamera2D.connect("zoom_level_changed",self,"_on_zoom_level_changed")
 			_on_zoom_level_changed(oCamera2D.zoom)
-
+		Things.TYPE.EFFECT:
+			add_to_group("Effect")
+		
 func set_location_x(setVal):
 	locationX = setVal
 	position.x = locationX * 32
