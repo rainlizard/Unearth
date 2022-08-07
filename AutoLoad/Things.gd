@@ -3,6 +3,7 @@ extends Node2D
 const THING_LIMIT = 2048
 const ACTION_POINT_LIMIT = 255
 const CREATURE_LIMIT = 255
+const LIGHT_LIMIT = -1
 
 enum TYPE {
 	NONE = 0

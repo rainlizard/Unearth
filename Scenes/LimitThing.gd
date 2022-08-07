@@ -13,7 +13,7 @@ func _process(delta):
 		#	visible = false
 		Things.TYPE.OBJECT:
 			typeName = "Things"
-			groupName = "Instance"
+			groupName = "Thing"
 			limit = Things.THING_LIMIT
 		Things.TYPE.CREATURE:
 			typeName = "Creatures"
@@ -21,15 +21,15 @@ func _process(delta):
 			limit = Things.CREATURE_LIMIT
 		Things.TYPE.EFFECT:
 			typeName = "Things"
-			groupName = "Instance"
+			groupName = "Thing"
 			limit = Things.THING_LIMIT
 		Things.TYPE.TRAP:
 			typeName = "Things"
-			groupName = "Instance"
+			groupName = "Thing"
 			limit = Things.THING_LIMIT
 		Things.TYPE.DOOR:
 			typeName = "Things"
-			groupName = "Instance"
+			groupName = "Thing"
 			limit = Things.THING_LIMIT
 		Things.TYPE.EXTRA:
 			match subtype:
@@ -38,16 +38,19 @@ func _process(delta):
 					groupName = "ActionPoint"
 					limit = Things.ACTION_POINT_LIMIT
 				2:
-					typeName = "Things"
-					groupName = "Instance"
-					limit = Things.THING_LIMIT
+					typeName = "Lights"
+					groupName = "Light"
+					limit = Things.LIGHT_LIMIT
 		_:
 			visible = false
 	
 	var count = get_tree().get_nodes_in_group(groupName).size()
 	$LimitThingName.text = typeName
-	$LimitThingNumber.text = str(count) + " / " + str(limit)
-	if count > limit:
-		$LimitThingNumber.modulate = Color(1,0.15,0.15)
+	$LimitThingNumber.modulate = Color(1,1,1) # Always show as white for lights
+	
+	if limit == -1: # For Lights, since I don't know what their limit is, don't show it
+		$LimitThingNumber.text = str(count)
 	else:
-		$LimitThingNumber.modulate = Color(1,1,1)
+		$LimitThingNumber.text = str(count) + " / " + str(limit)
+		if count > limit:
+			$LimitThingNumber.modulate = Color(1,0.15,0.15)
