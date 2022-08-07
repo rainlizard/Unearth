@@ -49,7 +49,7 @@ func _on_ColumnEditorHelpButton_pressed():
 	helptxt += '\n'
 	helptxt += "- If your column has multiple gaps then some of the top/bottom cube faces may not display in-game."
 	helptxt += '\n'
-	helptxt += "- Don't edit column 0, keep it blank."
+	helptxt += "- Don't edit column 0's cubes, leave it blank."
 	oMessage.big("Help",helptxt)
 
 
