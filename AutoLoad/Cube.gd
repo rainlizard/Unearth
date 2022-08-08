@@ -119,14 +119,7 @@ func read_cubes_cfg():
 	
 	print('Cube names read in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
-	
-	var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
-	var oDkClmControls = Nodelist.list["oDkClmControls"]
-	
-	CUBES_COUNT = Cube.tex.size()-1
-	
-	oColumnEditorControls.establish_maximum_cube_field_values()
-	oDkClmControls.establish_maximum_cube_field_values()
+	set_max_cubes() # Run for both read_cubes_cfg() and at the bottom of load_dk_original_cubes()
 
 func load_dk_original_cubes():
 	tex = [
@@ -642,3 +635,13 @@ func load_dk_original_cubes():
 		[  0,   0,   0,   0,   0,   0],
 		[  0,   0,   0,   0,   0,   0],
 	]
+	set_max_cubes()
+
+func set_max_cubes():
+	var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
+	var oDkClmControls = Nodelist.list["oDkClmControls"]
+	
+	CUBES_COUNT = Cube.tex.size()-1
+	
+	oColumnEditorControls.establish_maximum_cube_field_values()
+	oDkClmControls.establish_maximum_cube_field_values()

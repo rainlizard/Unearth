@@ -1257,7 +1257,6 @@ margin_top = 9.0
 margin_right = 276.0
 margin_bottom = 38.0
 focus_mode = 0
-pressed = true
 text = "Use slab ownership"
 script = ExtResource( 93 )
 __meta__ = {
