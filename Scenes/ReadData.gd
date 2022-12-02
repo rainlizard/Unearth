@@ -12,11 +12,45 @@ onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
 
 var value # just so I don't have to initialize the var in every function
+
+func read_keeperfx_lof(buffer):
+	buffer.seek(0)
+	value = buffer.get_string(buffer.get_size())
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
+	var array = value.split("\n")
+
+	for line in array:
+		for i in line:
+			i = i.strip_edges()
+		var lineParts = line.split("=")
+		for i in lineParts:
+			i = i.strip_edges()
+
+		if lineParts.size() == 2:
+			if lineParts[0] == "KIND":
+				oDataKeeperFxLof.KIND = lineParts[1]
+			if lineParts[0] == "NAME_TEXT":
+				oDataKeeperFxLof.NAME_TEXT = lineParts[1]
+			if lineParts[0] == "OPTIONS":
+				oDataKeeperFxLof.OPTIONS = lineParts[1]
+			if lineParts[0] == "AUTHOR":
+				oDataKeeperFxLof.AUTHOR = lineParts[1]
+			if lineParts[0] == "DESCRIPTION":
+				oDataKeeperFxLof.DESCRIPTION = lineParts[1]
+			if lineParts[0] == "DATE":
+				oDataKeeperFxLof.DATE = lineParts[1]
+			if lineParts[0] == "MAPSIZE":
+				var sizeString = lineParts[1].split(" ")
+				if sizeString.size() == 2:
+					var x = sizeString[0].to_int()
+					var y = sizeString[1].to_int()
+					oDataKeeperFxLof.use_size(x,y)
 
 func read_slx(buffer):
 	# 0 = Use map's original

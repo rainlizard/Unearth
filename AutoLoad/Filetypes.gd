@@ -1,6 +1,7 @@
 extends Node
 
 const FILE_TYPES = [
+	"LOF", # This must be read first so that MAPSIZE can be used in relation to the rest of the files
 	"CLM",
 	"DAT",
 	"APT",
@@ -30,6 +31,7 @@ func read(filePath, EXT):
 	
 	var oReadData = Nodelist.list["oReadData"]
 	match EXT:
+		"LOF" : oReadData.read_keeperfx_lof(buffer)
 		"CLM" : oReadData.read_clm(buffer)
 		"DAT" : oReadData.read_dat(buffer)
 		"APT" : oReadData.read_apt(buffer)
@@ -54,6 +56,7 @@ func write(filePath, EXT):
 	var buffer = StreamPeerBuffer.new()
 	var oWriteData = Nodelist.list["oWriteData"]
 	match EXT:
+		"LOF" : oWriteData.write_keeperfx_lof(buffer)
 		"CLM" : oWriteData.write_clm(buffer)
 		"DAT" : oWriteData.write_dat(buffer)
 		"APT" : oWriteData.write_apt(buffer)

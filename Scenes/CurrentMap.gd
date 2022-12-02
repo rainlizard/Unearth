@@ -22,6 +22,7 @@ onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oMenu = Nodelist.list["oMenu"]
+onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 
 
 var path = ""
@@ -49,13 +50,18 @@ func set_path_and_title(newpath):
 	oGame.construct_command_line() # Always update command line whenever the path changes
 
 func clear_map():
+	
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	set_path_and_title("")
 	
 	# "tng, apt, lgt"
-	for i in get_tree().get_nodes_in_group("Instance"):
-		i.queue_free()
+	var nodesToFree = get_tree().get_nodes_in_group("Instance")
+	for i in nodesToFree.size():
+		# Need to do it like this with pop_back() otherwise there's a Godot bug where it crashes when using queue_free() on too many instances at once.
+		nodesToFree.pop_back().queue_free()
+	# "LOF"
+	oDataKeeperFxLof.clear_all()
 	# "lif"
 	oDataLif.clear()
 	# "wib"

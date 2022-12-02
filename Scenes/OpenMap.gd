@@ -30,6 +30,10 @@ onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
+onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
+onready var oXSizeLine = Nodelist.list["oXSizeLine"]
+onready var oYSizeLine = Nodelist.list["oYSizeLine"]
+onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -94,6 +98,10 @@ func open_map(filePath): # auto opens other files
 	if compressedFiles.empty() == true:
 		# Load files
 		oCurrentMap.clear_map()
+		
+		if oNewMapWindow.visible == true:
+			oDataKeeperFxLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
+			print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
 		
 		for EXT in Filetypes.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:

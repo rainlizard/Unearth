@@ -55,6 +55,7 @@ Things="*res://AutoLoad/Things.gd"
 Nodelist="*res://AutoLoad/Nodelist.gd"
 Utils="*res://AutoLoad/Utils.gd"
 Filetypes="*res://AutoLoad/Filetypes.gd"
+M="*res://AutoLoad/M.gd"
 
 [debug]
 
