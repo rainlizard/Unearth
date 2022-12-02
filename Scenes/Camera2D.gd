@@ -29,7 +29,7 @@ func _ready():
 	reset_camera()
 
 func reset_camera():
-	offset = Vector2(85*96,85*96) * Vector2(0.5,0.5)
+	offset = Vector2(M.xSize*96, M.ySize*96) * Vector2(0.5,0.5)
 	desired_offset = offset
 	var initialZoom = 9085.0 / OS.window_size.y * Settings.UI_SCALE.y
 	zoom = Vector2(initialZoom,initialZoom)
@@ -49,7 +49,7 @@ func _process(delta):
 	
 	desired_offset += panDirectionMouse * DIRECTIONAL_PAN_SPEED * (zoom/Settings.UI_SCALE.x) * delta
 	desired_offset += panDirectionKeyboard * DIRECTIONAL_PAN_SPEED * (zoom/Settings.UI_SCALE.x) * delta
-	var fieldSize = Vector2(32*255,32*255)
+	var fieldSize = Vector2(32*(M.xSize*3), 32*(M.ySize*3))
 	var halfViewSize = ((get_viewport().size/Settings.UI_SCALE) * 0.5) * desired_zoom
 	# The point of this is just so you can't move the map COMPLETELY off the screen
 	var allowLittleExtraVisible = halfViewSize * 0.10

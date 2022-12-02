@@ -20,7 +20,6 @@ var slabOwnershipTexture = ImageTexture.new()
 onready var mat = oColorRectSlabOwner.get_material()
 
 func _ready():
-	slabOwnershipImage.create(85,85,false,Image.FORMAT_RGBA8)
 	mat.set_shader_param("color0", Constants.ownerRoomCol[0])
 	mat.set_shader_param("color1", Constants.ownerRoomCol[1])
 	mat.set_shader_param("color2", Constants.ownerRoomCol[2])
@@ -43,16 +42,20 @@ func clear():
 	slabOwnershipTexture.create_from_image(slabOwnershipImage, 0)
 
 func start():
+	slabOwnershipImage.create(M.xSize,M.ySize,false,Image.FORMAT_RGBA8)
 	# Read ownership data as pixels
 	slabOwnershipImage.lock()
-	for ySlab in 85:
-		for xSlab in 85:
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
 			var setValue = Constants.ownerRoomCol[oDataOwnership.get_cell(xSlab,ySlab)]
 			slabOwnershipImage.set_pixel(xSlab, ySlab, setValue)
 	slabOwnershipImage.unlock()
 	
 	slabOwnershipTexture.create_from_image(slabOwnershipImage, 0)
-	oColorRectSlabOwner.rect_size = Vector2(85*TILE_SIZE,85*TILE_SIZE)
+	oColorRectSlabOwner.rect_size = Vector2(8160, 8160)#Vector2(M.xSize*TILE_SIZE, M.ySize*TILE_SIZE)
+	#yield(get_tree(),'idle_frame')
+	#print(oColorRectSlabOwner.rect_scale)
+	#oColorRectSlabOwner.rect_position = Vector2(96,96)
 
 func ownership_update_shape(shapePositionArray, ownership):
 	
@@ -88,15 +91,14 @@ func ownership_update_things(shapePositionArray, paintOwnership):
 #
 #	slabOwnershipTexture.set_data(slabOwnershipImage)
 
-
 func _process(delta):
 	var cursorOnColor
 	mat.set_shader_param("territoryTexture", slabOwnershipTexture)
 	mat.set_shader_param("zoom", oCamera2D.zoom.x)
 	if oSelector.visible == true:
 		var cursorPos = oSelector.cursorTile
-		if cursorPos.x < 0 or cursorPos.x >= 85: return
-		if cursorPos.y < 0 or cursorPos.y >= 85: return
+		if cursorPos.x < 0 or cursorPos.x >= M.xSize: return
+		if cursorPos.y < 0 or cursorPos.y >= M.ySize: return
 		
 		slabOwnershipImage.lock()
 		cursorOnColor = slabOwnershipImage.get_pixel(cursorPos.x, cursorPos.y)

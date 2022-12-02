@@ -12,8 +12,23 @@ onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 
 var value # just so I don't have to initialize the var in every function
+
+func write_keeperfx_lof(buffer):
+	var newString = ""
+	newString += "KIND = " + str(oDataKeeperFxLof.KIND) + "\n"
+	newString += "NAME_TEXT = " + str(oDataKeeperFxLof.NAME_TEXT) + "\n"
+	newString += "OPTIONS = " + str(oDataKeeperFxLof.OPTIONS) + "\n"
+	newString += "AUTHOR = " + str(oDataKeeperFxLof.AUTHOR) + "\n"
+	newString += "DESCRIPTION = " + str(oDataKeeperFxLof.DESCRIPTION) + "\n"
+	newString += "DATE = " + str(oDataKeeperFxLof.DATE) + "\n"
+	newString += "MAPSIZE = " + str(M.xSize) + " " + str(M.ySize)
+	
+	var scriptBytes = newString.to_ascii()
+	buffer.put_data(scriptBytes)
+
 
 func write_lif(buffer, filePath):
 	var mapNumber = filePath.get_file().get_basename().to_upper().trim_prefix('MAP')
@@ -37,32 +52,35 @@ func write_txt(buffer):
 	buffer.put_data(scriptBytes)
 
 func write_une(buffer):
-	for ySlab in 85:
-		for xSlab in 85:
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
 			value = oDataCustomSlab.get_cell(xSlab,ySlab)
 			buffer.put_16(value)
 
 func write_wlb(buffer):
-	for ySlab in 85:
-		for xSlab in 85:
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
 			value = oDataLiquid.get_cell(xSlab,ySlab)
 			buffer.put_8(value)
 
 func write_wib(buffer):
-	for subtileY in 256:
-		for subtileX in 256:
+	var dataHeight = (M.ySize*3)+1
+	var dataWidth = (M.xSize*3)+1
+	for subtileY in dataHeight:
+		for subtileX in dataWidth:
 			buffer.put_8(oDataWibble.get_cell(subtileX,subtileY))
 
 func write_slb(buffer):
-	for y in 85:
-		for x in 85:
+	for y in M.ySize:
+		for x in M.xSize:
 			value = oDataSlab.get_cell(x,y)
+			#print('x:' + str(x) + " " + 'y:' + str(y))
 			buffer.put_8(value)
 			buffer.put_8(0)
 
 func write_own(buffer):
-	var dataHeight = (85*3)+1
-	var dataWidth = (85*3)+1
+	var dataHeight = (M.ySize*3)+1
+	var dataWidth = (M.xSize*3)+1
 	for subtileY in dataHeight:
 		for subtileX in dataWidth:
 			buffer.seek(subtileX + (subtileY*dataWidth))
@@ -161,8 +179,8 @@ func write_inf(buffer):
 
 func write_slx(buffer):
 	oDataSlx.slxImgData.lock()
-	for ySlab in 85:
-		for xSlab in 85:
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
 			value = oDataSlx.slxImgData.get_pixel(xSlab,ySlab).r8
 			# This is unncessary as the lower 4 bits will be used anyway, if the number is in the range 0-15
 			var lower4bits = value & 0x0F
@@ -170,8 +188,8 @@ func write_slx(buffer):
 	oDataSlx.slxImgData.unlock()
 
 func write_dat(buffer):
-	var dataHeight = (85*3)+1
-	var dataWidth = (85*3)+1
+	var dataHeight = (M.ySize*3)+1
+	var dataWidth = (M.xSize*3)+1
 	for subtileY in dataHeight:
 		for subtileX in dataWidth:
 			buffer.seek(2*(subtileX + (subtileY*dataWidth)))

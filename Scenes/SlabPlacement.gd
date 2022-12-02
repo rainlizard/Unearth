@@ -84,8 +84,8 @@ func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 		# Include surrounding
 		rectStart -= Vector2(1,1)
 		rectEnd += Vector2(1,1)
-	rectStart = Vector2(clamp(rectStart.x, 0, 84), clamp(rectStart.y, 0, 84))
-	rectEnd = Vector2(clamp(rectEnd.x, 0, 84), clamp(rectEnd.y, 0, 84))
+	rectStart = Vector2(clamp(rectStart.x, 0, M.xSize-1), clamp(rectStart.y, 0, M.ySize-1))
+	rectEnd = Vector2(clamp(rectEnd.x, 0, M.xSize-1), clamp(rectEnd.y, 0, M.ySize-1))
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	for ySlab in range(rectStart.y, rectEnd.y+1):
@@ -159,7 +159,7 @@ func slab_place_custom(xSlab, ySlab, slabID, ownership, surrID):
 func _on_ConfirmAutoGen_confirmed():
 	oMessage.quick("Auto-generated all slabs")
 	var updateNearby = true
-	generate_slabs_based_on_id(Vector2(0,0), Vector2(84,84), updateNearby)
+	generate_slabs_based_on_id(Vector2(0,0), Vector2(M.xSize-1,M.ySize-1), updateNearby)
 
 
 func auto_torch_earth(xSlab, ySlab):

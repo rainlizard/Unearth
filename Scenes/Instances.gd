@@ -79,23 +79,23 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			elif id.subtype in [2,7]: # Torch and Unlit Torch
 				if Slabs.data[oDataSlab.get_cell(xSlab+1,ySlab)][Slabs.IS_SOLID] == true:
 					id.locationX += 0.25
-					id.sensitiveTile = (xSlab+1) + ((ySlab) * 85)
+					id.sensitiveTile = (xSlab+1) + ((ySlab) * M.xSize) # Should this be M.ySize ???
 				if Slabs.data[oDataSlab.get_cell(xSlab-1,ySlab)][Slabs.IS_SOLID] == true:
 					id.locationX -= 0.25
-					id.sensitiveTile = (xSlab-1) + ((ySlab) * 85)
+					id.sensitiveTile = (xSlab-1) + ((ySlab) * M.xSize) # Should this be M.ySize ???
 				if Slabs.data[oDataSlab.get_cell(xSlab,ySlab+1)][Slabs.IS_SOLID] == true:
 					id.locationY += 0.25
-					id.sensitiveTile = (xSlab) + ((ySlab+1) * 85)
+					id.sensitiveTile = (xSlab) + ((ySlab+1) * M.xSize) # Should this be M.ySize ???
 				if Slabs.data[oDataSlab.get_cell(xSlab,ySlab-1)][Slabs.IS_SOLID] == true:
 					id.locationY -= 0.25
-					id.sensitiveTile = (xSlab) + ((ySlab-1) * 85)
+					id.sensitiveTile = (xSlab) + ((ySlab-1) * M.xSize) # Should this be M.ySize ???
 				update_stray_torch_height(id)
 		Things.TYPE.CREATURE:
 			id.creatureLevel = oPlacingSettings.creatureLevel
 			id.index = get_free_index_number()
 		Things.TYPE.EFFECT:
 			id.effectRange = oPlacingSettings.effectRange
-			id.sensitiveTile = (floor(newPosition.y/3) * 85) + floor(newPosition.x/3)
+			id.sensitiveTile = (floor(newPosition.y/3) * M.xSize) + floor(newPosition.x/3) # Should this be M.ySize ???
 		Things.TYPE.TRAP:
 			id.index = get_free_index_number()
 		Things.TYPE.DOOR:
@@ -172,7 +172,7 @@ func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng 
 	id.locationX = ((xSlab*3) + subtileX) + tngObj[3]
 	id.locationY = ((ySlab*3) + subtileY) + tngObj[4]
 	id.locationZ = tngObj[5]
-	id.sensitiveTile = (ySlab * 85) + xSlab
+	id.sensitiveTile = (ySlab * M.xSize) + xSlab # Should this be M.ySize ???
 	id.thingType = tngObj[6]
 	id.subtype = tngObj[7]
 	id.ownership = ownership
@@ -297,7 +297,7 @@ func delete_attached_objects_on_slab(xSlab, ySlab):
 	# Figure out how to make this faster
 	# Objects like torches are placed off the slab, their sensitiveTile needs to be checked.
 	
-	var groupName = 'attachedtotile_'+str((ySlab*85)+xSlab)
+	var groupName = 'attachedtotile_'+str((ySlab*M.xSize)+xSlab)
 	if groupName == "attachedtotile_0": return # This fixes an edge case issue with Spinning Keys being destroyed if you click the top left corner
 	for id in get_tree().get_nodes_in_group(groupName):
 		#id.position = Vector2(-32767,-32767)

@@ -18,7 +18,7 @@ uniform sampler2D slxData;
 uniform sampler2DArray dkTextureMap_Split_A;
 uniform sampler2DArray dkTextureMap_Split_B;
 
-uniform vec2 fieldSizeInSubtiles = vec2(255.0, 255.0);
+uniform vec2 fieldSizeInSubtiles = vec2(0.0, 0.0);
 
 // Exact same function as in Godot Source Code
 float calc_mip_level(vec2 texture_coord) {

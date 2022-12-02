@@ -56,7 +56,7 @@ func start():
 		if OS.has_feature("standalone") == false:
 			#yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
-			open_map("D:/DungeonKeeper/levels/personal/map00002.slb")
+			open_map("D:/DungeonKeeper/levels/personal/map00005.slb")
 		else:
 			oCurrentMap.clear_map()
 
@@ -120,8 +120,8 @@ func open_map(filePath): # auto opens other files
 				# Some maps can function without WLB files. So build them here.
 				# Generate WLB values from SLB. This is dependent on SLB being ordered before WLB inside Filetypes.FILE_TYPES
 				if EXT == "WLB":
-					for ySlab in 85:
-						for xSlab in 85:
+					for ySlab in M.ySize:
+						for xSlab in M.xSize:
 							var slabID = oDataSlab.get_cell(xSlab, ySlab)
 							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.REMEMBER_TYPE])
 		

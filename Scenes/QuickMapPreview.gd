@@ -75,7 +75,7 @@ const colourDict = {
 
 func _ready():
 	visible = false
-	img.create(85, 85, false, Image.FORMAT_RGB8)
+	img.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)
 	tex.create_from_image(img, 0)
 
 
@@ -111,13 +111,13 @@ func update_img(slbFilePath):
 	var ownership = 5
 	
 	img.lock()
-	for y in 85:
-		for x in 85:
+	for y in M.ySize:
+		for x in M.xSize:
 			slabID = slbBuffer.get_u8()
 			slbBuffer.get_u8() # skip second byte
 			
 			if ownBuffer != null:
-				var dataWidth = (85*3)+1
+				var dataWidth = (M.xSize*3)+1 # Should this be M.ySize ???
 				ownBuffer.seek( (((x*3)+1)+(y*3*dataWidth)))
 				ownership = ownBuffer.get_u8()
 			

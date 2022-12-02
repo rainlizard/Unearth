@@ -480,9 +480,8 @@ script = ExtResource( 14 )
 [node name="ColorRectSlabOwner" type="ColorRect" parent="Game2D/OverheadOwnership"]
 material = SubResource( 8 )
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="InstanceOwnership" type="Node2D" parent="Game2D/OverheadOwnership"]
 script = ExtResource( 27 )
@@ -5040,6 +5039,8 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer/ExportSlabsClm" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsClm_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
+[connection signal="text_changed" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_text_changed"]
+[connection signal="text_changed" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/YSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_YSizeLine_text_changed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer/CheckBoxNewMapBorder" to="Ui/UiSystem/NewMapWindow" method="_on_CheckBoxNewMapBorder_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer/CheckBoxNewMapBlank" to="Ui/UiSystem/NewMapWindow" method="_on_CheckBoxNewMapBlank_pressed"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapBorderOptions/NoisePersistence" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePersistence_sliderChanged"]

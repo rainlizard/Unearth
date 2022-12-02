@@ -60,8 +60,7 @@ func clear_map():
 	for i in nodesToFree.size():
 		# Need to do it like this with pop_back() otherwise there's a Godot bug where it crashes when using queue_free() on too many instances at once.
 		nodesToFree.pop_back().queue_free()
-	# "LOF"
-	oDataKeeperFxLof.clear_all()
+	
 	# "lif"
 	oDataLif.clear()
 	# "wib"
@@ -71,14 +70,14 @@ func clear_map():
 	# "wlb" (Water Lava Block)
 	oDataLiquid.clear()
 	# "slb"
-	oDataSlab.clear() #create(85,85, 0)
+	oDataSlab.clear()
 	# "own"
-	oDataOwnership.clear()#create(85,85, 5) # 5 = No ownership
+	oDataOwnership.clear()
 	oOverheadOwnership.clear()
 	# "inf"
-	oDataLevelStyle.data = 0 #clear()#create(1, 1, 0)
+	oDataLevelStyle.data = 0
 	# "dat"
-	oDataClmPos.clear() #create((85*3)+1, (85*3)+1, 0)
+	oDataClmPos.clear()
 	# "clm"
 	oDataClm.clear_all_column_data()
 	oOverheadGraphics.clear_img()
@@ -90,4 +89,7 @@ func clear_map():
 	oDataCustomSlab.clear()
 	
 	oScriptHelpers.clear()
+	
+	# "LOF" # Do this last in case other functions rely on the old map size
+	oDataKeeperFxLof.clear_all()
 	print('Cleared map in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')

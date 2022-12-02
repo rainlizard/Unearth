@@ -16,13 +16,13 @@ func start():
 	loading_bar_start()
 	var updateLoad = 0
 	
-	for ySlab in 85:
-		for xSlab in 85:
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
 			var slabStyleValue = oDataSlx.get_tileset_value(xSlab,ySlab)
 			
 			# Loading bar
 			if ySlab >= updateLoad:
-				updateLoad += (85*0.10)
+				updateLoad += (M.ySize*0.10) # should this be M.xSize???
 				oLoadingBar.value += 10
 				yield(get_tree(),"idle_frame")
 			
@@ -40,8 +40,8 @@ func start():
 						oDataClmPos.get_cell(x-1,z),
 					]
 					# Fix the edges
-					if x+1 >= 255: surrClmIndex[1] = TileMap.INVALID_CELL
-					if z+1 >= 255: surrClmIndex[2] = TileMap.INVALID_CELL
+					if x+1 >= (M.xSize*3): surrClmIndex[1] = TileMap.INVALID_CELL
+					if z+1 >= (M.ySize*3): surrClmIndex[2] = TileMap.INVALID_CELL
 					
 					oVoxelGen.column_gen(arrayOfArrays[slabStyleValue], x, z, clmIndex, surrClmIndex, false, oDataClm)
 	

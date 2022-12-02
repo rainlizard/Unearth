@@ -167,7 +167,7 @@ func place_shape(beginTile,endTile):
 
 
 func place_subtile(placeSubtile):
-	if placeSubtile.x < 0 or placeSubtile.y < 0 or placeSubtile.x >= 255 or placeSubtile.y >= 255:
+	if placeSubtile.x < 0 or placeSubtile.y < 0 or placeSubtile.x >= (M.xSize*3) or placeSubtile.y >= (M.ySize*3):
 		return
 	
 	if oSelector.position_meeting(get_global_mouse_position(), "Instance") == true:

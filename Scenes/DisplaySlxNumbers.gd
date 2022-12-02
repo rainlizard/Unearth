@@ -17,8 +17,8 @@ func _draw():
 	if oSlabStyle.visible == false: return
 	
 	oDataSlx.slxImgData.lock()
-	for x in 85:
-		for y in 85:
+	for x in M.xSize:
+		for y in M.ySize:
 			var value = oDataSlx.slxImgData.get_pixel(x,y).r8
 			if value > 0:
 				var string = str(value-1)

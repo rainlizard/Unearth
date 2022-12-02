@@ -24,29 +24,24 @@ func read_keeperfx_lof(buffer):
 	value = buffer.get_string(buffer.get_size())
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	var array = value.split("\n")
-
 	for line in array:
-		for i in line:
-			i = i.strip_edges()
 		var lineParts = line.split("=")
-		for i in lineParts:
-			i = i.strip_edges()
-
+		
 		if lineParts.size() == 2:
-			if lineParts[0] == "KIND":
-				oDataKeeperFxLof.KIND = lineParts[1]
-			if lineParts[0] == "NAME_TEXT":
-				oDataKeeperFxLof.NAME_TEXT = lineParts[1]
-			if lineParts[0] == "OPTIONS":
-				oDataKeeperFxLof.OPTIONS = lineParts[1]
-			if lineParts[0] == "AUTHOR":
-				oDataKeeperFxLof.AUTHOR = lineParts[1]
-			if lineParts[0] == "DESCRIPTION":
-				oDataKeeperFxLof.DESCRIPTION = lineParts[1]
-			if lineParts[0] == "DATE":
-				oDataKeeperFxLof.DATE = lineParts[1]
-			if lineParts[0] == "MAPSIZE":
-				var sizeString = lineParts[1].split(" ")
+			if lineParts[0].strip_edges() == "KIND":
+				oDataKeeperFxLof.KIND = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "NAME_TEXT":
+				oDataKeeperFxLof.NAME_TEXT = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "OPTIONS":
+				oDataKeeperFxLof.OPTIONS = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "AUTHOR":
+				oDataKeeperFxLof.AUTHOR = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "DESCRIPTION":
+				oDataKeeperFxLof.DESCRIPTION = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "DATE":
+				oDataKeeperFxLof.DATE = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "MAPSIZE":
+				var sizeString = lineParts[1].strip_edges().split(" ")
 				if sizeString.size() == 2:
 					var x = sizeString[0].to_int()
 					var y = sizeString[1].to_int()
@@ -59,8 +54,8 @@ func read_slx(buffer):
 	# 3 = Tileset 2, etc.
 	buffer.seek(0)
 	oDataSlx.slxImgData.lock()
-	for ySlab in 85:
-		for xSlab in 85:
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
 			value = buffer.get_u8()
 			var lower4bits = value & 0x0F
 			# Red value will be used to store the slx value
@@ -70,24 +65,26 @@ func read_slx(buffer):
 
 func read_une(buffer):
 	buffer.seek(0)
-	for ySlab in 85:
-		for xSlab in 85:
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
 			value = buffer.get_u16()
 			oDataCustomSlab.set_cell(xSlab,ySlab,value)
 
 func read_wlb(buffer):
 	buffer.seek(0)
-	for ySlab in 85:
-		for xSlab in 85:
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
 			value = buffer.get_u8()
 			oDataLiquid.set_cell(xSlab,ySlab,value)
 
 func read_wib(buffer):
 	buffer.seek(0)
-	for ySubtile in 256:
-		for xSubtile in 256:
+	var dataHeight = (M.ySize*3)+1
+	var dataWidth = (M.xSize*3)+1
+	for subtileY in dataHeight:
+		for subtileX in dataWidth:
 			value = buffer.get_u8()
-			oDataWibble.set_cell(xSubtile,ySubtile,value)
+			oDataWibble.set_cell(subtileX,subtileY,value)
 
 func read_inf(buffer):
 	buffer.seek(0)
@@ -103,17 +100,17 @@ func read_txt(buffer):
 
 func read_slb(buffer):
 	buffer.seek(0)
-	for y in 85:
-		for x in 85:
-			#buffer.seek( 2 * ( (y*85) + x ) )
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
+			#print('x:' + str(xSlab) + " " + 'y:' + str(ySlab))
 			value = buffer.get_u8()
 			buffer.get_u8() # skip second byte
-			oDataSlab.set_cell(x,y,value)
+			oDataSlab.set_cell(xSlab,ySlab,value)
 
 func read_own(buffer):
 	buffer.seek(0)
-	var dataHeight = (85*3)+1
-	var dataWidth = (85*3)+1
+	var dataHeight = (M.ySize*3)+1
+	var dataWidth = (M.xSize*3)+1
 	for ySubtile in dataHeight:
 		for xSubtile in dataWidth:
 			value = buffer.get_u8()
@@ -121,8 +118,8 @@ func read_own(buffer):
 
 func read_dat(buffer):
 	buffer.seek(0)
-	var dataHeight = (85*3)+1
-	var dataWidth = (85*3)+1
+	var dataHeight = (M.ySize*3)+1
+	var dataWidth = (M.xSize*3)+1
 	for ySubtile in dataHeight:
 		for xSubtile in dataWidth:
 			#buffer.seek(2*(xSubtile + (ySubtile*dataWidth)))

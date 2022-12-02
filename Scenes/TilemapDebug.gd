@@ -17,8 +17,8 @@ func _draw():
 	if draw_grid == true:
 		dynamic_font.font_data = preload("res://Theme/ClassicConsole.ttf")
 		dynamic_font.size = tileDrawDist
-		for x in 255: #get_size_x():
-			for y in 255: #get_size_y():
+		for x in (M.xSize*3): #get_size_x():
+			for y in (M.ySize*3): #get_size_y():
 				var value = DEBUG_THIS_TILEMAP_NODE.get_cell(x,y)
 				var string = str(value)
 				var pos = Vector2(x*tileDrawDist, y*tileDrawDist) + Vector2(tileDrawDist*0.5,tileDrawDist*0.5)

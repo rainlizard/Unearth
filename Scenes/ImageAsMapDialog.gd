@@ -50,9 +50,9 @@ func _on_ChooseMapImageFileDialog_file_selected(path):
 		oMessage.quick("Error loading file.")
 		return
 	
-	if imageData.get_size() > Vector2(85,85):
-		imageData.resize(85,85,Image.INTERPOLATE_NEAREST) #Image.Interpolation.INTERPOLATE_NEAREST
-	if imageData.get_size() < Vector2(85,85):
+	if imageData.get_size() > Vector2(M.xSize,M.ySize):
+		imageData.resize(M.xSize,M.ySize,Image.INTERPOLATE_NEAREST) #Image.Interpolation.INTERPOLATE_NEAREST
+	if imageData.get_size() < Vector2(M.xSize,M.ySize):
 		#offsetResultBy = ( (Vector2(85,85) - imageData.get_size()) / 2 ).floor()
 		
 		var copyPaste = Image.new()
@@ -61,10 +61,10 @@ func _on_ChooseMapImageFileDialog_file_selected(path):
 		
 		
 		# Center image if it's small
-		imageData.crop(85,85)
+		imageData.crop(M.xSize,M.ySize)
 		imageData.fill(Color(0,0,0,0))
 		
-		var destinationCoordinates = ( (Vector2(85,85) - copyPaste.get_size()) / 2 ).floor()
+		var destinationCoordinates = ( (Vector2(M.xSize,M.ySize) - copyPaste.get_size()) / 2 ).floor()
 		
 		imageData.blit_rect(copyPaste,copyPaste.get_used_rect(), destinationCoordinates)
 	#offsetResultBy = Vector2(1,1) # # To take into consideration the border

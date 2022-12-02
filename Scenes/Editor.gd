@@ -19,7 +19,7 @@ enum {
 }
 
 var currentView = VIEW_2D
-var fieldBoundary = Rect2(Vector2(1,1), Vector2(83,83)) # Position, Size
+var fieldBoundary = Rect2(Vector2(1,1), Vector2(M.xSize-2,M.ySize-2)) # Position, Size
 var mapHasBeenEdited = false
 
 func _ready():
@@ -93,8 +93,8 @@ func set_view_3d():
 func _on_EditableBordersCheckbox_toggled(button_pressed):
 	print(button_pressed)
 	match button_pressed:
-		true: fieldBoundary = Rect2(Vector2(0,0), Vector2(85,85))
-		false: fieldBoundary = Rect2(Vector2(1,1), Vector2(83,83))
+		true: fieldBoundary = Rect2(Vector2(0,0), Vector2(M.xSize,M.ySize))
+		false: fieldBoundary = Rect2(Vector2(1,1), Vector2(M.xSize-2,M.ySize-2))
 
 func _on_ConfirmQuit_confirmed():
 	get_tree().quit()

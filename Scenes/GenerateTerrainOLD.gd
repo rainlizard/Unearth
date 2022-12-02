@@ -51,8 +51,8 @@ func start(genType):
 				GEN_MAP: clear() #if blockMap.size() != 0: return # Disabling this for now to prevent misleading visuals
 				GEN_CLM: clear()
 			GENERATED_TYPE = GEN_MAP
-			TERRAIN_SIZE_X = 255
-			TERRAIN_SIZE_Z = 255
+			TERRAIN_SIZE_X = (M.xSize*3) # might need to swap xSize and ySize here
+			TERRAIN_SIZE_Z = (M.ySize*3)
 			TERRAIN_SIZE_Y = 8
 			oFloor.visible = false
 		"CLM":

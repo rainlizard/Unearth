@@ -46,7 +46,6 @@ var previousPosSubtile = Vector2()
 enum {MODE_TILE, MODE_SUBTILE}
 var mode = MODE_TILE
 
-#Rect2(Vector2(0,0), Vector2(85,85))
 
 func _ready():
 	change_mode(MODE_TILE)

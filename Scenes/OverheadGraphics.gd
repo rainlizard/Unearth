@@ -18,10 +18,10 @@ func update_map_overhead_2d_textures():
 	if arrayOfColorRects.empty() == true:
 		initialize_display_fields()
 	
-	overheadImgData.create(255, 255, false, Image.FORMAT_RGB8)
+	overheadImgData.create((M.xSize*3), (M.ySize*3), false, Image.FORMAT_RGB8)
 	overheadTexData.create_from_image(overheadImgData, 0)
 	
-	overhead2d_update_rect(Vector2(0,0), Vector2(84,84))
+	overhead2d_update_rect(Vector2(0,0), Vector2(M.xSize-1,M.ySize-1))
 	
 	print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
@@ -29,8 +29,8 @@ func overhead2d_update_rect(rectStart, rectEnd):
 	# Include surrounding
 	rectStart -= Vector2(1,1)
 	rectEnd += Vector2(1,1)
-	rectStart = Vector2(clamp(rectStart.x, 0, 84), clamp(rectStart.y, 0, 84))
-	rectEnd = Vector2(clamp(rectEnd.x, 0, 84), clamp(rectEnd.y, 0, 84))
+	rectStart = Vector2(clamp(rectStart.x, 0, M.xSize-1), clamp(rectStart.y, 0, M.ySize-1))
+	rectEnd = Vector2(clamp(rectEnd.x, 0, M.xSize-1), clamp(rectEnd.y, 0, M.ySize-1))
 #	print('rectStart: '+str(rectStart))
 #	print('rectEnd: '+str(rectEnd))
 	
@@ -65,7 +65,7 @@ func initialize_display_fields():
 func createDisplayField(setMap, showStyle):
 	
 	var displayField = ColorRect.new()
-	displayField.rect_size = Vector2(8160,8160)
+	displayField.rect_size = Vector2(M.xSize * 96, M.ySize * 96)
 	#displayField.visible = false # FPS is only saved when setting visible to false. FPS is not saved by making image transparent
 	displayField.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
@@ -78,7 +78,7 @@ func createDisplayField(setMap, showStyle):
 		mat.set_shader_param("dkTextureMap_Split_B", oTextureCache.cachedTextures[setMap][1])
 	
 	mat.set_shader_param("showOnlySpecificStyle", showStyle)
-	mat.set_shader_param("fieldSizeInSubtiles", Vector2(255, 255))
+	mat.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
 	mat.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
 	mat.set_shader_param("viewTextures", overheadTexData)
 	mat.set_shader_param("slxData", oDataSlx.slxTexData)

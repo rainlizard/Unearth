@@ -63,8 +63,8 @@ func update_all_utilized():
 	var CODETIME_START = OS.get_ticks_msec()
 	for clearIndex in 2048:
 		utilized[clearIndex] = 0
-	for y in 255:
-		for x in 255:
+	for y in (M.ySize*3):
+		for x in (M.xSize*3):
 			var value = oDataClmPos.get_cell(x,y)
 			utilized[value] += 1
 	
@@ -134,12 +134,12 @@ func sort_columns_by_utilized():
 	
 	#print(dictionary[419])
 	
-	for y in 255:
-		for x in 255:
+	for y in (M.ySize*3):
+		for x in (M.xSize*3):
 			var clmIndex = oDataClmPos.get_cell(x,y)
 			oDataClmPos.set_cell(x, y, dictSrcDest[clmIndex])
 	
-	oOverheadGraphics.overhead2d_update_rect(Vector2(0,0), Vector2(84,84))
+	oOverheadGraphics.overhead2d_update_rect(Vector2(0,0), Vector2(M.xSize-1,M.ySize-1))
 	
 	
 	utilized[0] = 0 # Pretend that the utilized value is maximum for column 0, so it's placed first. Set it back to 0 afterwards.

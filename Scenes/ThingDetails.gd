@@ -170,8 +170,8 @@ func thing_details(id):
 				if id.sensitiveTile != null:
 					
 					
-					var sensY = int(id.sensitiveTile/85)
-					var sensX = id.sensitiveTile - (sensY*85)
+					var sensY = int(id.sensitiveTile/M.ySize)
+					var sensX = id.sensitiveTile - (sensY*M.xSize)
 					value = Slabs.data[oDataSlab.get_cell(sensX,sensY)][Slabs.NAME]
 					
 					if sensX == 0 and sensY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
