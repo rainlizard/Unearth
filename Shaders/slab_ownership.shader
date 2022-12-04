@@ -30,7 +30,9 @@ void fragment() {
 	float textureHeight = float(textureSize(territoryTexture,0).y) * 96.0;
 	vec2 texel = vec2(1.0/textureWidth, 1.0/textureHeight);
 	
-	float superPixel = max(texel.x, texel.x*zoom)*outlineThickness;
+	// vec2 superPixel = max(texel.x, texel.x*zoom) * outlineThickness;
+	vec2 superPixel = vec2(max(texel.x,texel.x*zoom),max(texel.y,texel.y*zoom)) * outlineThickness;
+	
 	
 	// Place border around colour which has the mouse over it.
 	//if (cursorOnColor.rgb == vec3(0.0,0.0,0.0)) {
@@ -52,15 +54,15 @@ void fragment() {
 	
 	if (baseCol.a == 1.0) {
 		bool isBorder = false;
-		if (texture(territoryTexture, vec2(UV.x, UV.y+superPixel )) != baseCol) {isBorder = true;}
-		if (texture(territoryTexture, vec2(UV.x, UV.y-superPixel )) != baseCol) {isBorder = true;}
-		if (texture(territoryTexture, vec2(UV.x+superPixel, UV.y )) != baseCol) {isBorder = true;}
-		if (texture(territoryTexture, vec2(UV.x-superPixel, UV.y )) != baseCol) {isBorder = true;}
+		if (texture(territoryTexture, vec2(UV.x, UV.y+superPixel.y )) != baseCol) {isBorder = true;}
+		if (texture(territoryTexture, vec2(UV.x, UV.y-superPixel.y )) != baseCol) {isBorder = true;}
+		if (texture(territoryTexture, vec2(UV.x+superPixel.x, UV.y )) != baseCol) {isBorder = true;}
+		if (texture(territoryTexture, vec2(UV.x-superPixel.x, UV.y )) != baseCol) {isBorder = true;}
 		
-		if (texture(territoryTexture, vec2(UV.x+superPixel, UV.y+superPixel )) != baseCol) {isBorder = true;}
-		if (texture(territoryTexture, vec2(UV.x+superPixel, UV.y-superPixel )) != baseCol) {isBorder = true;}
-		if (texture(territoryTexture, vec2(UV.x-superPixel, UV.y+superPixel )) != baseCol) {isBorder = true;}
-		if (texture(territoryTexture, vec2(UV.x-superPixel, UV.y-superPixel )) != baseCol) {isBorder = true;}
+		if (texture(territoryTexture, vec2(UV.x+superPixel.x, UV.y+superPixel.y )) != baseCol) {isBorder = true;}
+		if (texture(territoryTexture, vec2(UV.x+superPixel.x, UV.y-superPixel.y )) != baseCol) {isBorder = true;}
+		if (texture(territoryTexture, vec2(UV.x-superPixel.x, UV.y+superPixel.y )) != baseCol) {isBorder = true;}
+		if (texture(territoryTexture, vec2(UV.x-superPixel.x, UV.y-superPixel.y )) != baseCol) {isBorder = true;}
 		
 			if (isBorder == true) {
 				modifiedCol.a = alphaOutline;

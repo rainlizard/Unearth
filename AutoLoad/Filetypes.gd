@@ -18,6 +18,25 @@ const FILE_TYPES = [
 	"UNE",
 ]
 
+func new_blank(EXT):
+	var oReadData = Nodelist.list["oReadData"]
+	match EXT:
+		"LOF" : oReadData.new_keeperfx_lof()
+		"CLM" : oReadData.new_clm()
+		"DAT" : oReadData.new_dat()
+		"APT" : oReadData.new_apt()
+		"TNG" : oReadData.new_tng()
+		"INF" : oReadData.new_inf()
+		"SLB" : oReadData.new_slb()
+		"OWN" : oReadData.new_own()
+		"LIF" : oReadData.new_lif()
+		"LGT" : oReadData.new_lgt()
+		"WIB" : oReadData.new_wib()
+		"SLX" : oReadData.new_slx()
+		"WLB" : oReadData.new_wlb()
+		"TXT" : oReadData.new_txt()
+		"UNE" : oReadData.new_une()
+
 func read(filePath, EXT):
 	
 	if File.new().file_exists(filePath) == false:

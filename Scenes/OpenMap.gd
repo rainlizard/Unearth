@@ -34,6 +34,8 @@ onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 onready var oXSizeLine = Nodelist.list["oXSizeLine"]
 onready var oYSizeLine = Nodelist.list["oYSizeLine"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
+onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
+onready var oDataSlx = Nodelist.list["oDataSlx"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -64,6 +66,8 @@ func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
 func open_map(filePath): # auto opens other files
+	
+	# a filePath of "" means make a blank map.
 	
 	# This will replace \ with /, just for the sake of fixing ugliness
 	filePath = filePath.replace("\\", "/")
@@ -107,9 +111,8 @@ func open_map(filePath): # auto opens other files
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
 				Filetypes.read(oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING], EXT.to_upper())
 			else:
-				print('Missing file, so using blank_map instead')
-				var blankPath = Settings.unearthdata.plus_file("blank_map.") + EXT.to_lower()
-				Filetypes.read(blankPath, EXT.to_upper())
+				print("Missing " + EXT + " file, so create blank data for that one.")
+				Filetypes.new_blank(EXT.to_upper())
 				
 				# Assign name data to any that's missing
 				if EXT == "LIF":
@@ -145,6 +148,7 @@ func finish_opening_map(map):
 	
 	oCurrentMap.set_path_and_title(map)
 	oDynamicMapTree.highlight_current_map()
+	oEditor.update_boundaries()
 	oEditor.mapHasBeenEdited = false
 	oScriptEditor.initialize_for_new_map()
 	oOverheadOwnership.start()
@@ -155,7 +159,6 @@ func finish_opening_map(map):
 	
 	oOverheadGraphics.update_map_overhead_2d_textures()
 	oPickSlabWindow.add_slabs()
-	
 	oDataClm.count_filled_clm_entries()
 	
 	oTextureCache.set_current_texture_pack()
@@ -210,8 +213,7 @@ func get_accompanying_files(map):
 			if dir.current_is_dir() == false:
 				if fileName.to_upper().begins_with(mapName.to_upper()): # Get file regardless of case (case insensitive)
 					var EXT = fileName.get_extension().to_upper()
-					if Filetypes.FILE_TYPES.has(EXT) and fileName.get_file().get_basename().to_upper() != "BLANK_MAP":
-						
+					if Filetypes.FILE_TYPES.has(EXT):
 						var fullPath = baseDir.plus_file(fileName)
 						var getModifiedTime = File.new().get_modified_time(fullPath)
 						dict[EXT] = [fullPath, getModifiedTime]

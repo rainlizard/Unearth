@@ -58,9 +58,6 @@ func _on_RecentSubmenu_Pressed(pressedID):
 
 
 func add_recent(filePath):
-	if "blank_map" in filePath:
-		return
-	
 	var recentString = filePath
 	
 	var findExisting = recentlyOpened.find(recentString)

@@ -38,8 +38,9 @@ func set_ownership_alpha_graphics(value):
 		oInstanceOwnership.materialInstanceOwnership[i].set_shader_param("alphaFilled", value)
 
 func clear():
-	slabOwnershipImage.fill(Constants.ownerRoomCol[5])
-	slabOwnershipTexture.create_from_image(slabOwnershipImage, 0)
+	if slabOwnershipImage.get_size().x > 0:
+		slabOwnershipImage.fill(Constants.ownerRoomCol[5])
+		slabOwnershipTexture.create_from_image(slabOwnershipImage, 0)
 
 func start():
 	slabOwnershipImage.create(M.xSize,M.ySize,false,Image.FORMAT_RGBA8)
@@ -52,7 +53,7 @@ func start():
 	slabOwnershipImage.unlock()
 	
 	slabOwnershipTexture.create_from_image(slabOwnershipImage, 0)
-	oColorRectSlabOwner.rect_size = Vector2(8160, 8160)#Vector2(M.xSize*TILE_SIZE, M.ySize*TILE_SIZE)
+	oColorRectSlabOwner.rect_size = Vector2(M.xSize*TILE_SIZE, M.ySize*TILE_SIZE)
 	#yield(get_tree(),'idle_frame')
 	#print(oColorRectSlabOwner.rect_scale)
 	#oColorRectSlabOwner.rect_position = Vector2(96,96)
@@ -96,14 +97,15 @@ func _process(delta):
 	mat.set_shader_param("territoryTexture", slabOwnershipTexture)
 	mat.set_shader_param("zoom", oCamera2D.zoom.x)
 	if oSelector.visible == true:
-		var cursorPos = oSelector.cursorTile
-		if cursorPos.x < 0 or cursorPos.x >= M.xSize: return
-		if cursorPos.y < 0 or cursorPos.y >= M.ySize: return
-		
-		slabOwnershipImage.lock()
-		cursorOnColor = slabOwnershipImage.get_pixel(cursorPos.x, cursorPos.y)
-		slabOwnershipImage.unlock()
-		mat.set_shader_param("cursorOnColor", cursorOnColor)
+		if slabOwnershipImage.get_size().x > 0:
+			var cursorPos = oSelector.cursorTile
+			if cursorPos.x < 0 or cursorPos.x >= M.xSize: return
+			if cursorPos.y < 0 or cursorPos.y >= M.ySize: return
+			
+			slabOwnershipImage.lock()
+			cursorOnColor = slabOwnershipImage.get_pixel(cursorPos.x, cursorPos.y)
+			slabOwnershipImage.unlock()
+			mat.set_shader_param("cursorOnColor", cursorOnColor)
 	
 	for i in 6:
 		if cursorOnColor == Constants.ownerRoomCol[i]:

@@ -8,7 +8,6 @@ var slxTexData = ImageTexture.new()
 func _init():
 	slxImgData.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)
 	slxTexData.create_from_image(slxImgData, 0)
-	#texture = slxTexData
 
 func clear_img():
 	slxImgData.fill(Color(0,0,0,1))

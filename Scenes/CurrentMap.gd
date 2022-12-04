@@ -34,12 +34,9 @@ enum {
 }
 
 func _on_ButtonNewMap_pressed():
-	oOpenMap.open_map(Settings.unearthdata.plus_file("blank_map.slb"))
+	oOpenMap.open_map("") # This means "blank" map
 
 func set_path_and_title(newpath):
-	if "unearthdata".plus_file("blank_map").to_upper() in newpath.to_upper():
-		newpath = ""
-	
 	if newpath != "":
 		OS.set_window_title(newpath + ' - Unearth v'+Constants.VERSION)
 		oMenu.add_recent(newpath) # Add saved maps to the recent menu
@@ -93,3 +90,4 @@ func clear_map():
 	# "LOF" # Do this last in case other functions rely on the old map size
 	oDataKeeperFxLof.clear_all()
 	print('Cleared map in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+

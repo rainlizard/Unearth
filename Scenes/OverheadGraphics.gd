@@ -17,6 +17,8 @@ func update_map_overhead_2d_textures():
 	
 	if arrayOfColorRects.empty() == true:
 		initialize_display_fields()
+	else:
+		update_display_fields_size()
 	
 	overheadImgData.create((M.xSize*3), (M.ySize*3), false, Image.FORMAT_RGB8)
 	overheadTexData.create_from_image(overheadImgData, 0)
@@ -63,7 +65,6 @@ func initialize_display_fields():
 		createDisplayField(map, map+1)
 
 func createDisplayField(setMap, showStyle):
-	
 	var displayField = ColorRect.new()
 	displayField.rect_size = Vector2(M.xSize * 96, M.ySize * 96)
 	#displayField.visible = false # FPS is only saved when setting visible to false. FPS is not saved by making image transparent
@@ -85,6 +86,11 @@ func createDisplayField(setMap, showStyle):
 	
 	arrayOfColorRects.append(displayField)
 	oGame2D.add_child_below_node(self, displayField)
+
+func update_display_fields_size():
+	for displayField in arrayOfColorRects:
+		displayField.rect_size = Vector2(M.xSize * 96, M.ySize * 96)
+		displayField.material.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
 
 func get_overhead_face_value(x, y, slabID):
 	# clmIndex is a position inside the 2048 column collection

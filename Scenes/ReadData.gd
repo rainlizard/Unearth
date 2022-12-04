@@ -20,6 +20,9 @@ onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
 var value # just so I don't have to initialize the var in every function
 
 func read_keeperfx_lof(buffer):
+	# Be sure to default to 85x85 in case it can't be read.
+	oDataKeeperFxLof.use_size(85,85)
+	
 	buffer.seek(0)
 	value = buffer.get_string(buffer.get_size())
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
@@ -46,6 +49,8 @@ func read_keeperfx_lof(buffer):
 					var x = sizeString[0].to_int()
 					var y = sizeString[1].to_int()
 					oDataKeeperFxLof.use_size(x,y)
+func new_keeperfx_lof():
+	pass
 
 func read_slx(buffer):
 	# 0 = Use map's original
@@ -63,12 +68,19 @@ func read_slx(buffer):
 	oDataSlx.slxImgData.unlock()
 	oDataSlx.slxTexData.set_data(oDataSlx.slxImgData)
 
+func new_slx():
+	oDataSlx.slxImgData.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)
+	oDataSlx.slxImgData.fill(Color(0,0,0,1))
+	oDataSlx.slxTexData.create_from_image(oDataSlx.slxImgData, 0)
+
 func read_une(buffer):
 	buffer.seek(0)
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
 			value = buffer.get_u16()
 			oDataCustomSlab.set_cell(xSlab,ySlab,value)
+func new_une():
+	pass
 
 func read_wlb(buffer):
 	buffer.seek(0)
@@ -76,6 +88,8 @@ func read_wlb(buffer):
 		for xSlab in M.xSize:
 			value = buffer.get_u8()
 			oDataLiquid.set_cell(xSlab,ySlab,value)
+func new_wlb():
+	pass
 
 func read_wib(buffer):
 	buffer.seek(0)
@@ -85,11 +99,15 @@ func read_wib(buffer):
 		for subtileX in dataWidth:
 			value = buffer.get_u8()
 			oDataWibble.set_cell(subtileX,subtileY,value)
+func new_wib():
+	pass
 
 func read_inf(buffer):
 	buffer.seek(0)
 	value = buffer.get_u8()
 	oDataLevelStyle.data = value
+func new_inf():
+	pass
 
 func read_txt(buffer):
 	buffer.seek(0)
@@ -97,6 +115,8 @@ func read_txt(buffer):
 	
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	oDataScript.data = value
+func new_txt():
+	pass
 
 func read_slb(buffer):
 	buffer.seek(0)
@@ -106,6 +126,10 @@ func read_slb(buffer):
 			value = buffer.get_u8()
 			buffer.get_u8() # skip second byte
 			oDataSlab.set_cell(xSlab,ySlab,value)
+func new_slb():
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
+			oDataSlab.set_cell(xSlab,ySlab,0)
 
 func read_own(buffer):
 	buffer.seek(0)
@@ -115,6 +139,8 @@ func read_own(buffer):
 		for xSubtile in dataWidth:
 			value = buffer.get_u8()
 			oDataOwnership.set_cell(xSubtile/3,ySubtile/3,value)
+func new_own():
+	pass
 
 func read_dat(buffer):
 	buffer.seek(0)
@@ -127,6 +153,12 @@ func read_dat(buffer):
 			if value == 65536: value = 0
 			
 			oDataClmPos.set_cell(xSubtile,ySubtile,value)
+func new_dat():
+	var dataHeight = (M.ySize*3)+1
+	var dataWidth = (M.xSize*3)+1
+	for ySubtile in dataHeight:
+		for xSubtile in dataWidth:
+			oDataClmPos.set_cell(xSubtile,ySubtile,0)
 
 func read_clm(buffer):
 	buffer.seek(0)
@@ -164,6 +196,21 @@ func read_clm(buffer):
 		oDataClm.cubes[entry].resize(8)
 		for cubeNumber in 8:
 			oDataClm.cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
+func new_clm():
+	var numberOfClmEntries = 2048
+	oDataClm.unknownData = 0
+	for entry in numberOfClmEntries:
+		oDataClm.utilized.append(0)
+		oDataClm.permanent.append(0)
+		oDataClm.lintel.append(0)
+		oDataClm.height.append(0)
+		oDataClm.solidMask.append(0)
+		oDataClm.floorTexture.append(0)
+		oDataClm.orientation.append(0)
+		oDataClm.cubes.append([])
+		oDataClm.cubes[entry].resize(8)
+		for cubeNumber in 8:
+			oDataClm.cubes[entry][cubeNumber] = 0
 
 func read_apt(buffer):
 	buffer.seek(0)
@@ -182,6 +229,9 @@ func read_apt(buffer):
 		id.data7 = buffer.get_u8() # 7
 		
 		oInstances.add_child(id)
+func new_apt():
+	pass
+
 
 func read_lgt(buffer):
 	buffer.seek(0)
@@ -217,6 +267,8 @@ func read_lgt(buffer):
 		id.data19 = buffer.get_u8() # 19
 		
 		oInstances.add_child(id)
+func new_lgt():
+	pass
 
 func read_tng(buffer):
 	buffer.seek(0)
@@ -268,6 +320,8 @@ func read_tng(buffer):
 				id.doorLocked = id.data14 # 14
 		
 		oInstances.add_child(id)
+func new_tng():
+	pass
 
 #func _ready(): #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #	var file = File.new()
@@ -282,6 +336,8 @@ func read_lif(buffer):
 	var array = lif_buffer_to_array(buffer)
 	var mapName = lif_array_to_map_name(array)
 	oDataLif.data = mapName
+func new_lif():
+	pass
 
 # These get their own functions because it's also used for Viewing Map Files before you open them
 func lif_buffer_to_array(buffer):
@@ -312,6 +368,30 @@ func lif_array_to_map_name(array):
 	
 	# Read map name normally
 	return array[0][1]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

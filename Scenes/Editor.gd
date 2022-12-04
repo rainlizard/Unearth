@@ -19,8 +19,9 @@ enum {
 }
 
 var currentView = VIEW_2D
-var fieldBoundary = Rect2(Vector2(1,1), Vector2(M.xSize-2,M.ySize-2)) # Position, Size
+var fieldBoundary = Rect2()
 var mapHasBeenEdited = false
+
 
 func _ready():
 	get_tree().set_auto_accept_quit(false)
@@ -98,3 +99,6 @@ func _on_EditableBordersCheckbox_toggled(button_pressed):
 
 func _on_ConfirmQuit_confirmed():
 	get_tree().quit()
+
+func update_boundaries():
+	fieldBoundary = Rect2(Vector2(1,1), Vector2(M.xSize-2,M.ySize-2)) # Position, Size
