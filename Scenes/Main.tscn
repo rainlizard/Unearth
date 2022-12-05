@@ -1,4 +1,4 @@
-[gd_scene load_steps=161 format=2]
+[gd_scene load_steps=160 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -115,7 +115,6 @@
 [ext_resource path="res://Art/IconPencilHover.png" type="Texture" id=113]
 [ext_resource path="res://Scenes/RectangleSelection.gd" type="Script" id=114]
 [ext_resource path="res://Scenes/OnlyOwnership.gd" type="Script" id=115]
-[ext_resource path="res://dk_images/keepower_64/possess_std.png" type="Texture" id=116]
 [ext_resource path="res://Scenes/DataScript.gd" type="Script" id=117]
 [ext_resource path="res://Scenes/PropertiesTabs.gd" type="Script" id=118]
 [ext_resource path="res://Scenes/AboutWindow.gd" type="Script" id=119]
@@ -432,7 +431,7 @@ transform = Transform( -0.707107, 0.707107, 1.15203e-07, 0, -1.62921e-07, 1, 0.7
 script = ExtResource( 21 )
 
 [node name="Player" type="KinematicBody" parent="Game3D"]
-transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 255, 10, 255 )
+transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 0, 10, 0 )
 script = ExtResource( 48 )
 
 [node name="Head" type="Spatial" parent="Game3D/Player"]
@@ -560,9 +559,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Extra3DInfo" type="Label" parent="Ui/Ui3D"]
-anchor_top = 1.0
-anchor_bottom = 1.0
+[node name="3DCameraInfo" type="Label" parent="Ui/Ui3D"]
+anchor_top = 0.5
+anchor_bottom = 0.5
 grow_vertical = 0
 text = "3D INFO DISPLAY"
 script = ExtResource( 3 )
@@ -570,25 +569,6 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
 }
-
-[node name="Possess3DButton" type="Button" parent="Ui/Ui3D"]
-anchor_left = 1.0
-anchor_right = 1.0
-grow_horizontal = 0
-rect_min_size = Vector2( 36, 36 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextureRect" type="TextureRect" parent="Ui/Ui3D/Possess3DButton"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -6.0
-margin_bottom = 3.0
-rect_clip_content = true
-texture = ExtResource( 116 )
-expand = true
-stretch_mode = 6
 
 [node name="UiTools" type="Control" parent="Ui"]
 anchor_right = 1.0
@@ -3186,7 +3166,7 @@ script = ExtResource( 125 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="MapProperties" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs"]
+[node name="MapProperties" type="MarginContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -3196,38 +3176,172 @@ margin_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
+custom_constants/margin_right = 100
+custom_constants/margin_top = 0
+custom_constants/margin_left = 100
+custom_constants/margin_bottom = 0
 script = ExtResource( 77 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_left = 372.0
-margin_right = 463.0
-margin_bottom = 21.0
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
+margin_left = 100.0
+margin_right = 735.0
+margin_bottom = 975.0
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
+margin_left = 100.0
+margin_right = 735.0
+margin_bottom = 975.0
+columns = 2
+
+[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_right = 316.0
+margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
-size_flags_horizontal = 6
+size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Map name"
-align = 1
 valign = 1
 
-[node name="MapNameLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_left = 388.0
-margin_top = 25.0
-margin_right = 446.0
-margin_bottom = 56.0
+[node name="MapNameLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_left = 320.0
+margin_right = 635.0
+margin_bottom = 31.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 6
-align = 1
+size_flags_horizontal = 7
+expand_to_text_length = true
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_top = 35.0
+margin_right = 316.0
+margin_bottom = 66.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Kind"
+valign = 1
+
+[node name="KindLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_left = 320.0
+margin_top = 35.0
+margin_right = 635.0
+margin_bottom = 66.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+expand_to_text_length = true
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_top = 70.0
+margin_right = 316.0
+margin_bottom = 101.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Name text"
+valign = 1
+
+[node name="NameTextLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_left = 320.0
+margin_top = 70.0
+margin_right = 635.0
+margin_bottom = 101.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+expand_to_text_length = true
+
+[node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_top = 105.0
+margin_right = 316.0
+margin_bottom = 136.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Options"
+valign = 1
+
+[node name="OptionsLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_left = 320.0
+margin_top = 105.0
+margin_right = 635.0
+margin_bottom = 136.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+expand_to_text_length = true
+
+[node name="Label5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_top = 140.0
+margin_right = 316.0
+margin_bottom = 171.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Author"
+valign = 1
+
+[node name="AuthorLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_left = 320.0
+margin_top = 140.0
+margin_right = 635.0
+margin_bottom = 171.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+expand_to_text_length = true
+
+[node name="Label6" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_top = 175.0
+margin_right = 316.0
+margin_bottom = 206.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Description"
+valign = 1
+
+[node name="DescriptionLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_left = 320.0
+margin_top = 175.0
+margin_right = 635.0
+margin_bottom = 206.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+expand_to_text_length = true
+
+[node name="Label7" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_top = 210.0
+margin_right = 316.0
+margin_bottom = 241.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Date"
+valign = 1
+
+[node name="DateLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer"]
+margin_left = 320.0
+margin_top = 210.0
+margin_right = 635.0
+margin_bottom = 241.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
 expand_to_text_length = true
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_top = 60.0
-margin_right = 835.0
-margin_bottom = 84.0
+margin_left = 100.0
+margin_right = 735.0
+margin_bottom = 975.0
 rect_min_size = Vector2( 24, 24 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3235,9 +3349,8 @@ __meta__ = {
 
 [node name="LabelDungeonStyle" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
 margin_left = 352.0
-margin_top = 88.0
 margin_right = 482.0
-margin_bottom = 109.0
+margin_bottom = 975.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 6
@@ -3247,8 +3360,8 @@ align = 1
 valign = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties"]
-margin_top = 113.0
-margin_right = 835.0
+margin_left = 100.0
+margin_right = 735.0
 margin_bottom = 975.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -3257,8 +3370,8 @@ __meta__ = {
 }
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/HBoxContainer"]
-margin_right = 835.0
-margin_bottom = 862.0
+margin_right = 635.0
+margin_bottom = 975.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
@@ -3267,8 +3380,8 @@ __meta__ = {
 }
 
 [node name="DungeonStyleList" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/HBoxContainer/ScrollContainer"]
-margin_left = 417.0
-margin_right = 417.0
+margin_left = 317.0
+margin_right = 317.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 6
@@ -4599,12 +4712,13 @@ size_flags_horizontal = 0
 text = "85"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer"]
+margin_left = 237.0
 margin_top = 35.0
 margin_right = 412.0
-margin_bottom = 35.0
+margin_bottom = 64.0
+size_flags_horizontal = 10
 
 [node name="CheckBoxNewMapBorder" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer"]
-visible = false
 margin_right = 89.0
 margin_bottom = 29.0
 pressed = true
@@ -4612,7 +4726,6 @@ group = ExtResource( 138 )
 text = "Border"
 
 [node name="CheckBoxNewMapBlank" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer"]
-visible = false
 margin_left = 93.0
 margin_right = 175.0
 margin_bottom = 29.0
@@ -4620,9 +4733,9 @@ group = ExtResource( 138 )
 text = "Blank"
 
 [node name="NewMapNoiseOptions" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer"]
-margin_top = 39.0
+margin_top = 68.0
 margin_right = 412.0
-margin_bottom = 170.0
+margin_bottom = 199.0
 
 [node name="NoisePersistence" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 0.0
@@ -4669,9 +4782,9 @@ one_shot = true
 
 [node name="QuickNoisePreview" type="TextureRect" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer"]
 margin_left = 106.0
-margin_top = 174.0
+margin_top = 203.0
 margin_right = 306.0
-margin_bottom = 374.0
+margin_bottom = 403.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -4811,9 +4924,6 @@ grow_horizontal = 0
 grow_vertical = 0
 align = 2
 script = ExtResource( 12 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Timer" type="Timer" parent="Ui/UiMessages/FPScounter"]
 autostart = true
@@ -4870,6 +4980,7 @@ expand_to_text_length = true
 script = ExtResource( 89 )
 
 [node name="Label2" type="Label" parent="Ui/Junk/VBoxContainer2"]
+visible = false
 margin_top = 46.0
 margin_right = 58.0
 margin_bottom = 60.0
@@ -4918,7 +5029,6 @@ align = 1
 script = ExtResource( 88 )
 
 [connection signal="visibility_changed" from="Game2D/Selector" to="Game2D/Selector" method="_on_Selector_visibility_changed"]
-[connection signal="pressed" from="Ui/Ui3D/Possess3DButton" to="Ui" method="_on_Possess3DButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership" to="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership" method="_on_OnlyOwnership_visibility_changed"]
 [connection signal="timeout" from="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/TimerUpdateColumnEntries" to="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails" method="_on_TimerUpdateColumnEntries_timeout"]
 [connection signal="item_rect_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs" to="Ui/UiTools/PropertiesWindow" method="_on_PropertiesTabs_item_rect_changed"]
@@ -5001,7 +5111,7 @@ script = ExtResource( 88 )
 [connection signal="gui_input" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/MapImageTextureRect" to="Ui/UiSystem/ImageAsMapDialog" method="_on_MapImageTextureRect_gui_input"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseMapImageFileDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ChooseMapImageFileDialog_file_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapProperties_visibility_changed"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/MapNameLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapNameLineEdit_text_changed"]
+[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/GridContainer/MapNameLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapNameLineEdit_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/KeeperFXScriptCheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_KeeperFXScriptCheckBox_toggled"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer/PortalRateField" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_PortalRateField_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlueAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_BlueAICheckBox_toggled"]

@@ -181,7 +181,8 @@ func _on_gui_input(event):
 
 # Show and hide tab name depending on mouse cursor hover
 func _on_tab_hover(hoveredTab):
-	tabSystem.ensure_tab_visible(hoveredTab) # Scroll when hovering over hidden tab on the side
+	if hoveredTab != -1:
+		tabSystem.ensure_tab_visible(hoveredTab) # Scroll when hovering over hidden tab on the side
 	
 	var txt = ""
 	for i in tabFolder.get_children():

@@ -38,12 +38,12 @@ func switch_camera_type(type):
 				oCamera3D.transform = rememberOrthogonal[2]
 			else:
 				# Default orthogonal camera position and rotation
-				rotation_degrees.y = 45#-135
+				rotation_degrees.y = -135
 				rotation_degrees.x = -45
 				oHead.rotation_degrees.x = 0
-				translation.x = 255#0
+				translation.x = 0#0
 				translation.y = 60
-				translation.z = 255#0
+				translation.z = 0#0
 		
 		oCamera3D.size = translation.y
 		

@@ -73,7 +73,6 @@ func _notification(what):
 func just_opened_editor():
 	yield(get_tree(),'idle_frame')
 	set_view_2d() # For when you load up the program and don't load a map
-	oUi3D.visible = false
 
 func set_view_2d():
 	currentView = VIEW_2D

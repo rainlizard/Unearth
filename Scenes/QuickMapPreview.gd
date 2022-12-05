@@ -80,8 +80,9 @@ func _ready():
 
 
 func update_img(slbFilePath):
-	
-	
+	img.crop(M.xSize, M.ySize)
+	#img.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)
+	#tex.create_from_image(img, 0)
 	
 	if File.new().file_exists(slbFilePath) == false:
 		print("File not found : " + slbFilePath)
@@ -125,7 +126,7 @@ func update_img(slbFilePath):
 			if colourDict.has(slabID):
 				img.set_pixel(x,y,colourDict[slabID])
 			else:
-				if slabID == 11: # Is claimed floor
+				if slabID == 11 and ownership != 255: # Is claimed floor
 					img.set_pixel(x,y,Constants.ownerFloorCol[ownership])
 				else:
 					if ownership == 5:

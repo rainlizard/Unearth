@@ -219,9 +219,9 @@ func game_setting(doWhat,string,value):
 			if doWhat == SET: oCamera3D.fov = value
 			if doWhat == GET: return oCamera3D.fov
 		"display_3d_info":
-			var oExtra3DInfo = $'../Main/Ui/Ui3D/Extra3DInfo'
-			if doWhat == SET: oExtra3DInfo.visible = value
-			if doWhat == GET: return oExtra3DInfo.visible
+			var o3DCameraInfo = $'../Main/Ui/Ui3D/3DCameraInfo'
+			if doWhat == SET: o3DCameraInfo.ENABLE_CAMERA_COORDS = value
+			if doWhat == GET: return o3DCameraInfo.ENABLE_CAMERA_COORDS
 		"ui_scale":
 			var oUi = $'../Main/Ui'
 			if doWhat == SET: oUi.set_ui_scale(value)

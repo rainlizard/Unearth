@@ -21,9 +21,6 @@ var textureData = ImageTexture.new()
 const earthColour = Color8(255,255,255,255)#Color8(36,24,0,255)
 const impenetrableColour = Color8(0,0,0,255)
 
-func _ready():
-	reinit_noise_preview()
-
 func reinit_noise_preview():
 	var sizeX = oXSizeLine.text.to_int()
 	var sizeY = oYSizeLine.text.to_int()
@@ -49,12 +46,17 @@ func reinit_noise_preview():
 
 func _on_NewMapWindow_visibility_changed():
 	if visible == true:
+		oXSizeLine.text = "85"
+		oYSizeLine.text = "85"
+		reinit_noise_preview()
+		
 		randomize()
 		noise.seed = randi()
 		update_border_image_with_noise()
 
 func _on_ButtonNewMapOK_pressed():
 	oCurrentMap._on_ButtonNewMap_pressed()
+	
 	var rectStart = Vector2(0, 0)
 	var rectEnd = Vector2(M.xSize-1, M.ySize-1)
 	var shapePositionArray = []
@@ -65,20 +67,21 @@ func _on_ButtonNewMapOK_pressed():
 	var useOwner = 5
 	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner)
 	
-	
-
-	
 	if oNewMapNoiseOptions.visible == true:
-		update_border_image_with_noise()
+		# Border
 		overwrite_map_with_border_values()
+	else:
+		# Blank
+		overwrite_map_with_blank_values()
+	
+	oSlabPlacement.generate_slabs_based_on_id(Vector2(0,0), Vector2(M.xSize-1,M.ySize-1), false)
 	
 	visible = false # Close New Map window after pressing OK button
-	yield(get_tree(),'idle_frame')
-	print(oOverheadGraphics.overheadImgData.get_size())
-	print(oOverheadGraphics.overheadImgData.get_size())
-	print(oOverheadGraphics.overheadImgData.get_size())
-	#oOverheadGraphics.overheadImgData.resize(1,1)
-	#oOverheadGraphics.overheadTexData.create_from_image(oOverheadGraphics.overheadImgData)
+
+func overwrite_map_with_blank_values():
+	for y in range(1, M.ySize-1):
+		for x in range(1, M.xSize-1):
+			oDataSlab.set_cell(x, y, Slabs.EARTH)
 
 func overwrite_map_with_border_values():
 	imageData.lock()
@@ -88,7 +91,7 @@ func overwrite_map_with_border_values():
 				impenetrableColour: oDataSlab.set_cell(x, y, Slabs.ROCK)
 				earthColour: oDataSlab.set_cell(x, y, Slabs.EARTH)
 	imageData.unlock()
-	oSlabPlacement.generate_slabs_based_on_id(Vector2(0,0), Vector2(M.xSize-1,M.ySize-1), false)
+	
 
 func _on_NoisePersistence_sliderChanged():
 	# Constantly reset the timer to max time while dragging the slider
@@ -125,8 +128,6 @@ func update_border_image_with_noise():
 	var fullMapSize = Vector2(oXSizeLine.text.to_int()-1, oYSizeLine.text.to_int()-1)
 	var halfMapSize = Vector2(fullMapSize.x * 0.5, fullMapSize.y * 0.5)
 	
-	#var positionsArray = []
-	
 	var floodFillTileMap = TileMap.new()
 	
 	var aspectRatio = Vector2()
@@ -148,12 +149,6 @@ func update_border_image_with_noise():
 			if n < edgeDist.x and n < edgeDist.y:
 				floodFillTileMap.set_cell(x,y,1)
 	
-#	for x in range(1, fullMapSize.x):
-#		for y in range(1, fullMapSize.y):
-#			var edgeDistPercent = 1.0 - (max(abs(x-halfMapSize.x), abs(y-halfMapSize.y)) / max(halfMapSize.x,halfMapSize.y))
-#			if abs(noise.get_noise_2d(x/fullMapSize.x, y/fullMapSize.y)) < edgeDistPercent:
-#				floodFillTileMap.set_cell(x,y,1)
-	
 	var coordsToCheck = [Vector2(halfMapSize.x,halfMapSize.y)]
 	
 	imageData.fill(impenetrableColour)
@@ -174,22 +169,24 @@ func update_border_image_with_noise():
 	
 	print('Border image time: ' + str(OS.get_ticks_msec() - NOISECODETIME) + 'ms')
 
-#func update_border_image_with_blank():
-#	imageData.fill(earthColour)
-#	imageData.lock()
-#	for x in M.xSize:
-#		for y in M.ySize:
-#			if x == 0 or x == M.xSize-1 or y == 0 or y == M.ySize-1:
-#				imageData.set_pixel(x,y, impenetrableColour)
-#	imageData.unlock()
-#	textureData.set_data(imageData)
+func update_border_image_with_blank():
+	imageData.fill(earthColour)
+	imageData.lock()
+	
+	var fullMapSize = Vector2(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
+	
+	for x in fullMapSize.x:
+		for y in fullMapSize.y:
+			if x == 0 or x == fullMapSize.x-1 or y == 0 or y == fullMapSize.y-1:
+				imageData.set_pixel(x,y, impenetrableColour)
+	imageData.unlock()
+	textureData.set_data(imageData)
 
 
-#func _on_CheckBoxNewMapBorder_pressed():
-#	oNewMapNoiseOptions.visible = true
-#	update_border_image_with_noise()
-#
-#func _on_CheckBoxNewMapBlank_pressed():
-#	oNewMapNoiseOptions.visible = false
-#	update_border_image_with_blank()
+func _on_CheckBoxNewMapBorder_pressed():
+	oNewMapNoiseOptions.visible = true
+	update_border_image_with_noise()
 
+func _on_CheckBoxNewMapBlank_pressed():
+	oNewMapNoiseOptions.visible = false
+	update_border_image_with_blank()

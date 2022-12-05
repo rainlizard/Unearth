@@ -58,6 +58,8 @@ func read_slx(buffer):
 	# 2 = Tileset 1
 	# 3 = Tileset 2, etc.
 	buffer.seek(0)
+	oDataSlx.slxImgData.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)
+	oDataSlx.slxTexData.create_from_image(oDataSlx.slxImgData, 0)
 	oDataSlx.slxImgData.lock()
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:

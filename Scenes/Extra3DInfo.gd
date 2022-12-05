@@ -3,10 +3,10 @@ onready var oPlayer = Nodelist.list["oPlayer"]
 onready var oCamera3D = Nodelist.list["oCamera3D"]
 onready var oHead = Nodelist.list["oHead"]
 
-var displayInfo = true
+var ENABLE_CAMERA_COORDS = false
 
 func _ready():
-	set_process(displayInfo)
+	visible = false
 
 func _process(delta):
 	var cx = 'x '+str(oPlayer.translation.x)
@@ -34,3 +34,6 @@ func compass():
 		return 'West'
 	if degrees >= 315 or degrees < 45:
 		return 'South'
+
+func set_to_be_displayed(shouldItShow):
+	pass

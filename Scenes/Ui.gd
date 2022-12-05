@@ -14,9 +14,9 @@ onready var oModeSwitchButton = Nodelist.list["oModeSwitchButton"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
-onready var oPossess3DButton = Nodelist.list["oPossess3DButton"]
 onready var oCamera3D = Nodelist.list["oCamera3D"]
 onready var oPlayer = Nodelist.list["oPlayer"]
+onready var o3DCameraInfo = Nodelist.list["o3DCameraInfo"]
 
 var FONT_SIZE_CR_LVL_BASE := 1.00 setget set_FONT_SIZE_CR_LVL_BASE
 var FONT_SIZE_CR_LVL_MAX := 8.00 setget set_FONT_SIZE_CR_LVL_MAX
@@ -145,8 +145,9 @@ func hide_tools():
 	oEditingMode.visible = false
 
 func switch_to_2D():
+	o3DCameraInfo.visible = false
 	if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
-		oUi3D.visible = false
+		#oUi3D.visible = false
 		# Don't show tools if opening a map from the map browser or oImageAsMapDialog
 		if oMapBrowser.visible == false and oImageAsMapDialog.visible == false:
 			show_tools()
@@ -154,15 +155,13 @@ func switch_to_2D():
 		oEditingMode.visible = false
 
 func switch_to_3D_overhead():
+	o3DCameraInfo.visible = false
 	oPlayer.switch_camera_type(0)
-	oUi3D.visible = true
-	oPossess3DButton.visible = true
 	show_tools()
 
 func switch_to_1st_person():
+	o3DCameraInfo.visible = o3DCameraInfo.ENABLE_CAMERA_COORDS
 	oPlayer.switch_camera_type(1)
-	oUi3D.visible = false
-	oPossess3DButton.visible = false
 	hide_tools()
 	
 	# This code section below is temporary.
@@ -172,10 +171,6 @@ func switch_to_1st_person():
 #		oUi3D.visible = true
 #
 #		oPropertiesWindow.oPropertiesTabs.current_tab = 2
-
-
-func _on_Possess3DButton_pressed():
-	switch_to_1st_person()
 
 
 func set_ui_scale(setVal):
