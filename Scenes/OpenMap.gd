@@ -118,7 +118,7 @@ func open_map(filePath): # auto opens other files
 				if EXT == "LIF":
 					var mapName = oDataLif.get_special_lif_text(filePath)
 					if mapName != "":
-						oDataLif.data = mapName
+						oDataLif.set_map_name(mapName)
 				
 				# Some maps can function without WLB files. So build them here.
 				# Generate WLB values from SLB. This is dependent on SLB being ordered before WLB inside Filetypes.FILE_TYPES

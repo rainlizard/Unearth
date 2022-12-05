@@ -4,6 +4,8 @@ var offset = Vector2(0,-35)
 
 func _ready():
 	visible = false
+	yield(get_tree(),'idle_frame')
+	visible = false
 
 func _process(delta):
 	if visible == true:

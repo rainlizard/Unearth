@@ -22,21 +22,37 @@ var value # just so I don't have to initialize the var in every function
 func read_keeperfx_lof(buffer):
 	# Be sure to default to 85x85 in case it can't be read.
 	oDataKeeperFxLof.use_size(85,85)
+	oDataKeeperFxLof.KIND = "FREE" # Default to free if it can't be read. Goes ABOVE the check.
 	
 	buffer.seek(0)
 	value = buffer.get_string(buffer.get_size())
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	var array = value.split("\n")
 	for line in array:
+		if line.begins_with(";"):
+			continue
+		
 		var lineParts = line.split("=")
 		
 		if lineParts.size() == 2:
-			if lineParts[0].strip_edges() == "KIND":
-				oDataKeeperFxLof.KIND = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "NAME_TEXT":
 				oDataKeeperFxLof.NAME_TEXT = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "NAME_ID":
+				oDataKeeperFxLof.NAME_ID = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "KIND":
+				oDataKeeperFxLof.KIND = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "ENSIGN_POS":
+				oDataKeeperFxLof.ENSIGN_POS = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "ENSIGN_ZOOM":
+				oDataKeeperFxLof.ENSIGN_ZOOM = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "PLAYERS":
+				oDataKeeperFxLof.PLAYERS = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "OPTIONS":
 				oDataKeeperFxLof.OPTIONS = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "SPEECH":
+				oDataKeeperFxLof.SPEECH = lineParts[1].strip_edges()
+			if lineParts[0].strip_edges() == "LAND_VIEW":
+				oDataKeeperFxLof.LAND_VIEW = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "AUTHOR":
 				oDataKeeperFxLof.AUTHOR = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "DESCRIPTION":
@@ -49,8 +65,12 @@ func read_keeperfx_lof(buffer):
 					var x = sizeString[0].to_int()
 					var y = sizeString[1].to_int()
 					oDataKeeperFxLof.use_size(x,y)
+	
+	oDataKeeperFxLof.set_date() # It's ok to set it here - this will be applied when you save the map.
+
 func new_keeperfx_lof():
-	pass
+	oDataKeeperFxLof.set_date()
+	oDataKeeperFxLof.KIND = "FREE"
 
 func read_slx(buffer):
 	# 0 = Use map's original
@@ -337,7 +357,7 @@ func new_tng():
 func read_lif(buffer):
 	var array = lif_buffer_to_array(buffer)
 	var mapName = lif_array_to_map_name(array)
-	oDataLif.data = mapName
+	oDataLif.set_map_name(mapName)
 func new_lif():
 	pass
 

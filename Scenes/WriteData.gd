@@ -18,14 +18,21 @@ var value # just so I don't have to initialize the var in every function
 
 func write_keeperfx_lof(buffer):
 	var newString = ""
-	newString += "KIND = " + str(oDataKeeperFxLof.KIND) + "\n"
+	newString += "; KeeperFX Level Overview File (LOF)" + "\n"
+	
 	newString += "NAME_TEXT = " + str(oDataKeeperFxLof.NAME_TEXT) + "\n"
+	newString += "NAME_ID = " + str(oDataKeeperFxLof.NAME_ID) + "\n"
+	newString += "KIND = " + str(oDataKeeperFxLof.KIND) + "\n"
+	newString += "ENSIGN_POS = " + str(oDataKeeperFxLof.ENSIGN_POS) + "\n"
+	newString += "ENSIGN_ZOOM = " + str(oDataKeeperFxLof.ENSIGN_ZOOM) + "\n"
+	newString += "PLAYERS = " + str(oDataKeeperFxLof.PLAYERS) + "\n"
 	newString += "OPTIONS = " + str(oDataKeeperFxLof.OPTIONS) + "\n"
+	newString += "SPEECH = " + str(oDataKeeperFxLof.SPEECH) + "\n"
+	newString += "LAND_VIEW = " + str(oDataKeeperFxLof.LAND_VIEW) + "\n"
 	newString += "AUTHOR = " + str(oDataKeeperFxLof.AUTHOR) + "\n"
 	newString += "DESCRIPTION = " + str(oDataKeeperFxLof.DESCRIPTION) + "\n"
 	newString += "DATE = " + str(oDataKeeperFxLof.DATE) + "\n"
 	newString += "MAPSIZE = " + str(M.xSize) + " " + str(M.ySize)
-	
 	var scriptBytes = newString.to_ascii()
 	buffer.put_data(scriptBytes)
 
