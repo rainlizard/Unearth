@@ -147,7 +147,7 @@ func save_image_as_png(img, inputPath):
 	imgTex.create_from_image(img, Texture.FLAG_MIPMAPS + Texture.FLAG_ANISOTROPIC_FILTER)
 	var savePath = Settings.unearthdata.plus_file(fileName)
 	ResourceSaver.save(savePath, imgTex)
-	oMessage.quick("Caching texture maps : unearthdata".plus_file(fileName))
+	oMessage.quick("Caching texture maps : ".plus_file("unearthdata").plus_file(fileName))
 
 
 func load_cache_filename(path):
