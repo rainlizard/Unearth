@@ -53,6 +53,7 @@ func _enter_tree():
 		Things.TYPE.DOOR:
 			add_to_group("Door")
 		Things.TYPE.OBJECT:
+			add_to_group("Object")
 			if subtype == 44: # Spinning Key
 				add_to_group("Key")
 			elif subtype in [52,53,54,55,56]:

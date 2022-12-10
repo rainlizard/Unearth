@@ -17,6 +17,10 @@ onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
 
+var tng_creation_order = []
+var lgt_creation_order = []
+var apt_creation_order = []
+
 var value # just so I don't have to initialize the var in every function
 
 func read_keeperfx_lof(buffer):
@@ -71,6 +75,26 @@ func read_keeperfx_lof(buffer):
 func new_keeperfx_lof():
 	oDataKeeperFxLof.set_date()
 	oDataKeeperFxLof.KIND = "FREE"
+
+func read_mapsize_from_lof(buffer):
+	buffer.seek(0)
+	value = buffer.get_string(buffer.get_size())
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
+	var array = value.split("\n")
+	for line in array:
+		if line.begins_with(";"):
+			continue
+		
+		var lineParts = line.split("=")
+		
+		if lineParts.size() == 2:
+			if lineParts[0].strip_edges() == "MAPSIZE":
+				var sizeString = lineParts[1].strip_edges().split(" ")
+				if sizeString.size() == 2:
+					var x = sizeString[0].to_int()
+					var y = sizeString[1].to_int()
+					return Vector2(x,y)
+	return Vector2(85,85)
 
 func read_slx(buffer):
 	# 0 = Use map's original
@@ -295,12 +319,15 @@ func new_lgt():
 func read_tng(buffer):
 	buffer.seek(0)
 	
+	tng_creation_order.clear()
+	
 	var numberOfTngEntries = buffer.get_u16() # Reads two bytes as one value. This allows for thing amounts up to 65025 (255*255) I believe.
 	print('Number of TNG entries: '+str(numberOfTngEntries))
 	
 	var thingScn = preload("res://Scenes/ThingInstance.tscn")
 	
 	for entry in numberOfTngEntries:
+		
 		var id = thingScn.instance()
 		id.locationX = (buffer.get_u8() / 256.0) + buffer.get_u8() # 0-1
 		id.locationY = (buffer.get_u8() / 256.0) + buffer.get_u8() # 2-3
@@ -342,9 +369,48 @@ func read_tng(buffer):
 				id.doorLocked = id.data14 # 14
 		
 		oInstances.add_child(id)
+		tng_creation_order.append(id)
 func new_tng():
 	pass
 
+func read_tngfx(buffer):
+	pass
+#	var bufferPos = 0
+#	buffer.seek(bufferPos)
+#	# These are unused for now but they can be used for extending maximum TNG entries beyond 65,535
+#	var numberOfTngEntries = buffer.get_u32()
+#	var numberOfLgtEntries = buffer.get_u32()
+#	var numberOfAptEntries = buffer.get_u32()
+#	bufferPos += 12
+#
+#	for entry in tng_creation_order.size():
+#		bufferPos += (entry * 256)
+#		buffer.seek(bufferPos)
+#		var id = tng_creation_order[entry]
+#		id.locationX = buffer.get_u32() + (id.locationX - int(id.locationX)) # 0-3
+#		id.locationY = buffer.get_u32() + (id.locationY - int(id.locationY)) # 4-7
+#		id.locationZ = buffer.get_u32() + (id.locationZ - int(id.locationZ)) # 8-11
+#		# Unused : 12-255
+#
+#	for entry in lgt_creation_order.size():
+#		bufferPos += (entry * 256)
+#		buffer.seek(bufferPos)
+#		var id = lgt_creation_order[entry]
+#		id.locationX = buffer.get_u32() + (id.locationX - int(id.locationX)) # 0-3
+#		id.locationY = buffer.get_u32() + (id.locationY - int(id.locationY)) # 4-7
+#		id.locationZ = buffer.get_u32() + (id.locationZ - int(id.locationZ)) # 8-11
+#		# Unused : 12-255
+#
+#	for entry in apt_creation_order.size():
+#		bufferPos += (entry * 256)
+#		buffer.seek(bufferPos)
+#		var id = apt_creation_order[entry]
+#		id.locationX = buffer.get_u32() + (id.locationX - int(id.locationX)) # 0-3
+#		id.locationY = buffer.get_u32() + (id.locationY - int(id.locationY)) # 4-7
+#		# Unused : 12-255
+
+func new_tngfx():
+	pass
 #func _ready(): #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #	var file = File.new()
 #	file.open("res://unearthdata/dklevels.lof",File.READ)

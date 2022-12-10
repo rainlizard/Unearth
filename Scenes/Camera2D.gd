@@ -26,10 +26,10 @@ var middleMousePanning = false
 var mouseInWindow = true
 
 func _ready():
-	reset_camera()
+	reset_camera(M.xSize, M.ySize)
 
-func reset_camera():
-	offset = Vector2(M.xSize*96, M.ySize*96) * Vector2(0.5,0.5)
+func reset_camera(x, y):
+	offset = Vector2(x*96, y*96) * Vector2(0.5,0.5)
 	desired_offset = offset
 	var initialZoom = 9085.0 / OS.window_size.y * Settings.UI_SCALE.y
 	zoom = Vector2(initialZoom,initialZoom)

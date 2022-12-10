@@ -226,7 +226,7 @@ shader_param/color3 = null
 shader_param/color4 = null
 shader_param/color5 = null
 
-[sub_resource type="ShaderMaterial" id=20]
+[sub_resource type="ShaderMaterial" id=19]
 shader = ExtResource( 36 )
 
 [sub_resource type="ShaderMaterial" id=9]
@@ -537,12 +537,15 @@ script = ExtResource( 114 )
 [node name="ScriptHelpers" type="Node2D" parent="Game2D"]
 script = ExtResource( 133 )
 
-[node name="QuickMapPreview" type="Sprite" parent="Game2D"]
-material = SubResource( 20 )
-scale = Vector2( 96, 96 )
-z_index = 100
-centered = false
+[node name="QuickMapPreview" type="ColorRect" parent="Game2D"]
+color = Color( 0, 0, 0, 1 )
 script = ExtResource( 136 )
+
+[node name="QuickMapPreviewDisplay" type="TextureRect" parent="Game2D/QuickMapPreview"]
+material = SubResource( 19 )
+margin_right = 500.0
+margin_bottom = 500.0
+expand = true
 
 [node name="Ui" type="CanvasLayer" parent="."]
 script = ExtResource( 78 )
@@ -2649,58 +2652,333 @@ __meta__ = {
 
 [node name="ControlsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -2210.0
+margin_left = -2754.0
 margin_top = 720.0
-margin_right = -1655.0
-margin_bottom = 1386.0
+margin_right = -1623.0
+margin_bottom = 1160.0
 window_title = "Controls"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ControlsWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer"]
+margin_right = 1130.0
+margin_bottom = 439.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = -20.0
-margin_bottom = -20.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_right = 1110.0
+margin_bottom = 419.0
+custom_constants/separation = 24
 
-[node name="Label" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer"]
-margin_right = 514.0
-margin_bottom = 621.0
-text = "Controls
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer"]
+margin_right = 674.0
+margin_bottom = 399.0
 
-- Mouse wheel up (Ctrl+Up): Zoom in
-- Mouse wheel down (Ctrl+Down): Zoom out
-- Hold middle click: Pan grab
-- WASD/Arrow keys: Pan directionally
-- Left click: Place
-- Ctrl + Left click:  Place overlapping
-- Right click: Select what's under cursor (eyedropper tool)
-- Delete: Delete all objects under cursor
-- Ctrl+Delete: Delete one object under cursor
-- Shift: cycle between overlapping objects
-- Tab: switch mode
-- Alt+Enter: Fullscreen
-- ESC: Exit
+[node name="Label2" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_right = 674.0
+margin_bottom = 21.0
+text = "2D"
+align = 1
 
-3D controls
+[node name="Spacing" type="Control" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 25.0
+margin_right = 674.0
+margin_bottom = 49.0
+rect_min_size = Vector2( 24, 24 )
 
-- WASD/Arrow keys: Movement
-- Shift: Move fast
-- Mouse: Look
-- Mouse wheel up: Descend
-- Mouse wheel down: Ascend
-- Spacebar: unlock mouse capture
-- Right click: exit 1st person mode
-- ESC: Exit 3D view"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 53.0
+margin_right = 674.0
+margin_bottom = 399.0
+custom_constants/hseparation = 21
+columns = 2
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_right = 287.0
+margin_bottom = 21.0
+text = "Mouse wheel up (Ctrl+Up)"
+
+[node name="Label19" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_right = 674.0
+margin_bottom = 21.0
+text = "Zoom in"
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 25.0
+margin_right = 287.0
+margin_bottom = 46.0
+text = "Mouse wheel down (Ctrl+Down)"
+
+[node name="Label20" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 25.0
+margin_right = 674.0
+margin_bottom = 46.0
+text = "Zoom out"
+
+[node name="Label4" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 50.0
+margin_right = 287.0
+margin_bottom = 71.0
+text = "Hold middle click"
+
+[node name="Label21" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 50.0
+margin_right = 674.0
+margin_bottom = 71.0
+text = "Pan grab"
+
+[node name="Label5" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 75.0
+margin_right = 287.0
+margin_bottom = 96.0
+text = "WASD / Arrow keys"
+
+[node name="Label22" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 75.0
+margin_right = 674.0
+margin_bottom = 96.0
+text = "Pan directionally"
+
+[node name="Label6" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 100.0
+margin_right = 287.0
+margin_bottom = 121.0
+text = "Left click"
+
+[node name="Label23" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 100.0
+margin_right = 674.0
+margin_bottom = 121.0
+text = "Place / Inspect"
+
+[node name="Label7" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 125.0
+margin_right = 287.0
+margin_bottom = 146.0
+text = "Ctrl + Left click"
+
+[node name="Label24" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 125.0
+margin_right = 674.0
+margin_bottom = 146.0
+text = "Place overlapping"
+
+[node name="Label8" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 150.0
+margin_right = 287.0
+margin_bottom = 171.0
+text = "Right click"
+
+[node name="Label25" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 150.0
+margin_right = 674.0
+margin_bottom = 171.0
+text = "Grab type under cursor (eyedropper tool)"
+
+[node name="Label9" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 175.0
+margin_right = 287.0
+margin_bottom = 196.0
+text = "Delete"
+
+[node name="Label26" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 175.0
+margin_right = 674.0
+margin_bottom = 196.0
+text = "Delete all objects under cursor"
+
+[node name="Label10" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 200.0
+margin_right = 287.0
+margin_bottom = 221.0
+text = "Ctrl+Delete"
+
+[node name="Label27" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 200.0
+margin_right = 674.0
+margin_bottom = 221.0
+text = "Delete one object under cursor"
+
+[node name="Label11" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 225.0
+margin_right = 287.0
+margin_bottom = 246.0
+text = "Shift"
+
+[node name="Label28" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 225.0
+margin_right = 674.0
+margin_bottom = 246.0
+text = "Cycle between overlapping objects"
+
+[node name="Label12" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 250.0
+margin_right = 287.0
+margin_bottom = 271.0
+text = "Number keys [0-9]"
+
+[node name="Label29" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 250.0
+margin_right = 674.0
+margin_bottom = 271.0
+text = "Quickly set creature level"
+
+[node name="Label13" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 275.0
+margin_right = 287.0
+margin_bottom = 296.0
+text = "Tab"
+
+[node name="Label30" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 275.0
+margin_right = 674.0
+margin_bottom = 296.0
+text = "Switch between placing Slabs or Things"
+
+[node name="Label14" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 300.0
+margin_right = 287.0
+margin_bottom = 321.0
+text = "Alt + Enter"
+
+[node name="Label31" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 300.0
+margin_right = 674.0
+margin_bottom = 321.0
+text = "Fullscreen"
+
+[node name="Label15" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 325.0
+margin_right = 287.0
+margin_bottom = 346.0
+text = "ESC"
+
+[node name="Label32" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 325.0
+margin_right = 674.0
+margin_bottom = 346.0
+text = "Exit"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer"]
+margin_left = 698.0
+margin_right = 1090.0
+margin_bottom = 399.0
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+margin_right = 392.0
+margin_bottom = 21.0
+text = "3D"
+align = 1
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 25.0
+margin_right = 392.0
+margin_bottom = 49.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 53.0
+margin_right = 392.0
+margin_bottom = 199.0
+custom_constants/hseparation = 21
+columns = 2
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_right = 170.0
+margin_bottom = 21.0
+text = "WASD/Arrow keys"
+
+[node name="Label19" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_left = 191.0
+margin_right = 392.0
+margin_bottom = 21.0
+text = "Movement"
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_top = 25.0
+margin_right = 170.0
+margin_bottom = 46.0
+text = "Shift"
+
+[node name="Label20" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_left = 191.0
+margin_top = 25.0
+margin_right = 392.0
+margin_bottom = 46.0
+text = "Move faster"
+
+[node name="Label5" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_top = 50.0
+margin_right = 170.0
+margin_bottom = 71.0
+text = "Mouse wheel up"
+
+[node name="Label22" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_left = 191.0
+margin_top = 50.0
+margin_right = 392.0
+margin_bottom = 71.0
+text = "Descend"
+
+[node name="Label6" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_top = 75.0
+margin_right = 170.0
+margin_bottom = 96.0
+text = "Mouse wheel down"
+
+[node name="Label23" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_left = 191.0
+margin_top = 75.0
+margin_right = 392.0
+margin_bottom = 96.0
+text = "Ascend"
+
+[node name="Label7" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_top = 100.0
+margin_right = 170.0
+margin_bottom = 121.0
+text = "Spacebar"
+
+[node name="Label24" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_left = 191.0
+margin_top = 100.0
+margin_right = 392.0
+margin_bottom = 121.0
+text = "Unlock mouse capture"
+
+[node name="Label9" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_top = 125.0
+margin_right = 170.0
+margin_bottom = 146.0
+text = "ESC / Right click"
+
+[node name="Label26" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2/GridContainer"]
+margin_left = 191.0
+margin_top = 125.0
+margin_right = 392.0
+margin_bottom = 146.0
+text = "Exit 3D view"
 
 [node name="AboutWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true

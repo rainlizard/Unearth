@@ -6,6 +6,7 @@ const FILE_TYPES = [
 	"DAT",
 	"APT",
 	"TNG",
+	"TNGFX",
 	"INF",
 	"SLB",
 	"OWN",
@@ -26,6 +27,7 @@ func new_blank(EXT):
 		"DAT" : oReadData.new_dat()
 		"APT" : oReadData.new_apt()
 		"TNG" : oReadData.new_tng()
+		"TNGFX" : oReadData.new_tngfx()
 		"INF" : oReadData.new_inf()
 		"SLB" : oReadData.new_slb()
 		"OWN" : oReadData.new_own()
@@ -55,6 +57,7 @@ func read(filePath, EXT):
 		"DAT" : oReadData.read_dat(buffer)
 		"APT" : oReadData.read_apt(buffer)
 		"TNG" : oReadData.read_tng(buffer)
+		"TNGFX" : oReadData.read_tngfx(buffer)
 		"INF" : oReadData.read_inf(buffer)
 		"SLB" : oReadData.read_slb(buffer)
 		"OWN" : oReadData.read_own(buffer)
@@ -80,6 +83,7 @@ func write(filePath, EXT):
 		"DAT" : oWriteData.write_dat(buffer)
 		"APT" : oWriteData.write_apt(buffer)
 		"TNG" : oWriteData.write_tng(buffer)
+		"TNGFX" : oWriteData.write_tngfx(buffer)
 		"INF" : oWriteData.write_inf(buffer)
 		"SLB" : oWriteData.write_slb(buffer)
 		"OWN" : oWriteData.write_own(buffer)

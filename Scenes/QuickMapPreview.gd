@@ -1,6 +1,8 @@
-extends Sprite
+extends ColorRect
 onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oRNC = Nodelist.list["oRNC"]
+onready var oReadData = Nodelist.list["oReadData"]
+onready var oCamera2D = Nodelist.list["oCamera2D"]
 
 
 var img = Image.new()
@@ -80,16 +82,23 @@ func _ready():
 
 
 func update_img(slbFilePath):
-	img.crop(M.xSize, M.ySize)
-	#img.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)
-	#tex.create_from_image(img, 0)
-	
 	if File.new().file_exists(slbFilePath) == false:
 		print("File not found : " + slbFilePath)
 		return
 	
-	var CODETIME_START = OS.get_ticks_msec()
+	var lofFilePath = ""
+	if File.new().file_exists(slbFilePath.get_basename()+".lof") == true:
+		lofFilePath = slbFilePath.get_basename()+".lof"
+	elif File.new().file_exists(slbFilePath.get_basename()+".LOF") == true:
+		lofFilePath = slbFilePath.get_basename()+".LOF"
 	
+	var lofBuffer = Filetypes.file_path_to_buffer(lofFilePath)
+	var xy = oReadData.read_mapsize_from_lof(lofBuffer)
+	print(xy)
+	
+	
+	
+	var CODETIME_START = OS.get_ticks_msec()
 	
 	var ownFilePath = ""
 	if File.new().file_exists(slbFilePath.get_basename()+".own") == true:
@@ -111,14 +120,15 @@ func update_img(slbFilePath):
 	var slabID
 	var ownership = 5
 	
+	img.create(xy.x, xy.y, false, Image.FORMAT_RGB8)
 	img.lock()
-	for y in M.ySize:
-		for x in M.xSize:
+	for y in xy.y:
+		for x in xy.x:
 			slabID = slbBuffer.get_u8()
 			slbBuffer.get_u8() # skip second byte
 			
 			if ownBuffer != null:
-				var dataWidth = (M.xSize*3)+1 # Should this be M.ySize ???
+				var dataWidth = (xy.x*3)+1
 				ownBuffer.seek( (((x*3)+1)+(y*3*dataWidth)))
 				ownership = ownBuffer.get_u8()
 			
@@ -138,7 +148,13 @@ func update_img(slbFilePath):
 	img.unlock()
 	
 	tex.set_data(img)
-	texture = tex
+	$QuickMapPreviewDisplay.texture = tex
+	$QuickMapPreviewDisplay.rect_size = Vector2(xy.x*96, xy.y*96)
+	#$QuickMapPreviewDisplay.rect_position = Vector2(xy.x*96*0.5, xy.y*96*0.5)
+	
+	oCamera2D.reset_camera(xy.x, xy.y)
+	
+	rect_size = Vector2(M.xSize*96, M.ySize*96) # Cover current map in darkness
 	
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return OK

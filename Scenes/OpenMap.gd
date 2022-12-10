@@ -153,7 +153,7 @@ func finish_opening_map(map):
 	oScriptEditor.initialize_for_new_map()
 	oOverheadOwnership.start()
 	oScriptHelpers.start()
-	oCamera2D.reset_camera()
+	oCamera2D.reset_camera(M.xSize, M.ySize)
 	
 	oSlabPalette.start()
 	

@@ -123,14 +123,21 @@ func write_tng(buffer):
 		else:
 			buffer.put_16(thingNode.data11_12) # 11-12
 		
-		if thingNode.doorOrientation != null: buffer.put_8(thingNode.doorOrientation) # 13
-		else: buffer.put_8(thingNode.data13) # 13
+		if thingNode.doorOrientation != null:
+			buffer.put_8(thingNode.doorOrientation) # 13
+		else:
+			buffer.put_8(thingNode.data13) # 13
 		
-		if thingNode.creatureLevel != null: buffer.put_8(thingNode.creatureLevel - 1) # 14
-		elif thingNode.doorLocked != null: buffer.put_8(thingNode.doorLocked) # 14
-		elif thingNode.herogateNumber != null: buffer.put_8(thingNode.herogateNumber) # 14
-		elif thingNode.boxNumber != null: buffer.put_8(thingNode.boxNumber) # 14
-		else: buffer.put_8(thingNode.data14) # 14
+		if thingNode.creatureLevel != null:
+			buffer.put_8(thingNode.creatureLevel - 1) # 14
+		elif thingNode.doorLocked != null:
+			buffer.put_8(thingNode.doorLocked) # 14
+		elif thingNode.herogateNumber != null:
+			buffer.put_8(thingNode.herogateNumber) # 14
+		elif thingNode.boxNumber != null:
+			buffer.put_8(thingNode.boxNumber) # 14
+		else:
+			buffer.put_8(thingNode.data14) # 14
 		
 		buffer.put_8(thingNode.data15) # 15
 		buffer.put_8(thingNode.data16) # 16
@@ -138,6 +145,61 @@ func write_tng(buffer):
 		buffer.put_8(thingNode.data18) # 18
 		buffer.put_8(thingNode.data19) # 19
 		buffer.put_8(thingNode.data20) # 20
+
+
+func write_tngfx(buffer):
+	var t = ""
+	var numberOfTngEntries = get_tree().get_nodes_in_group("Thing").size()
+	t += "[common]" + "\n"
+	t += "ThingsCount = " + str(numberOfTngEntries) + "\n"
+	
+	var entryNumber = 0
+	for groupName in ["Object", "Effect", "Creature", "Trap", "Door"]:
+		
+		for thingNode in get_tree().get_nodes_in_group(groupName):
+			t += "\n"
+			t += "[thing"+str(entryNumber)+"]" + "\n"
+			
+			t += "ThingType = \"" +groupName + "\"\n"
+			t += "Subtype = " +str(thingNode.subtype) + "\n"
+			t += "Ownership = " +str(thingNode.ownership) + "\n"
+			
+			if thingNode.effectRange != null:
+				var setRange = str(int(thingNode.effectRange))
+				var setRangeInner = str(fmod(thingNode.effectRange,1.0) * 256)
+				t += "EffectRange = [" + setRange + ", " + setRangeInner + "]" + "\n"
+			
+			if thingNode.sensitiveTile != null:
+				t += "ParentTile = " +str(thingNode.sensitiveTile) + "\n"
+			elif thingNode.index != null:
+				t += "Index = " +str(thingNode.index) + "\n"
+			
+			if thingNode.doorOrientation != null:
+				t += "DoorOrientation = " +str(thingNode.doorOrientation) + "\n"
+			
+			if thingNode.creatureLevel != null:
+				t += "CreatureLevel = " +str(thingNode.creatureLevel) + "\n"
+			elif thingNode.doorLocked != null:
+				t += "DoorLocked = " +str(thingNode.doorLocked) + "\n"
+			elif thingNode.herogateNumber != null:
+				t += "HerogateNumber = " +str(thingNode.herogateNumber) + "\n"
+			elif thingNode.boxNumber != null:
+				t += "CustomBox = " +str(thingNode.boxNumber) + "\n"
+			
+			var x = str(int(thingNode.locationX))
+			var xInner = str(fmod(thingNode.locationX,1.0) * 256)
+			var y = str(int(thingNode.locationY))
+			var yInner = str(fmod(thingNode.locationY,1.0) * 256)
+			var z = str(int(thingNode.locationZ))
+			var zInner = str(fmod(thingNode.locationZ,1.0) * 256)
+			
+			t += "SubtileX = [" + x + ", " + xInner + "]" + "\n"
+			t += "SubtileY = [" + y + ", " + yInner + "]" + "\n"
+			t += "SubtileZ = [" + z + ", " + zInner + "]" + "\n"
+			entryNumber += 1
+	
+	buffer.put_data(t.to_ascii())
+
 
 func write_apt(buffer):
 	var numberOfActionPoints = get_tree().get_nodes_in_group("ActionPoint").size()
