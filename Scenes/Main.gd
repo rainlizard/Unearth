@@ -11,8 +11,6 @@ func _ready():
 	Settings.initialize_settings()
 	initialize_window_settings()
 	$TextureCache.start() # Needs to be run after Settings initialized so that the GAME_DIRECTORY is correctly set
-	
-	Things.read_objects_cfg()
 	$OpenMap.start()
 	
 	# Auto switch to 3D while devving

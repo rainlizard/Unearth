@@ -23,7 +23,7 @@ onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
-
+onready var oInstances = Nodelist.list["oInstances"]
 
 var path = ""
 var currentFilePaths = {} # [0] = pathString,  [1] = modified date
@@ -46,17 +46,25 @@ func set_path_and_title(newpath):
 	
 	oGame.construct_command_line() # Always update command line whenever the path changes
 
+var instancesToFree = []
+func _process(delta):
+	# For whatever reason, clearing here instead from an array prevents Godot from crashing
+	while instancesToFree.empty() == false:
+		instancesToFree.pop_back().queue_free()
+
 func clear_map():
+	var allInst = get_tree().get_nodes_in_group("Instance")
+	for id in allInst:
+		oInstances.remove_child(id)
+		id.position = Vector2(-9999999,-9999999)
+		id.visible = false
+		for group in id.get_groups():
+			id.remove_from_group(group)
+		instancesToFree.append(id)
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	set_path_and_title("")
-	
-	# "tng, apt, lgt"
-	var nodesToFree = get_tree().get_nodes_in_group("Instance")
-	for i in nodesToFree.size():
-		# Need to do it like this with pop_back() otherwise there's a Godot bug where it crashes when using queue_free() on too many instances at once.
-		nodesToFree.pop_back().queue_free()
 	
 	# "lif"
 	oDataLif.clear()

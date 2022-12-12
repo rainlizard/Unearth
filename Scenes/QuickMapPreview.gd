@@ -76,6 +76,7 @@ const colourDict = {
 }
 
 func _ready():
+	
 	visible = false
 	img.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)
 	tex.create_from_image(img, 0)

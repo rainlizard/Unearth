@@ -1,4 +1,4 @@
-[gd_scene load_steps=160 format=2]
+[gd_scene load_steps=158 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -90,8 +90,6 @@
 [ext_resource path="res://Scenes/LevelSpinBox.gd" type="Script" id=88]
 [ext_resource path="res://Scenes/LineEditFloat.gd" type="Script" id=89]
 [ext_resource path="res://Scenes/SlabNameDisplay.gd" type="Script" id=90]
-[ext_resource path="res://Scenes/AddCustomObjectWindow.gd" type="Script" id=91]
-[ext_resource path="res://Scenes/CustomObjectSystem.gd" type="Script" id=92]
 [ext_resource path="res://Scenes/SlabOwnerCheckBox.gd" type="Script" id=93]
 [ext_resource path="res://Scenes/Inspector.gd" type="Script" id=94]
 [ext_resource path="res://Shaders/cursorMat.tres" type="Material" id=95]
@@ -398,9 +396,6 @@ script = ExtResource( 31 )
 
 [node name="WriteData" type="Node" parent="SaveMap"]
 script = ExtResource( 32 )
-
-[node name="CustomObjectSystem" type="Node" parent="."]
-script = ExtResource( 92 )
 
 [node name="CustomSlabSystem" type="Node" parent="."]
 script = ExtResource( 127 )
@@ -1416,7 +1411,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Column editor", null, 0, false, false, 3, 0, null, "", false, "Placement options", null, 0, false, false, 4, 0, null, "", false, "Update all slabs", null, 0, false, false, 5, 0, null, "", false, "Add custom object", null, 0, false, false, 6, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Texture editing", null, 0, false, false, 7, 0, null, "", false, "Slabset", null, 0, false, false, 8, 0, null, "", false ]
+items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Column editor", null, 0, false, false, 3, 0, null, "", false, "Placement options", null, 0, false, false, 4, 0, null, "", false, "Update all slabs", null, 0, false, false, 5, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Texture editing", null, 0, false, false, 6, 0, null, "", false, "Slabset", null, 0, false, false, 7, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3147,173 +3142,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 hide_folding = true
 hide_root = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="AddCustomObjectWindow" type="WindowDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = 648.0
-margin_top = 687.0
-margin_right = 1010.0
-margin_bottom = 1007.0
-rect_min_size = Vector2( 329, 320 )
-window_title = "Add custom object"
-resizable = true
-script = ExtResource( 91 )
-
-[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/AddCustomObjectWindow"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 15.0
-margin_top = 15.0
-margin_right = -15.0
-margin_bottom = -15.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer"]
-margin_right = 332.0
-margin_bottom = 290.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="CustomObjectHelpButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
-margin_right = 54.0
-margin_bottom = 27.0
-size_flags_horizontal = 0
-text = "Help"
-
-[node name="WarningIdInUse" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
-modulate = Color( 1, 0.28, 0.28, 1 )
-margin_top = 31.0
-margin_right = 332.0
-margin_bottom = 52.0
-text = "Warning: ID already in use by editor."
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
-margin_top = 56.0
-margin_right = 332.0
-margin_bottom = 215.0
-columns = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_top = 3.0
-margin_right = 120.0
-margin_bottom = 24.0
-text = "Type:"
-
-[node name="NewObjectType" type="OptionButton" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 244.0
-margin_right = 332.0
-margin_bottom = 27.0
-size_flags_horizontal = 10
-text = "Object"
-items = [ "Object", null, false, 0, null, "Creature", null, false, 1, null, "Effect", null, false, 2, null, "Trap", null, false, 3, null, "Door", null, false, 4, null ]
-selected = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label2" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_top = 36.0
-margin_right = 120.0
-margin_bottom = 57.0
-text = "ID:"
-
-[node name="NewObjectSubtypeID" type="LineEdit" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 274.0
-margin_top = 31.0
-margin_right = 332.0
-margin_bottom = 62.0
-size_flags_horizontal = 10
-
-[node name="Label3" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_top = 71.0
-margin_right = 120.0
-margin_bottom = 92.0
-text = "Editor name:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NewObjectName" type="LineEdit" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 182.0
-margin_top = 66.0
-margin_right = 332.0
-margin_bottom = 97.0
-rect_min_size = Vector2( 150, 0 )
-size_flags_horizontal = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label5" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_top = 104.0
-margin_right = 120.0
-margin_bottom = 125.0
-text = "Editor tab:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NewObjectTab" type="OptionButton" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 201.0
-margin_top = 101.0
-margin_right = 332.0
-margin_bottom = 128.0
-size_flags_horizontal = 10
-text = "Decoration"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label4" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_top = 135.0
-margin_right = 120.0
-margin_bottom = 156.0
-text = "Editor image:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NewObjectImage" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 196.0
-margin_top = 132.0
-margin_right = 332.0
-margin_bottom = 159.0
-size_flags_horizontal = 8
-text = "Choose image"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="LabelCustomObjectImagePath" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
-margin_top = 219.0
-margin_right = 332.0
-margin_bottom = 240.0
-align = 2
-clip_text = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
-margin_top = 263.0
-margin_right = 332.0
-margin_bottom = 290.0
-size_flags_vertical = 10
-
-[node name="AddCustomObjectButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_left = 142.0
-margin_right = 189.0
-margin_bottom = 27.0
-size_flags_horizontal = 6
-text = "Add"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -5463,12 +5291,6 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton" to="Ui/UiSystem/SlabSettingsWindow" method="_on_AutoWallArtButton_pressed"]
 [connection signal="focus_exited" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit" to="Ui/UiSystem/SlabSettingsWindow" method="_on_DamagedWallLineEdit_focus_exited"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
-[connection signal="visibility_changed" from="Ui/UiSystem/AddCustomObjectWindow" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_AddCustomObjectWindow_visibility_changed"]
-[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/CustomObjectHelpButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_CustomObjectHelpButton_pressed"]
-[connection signal="item_selected" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer/NewObjectType" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectType_item_selected"]
-[connection signal="focus_exited" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer/NewObjectSubtypeID" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectSubtypeID_focus_exited"]
-[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer/NewObjectImage" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectImage_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/HBoxContainer/AddCustomObjectButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_AddCustomObjectButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ImageAsMapDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImageAsMapDialog_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonNewMap" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonNewMap_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonSelectImage" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonSelectImage_pressed"]
@@ -5505,7 +5327,6 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/HelpButtonPosition/UNNEEDEDScriptHelpButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptHelpButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseFileListFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseFileListFileDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseTmapaFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseTmapaFileDialog_file_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/CustomObjectImageFileDialog" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_CustomObjectImageFileDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportTmapaDatDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaDatDialog_file_selected"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/CreateFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_CreateFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]

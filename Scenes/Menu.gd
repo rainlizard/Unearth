@@ -18,7 +18,6 @@ onready var oSelector = Nodelist.list["oSelector"]
 onready var oMenuButtonHelp = Nodelist.list["oMenuButtonHelp"]
 onready var oAboutWindow = Nodelist.list["oAboutWindow"]
 onready var oControlsWindow = Nodelist.list["oControlsWindow"]
-onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
@@ -178,12 +177,10 @@ func _on_EditSubmenu_Pressed(pressedID):
 		5: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oConfirmAutoGen)
-		6: # Add custom object
-			Utils.popup_centered(oAddCustomObjectWindow)
-		7:
+		6:
 			# Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
-		8:
+		7:
 			# Modify dynamic slabs
 			Utils.popup_centered(oSlabsetWindow)
 

@@ -37,6 +37,22 @@ enum { # I only used the official DK keeperfx categories as a guide rather than 
 	TAB_MISC
 }
 
+var GENRE_TO_TAB = {
+	"DECORATION": TAB_DECORATION,
+	"EFFECT": TAB_EFFECT,
+	"FOOD": TAB_FURNITURE,
+	"FURNITURE": TAB_FURNITURE,
+	"LAIR_TOTEM": TAB_LAIR,
+	"POWER": TAB_MISC,
+	"SPECIALBOX": TAB_SPECIAL,
+	"SPELLBOOK": TAB_SPELL,
+	"TREASURE_HOARD": TAB_GOLD,
+	"VALUABLE": TAB_GOLD,
+	"WORKSHOPBOX": TAB_BOX,
+}
+
+
+
 var DATA_EXTRA = {
 1 : ["Action Point", "TEMP", preload("res://Art/ActionPoint.png"), null, TAB_ACTION],
 2 : ["Light", "TEMP", preload("res://edited_images/GUIEDIT-1/PIC26.png"), null, TAB_EFFECT],
@@ -304,18 +320,17 @@ enum SPELLBOOK {
 	DESTROY_WALLS = 47
 }
 
-
+var objectsCfgHasBeenRead = false
 func read_objects_cfg():
+	objectsCfgHasBeenRead = true
+	
 	var oGame = Nodelist.list["oGame"]
 	var path = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "OBJECTS.CFG")
-	if path == "":
-		return
-	
 	var CODETIME_START = OS.get_ticks_msec()
-	var file = File.new()
-	if file.open(path, File.READ) != OK:
-		return
 	
+	var file = File.new()
+	if path == "" or file.open(path, File.READ) != OK:
+		return
 	var massiveString = file.get_as_text()
 	file.close()
 	
@@ -324,29 +339,71 @@ func read_objects_cfg():
 	massiveString = massiveString.to_upper()
 	
 	var objectListSections = massiveString.split('[OBJECT',false)
-	var objectID = 0
+	objectListSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
+	objectListSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
+	var objectID = 1 # start at [object1]
 	for section in objectListSections:
+		
+		# Initialize empty space for each entry in objects.cfg
+		if DATA_OBJECT.has(objectID) == false:
+			DATA_OBJECT[objectID] = [null, null, null, null, null]
 		
 		var bigListOfLines = section.split('\n',false)
 		for line in bigListOfLines:
-			if line.begins_with("NAME"):
-				var componentsOfLine = line.split('=', false)
-				if componentsOfLine.size() >= 2:
+			var componentsOfLine = line.split('=', false)
+			if componentsOfLine.size() >= 2:
+				
+				if componentsOfLine[0].strip_edges() == "NAME":
 					var thingCfgName = componentsOfLine[1].strip_edges()
-					if DATA_OBJECT.has(objectID) == true:
-						DATA_OBJECT[objectID][KEEPERFX_ID] = thingCfgName
-					else:
-						DATA_OBJECT[objectID] = [thingCfgName.capitalize(), thingCfgName, null, null, TAB_MISC]
+					DATA_OBJECT[objectID][KEEPERFX_ID] = thingCfgName # Always set CFG name
+					if DATA_OBJECT[objectID][NAME] == null: # Only change name if it's a newly added item
+						DATA_OBJECT[objectID][NAME] = thingCfgName.capitalize()
+					
+				elif componentsOfLine[0].strip_edges() == "GENRE":
+					if DATA_OBJECT[objectID][EDITOR_TAB] == null: # Only change tab if it's a newly added item
+						var thingGenre = componentsOfLine[1].strip_edges()
+						var thingTab = GENRE_TO_TAB[thingGenre]
+						DATA_OBJECT[objectID][EDITOR_TAB] = thingTab
+				
 		objectID += 1
 	
 	print('Object.cfg names read in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	
+	load_custom_images()
+
+func load_custom_images():
+	print("Loading /object-images/ directory ...")
+	var arrayOfFilenames = png_number_files()
+	for i in arrayOfFilenames:
+		var objectID = int(i.get_file().get_basename())
+		var img = Image.new()
+		var err = img.load(i)
+		if err == OK:
+			var tex = ImageTexture.new()
+			tex.create_from_image(img)
+			if DATA_OBJECT.has(objectID):
+				DATA_OBJECT[objectID][TEXTURE] = tex
 
 
-
-
-
-
-
+func png_number_files():
+	var path = Settings.unearthdata.plus_file("object-images")
+	var array = []
+	var dir = Directory.new()
+	if dir.open(path) == OK:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if dir.current_is_dir():
+				pass
+			else:
+				if file_name.get_extension().to_upper() == "PNG":
+					var fileNumber = file_name.get_file().get_basename()
+					if Utils.string_has_letters(fileNumber) == false:
+						array.append(Settings.unearthdata.plus_file("object-images").plus_file(file_name))
+			file_name = dir.get_next()
+	else:
+		print("An error occurred when trying to access the path.")
+	return array
 
 
 #

@@ -4,7 +4,6 @@ onready var oSelection = Nodelist.list["oSelection"]
 onready var oThingTabs = Nodelist.list["oThingTabs"]
 onready var oActionPointOptions = Nodelist.list["oActionPointOptions"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
-onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oGridFunctions = Nodelist.list["oGridFunctions"]
 onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
@@ -57,14 +56,11 @@ func _ready():
 	# Window's minimum size
 	rect_min_size = Vector2(80,80)#Vector2((grid_item_size.x*grid_window_scale)+11, (grid_item_size.y*grid_window_scale)+11)
 	
-	while Settings.haveInitializedAllSettings == false:
-		yield(get_tree(),'idle_frame')
-	
-	initialize_thing_grid_items()
-	
 	$ThingTabs.initialize([])
 
+var thing_grid_has_been_initialized = false
 func initialize_thing_grid_items():
+	thing_grid_has_been_initialized = true
 	remove_all_grid_items()
 	
 	var CODETIME_START = OS.get_ticks_msec()
@@ -102,7 +98,6 @@ func add_to_category(tabNode, thingsData, type, subtype):
 	var gridcontainer = tabNode.get_node("ScrollContainer/GridContainer")
 	var id = scnGridItem.instance()
 	id.connect('mouse_entered',oThingDetails,"_on_thing_portrait_mouse_entered",[id])
-	id.connect('gui_input',self,"_on_thing_portrait_gui_input",[id])
 	id.set_meta("thingSubtype", subtype)
 	id.set_meta("thingType", type)
 	
@@ -293,11 +288,6 @@ func remove_all_grid_items():
 		var gc = tabID.get_node('ScrollContainer/GridContainer')
 		for id in gc.get_children():
 			id.queue_free()
-
-func _on_thing_portrait_gui_input(event, id):
-	if event.is_action_pressed("mouse_right"):
-		oPropertiesWindow.oPropertiesTabs.current_tab = 0
-		oCustomObjectSystem.remove_object(id.get_meta("thingType"), id.get_meta("thingSubtype"))
 
 func rect_changed_start_timer():
 	rectChangedTimer.start(0.2)

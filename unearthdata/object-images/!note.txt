@@ -1,0 +1,2 @@
+Images for custom objects are used by the editor in this directory.
+The number corresponds to the subtype ID, so for example 137.png is for [object137] (in \fxdata\objects.cfg)

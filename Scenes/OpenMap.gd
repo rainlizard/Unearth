@@ -36,6 +36,7 @@ onready var oYSizeLine = Nodelist.list["oYSizeLine"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
+onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -43,6 +44,7 @@ var compressedFiles = []
 var ALWAYS_DECOMPRESS = false # Default to false
 
 func start():
+	
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
 	
 	if oGame.EXECUTABLE_PATH == "": return # Silently wait for user to set executable path. No need to show an error.
@@ -60,13 +62,14 @@ func start():
 			#oCurrentMap.clear_map()
 			open_map("D:/DungeonKeeper/levels/personal/map00002.slb")
 		else:
+			# initialize a cleared map
 			oCurrentMap.clear_map()
 
 func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
 func open_map(filePath): # auto opens other files
-	
+	oCurrentMap.clear_map()
 	# a filePath of "" means make a blank map.
 	
 	# This will replace \ with /, just for the sake of fixing ugliness
@@ -75,13 +78,11 @@ func open_map(filePath): # auto opens other files
 	# Prevent opening any maps under any circumstance if you haven't set the dk exe yet. (Fix to launching via file association)
 	if oGame.EXECUTABLE_PATH == "":
 		oMessage.quick("Error: Cannot open map because executable path is not set")
-		oCurrentMap.clear_map()
 		return
 	
 	# Prevent opening any maps under any circumstance if textures haven't been loaded. (Fix to launching via file association)
 	if oTextureCache.texturesLoadedState != oTextureCache.LOADING_SUCCESS:
 		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
-		oCurrentMap.clear_map()
 		return
 	
 	# Close windows that I want closed
@@ -101,7 +102,6 @@ func open_map(filePath): # auto opens other files
 	
 	if compressedFiles.empty() == true:
 		# Load files
-		oCurrentMap.clear_map()
 		
 		if oNewMapWindow.visible == true:
 			oDataKeeperFxLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
@@ -145,6 +145,10 @@ func open_map(filePath): # auto opens other files
 func finish_opening_map(map):
 	if Cube.tex.empty() == true:
 		Cube.read_cubes_cfg()
+	if Things.objectsCfgHasBeenRead == false:
+		Things.read_objects_cfg()
+	if oPickThingWindow.thing_grid_has_been_initialized == false:
+		oPickThingWindow.initialize_thing_grid_items()
 	
 	oCurrentMap.set_path_and_title(map)
 	oDynamicMapTree.highlight_current_map()

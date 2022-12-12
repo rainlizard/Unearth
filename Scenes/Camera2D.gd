@@ -34,6 +34,9 @@ func reset_camera(x, y):
 	var initialZoom = 9085.0 / OS.window_size.y * Settings.UI_SCALE.y
 	zoom = Vector2(initialZoom,initialZoom)
 	desired_zoom = zoom
+	yield(get_tree(),'idle_frame')
+	for id in get_tree().get_nodes_in_group("Thing"):
+		id._on_zoom_level_changed(zoom)
 
 func _process(delta):
 	

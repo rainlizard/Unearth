@@ -83,10 +83,11 @@ func set_location_z(setVal):
 
 func _on_zoom_level_changed(zoom):
 	var oUi = Nodelist.list["oUi"]
+	var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
 	var inventScale = Vector2()
 	inventScale.x = clamp(zoom.x, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
 	inventScale.y = clamp(zoom.y, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
-	if zoom.x > oUi.FONT_SIZE_CR_LVL_MAX:
+	if zoom.x > oUi.FONT_SIZE_CR_LVL_MAX or oQuickMapPreview.visible == true:
 		$ThingTexture/CreatureLevel.self_modulate = Color(0,0,0,0)
 	else:
 		$ThingTexture/CreatureLevel.self_modulate = Color(1,1,1,1)
