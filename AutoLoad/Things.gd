@@ -79,11 +79,11 @@ var DATA_TRAP = {
 12 : ["Dummy Trap 7", "TEMP", null, null, TAB_TRAP],
 }
 var DATA_EFFECT = {
-1 : ["Effect: Lava", "TEMP", preload("res://edited_images/GUIEDIT-1/PIC27.png"), null, TAB_EFFECT],
-2 : ["Effect: Dripping Water", "TEMP", preload("res://edited_images/GUIEDIT-1/PIC28.png"), null, TAB_EFFECT],
-3 : ["Effect: Rock Fall", "TEMP", preload("res://edited_images/GUIEDIT-1/PIC29.png"), null, TAB_EFFECT],
-4 : ["Effect: Entrance Ice", "TEMP", preload("res://edited_images/GUIEDIT-1/PIC30.png"), null, TAB_EFFECT],
-5 : ["Effect: Dry Ice", "TEMP", preload("res://edited_images/GUIEDIT-1/PIC31.png"), null, TAB_EFFECT]
+1 : ["Effect: Lava", "EMITTER_LAVA", preload("res://edited_images/GUIEDIT-1/PIC27.png"), null, TAB_EFFECT],
+2 : ["Effect: Dripping Water", "EMITTER_DRIPPING_WATER", preload("res://edited_images/GUIEDIT-1/PIC28.png"), null, TAB_EFFECT],
+3 : ["Effect: Rock Fall", "EMITTER_ROCK_FALL", preload("res://edited_images/GUIEDIT-1/PIC29.png"), null, TAB_EFFECT],
+4 : ["Effect: Entrance Ice", "EMITTER_ENTRANCE_ICE", preload("res://edited_images/GUIEDIT-1/PIC30.png"), null, TAB_EFFECT],
+5 : ["Effect: Dry Ice", "EMITTER_DRY_ICE", preload("res://edited_images/GUIEDIT-1/PIC31.png"), null, TAB_EFFECT]
 }
 var DATA_CREATURE = {
 01 : ["Wizard", "TEMP",          preload("res://edited_images/creatr_icon_64/wizrd_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_wizrd.png"), TAB_CREATURE],
@@ -320,23 +320,63 @@ enum SPELLBOOK {
 	DESTROY_WALLS = 47
 }
 
-var objectsCfgHasBeenRead = false
-func read_objects_cfg():
-	objectsCfgHasBeenRead = true
-	
-	var oGame = Nodelist.list["oGame"]
-	var path = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "OBJECTS.CFG")
+	#OBJECT = 1
+	#CREATURE = 5
+	#EFFECT = 7
+	#TRAP = 8
+	#DOOR = 9
+
+var thingsCfgHasBeenRead = false
+func read_things_cfg():
 	var CODETIME_START = OS.get_ticks_msec()
+	thingsCfgHasBeenRead = true
+	
+	for i in 4:
+		match i:
+			0:
+				var massiveString = attempt_to_open_cfg("OBJECTS.CFG")
+				if massiveString is String:
+					cfg_objects(massiveString)
+					load_custom_images_into_array(DATA_OBJECT, "objects")
+			1:
+				var massiveString = attempt_to_open_cfg("CREATURE.CFG")
+				if massiveString is String:
+					cfg_creatures(massiveString)
+					load_custom_images_into_array(DATA_CREATURE, "creatures")
+			2:
+				var massiveString = attempt_to_open_cfg("TRAPDOOR.CFG")
+				if massiveString is String:
+					cfg_traps(massiveString)
+					load_custom_images_into_array(DATA_TRAP, "traps")
+			3:
+				var massiveString = attempt_to_open_cfg("TRAPDOOR.CFG")
+				if massiveString is String:
+					cfg_doors(massiveString)
+					load_custom_images_into_array(DATA_DOOR, "doors")
+	
+	print('All thing cfgs read in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+func attempt_to_open_cfg(cfgFileName):
+	var oGame = Nodelist.list["oGame"]
+	var path = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, cfgFileName)
 	
 	var file = File.new()
 	if path == "" or file.open(path, File.READ) != OK:
-		return
-	var massiveString = file.get_as_text()
+		return -1
+	var massiveString = file.get_as_text().to_upper() # Make it easier to read by making it all upper case
 	file.close()
-	
-	
-	# Make it easier to read by making it all upper case
-	massiveString = massiveString.to_upper()
+	return massiveString
+
+func cfg_creatures(massiveString):
+	pass
+
+func cfg_traps(massiveString):
+	pass
+
+func cfg_doors(massiveString):
+	pass
+
+func cfg_objects(massiveString):
 	
 	var objectListSections = massiveString.split('[OBJECT',false)
 	objectListSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
@@ -364,29 +404,24 @@ func read_objects_cfg():
 						var thingGenre = componentsOfLine[1].strip_edges()
 						var thingTab = GENRE_TO_TAB[thingGenre]
 						DATA_OBJECT[objectID][EDITOR_TAB] = thingTab
-				
+		
 		objectID += 1
-	
-	print('Object.cfg names read in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-	
-	load_custom_images()
 
-func load_custom_images():
-	print("Loading /object-images/ directory ...")
-	var arrayOfFilenames = png_number_files()
+func load_custom_images_into_array(DATA_ARRAY, thingtypeImageFolder):
+	print("Loading /thing-images/" + thingtypeImageFolder + " directory ...")
+	var arrayOfFilenames = get_png_files_in_dir(Settings.unearthdata.plus_file("thing-images").plus_file(thingtypeImageFolder))
 	for i in arrayOfFilenames:
-		var objectID = int(i.get_file().get_basename())
+		var subtypeID = int(i.get_file().get_basename())
 		var img = Image.new()
 		var err = img.load(i)
 		if err == OK:
 			var tex = ImageTexture.new()
 			tex.create_from_image(img)
-			if DATA_OBJECT.has(objectID):
-				DATA_OBJECT[objectID][TEXTURE] = tex
+			if DATA_ARRAY.has(subtypeID):
+				DATA_ARRAY[subtypeID][TEXTURE] = tex
 
 
-func png_number_files():
-	var path = Settings.unearthdata.plus_file("object-images")
+func get_png_files_in_dir(path):
 	var array = []
 	var dir = Directory.new()
 	if dir.open(path) == OK:
@@ -399,7 +434,7 @@ func png_number_files():
 				if file_name.get_extension().to_upper() == "PNG":
 					var fileNumber = file_name.get_file().get_basename()
 					if Utils.string_has_letters(fileNumber) == false:
-						array.append(Settings.unearthdata.plus_file("object-images").plus_file(file_name))
+						array.append(path.plus_file(file_name))
 			file_name = dir.get_next()
 	else:
 		print("An error occurred when trying to access the path.")

@@ -154,14 +154,40 @@ func write_tngfx(buffer):
 	t += "ThingsCount = " + str(numberOfTngEntries) + "\n"
 	
 	var entryNumber = 0
-	for groupName in ["Object", "Effect", "Creature", "Trap", "Door"]:
-		
+	for thingType in [Things.TYPE.OBJECT, Things.TYPE.CREATURE, Things.TYPE.EFFECT, Things.TYPE.TRAP, Things.TYPE.DOOR]:
+		var groupName = "UnknownThingType"
+		match thingType:
+			Things.TYPE.OBJECT: groupName = "Object"
+			Things.TYPE.CREATURE: groupName = "Creature"
+			Things.TYPE.EFFECT: groupName = "Effect"
+			Things.TYPE.TRAP: groupName = "Trap"
+			Things.TYPE.DOOR: groupName = "Door"
 		for thingNode in get_tree().get_nodes_in_group(groupName):
 			t += "\n"
 			t += "[thing"+str(entryNumber)+"]" + "\n"
 			
 			t += "ThingType = \"" +groupName + "\"\n"
-			t += "Subtype = " +str(thingNode.subtype) + "\n"
+			
+			var setSubtype = "???"
+			match thingType:
+				Things.TYPE.OBJECT:
+					if Things.DATA_OBJECT.has(thingNode.subtype):
+						setSubtype = Things.DATA_OBJECT[thingNode.subtype][Things.KEEPERFX_ID]
+				Things.TYPE.CREATURE:
+					if Things.DATA_CREATURE.has(thingNode.subtype):
+						setSubtype = Things.DATA_CREATURE[thingNode.subtype][Things.KEEPERFX_ID]
+				Things.TYPE.EFFECT:
+					if Things.DATA_EFFECT.has(thingNode.subtype):
+						setSubtype = Things.DATA_EFFECT[thingNode.subtype][Things.KEEPERFX_ID]
+				Things.TYPE.TRAP:
+					if Things.DATA_TRAP.has(thingNode.subtype):
+						setSubtype = Things.DATA_TRAP[thingNode.subtype][Things.KEEPERFX_ID]
+				Things.TYPE.DOOR:
+					if Things.DATA_DOOR.has(thingNode.subtype):
+						setSubtype = Things.DATA_DOOR[thingNode.subtype][Things.KEEPERFX_ID]
+			
+			t += "Subtype = \"" + setSubtype + "\"\n"
+			
 			t += "Ownership = " +str(thingNode.ownership) + "\n"
 			
 			if thingNode.effectRange != null:

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/143.png-91bf1c6c89b0d23a6667e83c47e6b27b.stex"
+path="res://.import/141.png-d1463b6bad504b090e7b224dd07664ff.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://unearthdata/object-images/143.png"
-dest_files=[ "res://.import/143.png-91bf1c6c89b0d23a6667e83c47e6b27b.stex" ]
+source_file="res://unearthdata/thing-images/objects/141.png"
+dest_files=[ "res://.import/141.png-d1463b6bad504b090e7b224dd07664ff.stex" ]
 
 [params]
 

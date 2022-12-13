@@ -145,8 +145,8 @@ func open_map(filePath): # auto opens other files
 func finish_opening_map(map):
 	if Cube.tex.empty() == true:
 		Cube.read_cubes_cfg()
-	if Things.objectsCfgHasBeenRead == false:
-		Things.read_objects_cfg()
+	if Things.thingsCfgHasBeenRead == false:
+		Things.read_things_cfg()
 	if oPickThingWindow.thing_grid_has_been_initialized == false:
 		oPickThingWindow.initialize_thing_grid_items()
 	
