@@ -54,208 +54,208 @@ var GENRE_TO_TAB = {
 
 
 var DATA_EXTRA = {
-1 : ["Action Point", "TEMP", preload("res://Art/ActionPoint.png"), null, TAB_ACTION],
-2 : ["Light", "TEMP", preload("res://edited_images/GUIEDIT-1/PIC26.png"), null, TAB_EFFECT],
+1 : ["Action Point", null, preload("res://Art/ActionPoint.png"), null, TAB_ACTION],
+2 : ["Light", null, preload("res://edited_images/GUIEDIT-1/PIC26.png"), null, TAB_EFFECT],
 }
 
 var DATA_DOOR = {
-1 : ["Wooden Door", "TEMP", preload("res://dk_images/trapdoor_64/door_pers_wood_std.png"), null, TAB_MISC],
-2 : ["Braced Door", "TEMP", preload("res://dk_images/trapdoor_64/door_pers_braced_std.png"), null, TAB_MISC],
-3 : ["Iron Door", "TEMP", preload("res://dk_images/trapdoor_64/door_pers_iron_std.png"), null, TAB_MISC],
-4 : ["Magic Door", "TEMP", preload("res://dk_images/trapdoor_64/door_pers_magic_std.png"), null, TAB_MISC]
+1 : ["Wooden Door", null, preload("res://dk_images/trapdoor_64/door_pers_wood_std.png"), null, TAB_MISC],
+2 : ["Braced Door", null, preload("res://dk_images/trapdoor_64/door_pers_braced_std.png"), null, TAB_MISC],
+3 : ["Iron Door", null, preload("res://dk_images/trapdoor_64/door_pers_iron_std.png"), null, TAB_MISC],
+4 : ["Magic Door", null, preload("res://dk_images/trapdoor_64/door_pers_magic_std.png"), null, TAB_MISC]
 }
 var DATA_TRAP = {
-1 : ["Boulder Trap", "TEMP", preload("res://dk_images/trapdoor_64/trap_boulder_std.png"), null, TAB_TRAP],
-2 : ["Alarm Trap", "TEMP", preload("res://dk_images/trapdoor_64/trap_alarm_std.png"), null, TAB_TRAP],
-3 : ["Poison Gas Trap", "TEMP", preload("res://dk_images/trapdoor_64/trap_gas_std.png"), null, TAB_TRAP],
-4 : ["Lightning Trap", "TEMP", preload("res://dk_images/trapdoor_64/trap_lightning_std.png"), null, TAB_TRAP],
-5 : ["Word of Power Trap", "TEMP", preload("res://dk_images/trapdoor_64/trap_wop_std.png"), null, TAB_TRAP],
-6 : ["Lava Trap", "TEMP", preload("res://dk_images/trapdoor_64/trap_lava_std.png"), null, TAB_TRAP],
-7 : ["Dummy Trap 2", "TEMP", null, null, TAB_TRAP],
-8 : ["Dummy Trap 3", "TEMP", null, null, TAB_TRAP],
-9 : ["Dummy Trap 4", "TEMP", null, null, TAB_TRAP],
-10 : ["Dummy Trap 5", "TEMP", null, null, TAB_TRAP],
-11 : ["Dummy Trap 6", "TEMP", null, null, TAB_TRAP],
-12 : ["Dummy Trap 7", "TEMP", null, null, TAB_TRAP],
+1 : ["Boulder Trap", null, preload("res://dk_images/trapdoor_64/trap_boulder_std.png"), null, TAB_TRAP],
+2 : ["Alarm Trap", null, preload("res://dk_images/trapdoor_64/trap_alarm_std.png"), null, TAB_TRAP],
+3 : ["Poison Gas Trap", null, preload("res://dk_images/trapdoor_64/trap_gas_std.png"), null, TAB_TRAP],
+4 : ["Lightning Trap", null, preload("res://dk_images/trapdoor_64/trap_lightning_std.png"), null, TAB_TRAP],
+5 : ["Word of Power Trap", null, preload("res://dk_images/trapdoor_64/trap_wop_std.png"), null, TAB_TRAP],
+6 : ["Lava Trap", null, preload("res://dk_images/trapdoor_64/trap_lava_std.png"), null, TAB_TRAP],
+7 : ["Dummy Trap 2", null, null, null, TAB_TRAP],
+8 : ["Dummy Trap 3", null, null, null, TAB_TRAP],
+9 : ["Dummy Trap 4", null, null, null, TAB_TRAP],
+10 : ["Dummy Trap 5", null, null, null, TAB_TRAP],
+11 : ["Dummy Trap 6", null, null, null, TAB_TRAP],
+12 : ["Dummy Trap 7", null, null, null, TAB_TRAP],
 }
 var DATA_EFFECT = {
-1 : ["Effect: Lava", "EMITTER_LAVA", preload("res://edited_images/GUIEDIT-1/PIC27.png"), null, TAB_EFFECT],
-2 : ["Effect: Dripping Water", "EMITTER_DRIPPING_WATER", preload("res://edited_images/GUIEDIT-1/PIC28.png"), null, TAB_EFFECT],
-3 : ["Effect: Rock Fall", "EMITTER_ROCK_FALL", preload("res://edited_images/GUIEDIT-1/PIC29.png"), null, TAB_EFFECT],
-4 : ["Effect: Entrance Ice", "EMITTER_ENTRANCE_ICE", preload("res://edited_images/GUIEDIT-1/PIC30.png"), null, TAB_EFFECT],
-5 : ["Effect: Dry Ice", "EMITTER_DRY_ICE", preload("res://edited_images/GUIEDIT-1/PIC31.png"), null, TAB_EFFECT]
+1 : ["Effect: Lava", null, preload("res://edited_images/GUIEDIT-1/PIC27.png"), null, TAB_EFFECT],
+2 : ["Effect: Dripping Water", null, preload("res://edited_images/GUIEDIT-1/PIC28.png"), null, TAB_EFFECT],
+3 : ["Effect: Rock Fall", null, preload("res://edited_images/GUIEDIT-1/PIC29.png"), null, TAB_EFFECT],
+4 : ["Effect: Entrance Ice", null, preload("res://edited_images/GUIEDIT-1/PIC30.png"), null, TAB_EFFECT],
+5 : ["Effect: Dry Ice", null, preload("res://edited_images/GUIEDIT-1/PIC31.png"), null, TAB_EFFECT]
 }
 var DATA_CREATURE = {
-01 : ["Wizard", "TEMP",          preload("res://edited_images/creatr_icon_64/wizrd_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_wizrd.png"), TAB_CREATURE],
-02 : ["Barbarian", "TEMP",       preload("res://edited_images/creatr_icon_64/barbr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_barbr.png"), TAB_CREATURE],
-03 : ["Archer", "TEMP",          preload("res://edited_images/creatr_icon_64/archr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_archr.png"), TAB_CREATURE],
-04 : ["Monk", "TEMP",            preload("res://edited_images/creatr_icon_64/monk_std.png"),  preload("res://dk_images/creature_portrait_64/creatr_portrt_monk.png"), TAB_CREATURE],
-05 : ["Dwarf", "TEMP",           preload("res://edited_images/creatr_icon_64/dwarf_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_dwrf1.png"), TAB_CREATURE],
-06 : ["Knight", "TEMP",          preload("res://edited_images/creatr_icon_64/knght_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_knigh.png"), TAB_CREATURE],
-07 : ["Avatar", "TEMP",          preload("res://edited_images/creatr_icon_64/avatr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_avatr.png"), TAB_CREATURE],
-08 : ["Tunneller", "TEMP",       preload("res://edited_images/creatr_icon_64/tunlr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_dwrf2.png"), TAB_CREATURE],
-09 : ["Witch", "TEMP",           preload("res://edited_images/creatr_icon_64/prsts_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_witch.png"), TAB_CREATURE],
-10 : ["Giant", "TEMP",           preload("res://edited_images/creatr_icon_64/giant_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_giant.png"), TAB_CREATURE],
-11 : ["Fairy", "TEMP",           preload("res://edited_images/creatr_icon_64/fairy_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_fairy.png"), TAB_CREATURE],
-12 : ["Thief", "TEMP",           preload("res://edited_images/creatr_icon_64/thief_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_thief.png"), TAB_CREATURE],
-13 : ["Samurai", "TEMP",         preload("res://edited_images/creatr_icon_64/samur_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_samur.png"), TAB_CREATURE],
-14 : ["Horned Reaper", "TEMP",   preload("res://edited_images/creatr_icon_64/hornd_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_horny.png"), TAB_CREATURE],
-15 : ["Skeleton", "TEMP",        preload("res://edited_images/creatr_icon_64/skelt_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_skelt.png"), TAB_CREATURE],
-16 : ["Troll", "TEMP",           preload("res://edited_images/creatr_icon_64/troll_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_troll.png"), TAB_CREATURE],
-17 : ["Dragon", "TEMP",          preload("res://edited_images/creatr_icon_64/dragn_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_dragn.png"), TAB_CREATURE],
-18 : ["Demon Spawn", "TEMP",     preload("res://edited_images/creatr_icon_64/dspwn_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_spawn.png"), TAB_CREATURE],
-19 : ["Fly", "TEMP",             preload("res://edited_images/creatr_icon_64/fly_std.png"),   preload("res://dk_images/creature_portrait_64/creatr_portrt_fly.png"), TAB_CREATURE],
-20 : ["Dark Mistress", "TEMP",   preload("res://edited_images/creatr_icon_64/dkmis_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_mistr.png"), TAB_CREATURE],
-21 : ["Warlock", "TEMP",         preload("res://edited_images/creatr_icon_64/warlk_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_warlk.png"), TAB_CREATURE],
-22 : ["Bile Demon", "TEMP",      preload("res://edited_images/creatr_icon_64/biled_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_biled.png"), TAB_CREATURE],
-23 : ["Imp", "TEMP",             preload("res://edited_images/creatr_icon_64/imp_std.png"),   preload("res://dk_images/creature_portrait_64/creatr_portrt_imp.png"), TAB_CREATURE],
-24 : ["Beetle", "TEMP",          preload("res://edited_images/creatr_icon_64/bug_std.png"),   preload("res://dk_images/creature_portrait_64/creatr_portrt_bug.png"), TAB_CREATURE],
-25 : ["Vampire", "TEMP",         preload("res://edited_images/creatr_icon_64/vampr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_vampr.png"), TAB_CREATURE],
-26 : ["Spider", "TEMP",          preload("res://edited_images/creatr_icon_64/spidr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_spidr.png"), TAB_CREATURE],
-27 : ["Hell Hound", "TEMP",      preload("res://edited_images/creatr_icon_64/hound_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_hound.png"), TAB_CREATURE],
-28 : ["Ghost", "TEMP",           preload("res://edited_images/creatr_icon_64/ghost_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_ghost.png"), TAB_CREATURE],
-29 : ["Tentacle", "TEMP",        preload("res://edited_images/creatr_icon_64/tentc_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_tentc.png"), TAB_CREATURE],
-30 : ["Orc", "TEMP",             preload("res://edited_images/creatr_icon_64/orc_std.png"),   preload("res://dk_images/creature_portrait_64/creatr_portrt_orc.png"), TAB_CREATURE],
-31 : ["Floating Spirit", "TEMP", preload("res://dk_images/magic_dust/anim0981/r1frame02.png"), preload("res://dk_images/magic_dust/anim0981/r1frame02.png"), TAB_CREATURE] # wrong icon probably
+01 : ["Wizard", null,          preload("res://edited_images/creatr_icon_64/wizrd_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_wizrd.png"), TAB_CREATURE],
+02 : ["Barbarian", null,       preload("res://edited_images/creatr_icon_64/barbr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_barbr.png"), TAB_CREATURE],
+03 : ["Archer", null,          preload("res://edited_images/creatr_icon_64/archr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_archr.png"), TAB_CREATURE],
+04 : ["Monk", null,            preload("res://edited_images/creatr_icon_64/monk_std.png"),  preload("res://dk_images/creature_portrait_64/creatr_portrt_monk.png"), TAB_CREATURE],
+05 : ["Dwarf", null,           preload("res://edited_images/creatr_icon_64/dwarf_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_dwrf1.png"), TAB_CREATURE],
+06 : ["Knight", null,          preload("res://edited_images/creatr_icon_64/knght_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_knigh.png"), TAB_CREATURE],
+07 : ["Avatar", null,          preload("res://edited_images/creatr_icon_64/avatr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_avatr.png"), TAB_CREATURE],
+08 : ["Tunneller", null,       preload("res://edited_images/creatr_icon_64/tunlr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_dwrf2.png"), TAB_CREATURE],
+09 : ["Witch", null,           preload("res://edited_images/creatr_icon_64/prsts_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_witch.png"), TAB_CREATURE],
+10 : ["Giant", null,           preload("res://edited_images/creatr_icon_64/giant_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_giant.png"), TAB_CREATURE],
+11 : ["Fairy", null,           preload("res://edited_images/creatr_icon_64/fairy_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_fairy.png"), TAB_CREATURE],
+12 : ["Thief", null,           preload("res://edited_images/creatr_icon_64/thief_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_thief.png"), TAB_CREATURE],
+13 : ["Samurai", null,         preload("res://edited_images/creatr_icon_64/samur_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_samur.png"), TAB_CREATURE],
+14 : ["Horned Reaper", null,   preload("res://edited_images/creatr_icon_64/hornd_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_horny.png"), TAB_CREATURE],
+15 : ["Skeleton", null,        preload("res://edited_images/creatr_icon_64/skelt_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_skelt.png"), TAB_CREATURE],
+16 : ["Troll", null,           preload("res://edited_images/creatr_icon_64/troll_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_troll.png"), TAB_CREATURE],
+17 : ["Dragon", null,          preload("res://edited_images/creatr_icon_64/dragn_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_dragn.png"), TAB_CREATURE],
+18 : ["Demon Spawn", null,     preload("res://edited_images/creatr_icon_64/dspwn_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_spawn.png"), TAB_CREATURE],
+19 : ["Fly", null,             preload("res://edited_images/creatr_icon_64/fly_std.png"),   preload("res://dk_images/creature_portrait_64/creatr_portrt_fly.png"), TAB_CREATURE],
+20 : ["Dark Mistress", null,   preload("res://edited_images/creatr_icon_64/dkmis_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_mistr.png"), TAB_CREATURE],
+21 : ["Warlock", null,         preload("res://edited_images/creatr_icon_64/warlk_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_warlk.png"), TAB_CREATURE],
+22 : ["Bile Demon", null,      preload("res://edited_images/creatr_icon_64/biled_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_biled.png"), TAB_CREATURE],
+23 : ["Imp", null,             preload("res://edited_images/creatr_icon_64/imp_std.png"),   preload("res://dk_images/creature_portrait_64/creatr_portrt_imp.png"), TAB_CREATURE],
+24 : ["Beetle", null,          preload("res://edited_images/creatr_icon_64/bug_std.png"),   preload("res://dk_images/creature_portrait_64/creatr_portrt_bug.png"), TAB_CREATURE],
+25 : ["Vampire", null,         preload("res://edited_images/creatr_icon_64/vampr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_vampr.png"), TAB_CREATURE],
+26 : ["Spider", null,          preload("res://edited_images/creatr_icon_64/spidr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_spidr.png"), TAB_CREATURE],
+27 : ["Hell Hound", null,      preload("res://edited_images/creatr_icon_64/hound_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_hound.png"), TAB_CREATURE],
+28 : ["Ghost", null,           preload("res://edited_images/creatr_icon_64/ghost_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_ghost.png"), TAB_CREATURE],
+29 : ["Tentacle", null,        preload("res://edited_images/creatr_icon_64/tentc_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_tentc.png"), TAB_CREATURE],
+30 : ["Orc", null,             preload("res://edited_images/creatr_icon_64/orc_std.png"),   preload("res://dk_images/creature_portrait_64/creatr_portrt_orc.png"), TAB_CREATURE],
+31 : ["Floating Spirit", null, preload("res://dk_images/magic_dust/anim0981/r1frame02.png"), preload("res://dk_images/magic_dust/anim0981/r1frame02.png"), TAB_CREATURE] # wrong icon probably
 }
 
 var DATA_OBJECT = {
-001 : ["Barrel", "TEMP", preload("res://dk_images/other/anim0932/r1frame01.png"), null, TAB_DECORATION],
-002 : ["Torch", "TEMP", preload("res://dk_images/other/anim0963/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
-003 : ["Gold Pot (500)", "TEMP", preload("res://dk_images/valuables/gold_pot_tp/AnimGoldPot.res"), null, TAB_GOLD],
-004 : ["Lit Statue", "TEMP", preload("res://dk_images/statues/anim0952/AnimLitStatue.res"), null, TAB_DECORATION], #TAB_FURNITURE
-005 : ["Dungeon Heart", "TEMP", preload("res://dk_images/crucials/anim0950/AnimDungeonHeart.res"), null, TAB_FURNITURE],
-006 : ["Gold Pot (250)", "TEMP", preload("res://dk_images/valuables/gold_pot_tp/AnimGoldPot.res"), null, TAB_GOLD],
-007 : ["Unlit Torch", "TEMP", preload("res://dk_images/other/anim0963/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
-008 : ["Glowing Statue", "TEMP", preload("res://dk_images/statues/anim0952/AnimLitStatue.res"), null, TAB_DECORATION], #Lit Statue No Flame # Partially Lit Statue
-009 : ["Egg Growing (1)", "TEMP", preload("res://dk_images/food/anim0898/AnimEggGrowing1.res"), null, TAB_MISC],
-010 : ["Chicken", "TEMP", preload("res://dk_images/food/anim0822/AnimChicken.res"), null, TAB_MISC],
-011 : ["Hand Of Evil", "TEMP", preload("res://edited_images/icon_handofevil.png"), null, TAB_SPELL],
-012 : ["Create Imp", "TEMP", preload("res://dk_images/keepower_64/imp_std.png"), null, TAB_SPELL],
-013 : ["Must Obey", "TEMP", preload("res://edited_images/mustobey.png"), null, TAB_SPELL],
-014 : ["Slap", "TEMP", preload("res://edited_images/icon_slap.png"), null, TAB_SPELL],
-015 : ["Sight of Evil", "TEMP", preload("res://dk_images/keepower_64/sight_std.png"), null, TAB_SPELL],
-016 : ["Call To Arms", "TEMP", preload("res://dk_images/keepower_64/cta_std.png"), null, TAB_SPELL],
-017 : ["Cave-In", "TEMP", preload("res://dk_images/keepower_64/cavein_std.png"), null, TAB_SPELL],
-018 : ["Heal", "TEMP", preload("res://dk_images/keepower_64/heal_std.png"), null, TAB_SPELL],
-019 : ["Hold Audience", "TEMP", preload("res://dk_images/keepower_64/holdaud_std.png"), null, TAB_SPELL],
-020 : ["Lightning Strike", "TEMP", preload("res://dk_images/keepower_64/lightng_std.png"), null, TAB_SPELL],
-021 : ["Speed Monster", "TEMP", preload("res://dk_images/keepower_64/speed_std.png"), null, TAB_SPELL],
-022 : ["Protect Monster", "TEMP", preload("res://dk_images/keepower_64/armor_std.png"), null, TAB_SPELL],
-023 : ["Conceal Monster", "TEMP", preload("res://dk_images/keepower_64/conceal_std.png"), null, TAB_SPELL],
-024 : ["Cta Ensign", "TEMP", null, null, TAB_MISC],
-025 : ["Room Flag", "TEMP", null, null, TAB_MISC], #TAB_DECORATION
-026 : ["Anvil", "TEMP", preload("res://dk_images/furniture/workshop_anvil_tp/r1frame01.png"), null, TAB_FURNITURE],
-027 : ["Prison Bar", "TEMP", preload("res://dk_images/other/anim0797/r1frame01.png"), null, TAB_FURNITURE],
-028 : ["Candlestick", "TEMP", preload("res://dk_images/furniture/anim0791/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
-029 : ["Gravestone", "TEMP", preload("res://dk_images/furniture/tombstone_tp/r1frame01.png"), null, TAB_FURNITURE],
-030 : ["Aztec Statue", "TEMP", preload("res://dk_images/statues/anim0907/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
-031 : ["Training Post", "TEMP", preload("res://dk_images/furniture/training_machine_tp/AnimTrainingMachine.res"), null, TAB_FURNITURE],
-032 : ["Torture Spike", "TEMP", preload("res://dk_images/furniture/anim0892/AnimSpike.res"), null, TAB_FURNITURE],
-033 : ["Temple Spangle", "TEMP", preload("res://dk_images/magic_fogs/anim0798/AnimTempleSpangle.res"), null, TAB_DECORATION],
-034 : ["Purple Potion", "TEMP", preload("res://dk_images/potions/anim0804/r1frame01.png"), null, TAB_DECORATION],
-035 : ["Blue Potion", "TEMP", preload("res://dk_images/potions/anim0806/r1frame01.png"), null, TAB_DECORATION],
-036 : ["Green Potion", "TEMP", preload("res://dk_images/potions/anim0808/r1frame01.png"), null, TAB_DECORATION],
-037 : ["Power Hand", "TEMP", preload("res://dk_images/power_hand/anim0783/AnimePowerHand.res"), null, TAB_MISC],
-038 : ["Power Hand Grab", "TEMP", preload("res://dk_images/power_hand/anim0784/AnimePowerHandGrab.res"), null, TAB_MISC],
-039 : ["Power Hand Whip", "TEMP", preload("res://dk_images/power_hand/anim0786/AnimePowerHandWhip.res"), null, TAB_MISC],
-040 : ["Egg Stable (2)", "TEMP", preload("res://dk_images/food/anim0899/r1frame01.png"), null, TAB_MISC],
-041 : ["Egg Wobbling (3)", "TEMP", preload("res://dk_images/food/anim0900/AnimEggWobbling3.res"), null, TAB_MISC],
-042 : ["Egg Cracking (4)", "TEMP", preload("res://dk_images/food/anim0901/AnimEggCracking4.res"), null, TAB_MISC],
-043 : ["Gold Pile (200)", "TEMP", preload("res://dk_images/valuables/gold_hoard1_tp/AnimGoldHoard1.res"), null, TAB_GOLD],
-044 : ["Spinning Key", "TEMP", preload("res://dk_images/traps_doors/anim0811/AnimSpinningKey.res"), null, TAB_MISC],
-045 : ["Disease", "TEMP", preload("res://dk_images/keepower_64/disease_std.png"), null, TAB_SPELL],
-046 : ["Chicken Spell", "TEMP", preload("res://dk_images/keepower_64/chicken_std.png"), null, TAB_SPELL],
-047 : ["Destroy Walls", "TEMP", preload("res://dk_images/keepower_64/dstwall_std.png"), null, TAB_SPELL],
-048 : ["Time Bomb", "TEMP", preload("res://edited_images/timebomb.png"), null, TAB_SPELL], 
-049 : ["Hero Gate", "TEMP", preload("res://dk_images/crucials/anim0780/AnimHeroGate.res"), null, TAB_ACTION],
-050 : ["Spinning Key 2", "TEMP", preload("res://dk_images/traps_doors/anim0811/AnimSpinningKey.res"), null, TAB_MISC],
-051 : ["Armour Effect", "TEMP", null, null, TAB_MISC],
-052 : ["Treasury Gold 1 (800)", "TEMP", preload("res://dk_images/valuables/gold_hoard1_tp/AnimGoldHoard1.res"), null, TAB_GOLD],
-053 : ["Treasury Gold 2 (1200)", "TEMP", preload("res://dk_images/valuables/gold_hoard2_tp/AnimGoldHoard2.res"), null, TAB_GOLD],
-054 : ["Treasury Gold 3 (1600)", "TEMP", preload("res://dk_images/valuables/gold_hoard3_tp/AnimGoldHoard3.res"), null, TAB_GOLD],
-055 : ["Treasury Gold 4 (2000)", "TEMP", preload("res://dk_images/valuables/gold_hoard4_tp/AnimGoldHoard4.res"), null, TAB_GOLD],
-056 : ["Treasury Gold 5 (2400)", "TEMP", preload("res://dk_images/valuables/gold_hoard5_tp/AnimGoldHoard5.res"), null, TAB_GOLD],
-057 : ["Lair: Wizard", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-058 : ["Lair: Barbarian", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-059 : ["Lair: Archer", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-060 : ["Lair: Monk", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-061 : ["Lair: Dwarf", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-062 : ["Lair: Knight", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-063 : ["Lair: Avatar", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-064 : ["Lair: Tunneller", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-065 : ["Lair: Witch", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-066 : ["Lair: Giant", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-067 : ["Lair: Fairy", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-068 : ["Lair: Thief", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-069 : ["Lair: Samurai", "TEMP", preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
-070 : ["Lair: Horny", "TEMP", preload("res://edited_images/lair/creature_horny/anim0160/AnimLairHornedReaper.res"), null, TAB_LAIR],
-071 : ["Lair: Skeleton", "TEMP", preload("res://edited_images/lair/creature_skeleton/anim0158/AnimLairSkeleton.res"), null, TAB_LAIR],
-072 : ["Lair: Troll", "TEMP", preload("res://edited_images/lair/creature_generic/anim0156/r1frame01.png"), null, TAB_LAIR],
-073 : ["Lair: Dragon", "TEMP", preload("res://edited_images/lair/creature_dragon/anim0154/AnimLairDragon.res"), null, TAB_LAIR],
-074 : ["Lair: Demon Spawn", "TEMP", preload("res://edited_images/lair/creature_demonspawn/lairempty_tp/r1frame01.png"), null, TAB_LAIR],
-075 : ["Lair: Fly", "TEMP", preload("res://edited_images/lair/creature_fly/anim0150/AnimLairFly.res"), null, TAB_LAIR],
-076 : ["Lair: Mistress", "TEMP", preload("res://edited_images/lair/creature_dkmistress/anim0148/AnimLairMistress.res"), null, TAB_LAIR],
-077 : ["Lair: Warlock", "TEMP", preload("res://edited_images/lair/creature_warlock/anim0146/AnimLairWarlock.res"), null, TAB_LAIR],
-078 : ["Lair: Bile Demon", "TEMP", preload("res://edited_images/lair/creature_biledemon/anim0144/AnimLairBileDemon.res"), null, TAB_LAIR],
-079 : ["Lair: Imp", "TEMP", preload("res://edited_images/lair/creature_dragon/anim0154/r1frame01.png"), null, TAB_LAIR],
-080 : ["Lair: Beetle", "TEMP", preload("res://edited_images/lair/creature_bug/anim0142/AnimLairBeetle.res"), null, TAB_LAIR],
-081 : ["Lair: Vampire", "TEMP", preload("res://edited_images/lair/creature_vampire/anim0140/r1frame01.png"), null, TAB_LAIR],
-082 : ["Lair: Spider", "TEMP", preload("res://edited_images/lair/creature_spider/anim0138/AnimLairSpider.res"), null, TAB_LAIR],
-083 : ["Lair: Hell Hound", "TEMP", preload("res://edited_images/lair/creature_hound/anim0136/r1frame01.png"), null, TAB_LAIR],
-084 : ["Lair: Ghost", "TEMP", preload("res://edited_images/lair/creature_ghost/anim0134/r1frame01.png"), null, TAB_LAIR],
-085 : ["Lair: Tentacle", "TEMP", preload("res://edited_images/lair/creature_tentacle/anim0130/r1frame01.png"), null, TAB_LAIR],
-086 : ["Reveal Map", "TEMP", preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
-087 : ["Resurrect Creature", "TEMP", preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
-088 : ["Transfer Creature", "TEMP", preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
-089 : ["Steal Hero", "TEMP", preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
-090 : ["Multiply Creatures", "TEMP", preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
-091 : ["Increase Level", "TEMP", preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
-092 : ["Make Safe", "TEMP", preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
-093 : ["Locate Hidden World", "TEMP", preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
-094 : ["Box: Boulder Trap", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-095 : ["Box: Alarm Trap", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-096 : ["Box: Poison Gas Trap", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-097 : ["Box: Lightning Trap", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-098 : ["Box: Word of Power Trap", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-099 : ["Box: Lava Trap", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-100 : ["Box: Dummy Trap 2", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-101 : ["Box: Dummy Trap 3", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-102 : ["Box: Dummy Trap 4", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-103 : ["Box: Dummy Trap 5", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-104 : ["Box: Dummy Trap 6", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-105 : ["Box: Dummy Trap 7", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-106 : ["Box: Wooden Door", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-107 : ["Box: Braced Door", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-108 : ["Box: Iron Door", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-109 : ["Box: Magic Door", "TEMP", preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
-110 : ["Workshop Item", "TEMP", preload("res://dk_images/furniture/workshop_anvil_tp/r1frame01.png"), null, TAB_MISC],
-111 : ["Red Heart Flame", "TEMP", preload("res://dk_images/magic_fogs/anim0801/AnimRedHeartFlame.res"), null, TAB_FURNITURE],
-112 : ["Disease Effect", "TEMP", null, null, TAB_MISC],
-113 : ["Scavenger Eye", "TEMP", preload("res://dk_images/furniture/scavenge_eye_tp/AnimScavengerEye.res"), null, TAB_FURNITURE],
-114 : ["Workshop Machine", "TEMP", preload("res://dk_images/furniture/workshop_machine_tp/AnimWorkshopMachine.res"), null, TAB_FURNITURE],
-115 : ["Red Flag", "TEMP", preload("res://dk_images/furniture/flagpole_redflag_tp/AnimFlagpoleRed.res"), null, TAB_FURNITURE],
-116 : ["Blue Flag", "TEMP", preload("res://dk_images/furniture/flagpole_blueflag_tp/AnimFlagpoleBlue.res"), null, TAB_FURNITURE],
-117 : ["Green Flag", "TEMP", preload("res://dk_images/furniture/flagpole_greenflag_tp/AnimFlagpoleGreen.res"), null, TAB_FURNITURE],
-118 : ["Yellow Flag", "TEMP", preload("res://dk_images/furniture/flagpole_yellowflag_tp/AnimFlagpoleYellow.res"), null, TAB_FURNITURE],
-119 : ["Flagpole", "TEMP", preload("res://dk_images/furniture/flagpole_empty_tp/r1frame01.png"), null, TAB_FURNITURE],
-120 : ["Blue Heart Flame", "TEMP", preload("res://dk_images/magic_fogs/anim0802/AnimBlueHeartFlame.res"), null, TAB_FURNITURE],
-121 : ["Green Heart Flame", "TEMP", preload("res://dk_images/magic_fogs/anim0800/AnimGreenHeartFlame.res"), null, TAB_FURNITURE],
-122 : ["Yellow Heart Flame", "TEMP", preload("res://dk_images/magic_fogs/anim0799/AnimYellowHeartFlame.res"), null, TAB_FURNITURE],
-123 : ["Casted Sight", "TEMP", preload("res://dk_images/magic_fogs/anim0854/AnimCastedSight.res"), null, TAB_MISC],
-124 : ["Casted Lightning", "TEMP", null, null, TAB_MISC],
-125 : ["Torturer", "TEMP", preload("res://dk_images/furniture/torture_machine_tp/r1frame01.png"), null, TAB_FURNITURE],
-126 : ["Lair: Orc", "TEMP", preload("res://edited_images/lair/creature_orc/anim0128/r1frame01.png"), null, TAB_LAIR],
-127 : ["Power Hand Gold", "TEMP", preload("res://dk_images/power_hand/anim0782/AnimePowerHandGold.res"), null, TAB_MISC],
-128 : ["Spinning Coin", "TEMP", null, null, TAB_MISC],
-129 : ["Unlit Statue", "TEMP", preload("res://dk_images/statues/anim0954/r1frame01.png"), null, TAB_DECORATION],
-130 : ["Statue 3", "TEMP", preload("res://dk_images/statues/anim0956/r1frame01.png"), null, TAB_DECORATION],
-131 : ["Statue 4", "TEMP", preload("res://dk_images/statues/anim0958/r1frame01.png"), null, TAB_DECORATION],
-132 : ["Statue 5", "TEMP", preload("res://dk_images/statues/anim0960/r1frame01.png"), null, TAB_DECORATION],
-133 : ["Mysterious Box", "TEMP", preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
-134 : ["Armageddon", "TEMP", preload("res://dk_images/keepower_64/armagedn_std.png"), null, TAB_SPELL],
-135 : ["Possess", "TEMP", preload("res://dk_images/keepower_64/possess_std.png"), null, TAB_SPELL],
-136 : ["Gold Bag (100)", "TEMP", preload("res://dk_images/valuables/gold_sack_tp/r1frame01.png"), null, TAB_GOLD],
+001 : ["Barrel", null, preload("res://dk_images/other/anim0932/r1frame01.png"), null, TAB_DECORATION],
+002 : ["Torch", null, preload("res://dk_images/other/anim0963/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
+003 : ["Gold Pot (500)", null, preload("res://dk_images/valuables/gold_pot_tp/AnimGoldPot.res"), null, TAB_GOLD],
+004 : ["Lit Statue", null, preload("res://dk_images/statues/anim0952/AnimLitStatue.res"), null, TAB_DECORATION], #TAB_FURNITURE
+005 : ["Dungeon Heart", null, preload("res://dk_images/crucials/anim0950/AnimDungeonHeart.res"), null, TAB_FURNITURE],
+006 : ["Gold Pot (250)", null, preload("res://dk_images/valuables/gold_pot_tp/AnimGoldPot.res"), null, TAB_GOLD],
+007 : ["Unlit Torch", null, preload("res://dk_images/other/anim0963/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
+008 : ["Glowing Statue", null, preload("res://dk_images/statues/anim0952/AnimLitStatue.res"), null, TAB_DECORATION], #Lit Statue No Flame # Partially Lit Statue
+009 : ["Egg Growing (1)", null, preload("res://dk_images/food/anim0898/AnimEggGrowing1.res"), null, TAB_MISC],
+010 : ["Chicken", null, preload("res://dk_images/food/anim0822/AnimChicken.res"), null, TAB_MISC],
+011 : ["Hand Of Evil", null, preload("res://edited_images/icon_handofevil.png"), null, TAB_SPELL],
+012 : ["Create Imp", null, preload("res://dk_images/keepower_64/imp_std.png"), null, TAB_SPELL],
+013 : ["Must Obey", null, preload("res://edited_images/mustobey.png"), null, TAB_SPELL],
+014 : ["Slap", null, preload("res://edited_images/icon_slap.png"), null, TAB_SPELL],
+015 : ["Sight of Evil", null, preload("res://dk_images/keepower_64/sight_std.png"), null, TAB_SPELL],
+016 : ["Call To Arms", null, preload("res://dk_images/keepower_64/cta_std.png"), null, TAB_SPELL],
+017 : ["Cave-In", null, preload("res://dk_images/keepower_64/cavein_std.png"), null, TAB_SPELL],
+018 : ["Heal", null, preload("res://dk_images/keepower_64/heal_std.png"), null, TAB_SPELL],
+019 : ["Hold Audience", null, preload("res://dk_images/keepower_64/holdaud_std.png"), null, TAB_SPELL],
+020 : ["Lightning Strike", null, preload("res://dk_images/keepower_64/lightng_std.png"), null, TAB_SPELL],
+021 : ["Speed Monster", null, preload("res://dk_images/keepower_64/speed_std.png"), null, TAB_SPELL],
+022 : ["Protect Monster", null, preload("res://dk_images/keepower_64/armor_std.png"), null, TAB_SPELL],
+023 : ["Conceal Monster", null, preload("res://dk_images/keepower_64/conceal_std.png"), null, TAB_SPELL],
+024 : ["Cta Ensign", null, null, null, TAB_MISC],
+025 : ["Room Flag", null, null, null, TAB_MISC], #TAB_DECORATION
+026 : ["Anvil", null, preload("res://dk_images/furniture/workshop_anvil_tp/r1frame01.png"), null, TAB_FURNITURE],
+027 : ["Prison Bar", null, preload("res://dk_images/other/anim0797/r1frame01.png"), null, TAB_FURNITURE],
+028 : ["Candlestick", null, preload("res://dk_images/furniture/anim0791/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
+029 : ["Gravestone", null, preload("res://dk_images/furniture/tombstone_tp/r1frame01.png"), null, TAB_FURNITURE],
+030 : ["Aztec Statue", null, preload("res://dk_images/statues/anim0907/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
+031 : ["Training Post", null, preload("res://dk_images/furniture/training_machine_tp/AnimTrainingMachine.res"), null, TAB_FURNITURE],
+032 : ["Torture Spike", null, preload("res://dk_images/furniture/anim0892/AnimSpike.res"), null, TAB_FURNITURE],
+033 : ["Temple Spangle", null, preload("res://dk_images/magic_fogs/anim0798/AnimTempleSpangle.res"), null, TAB_DECORATION],
+034 : ["Purple Potion", null, preload("res://dk_images/potions/anim0804/r1frame01.png"), null, TAB_DECORATION],
+035 : ["Blue Potion", null, preload("res://dk_images/potions/anim0806/r1frame01.png"), null, TAB_DECORATION],
+036 : ["Green Potion", null, preload("res://dk_images/potions/anim0808/r1frame01.png"), null, TAB_DECORATION],
+037 : ["Power Hand", null, preload("res://dk_images/power_hand/anim0783/AnimePowerHand.res"), null, TAB_MISC],
+038 : ["Power Hand Grab", null, preload("res://dk_images/power_hand/anim0784/AnimePowerHandGrab.res"), null, TAB_MISC],
+039 : ["Power Hand Whip", null, preload("res://dk_images/power_hand/anim0786/AnimePowerHandWhip.res"), null, TAB_MISC],
+040 : ["Egg Stable (2)", null, preload("res://dk_images/food/anim0899/r1frame01.png"), null, TAB_MISC],
+041 : ["Egg Wobbling (3)", null, preload("res://dk_images/food/anim0900/AnimEggWobbling3.res"), null, TAB_MISC],
+042 : ["Egg Cracking (4)", null, preload("res://dk_images/food/anim0901/AnimEggCracking4.res"), null, TAB_MISC],
+043 : ["Gold Pile (200)", null, preload("res://dk_images/valuables/gold_hoard1_tp/AnimGoldHoard1.res"), null, TAB_GOLD],
+044 : ["Spinning Key", null, preload("res://dk_images/traps_doors/anim0811/AnimSpinningKey.res"), null, TAB_MISC],
+045 : ["Disease", null, preload("res://dk_images/keepower_64/disease_std.png"), null, TAB_SPELL],
+046 : ["Chicken Spell", null, preload("res://dk_images/keepower_64/chicken_std.png"), null, TAB_SPELL],
+047 : ["Destroy Walls", null, preload("res://dk_images/keepower_64/dstwall_std.png"), null, TAB_SPELL],
+048 : ["Time Bomb", null, preload("res://edited_images/timebomb.png"), null, TAB_SPELL], 
+049 : ["Hero Gate", null, preload("res://dk_images/crucials/anim0780/AnimHeroGate.res"), null, TAB_ACTION],
+050 : ["Spinning Key 2", null, preload("res://dk_images/traps_doors/anim0811/AnimSpinningKey.res"), null, TAB_MISC],
+051 : ["Armour Effect", null, null, null, TAB_MISC],
+052 : ["Treasury Gold 1 (800)", null, preload("res://dk_images/valuables/gold_hoard1_tp/AnimGoldHoard1.res"), null, TAB_GOLD],
+053 : ["Treasury Gold 2 (1200)", null, preload("res://dk_images/valuables/gold_hoard2_tp/AnimGoldHoard2.res"), null, TAB_GOLD],
+054 : ["Treasury Gold 3 (1600)", null, preload("res://dk_images/valuables/gold_hoard3_tp/AnimGoldHoard3.res"), null, TAB_GOLD],
+055 : ["Treasury Gold 4 (2000)", null, preload("res://dk_images/valuables/gold_hoard4_tp/AnimGoldHoard4.res"), null, TAB_GOLD],
+056 : ["Treasury Gold 5 (2400)", null, preload("res://dk_images/valuables/gold_hoard5_tp/AnimGoldHoard5.res"), null, TAB_GOLD],
+057 : ["Lair: Wizard", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+058 : ["Lair: Barbarian", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+059 : ["Lair: Archer", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+060 : ["Lair: Monk", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+061 : ["Lair: Dwarf", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+062 : ["Lair: Knight", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+063 : ["Lair: Avatar", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+064 : ["Lair: Tunneller", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+065 : ["Lair: Witch", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+066 : ["Lair: Giant", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+067 : ["Lair: Fairy", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+068 : ["Lair: Thief", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+069 : ["Lair: Samurai", null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.res"), null, TAB_LAIR],
+070 : ["Lair: Horny", null, preload("res://edited_images/lair/creature_horny/anim0160/AnimLairHornedReaper.res"), null, TAB_LAIR],
+071 : ["Lair: Skeleton", null, preload("res://edited_images/lair/creature_skeleton/anim0158/AnimLairSkeleton.res"), null, TAB_LAIR],
+072 : ["Lair: Troll", null, preload("res://edited_images/lair/creature_generic/anim0156/r1frame01.png"), null, TAB_LAIR],
+073 : ["Lair: Dragon", null, preload("res://edited_images/lair/creature_dragon/anim0154/AnimLairDragon.res"), null, TAB_LAIR],
+074 : ["Lair: Demon Spawn", null, preload("res://edited_images/lair/creature_demonspawn/lairempty_tp/r1frame01.png"), null, TAB_LAIR],
+075 : ["Lair: Fly", null, preload("res://edited_images/lair/creature_fly/anim0150/AnimLairFly.res"), null, TAB_LAIR],
+076 : ["Lair: Mistress", null, preload("res://edited_images/lair/creature_dkmistress/anim0148/AnimLairMistress.res"), null, TAB_LAIR],
+077 : ["Lair: Warlock", null, preload("res://edited_images/lair/creature_warlock/anim0146/AnimLairWarlock.res"), null, TAB_LAIR],
+078 : ["Lair: Bile Demon", null, preload("res://edited_images/lair/creature_biledemon/anim0144/AnimLairBileDemon.res"), null, TAB_LAIR],
+079 : ["Lair: Imp", null, preload("res://edited_images/lair/creature_dragon/anim0154/r1frame01.png"), null, TAB_LAIR],
+080 : ["Lair: Beetle", null, preload("res://edited_images/lair/creature_bug/anim0142/AnimLairBeetle.res"), null, TAB_LAIR],
+081 : ["Lair: Vampire", null, preload("res://edited_images/lair/creature_vampire/anim0140/r1frame01.png"), null, TAB_LAIR],
+082 : ["Lair: Spider", null, preload("res://edited_images/lair/creature_spider/anim0138/AnimLairSpider.res"), null, TAB_LAIR],
+083 : ["Lair: Hell Hound", null, preload("res://edited_images/lair/creature_hound/anim0136/r1frame01.png"), null, TAB_LAIR],
+084 : ["Lair: Ghost", null, preload("res://edited_images/lair/creature_ghost/anim0134/r1frame01.png"), null, TAB_LAIR],
+085 : ["Lair: Tentacle", null, preload("res://edited_images/lair/creature_tentacle/anim0130/r1frame01.png"), null, TAB_LAIR],
+086 : ["Reveal Map", null, preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
+087 : ["Resurrect Creature", null, preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
+088 : ["Transfer Creature", null, preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
+089 : ["Steal Hero", null, preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
+090 : ["Multiply Creatures", null, preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
+091 : ["Increase Level", null, preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
+092 : ["Make Safe", null, preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
+093 : ["Locate Hidden World", null, preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
+094 : ["Box: Boulder Trap", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+095 : ["Box: Alarm Trap", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+096 : ["Box: Poison Gas Trap", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+097 : ["Box: Lightning Trap", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+098 : ["Box: Word of Power Trap", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+099 : ["Box: Lava Trap", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+100 : ["Box: Dummy Trap 2", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+101 : ["Box: Dummy Trap 3", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+102 : ["Box: Dummy Trap 4", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+103 : ["Box: Dummy Trap 5", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+104 : ["Box: Dummy Trap 6", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+105 : ["Box: Dummy Trap 7", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+106 : ["Box: Wooden Door", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+107 : ["Box: Braced Door", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+108 : ["Box: Iron Door", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+109 : ["Box: Magic Door", null, preload("res://dk_images/traps_doors/anim0116/AnimBox.res"), null, TAB_BOX],
+110 : ["Workshop Item", null, preload("res://dk_images/furniture/workshop_anvil_tp/r1frame01.png"), null, TAB_MISC],
+111 : ["Red Heart Flame", null, preload("res://dk_images/magic_fogs/anim0801/AnimRedHeartFlame.res"), null, TAB_FURNITURE],
+112 : ["Disease Effect", null, null, null, TAB_MISC],
+113 : ["Scavenger Eye", null, preload("res://dk_images/furniture/scavenge_eye_tp/AnimScavengerEye.res"), null, TAB_FURNITURE],
+114 : ["Workshop Machine", null, preload("res://dk_images/furniture/workshop_machine_tp/AnimWorkshopMachine.res"), null, TAB_FURNITURE],
+115 : ["Red Flag", null, preload("res://dk_images/furniture/flagpole_redflag_tp/AnimFlagpoleRed.res"), null, TAB_FURNITURE],
+116 : ["Blue Flag", null, preload("res://dk_images/furniture/flagpole_blueflag_tp/AnimFlagpoleBlue.res"), null, TAB_FURNITURE],
+117 : ["Green Flag", null, preload("res://dk_images/furniture/flagpole_greenflag_tp/AnimFlagpoleGreen.res"), null, TAB_FURNITURE],
+118 : ["Yellow Flag", null, preload("res://dk_images/furniture/flagpole_yellowflag_tp/AnimFlagpoleYellow.res"), null, TAB_FURNITURE],
+119 : ["Flagpole", null, preload("res://dk_images/furniture/flagpole_empty_tp/r1frame01.png"), null, TAB_FURNITURE],
+120 : ["Blue Heart Flame", null, preload("res://dk_images/magic_fogs/anim0802/AnimBlueHeartFlame.res"), null, TAB_FURNITURE],
+121 : ["Green Heart Flame", null, preload("res://dk_images/magic_fogs/anim0800/AnimGreenHeartFlame.res"), null, TAB_FURNITURE],
+122 : ["Yellow Heart Flame", null, preload("res://dk_images/magic_fogs/anim0799/AnimYellowHeartFlame.res"), null, TAB_FURNITURE],
+123 : ["Casted Sight", null, preload("res://dk_images/magic_fogs/anim0854/AnimCastedSight.res"), null, TAB_MISC],
+124 : ["Casted Lightning", null, null, null, TAB_MISC],
+125 : ["Torturer", null, preload("res://dk_images/furniture/torture_machine_tp/r1frame01.png"), null, TAB_FURNITURE],
+126 : ["Lair: Orc", null, preload("res://edited_images/lair/creature_orc/anim0128/r1frame01.png"), null, TAB_LAIR],
+127 : ["Power Hand Gold", null, preload("res://dk_images/power_hand/anim0782/AnimePowerHandGold.res"), null, TAB_MISC],
+128 : ["Spinning Coin", null, null, null, TAB_MISC],
+129 : ["Unlit Statue", null, preload("res://dk_images/statues/anim0954/r1frame01.png"), null, TAB_DECORATION],
+130 : ["Statue 3", null, preload("res://dk_images/statues/anim0956/r1frame01.png"), null, TAB_DECORATION],
+131 : ["Statue 4", null, preload("res://dk_images/statues/anim0958/r1frame01.png"), null, TAB_DECORATION],
+132 : ["Statue 5", null, preload("res://dk_images/statues/anim0960/r1frame01.png"), null, TAB_DECORATION],
+133 : ["Mysterious Box", null, preload("res://dk_images/trapdoor_64/bonus_box_std.png"), null, TAB_SPECIAL],
+134 : ["Armageddon", null, preload("res://dk_images/keepower_64/armagedn_std.png"), null, TAB_SPELL],
+135 : ["Possess", null, preload("res://dk_images/keepower_64/possess_std.png"), null, TAB_SPELL],
+136 : ["Gold Bag (100)", null, preload("res://dk_images/valuables/gold_sack_tp/r1frame01.png"), null, TAB_GOLD],
 }
 
 var LIST_OF_BOXES = {
@@ -368,21 +368,83 @@ func attempt_to_open_cfg(cfgFileName):
 	return massiveString
 
 func cfg_creatures(massiveString):
-	pass
+	var bigListOfLines = massiveString.split('\n',false)
+	for line in bigListOfLines:
+		var componentsOfLine = line.split('=', false)
+		if componentsOfLine.size() >= 2:
+			if componentsOfLine[0].strip_edges() == "CREATURES":
+				var creaturesList = componentsOfLine[1].strip_edges().split(' ', false)
+				var objectID = 0
+				creaturesList.insert(0, "")
+				while true:
+					#if DATA_CREATURE.has(objectID) == false:
+					#	DATA_CREATURE[objectID] = [null, null, null, null, null]
+					
+					if DATA_CREATURE.has(objectID):
+						var thingCfgName = creaturesList[objectID].strip_edges()
+						if DATA_CREATURE[objectID][KEEPERFX_ID] == null:
+							DATA_CREATURE[objectID][KEEPERFX_ID] = thingCfgName
+					
+					objectID += 1
+					if objectID >= creaturesList.size():
+						return
+				
+				return # exit early
 
 func cfg_traps(massiveString):
-	pass
+	var listSections = massiveString.split('[TRAP',false)
+	listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
+	listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
+	var objectID = 1 # start at [object1]
+	for section in listSections:
+		if DATA_TRAP.has(objectID) == false:
+			DATA_TRAP[objectID] = [null, null, null, null, null]
+		
+		var bigListOfLines = section.split('\n',false)
+		for line in bigListOfLines:
+			var componentsOfLine = line.split('=', false)
+			if componentsOfLine.size() >= 2:
+				
+				if componentsOfLine[0].strip_edges() == "NAME":
+					var thingCfgName = componentsOfLine[1].strip_edges()
+					if DATA_TRAP[objectID][KEEPERFX_ID] == null:
+						DATA_TRAP[objectID][KEEPERFX_ID] = thingCfgName # Always set CFG name
+					if DATA_TRAP[objectID][NAME] == null: # Only change name if it's a newly added item
+						DATA_TRAP[objectID][NAME] = thingCfgName.capitalize()
+		
+		objectID += 1
 
 func cfg_doors(massiveString):
-	pass
+	var listSections = massiveString.split('[DOOR',false)
+	listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
+	listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
+	var objectID = 1 # start at [object1]
+	for section in listSections:
+		if DATA_DOOR.has(objectID) == false:
+			DATA_DOOR[objectID] = [null, null, null, null, null]
+		
+		var bigListOfLines = section.split('\n',false)
+		for line in bigListOfLines:
+			
+			var componentsOfLine = line.split('=', false)
+			if componentsOfLine.size() >= 2:
+				
+				if componentsOfLine[0].strip_edges() == "NAME":
+					var thingCfgName = componentsOfLine[1].strip_edges()
+					if DATA_DOOR[objectID][KEEPERFX_ID] == null:
+						DATA_DOOR[objectID][KEEPERFX_ID] = thingCfgName
+					if DATA_DOOR[objectID][NAME] == null: # Only change name if it's a newly added item
+						DATA_DOOR[objectID][NAME] = thingCfgName.capitalize()
+		
+		objectID += 1
 
 func cfg_objects(massiveString):
 	
-	var objectListSections = massiveString.split('[OBJECT',false)
-	objectListSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
-	objectListSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
+	var listSections = massiveString.split('[OBJECT',false)
+	listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
+	listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
 	var objectID = 1 # start at [object1]
-	for section in objectListSections:
+	for section in listSections:
 		
 		# Initialize empty space for each entry in objects.cfg
 		if DATA_OBJECT.has(objectID) == false:
@@ -395,7 +457,8 @@ func cfg_objects(massiveString):
 				
 				if componentsOfLine[0].strip_edges() == "NAME":
 					var thingCfgName = componentsOfLine[1].strip_edges()
-					DATA_OBJECT[objectID][KEEPERFX_ID] = thingCfgName # Always set CFG name
+					if DATA_OBJECT[objectID][KEEPERFX_ID] == null:
+						DATA_OBJECT[objectID][KEEPERFX_ID] = thingCfgName # Always set CFG name
 					if DATA_OBJECT[objectID][NAME] == null: # Only change name if it's a newly added item
 						DATA_OBJECT[objectID][NAME] = thingCfgName.capitalize()
 					

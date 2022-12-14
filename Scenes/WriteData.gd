@@ -185,7 +185,8 @@ func write_tngfx(buffer):
 				Things.TYPE.DOOR:
 					if Things.DATA_DOOR.has(thingNode.subtype):
 						setSubtype = Things.DATA_DOOR[thingNode.subtype][Things.KEEPERFX_ID]
-			
+			if setSubtype == null:
+				setSubtype = "???"
 			t += "Subtype = \"" + setSubtype + "\"\n"
 			
 			t += "Ownership = " +str(thingNode.ownership) + "\n"
