@@ -58,9 +58,7 @@ func _ready():
 	
 	$ThingTabs.initialize([])
 
-var thing_grid_has_been_initialized = false
 func initialize_thing_grid_items():
-	thing_grid_has_been_initialized = true
 	remove_all_grid_items()
 	
 	var CODETIME_START = OS.get_ticks_msec()

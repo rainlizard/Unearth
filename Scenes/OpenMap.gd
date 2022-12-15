@@ -85,12 +85,16 @@ func open_map(filePath): # auto opens other files
 		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
 		return
 	
+	
+	
 	# Close windows that I want closed
 	oMapSettingsWindow.visible = false
 	oColumnEditor.visible = false
 	
 	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
 	var map = filePath.get_basename()
+	
+	load_cfg_stuff(map)
 	
 	# Open all map file types
 	oCurrentMap.currentFilePaths = get_accompanying_files(map)
@@ -142,14 +146,23 @@ func open_map(filePath): # auto opens other files
 #	else:
 #		oMessage.quick("Error: Map files not found")
 
-func finish_opening_map(map):
+func load_cfg_stuff(map):
 	if Cube.tex.empty() == true:
 		Cube.read_cubes_cfg()
-	if Things.thingsCfgHasBeenRead == false:
-		Things.read_things_cfg()
-	if oPickThingWindow.thing_grid_has_been_initialized == false:
-		oPickThingWindow.initialize_thing_grid_items()
 	
+	var parentDirectory = map.get_base_dir().get_base_dir()
+	var mainCfgName = map.get_base_dir().get_file() + ".cfg"
+	print("Parent directory: " + parentDirectory)
+	print("Main cfg name: " + mainCfgName)
+	
+	#var cfgsDir = oGame.get_precise_filepath(dir, cfgFileName)
+	
+	var fullPathToMainCfg = oGame.get_precise_filepath(parentDirectory, mainCfgName)
+	if fullPathToMainCfg != "":
+		Things.get_cfgs_directory(fullPathToMainCfg)
+
+func finish_opening_map(map):
+	oPickThingWindow.initialize_thing_grid_items()
 	oCurrentMap.set_path_and_title(map)
 	oDynamicMapTree.highlight_current_map()
 	oEditor.update_boundaries()

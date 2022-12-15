@@ -83,19 +83,19 @@ func _init():
     self.tinf = Tinf.new()
 
 # Load a zip file with the given path. Returns a boolean denoting success.
-func load(path):
-    if path == null:
+func load(patha):
+    if patha == null:
         return false
 
-    self.path = path
+    self.path = patha
     self.pos = 0
 
     var file = File.new()
 
-    if !file.file_exists(path):
+    if !file.file_exists(patha):
         return false
 
-    file.open(path, File.READ)
+    file.open(patha, File.READ)
     var file_length = file.get_len()
     if file.get_32() != 0x04034B50:
         return false
@@ -242,7 +242,7 @@ func _skip_file_header():
     var file_name_length = raw[27] << 8 | raw[26]
     var extra_field_length = raw[29] << 8 | raw[28]
 
-    var raw_end = _skip(file_name_length + extra_field_length)
+    var _raw_end = _skip(file_name_length + extra_field_length)
 
 
 # The inner Tinf class is a pretty straight port from Jørgen Ibsen's excellent
