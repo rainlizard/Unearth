@@ -147,8 +147,10 @@ func open_map(filePath): # auto opens other files
 #		oMessage.quick("Error: Map files not found")
 
 func load_cfg_stuff(map):
+	Things.reset_thing_data_to_default()
 	if Cube.tex.empty() == true:
 		Cube.read_cubes_cfg()
+	
 	
 	var parentDirectory = map.get_base_dir().get_base_dir()
 	var mainCfgName = map.get_base_dir().get_file() + ".cfg"
@@ -156,6 +158,7 @@ func load_cfg_stuff(map):
 	print("Main cfg name: " + mainCfgName)
 	
 	#var cfgsDir = oGame.get_precise_filepath(dir, cfgFileName)
+	
 	
 	var fullPathToMainCfg = oGame.get_precise_filepath(parentDirectory, mainCfgName)
 	if fullPathToMainCfg != "":

@@ -52,7 +52,16 @@ var GENRE_TO_TAB = {
 	"WORKSHOPBOX": TAB_BOX,
 }
 
+var default_data = {}
 
+func _init():
+	# This only takes 1ms
+	default_data["DATA_EXTRA"] = DATA_EXTRA.duplicate(true)
+	default_data["DATA_DOOR"] = DATA_DOOR.duplicate(true)
+	default_data["DATA_TRAP"] = DATA_TRAP.duplicate(true)
+	default_data["DATA_EFFECT"] = DATA_EFFECT.duplicate(true)
+	default_data["DATA_CREATURE"] = DATA_CREATURE.duplicate(true)
+	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
 
 var DATA_EXTRA = {
 1 : ["Action Point", null, null,  preload("res://Art/ActionPoint.png"), null, TAB_ACTION],
@@ -327,6 +336,15 @@ enum SPELLBOOK {
 	#TRAP = 8
 	#DOOR = 9
 
+func reset_thing_data_to_default():
+	# Reset data. Takes 1ms.
+	DATA_EXTRA = default_data["DATA_EXTRA"].duplicate(true)
+	DATA_DOOR = default_data["DATA_DOOR"].duplicate(true)
+	DATA_TRAP = default_data["DATA_TRAP"].duplicate(true)
+	DATA_EFFECT = default_data["DATA_EFFECT"].duplicate(true)
+	DATA_CREATURE = default_data["DATA_CREATURE"].duplicate(true)
+	DATA_OBJECT = default_data["DATA_OBJECT"].duplicate(true)
+
 func get_cfgs_directory(fullPathToMainCfg):
 	var oGame = Nodelist.list["oGame"]
 	
@@ -351,7 +369,6 @@ func get_cfgs_directory(fullPathToMainCfg):
 	load_images_from_zip_files(oGame.DK_FXDATA_DIRECTORY)
 
 func read_all_things_cfg_from_dir(dir):
-	
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	for i in 4:
@@ -376,7 +393,7 @@ func read_all_things_cfg_from_dir(dir):
 
 func load_images_from_zip_files(dir):
 	var CODETIME_START_IMAGES_FROM_ZIPFILES = OS.get_ticks_msec()
-	print("---------")
+	#print("---------")
 	var listOfZipFiles = get_zip_files_in_dir(dir)
 	for zipFile in listOfZipFiles:
 		var gdunzip = load('res://gdunzip/gdunzip.gd').new()
@@ -402,7 +419,7 @@ func load_images_from_zip_files(dir):
 											for i in DATA_OBJECT.values(): # This is slow and could be optimized
 												if i[ANIMATION_ID].to_upper() == dictObj["name"].to_upper():
 													i[TEXTURE] = tex
-	print("---------")
+	#print("---------")
 	print('Loaded images from zip files : ' + str(OS.get_ticks_msec() - CODETIME_START_IMAGES_FROM_ZIPFILES) + 'ms')
 	#print(gdunzip.files)
 #	for i in gdunzip.files:
@@ -443,8 +460,8 @@ func cfg_creatures(massiveString):
 
 func cfg_traps(massiveString):
 	var listSections = massiveString.split('[TRAP',false)
-	listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
-	listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
+	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
+	if listSections.size() > 0: listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
 	var objectID = 1 # start at [object1]
 	for section in listSections:
 		if DATA_TRAP.has(objectID) == false:
@@ -468,8 +485,8 @@ func cfg_traps(massiveString):
 
 func cfg_doors(massiveString):
 	var listSections = massiveString.split('[DOOR',false)
-	listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
-	listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
+	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
+	if listSections.size() > 0: listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
 	var objectID = 1 # start at [object1]
 	for section in listSections:
 		if DATA_DOOR.has(objectID) == false:
@@ -495,8 +512,8 @@ func cfg_doors(massiveString):
 func cfg_objects(massiveString):
 	
 	var listSections = massiveString.split('[OBJECT',false)
-	listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
-	listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
+	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
+	if listSections.size() > 0: listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
 	var objectID = 1 # start at [object1]
 	for section in listSections:
 		
