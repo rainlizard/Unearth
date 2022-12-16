@@ -172,19 +172,19 @@ func write_tngfx(buffer):
 			match thingType:
 				Things.TYPE.OBJECT:
 					if Things.DATA_OBJECT.has(thingNode.subtype):
-						setSubtype = Things.DATA_OBJECT[thingNode.subtype][Things.KEEPERFX_ID]
+						setSubtype = Things.DATA_OBJECT[thingNode.subtype][Things.KEEPERFX_NAME]
 				Things.TYPE.CREATURE:
 					if Things.DATA_CREATURE.has(thingNode.subtype):
-						setSubtype = Things.DATA_CREATURE[thingNode.subtype][Things.KEEPERFX_ID]
+						setSubtype = Things.DATA_CREATURE[thingNode.subtype][Things.KEEPERFX_NAME]
 				Things.TYPE.EFFECT:
 					if Things.DATA_EFFECT.has(thingNode.subtype):
-						setSubtype = Things.DATA_EFFECT[thingNode.subtype][Things.KEEPERFX_ID]
+						setSubtype = Things.DATA_EFFECT[thingNode.subtype][Things.KEEPERFX_NAME]
 				Things.TYPE.TRAP:
 					if Things.DATA_TRAP.has(thingNode.subtype):
-						setSubtype = Things.DATA_TRAP[thingNode.subtype][Things.KEEPERFX_ID]
+						setSubtype = Things.DATA_TRAP[thingNode.subtype][Things.KEEPERFX_NAME]
 				Things.TYPE.DOOR:
 					if Things.DATA_DOOR.has(thingNode.subtype):
-						setSubtype = Things.DATA_DOOR[thingNode.subtype][Things.KEEPERFX_ID]
+						setSubtype = Things.DATA_DOOR[thingNode.subtype][Things.KEEPERFX_NAME]
 			if setSubtype == null:
 				setSubtype = "???"
 			t += "Subtype = \"" + setSubtype + "\"\n"

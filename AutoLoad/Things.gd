@@ -16,7 +16,7 @@ enum TYPE {
 }
 enum {
 	NAME = 0
-	KEEPERFX_ID = 1
+	KEEPERFX_NAME = 1
 	ANIMATION_ID = 2
 	TEXTURE = 3
 	PORTRAIT = 4 # Keep PORTAIT field "null" if I want to use texture for portrait.
@@ -469,8 +469,8 @@ func cfg_creatures(massiveString, DATA_ARRAY):
 					
 					if DATA_ARRAY.has(objectID):
 						var thingCfgName = creaturesList[objectID].strip_edges()
-						#if DATA_ARRAY[objectID][KEEPERFX_ID] == null:
-						DATA_ARRAY[objectID][KEEPERFX_ID] = thingCfgName
+						#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
+						DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName
 					
 					objectID += 1
 					if objectID >= creaturesList.size():
@@ -494,8 +494,8 @@ func cfg_traps(massiveString, DATA_ARRAY):
 				
 				if componentsOfLine[0].strip_edges() == "NAME":
 					var thingCfgName = componentsOfLine[1].strip_edges()
-					#if DATA_ARRAY[objectID][KEEPERFX_ID] == null:
-					DATA_ARRAY[objectID][KEEPERFX_ID] = thingCfgName # Always set CFG name
+					#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
+					DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName # Always set CFG name
 					if DATA_ARRAY[objectID][NAME] == null or objectID >= 7: # Only change name if it's a newly added item OR a Dummy Trap
 						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
 				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
@@ -520,8 +520,8 @@ func cfg_doors(massiveString, DATA_ARRAY):
 				
 				if componentsOfLine[0].strip_edges() == "NAME":
 					var thingCfgName = componentsOfLine[1].strip_edges()
-					#if DATA_ARRAY[objectID][KEEPERFX_ID] == null:
-					DATA_ARRAY[objectID][KEEPERFX_ID] = thingCfgName
+					#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
+					DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName
 					if DATA_ARRAY[objectID][NAME] == null: # Only change name if it's a newly added item
 						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
 				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
@@ -548,9 +548,22 @@ func cfg_objects(massiveString, DATA_ARRAY):
 				
 				if componentsOfLine[0].strip_edges() == "NAME":
 					var thingCfgName = componentsOfLine[1].strip_edges()
-					#if DATA_ARRAY[objectID][KEEPERFX_ID] == null:
-					DATA_ARRAY[objectID][KEEPERFX_ID] = thingCfgName # Always set CFG name
-					if DATA_ARRAY[objectID][NAME] == null: # Only change name if it's a newly added item
+					var do = false
+					if default_data["DATA_OBJECT"].has(objectID) == false:
+						do = true
+					elif thingCfgName != default_data["DATA_OBJECT"][objectID][KEEPERFX_NAME]:
+						do = true
+					elif DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
+						do = true
+					
+					if objectID == 138:
+						print(DATA_ARRAY[objectID][KEEPERFX_NAME])
+						print(default_data["DATA_OBJECT"][objectID][KEEPERFX_NAME])
+						print(thingCfgName)
+					
+					if do == true:
+						if objectID == 138: print('d')
+						DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName # Always set CFG name
 						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
 					
 				elif componentsOfLine[0].strip_edges() == "GENRE":
