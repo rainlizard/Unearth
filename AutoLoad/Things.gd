@@ -336,7 +336,15 @@ enum SPELLBOOK {
 	#TRAP = 8
 	#DOOR = 9
 
+var haveFullySetupDefaultData = false
+
 func reset_thing_data_to_default():
+	if haveFullySetupDefaultData == false:
+		haveFullySetupDefaultData = true
+		var oGame = Nodelist.list["oGame"]
+		read_all_things_cfg_from_dir(oGame.DK_FXDATA_DIRECTORY, 0)
+		load_images_from_zip_files(oGame.DK_FXDATA_DIRECTORY, 0)
+	
 	# Reset data. Takes 1ms.
 	DATA_EXTRA = default_data["DATA_EXTRA"].duplicate(true)
 	DATA_DOOR = default_data["DATA_DOOR"].duplicate(true)
@@ -358,17 +366,11 @@ func get_cfgs_directory(fullPathToMainCfg):
 					var configsLocationValue = componentsOfLine[1].strip_edges()
 					var fullCfgsDir = oGame.GAME_DIRECTORY.plus_file(configsLocationValue)
 					
-					read_all_things_cfg_from_dir(fullCfgsDir)
-					# Need to load images from both:
-					load_images_from_zip_files(oGame.DK_FXDATA_DIRECTORY)
-					load_images_from_zip_files(fullCfgsDir)
+					read_all_things_cfg_from_dir(fullCfgsDir, 1)
+					load_images_from_zip_files(fullCfgsDir, 1)
 					return
-	
-	# If not a campaign map, then read from /fxdata/ directory
-	read_all_things_cfg_from_dir(oGame.DK_FXDATA_DIRECTORY)
-	load_images_from_zip_files(oGame.DK_FXDATA_DIRECTORY)
 
-func read_all_things_cfg_from_dir(dir):
+func read_all_things_cfg_from_dir(dir, load_into):
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	for i in 4:
@@ -376,22 +378,34 @@ func read_all_things_cfg_from_dir(dir):
 			0:
 				var massiveString = file_to_upper_string(dir, "OBJECTS.CFG")
 				if massiveString is String:
-					cfg_objects(massiveString)
+					if load_into == 0:
+						cfg_objects(massiveString, default_data["DATA_OBJECT"])
+					else:
+						cfg_objects(massiveString, DATA_OBJECT)
 			1:
 				var massiveString = file_to_upper_string(dir, "CREATURE.CFG")
 				if massiveString is String:
-					cfg_creatures(massiveString)
+					if load_into == 0:
+						cfg_creatures(massiveString, default_data["DATA_CREATURE"])
+					else:
+						cfg_creatures(massiveString, DATA_CREATURE)
 			2:
 				var massiveString = file_to_upper_string(dir, "TRAPDOOR.CFG")
 				if massiveString is String:
-					cfg_traps(massiveString)
+					if load_into == 0:
+						cfg_traps(massiveString, default_data["DATA_TRAP"])
+					else:
+						cfg_traps(massiveString, DATA_TRAP)
 			3:
 				var massiveString = file_to_upper_string(dir, "TRAPDOOR.CFG")
 				if massiveString is String:
-					cfg_doors(massiveString)
+					if load_into == 0:
+						cfg_doors(massiveString, default_data["DATA_DOOR"])
+					else:
+						cfg_doors(massiveString, DATA_DOOR)
 	print('All thing cfgs read in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
-func load_images_from_zip_files(dir):
+func load_images_from_zip_files(dir, load_into):
 	var CODETIME_START_IMAGES_FROM_ZIPFILES = OS.get_ticks_msec()
 	#print("---------")
 	var listOfZipFiles = get_zip_files_in_dir(dir)
@@ -416,9 +430,15 @@ func load_images_from_zip_files(dir):
 											img.load_png_from_buffer(uncompressedPngBytes)
 											var tex = ImageTexture.new()
 											tex.create_from_image(img)
-											for i in DATA_OBJECT.values(): # This is slow and could be optimized
-												if i[ANIMATION_ID].to_upper() == dictObj["name"].to_upper():
-													i[TEXTURE] = tex
+											if load_into == 0:
+												for i in default_data["DATA_OBJECT"].values(): # This is slow and could be optimized
+													if i[ANIMATION_ID].to_upper() == dictObj["name"].to_upper():
+														i[TEXTURE] = tex
+											else:
+												for i in DATA_OBJECT.values(): # This is slow and could be optimized
+													if i[ANIMATION_ID].to_upper() == dictObj["name"].to_upper():
+														i[TEXTURE] = tex
+
 	#print("---------")
 	print('Loaded images from zip files : ' + str(OS.get_ticks_msec() - CODETIME_START_IMAGES_FROM_ZIPFILES) + 'ms')
 	#print(gdunzip.files)
@@ -436,7 +456,7 @@ func file_to_upper_string(dir, fileName):
 	file.close()
 	return massiveString
 
-func cfg_creatures(massiveString):
+func cfg_creatures(massiveString, DATA_ARRAY):
 	var bigListOfLines = massiveString.split('\n',false)
 	for line in bigListOfLines:
 		var componentsOfLine = line.split('=', false)
@@ -447,10 +467,10 @@ func cfg_creatures(massiveString):
 				creaturesList.insert(0, "")
 				while true:
 					
-					if DATA_CREATURE.has(objectID):
+					if DATA_ARRAY.has(objectID):
 						var thingCfgName = creaturesList[objectID].strip_edges()
-						if DATA_CREATURE[objectID][KEEPERFX_ID] == null:
-							DATA_CREATURE[objectID][KEEPERFX_ID] = thingCfgName
+						#if DATA_ARRAY[objectID][KEEPERFX_ID] == null:
+						DATA_ARRAY[objectID][KEEPERFX_ID] = thingCfgName
 					
 					objectID += 1
 					if objectID >= creaturesList.size():
@@ -458,14 +478,14 @@ func cfg_creatures(massiveString):
 				
 				return # exit early
 
-func cfg_traps(massiveString):
+func cfg_traps(massiveString, DATA_ARRAY):
 	var listSections = massiveString.split('[TRAP',false)
 	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
 	if listSections.size() > 0: listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
 	var objectID = 1 # start at [object1]
 	for section in listSections:
-		if DATA_TRAP.has(objectID) == false:
-			DATA_TRAP[objectID] = [null, null, null, null, null, null]
+		if DATA_ARRAY.has(objectID) == false:
+			DATA_ARRAY[objectID] = [null, null, null, null, null, null]
 		
 		var bigListOfLines = section.split('\n',false)
 		for line in bigListOfLines:
@@ -474,23 +494,23 @@ func cfg_traps(massiveString):
 				
 				if componentsOfLine[0].strip_edges() == "NAME":
 					var thingCfgName = componentsOfLine[1].strip_edges()
-					if DATA_TRAP[objectID][KEEPERFX_ID] == null:
-						DATA_TRAP[objectID][KEEPERFX_ID] = thingCfgName # Always set CFG name
-					if DATA_TRAP[objectID][NAME] == null or objectID >= 7: # Only change name if it's a newly added item OR a Dummy Trap
-						DATA_TRAP[objectID][NAME] = thingCfgName.capitalize()
+					#if DATA_ARRAY[objectID][KEEPERFX_ID] == null:
+					DATA_ARRAY[objectID][KEEPERFX_ID] = thingCfgName # Always set CFG name
+					if DATA_ARRAY[objectID][NAME] == null or objectID >= 7: # Only change name if it's a newly added item OR a Dummy Trap
+						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
 				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
 					var thingAnimationID = componentsOfLine[1].strip_edges()
-					DATA_TRAP[objectID][ANIMATION_ID] = thingAnimationID
+					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
 		objectID += 1
 
-func cfg_doors(massiveString):
+func cfg_doors(massiveString, DATA_ARRAY):
 	var listSections = massiveString.split('[DOOR',false)
 	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
 	if listSections.size() > 0: listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
 	var objectID = 1 # start at [object1]
 	for section in listSections:
-		if DATA_DOOR.has(objectID) == false:
-			DATA_DOOR[objectID] = [null, null, null, null, null, null]
+		if DATA_ARRAY.has(objectID) == false:
+			DATA_ARRAY[objectID] = [null, null, null, null, null, null]
 		
 		var bigListOfLines = section.split('\n',false)
 		for line in bigListOfLines:
@@ -500,16 +520,16 @@ func cfg_doors(massiveString):
 				
 				if componentsOfLine[0].strip_edges() == "NAME":
 					var thingCfgName = componentsOfLine[1].strip_edges()
-					if DATA_DOOR[objectID][KEEPERFX_ID] == null:
-						DATA_DOOR[objectID][KEEPERFX_ID] = thingCfgName
-					if DATA_DOOR[objectID][NAME] == null: # Only change name if it's a newly added item
-						DATA_DOOR[objectID][NAME] = thingCfgName.capitalize()
+					#if DATA_ARRAY[objectID][KEEPERFX_ID] == null:
+					DATA_ARRAY[objectID][KEEPERFX_ID] = thingCfgName
+					if DATA_ARRAY[objectID][NAME] == null: # Only change name if it's a newly added item
+						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
 				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
 					var thingAnimationID = componentsOfLine[1].strip_edges()
-					DATA_DOOR[objectID][ANIMATION_ID] = thingAnimationID
+					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
 		objectID += 1
 
-func cfg_objects(massiveString):
+func cfg_objects(massiveString, DATA_ARRAY):
 	
 	var listSections = massiveString.split('[OBJECT',false)
 	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
@@ -518,8 +538,8 @@ func cfg_objects(massiveString):
 	for section in listSections:
 		
 		# Initialize empty space for each entry in objects.cfg
-		if DATA_OBJECT.has(objectID) == false:
-			DATA_OBJECT[objectID] = [null, null, null, null, null, null]
+		if DATA_ARRAY.has(objectID) == false:
+			DATA_ARRAY[objectID] = [null, null, null, null, null, null]
 		
 		var bigListOfLines = section.split('\n',false)
 		for line in bigListOfLines:
@@ -528,19 +548,19 @@ func cfg_objects(massiveString):
 				
 				if componentsOfLine[0].strip_edges() == "NAME":
 					var thingCfgName = componentsOfLine[1].strip_edges()
-					if DATA_OBJECT[objectID][KEEPERFX_ID] == null:
-						DATA_OBJECT[objectID][KEEPERFX_ID] = thingCfgName # Always set CFG name
-					if DATA_OBJECT[objectID][NAME] == null: # Only change name if it's a newly added item
-						DATA_OBJECT[objectID][NAME] = thingCfgName.capitalize()
+					#if DATA_ARRAY[objectID][KEEPERFX_ID] == null:
+					DATA_ARRAY[objectID][KEEPERFX_ID] = thingCfgName # Always set CFG name
+					if DATA_ARRAY[objectID][NAME] == null: # Only change name if it's a newly added item
+						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
 					
 				elif componentsOfLine[0].strip_edges() == "GENRE":
-					if DATA_OBJECT[objectID][EDITOR_TAB] == null: # Only change tab if it's a newly added item
+					if DATA_ARRAY[objectID][EDITOR_TAB] == null: # Only change tab if it's a newly added item
 						var thingGenre = componentsOfLine[1].strip_edges()
 						var thingTab = GENRE_TO_TAB[thingGenre]
-						DATA_OBJECT[objectID][EDITOR_TAB] = thingTab
+						DATA_ARRAY[objectID][EDITOR_TAB] = thingTab
 				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
 					var thingAnimationID = componentsOfLine[1].strip_edges()
-					DATA_OBJECT[objectID][ANIMATION_ID] = thingAnimationID
+					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
 		
 		objectID += 1
 
