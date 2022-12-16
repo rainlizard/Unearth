@@ -68,27 +68,33 @@ func initialize_thing_grid_items():
 			Things.TYPE.OBJECT:
 				for subtype in Things.DATA_OBJECT:
 					var putIntoTab = Things.DATA_OBJECT[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_OBJECT, thingCategory, subtype)
+					if putIntoTab != null:
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_OBJECT, thingCategory, subtype)
 			Things.TYPE.CREATURE:
 				for subtype in Things.DATA_CREATURE:
 					var putIntoTab = Things.DATA_CREATURE[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_CREATURE, thingCategory, subtype)
+					if putIntoTab != null:
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_CREATURE, thingCategory, subtype)
 			Things.TYPE.TRAP:
 				for subtype in Things.DATA_TRAP:
 					var putIntoTab = Things.DATA_TRAP[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_TRAP, thingCategory, subtype)
+					if putIntoTab != null:
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_TRAP, thingCategory, subtype)
 			Things.TYPE.DOOR:
 				for subtype in Things.DATA_DOOR:
 					var putIntoTab = Things.DATA_DOOR[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_DOOR, thingCategory, subtype)
+					if putIntoTab != null:
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_DOOR, thingCategory, subtype)
 			Things.TYPE.EFFECT:
 				for subtype in Things.DATA_EFFECT:
 					var putIntoTab = Things.DATA_EFFECT[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EFFECT, thingCategory, subtype)
+					if putIntoTab != null:
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EFFECT, thingCategory, subtype)
 			Things.TYPE.EXTRA:
 				for subtype in Things.DATA_EXTRA:
 					var putIntoTab = Things.DATA_EXTRA[subtype][Things.EDITOR_TAB]
-					add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EXTRA, thingCategory, subtype)
+					if putIntoTab != null:
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EXTRA, thingCategory, subtype)
 	
 	print('Initialized Things window: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 

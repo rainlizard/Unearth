@@ -64,17 +64,20 @@ func _init():
 	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
 
 var DATA_EXTRA = {
+0 : [null, null, null, null, null, null],
 1 : ["Action Point", null, null,  preload("res://Art/ActionPoint.png"), null, TAB_ACTION],
 2 : ["Light", null, null, preload("res://edited_images/GUIEDIT-1/PIC26.png"), null, TAB_EFFECT],
 }
 
 var DATA_DOOR = {
+0 : [null, null, null, null, null, null],
 1 : ["Wooden Door", null, null, preload("res://dk_images/trapdoor_64/door_pers_wood_std.png"), null, TAB_MISC],
 2 : ["Braced Door", null, null, preload("res://dk_images/trapdoor_64/door_pers_braced_std.png"), null, TAB_MISC],
 3 : ["Iron Door", null, null, preload("res://dk_images/trapdoor_64/door_pers_iron_std.png"), null, TAB_MISC],
 4 : ["Magic Door", null, null, preload("res://dk_images/trapdoor_64/door_pers_magic_std.png"), null, TAB_MISC]
 }
 var DATA_TRAP = {
+0 : [null, null, null, null, null, null],
 1 : ["Boulder Trap", null, null, preload("res://dk_images/trapdoor_64/trap_boulder_std.png"), null, TAB_TRAP],
 2 : ["Alarm Trap", null, null, preload("res://dk_images/trapdoor_64/trap_alarm_std.png"), null, TAB_TRAP],
 3 : ["Poison Gas Trap", null, null, preload("res://dk_images/trapdoor_64/trap_gas_std.png"), null, TAB_TRAP],
@@ -89,6 +92,7 @@ var DATA_TRAP = {
 12 : ["Dummy Trap 7", null, null, null, null, TAB_TRAP],
 }
 var DATA_EFFECT = {
+0 : [null, null, null, null, null, null],
 1 : ["Effect: Lava", null, null, preload("res://edited_images/GUIEDIT-1/PIC27.png"), null, TAB_EFFECT],
 2 : ["Effect: Dripping Water", null, null, preload("res://edited_images/GUIEDIT-1/PIC28.png"), null, TAB_EFFECT],
 3 : ["Effect: Rock Fall", null, null, preload("res://edited_images/GUIEDIT-1/PIC29.png"), null, TAB_EFFECT],
@@ -96,6 +100,7 @@ var DATA_EFFECT = {
 5 : ["Effect: Dry Ice", null, null, preload("res://edited_images/GUIEDIT-1/PIC31.png"), null, TAB_EFFECT]
 }
 var DATA_CREATURE = {
+00 : [null, null, null, null, null, null],
 01 : ["Wizard", null, null,          preload("res://edited_images/creatr_icon_64/wizrd_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_wizrd.png"), TAB_CREATURE],
 02 : ["Barbarian", null, null,       preload("res://edited_images/creatr_icon_64/barbr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_barbr.png"), TAB_CREATURE],
 03 : ["Archer", null, null,          preload("res://edited_images/creatr_icon_64/archr_std.png"), preload("res://dk_images/creature_portrait_64/creatr_portrt_archr.png"), TAB_CREATURE],
@@ -130,6 +135,7 @@ var DATA_CREATURE = {
 }
 
 var DATA_OBJECT = {
+000 : [null, null, null, null, null, null],
 001 : ["Barrel", null,null, preload("res://dk_images/other/anim0932/r1frame01.png"), null, TAB_DECORATION],
 002 : ["Torch", null,null, preload("res://dk_images/other/anim0963/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
 003 : ["Gold Pot (500)", null,null, preload("res://dk_images/valuables/gold_pot_tp/AnimGoldPot.res"), null, TAB_GOLD],
@@ -405,56 +411,116 @@ func read_all_things_cfg_from_dir(dir, load_into):
 						cfg_doors(massiveString, DATA_DOOR)
 	print('All thing cfgs read in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
-func load_images_from_zip_files(dir, load_into):
-	var CODETIME_START_IMAGES_FROM_ZIPFILES = OS.get_ticks_msec()
-	#print("---------")
-	var listOfZipFiles = get_zip_files_in_dir(dir)
-	for zipFile in listOfZipFiles:
-		var gdunzip = load('res://gdunzip/gdunzip.gd').new()
-		var loaded = gdunzip.load(zipFile)
-		if loaded == true:
-			var uncompressedJsonBytes = gdunzip.uncompress('sprites.json')
-			if uncompressedJsonBytes is PoolByteArray:
-				var bigString = uncompressedJsonBytes.get_string_from_utf8()
-				var json = parse_json(bigString)
-				for dictObj in json:
-					if dictObj.has("name") and dictObj.has("td"):
-						if dictObj["td"].size() > 0:
-							if dictObj["td"][0].size() > 0:
-								if dictObj["td"][0][0].size() > 0:
-									if dictObj["td"][0][0].has("file"):
-										var pngFileName = dictObj["td"][0][0]["file"]
-										var uncompressedPngBytes = gdunzip.uncompress(pngFileName)
-										if uncompressedPngBytes is PoolByteArray:
-											var img = Image.new()
-											img.load_png_from_buffer(uncompressedPngBytes)
-											var tex = ImageTexture.new()
-											tex.create_from_image(img)
-											if load_into == 0:
-												for i in default_data["DATA_OBJECT"].values(): # This is slow and could be optimized
-													if i[ANIMATION_ID].to_upper() == dictObj["name"].to_upper():
-														i[TEXTURE] = tex
-											else:
-												for i in DATA_OBJECT.values(): # This is slow and could be optimized
-													if i[ANIMATION_ID].to_upper() == dictObj["name"].to_upper():
-														i[TEXTURE] = tex
 
-	#print("---------")
-	print('Loaded images from zip files : ' + str(OS.get_ticks_msec() - CODETIME_START_IMAGES_FROM_ZIPFILES) + 'ms')
-	#print(gdunzip.files)
-#	for i in gdunzip.files:
-#		print(i['sprites.json'])
+func cfg_objects(massiveString, DATA_ARRAY):
 	
-func file_to_upper_string(dir, fileName):
-	var oGame = Nodelist.list["oGame"]
-	var path = oGame.get_precise_filepath(dir, fileName)
-	
-	var file = File.new()
-	if path == "" or file.open(path, File.READ) != OK:
-		return -1
-	var massiveString = file.get_as_text().to_upper() # Make it easier to read by making it all upper case
-	file.close()
-	return massiveString
+	var listSections = massiveString.split('[OBJECT',false)
+	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
+	var objectID = 0
+	for section in listSections:
+		
+		var bigListOfLines = section.split('\n',false)
+		if bigListOfLines.size() > 0:
+			var header = bigListOfLines[0].strip_edges() # First line will always be the header, because that's where it was split at
+			objectID = header.to_int() # Set objectID to header
+			if DATA_ARRAY.has(objectID) == false:
+				DATA_ARRAY[objectID] = [null, null, null, null, null, null] # Initialize empty space for each new entry in .cfg
+		
+		for line in bigListOfLines:
+			var componentsOfLine = line.split('=', false)
+			if componentsOfLine.size() >= 2:
+				
+				if componentsOfLine[0].strip_edges() == "NAME":
+					var thingCfgName = componentsOfLine[1].strip_edges()
+					var do = false
+					if default_data["DATA_OBJECT"].has(objectID) == false:
+						do = true
+					elif thingCfgName != default_data["DATA_OBJECT"][objectID][KEEPERFX_NAME] or DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
+						do = true
+					
+#					if objectID == 138:
+#						print(DATA_ARRAY[objectID][KEEPERFX_NAME])
+#						print(default_data["DATA_OBJECT"][objectID][KEEPERFX_NAME])
+#						print(thingCfgName)
+					
+					if do == true:
+						DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName # Always set CFG name
+						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
+					
+				elif componentsOfLine[0].strip_edges() == "GENRE" and objectID != 0:
+					var thingGenre = componentsOfLine[1].strip_edges()
+					var thingTab = GENRE_TO_TAB[thingGenre]
+					
+					var do = false
+					if default_data["DATA_OBJECT"].has(objectID) == false:
+						do = true
+					elif DATA_ARRAY[objectID][EDITOR_TAB] == null: #thingTab != default_data["DATA_OBJECT"][objectID][EDITOR_TAB] or
+						do = true
+					
+					if do == true:
+						DATA_ARRAY[objectID][EDITOR_TAB] = thingTab
+					
+				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
+					var thingAnimationID = componentsOfLine[1].strip_edges()
+					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
+
+
+func cfg_traps(massiveString, DATA_ARRAY):
+	var listSections = massiveString.split('[TRAP',false)
+	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
+	var objectID = 0
+	for section in listSections:
+		
+		var bigListOfLines = section.split('\n',false)
+		if bigListOfLines.size() > 0:
+			var header = bigListOfLines[0].strip_edges() # First line will always be the header, because that's where it was split at
+			objectID = header.to_int() # Set objectID to header
+			if DATA_ARRAY.has(objectID) == false:
+				DATA_ARRAY[objectID] = [null, null, null, null, null, null] # Initialize empty space for each new entry in .cfg
+
+		for line in bigListOfLines:
+			var componentsOfLine = line.split('=', false)
+			if componentsOfLine.size() >= 2:
+				
+				if componentsOfLine[0].strip_edges() == "NAME":
+					var thingCfgName = componentsOfLine[1].strip_edges()
+					#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
+					DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName # Always set CFG name
+					if DATA_ARRAY[objectID][NAME] == null or objectID >= 7: # Only change name if it's a newly added item OR a Dummy Trap
+						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
+				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
+					var thingAnimationID = componentsOfLine[1].strip_edges()
+					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
+
+
+
+func cfg_doors(massiveString, DATA_ARRAY):
+	var listSections = massiveString.split('[DOOR',false)
+	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
+	var objectID = 0
+	for section in listSections:
+		var bigListOfLines = section.split('\n',false)
+		if bigListOfLines.size() > 0:
+			var header = bigListOfLines[0].strip_edges() # First line will always be the header, because that's where it was split at
+			objectID = header.to_int() # Set objectID to header
+			if DATA_ARRAY.has(objectID) == false:
+				DATA_ARRAY[objectID] = [null, null, null, null, null, null] # Initialize empty space for each new entry in .cfg
+		
+		for line in bigListOfLines:
+			
+			var componentsOfLine = line.split('=', false)
+			if componentsOfLine.size() >= 2:
+				
+				if componentsOfLine[0].strip_edges() == "NAME":
+					var thingCfgName = componentsOfLine[1].strip_edges()
+					#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
+					DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName
+					if DATA_ARRAY[objectID][NAME] == null: # Only change name if it's a newly added item
+						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
+				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
+					var thingAnimationID = componentsOfLine[1].strip_edges()
+					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
+
 
 func cfg_creatures(massiveString, DATA_ARRAY):
 	var bigListOfLines = massiveString.split('\n',false)
@@ -478,104 +544,78 @@ func cfg_creatures(massiveString, DATA_ARRAY):
 				
 				return # exit early
 
-func cfg_traps(massiveString, DATA_ARRAY):
-	var listSections = massiveString.split('[TRAP',false)
-	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
-	if listSections.size() > 0: listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
-	var objectID = 1 # start at [object1]
-	for section in listSections:
-		if DATA_ARRAY.has(objectID) == false:
-			DATA_ARRAY[objectID] = [null, null, null, null, null, null]
-		
-		var bigListOfLines = section.split('\n',false)
-		for line in bigListOfLines:
-			var componentsOfLine = line.split('=', false)
-			if componentsOfLine.size() >= 2:
-				
-				if componentsOfLine[0].strip_edges() == "NAME":
-					var thingCfgName = componentsOfLine[1].strip_edges()
-					#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
-					DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName # Always set CFG name
-					if DATA_ARRAY[objectID][NAME] == null or objectID >= 7: # Only change name if it's a newly added item OR a Dummy Trap
-						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
-				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
-					var thingAnimationID = componentsOfLine[1].strip_edges()
-					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
-		objectID += 1
 
-func cfg_doors(massiveString, DATA_ARRAY):
-	var listSections = massiveString.split('[DOOR',false)
-	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
-	if listSections.size() > 0: listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
-	var objectID = 1 # start at [object1]
-	for section in listSections:
-		if DATA_ARRAY.has(objectID) == false:
-			DATA_ARRAY[objectID] = [null, null, null, null, null, null]
-		
-		var bigListOfLines = section.split('\n',false)
-		for line in bigListOfLines:
-			
-			var componentsOfLine = line.split('=', false)
-			if componentsOfLine.size() >= 2:
-				
-				if componentsOfLine[0].strip_edges() == "NAME":
-					var thingCfgName = componentsOfLine[1].strip_edges()
-					#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
-					DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName
-					if DATA_ARRAY[objectID][NAME] == null: # Only change name if it's a newly added item
-						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
-				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
-					var thingAnimationID = componentsOfLine[1].strip_edges()
-					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
-		objectID += 1
-
-func cfg_objects(massiveString, DATA_ARRAY):
+func load_images_from_zip_files(dir, load_into):
+	var CODETIME_START_IMAGES_FROM_ZIPFILES = OS.get_ticks_msec()
+	#print("---------")
+	var DATA_ARRAY
+	if load_into == 0:
+		DATA_ARRAY = default_data["DATA_OBJECT"]
+	else:
+		DATA_ARRAY = DATA_OBJECT
 	
-	var listSections = massiveString.split('[OBJECT',false)
-	if listSections.size() > 0: listSections.remove(0) # get rid of the first section since it just contains stuff before [object0]
-	if listSections.size() > 0: listSections.remove(0) # get rid of the 2nd section since it's [object0] "null"
-	var objectID = 1 # start at [object1]
-	for section in listSections:
-		
-		# Initialize empty space for each entry in objects.cfg
-		if DATA_ARRAY.has(objectID) == false:
-			DATA_ARRAY[objectID] = [null, null, null, null, null, null]
-		
-		var bigListOfLines = section.split('\n',false)
-		for line in bigListOfLines:
-			var componentsOfLine = line.split('=', false)
-			if componentsOfLine.size() >= 2:
-				
-				if componentsOfLine[0].strip_edges() == "NAME":
-					var thingCfgName = componentsOfLine[1].strip_edges()
-					var do = false
-					if default_data["DATA_OBJECT"].has(objectID) == false:
-						do = true
-					elif thingCfgName != default_data["DATA_OBJECT"][objectID][KEEPERFX_NAME]:
-						do = true
-					elif DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
-						do = true
-					
-					if objectID == 138:
-						print(DATA_ARRAY[objectID][KEEPERFX_NAME])
-						print(default_data["DATA_OBJECT"][objectID][KEEPERFX_NAME])
-						print(thingCfgName)
-					
-					if do == true:
-						if objectID == 138: print('d')
-						DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName # Always set CFG name
-						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
-					
-				elif componentsOfLine[0].strip_edges() == "GENRE":
-					if DATA_ARRAY[objectID][EDITOR_TAB] == null: # Only change tab if it's a newly added item
-						var thingGenre = componentsOfLine[1].strip_edges()
-						var thingTab = GENRE_TO_TAB[thingGenre]
-						DATA_ARRAY[objectID][EDITOR_TAB] = thingTab
-				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
-					var thingAnimationID = componentsOfLine[1].strip_edges()
-					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
-		
-		objectID += 1
+	var listOfZipFiles = get_zip_files_in_dir(dir)
+	for zipFile in listOfZipFiles:
+		var gdunzip = load('res://gdunzip/gdunzip.gd').new()
+		var loaded = gdunzip.load(zipFile)
+		if loaded == true:
+			var uncompressedJsonBytes = gdunzip.uncompress('sprites.json')
+			if uncompressedJsonBytes is PoolByteArray:
+				var bigString = uncompressedJsonBytes.get_string_from_utf8()
+				var json = parse_json(bigString)
+				for dictObj in json:
+					if dictObj.has("name") and dictObj.has("td"):
+						if dictObj["td"].size() > 0:
+							if dictObj["td"][0].size() > 0:
+								if dictObj["td"][0][0].size() > 0:
+									if dictObj["td"][0][0].has("file"):
+										var pngFileName = dictObj["td"][0][0]["file"]
+										var uncompressedPngBytes = gdunzip.uncompress(pngFileName)
+										if uncompressedPngBytes is PoolByteArray:
+											var img = Image.new()
+											img.load_png_from_buffer(uncompressedPngBytes)
+											var tex = ImageTexture.new()
+											tex.create_from_image(img)
+											var checkForAniID = dictObj["name"].to_upper()
+											for i in DATA_ARRAY.size():
+												if DATA_ARRAY[i][ANIMATION_ID].to_upper() == checkForAniID:
+													DATA_ARRAY[i][TEXTURE] = tex
+
+	#print("---------")
+	print('Loaded images from zip files : ' + str(OS.get_ticks_msec() - CODETIME_START_IMAGES_FROM_ZIPFILES) + 'ms')
+	#print(gdunzip.files)
+#	for i in gdunzip.files:
+#		print(i['sprites.json'])
+	
+func file_to_upper_string(dir, fileName):
+	var oGame = Nodelist.list["oGame"]
+	var path = oGame.get_precise_filepath(dir, fileName)
+	
+	var file = File.new()
+	if path == "" or file.open(path, File.READ) != OK:
+		return -1
+	var massiveString = file.get_as_text().to_upper() # Make it easier to read by making it all upper case
+	file.close()
+	return massiveString
+
+
+func get_zip_files_in_dir(path):
+	var array = []
+	var dir = Directory.new()
+	if dir.open(path) == OK:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if dir.current_is_dir():
+				pass
+			else:
+				if file_name.get_extension().to_upper() == "ZIP":
+					array.append(path.plus_file(file_name))
+			file_name = dir.get_next()
+	else:
+		print("An error occurred when trying to access the path.")
+	return array
+
 
 #func load_custom_images_into_array(DATA_ARRAY, thingtypeImageFolder):
 #	print("Loading /thing-images/" + thingtypeImageFolder + " directory ...")
@@ -610,23 +650,6 @@ func cfg_objects(massiveString, DATA_ARRAY):
 #		print("An error occurred when trying to access the path.")
 #	return array
 
-
-func get_zip_files_in_dir(path):
-	var array = []
-	var dir = Directory.new()
-	if dir.open(path) == OK:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if dir.current_is_dir():
-				pass
-			else:
-				if file_name.get_extension().to_upper() == "ZIP":
-					array.append(path.plus_file(file_name))
-			file_name = dir.get_next()
-	else:
-		print("An error occurred when trying to access the path.")
-	return array
 
 #
 #static func thing_text(array):
