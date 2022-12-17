@@ -438,11 +438,6 @@ func cfg_objects(massiveString, DATA_ARRAY):
 					elif thingCfgName != default_data["DATA_OBJECT"][objectID][KEEPERFX_NAME] or DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
 						do = true
 					
-#					if objectID == 138:
-#						print(DATA_ARRAY[objectID][KEEPERFX_NAME])
-#						print(default_data["DATA_OBJECT"][objectID][KEEPERFX_NAME])
-#						print(thingCfgName)
-					
 					if do == true:
 						DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName # Always set CFG name
 						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
@@ -477,20 +472,24 @@ func cfg_traps(massiveString, DATA_ARRAY):
 			objectID = header.to_int() # Set objectID to header
 			if DATA_ARRAY.has(objectID) == false:
 				DATA_ARRAY[objectID] = [null, null, null, null, null, null] # Initialize empty space for each new entry in .cfg
-
+		
+		var already_assigned_name = false # This is needed otherwise traps and doors sometimes use each other's fields
+		var already_assigned_animation_id = false
+		
 		for line in bigListOfLines:
 			var componentsOfLine = line.split('=', false)
 			if componentsOfLine.size() >= 2:
 				
-				if componentsOfLine[0].strip_edges() == "NAME":
+				if componentsOfLine[0].strip_edges() == "NAME" and already_assigned_name == false:
 					var thingCfgName = componentsOfLine[1].strip_edges()
-					#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
 					DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName # Always set CFG name
+					already_assigned_name = true
 					if DATA_ARRAY[objectID][NAME] == null or objectID >= 7: # Only change name if it's a newly added item OR a Dummy Trap
 						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
-				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
+				elif componentsOfLine[0].strip_edges() == "ANIMATIONID" and already_assigned_animation_id == false:
 					var thingAnimationID = componentsOfLine[1].strip_edges()
 					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
+					already_assigned_animation_id = true
 
 
 
@@ -506,20 +505,24 @@ func cfg_doors(massiveString, DATA_ARRAY):
 			if DATA_ARRAY.has(objectID) == false:
 				DATA_ARRAY[objectID] = [null, null, null, null, null, null] # Initialize empty space for each new entry in .cfg
 		
+		var already_assigned_name = false # This is needed otherwise traps and doors sometimes use each other's fields
+		var already_assigned_animation_id = false
+		
 		for line in bigListOfLines:
 			
 			var componentsOfLine = line.split('=', false)
 			if componentsOfLine.size() >= 2:
 				
-				if componentsOfLine[0].strip_edges() == "NAME":
+				if componentsOfLine[0].strip_edges() == "NAME" and already_assigned_name == false:
 					var thingCfgName = componentsOfLine[1].strip_edges()
-					#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
 					DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName
-					if DATA_ARRAY[objectID][NAME] == null: # Only change name if it's a newly added item
+					already_assigned_name = true
+					if DATA_ARRAY[objectID][NAME] == null: # Only set editor name if it's a newly added item
 						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
-				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
+				elif componentsOfLine[0].strip_edges() == "ANIMATIONID" and already_assigned_animation_id == false:
 					var thingAnimationID = componentsOfLine[1].strip_edges()
 					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
+					already_assigned_animation_id = true
 
 
 func cfg_creatures(massiveString, DATA_ARRAY):
