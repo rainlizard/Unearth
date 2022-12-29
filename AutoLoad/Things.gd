@@ -372,7 +372,6 @@ func get_cfgs_directory(fullPathToMainCfg):
 					var fullCfgsDir = oGame.GAME_DIRECTORY.plus_file(configsLocationValue)
 					
 					read_all_things_cfg_from_dir(fullCfgsDir, 1)
-					load_images_from_zip_files(fullCfgsDir, 1)
 					return
 
 func read_all_things_cfg_from_dir(dir, load_into):
