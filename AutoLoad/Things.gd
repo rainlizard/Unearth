@@ -349,7 +349,6 @@ func reset_thing_data_to_default():
 		haveFullySetupDefaultData = true
 		var oGame = Nodelist.list["oGame"]
 		read_all_things_cfg_from_dir(oGame.DK_FXDATA_DIRECTORY, 0)
-		load_images_from_zip_files(oGame.DK_FXDATA_DIRECTORY, 0)
 	
 	# Reset data. Takes 1ms.
 	DATA_EXTRA = default_data["DATA_EXTRA"].duplicate(true)
@@ -548,48 +547,7 @@ func cfg_creatures(massiveString, DATA_ARRAY):
 				return # exit early
 
 
-func load_images_from_zip_files(dir, load_into):
-	var CODETIME_START_IMAGES_FROM_ZIPFILES = OS.get_ticks_msec()
-	#print("---------")
-	var DATA_ARRAY
-	if load_into == 0:
-		DATA_ARRAY = default_data["DATA_OBJECT"]
-	else:
-		DATA_ARRAY = DATA_OBJECT
-	
-	var listOfZipFiles = get_zip_files_in_dir(dir)
-	for zipFile in listOfZipFiles:
-		var gdunzip = load('res://gdunzip/gdunzip.gd').new()
-		var loaded = gdunzip.load(zipFile)
-		if loaded == true:
-			var uncompressedJsonBytes = gdunzip.uncompress('sprites.json')
-			if uncompressedJsonBytes is PoolByteArray:
-				var bigString = uncompressedJsonBytes.get_string_from_utf8()
-				var json = parse_json(bigString)
-				for dictObj in json:
-					if dictObj.has("name") and dictObj.has("td"):
-						if dictObj["td"].size() > 0:
-							if dictObj["td"][0].size() > 0:
-								if dictObj["td"][0][0].size() > 0:
-									if dictObj["td"][0][0].has("file"):
-										var pngFileName = dictObj["td"][0][0]["file"]
-										var uncompressedPngBytes = gdunzip.uncompress(pngFileName)
-										if uncompressedPngBytes is PoolByteArray:
-											var img = Image.new()
-											img.load_png_from_buffer(uncompressedPngBytes)
-											var tex = ImageTexture.new()
-											tex.create_from_image(img)
-											var checkForAniID = dictObj["name"].to_upper()
-											for i in DATA_ARRAY.size():
-												if DATA_ARRAY[i][ANIMATION_ID].to_upper() == checkForAniID:
-													DATA_ARRAY[i][TEXTURE] = tex
 
-	#print("---------")
-	print('Loaded images from zip files : ' + str(OS.get_ticks_msec() - CODETIME_START_IMAGES_FROM_ZIPFILES) + 'ms')
-	#print(gdunzip.files)
-#	for i in gdunzip.files:
-#		print(i['sprites.json'])
-	
 func file_to_upper_string(dir, fileName):
 	var oGame = Nodelist.list["oGame"]
 	var path = oGame.get_precise_filepath(dir, fileName)
