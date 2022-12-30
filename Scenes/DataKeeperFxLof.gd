@@ -1,17 +1,17 @@
 extends Node
 
-var NAME_TEXT
-var NAME_ID
-var ENSIGN_POS
-var ENSIGN_ZOOM
-var PLAYERS
-var OPTIONS
-var SPEECH
-var LAND_VIEW
-var KIND
-var AUTHOR
-var DESCRIPTION
-var DATE
+var NAME_TEXT = ""
+var NAME_ID = ""
+var ENSIGN_POS = ""
+var ENSIGN_ZOOM = ""
+var PLAYERS = ""
+var OPTIONS = ""
+var SPEECH = ""
+var LAND_VIEW = ""
+var KIND = ""
+var AUTHOR = ""
+var DESCRIPTION = ""
+var DATE = ""
 
 func set_date():
 	var dict = Time.get_date_dict_from_system()

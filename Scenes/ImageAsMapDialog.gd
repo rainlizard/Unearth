@@ -2,10 +2,11 @@ extends WindowDialog
 onready var oChooseMapImageFileDialog = Nodelist.list["oChooseMapImageFileDialog"]
 onready var oMapImageTextureRect = Nodelist.list["oMapImageTextureRect"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oImageAsMapGuide = Nodelist.list["oImageAsMapGuide"]
+onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 
 var imageData = Image.new()
 var textureData = ImageTexture.new()
@@ -17,6 +18,7 @@ var CODETIME_START
 const transparencyColour = Color8(44,42,50,255) # When you click on the background
 
 func _ready():
+	oImageAsMapGuide.visible = false
 	for slabID in Slabs.slabOrder:
 		# Don't put the junk slabs in
 		if Slabs.data[slabID][Slabs.EDITOR_TAB] == Slabs.TAB_MAINSLAB:
@@ -30,15 +32,6 @@ func _ready():
 			
 			$HBoxContainer/VBoxContainer2/ScrollContainer/GridContainer.add_child(buttonID)
 
-func _on_ImgMapButtonHelp_pressed():
-	var helptxt = ""
-	helptxt += "Load a .png file from your file system, images larger than 85x85 will be resized."
-	helptxt += "\n"
-	helptxt += "Click on a pixel within the image to highlight its colour, then click a slab button to instantly place slabs on the map. Repeat until all colours are assigned."
-	oMessage.big("Help",helptxt)
-
-
-
 func _on_ImgMapButtonSelectImage_pressed():
 	Utils.popup_centered(oChooseMapImageFileDialog)
 
@@ -50,9 +43,13 @@ func _on_ChooseMapImageFileDialog_file_selected(path):
 		oMessage.quick("Error loading file.")
 		return
 	
-	if imageData.get_size() > Vector2(M.xSize,M.ySize):
+	if imageData.get_size().x > M.xSize or imageData.get_size().y > M.ySize:
+		oMessage.quick("Image has been downscaled to fit the current map size.")
 		imageData.resize(M.xSize,M.ySize,Image.INTERPOLATE_NEAREST) #Image.Interpolation.INTERPOLATE_NEAREST
-	if imageData.get_size() < Vector2(M.xSize,M.ySize):
+	if imageData.get_size() == Vector2(M.xSize,M.ySize):
+		oMessage.quick("Image size perfectly matches the current map size.")
+	if imageData.get_size().x < M.xSize or imageData.get_size().y < M.ySize:
+		oMessage.quick("Image has been centered to fit the current map size.")
 		#offsetResultBy = ( (Vector2(85,85) - imageData.get_size()) / 2 ).floor()
 		
 		var copyPaste = Image.new()
@@ -72,6 +69,7 @@ func _on_ChooseMapImageFileDialog_file_selected(path):
 	textureData = ImageTexture.new()
 	textureData.create_from_image(imageData, 0) # flags off
 	oMapImageTextureRect.texture = textureData
+	oImageAsMapGuide.visible = true
 
 func _on_MapImageTextureRect_gui_input(event):
 	if visible == false: return
@@ -88,7 +86,7 @@ func _on_MapImageTextureRect_gui_input(event):
 		screenshot.lock()
 		screenshot.flip_y() # Must be used due to Godot
 		var pixel = screenshot.get_pixelv(mousePos)
-		highlightedColour = Color8(pixel.r8,pixel.g8,pixel.b8,pixel.a8)
+		highlightedColour = Color8(pixel.r8, pixel.g8, pixel.b8, pixel.a8)
 		screenshot.unlock()
 		#print(highlightedColour)
 		if highlightedColour == transparencyColour:
@@ -140,6 +138,8 @@ func _on_slab_button_pressed(buttonID):
 	yield(get_tree(),'idle_frame')
 	
 	finish_up()
+	
+	oImageAsMapGuide.visible = false
 
 # The apply button is to make use of being able to remember old colour values, in case you want to make multiple maps
 func _on_ImgMapButtonApply_pressed():
@@ -164,8 +164,8 @@ func apply_colour_as_slabIDs_to_map(doColour, slabID):
 	var rectStart = Vector2(1, 1)
 	var rectEnd = Vector2(imageData.get_size().x-1, imageData.get_size().y-1)
 	
-	for y in range(rectStart.x, rectEnd.y):
-		for x in range(rectStart.x, rectEnd.y):
+	for y in range(rectStart.y, rectEnd.y):
+		for x in range(rectStart.x, rectEnd.x):
 			var c = imageData.get_pixel(x,y)
 			
 			if c == doColour:
@@ -183,7 +183,7 @@ func finish_up():
 
 
 func _on_ImgMapButtonNewMap_pressed():
-	oCurrentMap._on_ButtonNewMap_pressed()
+	Utils.popup_centered(oNewMapWindow)
 
 
 func _on_ImageAsMapDialog_visibility_changed():

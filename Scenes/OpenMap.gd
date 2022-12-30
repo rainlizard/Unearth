@@ -37,6 +37,7 @@ onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
+onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -113,6 +114,15 @@ func open_map(filePath): # auto opens other files
 		
 		for EXT in Filetypes.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
+				
+				# Don't bother reading original formats if keeperFX formats have been found
+				if EXT == "TNG" and oCurrentMap.currentFilePaths.has("TNGFX") == true:
+					continue
+				if EXT == "APT" and oCurrentMap.currentFilePaths.has("APTFX") == true:
+					continue
+				if EXT == "LGT" and oCurrentMap.currentFilePaths.has("LGTFX") == true:
+					continue
+				
 				Filetypes.read(oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING], EXT.to_upper())
 			else:
 				print("Missing " + EXT + " file, so create blank data for that one.")
@@ -151,15 +161,12 @@ func load_cfg_stuff(map):
 	if Cube.tex.empty() == true:
 		Cube.read_cubes_cfg()
 	
+	oCustomObjectSystem.load_file()
 	
 	var parentDirectory = map.get_base_dir().get_base_dir()
 	var mainCfgName = map.get_base_dir().get_file() + ".cfg"
 	print("Parent directory: " + parentDirectory)
 	print("Main cfg name: " + mainCfgName)
-	
-	#var cfgsDir = oGame.get_precise_filepath(dir, cfgFileName)
-	
-	
 	var fullPathToMainCfg = oGame.get_precise_filepath(parentDirectory, mainCfgName)
 	if fullPathToMainCfg != "":
 		Things.get_cfgs_directory(fullPathToMainCfg)

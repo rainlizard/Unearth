@@ -168,26 +168,28 @@ func write_tngfx(buffer):
 			
 			t += "ThingType = \"" +groupName + "\"\n"
 			
-			var setSubtype = "???"
-			match thingType:
-				Things.TYPE.OBJECT:
-					if Things.DATA_OBJECT.has(thingNode.subtype):
-						setSubtype = Things.DATA_OBJECT[thingNode.subtype][Things.KEEPERFX_NAME]
-				Things.TYPE.CREATURE:
-					if Things.DATA_CREATURE.has(thingNode.subtype):
-						setSubtype = Things.DATA_CREATURE[thingNode.subtype][Things.KEEPERFX_NAME]
-				Things.TYPE.EFFECT:
-					if Things.DATA_EFFECT.has(thingNode.subtype):
-						setSubtype = Things.DATA_EFFECT[thingNode.subtype][Things.KEEPERFX_NAME]
-				Things.TYPE.TRAP:
-					if Things.DATA_TRAP.has(thingNode.subtype):
-						setSubtype = Things.DATA_TRAP[thingNode.subtype][Things.KEEPERFX_NAME]
-				Things.TYPE.DOOR:
-					if Things.DATA_DOOR.has(thingNode.subtype):
-						setSubtype = Things.DATA_DOOR[thingNode.subtype][Things.KEEPERFX_NAME]
-			if setSubtype == null:
-				setSubtype = "???"
-			t += "Subtype = \"" + setSubtype + "\"\n"
+#			var setSubtype = "???"
+#			match thingType:
+#				Things.TYPE.OBJECT:
+#					if Things.DATA_OBJECT.has(thingNode.subtype):
+#						setSubtype = Things.DATA_OBJECT[thingNode.subtype][Things.KEEPERFX_NAME]
+#				Things.TYPE.CREATURE:
+#					if Things.DATA_CREATURE.has(thingNode.subtype):
+#						setSubtype = Things.DATA_CREATURE[thingNode.subtype][Things.KEEPERFX_NAME]
+#				Things.TYPE.EFFECT:
+#					if Things.DATA_EFFECT.has(thingNode.subtype):
+#						setSubtype = Things.DATA_EFFECT[thingNode.subtype][Things.KEEPERFX_NAME]
+#				Things.TYPE.TRAP:
+#					if Things.DATA_TRAP.has(thingNode.subtype):
+#						setSubtype = Things.DATA_TRAP[thingNode.subtype][Things.KEEPERFX_NAME]
+#				Things.TYPE.DOOR:
+#					if Things.DATA_DOOR.has(thingNode.subtype):
+#						setSubtype = Things.DATA_DOOR[thingNode.subtype][Things.KEEPERFX_NAME]
+#			if setSubtype == null:
+#				setSubtype = "???"
+#			t += "Subtype = \"" + setSubtype + "\"\n"
+			
+			t += "Subtype = " + str(thingNode.subtype) + "\n"
 			
 			t += "Ownership = " +str(thingNode.ownership) + "\n"
 			
@@ -223,6 +225,7 @@ func write_tngfx(buffer):
 			t += "SubtileX = [" + x + ", " + xInner + "]" + "\n"
 			t += "SubtileY = [" + y + ", " + yInner + "]" + "\n"
 			t += "SubtileZ = [" + z + ", " + zInner + "]" + "\n"
+			
 			entryNumber += 1
 	
 	buffer.put_data(t.to_ascii())
@@ -241,6 +244,35 @@ func write_apt(buffer):
 		buffer.put_8(int(apNode.pointRange)) # 5
 		buffer.put_8(apNode.pointNumber) # 6
 		buffer.put_8(apNode.data7) # 7
+
+func write_aptfx(buffer):
+	var t = ""
+	var numberOfActionPoints = get_tree().get_nodes_in_group("ActionPoint").size()
+	t += "[common]" + "\n"
+	t += "ActionPointsCount = " + str(numberOfActionPoints) + "\n"
+	
+	var entryNumber = 0
+	for apNode in get_tree().get_nodes_in_group("ActionPoint"):
+		t += "\n"
+		t += "[actionpoint"+str(entryNumber)+"]" + "\n"
+		
+		if apNode.pointNumber != null:
+			t += "PointNumber = " +str(apNode.pointNumber) + "\n"
+		
+		if apNode.pointRange != null:
+			var setRange = str(int(apNode.pointRange))
+			var setRangeInner = str(fmod(apNode.pointRange,1.0) * 256)
+			t += "PointRange = [" + setRange + ", " + setRangeInner + "]" + "\n"
+		
+		var x = str(int(apNode.locationX))
+		var xInner = str(fmod(apNode.locationX,1.0) * 256)
+		var y = str(int(apNode.locationY))
+		var yInner = str(fmod(apNode.locationY,1.0) * 256)
+		t += "SubtileX = [" + x + ", " + xInner + "]" + "\n"
+		t += "SubtileY = [" + y + ", " + yInner + "]" + "\n"
+		entryNumber += 1
+	
+	buffer.put_data(t.to_ascii())
 
 func write_lgt(buffer):
 	var numberOfLightPoints = get_tree().get_nodes_in_group("Light").size()
@@ -268,6 +300,38 @@ func write_lgt(buffer):
 		buffer.put_8(lightNode.data17) # 17
 		buffer.put_8(lightNode.data18) # 18
 		buffer.put_8(lightNode.data19) # 19
+
+func write_lgtfx(buffer):
+	var t = ""
+	var numberOfLightPoints = get_tree().get_nodes_in_group("Light").size()
+	t += "[common]" + "\n"
+	t += "LightsCount = " + str(numberOfLightPoints) + "\n"
+	
+	var entryNumber = 0
+	for lightNode in get_tree().get_nodes_in_group("Light"):
+		t += "\n"
+		t += "[light"+str(entryNumber)+"]" + "\n"
+		
+		if lightNode.lightIntensity != null:
+			t += "LightIntensity = " +str(lightNode.lightIntensity) + "\n"
+		
+		if lightNode.lightRange != null:
+			var setRange = str(int(lightNode.lightRange))
+			var setRangeInner = str(fmod(lightNode.lightRange,1.0) * 256)
+			t += "LightRange = [" + setRange + ", " + setRangeInner + "]" + "\n"
+		
+		var x = str(int(lightNode.locationX))
+		var xInner = str(fmod(lightNode.locationX,1.0) * 256)
+		var y = str(int(lightNode.locationY))
+		var yInner = str(fmod(lightNode.locationY,1.0) * 256)
+		var z = str(int(lightNode.locationZ))
+		var zInner = str(fmod(lightNode.locationZ,1.0) * 256)
+		t += "SubtileX = [" + x + ", " + xInner + "]" + "\n"
+		t += "SubtileY = [" + y + ", " + yInner + "]" + "\n"
+		t += "SubtileZ = [" + z + ", " + zInner + "]" + "\n"
+		entryNumber += 1
+	
+	buffer.put_data(t.to_ascii())
 
 func write_inf(buffer):
 	value = oDataLevelStyle.data

@@ -433,8 +433,12 @@ func cfg_objects(massiveString, DATA_ARRAY):
 					var do = false
 					if default_data["DATA_OBJECT"].has(objectID) == false:
 						do = true
-					elif thingCfgName != default_data["DATA_OBJECT"][objectID][KEEPERFX_NAME] or DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
+					if DATA_ARRAY[objectID][NAME] == null:
 						do = true
+#					elif default_data["DATA_OBJECT"][objectID][NAME] == null:
+#						do = true
+#					elif thingCfgName != default_data["DATA_OBJECT"][objectID][KEEPERFX_NAME] or DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
+#						do = true
 					
 					if do == true:
 						DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName # Always set CFG name

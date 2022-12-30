@@ -78,6 +78,9 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	oOverheadOwnership.ownership_update_shape(shapePositionArray, ownership)
 	print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
+onready var oLoadingBar = Nodelist.list["oLoadingBar"]
+
+
 func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 	oEditor.mapHasBeenEdited = true
 	if updateNearby == true:
@@ -87,14 +90,31 @@ func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
 	rectStart = Vector2(clamp(rectStart.x, 0, M.xSize-1), clamp(rectStart.y, 0, M.ySize-1))
 	rectEnd = Vector2(clamp(rectEnd.x, 0, M.xSize-1), clamp(rectEnd.y, 0, M.ySize-1))
 	
+	oLoadingBar.visible = true
+	oLoadingBar.value = 0
+	var totalSize = abs((rectStart.x)-(rectEnd.x+1)) * abs((rectStart.y)-(rectEnd.y+1))
+	var incrementEvery = 0
+	if totalSize < 1024:
+		incrementEvery = 999999999999 # Don't bother showing loading bar or idling
+	var slabNumber = 0
+	
 	var CODETIME_START = OS.get_ticks_msec()
 	for ySlab in range(rectStart.y, rectEnd.y+1):
 		for xSlab in range(rectStart.x, rectEnd.x+1):
+			
 			var slabID = oDataSlab.get_cell(xSlab, ySlab)
 			var ownership = oDataOwnership.get_cell(xSlab, ySlab)
 			do_slab(xSlab, ySlab, slabID, ownership)
 			
 			oInstances.manage_things_on_slab(xSlab, ySlab, slabID, ownership)
+			
+			slabNumber += 1
+			if slabNumber >= incrementEvery:
+				incrementEvery += totalSize/10.0
+				oLoadingBar.value += 10
+				yield(get_tree(),'idle_frame')
+	
+	oLoadingBar.visible = false
 	
 	print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	

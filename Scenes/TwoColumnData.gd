@@ -108,10 +108,10 @@ func _on_property_value_entered(new_val, callingNode): # When pressing Enter on 
 func _on_property_value_focus_exited(callingNode, leftText):
 	match leftText:
 		"Position":
-			callingNode.oLineEditX.text = str(clamp(float(callingNode.oLineEditX.text), 0.0, 255.0))
-			callingNode.oLineEditY.text = str(clamp(float(callingNode.oLineEditY.text), 0.0, 255.0))
+			callingNode.oLineEditX.text = str(clamp(float(callingNode.oLineEditX.text), 0.0, M.xSize*3))
+			callingNode.oLineEditY.text = str(clamp(float(callingNode.oLineEditY.text), 0.0, M.xSize*3))
 			if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
-				callingNode.oLineEditZ.text = str(clamp(float(callingNode.oLineEditZ.text), 0.0, 255.0))
+				callingNode.oLineEditZ.text = str(clamp(float(callingNode.oLineEditZ.text), 0.0, M.xSize*3))
 #	if callingNode is SpinBox:
 #		callingNode.value = float(callingNode.value)
 	update_property_value(callingNode, leftText)
@@ -137,10 +137,10 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.locationX = clamp(float(callingNode.oLineEditX.text), 0.0, 255.0)
-						inst.locationY = clamp(float(callingNode.oLineEditY.text), 0.0, 255.0)
+						inst.locationX = clamp(float(callingNode.oLineEditX.text), 0.0, M.xSize*3)
+						inst.locationY = clamp(float(callingNode.oLineEditY.text), 0.0, M.xSize*3)
 						if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
-							inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0, 255.0)
+							inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0, M.xSize*3)
 						oInspector.set_inspector_subtile(Vector2(inst.locationX,inst.locationY))
 		"Custom box":
 			valueNumber = clamp(int(valueNumber), 0, 255)

@@ -17,9 +17,9 @@ onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
 
-var tng_creation_order = []
-var lgt_creation_order = []
-var apt_creation_order = []
+#var tng_creation_order = []
+#var lgt_creation_order = []
+#var apt_creation_order = []
 
 var value # just so I don't have to initialize the var in every function
 
@@ -158,7 +158,6 @@ func new_inf():
 func read_txt(buffer):
 	buffer.seek(0)
 	value = buffer.get_string(buffer.get_size())
-	
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	oDataScript.data = value
 func new_txt():
@@ -316,17 +315,58 @@ func read_lgt(buffer):
 func new_lgt():
 	pass
 
+func read_lgtfx(buffer):
+	value = buffer.get_string(buffer.get_size())
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
+	
+	var c = ConfigFile.new()
+	var err = c.parse(value.to_upper())
+	
+	if err == OK:
+		var numberOfLgtEntries = c.get_value("COMMON", "LIGHTSCOUNT")
+		var lightScn = preload("res://Scenes/LightInstance.tscn")
+		
+		for entryNumber in numberOfLgtEntries:
+			var section = "LIGHT"+str(entryNumber)
+			if c.has_section(section) == false:
+				continue
+			
+			var id = lightScn.instance()
+			
+			id.locationX = c.get_value(section, "SUBTILEX")[0] + (c.get_value(section, "SUBTILEX")[1] / 256.0)
+			id.locationY = c.get_value(section, "SUBTILEY")[0] + (c.get_value(section, "SUBTILEY")[1] / 256.0)
+			id.locationZ = c.get_value(section, "SUBTILEZ")[0] + (c.get_value(section, "SUBTILEZ")[1] / 256.0)
+			
+			id.lightIntensity = c.get_value(section, "LIGHTINTENSITY")
+			id.lightRange = c.get_value(section, "LIGHTRANGE")[0] + (c.get_value(section, "LIGHTRANGE")[1] / 256.0)
+			id.data3 = 0
+			id.data4 = 0
+			id.data5 = 0
+			id.data6 = 0
+			id.data7 = 0
+			id.data8 = 0
+			id.data9 = 0
+			id.data16 = 0
+			id.data17 = 0
+			id.data18 = 0
+			id.data19 = 0
+			oInstances.add_child(id)
+
+
+func new_lgtfx():
+	pass
+
 func read_tng(buffer):
 	buffer.seek(0)
 	
-	tng_creation_order.clear()
+	#tng_creation_order.clear()
 	
 	var numberOfTngEntries = buffer.get_u16() # Reads two bytes as one value. This allows for thing amounts up to 65025 (255*255) I believe.
 	print('Number of TNG entries: '+str(numberOfTngEntries))
 	
 	var thingScn = preload("res://Scenes/ThingInstance.tscn")
 	
-	for entry in numberOfTngEntries:
+	for entryNumber in numberOfTngEntries:
 		
 		var id = thingScn.instance()
 		id.locationX = (buffer.get_u8() / 256.0) + buffer.get_u8() # 0-1
@@ -369,12 +409,108 @@ func read_tng(buffer):
 				id.doorLocked = id.data14 # 14
 		
 		oInstances.add_child(id)
-		tng_creation_order.append(id)
+		#tng_creation_order.append(id)
 func new_tng():
 	pass
 
 func read_tngfx(buffer):
+	
+	value = buffer.get_string(buffer.get_size())
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
+	
+	var c = ConfigFile.new()
+	var err = c.parse(value.to_upper())
+	
+	if err == OK:
+		var numberOfTngEntries = c.get_value("COMMON", "THINGSCOUNT")
+		var thingScn = preload("res://Scenes/ThingInstance.tscn")
+		for entryNumber in numberOfTngEntries:
+			var section = "THING"+str(entryNumber)
+			if c.has_section(section) == false:
+				continue
+			
+			var id = thingScn.instance()
+			
+			id.locationX = c.get_value(section, "SUBTILEX")[0] + (c.get_value(section, "SUBTILEX")[1] / 256.0)
+			id.locationY = c.get_value(section, "SUBTILEY")[0] + (c.get_value(section, "SUBTILEY")[1] / 256.0)
+			id.locationZ = c.get_value(section, "SUBTILEZ")[0] + (c.get_value(section, "SUBTILEZ")[1] / 256.0)
+			
+			id.subtype = c.get_value(section, "SUBTYPE")
+			id.ownership = c.get_value(section, "OWNERSHIP")
+			
+			match c.get_value(section, "THINGTYPE"):
+				"OBJECT": id.thingType = Things.TYPE.OBJECT
+				"CREATURE": id.thingType = Things.TYPE.CREATURE
+				"EFFECT": id.thingType = Things.TYPE.EFFECT
+				"TRAP": id.thingType = Things.TYPE.TRAP
+				"DOOR": id.thingType = Things.TYPE.DOOR
+				_: id.thingType = Things.TYPE.NONE
+			
+			match id.thingType:
+				Things.TYPE.OBJECT:
+					id.sensitiveTile = c.get_value(section, "PARENTTILE")
+					if id.subtype == 49: # Hero Gate
+						id.herogateNumber = c.get_value(section, "HEROGATENUMBER")
+					elif id.subtype == 133: # Mysterious Box
+						id.boxNumber = c.get_value(section, "CUSTOMBOX")
+				Things.TYPE.CREATURE:
+					id.index = c.get_value(section, "INDEX")
+					id.creatureLevel = c.get_value(section, "CREATURELEVEL")
+				Things.TYPE.EFFECT:
+					id.effectRange = c.get_value(section, "EFFECTRANGE")[0] + (c.get_value(section, "EFFECTRANGE")[1] / 256.0)
+					id.sensitiveTile = c.get_value(section, "PARENTTILE")
+				Things.TYPE.TRAP:
+					id.index = c.get_value(section, "INDEX")
+				Things.TYPE.DOOR:
+					id.index = c.get_value(section, "INDEX")
+					id.doorOrientation = c.get_value(section, "DOORORIENTATION")
+					id.doorLocked = c.get_value(section, "DOORLOCKED")
+			id.data9 = 0
+			id.data10 = 0
+			id.data11_12 = 0
+			id.data13 = 0
+			id.data14 = 0
+			id.data15 = 0
+			id.data16 = 0
+			id.data17 = 0
+			id.data18 = 0
+			id.data19 = 0
+			id.data20 = 0
+			oInstances.add_child(id)
+
+func new_tngfx():
 	pass
+
+
+func read_aptfx(buffer):
+	value = buffer.get_string(buffer.get_size())
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
+	
+	var c = ConfigFile.new()
+	var err = c.parse(value.to_upper())
+	
+	if err == OK:
+		var numberOfAptEntries = c.get_value("COMMON", "ACTIONPOINTSCOUNT")
+		var apScn = preload("res://Scenes/ActionPointInstance.tscn")
+		
+		for entryNumber in numberOfAptEntries:
+			var section = "ACTIONPOINT"+str(entryNumber)
+			if c.has_section(section) == false:
+				continue
+			
+			var id = apScn.instance()
+			
+			id.locationX = c.get_value(section, "SUBTILEX")[0] + (c.get_value(section, "SUBTILEX")[1] / 256.0)
+			id.locationY = c.get_value(section, "SUBTILEY")[0] + (c.get_value(section, "SUBTILEY")[1] / 256.0)
+			
+			id.pointNumber = c.get_value(section, "POINTNUMBER")
+			id.pointRange = c.get_value(section, "POINTRANGE")[0] + (c.get_value(section, "POINTRANGE")[1] / 256.0)
+			id.data7 = 0
+			oInstances.add_child(id)
+
+func new_aptfx():
+	pass
+
 #	var bufferPos = 0
 #	buffer.seek(bufferPos)
 #	# These are unused for now but they can be used for extending maximum TNG entries beyond 65,535
@@ -409,8 +545,6 @@ func read_tngfx(buffer):
 #		id.locationY = buffer.get_u32() + (id.locationY - int(id.locationY)) # 4-7
 #		# Unused : 12-255
 
-func new_tngfx():
-	pass
 #func _ready(): #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #	var file = File.new()
 #	file.open("res://unearthdata/dklevels.lof",File.READ)

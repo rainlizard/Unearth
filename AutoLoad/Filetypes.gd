@@ -5,6 +5,7 @@ const FILE_TYPES = [
 	"CLM",
 	"DAT",
 	"APT",
+	"APTFX",
 	"TNG",
 	"TNGFX",
 	"INF",
@@ -12,6 +13,7 @@ const FILE_TYPES = [
 	"OWN",
 	"LIF",
 	"LGT",
+	"LGTFX",
 	"WIB",
 	"SLX",
 	"WLB",
@@ -26,6 +28,7 @@ func new_blank(EXT):
 		"CLM" : oReadData.new_clm()
 		"DAT" : oReadData.new_dat()
 		"APT" : oReadData.new_apt()
+		"APTFX" : oReadData.new_aptfx()
 		"TNG" : oReadData.new_tng()
 		"TNGFX" : oReadData.new_tngfx()
 		"INF" : oReadData.new_inf()
@@ -33,6 +36,7 @@ func new_blank(EXT):
 		"OWN" : oReadData.new_own()
 		"LIF" : oReadData.new_lif()
 		"LGT" : oReadData.new_lgt()
+		"LGTFX" : oReadData.new_lgtfx()
 		"WIB" : oReadData.new_wib()
 		"SLX" : oReadData.new_slx()
 		"WLB" : oReadData.new_wlb()
@@ -56,6 +60,7 @@ func read(filePath, EXT):
 		"CLM" : oReadData.read_clm(buffer)
 		"DAT" : oReadData.read_dat(buffer)
 		"APT" : oReadData.read_apt(buffer)
+		"APTFX" : oReadData.read_aptfx(buffer)
 		"TNG" : oReadData.read_tng(buffer)
 		"TNGFX" : oReadData.read_tngfx(buffer)
 		"INF" : oReadData.read_inf(buffer)
@@ -63,6 +68,7 @@ func read(filePath, EXT):
 		"OWN" : oReadData.read_own(buffer)
 		"LIF" : oReadData.read_lif(buffer)
 		"LGT" : oReadData.read_lgt(buffer)
+		"LGTFX" : oReadData.read_lgtfx(buffer)
 		"WIB" : oReadData.read_wib(buffer)
 		"SLX" : oReadData.read_slx(buffer)
 		"WLB" : oReadData.read_wlb(buffer)
@@ -82,6 +88,7 @@ func write(filePath, EXT):
 		"CLM" : oWriteData.write_clm(buffer)
 		"DAT" : oWriteData.write_dat(buffer)
 		"APT" : oWriteData.write_apt(buffer)
+		"APTFX" : oWriteData.write_aptfx(buffer)
 		"TNG" : oWriteData.write_tng(buffer)
 		"TNGFX" : oWriteData.write_tngfx(buffer)
 		"INF" : oWriteData.write_inf(buffer)
@@ -89,6 +96,7 @@ func write(filePath, EXT):
 		"OWN" : oWriteData.write_own(buffer)
 		"LIF" : oWriteData.write_lif(buffer,filePath)
 		"LGT" : oWriteData.write_lgt(buffer)
+		"LGTFX" : oWriteData.write_lgtfx(buffer)
 		"WIB" : oWriteData.write_wib(buffer)
 		"SLX" : oWriteData.write_slx(buffer)
 		"WLB" : oWriteData.write_wlb(buffer)

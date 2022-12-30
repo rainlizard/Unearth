@@ -13,6 +13,7 @@ onready var oNoiseUpdateTimer = Nodelist.list["oNoiseUpdateTimer"]
 onready var oNewMapNoiseOptions = Nodelist.list["oNewMapNoiseOptions"]
 onready var oXSizeLine = Nodelist.list["oXSizeLine"]
 onready var oYSizeLine = Nodelist.list["oYSizeLine"]
+onready var oGame = Nodelist.list["oGame"]
 
 var noise = OpenSimplexNoise.new()
 var imageData = Image.new()
@@ -45,14 +46,27 @@ func reinit_noise_preview():
 	oQuickNoisePreview.rect_size = oQuickNoisePreview.rect_min_size
 
 func _on_NewMapWindow_visibility_changed():
-	if visible == true:
-		oXSizeLine.text = "85"
-		oYSizeLine.text = "85"
-		reinit_noise_preview()
-		
-		randomize()
-		noise.seed = randi()
-		update_border_image_with_noise()
+	if visible == false: return
+	if oGame.EXECUTABLE_PATH.get_file().to_lower() != "keeperfx.exe":
+		oXSizeLine.editable = false
+		oYSizeLine.editable = false
+		var setTxt = "If you want to change map size then the settings executable path must point to 'keeperfx.exe'."
+		oXSizeLine.hint_tooltip = setTxt
+		oYSizeLine.hint_tooltip = setTxt
+	else:
+		oXSizeLine.editable = true
+		oYSizeLine.editable = true
+		var setTxt = ""
+		oXSizeLine.hint_tooltip = setTxt
+		oYSizeLine.hint_tooltip = setTxt
+	
+	oXSizeLine.text = "85"
+	oYSizeLine.text = "85"
+	reinit_noise_preview()
+	
+	randomize()
+	noise.seed = randi()
+	update_border_image_with_noise()
 
 func _on_ButtonNewMapOK_pressed():
 	oCurrentMap._on_ButtonNewMap_pressed()
@@ -103,14 +117,15 @@ func _on_NoiseLacunarity_sliderChanged():
 	oNoiseUpdateTimer.start(0.01)
 func _on_NoiseOctaves_sliderChanged():
 	oNoiseUpdateTimer.start(0.01)
-func _on_YSizeLine_text_changed(new_text):
-	if new_text.to_int() > 500:
-		oYSizeLine.text = "500"
+
+func _on_YSizeLine_focus_exited():
+	if oYSizeLine.text.to_int() > 512:
+		oYSizeLine.text = "512"
 	reinit_noise_preview()
 	oNoiseUpdateTimer.start(0.01)
-func _on_XSizeLine_text_changed(new_text):
-	if new_text.to_int() > 500:
-		oXSizeLine.text = "500"
+func _on_XSizeLine_focus_exited():
+	if oXSizeLine.text.to_int() > 512:
+		oXSizeLine.text = "512"
 	reinit_noise_preview()
 	oNoiseUpdateTimer.start(0.01)
 
@@ -190,3 +205,5 @@ func _on_CheckBoxNewMapBorder_pressed():
 func _on_CheckBoxNewMapBlank_pressed():
 	oNewMapNoiseOptions.visible = false
 	update_border_image_with_blank()
+
+

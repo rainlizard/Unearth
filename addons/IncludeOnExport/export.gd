@@ -14,16 +14,16 @@ func _export_begin(features, is_debug, path, flags):
 	output_root_dir = path.get_base_dir()
 	
 	# Export all the PNGs in /thing-images/
-	for i in dir_contents("res://unearthdata/thing-images/"):
-		_export_file_our_way(i)
-	for i in dir_contents("res://unearthdata/thing-images/creatures/"):
-		_export_file_our_way(i)
-	for i in dir_contents("res://unearthdata/thing-images/doors/"):
-		_export_file_our_way(i)
-	for i in dir_contents("res://unearthdata/thing-images/objects/"):
-		_export_file_our_way(i)
-	for i in dir_contents("res://unearthdata/thing-images/traps/"):
-		_export_file_our_way(i)
+#	for i in dir_contents("res://unearthdata/thing-images/"):
+#		_export_file_our_way(i)
+#	for i in dir_contents("res://unearthdata/thing-images/creatures/"):
+#		_export_file_our_way(i)
+#	for i in dir_contents("res://unearthdata/thing-images/doors/"):
+#		_export_file_our_way(i)
+#	for i in dir_contents("res://unearthdata/thing-images/objects/"):
+#		_export_file_our_way(i)
+#	for i in dir_contents("res://unearthdata/thing-images/traps/"):
+#		_export_file_our_way(i)
 
 func _export_file(path, type, features):
 	#print(path)

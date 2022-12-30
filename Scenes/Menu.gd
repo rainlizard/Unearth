@@ -32,6 +32,7 @@ onready var oUi = Nodelist.list["oUi"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oDataLif = Nodelist.list["oDataLif"]
+onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -177,10 +178,12 @@ func _on_EditSubmenu_Pressed(pressedID):
 		5: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oConfirmAutoGen)
-		6:
+		6: # Add custom object
+			Utils.popup_centered(oAddCustomObjectWindow)
+		7:
 			# Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
-		7:
+		8:
 			# Modify dynamic slabs
 			Utils.popup_centered(oSlabsetWindow)
 
