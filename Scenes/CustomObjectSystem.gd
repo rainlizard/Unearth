@@ -65,7 +65,7 @@ func load_file():
 		match objThingType:
 			Things.TYPE.OBJECT: Things.DATA_OBJECT[objSubtype] = constructArray
 			Things.TYPE.CREATURE: Things.DATA_CREATURE[objSubtype] = constructArray
-			Things.TYPE.EFFECT: Things.DATA_EFFECT[objSubtype] = constructArray
+			Things.TYPE.EFFECTGEN: Things.DATA_EFFECTGEN[objSubtype] = constructArray
 			Things.TYPE.TRAP: Things.DATA_TRAP[objSubtype] = constructArray
 			Things.TYPE.DOOR: Things.DATA_DOOR[objSubtype] = constructArray
 		
@@ -83,7 +83,7 @@ func remove_object(thingType, subtype):
 	match thingType:
 		Things.TYPE.OBJECT: Things.DATA_OBJECT.erase(subtype)
 		Things.TYPE.CREATURE: Things.DATA_CREATURE.erase(subtype)
-		Things.TYPE.EFFECT: Things.DATA_EFFECT.erase(subtype)
+		Things.TYPE.EFFECTGEN: Things.DATA_EFFECTGEN.erase(subtype)
 		Things.TYPE.TRAP: Things.DATA_TRAP.erase(subtype)
 		Things.TYPE.DOOR: Things.DATA_DOOR.erase(subtype)
 	

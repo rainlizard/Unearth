@@ -1,5 +1,6 @@
 extends Node
 
+var MAP_FORMAT_VERSION = ""
 var NAME_TEXT = ""
 var NAME_ID = ""
 var ENSIGN_POS = ""
@@ -13,16 +14,12 @@ var AUTHOR = ""
 var DESCRIPTION = ""
 var DATE = ""
 
-func set_date():
-	var dict = Time.get_date_dict_from_system()
-	DATE = str(dict["year"])+"-"+str(dict["month"])+"-"+str(dict["day"])
-
-
 func use_size(x, y): #called from _on_ButtonNewMapOK_pressed() and read_keeperfx_lof()
 	M.xSize = x
 	M.ySize = y
 
 func clear_all():
+	MAP_FORMAT_VERSION = ""
 	KIND = ""
 	NAME_TEXT = ""
 	OPTIONS = ""

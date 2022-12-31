@@ -19,7 +19,7 @@ var value # just so I don't have to initialize the var in every function
 func write_keeperfx_lof(buffer):
 	var newString = ""
 	newString += "; KeeperFX Level Overview File (LOF)" + "\n"
-	
+	newString += "MAP_FORMAT_VERSION = " + str(Constants.unearth_map_format_version).pad_decimals(2) + "\n"
 	newString += "NAME_TEXT = " + str(oDataKeeperFxLof.NAME_TEXT) + "\n"
 	newString += "NAME_ID = " + str(oDataKeeperFxLof.NAME_ID) + "\n"
 	newString += "KIND = " + str(oDataKeeperFxLof.KIND) + "\n"
@@ -31,7 +31,9 @@ func write_keeperfx_lof(buffer):
 	newString += "LAND_VIEW = " + str(oDataKeeperFxLof.LAND_VIEW) + "\n"
 	newString += "AUTHOR = " + str(oDataKeeperFxLof.AUTHOR) + "\n"
 	newString += "DESCRIPTION = " + str(oDataKeeperFxLof.DESCRIPTION) + "\n"
-	newString += "DATE = " + str(oDataKeeperFxLof.DATE) + "\n"
+	var dict = Time.get_date_dict_from_system()
+	var setDate = str(dict["year"])+"-"+str(dict["month"])+"-"+str(dict["day"])
+	newString += "DATE = " + str(setDate) + "\n"
 	newString += "MAPSIZE = " + str(M.xSize) + " " + str(M.ySize)
 	var scriptBytes = newString.to_ascii()
 	buffer.put_data(scriptBytes)
@@ -154,12 +156,12 @@ func write_tngfx(buffer):
 	t += "ThingsCount = " + str(numberOfTngEntries) + "\n"
 	
 	var entryNumber = 0
-	for thingType in [Things.TYPE.OBJECT, Things.TYPE.CREATURE, Things.TYPE.EFFECT, Things.TYPE.TRAP, Things.TYPE.DOOR]:
+	for thingType in [Things.TYPE.OBJECT, Things.TYPE.CREATURE, Things.TYPE.EFFECTGEN, Things.TYPE.TRAP, Things.TYPE.DOOR]:
 		var groupName = "UnknownThingType"
 		match thingType:
 			Things.TYPE.OBJECT: groupName = "Object"
 			Things.TYPE.CREATURE: groupName = "Creature"
-			Things.TYPE.EFFECT: groupName = "Effect"
+			Things.TYPE.EFFECTGEN: groupName = "EffectGen"
 			Things.TYPE.TRAP: groupName = "Trap"
 			Things.TYPE.DOOR: groupName = "Door"
 		for thingNode in get_tree().get_nodes_in_group(groupName):
@@ -176,9 +178,9 @@ func write_tngfx(buffer):
 #				Things.TYPE.CREATURE:
 #					if Things.DATA_CREATURE.has(thingNode.subtype):
 #						setSubtype = Things.DATA_CREATURE[thingNode.subtype][Things.KEEPERFX_NAME]
-#				Things.TYPE.EFFECT:
-#					if Things.DATA_EFFECT.has(thingNode.subtype):
-#						setSubtype = Things.DATA_EFFECT[thingNode.subtype][Things.KEEPERFX_NAME]
+#				Things.TYPE.EFFECTGEN:
+#					if Things.DATA_EFFECTGEN.has(thingNode.subtype):
+#						setSubtype = Things.DATA_EFFECTGEN[thingNode.subtype][Things.KEEPERFX_NAME]
 #				Things.TYPE.TRAP:
 #					if Things.DATA_TRAP.has(thingNode.subtype):
 #						setSubtype = Things.DATA_TRAP[thingNode.subtype][Things.KEEPERFX_NAME]

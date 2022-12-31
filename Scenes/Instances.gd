@@ -93,7 +93,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 		Things.TYPE.CREATURE:
 			id.creatureLevel = oPlacingSettings.creatureLevel
 			id.index = get_free_index_number()
-		Things.TYPE.EFFECT:
+		Things.TYPE.EFFECTGEN:
 			id.effectRange = oPlacingSettings.effectRange
 			id.sensitiveTile = (floor(newPosition.y/3) * M.xSize) + floor(newPosition.x/3) # Should this be M.ySize ???
 		Things.TYPE.TRAP:
@@ -177,7 +177,7 @@ func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng 
 	id.subtype = tngObj[7]
 	id.ownership = ownership
 	
-	if id.thingType == Things.TYPE.EFFECT:
+	if id.thingType == Things.TYPE.EFFECTGEN:
 		id.effectRange = tngObj[8]
 	
 	if slabID == Slabs.GUARD_POST:

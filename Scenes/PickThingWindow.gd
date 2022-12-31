@@ -24,7 +24,7 @@ onready var tabs = {
 	Things.TAB_GOLD: [$ThingTabs/TabFolder/Gold,"res://dk_images/symbols_64/creatr_stat_gold_std.png"], #"res://dk_images/valuables/gold_hoard1_fp/r1frame03.png" #"res://dk_images/valuables/gold_hoard2_fp/r1frame02.png" #"res://dk_images/valuables/gold_hoard4_fp/r1frame01.png"
 	Things.TAB_DECORATION: [$ThingTabs/TabFolder/Decoration,"res://dk_images/statues/anim0906/r1frame01.png"],
 	Things.TAB_ACTION: [$ThingTabs/TabFolder/Action,"res://dk_images/guisymbols_64/sym_fight.png"], #"res://Art/ActionPoint.png"
-	Things.TAB_EFFECT: [$ThingTabs/TabFolder/Effect,"res://edited_images/icon_effect.png"],
+	Things.TAB_EFFECTGEN: [$ThingTabs/TabFolder/Effect,"res://edited_images/icon_effect.png"],
 	Things.TAB_FURNITURE: [$ThingTabs/TabFolder/Furniture,"res://dk_images/furniture/workshop_machine_fp/r1frame01.png"], #"res://dk_images/furniture/training_machine_fp/r1frame09.png"
 	Things.TAB_LAIR: [$ThingTabs/TabFolder/Lair,"res://dk_images/room_64/lair_std.png"],
 	Things.TAB_MISC: [$ThingTabs/TabFolder/Misc,"res://dk_images/rpanel_64/tab_crtr_wandr_std.png"],
@@ -64,7 +64,7 @@ func initialize_thing_grid_items():
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	
-	for thingCategory in [Things.TYPE.OBJECT, Things.TYPE.CREATURE, Things.TYPE.TRAP, Things.TYPE.DOOR, Things.TYPE.EFFECT, Things.TYPE.EXTRA]:
+	for thingCategory in [Things.TYPE.OBJECT, Things.TYPE.CREATURE, Things.TYPE.TRAP, Things.TYPE.DOOR, Things.TYPE.EFFECTGEN, Things.TYPE.EXTRA]:
 		match thingCategory:
 			Things.TYPE.OBJECT:
 				for subtype in Things.DATA_OBJECT:
@@ -86,11 +86,11 @@ func initialize_thing_grid_items():
 					var putIntoTab = Things.DATA_DOOR[subtype][Things.EDITOR_TAB]
 					if putIntoTab != null:
 						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_DOOR, thingCategory, subtype)
-			Things.TYPE.EFFECT:
-				for subtype in Things.DATA_EFFECT:
-					var putIntoTab = Things.DATA_EFFECT[subtype][Things.EDITOR_TAB]
+			Things.TYPE.EFFECTGEN:
+				for subtype in Things.DATA_EFFECTGEN:
+					var putIntoTab = Things.DATA_EFFECTGEN[subtype][Things.EDITOR_TAB]
 					if putIntoTab != null:
-						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EFFECT, thingCategory, subtype)
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EFFECTGEN, thingCategory, subtype)
 			Things.TYPE.EXTRA:
 				for subtype in Things.DATA_EXTRA:
 					var putIntoTab = Things.DATA_EXTRA[subtype][Things.EDITOR_TAB]
@@ -152,7 +152,7 @@ func change_portrait_on_hover(id, textureOrPortrait):
 	match id.get_meta("thingType"):
 		Things.TYPE.OBJECT: portraitTex = Things.DATA_OBJECT[id.get_meta("thingSubtype")][textureOrPortrait]
 		Things.TYPE.CREATURE: portraitTex = Things.DATA_CREATURE[id.get_meta("thingSubtype")][textureOrPortrait]
-		Things.TYPE.EFFECT: portraitTex = Things.DATA_EFFECT[id.get_meta("thingSubtype")][textureOrPortrait]
+		Things.TYPE.EFFECTGEN: portraitTex = Things.DATA_EFFECTGEN[id.get_meta("thingSubtype")][textureOrPortrait]
 		Things.TYPE.TRAP: portraitTex = Things.DATA_TRAP[id.get_meta("thingSubtype")][textureOrPortrait]
 		Things.TYPE.DOOR: portraitTex = Things.DATA_DOOR[id.get_meta("thingSubtype")][textureOrPortrait]
 		Things.TYPE.EXTRA: portraitTex = Things.DATA_EXTRA[id.get_meta("thingSubtype")][textureOrPortrait]

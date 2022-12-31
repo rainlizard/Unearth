@@ -266,9 +266,9 @@ func retrieve_thing_name(t_type, s_type): # called by ThingInstance too
 		Things.TYPE.CREATURE:
 			if Things.DATA_CREATURE.has(s_type):
 				return Things.DATA_CREATURE[s_type][Things.NAME]
-		Things.TYPE.EFFECT:
-			if Things.DATA_EFFECT.has(s_type):
-				return Things.DATA_EFFECT[s_type][Things.NAME]
+		Things.TYPE.EFFECTGEN:
+			if Things.DATA_EFFECTGEN.has(s_type):
+				return Things.DATA_EFFECTGEN[s_type][Things.NAME]
 		Things.TYPE.TRAP:
 			if Things.DATA_TRAP.has(s_type):
 				return Things.DATA_TRAP[s_type][Things.NAME]
@@ -285,7 +285,7 @@ func retrieve_subtype_value(t_type, s_type):
 		Things.TYPE.NONE: return "None" + " : " + str(s_type)
 		Things.TYPE.OBJECT: return "Object" + " : " + str(s_type)
 		Things.TYPE.CREATURE: return "Creature" + " : " + str(s_type)
-		Things.TYPE.EFFECT: return "Effect" + " : " + str(s_type)
+		Things.TYPE.EFFECTGEN: return "EffectGen" + " : " + str(s_type)
 		Things.TYPE.TRAP: return "Trap" + " : " + str(s_type)
 		Things.TYPE.DOOR: return "Door" + " : " + str(s_type)
 		Things.TYPE.EXTRA: return null

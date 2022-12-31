@@ -19,7 +19,7 @@ func _process(delta):
 			typeName = "Creatures"
 			groupName = "Creature"
 			limit = Things.CREATURE_LIMIT
-		Things.TYPE.EFFECT:
+		Things.TYPE.EFFECTGEN:
 			typeName = "Things"
 			groupName = "Thing"
 			limit = Things.THING_LIMIT

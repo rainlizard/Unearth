@@ -105,7 +105,7 @@ func get_thingType():
 	match oNewObjectType.selected:
 		0: return Things.TYPE.OBJECT
 		1: return Things.TYPE.CREATURE
-		2: return Things.TYPE.EFFECT
+		2: return Things.TYPE.EFFECTGEN
 		3: return Things.TYPE.TRAP
 		4: return Things.TYPE.DOOR
 
@@ -115,7 +115,7 @@ func thinglist_has_subtype(thingType, subtype):
 	match thingType:
 		Things.TYPE.OBJECT: return Things.DATA_OBJECT.has(subtype)
 		Things.TYPE.CREATURE: return Things.DATA_CREATURE.has(subtype)
-		Things.TYPE.EFFECT: return Things.DATA_EFFECT.has(subtype)
+		Things.TYPE.EFFECTGEN: return Things.DATA_EFFECTGEN.has(subtype)
 		Things.TYPE.TRAP: return Things.DATA_TRAP.has(subtype)
 		Things.TYPE.DOOR: return Things.DATA_DOOR.has(subtype)
 		Things.TYPE.EXTRA: return Things.DATA_EXTRA.has(subtype)
@@ -125,7 +125,7 @@ func get_empty_entry_thinglist(thingType):
 	match thingType:
 		Things.TYPE.OBJECT:  db = Things.DATA_OBJECT
 		Things.TYPE.CREATURE:  db = Things.DATA_CREATURE
-		Things.TYPE.EFFECT:  db = Things.DATA_EFFECT
+		Things.TYPE.EFFECTGEN:  db = Things.DATA_EFFECTGEN
 		Things.TYPE.TRAP:  db = Things.DATA_TRAP
 		Things.TYPE.DOOR:  db = Things.DATA_DOOR
 		Things.TYPE.EXTRA:  db = Things.DATA_EXTRA

@@ -60,7 +60,7 @@ func update_and_set_placing_tab():
 				availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.CUSTOM_BOX_ID]
 		Things.TYPE.CREATURE:
 			availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.CREATURE_LEVEL]
-		Things.TYPE.EFFECT:
+		Things.TYPE.EFFECTGEN:
 			availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.EFFECT_RANGE]
 		Things.TYPE.TRAP:
 			availableFields = [FIELDS.NAME, FIELDS.TYPE]

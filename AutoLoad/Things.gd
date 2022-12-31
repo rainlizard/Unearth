@@ -8,10 +8,18 @@ const LIGHT_LIMIT = -1
 enum TYPE {
 	NONE = 0
 	OBJECT = 1
+	#TCls_Shot = 2
+	#TCls_EffectElem = 3
+	#TCls_DeadCreature = 4
 	CREATURE = 5
-	EFFECT = 7
+	#TCls_Effect = 6
+	EFFECTGEN = 7
 	TRAP = 8
 	DOOR = 9
+	#TCls_Unkn10 = 10
+	#TCls_Unkn11 = 11
+	#TCls_AmbientSnd = 12
+	#TCls_CaveIn = 13
 	EXTRA = 696969
 }
 enum {
@@ -32,7 +40,7 @@ enum { # I only used the official DK keeperfx categories as a guide rather than 
 	TAB_SPECIAL
 	TAB_BOX
 	TAB_LAIR
-	TAB_EFFECT
+	TAB_EFFECTGEN
 	TAB_FURNITURE
 	TAB_DECORATION
 	TAB_MISC
@@ -40,7 +48,7 @@ enum { # I only used the official DK keeperfx categories as a guide rather than 
 
 var GENRE_TO_TAB = {
 	"DECORATION": TAB_DECORATION,
-	"EFFECT": TAB_EFFECT,
+	"EFFECT": TAB_EFFECTGEN,
 	"FOOD": TAB_FURNITURE,
 	"FURNITURE": TAB_FURNITURE,
 	"LAIR_TOTEM": TAB_LAIR,
@@ -59,14 +67,14 @@ func _init():
 	default_data["DATA_EXTRA"] = DATA_EXTRA.duplicate(true)
 	default_data["DATA_DOOR"] = DATA_DOOR.duplicate(true)
 	default_data["DATA_TRAP"] = DATA_TRAP.duplicate(true)
-	default_data["DATA_EFFECT"] = DATA_EFFECT.duplicate(true)
+	default_data["DATA_EFFECTGEN"] = DATA_EFFECTGEN.duplicate(true)
 	default_data["DATA_CREATURE"] = DATA_CREATURE.duplicate(true)
 	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
 
 var DATA_EXTRA = {
 0 : [null, null, null, null, null, null],
 1 : ["Action Point", null, null,  preload("res://Art/ActionPoint.png"), null, TAB_ACTION],
-2 : ["Light", null, null, preload("res://edited_images/GUIEDIT-1/PIC26.png"), null, TAB_EFFECT],
+2 : ["Light", null, null, preload("res://edited_images/GUIEDIT-1/PIC26.png"), null, TAB_EFFECTGEN],
 }
 
 var DATA_DOOR = {
@@ -91,13 +99,13 @@ var DATA_TRAP = {
 11 : ["Dummy Trap 6", null, null, null, null, TAB_TRAP],
 12 : ["Dummy Trap 7", null, null, null, null, TAB_TRAP],
 }
-var DATA_EFFECT = {
+var DATA_EFFECTGEN = {
 0 : [null, null, null, null, null, null],
-1 : ["Effect: Lava", null, null, preload("res://edited_images/GUIEDIT-1/PIC27.png"), null, TAB_EFFECT],
-2 : ["Effect: Dripping Water", null, null, preload("res://edited_images/GUIEDIT-1/PIC28.png"), null, TAB_EFFECT],
-3 : ["Effect: Rock Fall", null, null, preload("res://edited_images/GUIEDIT-1/PIC29.png"), null, TAB_EFFECT],
-4 : ["Effect: Entrance Ice", null, null, preload("res://edited_images/GUIEDIT-1/PIC30.png"), null, TAB_EFFECT],
-5 : ["Effect: Dry Ice", null, null, preload("res://edited_images/GUIEDIT-1/PIC31.png"), null, TAB_EFFECT]
+1 : ["Effect: Lava", null, null, preload("res://edited_images/GUIEDIT-1/PIC27.png"), null, TAB_EFFECTGEN],
+2 : ["Effect: Dripping Water", null, null, preload("res://edited_images/GUIEDIT-1/PIC28.png"), null, TAB_EFFECTGEN],
+3 : ["Effect: Rock Fall", null, null, preload("res://edited_images/GUIEDIT-1/PIC29.png"), null, TAB_EFFECTGEN],
+4 : ["Effect: Entrance Ice", null, null, preload("res://edited_images/GUIEDIT-1/PIC30.png"), null, TAB_EFFECTGEN],
+5 : ["Effect: Dry Ice", null, null, preload("res://edited_images/GUIEDIT-1/PIC31.png"), null, TAB_EFFECTGEN]
 }
 var DATA_CREATURE = {
 00 : [null, null, null, null, null, null],
@@ -354,7 +362,7 @@ func reset_thing_data_to_default():
 	DATA_EXTRA = default_data["DATA_EXTRA"].duplicate(true)
 	DATA_DOOR = default_data["DATA_DOOR"].duplicate(true)
 	DATA_TRAP = default_data["DATA_TRAP"].duplicate(true)
-	DATA_EFFECT = default_data["DATA_EFFECT"].duplicate(true)
+	DATA_EFFECTGEN = default_data["DATA_EFFECTGEN"].duplicate(true)
 	DATA_CREATURE = default_data["DATA_CREATURE"].duplicate(true)
 	DATA_OBJECT = default_data["DATA_OBJECT"].duplicate(true)
 
@@ -624,7 +632,7 @@ func get_zip_files_in_dir(path):
 #		TYPE.NONE: return ''
 #		TYPE.ITEM: return DATA_OBJECT[subtypeArgument][NAME]
 #		TYPE.CREATURE: return DATA_CREATURE[subtypeArgument][NAME]
-#		TYPE.EFFECT: return DATA_EFFECT[subtypeArgument][NAME]
+#		TYPE.EFFECT: return DATA_EFFECTGEN[subtypeArgument][NAME]
 #		TYPE.TRAP: return DATA_TRAP[subtypeArgument][NAME]
 #		TYPE.DOOR: return DATA_DOOR[subtypeArgument][NAME]
 #	return 'UNKNOWN'
@@ -645,8 +653,8 @@ func get_zip_files_in_dir(path):
 #			tmp = DATA_CREATURE[subtypeArgument][PORTRAIT]
 #			if tmp == null: tmp = DATA_CREATURE[subtypeArgument][TEXTURE]
 #		TYPE.EFFECT:
-#			tmp = DATA_EFFECT[subtypeArgument][PORTRAIT]
-#			if tmp == null: tmp = DATA_EFFECT[subtypeArgument][TEXTURE]
+#			tmp = DATA_EFFECTGEN[subtypeArgument][PORTRAIT]
+#			if tmp == null: tmp = DATA_EFFECTGEN[subtypeArgument][TEXTURE]
 #		TYPE.TRAP:
 #			tmp = DATA_TRAP[subtypeArgument][PORTRAIT]
 #			if tmp == null: tmp = DATA_TRAP[subtypeArgument][TEXTURE]

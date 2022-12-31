@@ -69,8 +69,8 @@ func _enter_tree():
 			var oCamera2D = Nodelist.list["oCamera2D"]
 			oCamera2D.connect("zoom_level_changed",self,"_on_zoom_level_changed")
 			_on_zoom_level_changed(oCamera2D.zoom)
-		Things.TYPE.EFFECT:
-			add_to_group("Effect")
+		Things.TYPE.EFFECTGEN:
+			add_to_group("EffectGen")
 		
 func set_location_x(setVal):
 	locationX = setVal
@@ -162,9 +162,9 @@ func set_texture_based_on_thingtype():
 				if tex != null:
 					#$ThingTexture.rect_position.y -= 12
 					$ThingTexture.rect_scale = Vector2(1.5,1.5)
-		Things.TYPE.EFFECT:
-			if Things.DATA_EFFECT.has(subtype) == true:
-				tex = Things.DATA_EFFECT[subtype][Things.TEXTURE]
+		Things.TYPE.EFFECTGEN:
+			if Things.DATA_EFFECTGEN.has(subtype) == true:
+				tex = Things.DATA_EFFECTGEN[subtype][Things.TEXTURE]
 		Things.TYPE.TRAP:
 			if Things.DATA_TRAP.has(subtype) == true:
 				tex = Things.DATA_TRAP[subtype][Things.TEXTURE]
@@ -247,7 +247,7 @@ func _on_VisibilityNotifier2D_screen_exited():
 #			oCreatureTextureRect.material = oInstanceOwnership.materialInstanceOwnership[get_ownership()]
 #			oCreatureLevel.frame = data[CREATURE_LEVEL]
 #		TYPE.EFFECT:
-#			var tex = DATA_EFFECT[get_subtype()][TEXTURE]
+#			var tex = DATA_EFFECTGEN[get_subtype()][TEXTURE]
 #			if tex != null: $ThingTexture.texture = tex
 #		TYPE.TRAP:
 #			var tex = DATA_TRAP[get_subtype()][TEXTURE]

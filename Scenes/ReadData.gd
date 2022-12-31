@@ -39,6 +39,8 @@ func read_keeperfx_lof(buffer):
 		var lineParts = line.split("=")
 		
 		if lineParts.size() == 2:
+			if lineParts[0].strip_edges() == "MAP_FORMAT_VERSION":
+				oDataKeeperFxLof.MAP_FORMAT_VERSION = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "NAME_TEXT":
 				oDataKeeperFxLof.NAME_TEXT = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "NAME_ID":
@@ -69,11 +71,8 @@ func read_keeperfx_lof(buffer):
 					var x = sizeString[0].to_int()
 					var y = sizeString[1].to_int()
 					oDataKeeperFxLof.use_size(x,y)
-	
-	oDataKeeperFxLof.set_date() # It's ok to set it here - this will be applied when you save the map.
 
 func new_keeperfx_lof():
-	oDataKeeperFxLof.set_date()
 	oDataKeeperFxLof.KIND = "FREE"
 
 func read_mapsize_from_lof(buffer):
@@ -397,7 +396,7 @@ func read_tng(buffer):
 			Things.TYPE.CREATURE:
 				id.index = id.data11_12
 				id.creatureLevel = id.data14 + 1 # 14
-			Things.TYPE.EFFECT:
+			Things.TYPE.EFFECTGEN:
 				id.effectRange = (id.data9 / 256.0) + id.data10 # 9-10
 				id.sensitiveTile = id.data11_12
 			Things.TYPE.TRAP:
@@ -441,9 +440,13 @@ func read_tngfx(buffer):
 			match c.get_value(section, "THINGTYPE"):
 				"OBJECT": id.thingType = Things.TYPE.OBJECT
 				"CREATURE": id.thingType = Things.TYPE.CREATURE
-				"EFFECT": id.thingType = Things.TYPE.EFFECT
+				"EFFECTGEN": id.thingType = Things.TYPE.EFFECTGEN
 				"TRAP": id.thingType = Things.TYPE.TRAP
 				"DOOR": id.thingType = Things.TYPE.DOOR
+				"EFFECT":
+					if oDataKeeperFxLof.MAP_FORMAT_VERSION == "": # This is for an old map format bug, read "Effect" as "EffectGen"
+						id.thingType = Things.TYPE.EFFECTGEN
+				
 				_: id.thingType = Things.TYPE.NONE
 			
 			match id.thingType:
@@ -456,7 +459,7 @@ func read_tngfx(buffer):
 				Things.TYPE.CREATURE:
 					id.index = c.get_value(section, "INDEX")
 					id.creatureLevel = c.get_value(section, "CREATURELEVEL")
-				Things.TYPE.EFFECT:
+				Things.TYPE.EFFECTGEN:
 					id.effectRange = c.get_value(section, "EFFECTRANGE")[0] + (c.get_value(section, "EFFECTRANGE")[1] / 256.0)
 					id.sensitiveTile = c.get_value(section, "PARENTTILE")
 				Things.TYPE.TRAP:
