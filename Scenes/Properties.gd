@@ -6,6 +6,7 @@ onready var oDungeonStyleList = Nodelist.list["oDungeonStyleList"]
 onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oAdvancedMapPropertiesCheckBox = Nodelist.list["oAdvancedMapPropertiesCheckBox"]
 
 onready var oAdvancedMapProperties = Nodelist.list["oAdvancedMapProperties"]
 
@@ -20,6 +21,12 @@ onready var oSpeechLineEdit = Nodelist.list["oSpeechLineEdit"]
 onready var oLandViewLineEdit = Nodelist.list["oLandViewLineEdit"]
 onready var oAuthorLineEdit = Nodelist.list["oAuthorLineEdit"]
 onready var oDescriptionLineEdit = Nodelist.list["oDescriptionLineEdit"]
+onready var oSettingsXSizeLine = Nodelist.list["oSettingsXSizeLine"]
+onready var oSettingsYSizeLine = Nodelist.list["oSettingsYSizeLine"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+
+func _ready():
+	oAdvancedMapProperties.visible = false #default to hiding
 
 func _on_MapProperties_visibility_changed():
 	if is_instance_valid(oDungeonStyleList) == false: return
@@ -36,6 +43,16 @@ func _on_MapProperties_visibility_changed():
 		oLandViewLineEdit.text = oDataKeeperFxLof.LAND_VIEW
 		oAuthorLineEdit.text = oDataKeeperFxLof.AUTHOR
 		oDescriptionLineEdit.text = oDataKeeperFxLof.DESCRIPTION
+		oSettingsXSizeLine.text = str(M.xSize)
+		oSettingsYSizeLine.text = str(M.ySize)
+		
+		# Resizing feature isn't implemented, so do not allow changing map format back if you've adjusted size
+		if M.xSize != 85 or M.ySize != 85:
+			oCurrentFormat.disabled = true
+			oCurrentFormat.selected = 0
+		else:
+			oCurrentFormat.disabled = false
+
 
 func refresh_dungeon_style_options():
 	oDungeonStyleList.clear()
@@ -115,3 +132,13 @@ func _on_SpeechLineEdit_text_changed(new_text):
 func _on_LandViewLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataKeeperFxLof.LAND_VIEW = new_text
+
+
+func _on_MapFormatSetting_item_selected(index):
+	match index:
+		0: #KeeperFX format
+			oAdvancedMapPropertiesCheckBox.disabled = false
+		1: #Old format
+			oAdvancedMapPropertiesCheckBox.disabled = true
+			oAdvancedMapPropertiesCheckBox.pressed = false
+			oAdvancedMapProperties.visible = false

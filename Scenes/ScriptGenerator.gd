@@ -220,7 +220,7 @@ func initialize_rooms_available():
 			id.get_node("IconTextureRect").texture = Slabs.icons[slabID]
 			id.set_meta("variable", functionVariable)
 			id.set_meta("ID", slabID)
-			id.get_node("TextEditableLabel").editable = false
+			id.get_node("%TextEditableLabel").editable = false
 			
 			if defaultAvailability == 1:
 				id.set_availability_state(id.OPTION_START)
@@ -238,11 +238,11 @@ func initialize_creatures_available(): # oCreaturePool
 		id.set_meta("variable", functionVariable)
 		var creatureName = Things.DATA_CREATURE[thingID][Things.NAME]
 		id.hint_tooltip = creatureName + ' availability'
-		id.get_node("IconTextureRect").texture = Things.DATA_CREATURE[thingID][Things.TEXTURE]
-		id.get_node("TextEditableLabel").hint_tooltip = creatureName + ' in pool'
-		id.get_node("TextEditableLabel").text = str(defaultAvailability)
-		id.get_node("TextEditableLabel").editable = true
-		id.get_node("TextEditableLabel").mouse_filter = Control.MOUSE_FILTER_PASS
+		id.get_node("%IconTextureRect").texture = Things.DATA_CREATURE[thingID][Things.TEXTURE]
+		id.get_node("%TextEditableLabel").hint_tooltip = creatureName + ' in pool'
+		id.get_node("%TextEditableLabel").text = str(defaultAvailability)
+		id.get_node("%TextEditableLabel").editable = true
+		id.get_node("%TextEditableLabel").mouse_filter = Control.MOUSE_FILTER_PASS
 		
 		if defaultAvailability > 0:
 			id.set_availability_state(id.ENABLED)
@@ -262,9 +262,9 @@ func initialize_traps_available(): # oTrapsAvailable
 		var defaultAvailability = i[2]
 		var id = scnAvailableButton.instance()
 		id.hint_tooltip = Things.DATA_TRAP[thingID][Things.NAME] + ' availability'
-		id.get_node("IconTextureRect").texture = Things.DATA_TRAP[thingID][Things.TEXTURE]
+		id.get_node("%IconTextureRect").texture = Things.DATA_TRAP[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
-		id.get_node("TextEditableLabel").editable = false
+		id.get_node("%TextEditableLabel").editable = false
 		
 		if defaultAvailability == 1:
 			id.set_availability_state(id.ENABLED)
@@ -280,10 +280,10 @@ func initialize_magic_available(): # oMagicAvailable
 		var defaultAvailability = i[2]
 		var id = scnAvailableButton.instance()
 		id.hint_tooltip = Things.DATA_OBJECT[thingID][Things.NAME] + ' availability'
-		id.get_node("IconTextureRect").texture = Things.DATA_OBJECT[thingID][Things.TEXTURE]
+		id.get_node("%IconTextureRect").texture = Things.DATA_OBJECT[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
 		id.set_meta("ID", thingID)
-		id.get_node("TextEditableLabel").editable = false
+		id.get_node("%TextEditableLabel").editable = false
 		
 		if defaultAvailability == 1:
 			id.set_availability_state(id.OPTION_START)
@@ -299,9 +299,9 @@ func initialize_doors_available(): # oDoorsAvailable
 		var defaultAvailability = i[2]
 		var id = scnAvailableButton.instance()
 		id.hint_tooltip = Things.DATA_DOOR[thingID][Things.NAME] + ' availability'
-		id.get_node("IconTextureRect").texture = Things.DATA_DOOR[thingID][Things.TEXTURE]
+		id.get_node("%IconTextureRect").texture = Things.DATA_DOOR[thingID][Things.TEXTURE]
 		id.set_meta("variable", functionVariable)
-		id.get_node("TextEditableLabel").editable = false
+		id.get_node("%TextEditableLabel").editable = false
 		
 		if defaultAvailability == 1:
 			id.set_availability_state(id.ENABLED)

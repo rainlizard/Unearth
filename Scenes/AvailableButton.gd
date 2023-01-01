@@ -1,11 +1,5 @@
 extends VBoxContainer
 onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
-onready var oIconTextureRect = $IconTextureRect
-onready var oIconHighlight = $IconTextureRect/IconHighlight
-onready var oIconColorRect = $IconTextureRect/IconColorRect
-onready var oTextEditableLabel = $TextEditableLabel
-onready var oTextHighlight = $TextEditableLabel/TextHighlight
-onready var oTextColorRect = $TextEditableLabel/TextColorRect
 
 var availabilityState setget set_availability_state
 
@@ -23,13 +17,13 @@ func _ready():
 
 
 func _on_available_button_mouse_entered():
-	oIconHighlight.color.a8 = 16
-	oTextHighlight.color.a8 = 16
+	$'%IconHighlight'.color.a8 = 16
+	$'%TextHighlight'.color.a8 = 16
 
 
 func _on_available_button_mouse_exited():
-	oIconHighlight.color.a8 = 0
-	oTextHighlight.color.a8 = 0
+	$'%IconHighlight'.color.a8 = 0
+	$'%TextHighlight'.color.a8 = 0
 
 
 func _on_AvailableButton_gui_input(event):
@@ -56,51 +50,44 @@ func _on_button_pressed():
 func set_availability_state(setVal):
 	availabilityState = setVal
 	
-	oIconTextureRect = $IconTextureRect
-	oIconHighlight = $IconTextureRect/IconHighlight
-	oIconColorRect = $IconTextureRect/IconColorRect
-	oTextEditableLabel = $TextEditableLabel
-	oTextHighlight = $TextEditableLabel/TextHighlight
-	oTextColorRect = $TextEditableLabel/TextColorRect
-	
 	match availabilityState:
 		OPTION_START:
-			oTextEditableLabel.text = "Start"
-			oTextColorRect.modulate = Color(1,1,1,1)
-			oIconColorRect.modulate = Color(1,1,1,1)
-			oTextColorRect.color = Color("#46455c")
-			oIconColorRect.color = Color("#383745")
+			$'%TextEditableLabel'.text = "Start"
+			$'%TextColorRect'.modulate = Color(1,1,1,1)
+			$'%IconColorRect'.modulate = Color(1,1,1,1)
+			$'%TextColorRect'.color = Color("#46455c")
+			$'%IconColorRect'.color = Color("#383745")
 		OPTION_RESEARCH:
-			oTextEditableLabel.text = "Research"
-			oTextColorRect.modulate = Color(1,1,1,1)
-			oIconColorRect.modulate = Color(1,1,1,1)
-			oTextColorRect.color = Color("#5c3b5c")
-			oIconColorRect.color = Color("#3f3745")
+			$'%TextEditableLabel'.text = "Research"
+			$'%TextColorRect'.modulate = Color(1,1,1,1)
+			$'%IconColorRect'.modulate = Color(1,1,1,1)
+			$'%TextColorRect'.color = Color("#5c3b5c")
+			$'%IconColorRect'.color = Color("#3f3745")
 		OPTION_DISABLED:
-			oTextEditableLabel.text = "Disabled"
-			oTextColorRect.modulate = Color(1,1,1,0.25)
-			oIconColorRect.modulate = Color(1,1,1,0.25)
-			oTextColorRect.color = Color("#000000")
-			oIconColorRect.color = Color("#000000")
+			$'%TextEditableLabel'.text = "Disabled"
+			$'%TextColorRect'.modulate = Color(1,1,1,0.25)
+			$'%IconColorRect'.modulate = Color(1,1,1,0.25)
+			$'%TextColorRect'.color = Color("#000000")
+			$'%IconColorRect'.color = Color("#000000")
 		ENABLED:
-			oIconColorRect.modulate = Color(1,1,1,1)
-			oTextColorRect.modulate = Color(1,1,1,1)
-			oTextColorRect.color = Color("#46455c")
-			oIconColorRect.color = Color("#383745")
-			if oTextEditableLabel.editable == false:
-				oTextEditableLabel.text = "Enabled"
+			$'%IconColorRect'.modulate = Color(1,1,1,1)
+			$'%TextColorRect'.modulate = Color(1,1,1,1)
+			$'%TextColorRect'.color = Color("#46455c")
+			$'%IconColorRect'.color = Color("#383745")
+			if $'%TextEditableLabel'.editable == false:
+				$'%TextEditableLabel'.text = "Enabled"
 		DISABLED:
-			oIconColorRect.modulate = Color(1,1,1,0.25)
-			oTextColorRect.modulate = Color(1,1,1,0.25)
-			oTextColorRect.color = Color("#000000")
-			oIconColorRect.color = Color("#000000")
-			if oTextEditableLabel.editable == false:
-				oTextEditableLabel.text = "Disabled"
+			$'%IconColorRect'.modulate = Color(1,1,1,0.25)
+			$'%TextColorRect'.modulate = Color(1,1,1,0.25)
+			$'%TextColorRect'.color = Color("#000000")
+			$'%IconColorRect'.color = Color("#000000")
+			if $'%TextEditableLabel'.editable == false:
+				$'%TextEditableLabel'.text = "Disabled"
 
 
 func get_integer():
-	return int(oTextEditableLabel.text)
+	return int($'%TextEditableLabel'.text)
 
 
 func _on_EditableLabel_focus_exited():
-	oTextEditableLabel.text = str(int(oTextEditableLabel.text))
+	$'%TextEditableLabel'.text = str(int($'%TextEditableLabel'.text))

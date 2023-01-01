@@ -14,6 +14,8 @@ onready var oNewMapNoiseOptions = Nodelist.list["oNewMapNoiseOptions"]
 onready var oXSizeLine = Nodelist.list["oXSizeLine"]
 onready var oYSizeLine = Nodelist.list["oYSizeLine"]
 onready var oGame = Nodelist.list["oGame"]
+onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var noise = OpenSimplexNoise.new()
 var imageData = Image.new()
@@ -21,6 +23,7 @@ var textureData = ImageTexture.new()
 
 const earthColour = Color8(255,255,255,255)#Color8(36,24,0,255)
 const impenetrableColour = Color8(0,0,0,255)
+
 
 func reinit_noise_preview():
 	var sizeX = oXSizeLine.text.to_int()
@@ -47,18 +50,6 @@ func reinit_noise_preview():
 
 func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
-	if oGame.EXECUTABLE_PATH.get_file().to_lower() != "keeperfx.exe":
-		oXSizeLine.editable = false
-		oYSizeLine.editable = false
-		var setTxt = "If you want to change map size then the settings executable path must point to 'keeperfx.exe'."
-		oXSizeLine.hint_tooltip = setTxt
-		oYSizeLine.hint_tooltip = setTxt
-	else:
-		oXSizeLine.editable = true
-		oYSizeLine.editable = true
-		var setTxt = ""
-		oXSizeLine.hint_tooltip = setTxt
-		oYSizeLine.hint_tooltip = setTxt
 	
 	oXSizeLine.text = "85"
 	oYSizeLine.text = "85"
@@ -89,6 +80,8 @@ func _on_ButtonNewMapOK_pressed():
 		overwrite_map_with_blank_values()
 	
 	oSlabPlacement.generate_slabs_based_on_id(Vector2(0,0), Vector2(M.xSize-1,M.ySize-1), false)
+	
+	oCurrentFormat.selected = oSetNewFormat.selected
 	
 	visible = false # Close New Map window after pressing OK button
 
@@ -207,3 +200,20 @@ func _on_CheckBoxNewMapBlank_pressed():
 	update_border_image_with_blank()
 
 
+
+
+func _on_NewMapFormat_item_selected(index):
+	if index == 0:
+		oXSizeLine.editable = true
+		oYSizeLine.editable = true
+		oXSizeLine.hint_tooltip = ""
+		oYSizeLine.hint_tooltip = ""
+	elif index == 1:
+		oXSizeLine.editable = false
+		oYSizeLine.editable = false
+		oXSizeLine.text = "85"
+		oYSizeLine.text = "85"
+		_on_XSizeLine_focus_exited()
+		_on_YSizeLine_focus_exited()
+		oXSizeLine.hint_tooltip = "Map size can only be changed if KeeperFX format is used."
+		oYSizeLine.hint_tooltip = "Map size can only be changed if KeeperFX format is used."

@@ -14,11 +14,9 @@ size_flags_horizontal = 5
 size_flags_vertical = 5
 alignment = 1
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="IconTextureRect" type="TextureRect" parent="."]
+unique_name_in_owner = true
 margin_right = 96.0
 margin_bottom = 64.0
 grow_horizontal = 2
@@ -32,15 +30,14 @@ expand = true
 stretch_mode = 6
 
 [node name="IconHighlight" type="ColorRect" parent="IconTextureRect"]
+unique_name_in_owner = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color( 1, 1, 1, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="IconColorRect" type="ColorRect" parent="IconTextureRect"]
+unique_name_in_owner = true
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -55,6 +52,7 @@ __meta__ = {
 }
 
 [node name="TextEditableLabel" type="LineEdit" parent="." groups=["EditableLabel"]]
+unique_name_in_owner = true
 margin_top = 68.0
 margin_right = 96.0
 margin_bottom = 82.0
@@ -68,24 +66,25 @@ custom_styles/normal = ExtResource( 4 )
 align = 1
 script = ExtResource( 3 )
 
-[node name="TextHighlight" type="ColorRect" parent="TextEditableLabel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-color = Color( 1, 1, 1, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="TextColorRect" type="ColorRect" parent="TextEditableLabel"]
+unique_name_in_owner = true
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 color = Color( 0.27451, 0.270588, 0.360784, 1 )
 __meta__ = {
 "_edit_use_anchors_": true
 }
+
+[node name="TextHighlight" type="ColorRect" parent="TextEditableLabel"]
+unique_name_in_owner = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 1, 1, 1, 0 )
 
 [connection signal="gui_input" from="." to="." method="_on_AvailableButton_gui_input"]
 [connection signal="focus_exited" from="TextEditableLabel" to="." method="_on_EditableLabel_focus_exited"]

@@ -38,6 +38,7 @@ onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 

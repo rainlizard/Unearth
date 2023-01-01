@@ -5,7 +5,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 
 func _on_ChooseDkExe_file_selected(path):
 	if path.get_file().to_lower() != "keeperfx.exe":
-		oMessage.big("Warning", "You didn't select keeperfx.exe, so some editor features will be disabled, such as large map sizes.")
+		oMessage.big("Warning", "It seems you didn't select keeperfx.exe, it is recommended that you install and use KeeperFX to take advantage of new features.")
 	Settings.set_setting("executable_path", path)
 	
 	var err = oGame.test_write_permissions()
