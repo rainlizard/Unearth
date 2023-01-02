@@ -33,6 +33,7 @@ onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -190,15 +191,28 @@ func _on_EditSubmenu_Pressed(pressedID):
 func _on_slab_style_window_close_button_clicked():
 	oMenuButtonEdit.get_popup().set_item_checked(0, false)
 
+func _on_MenuButtonHelp_about_to_show():
+	match oCurrentFormat.selected:
+		0:
+			oMenuButtonHelp.get_popup().set_item_disabled(0, false)
+			oMenuButtonHelp.get_popup().set_item_disabled(1, false)
+			oMenuButtonHelp.get_popup().set_item_disabled(2, true)
+		1:
+			oMenuButtonHelp.get_popup().set_item_disabled(0, true)
+			oMenuButtonHelp.get_popup().set_item_disabled(1, true)
+			oMenuButtonHelp.get_popup().set_item_disabled(2, false)
+
 func _on_HelpSubmenu_Pressed(pressedID):
 	match pressedID:
 		0:
-			OS.shell_open("https://lubiki.keeperklan.com/dk1_docs/dk_scripting_ref.htm")
-		1:
 			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/New-and-Modified-Level-Script-Commands")
+		1:
+			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Creating-a-new-campaign")
 		2:
-			Utils.popup_centered(oControlsWindow)
+			OS.shell_open("https://lubiki.keeperklan.com/dk1_docs/dk_scripting_ref.htm")
 		3:
+			Utils.popup_centered(oControlsWindow)
+		4:
 			Utils.popup_centered(oAboutWindow)
 
 func _on_ViewSubmenu_Pressed(pressedID):
