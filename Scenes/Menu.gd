@@ -34,6 +34,7 @@ onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oDataLif = Nodelist.list["oDataLif"]
 onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -59,6 +60,7 @@ func _on_RecentSubmenu_Pressed(pressedID):
 
 
 func add_recent(filePath):
+	if filePath == "": return
 	var recentString = filePath
 	
 	var findExisting = recentlyOpened.find(recentString)
@@ -83,6 +85,7 @@ func populate_recently_opened():
 	recentlyOpenedPopupMenu.clear()
 	for i in recentlyOpened.size():
 		var filePath = recentlyOpened[i]
+		
 		filePath = filePath.replace("\\", "/")
 		
 		var mapName = oDataLif.lif_name_text(filePath + '.lif')
@@ -92,6 +95,10 @@ func populate_recently_opened():
 			mapName = oDataLif.get_special_lif_text(filePath)
 		if mapName == "":
 			mapName = oDataLif.get_special_lif_text(filePath)
+		if mapName == "":
+			mapName = oDataKeeperFxLof.lof_name_text(filePath + ".lof")
+		if mapName == "":
+			mapName = oDataKeeperFxLof.lof_name_text(filePath + ".LOF")
 		
 		# Trim game directory from path to make it look nicer
 		var baseDir = oGame.GAME_DIRECTORY.replace('\\','/')
