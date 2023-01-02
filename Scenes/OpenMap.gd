@@ -124,6 +124,14 @@ func open_map(filePath): # auto opens other files
 				if EXT == "LGT" and oCurrentMap.currentFilePaths.has("LGTFX") == true:
 					continue
 				
+				# Set current format setting to new KeeperFX format, if any new files are detected
+				var setNewFormat = false
+				if EXT == "TNGFX": setNewFormat = true
+				if EXT == "APTFX": setNewFormat = true 
+				if EXT == "LGTFX": setNewFormat = true 
+				if setNewFormat == true:
+					oCurrentFormat.selected = 0
+				
 				Filetypes.read(oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING], EXT.to_upper())
 			else:
 				print("Missing " + EXT + " file, so create blank data for that one.")

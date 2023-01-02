@@ -156,5 +156,5 @@ func toggle_map_preview(togglePreview):
 	if oCurrentMap.currentFilePaths.has("SLB") == true:
 		var currentSlbPath = oCurrentMap.currentFilePaths["SLB"][oCurrentMap.PATHSTRING]
 		
-		if currentSlbPath == oDynamicMapTree.get_selected().get_metadata(0):
+		if oDynamicMapTree.get_selected() != null and currentSlbPath == oDynamicMapTree.get_selected().get_metadata(0):
 			oQuickMapPreview.visible = false

@@ -8,6 +8,7 @@ onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 onready var oMenu = Nodelist.list["oMenu"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var queueExit = false
 
@@ -21,6 +22,20 @@ func save_map(filePath): # auto opens other files
 		delete_existing_files(map)
 	
 	for EXT in Filetypes.FILE_TYPES:
+		
+		# List of file extensions to skip creating
+		# Remember "continue" means skip
+		if oCurrentFormat.selected == 0: # KeeperFX format
+			if EXT == "LIF": continue
+			if EXT == "TNG": continue
+			if EXT == "APT": continue
+			if EXT == "LGT": continue
+		elif oCurrentFormat.selected == 1: # Old format
+			if EXT == "LOF": continue
+			if EXT == "TNGFX": continue
+			if EXT == "APTFX": continue
+			if EXT == "LGTFX": continue
+		
 		var saveToFilePath = map + '.' + EXT.to_lower()
 		
 		# Skip saving over existing script file unless it has been edited

@@ -1,22 +1,28 @@
 extends Tree
-
 onready var oGame = Nodelist.list["oGame"]
 onready var oDataLif = Nodelist.list["oDataLif"]
+onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 
 var treeItemsThatWantNames = {} # <BASENAME> <TreeItem>
-var lifNames = {} # <BASENAME> <LifNameString>
+var gatherMapNames = {} # <BASENAME> <LifNameString>
 
 
 func update_source_tree(): # Call this whenever there's an update to the filesystem, or whenever you open the map list
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	treeItemsThatWantNames.clear()
-	lifNames.clear()
+	gatherMapNames.clear()
 	clear()
 	create_item() # Important to create root
 	get_root().set_text(0,"SourceMapTree root")
 	
-	scan_all_paths(oGame.GAME_DIRECTORY)
+	var path
+	path = oGame.GAME_DIRECTORY.plus_file("levels")
+	var levelsTreeItem = add_tree_dir(self, self, path)
+	deep_scan(path, levelsTreeItem)
+	path = oGame.GAME_DIRECTORY.plus_file("campgns")
+	var campgnsTreeItem = add_tree_dir(self, self, path)
+	deep_scan(path, campgnsTreeItem)
 	
 	# For the remaining items without lif names
 	for BASENAME in treeItemsThatWantNames:
@@ -27,11 +33,11 @@ func update_source_tree(): # Call this whenever there's an update to the filesys
 	print('SourceMapTree updated in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 
-func scan_all_paths(rootPath):
+func deep_scan(rootPath, parentTreeItem):
 	var dir = Directory.new()
 	if dir.open(rootPath) == OK:
 		dir.list_dir_begin(true, false)
-		add_directory_contents(dir, self)
+		add_directory_contents(dir, parentTreeItem)
 		dir.list_dir_end()
 	else:
 		push_error("An error occurred when trying to access the path.")
@@ -71,6 +77,8 @@ func add_directory_contents(dir, treeItem):
 				SLB_WANTS_NAME(pathString, newTreeItem)
 			elif EXT == "LIF":
 				LIF_WANTS_TO_GIVE_NAME(pathString)
+			elif EXT == "LOF":
+				LOF_WANTS_TO_GIVE_NAME(pathString)
 
 
 class MyCustomSorter:
@@ -112,21 +120,31 @@ func kill_childless_tree_items(array): # Feed this an array of DIRECTORY TreeIte
 
 func SLB_WANTS_NAME(pathString,newTreeItem):
 	var BASENAME = pathString.get_basename().to_upper()
-	if lifNames.has(BASENAME):
-		newTreeItem.set_text(1, lifNames[BASENAME])
-		lifNames.erase(BASENAME)
+	if gatherMapNames.has(BASENAME):
+		newTreeItem.set_text(1, gatherMapNames[BASENAME])
+		gatherMapNames.erase(BASENAME)
 	else:
 		treeItemsThatWantNames[BASENAME] = newTreeItem
 
 
 func LIF_WANTS_TO_GIVE_NAME(pathString):
-	var lifNameText = oDataLif.lif_name_text(pathString)
+	var getNameText = oDataLif.lif_name_text(pathString)
+	
 	var BASENAME = pathString.get_basename().to_upper()
 	if treeItemsThatWantNames.has(BASENAME):
 		var fetchItem = treeItemsThatWantNames[BASENAME]
-		fetchItem.set_text(1, lifNameText)
+		fetchItem.set_text(1, getNameText)
 		treeItemsThatWantNames.erase(BASENAME)
 	else:
-		lifNames[BASENAME] = lifNameText
+		gatherMapNames[BASENAME] = getNameText
 
-
+func LOF_WANTS_TO_GIVE_NAME(pathString):
+	var getNameText = oDataKeeperFxLof.lof_name_text(pathString)
+	
+	var BASENAME = pathString.get_basename().to_upper()
+	if treeItemsThatWantNames.has(BASENAME):
+		var fetchItem = treeItemsThatWantNames[BASENAME]
+		fetchItem.set_text(1, getNameText)
+		treeItemsThatWantNames.erase(BASENAME)
+	else:
+		gatherMapNames[BASENAME] = getNameText

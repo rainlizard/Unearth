@@ -95,11 +95,11 @@ func update_img(slbFilePath):
 	
 	var lofBuffer = Filetypes.file_path_to_buffer(lofFilePath)
 	var xy = oReadData.read_mapsize_from_lof(lofBuffer)
-	print(xy)
+	#print(xy)
 	
 	
 	
-	var CODETIME_START = OS.get_ticks_msec()
+	#var CODETIME_START = OS.get_ticks_msec()
 	
 	var ownFilePath = ""
 	if File.new().file_exists(slbFilePath.get_basename()+".own") == true:
@@ -157,5 +157,5 @@ func update_img(slbFilePath):
 	
 	rect_size = Vector2(M.xSize*96, M.ySize*96) # Cover current map in darkness
 	
-	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	#print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return OK
