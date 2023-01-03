@@ -199,14 +199,13 @@ func construct_shape_for_placement(constructType):
 	elif oOnlyOwnership.visible == true:
 		oOverheadOwnership.ownership_update_shape(shapePositionArray, paintOwnership)
 		oOverheadOwnership.ownership_update_things(shapePositionArray, paintOwnership)
-		oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd, true)
+		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, true)
 	else:
 		# Slab placement
 		var useOwner = paintOwnership
 		if oOwnableNaturalTerrain.pressed == false and Slabs.data.has(paintSlab) and Slabs.data[paintSlab][Slabs.IS_OWNABLE] == false:
 			useOwner = 5
 		
-		print('aaa')
 		oSlabPlacement.place_shape_of_slab_id(shapePositionArray, paintSlab, useOwner)
 		
 		var updateNearby = true
@@ -214,7 +213,7 @@ func construct_shape_for_placement(constructType):
 		if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
 			updateNearby = false
 		
-		oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd, updateNearby)
+		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
 
 
 func place_subtile(placeSubtile):

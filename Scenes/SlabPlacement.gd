@@ -81,44 +81,72 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 
 
-func generate_slabs_based_on_id(rectStart, rectEnd, updateNearby):
+func generate_slabs_based_on_id(shapePositionArray, updateNearby):
+	var CODETIME_START = OS.get_ticks_msec()
+	
 	oEditor.mapHasBeenEdited = true
 	if updateNearby == true:
-		# Include surrounding
-		rectStart -= Vector2(1,1)
-		rectEnd += Vector2(1,1)
-	rectStart = Vector2(clamp(rectStart.x, 0, M.xSize-1), clamp(rectStart.y, 0, M.ySize-1))
-	rectEnd = Vector2(clamp(rectEnd.x, 0, M.xSize-1), clamp(rectEnd.y, 0, M.ySize-1))
+		# Include surrounding. This only takes 14ms to 'Update all slabs'
+		var surroundingShape = {}
+		var shapePositionDictionary = {}
+		for pos in shapePositionArray:
+			shapePositionDictionary[pos] = true
+		for pos in shapePositionArray:
+			if shapePositionDictionary.has(pos+Vector2(1,0)) == false: surroundingShape[pos+Vector2(1,0)] = true
+			if shapePositionDictionary.has(pos+Vector2(-1,0)) == false: surroundingShape[pos+Vector2(-1,0)] = true
+			if shapePositionDictionary.has(pos+Vector2(0,1)) == false: surroundingShape[pos+Vector2(0,1)] = true
+			if shapePositionDictionary.has(pos+Vector2(0,-1)) == false: surroundingShape[pos+Vector2(0,-1)] = true
+			if shapePositionDictionary.has(pos+Vector2(1,1)) == false: surroundingShape[pos+Vector2(1,1)] = true
+			if shapePositionDictionary.has(pos+Vector2(-1,-1)) == false: surroundingShape[pos+Vector2(-1,-1)] = true
+			if shapePositionDictionary.has(pos+Vector2(-1,1)) == false: surroundingShape[pos+Vector2(-1,1)] = true
+			if shapePositionDictionary.has(pos+Vector2(1,-1)) == false: surroundingShape[pos+Vector2(1,-1)] = true
+		# Merge
+		shapePositionArray.append_array(surroundingShape.keys())
+	#rectStart = Vector2(clamp(rectStart.x, 0, M.xSize-1), clamp(rectStart.y, 0, M.ySize-1))
+	#rectEnd = Vector2(clamp(rectEnd.x, 0, M.xSize-1), clamp(rectEnd.y, 0, M.ySize-1))
+	
+	# Erase  (37ms)
+	for i in range(shapePositionArray.size() - 1, -1, -1): # iterate in reverse
+		var pos = shapePositionArray[i]
+		if pos.x < 0:
+			shapePositionArray.erase(pos)
+			continue
+		if pos.y < 0:
+			shapePositionArray.erase(pos)
+			continue
+		if pos.x >= M.xSize:
+			shapePositionArray.erase(pos)
+			continue
+		if pos.y >= M.ySize:
+			shapePositionArray.erase(pos)
+			continue
 	
 	oLoadingBar.visible = true
 	oLoadingBar.value = 0
-	var totalSize = abs((rectStart.x)-(rectEnd.x+1)) * abs((rectStart.y)-(rectEnd.y+1))
+	var totalSize = shapePositionArray.size() #abs((rectStart.x)-(rectEnd.x+1)) * abs((rectStart.y)-(rectEnd.y+1))
 	var incrementEvery = 0
 	if totalSize < 1024:
 		incrementEvery = 999999999999 # Don't bother showing loading bar or idling
 	var slabNumber = 0
 	
-	var CODETIME_START = OS.get_ticks_msec()
-	for ySlab in range(rectStart.y, rectEnd.y+1):
-		for xSlab in range(rectStart.x, rectEnd.x+1):
-			
-			var slabID = oDataSlab.get_cell(xSlab, ySlab)
-			var ownership = oDataOwnership.get_cell(xSlab, ySlab)
-			do_slab(xSlab, ySlab, slabID, ownership)
-			
-			oInstances.manage_things_on_slab(xSlab, ySlab, slabID, ownership)
-			
-			slabNumber += 1
-			if slabNumber >= incrementEvery:
-				incrementEvery += totalSize/10.0
-				oLoadingBar.value += 10
-				yield(get_tree(),'idle_frame')
+	for pos in shapePositionArray:
+		var slabID = oDataSlab.get_cell(pos.x, pos.y)
+		var ownership = oDataOwnership.get_cell(pos.x, pos.y)
+		do_slab(pos.x, pos.y, slabID, ownership)
+		
+		oInstances.manage_things_on_slab(pos.x, pos.y, slabID, ownership)
+		
+		slabNumber += 1
+		if slabNumber >= incrementEvery:
+			incrementEvery += totalSize/10.0
+			oLoadingBar.value += 10
+			yield(get_tree(),'idle_frame')
 	
 	oLoadingBar.visible = false
 	
 	print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
-	oOverheadGraphics.overhead2d_update_rect(rectStart, rectEnd)
+	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
 
 
 func do_slab(xSlab, ySlab, slabID, ownership):
@@ -179,7 +207,12 @@ func slab_place_custom(xSlab, ySlab, slabID, ownership, surrID):
 func _on_ConfirmAutoGen_confirmed():
 	oMessage.quick("Auto-generated all slabs")
 	var updateNearby = true
-	generate_slabs_based_on_id(Vector2(0,0), Vector2(M.xSize-1,M.ySize-1), updateNearby)
+	#Vector2(0,0), Vector2(M.xSize-1,M.ySize-1)
+	var shapePositionArray = []
+	for ySlab in range(0, M.ySize):
+		for xSlab in range(0, M.xSize):
+			shapePositionArray.append(Vector2(xSlab,ySlab))
+	generate_slabs_based_on_id(shapePositionArray, updateNearby)
 
 
 func auto_torch_earth(xSlab, ySlab):

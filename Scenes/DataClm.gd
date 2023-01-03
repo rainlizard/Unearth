@@ -130,8 +130,6 @@ func sort_columns_by_utilized():
 		cubes[i] = array[i][7]
 		floorTexture[i] = array[i][8]
 	
-
-	
 	#print(dictionary[419])
 	
 	for y in (M.ySize*3):
@@ -139,7 +137,12 @@ func sort_columns_by_utilized():
 			var clmIndex = oDataClmPos.get_cell(x,y)
 			oDataClmPos.set_cell(x, y, dictSrcDest[clmIndex])
 	
-	oOverheadGraphics.overhead2d_update_rect(Vector2(0,0), Vector2(M.xSize-1,M.ySize-1))
+	var shapePositionArray = []
+	for ySlab in range(0, M.ySize):
+		for xSlab in range(0, M.xSize):
+			shapePositionArray.append(Vector2(xSlab,ySlab))
+	
+	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
 	
 	
 	utilized[0] = 0 # Pretend that the utilized value is maximum for column 0, so it's placed first. Set it back to 0 afterwards.

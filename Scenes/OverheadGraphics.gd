@@ -23,30 +23,36 @@ func update_map_overhead_2d_textures():
 	overheadImgData.create((M.xSize*3), (M.ySize*3), false, Image.FORMAT_RGB8)
 	overheadTexData.create_from_image(overheadImgData, 0)
 	
-	overhead2d_update_rect(Vector2(0,0), Vector2(M.xSize-1,M.ySize-1))
+	var shapePositionArray = []
+	for ySlab in range(0, M.ySize):
+		for xSlab in range(0, M.xSize):
+			shapePositionArray.append(Vector2(xSlab,ySlab))
+	
+	overhead2d_update_rect(shapePositionArray)
 	
 	print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-func overhead2d_update_rect(rectStart, rectEnd):
+func overhead2d_update_rect(shapePositionArray):
 	# Include surrounding
-	rectStart -= Vector2(1,1)
-	rectEnd += Vector2(1,1)
-	rectStart = Vector2(clamp(rectStart.x, 0, M.xSize-1), clamp(rectStart.y, 0, M.ySize-1))
-	rectEnd = Vector2(clamp(rectEnd.x, 0, M.xSize-1), clamp(rectEnd.y, 0, M.ySize-1))
+	#rectStart -= Vector2(1,1)
+	#rectEnd += Vector2(1,1)
+	#rectStart = Vector2(clamp(rectStart.x, 0, M.xSize-1), clamp(rectStart.y, 0, M.ySize-1))
+	#rectEnd = Vector2(clamp(rectEnd.x, 0, M.xSize-1), clamp(rectEnd.y, 0, M.ySize-1))
 #	print('rectStart: '+str(rectStart))
 #	print('rectEnd: '+str(rectEnd))
 	
 	overheadImgData.lock()
-	for ySlab in range(rectStart.y, rectEnd.y+1):
-		for xSlab in range(rectStart.x, rectEnd.x+1):
-#			print('xSlab: '+str(xSlab))
-#			print('ySlab: '+str(ySlab))
-			var slabID = oDataSlab.get_cell(xSlab, ySlab)
-			for ySubtile in 3:
-				for xSubtile in 3:
-					var x = (xSlab * 3) + xSubtile
-					var y = (ySlab * 3) + ySubtile
-					overheadImgData.set_pixel(x,y,get_overhead_face_value(x, y, slabID))
+	#for ySlab in range(rectStart.y, rectEnd.y+1):
+	#	for xSlab in range(rectStart.x, rectEnd.x+1):
+	for pos in shapePositionArray:
+#		print('xSlab: '+str(xSlab))
+#		print('ySlab: '+str(ySlab))
+		var slabID = oDataSlab.get_cell(pos.x, pos.y)
+		for ySubtile in 3:
+			for xSubtile in 3:
+				var x = (pos.x * 3) + xSubtile
+				var y = (pos.y * 3) + ySubtile
+				overheadImgData.set_pixel(x,y,get_overhead_face_value(x, y, slabID))
 	overheadImgData.unlock()
 	
 	overheadTexData.set_data(overheadImgData)

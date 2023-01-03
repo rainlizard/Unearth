@@ -82,7 +82,8 @@ func _on_ButtonNewMapOK_pressed():
 		# Blank
 		overwrite_map_with_blank_values()
 	
-	oSlabPlacement.generate_slabs_based_on_id(Vector2(0,0), Vector2(M.xSize-1,M.ySize-1), false)
+	#Vector2(0,0), Vector2(M.xSize-1,M.ySize-1)
+	oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, false)
 	
 	oCurrentFormat.selected = oSetNewFormat.selected
 	

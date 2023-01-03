@@ -176,7 +176,7 @@ func apply_colour_as_slabIDs_to_map(doColour, slabID):
 	
 	var useOwner = 5
 	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner)
-	oSlabPlacement.generate_slabs_based_on_id(rectStart, rectEnd, true)
+	oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, true)
 
 func finish_up():
 	oMessage.quick("Applied slabs to map.")
