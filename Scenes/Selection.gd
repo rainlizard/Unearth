@@ -24,6 +24,13 @@ onready var oInspector = Nodelist.list["oInspector"]
 onready var oCustomSlabsTab = Nodelist.list["oCustomSlabsTab"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oEditingTools = Nodelist.list["oEditingTools"]
+
+enum {
+	CONSTRUCT_RECTANGLE
+	CONSTRUCT_CIRCLE
+	CONSTRUCT_FILL
+}
 
 var texBlueCursor = preload("res://Art/Cursor32x32Blue.png")
 var texGreenCursor = preload("res://Art/Cursor32x32.png")
@@ -79,7 +86,7 @@ func newPaintSlab(value):
 	paintSlab = value
 
 func get_slab_under_cursor():
-	cursorOverSlab = oSelector.get_slabID_under_cursor()#oDataSlab.get_cellv(oSelector.cursorTile)
+	cursorOverSlab = oSelector.get_slabID_at_pos(oSelector.cursorTile)
 	cursorOverSlabOwner = oDataOwnership.get_cellv(oSelector.cursorTile)
 
 func update_paint():
@@ -120,38 +127,72 @@ func update_paint():
 					oPickThingWindow.set_selection(paintThingType, paintSubtype)
 
 
-func place_shape(beginTile, endTile, isCircle):
+func construct_shape_for_placement(constructType):
 	oEditor.mapHasBeenEdited = true
-	
 	var rectStart = Vector2()
 	var rectEnd = Vector2()
 	
-	if beginTile.x < endTile.x:
-		rectStart.x = beginTile.x
-		rectEnd.x = endTile.x
-	else:
-		rectStart.x = endTile.x
-		rectEnd.x = beginTile.x
-	
-	if beginTile.y < endTile.y:
-		rectStart.y = beginTile.y
-		rectEnd.y = endTile.y
-	else:
-		rectStart.y = endTile.y
-		rectEnd.y = beginTile.y
-	
-	var brushSizeX = abs(rectStart.x-rectEnd.x)
-	var brushSizeY = abs(rectStart.y-rectEnd.y)
-	var center = rectStart + (Vector2(brushSizeX,brushSizeY)*0.5)
-	
 	var shapePositionArray = []
-	for y in range(rectStart.y, rectEnd.y+1):
-		for x in range(rectStart.x, rectEnd.x+1):
-			if isCircle == true:
-				if (Vector2(x,y).distance_to(center)) < (max(brushSizeX+1,brushSizeY+1)*0.47):
-					shapePositionArray.append(Vector2(x,y))
+	match constructType:
+		CONSTRUCT_RECTANGLE:
+			if oRectangleSelection.beginTile.x < oRectangleSelection.endTile.x:
+				rectStart.x = oRectangleSelection.beginTile.x
+				rectEnd.x = oRectangleSelection.endTile.x
 			else:
-				shapePositionArray.append(Vector2(x,y))
+				rectStart.x = oRectangleSelection.endTile.x
+				rectEnd.x = oRectangleSelection.beginTile.x
+			if oRectangleSelection.beginTile.y < oRectangleSelection.endTile.y:
+				rectStart.y = oRectangleSelection.beginTile.y
+				rectEnd.y = oRectangleSelection.endTile.y
+			else:
+				rectStart.y = oRectangleSelection.endTile.y
+				rectEnd.y = oRectangleSelection.beginTile.y
+			for y in range(rectStart.y, rectEnd.y+1):
+				for x in range(rectStart.x, rectEnd.x+1):
+					shapePositionArray.append(Vector2(x,y))
+		CONSTRUCT_CIRCLE:
+			var b = ((oEditingTools.BRUSH_SIZE)-1) / 2.0
+			var beginTile = oSelector.world2tile(get_global_mouse_position()) - Vector2(floor(b),floor(b))
+			var endTile = oSelector.world2tile(get_global_mouse_position()) + Vector2(ceil(b),ceil(b))
+			if beginTile.x < endTile.x:
+				rectStart.x = beginTile.x
+				rectEnd.x = endTile.x
+			else:
+				rectStart.x = endTile.x
+				rectEnd.x = beginTile.x
+			if beginTile.y < endTile.y:
+				rectStart.y = beginTile.y
+				rectEnd.y = endTile.y
+			else:
+				rectStart.y = endTile.y
+				rectEnd.y = beginTile.y
+			var brushSizeX = abs(rectStart.x-rectEnd.x)
+			var brushSizeY = abs(rectStart.y-rectEnd.y)
+			var center = rectStart + (Vector2(brushSizeX,brushSizeY)*0.5)
+			for y in range(rectStart.y, rectEnd.y+1):
+				for x in range(rectStart.x, rectEnd.x+1):
+					if (Vector2(x,y).distance_to(center)) < (max(brushSizeX+1,brushSizeY+1)*0.47):
+						shapePositionArray.append(Vector2(x,y))
+		CONSTRUCT_FILL:
+			var beginTile = oSelector.world2tile(get_global_mouse_position())
+			var coordsToCheck = [beginTile]
+			var fillTargetID = oSelector.get_slabID_at_pos(oSelector.cursorTile)
+			
+			while coordsToCheck.size() > 0:
+				var coord = coordsToCheck.pop_back()
+				oSelector.get_slabID_at_pos(oSelector.cursorTile)
+				
+				if oSelector.get_slabID_at_pos(coord) == fillTargetID:
+					shapePositionArray.append(coord)
+					
+					if shapePositionArray.has(coord + Vector2(0,1)) == false:
+						coordsToCheck.append(coord + Vector2(0,1))
+					if shapePositionArray.has(coord + Vector2(0,-1)) == false:
+						coordsToCheck.append(coord + Vector2(0,-1))
+					if shapePositionArray.has(coord + Vector2(1,0)) == false:
+						coordsToCheck.append(coord + Vector2(1,0))
+					if shapePositionArray.has(coord + Vector2(-1,0)) == false:
+						coordsToCheck.append(coord + Vector2(-1,0))
 	
 	if oSlabStyle.visible == true:
 		oDataSlx.set_tileset_shape(shapePositionArray)
@@ -164,6 +205,8 @@ func place_shape(beginTile, endTile, isCircle):
 		var useOwner = paintOwnership
 		if oOwnableNaturalTerrain.pressed == false and Slabs.data.has(paintSlab) and Slabs.data[paintSlab][Slabs.IS_OWNABLE] == false:
 			useOwner = 5
+		
+		print('aaa')
 		oSlabPlacement.place_shape_of_slab_id(shapePositionArray, paintSlab, useOwner)
 		
 		var updateNearby = true

@@ -76,7 +76,7 @@ func mouse_button_anywhere():
 	if Input.is_action_pressed("mouse_left") == false:
 		if oEditingTools.TOOL_SELECTED == oEditingTools.RECTANGLE:
 			if oRectangleSelection.visible == true:
-				oSelection.place_shape(oRectangleSelection.beginTile, oRectangleSelection.endTile, false)
+				oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_RECTANGLE)
 				oRectangleSelection.clear()
 
 func mouse_button_on_field():
@@ -96,6 +96,10 @@ func mouse_button_on_field():
 				pass
 			oEditingTools.RECTANGLE:
 				oRectangleSelection.set_initial_position(cursorTile)
+			oEditingTools.PAINTBUCKET:
+				if mode == MODE_TILE:
+					oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_FILL)
+				pass
 	
 	if Input.is_action_pressed("mouse_left"):
 			match oEditingTools.TOOL_SELECTED:
@@ -107,9 +111,7 @@ func mouse_button_on_field():
 								var placeSubtile = world2subtile(get_global_mouse_position())
 								oSelection.place_subtile(placeSubtile)
 							MODE_TILE:
-								var placeTile = world2tile(get_global_mouse_position())
-								var b = ((oEditingTools.BRUSH_SIZE)-1) / 2.0
-								oSelection.place_shape(placeTile-Vector2(floor(b),floor(b)), placeTile+Vector2(ceil(b),ceil(b)), true)
+								oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_CIRCLE)
 				oEditingTools.RECTANGLE:
 					oRectangleSelection.update_positions(cursorTile)
 	
@@ -242,12 +244,12 @@ func position_meeting(checkPos, checkGroup):
 			return true
 	return false
 
-func get_slabID_under_cursor():
-	var customSlabID = oDataCustomSlab.get_cellv(cursorTile)
+func get_slabID_at_pos(pos):
+	var customSlabID = oDataCustomSlab.get_cellv(pos)
 	if customSlabID != 0:
 		return customSlabID
 	else:
-		return oDataSlab.get_cellv(cursorTile)
+		return oDataSlab.get_cellv(pos)
 
 
 func _on_Selector_visibility_changed():

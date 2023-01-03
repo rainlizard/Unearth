@@ -1,4 +1,4 @@
-[gd_scene load_steps=160 format=2]
+[gd_scene load_steps=163 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -115,6 +115,7 @@
 [ext_resource path="res://Art/IconPencilHover.png" type="Texture" id=113]
 [ext_resource path="res://Scenes/RectangleSelection.gd" type="Script" id=114]
 [ext_resource path="res://Scenes/OnlyOwnership.gd" type="Script" id=115]
+[ext_resource path="res://Art/IconPaintBucket.png" type="Texture" id=116]
 [ext_resource path="res://Scenes/DataScript.gd" type="Script" id=117]
 [ext_resource path="res://Scenes/PropertiesTabs.gd" type="Script" id=118]
 [ext_resource path="res://Scenes/AboutWindow.gd" type="Script" id=119]
@@ -140,6 +141,8 @@
 [ext_resource path="res://Scenes/LimitThing.gd" type="Script" id=139]
 [ext_resource path="res://Shaders/IndividualFloorTexture.tres" type="Material" id=140]
 [ext_resource path="res://Scenes/DataKeeperFxLof.gd" type="Script" id=141]
+[ext_resource path="res://Art/IconPaintBucketHover.png" type="Texture" id=142]
+[ext_resource path="res://Art/IconPaintBucketPressed.png" type="Texture" id=143]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -1242,6 +1245,7 @@ columns = 6
 margin_top = 9.0
 margin_right = 276.0
 margin_bottom = 38.0
+hint_tooltip = "The ownership of placed Things will be set to the ownership of the underlying slab"
 focus_mode = 0
 text = "Use slab ownership"
 script = ExtResource( 93 )
@@ -1324,16 +1328,31 @@ texture_pressed = ExtResource( 111 )
 texture_hover = ExtResource( 112 )
 expand = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
+[node name="ToolPaintBucket" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
+margin_left = 52.0
+margin_right = 100.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 48 )
+hint_tooltip = "Paint bucket tool"
+focus_mode = 0
+toggle_mode = true
+enabled_focus_mode = 0
+group = ExtResource( 108 )
+texture_normal = ExtResource( 116 )
+texture_pressed = ExtResource( 143 )
+texture_hover = ExtResource( 142 )
+expand = true
+
+[node name="BrushSizeContainer" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
 margin_right = 170.0
 margin_bottom = 40.0
 
-[node name="Label" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer2"]
+[node name="Label" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer"]
 margin_right = 92.0
 margin_bottom = 21.0
 text = "Brush size"
 
-[node name="EditBrushSizeValue" type="SpinBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer2"]
+[node name="EditBrushSizeValue" type="SpinBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer"]
 margin_right = 74.0
 margin_bottom = 31.0
 min_value = 1.0
@@ -5494,7 +5513,8 @@ script = ExtResource( 88 )
 [connection signal="visibility_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" method="_on_UseSlabOwnerCheckBox_visibility_changed"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolPencil" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPencil_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolRectangle" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolRectangle_toggled"]
-[connection signal="value_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer2/EditBrushSizeValue" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_EditBrushSizeValue_value_changed"]
+[connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolPaintBucket" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPaintBucket_toggled"]
+[connection signal="value_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer/EditBrushSizeValue" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_EditBrushSizeValue_value_changed"]
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/PlacingTipsButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_PlacingTipsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonSettings" to="Ui/UiSystem/Menu" method="_on_MenuButtonSettings_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonHelp" to="Ui/UiSystem/Menu" method="_on_MenuButtonHelp_about_to_show"]
