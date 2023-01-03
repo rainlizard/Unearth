@@ -1,4 +1,7 @@
-extends HBoxContainer
+extends VBoxContainer
+onready var oToolPencil = Nodelist.list["oToolPencil"]
+
+var BRUSH_SIZE = 1
 
 enum {
 	PENCIL
@@ -17,5 +20,9 @@ func switched_to_slab_mode():
 	visible = true
 
 func switched_to_thing_mode():
-	$ToolPencil.pressed = true
+	oToolPencil.pressed = true
 	visible = false
+
+
+func _on_EditBrushSizeValue_value_changed(value):
+	BRUSH_SIZE = value

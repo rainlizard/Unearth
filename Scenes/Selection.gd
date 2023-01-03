@@ -120,7 +120,7 @@ func update_paint():
 					oPickThingWindow.set_selection(paintThingType, paintSubtype)
 
 
-func place_shape(beginTile,endTile):
+func place_shape(beginTile, endTile, isCircle):
 	oEditor.mapHasBeenEdited = true
 	
 	var rectStart = Vector2()
@@ -140,10 +140,18 @@ func place_shape(beginTile,endTile):
 		rectStart.y = endTile.y
 		rectEnd.y = beginTile.y
 	
+	var brushSizeX = abs(rectStart.x-rectEnd.x)
+	var brushSizeY = abs(rectStart.y-rectEnd.y)
+	var center = rectStart + (Vector2(brushSizeX,brushSizeY)*0.5)
+	
 	var shapePositionArray = []
 	for y in range(rectStart.y, rectEnd.y+1):
 		for x in range(rectStart.x, rectEnd.x+1):
-			shapePositionArray.append(Vector2(x,y))
+			if isCircle == true:
+				if (Vector2(x,y).distance_to(center)) < (max(brushSizeX+1,brushSizeY+1)*0.47):
+					shapePositionArray.append(Vector2(x,y))
+			else:
+				shapePositionArray.append(Vector2(x,y))
 	
 	if oSlabStyle.visible == true:
 		oDataSlx.set_tileset_shape(shapePositionArray)

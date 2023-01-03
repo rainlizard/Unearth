@@ -76,7 +76,7 @@ func mouse_button_anywhere():
 	if Input.is_action_pressed("mouse_left") == false:
 		if oEditingTools.TOOL_SELECTED == oEditingTools.RECTANGLE:
 			if oRectangleSelection.visible == true:
-				oSelection.place_shape(oRectangleSelection.beginTile, oRectangleSelection.endTile)
+				oSelection.place_shape(oRectangleSelection.beginTile, oRectangleSelection.endTile, false)
 				oRectangleSelection.clear()
 
 func mouse_button_on_field():
@@ -108,7 +108,8 @@ func mouse_button_on_field():
 								oSelection.place_subtile(placeSubtile)
 							MODE_TILE:
 								var placeTile = world2tile(get_global_mouse_position())
-								oSelection.place_shape(placeTile, placeTile)
+								var b = ((oEditingTools.BRUSH_SIZE)-1) / 2.0
+								oSelection.place_shape(placeTile-Vector2(floor(b),floor(b)), placeTile+Vector2(ceil(b),ceil(b)), true)
 				oEditingTools.RECTANGLE:
 					oRectangleSelection.update_positions(cursorTile)
 	

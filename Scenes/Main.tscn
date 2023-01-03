@@ -1283,7 +1283,7 @@ margin_top = 50.0
 margin_right = 276.0
 margin_bottom = 51.0
 
-[node name="EditingTools" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
+[node name="EditingTools" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 55.0
 margin_right = 276.0
 margin_bottom = 103.0
@@ -1291,7 +1291,11 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 109 )
 
-[node name="ToolPencil" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ToolPencil" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
 margin_right = 48.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
@@ -1305,7 +1309,7 @@ texture_pressed = ExtResource( 110 )
 texture_hover = ExtResource( 113 )
 expand = true
 
-[node name="ToolRectangle" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
+[node name="ToolRectangle" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
 margin_left = 52.0
 margin_right = 100.0
 margin_bottom = 48.0
@@ -1319,6 +1323,22 @@ texture_normal = ExtResource( 69 )
 texture_pressed = ExtResource( 111 )
 texture_hover = ExtResource( 112 )
 expand = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
+margin_right = 170.0
+margin_bottom = 40.0
+
+[node name="Label" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer2"]
+margin_right = 92.0
+margin_bottom = 21.0
+text = "Brush size"
+
+[node name="EditBrushSizeValue" type="SpinBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer2"]
+margin_right = 74.0
+margin_bottom = 31.0
+min_value = 1.0
+value = 1.0
+script = ExtResource( 81 )
 
 [node name="LimitThing" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 107.0
@@ -5472,8 +5492,9 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer2/DeleteSelectedButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails" method="_on_DeleteSelectedButton_pressed"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" method="_on_UseSlabOwnerCheckBox_toggled"]
 [connection signal="visibility_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" method="_on_UseSlabOwnerCheckBox_visibility_changed"]
-[connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/ToolPencil" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPencil_toggled"]
-[connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/ToolRectangle" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolRectangle_toggled"]
+[connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolPencil" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPencil_toggled"]
+[connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolRectangle" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolRectangle_toggled"]
+[connection signal="value_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer2/EditBrushSizeValue" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_EditBrushSizeValue_value_changed"]
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/PlacingTipsButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_PlacingTipsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonSettings" to="Ui/UiSystem/Menu" method="_on_MenuButtonSettings_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonHelp" to="Ui/UiSystem/Menu" method="_on_MenuButtonHelp_about_to_show"]
