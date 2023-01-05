@@ -38,6 +38,8 @@ var data18 = null
 var data19 = null
 var data20 = null
 
+var baseZindex = 0
+
 func _enter_tree():
 	set_texture_based_on_thingtype()
 	set_grow_direction()
@@ -56,6 +58,9 @@ func _enter_tree():
 			add_to_group("Object")
 			if subtype == 44: # Spinning Key
 				add_to_group("Key")
+				# Display keys above door objects
+				baseZindex = 2
+				z_index = 2
 			elif subtype in [52,53,54,55,56]:
 				add_to_group("TreasuryGold")
 			elif subtype in Things.LIST_OF_SPELLBOOKS:
@@ -176,6 +181,35 @@ func set_texture_based_on_thingtype():
 	else:
 		$ThingTexture.texture = preload('res://Art/Thing.png')
 		$ThingTexture.expand = true
+		$ThingTexture.rect_scale = Vector2(0.5,0.5)
+		$TextNameLabel.visible = true
+		yield(get_tree(),'idle_frame')
+		match thingType:
+			Things.TYPE.OBJECT:
+				if Things.DATA_OBJECT.has(subtype):
+					$TextNameLabel.text = Things.DATA_OBJECT[subtype][Things.NAME]
+			Things.TYPE.CREATURE:
+				if Things.DATA_CREATURE.has(subtype):
+					$TextNameLabel.text = Things.DATA_CREATURE[subtype][Things.NAME]
+			Things.TYPE.EFFECTGEN:
+				if Things.DATA_EFFECTGEN.has(subtype):
+					$TextNameLabel.text = Things.DATA_EFFECTGEN[subtype][Things.NAME]
+			Things.TYPE.TRAP:
+				if Things.DATA_TRAP.has(subtype):
+					$TextNameLabel.text = Things.DATA_TRAP[subtype][Things.NAME]
+			Things.TYPE.DOOR:
+				if Things.DATA_DOOR.has(subtype):
+					$TextNameLabel.text = Things.DATA_DOOR[subtype][Things.NAME]
+			Things.TYPE.EXTRA:
+				if Things.DATA_EXTRA.has(subtype):
+					$TextNameLabel.text = Things.DATA_EXTRA[subtype][Things.NAME]
+		if " " in $TextNameLabel.text:
+			$TextNameLabel.text = $TextNameLabel.text.replace(" ", "\n")
+			$TextNameLabel.grow_vertical = Control.GROW_DIRECTION_BOTH
+		else:
+			$TextNameLabel.grow_vertical = Control.GROW_DIRECTION_END
+
+
 
 func set_grow_direction():
 	# Change Grow Direction so the art pokes out from the base.
@@ -192,6 +226,8 @@ func _on_MouseDetection_mouse_entered():
 	oSelection.clean_up_cursor_array()
 	oThingDetails.update_details()
 	update()
+	$TextNameLabel.modulate = Color(1,1,1,1)
+	z_index = baseZindex+1
 
 func _on_MouseDetection_mouse_exited():
 	if oSelection.cursorOnInstancesArray.has(self):
@@ -199,6 +235,8 @@ func _on_MouseDetection_mouse_exited():
 	oSelection.clean_up_cursor_array()
 	oThingDetails.update_details()
 	update()
+	$TextNameLabel.modulate = Color(1,1,1,0.5)
+	z_index = baseZindex
 
 func instance_was_selected(): update()
 func instance_was_deselected(): update()
@@ -206,10 +244,11 @@ func _draw():
 	if effectRange != null and (oSelection.cursorOnInstancesArray.has(self) or oInspector.inspectingInstance == self):
 		draw_arc(Vector2(0,0), (effectRange * 32)+16, 0, PI*2, 64, Color(0.75,1,0.75,1), 4, false)
 
+
 func toggle_spinning_key(): # Called when you manually change the lock state
 	# If door has no key, then create a key.
 	# If door has key, then destroy the key.
-	
+	oInstances = Nodelist.list["oInstances"]
 	var keyID = oInstances.get_node_on_subtile("Key", locationX, locationY)
 	if is_instance_valid(keyID) == true:
 		if doorLocked == 0:

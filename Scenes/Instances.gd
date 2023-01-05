@@ -5,6 +5,7 @@ onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
 var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
@@ -152,6 +153,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 				goldID.queue_free()
 			id.locationX = locX
 			id.locationY = locY
+	return id
 
 func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng file
 	var id = thingScn.instance()

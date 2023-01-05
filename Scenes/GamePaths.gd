@@ -13,7 +13,8 @@ var SAVE_AS_DIRECTORY = ""
 var GAME_DIRECTORY = ""
 var DK_DATA_DIRECTORY = ""
 var DK_FXDATA_DIRECTORY = ""
-
+var DK_LEVELS_DIRECTORY = ""
+var DK_CAMPGNS_DIRECTORY = ""
 #var nosound = true
 #var cheats = true
 #var gameSpeed = 25
@@ -22,6 +23,12 @@ var COMMAND_LINE = ""
 var COMMAND_LINE_CONSOLE = ""
 var COMMAND_LINE_CONSOLE_ARG = ""
 var DK_COMMANDS = "-nointro -alex"
+
+func running_keeperfx():
+	if EXECUTABLE_PATH.get_file().to_lower() == "keeperfx.exe":
+		return true
+	else:
+		return false
 
 func _input(event):
 	if Input.is_action_just_pressed("SaveAndPlay"):
@@ -43,6 +50,8 @@ func set_paths(path):
 		match i.to_upper():
 			"DATA": DK_DATA_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 			"FXDATA": DK_FXDATA_DIRECTORY = GAME_DIRECTORY.plus_file(i)
+			"LEVELS": DK_LEVELS_DIRECTORY = GAME_DIRECTORY.plus_file(i)
+			"CAMPGNS": DK_CAMPGNS_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 
 func _on_CmdLineDkCommands_text_changed(new_text):
 	Settings.set_setting("dk_commands", new_text)

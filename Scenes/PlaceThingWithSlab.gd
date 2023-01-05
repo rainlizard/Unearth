@@ -2,6 +2,7 @@ extends Node
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oDkTng = Nodelist.list["oDkTng"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
+onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 
 onready var dir = oSlabPlacement.dir
 
@@ -39,7 +40,13 @@ func create_door_thing(xSlab, ySlab, ownership):
 		doorID.ownership = ownership
 	else:
 		# No door thing, so create it
-		oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership) #subtype determined in oInstances
+		var id = oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership) #subtype determined in oInstances
+		if oPlaceLockedCheckBox.visible == true and oPlaceLockedCheckBox.pressed == true:
+			if oPlaceLockedCheckBox.pressed == true:
+				id.doorLocked = 1
+			else:
+				id.doorLocked = 0
+			id.toggle_spinning_key()
 	
 	# This isn't important, key ownership doesn't matter, but change it anyway
 	var keyID = oInstances.get_node_on_subtile("Key", createAtPos.x, createAtPos.y)

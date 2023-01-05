@@ -14,6 +14,7 @@ onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 onready var oDkDat = Nodelist.list["oDkDat"]
+onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 
 
 onready var oSelectedRect = $Clippy/SelectedRect
@@ -209,7 +210,11 @@ func set_selection(setID):
 				oSelection.paintSlab = setID
 				
 				oSlabTabs.set_current_tab(tabIndex)
-
+	
+	if Slabs.doors.has(oSelection.paintSlab):
+		oPlaceLockedCheckBox.visible = true
+	else:
+		oPlaceLockedCheckBox.visible = false
 
 func update_scale(setvalue):
 	var oGridContainer = current_grid_container()

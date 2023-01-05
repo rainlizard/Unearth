@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scenes/ThingInstance.gd" type="Script" id=1]
 [ext_resource path="res://dk_images/creature_flower_32/level_06.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://dk_images/creature_flower_32/level_07.png" type="Texture" id=9]
 [ext_resource path="res://dk_images/creature_flower_32/level_10.png" type="Texture" id=10]
 [ext_resource path="res://dk_images/creature_flower_32/level_01.png" type="Texture" id=11]
+[ext_resource path="res://Theme/UnearthTheme.theme" type="Theme" id=12]
 [ext_resource path="res://Theme/Stoke-Light.ttf" type="DynamicFontData" id=13]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -76,6 +77,21 @@ valign = 1
 
 [node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 rect = Rect2( -32, -32, 64, 64 )
+
+[node name="TextNameLabel" type="Label" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0.501961 )
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource( 12 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_constants/shadow_as_outline = 0
+text = "test"
+align = 1
+valign = 1
 
 [connection signal="mouse_entered" from="MouseDetection" to="." method="_on_MouseDetection_mouse_entered"]
 [connection signal="mouse_exited" from="MouseDetection" to="." method="_on_MouseDetection_mouse_exited"]

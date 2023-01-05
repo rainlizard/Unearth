@@ -106,23 +106,8 @@ func populate_recently_opened():
 		recentlyOpenedPopupMenu.add_item(mapName + ' - ' + filePath.trim_prefix(baseDir), i)
 		recentlyOpenedPopupMenu.set_item_metadata(i, filePath)
 
-
 func _process(delta):
-	var fixedBaseDir = oGame.EXECUTABLE_PATH.get_base_dir().to_upper().replace('\\','/')
-	var fixedMapPath = oCurrentMap.path.to_upper().replace('\\','/')
-	
-#	print('Checking for "'+fixedBaseDir.plus_file("LEVELS")+'"  in  "'+fixedMapPath+'"')
-#	print('Checking for "'+fixedBaseDir.plus_file("CAMPGNS")+'"  in  "'+fixedMapPath+'"')
-	if fixedBaseDir.plus_file("LEVELS") in fixedMapPath or fixedBaseDir.plus_file("CAMPGNS") in fixedMapPath:
-		# Is playable path
-		# Enable Play button
-		oPlayButton.disabled = false
-		oPlayButton.hint_tooltip = ""
-	else:
-		# Is not a playable path
-		oPlayButton.disabled = true
-		oPlayButton.hint_tooltip = "Map must be saved in the correct directory in order to play."
-	
+	constantly_monitor_play_button_state()
 	
 	if oCurrentMap.path == "": # Certain features hould only be available to maps that exist as files - maps that have already been "Saved as".
 		oMenuButtonFile.get_popup().set_item_disabled(4,true) # Disable "Save map"
@@ -134,18 +119,37 @@ func _process(delta):
 		oMenuButtonEdit.get_popup().set_item_disabled(1,false) # Enable "Open script file"
 		oMenuButtonEdit.get_popup().set_item_disabled(2,false) # Enable "Open map folder"
 	
-	
-	if oEditor.mapHasBeenEdited == true:
-		oPlayButton.text = "Save & Play"
-	else:
-		oPlayButton.text = "Play"
-	
 	# Fix button being stretched
 	if visible == true and fixMenuExpansion != oEditor.mapHasBeenEdited:
 		fixMenuExpansion = oEditor.mapHasBeenEdited
 		hide()
 		show()
 
+func constantly_monitor_play_button_state():
+	var mapPath = oCurrentMap.path.to_upper().replace('\\','/')
+	
+	var currentDirectory = mapPath.get_base_dir()
+	var parentDirectory = currentDirectory.get_base_dir()
+	
+	var mapIsInCorrectDirectory = false
+	if oGame.running_keeperfx() == true:
+		if parentDirectory.ends_with("/LEVELS") or parentDirectory.ends_with("/CAMPGNS"):
+			mapIsInCorrectDirectory = true
+	else:
+		if parentDirectory.ends_with("/LEVELS"):
+			mapIsInCorrectDirectory = true
+	
+	if mapIsInCorrectDirectory == true: # Is playable path
+		oPlayButton.disabled = false
+		oPlayButton.hint_tooltip = ""
+	else: # Is not a playable path
+		oPlayButton.disabled = true
+		oPlayButton.hint_tooltip = "Map must be saved in the correct directory in order to play."
+	
+	if oEditor.mapHasBeenEdited == true:
+		oPlayButton.text = "Save & Play"
+	else:
+		oPlayButton.text = "Play"
 
 func _on_FileSubmenu_Pressed(pressedID):
 	match pressedID:

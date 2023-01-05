@@ -4,6 +4,7 @@ onready var oUi = Nodelist.list["oUi"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 
+var saveInstruction = Label.new()
 var lineEdit
 var lineEditPreviousText = "sadfdfgfdhgfds" # this should be something that won't be initially written in linedit
 
@@ -11,11 +12,17 @@ func _ready():
 	var optionButton = get_vbox().get_child(3).get_child(2)
 	optionButton.visible = false
 	lineEdit = get_line_edit()
+	get_vbox().add_child(saveInstruction)
+	get_vbox().move_child(saveInstruction,3)
 
 func _on_FileDialogSaveAs_about_to_show():
 	var path = oGame.SAVE_AS_DIRECTORY
-	if oGame.SAVE_AS_DIRECTORY == "":
-		path = oGame.EXECUTABLE_PATH
+	if oGame.SAVE_AS_DIRECTORY == "": # Default path
+		var personalFolder = oGame.DK_LEVELS_DIRECTORY.plus_file("personal")
+		if Directory.new().dir_exists(personalFolder):
+			path = personalFolder # KeeperFX has personal folder
+		else:
+			path = oGame.DK_LEVELS_DIRECTORY # Old DK does not have personal folder
 	current_path = path
 	current_dir = path
 	
@@ -32,6 +39,24 @@ func _process(delta):
 	if lineEditPreviousText != lineEdit.text:
 		linedit_was_changed()
 		lineEditPreviousText = lineEdit.text
+	
+	saveInstruction.set("custom_colors/font_color", Color(1,0.5,0.5,1))
+	saveInstruction.text = "Map not playable from this directory."
+	var dir = current_dir.to_upper()
+	if oGame.running_keeperfx() == true:
+		if dir.ends_with("/LEVELS"):
+			saveInstruction.text = "Must save in a sub directory."
+		if dir.ends_with("/CAMPGNS"):
+			saveInstruction.text = "Must save in a sub directory."
+		if dir.get_base_dir().ends_with("/LEVELS") or dir.get_base_dir().ends_with("/CAMPGNS"):
+			saveInstruction.text = "Map playable from this directory."
+			saveInstruction.set("custom_colors/font_color", Color(0.5,1.0,0.5,1))
+	else:
+		# Original DK
+		if dir.ends_with("/LEVELS"):
+			saveInstruction.text = "Map playable from this directory."
+			saveInstruction.set("custom_colors/font_color", Color(0.5,1.0,0.5,1))
+
 
 func linedit_was_changed():
 	

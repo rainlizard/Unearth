@@ -50,8 +50,7 @@ func reinit_noise_preview():
 
 func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
-	
-	if oGame.EXECUTABLE_PATH.get_file().to_lower() != "keeperfx.exe":
+	if oGame.running_keeperfx() == false:
 		oSetNewFormat.selected = 1 # Set default format to OLD, for newbies who don't know what KeeperFX is
 	
 	oXSizeLine.text = "85"
