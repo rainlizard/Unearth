@@ -1,6 +1,6 @@
 extends Tree
 onready var oGame = Nodelist.list["oGame"]
-onready var oDataLif = Nodelist.list["oDataLif"]
+onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 
 var treeItemsThatWantNames = {} # <BASENAME> <TreeItem>
@@ -27,7 +27,7 @@ func update_source_tree(): # Call this whenever there's an update to the filesys
 	# For the remaining items without lif names
 	for BASENAME in treeItemsThatWantNames:
 		var fetchItem = treeItemsThatWantNames[BASENAME]
-		var txt = oDataLif.get_special_lif_text(BASENAME)
+		var txt = oDataMapName.get_special_lif_text(BASENAME)
 		fetchItem.set_text(1, txt)
 	
 	print('SourceMapTree updated in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
@@ -128,7 +128,7 @@ func SLB_WANTS_NAME(pathString,newTreeItem):
 
 
 func LIF_WANTS_TO_GIVE_NAME(pathString):
-	var getNameText = oDataLif.lif_name_text(pathString)
+	var getNameText = oDataMapName.lif_name_text(pathString)
 	
 	var BASENAME = pathString.get_basename().to_upper()
 	if treeItemsThatWantNames.has(BASENAME):

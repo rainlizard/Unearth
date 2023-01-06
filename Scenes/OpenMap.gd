@@ -20,7 +20,7 @@ onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
-onready var oDataLif = Nodelist.list["oDataLif"]
+onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
@@ -123,7 +123,8 @@ func open_map(filePath): # auto opens other files
 					continue
 				if EXT == "LGT" and oCurrentMap.currentFilePaths.has("LGTFX") == true:
 					continue
-				
+				if EXT == "LIF" and oCurrentMap.currentFilePaths.has("LOF") == true:
+					continue
 				# Set current format setting to new KeeperFX format, if any new files are detected
 				var setNewFormat = false
 				if EXT == "TNGFX": setNewFormat = true
@@ -139,9 +140,9 @@ func open_map(filePath): # auto opens other files
 				
 				# Assign name data to any that's missing
 				if EXT == "LIF":
-					var mapName = oDataLif.get_special_lif_text(filePath)
+					var mapName = oDataMapName.get_special_lif_text(filePath)
 					if mapName != "":
-						oDataLif.set_map_name(mapName)
+						oDataMapName.set_map_name(mapName)
 				
 				# Some maps can function without WLB files. So build them here.
 				# Generate WLB values from SLB. This is dependent on SLB being ordered before WLB inside Filetypes.FILE_TYPES

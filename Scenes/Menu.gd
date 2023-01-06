@@ -31,7 +31,7 @@ onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
-onready var oDataLif = Nodelist.list["oDataLif"]
+onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
@@ -83,22 +83,25 @@ func initialize_recently_opened(value):
 
 func populate_recently_opened():
 	recentlyOpenedPopupMenu.clear()
+	
+	for i in range(recentlyOpened.size() - 1, -1, -1): # iterate in reverse
+		var filePath = recentlyOpened[i]
+		
+		if Directory.new().file_exists(filePath.get_basename()+".slb") == false and Directory.new().file_exists(filePath.get_basename()+".SLB") == false:
+			recentlyOpened.remove(i)
+	
 	for i in recentlyOpened.size():
 		var filePath = recentlyOpened[i]
 		
 		filePath = filePath.replace("\\", "/")
+		var mapName = ""
 		
-		var mapName = oDataLif.lif_name_text(filePath + '.lif')
-		if mapName == "":
-			mapName = oDataLif.lif_name_text(filePath + '.LIF')
-		if mapName == "":
-			mapName = oDataLif.get_special_lif_text(filePath)
-		if mapName == "":
-			mapName = oDataLif.get_special_lif_text(filePath)
-		if mapName == "":
-			mapName = oDataKeeperFxLof.lof_name_text(filePath + ".lof")
-		if mapName == "":
-			mapName = oDataKeeperFxLof.lof_name_text(filePath + ".LOF")
+		if mapName == "": mapName = oDataKeeperFxLof.lof_name_text(filePath + ".lof")
+		if mapName == "": mapName = oDataKeeperFxLof.lof_name_text(filePath + ".LOF")
+		if mapName == "": mapName = oDataMapName.lif_name_text(filePath + '.lif')
+		if mapName == "": mapName = oDataMapName.lif_name_text(filePath + '.LIF')
+		if mapName == "": mapName = oDataMapName.get_special_lif_text(filePath)
+		if mapName == "": mapName = oDataMapName.get_special_lif_text(filePath)
 		
 		# Trim game directory from path to make it look nicer
 		var baseDir = oGame.GAME_DIRECTORY.replace('\\','/')
@@ -136,7 +139,7 @@ func constantly_monitor_play_button_state():
 		if parentDirectory.ends_with("/LEVELS") or parentDirectory.ends_with("/CAMPGNS"):
 			mapIsInCorrectDirectory = true
 	else:
-		if parentDirectory.ends_with("/LEVELS"):
+		if currentDirectory.ends_with("/LEVELS"):
 			mapIsInCorrectDirectory = true
 	
 	if mapIsInCorrectDirectory == true: # Is playable path
@@ -203,15 +206,14 @@ func _on_slab_style_window_close_button_clicked():
 	oMenuButtonEdit.get_popup().set_item_checked(0, false)
 
 func _on_MenuButtonHelp_about_to_show():
-	match oCurrentFormat.selected:
-		0:
-			oMenuButtonHelp.get_popup().set_item_disabled(0, false)
-			oMenuButtonHelp.get_popup().set_item_disabled(1, false)
-			oMenuButtonHelp.get_popup().set_item_disabled(2, true)
-		1:
-			oMenuButtonHelp.get_popup().set_item_disabled(0, true)
-			oMenuButtonHelp.get_popup().set_item_disabled(1, true)
-			oMenuButtonHelp.get_popup().set_item_disabled(2, false)
+	if oGame.running_keeperfx() == true:
+		oMenuButtonHelp.get_popup().set_item_disabled(0, false)
+		oMenuButtonHelp.get_popup().set_item_disabled(1, false)
+		oMenuButtonHelp.get_popup().set_item_disabled(2, true)
+	else:
+		oMenuButtonHelp.get_popup().set_item_disabled(0, true)
+		oMenuButtonHelp.get_popup().set_item_disabled(1, true)
+		oMenuButtonHelp.get_popup().set_item_disabled(2, false)
 
 func _on_HelpSubmenu_Pressed(pressedID):
 	match pressedID:
@@ -247,6 +249,11 @@ func _on_MenuButtonSettings_pressed():
 	oSettingsWindow._on_ButtonSettings_pressed()
 
 func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in combination with OS.execute otherwise a Godot bug occurs
+	if oCurrentFormat.selected == 0:
+		if oGame.running_keeperfx() == false:
+			oMessage.big("Incompatible", "Your map format is set to KeeperFX format, but your game executable is not set to keeperfx.exe")
+			return
+	
 	oGame.menu_play_clicked()
 	
 	oPlayButton.disconnect("pressed",self,"_on_PlayButton_pressed")

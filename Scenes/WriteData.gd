@@ -8,7 +8,7 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataWibble = Nodelist.list["oDataWibble"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oDataLiquid = Nodelist.list["oDataLiquid"]
-onready var oDataLif = Nodelist.list["oDataLif"]
+onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
@@ -46,7 +46,7 @@ func write_lif(buffer, filePath):
 	for i in 3:
 		mapNumber = mapNumber.trim_prefix('0')
 	
-	value = mapNumber + ', ' + oDataLif.data
+	value = mapNumber + ', ' + oDataMapName.data
 	
 	buffer.put_data(value.to_utf8())
 

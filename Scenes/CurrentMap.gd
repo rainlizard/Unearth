@@ -14,7 +14,7 @@ onready var oUiTools = Nodelist.list["oUiTools"]
 onready var oDataWibble = Nodelist.list["oDataWibble"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oDataLiquid = Nodelist.list["oDataLiquid"]
-onready var oDataLif = Nodelist.list["oDataLif"]
+onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oMain = Nodelist.list["oMain"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataScript = Nodelist.list["oDataScript"]
@@ -32,6 +32,9 @@ enum {
 	PATHSTRING
 	MODIFIED_DATE
 }
+
+func _init():
+	OS.set_window_title('Unearth v'+Constants.VERSION)
 
 func _on_ButtonNewMap_pressed():
 	oOpenMap.open_map("") # This means "blank" map
@@ -67,7 +70,7 @@ func clear_map():
 	set_path_and_title("")
 	
 	# "lif"
-	oDataLif.clear()
+	oDataMapName.clear()
 	# "wib"
 	oDataSlx.clear_img()
 	# "wib" (Wibble)

@@ -50,8 +50,12 @@ func reinit_noise_preview():
 
 func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
-	if oGame.running_keeperfx() == false:
-		oSetNewFormat.selected = 1 # Set default format to OLD, for newbies who don't know what KeeperFX is
+	
+	# Always set default format to Old Format until Bigger Maps feature is done in KeeperFX
+	oSetNewFormat.selected = 1
+	#if oGame.running_keeperfx() == false:
+	#	oSetNewFormat.selected = 1 # Set default format to OLD, for newbies who don't know what KeeperFX is
+	
 	
 	oXSizeLine.text = "85"
 	oYSizeLine.text = "85"

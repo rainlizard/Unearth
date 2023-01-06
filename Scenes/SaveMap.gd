@@ -17,24 +17,33 @@ func save_map(filePath): # auto opens other files
 	
 	var SAVETIME_START = OS.get_ticks_msec()
 	
-	# Delete the old files. Important for Linux otherwise duplicates can be created. (Lowercase files can be saved without replacing the uppercase files)
-	if OS.get_name() == "X11":
-		delete_existing_files(map)
+	# Delete the old files.
+	# Important for Linux otherwise duplicates can be created. (Lowercase files can be saved without replacing the uppercase files)
+	# Also important to delete files of the other format (TNG and TNGFX shouldn't exist at the same time), if switching formats.
+	delete_existing_files(map)
 	
 	for EXT in Filetypes.FILE_TYPES:
 		
 		# List of file extensions to skip creating
 		# Remember "continue" means skip
 		if oCurrentFormat.selected == 0: # KeeperFX format
-			if EXT == "LIF": continue
-			if EXT == "TNG": continue
-			if EXT == "APT": continue
-			if EXT == "LGT": continue
+			if EXT == "LIF":
+				continue
+			if EXT == "TNG":
+				continue
+			if EXT == "APT":
+				continue
+			if EXT == "LGT":
+				continue
 		elif oCurrentFormat.selected == 1: # Old format
-			if EXT == "LOF": continue
-			if EXT == "TNGFX": continue
-			if EXT == "APTFX": continue
-			if EXT == "LGTFX": continue
+			if EXT == "LOF":
+				continue
+			if EXT == "TNGFX":
+				continue
+			if EXT == "APTFX":
+				continue
+			if EXT == "LGTFX":
+				continue
 		
 		var saveToFilePath = map + '.' + EXT.to_lower()
 		
@@ -92,10 +101,9 @@ func delete_existing_files(map):
 func clicked_save_on_menu():
 	save_map(oCurrentMap.path)
 
-func _on_FileDialogSaveAs_file_selected(filePath):
-	Settings.set_setting("save_path", filePath.get_base_dir())
-	
-	var map = filePath.get_basename()
+func _on_FileDialogSaveAs_files_selected(filePath):
+	filePath = filePath.get_basename()
+	var map = filePath.get_base_dir().plus_file("map" + filePath.get_file())
 	save_map(map)
 
 #	if File.new().file_exists(path + ".slb") == true:

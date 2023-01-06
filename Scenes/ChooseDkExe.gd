@@ -2,6 +2,7 @@ extends FileDialog
 onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oKeeperFXDetection = Nodelist.list["oKeeperFXDetection"]
 
 func _on_ChooseDkExe_file_selected(path):
 	Settings.set_setting("executable_path", path) # Do this first so running_keeperfx() works

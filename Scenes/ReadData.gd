@@ -9,7 +9,7 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataWibble = Nodelist.list["oDataWibble"]
 onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
-onready var oDataLif = Nodelist.list["oDataLif"]
+onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
@@ -42,7 +42,7 @@ func read_keeperfx_lof(buffer):
 			if lineParts[0].strip_edges() == "MAP_FORMAT_VERSION":
 				oDataKeeperFxLof.MAP_FORMAT_VERSION = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "NAME_TEXT":
-				oDataKeeperFxLof.NAME_TEXT = lineParts[1].strip_edges()
+				oDataMapName.set_map_name(lineParts[1].strip_edges())
 			if lineParts[0].strip_edges() == "NAME_ID":
 				oDataKeeperFxLof.NAME_ID = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "KIND":
@@ -560,7 +560,8 @@ func new_aptfx():
 func read_lif(buffer):
 	var array = lif_buffer_to_array(buffer)
 	var mapName = lif_array_to_map_name(array)
-	oDataLif.set_map_name(mapName)
+	oDataMapName.set_map_name(mapName)
+
 func new_lif():
 	pass
 

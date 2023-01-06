@@ -16,7 +16,6 @@ var config = ConfigFile.new()
 var listOfSettings = [
 	"REMEMBER_TMAPA_PATHS",
 	"executable_path",
-	"save_path",
 	"file_viewer_window_size",
 	"file_viewer_window_position",
 	"vsync",
@@ -152,10 +151,6 @@ func game_setting(doWhat,string,value):
 			var oGame = $'../Main/Game'
 			if doWhat == SET: oGame.set_paths(value)
 			if doWhat == GET: return oGame.EXECUTABLE_PATH
-		"save_path":
-			var oGame = $'../Main/Game'
-			if doWhat == SET: oGame.set_SAVE_AS_DIRECTORY(value)
-			if doWhat == GET: return oGame.SAVE_AS_DIRECTORY
 		"file_viewer_window_size":
 			var oMapBrowser = $'../Main/Ui/UiSystem/MapBrowser'
 			if doWhat == SET: oMapBrowser.rect_size = value

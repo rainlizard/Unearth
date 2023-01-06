@@ -7,9 +7,9 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oCmdLineConsole = Nodelist.list["oCmdLineConsole"]
 onready var oCmdLineConsoleArg = Nodelist.list["oCmdLineConsoleArg"]
 onready var oCmdLineExecute = Nodelist.list["oCmdLineExecute"]
+onready var oKeeperFXDetection = Nodelist.list["oKeeperFXDetection"]
 
 var EXECUTABLE_PATH = ""
-var SAVE_AS_DIRECTORY = ""
 var GAME_DIRECTORY = ""
 var DK_DATA_DIRECTORY = ""
 var DK_FXDATA_DIRECTORY = ""
@@ -52,6 +52,15 @@ func set_paths(path):
 			"FXDATA": DK_FXDATA_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 			"LEVELS": DK_LEVELS_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 			"CAMPGNS": DK_CAMPGNS_DIRECTORY = GAME_DIRECTORY.plus_file(i)
+	
+	if running_keeperfx() == true:
+		oKeeperFXDetection.text = "KeeperFX detected"
+		oKeeperFXDetection.set("custom_colors/font_color", Color(0.5,1.0,0.5,1))
+		oKeeperFXDetection.visible = true
+	else:
+		oKeeperFXDetection.text = "KeeperFX not detected"
+		oKeeperFXDetection.set("custom_colors/font_color", Color(1.0,0.5,0.5,1))
+		oKeeperFXDetection.visible = true
 
 func _on_CmdLineDkCommands_text_changed(new_text):
 	Settings.set_setting("dk_commands", new_text)
@@ -118,10 +127,6 @@ func cmdline_commands():
 	if DK_COMMANDS != '':
 		COMMAND_LINE += ' '
 	COMMAND_LINE += DK_COMMANDS
-
-func set_SAVE_AS_DIRECTORY(path):
-	if path == null: path = ""
-	SAVE_AS_DIRECTORY = path
 
 func menu_play_clicked():
 	if oEditor.mapHasBeenEdited == true:

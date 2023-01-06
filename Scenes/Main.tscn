@@ -375,7 +375,7 @@ format = 1
 [node name="DataClm" type="Node2D" parent="CurrentMap"]
 script = ExtResource( 39 )
 
-[node name="DataLif" type="Node" parent="CurrentMap"]
+[node name="DataMapName" type="Node" parent="CurrentMap"]
 script = ExtResource( 44 )
 
 [node name="DataScript" type="Node" parent="CurrentMap"]
@@ -2068,10 +2068,17 @@ text = "Path"
 valign = 1
 autowrap = true
 
-[node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="KeeperFXDetection" type="Label" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 31.0
+margin_right = 544.0
+margin_bottom = 52.0
+custom_colors/font_color = Color( 1, 0.658824, 0.329412, 1 )
+text = "Need to set executable"
+
+[node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+margin_top = 56.0
 margin_right = 240.0
-margin_bottom = 58.0
+margin_bottom = 83.0
 hint_tooltip = "Reads tmapa00x.dat files from Dungeon Keeper's /data/ directory and then recreates cache files in Unearth's /unearthdata/ directory."
 size_flags_horizontal = 2
 text = "Reload texture map cache"
@@ -2080,32 +2087,32 @@ __meta__ = {
 }
 
 [node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
-margin_top = 62.0
+margin_top = 87.0
 margin_right = 544.0
-margin_bottom = 91.0
+margin_bottom = 116.0
 text = "Always decompress maps"
 
 [node name="Label" type="Label" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
-margin_top = 95.0
+margin_top = 120.0
 margin_right = 544.0
-margin_bottom = 116.0
+margin_bottom = 141.0
 text = "Play button command line"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CmdLineDkCommands" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
-margin_top = 120.0
+margin_top = 145.0
 margin_right = 58.0
-margin_bottom = 160.0
+margin_bottom = 185.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 0
 expand_to_text_length = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
-margin_top = 164.0
+margin_top = 189.0
 margin_right = 544.0
-margin_bottom = 204.0
+margin_bottom = 229.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
@@ -5561,7 +5568,7 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/ResetToDefault" to="Ui/UiSystem/SettingsWindow" method="_on_ResetToDefault_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/CloseButton" to="Ui/UiSystem/SettingsWindow" method="_on_CloseButton_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/FileDialogSaveAs" to="Ui/UiSystem/FileDialogSaveAs" method="_on_FileDialogSaveAs_about_to_show"]
-[connection signal="file_selected" from="Ui/UiSystem/FileDialogSaveAs" to="SaveMap" method="_on_FileDialogSaveAs_file_selected"]
+[connection signal="files_selected" from="Ui/UiSystem/FileDialogSaveAs" to="SaveMap" method="_on_FileDialogSaveAs_files_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/FileDialogSaveAs" to="Ui/UiSystem/FileDialogSaveAs" method="_on_FileDialogSaveAs_visibility_changed"]
 [connection signal="about_to_show" from="Ui/UiSystem/FileDialogOpen" to="Ui/UiSystem/FileDialogOpen" method="_on_FileDialogOpen_about_to_show"]
 [connection signal="file_selected" from="Ui/UiSystem/FileDialogOpen" to="OpenMap" method="_on_FileDialogOpen_file_selected"]

@@ -3,7 +3,7 @@ onready var oReadData = Nodelist.list["oReadData"]
 onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 
 
-var data
+var data = ""
 
 func set_map_name(mapStringName):
 	data = mapStringName

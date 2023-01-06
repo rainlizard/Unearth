@@ -3,7 +3,7 @@ onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oDungeonStyleList = Nodelist.list["oDungeonStyleList"]
-onready var oDataLif = Nodelist.list["oDataLif"]
+onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oAdvancedMapPropertiesCheckBox = Nodelist.list["oAdvancedMapPropertiesCheckBox"]
@@ -32,7 +32,7 @@ func _on_MapProperties_visibility_changed():
 	if is_instance_valid(oDungeonStyleList) == false: return
 	if visible == true:
 		refresh_dungeon_style_options()
-		oMapNameLineEdit.text = oDataLif.data
+		oMapNameLineEdit.text = oDataMapName.data
 		oNameIDLineEdit.text = oDataKeeperFxLof.NAME_ID
 		oKindLineEdit.text = oDataKeeperFxLof.KIND
 		oEnsignPositionLineEdit.text = oDataKeeperFxLof.ENSIGN_POS
@@ -101,7 +101,7 @@ func _on_AdvancedMapPropertiesCheckBox_pressed():
 
 func _on_MapNameLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataLif.set_map_name(new_text)
+	oDataMapName.set_map_name(new_text)
 func _on_AuthorLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataKeeperFxLof.AUTHOR = new_text
@@ -135,6 +135,7 @@ func _on_LandViewLineEdit_text_changed(new_text):
 
 
 func _on_MapFormatSetting_item_selected(index):
+	oEditor.mapHasBeenEdited = true
 	match index:
 		0: #KeeperFX format
 			oAdvancedMapPropertiesCheckBox.disabled = false
