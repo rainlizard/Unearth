@@ -3,23 +3,27 @@ onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oSaveMap = Nodelist.list["oSaveMap"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oLineEditFilter = Nodelist.list["oLineEditFilter"]
-onready var oBrowseOpenButton = Nodelist.list["oBrowseOpenButton"]
-#onready var oBrowsePlayButton = Nodelist.list["oBrowsePlayButton"]
+onready var oBrowseButton = Nodelist.list["oBrowseButton"]
 onready var oDynamicMapTree = Nodelist.list["oDynamicMapTree"]
 onready var oSourceMapTree = Nodelist.list["oSourceMapTree"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
-onready var oDateSaved = Nodelist.list["oDateSaved"]
 onready var oCannotDelete = Nodelist.list["oCannotDelete"]
 onready var oConfirmDelete = Nodelist.list["oConfirmDelete"]
 onready var oBrowserFilename = Nodelist.list["oBrowserFilename"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
 onready var oSelector = Nodelist.list["oSelector"]
+onready var oMapBrowserTabEdit = Nodelist.list["oMapBrowserTabEdit"]
+onready var oMapBrowserTabPlay = Nodelist.list["oMapBrowserTabPlay"]
+onready var oMapBrowserTabContainer = Nodelist.list["oMapBrowserTabContainer"]
+onready var oRandomMapContainer = Nodelist.list["oRandomMapContainer"]
+
 
 func _ready():
 	oBrowserFilename.text = oGame.GAME_DIRECTORY
-	oBrowseOpenButton.visible = false
-	#oBrowsePlayButton.visible = false
+	oBrowseButton.visible = false
+	$MapBrowserTabContainer.set_tab_title(0, "Play")
+	$MapBrowserTabContainer.set_tab_title(1, "Edit")
 
 func _on_BrowseMapsMenu_pressed():
 	match visible:
@@ -30,7 +34,6 @@ func _on_MapBrowser_about_to_show():
 	oSourceMapTree.update_source_tree()
 	
 	oDynamicMapTree.update_dynamic_tree()
-	oDateSaved.text = ""
 	
 	yield(get_tree(), "idle_frame") #Needs to be here for grab focus to work
 	oLineEditFilter.grab_focus()
@@ -41,23 +44,33 @@ func _on_DynamicMapTree_item_activated():
 	if selectedTreeItem.get_metadata(1) == "is_a_file":
 		activate(path)
 
-func _on_BrowseOpenButton_pressed():
+func _on_BrowseButton_pressed():
 	var path = oBrowserFilename.text
 	activate(path)
-	hide() # Hide map browser which clicking Open button. But keep it open when double clicking on maps to open them
+	#if oMapBrowserTabContainer.current_tab == 1:
+	#	hide() # Hide map browser when clicking button. But keep browser open when double clicking on maps to open them
+
+func _on_PlayRandomMapButton_pressed():
+	if oSourceMapTree.allMapsForRandomizier.size() > 0:
+		var path = Random.choose(oSourceMapTree.allMapsForRandomizier)
+		if path != "":
+			activate(path)
+
 
 func activate(path):
-	path = path.get_basename()
-	oOpenMap.open_map(path)
-	toggle_map_preview(false)
+	if oMapBrowserTabContainer.current_tab == 0: # Play
+		oGame.launch_game(oGame.cmdline(path))
+	else: # Edit
+		path = path.get_basename()
+		oOpenMap.open_map(path)
+		toggle_map_preview(false)
 
 func _on_DynamicMapTree_item_selected():
 	var selectedTreeItem = oDynamicMapTree.get_selected()
 	var path = selectedTreeItem.get_metadata(0)
 	# Set modified time, if it's a file
 	if selectedTreeItem.get_metadata(1) == "is_a_file":
-		oBrowseOpenButton.visible = true
-		#oBrowsePlayButton.visible = true
+		oBrowseButton.visible = true
 #		var file = File.new()
 #		var modifiedTime = file.get_modified_time(path + '.slb') # This might cause case-sensitive issues but I don't care right now.
 #		oDateSaved.text = convert_unix_time_to_readable(modifiedTime) #'Last modified: '+
@@ -70,10 +83,8 @@ func _on_DynamicMapTree_item_selected():
 			toggle_map_preview(false)
 	else:
 		toggle_map_preview(false)
-		oBrowseOpenButton.visible = false
-		#oBrowsePlayButton.visible = false
+		oBrowseButton.visible = false
 		# "Directory" modified time is not shown
-		oDateSaved.text = ""
 		#oBrowserFilename.text = ""
 	oBrowserFilename.text = path.get_basename()
 
@@ -145,8 +156,6 @@ func _on_MapBrowser_visibility_changed():
 		toggle_map_preview(false)
 
 
-func _on_BrowsePlayButton_pressed():
-	pass # Replace with function body.
 
 
 func toggle_map_preview(togglePreview):
@@ -158,3 +167,20 @@ func toggle_map_preview(togglePreview):
 		
 		if oDynamicMapTree.get_selected() != null and currentSlbPath == oDynamicMapTree.get_selected().get_metadata(0):
 			oQuickMapPreview.visible = false
+
+
+func _on_MapBrowserTabContainer_tab_changed(tab):
+	match tab:
+		0:
+			var n = oMapBrowserTabEdit.get_child(0)
+			oMapBrowserTabEdit.remove_child(n)
+			oMapBrowserTabPlay.add_child(n)
+			oBrowseButton.text = "Play"
+			oRandomMapContainer.visible = true
+		1:
+			var n = oMapBrowserTabPlay.get_child(0)
+			oMapBrowserTabPlay.remove_child(n)
+			oMapBrowserTabEdit.add_child(n)
+			oBrowseButton.text = "Edit"
+			oRandomMapContainer.visible = false
+	_on_DynamicMapTree_item_selected()

@@ -3,6 +3,7 @@ onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oRNC = Nodelist.list["oRNC"]
 onready var oReadData = Nodelist.list["oReadData"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
+onready var oMapBrowserTabContainer = Nodelist.list["oMapBrowserTabContainer"]
 
 
 var img = Image.new()
@@ -74,15 +75,24 @@ const colourDict = {
 	52 : Color("D890BF"),
 	54 : Color.purple, #Color.fuchsia
 }
+const spoilerColor = Color8(20,16,0) #Color(0.125, 0.125, 0.175, 1.0)
+var spoiledSlabs = {
+	Slabs.ROCK:null,
+	Slabs.GOLD:null,
+	Slabs.GEMS:null,
+}
 
 func _ready():
-	
 	visible = false
 	img.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)
 	tex.create_from_image(img, 0)
 
 
 func update_img(slbFilePath):
+	var hideSpoilers = false
+	if oMapBrowserTabContainer.current_tab == 0:
+		hideSpoilers = true
+	
 	if File.new().file_exists(slbFilePath) == false:
 		print("File not found : " + slbFilePath)
 		return
@@ -133,18 +143,40 @@ func update_img(slbFilePath):
 				ownBuffer.seek( (((x*3)+1)+(y*3*dataWidth)))
 				ownership = ownBuffer.get_u8()
 			
-			
-			if colourDict.has(slabID):
-				img.set_pixel(x,y,colourDict[slabID])
-			else:
-				if slabID == 11 and ownership != 255: # Is claimed floor
-					img.set_pixel(x,y,Constants.ownerFloorCol[ownership])
+			if hideSpoilers == false:
+				if colourDict.has(slabID):
+					img.set_pixel(x,y,colourDict[slabID])
 				else:
-					if ownership == 5:
-						img.set_pixel(x,y,Color(1,1,1,1)) # Neutral room. Use shader to flash it.
+					if slabID == 11 and ownership != 255: # Is claimed floor
+						img.set_pixel(x,y,Constants.ownerFloorCol[ownership])
 					else:
-						img.set_pixel(x,y,Constants.ownerRoomCol[ownership])
-	
+						if ownership == 5:
+							img.set_pixel(x,y,Color(1,1,1,1)) # Neutral room. Use shader to flash it.
+						else:
+							img.set_pixel(x,y,Constants.ownerRoomCol[ownership])
+			else:
+				var pixelHasBeenSet = false
+				if colourDict.has(slabID):
+					if spoiledSlabs.has(slabID) or ownership == 0:
+						img.set_pixel(x,y,colourDict[slabID])
+						pixelHasBeenSet = true
+				else:
+					if ownership == 0:
+						if slabID == 11 and ownership != 255 and ownership == 0: # Is claimed floor
+							img.set_pixel(x, y, Constants.ownerFloorCol[ownership])
+							pixelHasBeenSet = true
+						else:
+							img.set_pixel(x,y,Constants.ownerRoomCol[ownership])
+							pixelHasBeenSet = true
+					elif ownership == 5:
+						if slabID == Slabs.PORTAL or slabID == Slabs.PORTAL_WALL:
+							img.set_pixel(x,y,Color(1,1,1,1)) # Neutral room. Use shader to flash it.
+							pixelHasBeenSet = true
+				
+				if pixelHasBeenSet == false:
+					img.set_pixel(x,y,spoilerColor)
+
+
 	#if ownership < 5:
 	img.unlock()
 	

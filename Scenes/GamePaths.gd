@@ -34,9 +34,9 @@ func _input(event):
 	if Input.is_action_just_pressed("SaveAndPlay"):
 		menu_play_clicked()
 
-func launch_game():
+func launch_game(mainCommands):
 	var printOutput = []
-	OS.execute(COMMAND_LINE_CONSOLE, [COMMAND_LINE_CONSOLE_ARG, COMMAND_LINE], false, printOutput) # Make sure "false" is set so Unearth doesn't freeze
+	OS.execute(COMMAND_LINE_CONSOLE, [COMMAND_LINE_CONSOLE_ARG, mainCommands], false, printOutput) # Make sure "false" is set so Unearth doesn't freeze
 	print(printOutput)
 	oMessage.quick("Launching...")
 
@@ -64,40 +64,41 @@ func set_paths(path):
 
 func _on_CmdLineDkCommands_text_changed(new_text):
 	Settings.set_setting("dk_commands", new_text)
-	construct_command_line()
+	reconstruct_command_line()
 
-func construct_command_line():
+func reconstruct_command_line():
 	print('Constructing command line...')
-	
-	COMMAND_LINE = ""
-	cmdline_main()
-	cmdline_map()
-	cmdline_commands()
-	oCmdLineConsole.text = COMMAND_LINE_CONSOLE
-	oCmdLineConsoleArg.text = COMMAND_LINE_CONSOLE_ARG
-	oCmdLineExecute.text = COMMAND_LINE
-
-func cmdline_main():
 	# Keep in mind Linux and Windows both want different quotation marks ' "
 	match OS.get_name():
 		"Windows":
 			COMMAND_LINE_CONSOLE = 'cmd'
 			COMMAND_LINE_CONSOLE_ARG = '/C'
-			COMMAND_LINE += 'cd /D '
-			COMMAND_LINE += '"' + GAME_DIRECTORY + '"'
-			COMMAND_LINE += ' && '
-			COMMAND_LINE += '"' + EXECUTABLE_PATH.get_file() + '"'
 		"X11":
 			COMMAND_LINE_CONSOLE = "/bin/sh"
 			COMMAND_LINE_CONSOLE_ARG = "-c"
-			COMMAND_LINE += "cd "
-			COMMAND_LINE += "'" + GAME_DIRECTORY + "'"
-			COMMAND_LINE += " && wine "
-			COMMAND_LINE += "'" + EXECUTABLE_PATH.get_file() + "'"
+	oCmdLineConsole.text = COMMAND_LINE_CONSOLE
+	oCmdLineConsoleArg.text = COMMAND_LINE_CONSOLE_ARG
+	
+	COMMAND_LINE = cmdline(oCurrentMap.path)
+	oCmdLineExecute.text = COMMAND_LINE
 
-func cmdline_map():
+func cmdline(mapPath):
+	# Keep in mind Linux and Windows both want different quotation marks ' "
+	var constructString = ""
+	match OS.get_name():
+		"Windows":
+			constructString += 'cd /D '
+			constructString += '"' + GAME_DIRECTORY + '"'
+			constructString += ' && '
+			constructString += '"' + EXECUTABLE_PATH.get_file() + '"'
+		"X11":
+			constructString += "cd "
+			constructString += "'" + GAME_DIRECTORY + "'"
+			constructString += " && wine "
+			constructString += "'" + EXECUTABLE_PATH.get_file() + "'"
+	
 	# Delete -level xxx and -campaign xxx from the command line
-	var arrayOfWords = COMMAND_LINE.split(" ")
+	var arrayOfWords = constructString.split(" ")
 	for i in arrayOfWords.size():
 		match arrayOfWords[i]:
 			"-level":
@@ -108,30 +109,31 @@ func cmdline_map():
 				arrayOfWords[i] = ""
 				if i+1 < arrayOfWords.size():
 					arrayOfWords[i+1] = ""
-	COMMAND_LINE = ""
+	constructString = ""
 	for word in arrayOfWords:
 		if word != "":
-			COMMAND_LINE += " " + word
+			constructString += " " + word
 	
 	# Add level and campaign to command line
 	
-	var newMapNumber = oCurrentMap.path.get_file().to_upper().trim_prefix("MAP")
-	var newCampaignName = oCurrentMap.path.get_base_dir().get_file()
-	COMMAND_LINE += " -level " + newMapNumber
+	var newMapNumber = mapPath.get_file().to_upper().trim_prefix("MAP")
+	var newCampaignName = mapPath.get_base_dir().get_file()
+	constructString += " -level " + newMapNumber
 	if newCampaignName != "levels": # The older DK structure stored all their maps in /levels/ folder and did not use campaign command.
-		COMMAND_LINE += " -campaign " + newCampaignName
+		constructString += " -campaign " + newCampaignName
 	
-	COMMAND_LINE = COMMAND_LINE.strip_edges(true,true)
-
-func cmdline_commands():
+	constructString = constructString.strip_edges(true,true)
+	
 	if DK_COMMANDS != '':
-		COMMAND_LINE += ' '
-	COMMAND_LINE += DK_COMMANDS
+		constructString += ' '
+	constructString += DK_COMMANDS
+	
+	return constructString
 
 func menu_play_clicked():
 	if oEditor.mapHasBeenEdited == true:
 		oSaveMap.save_map(oCurrentMap.path)
-	launch_game()
+	launch_game(COMMAND_LINE)
 
 func get_main_subdirectories(path):
 	var array = []

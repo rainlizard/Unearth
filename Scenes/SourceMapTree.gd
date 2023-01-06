@@ -6,9 +6,12 @@ onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
 var treeItemsThatWantNames = {} # <BASENAME> <TreeItem>
 var gatherMapNames = {} # <BASENAME> <LifNameString>
 
+var allMapsForRandomizier = []
 
 func update_source_tree(): # Call this whenever there's an update to the filesystem, or whenever you open the map list
 	var CODETIME_START = OS.get_ticks_msec()
+	
+	allMapsForRandomizier.clear()
 	
 	treeItemsThatWantNames.clear()
 	gatherMapNames.clear()
@@ -31,7 +34,6 @@ func update_source_tree(): # Call this whenever there's an update to the filesys
 		fetchItem.set_text(1, txt)
 	
 	print('SourceMapTree updated in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-
 
 func deep_scan(rootPath, parentTreeItem):
 	var dir = Directory.new()
@@ -75,11 +77,12 @@ func add_directory_contents(dir, treeItem):
 			if EXT == "SLB":
 				var newTreeItem = add_tree_file(self,treeItem, pathString)
 				SLB_WANTS_NAME(pathString, newTreeItem)
+				allMapsForRandomizier.append(pathString)
 			elif EXT == "LIF":
 				LIF_WANTS_TO_GIVE_NAME(pathString)
 			elif EXT == "LOF":
 				LOF_WANTS_TO_GIVE_NAME(pathString)
-
+			
 
 class MyCustomSorter:
 	static func sort_ascending(a, b):

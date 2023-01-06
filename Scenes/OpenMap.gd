@@ -113,6 +113,7 @@ func open_map(filePath): # auto opens other files
 			oDataKeeperFxLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
 			print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
 		
+		var formatType = 1
 		for EXT in Filetypes.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
 				
@@ -126,12 +127,10 @@ func open_map(filePath): # auto opens other files
 				if EXT == "LIF" and oCurrentMap.currentFilePaths.has("LOF") == true:
 					continue
 				# Set current format setting to new KeeperFX format, if any new files are detected
-				var setNewFormat = false
-				if EXT == "TNGFX": setNewFormat = true
-				if EXT == "APTFX": setNewFormat = true 
-				if EXT == "LGTFX": setNewFormat = true 
-				if setNewFormat == true:
-					oCurrentFormat.selected = 0
+				
+				if EXT == "TNGFX": formatType = 0
+				if EXT == "APTFX": formatType = 0
+				if EXT == "LGTFX": formatType = 0
 				
 				Filetypes.read(oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING], EXT.to_upper())
 			else:
@@ -151,6 +150,9 @@ func open_map(filePath): # auto opens other files
 						for xSlab in M.xSize:
 							var slabID = oDataSlab.get_cell(xSlab, ySlab)
 							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.REMEMBER_TYPE])
+		
+		# Set map format
+		oCurrentFormat.selected = formatType
 		
 		finish_opening_map(map)
 	else:

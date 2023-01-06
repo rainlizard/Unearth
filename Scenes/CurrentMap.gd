@@ -47,7 +47,7 @@ func set_path_and_title(newpath):
 		OS.set_window_title('Unearth v'+Constants.VERSION)
 	path = newpath
 	
-	oGame.construct_command_line() # Always update command line whenever the path changes
+	oGame.reconstruct_command_line() # Always update command line whenever the path changes
 
 var instancesToFree = []
 func _process(delta):
