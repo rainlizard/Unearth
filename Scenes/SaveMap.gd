@@ -101,11 +101,6 @@ func delete_existing_files(map):
 func clicked_save_on_menu():
 	save_map(oCurrentMap.path)
 
-func _on_FileDialogSaveAs_files_selected(filePath):
-	filePath = filePath.get_basename()
-	var map = filePath.get_base_dir().plus_file("map" + filePath.get_file())
-	save_map(map)
-
 #	if File.new().file_exists(path + ".slb") == true:
 #		mapPathSave = path
 #		oConfirmOverwrite.Utils.popup_centered(self)

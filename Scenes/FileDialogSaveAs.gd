@@ -3,6 +3,7 @@ onready var oGame = Nodelist.list["oGame"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oSaveMap = Nodelist.list["oSaveMap"]
 
 var saveInstruction = Label.new()
 var lineEdit
@@ -111,7 +112,8 @@ func linedit_was_changed():
 		var eraseTxt = lineEdit.text
 		eraseTxt.erase(0, 1)
 		lineEdit.text = eraseTxt
-	
+	if lineEdit.text == "00000":
+		lineEdit.text = "00001"
 	if int(lineEdit.text) > 32767:
 		lineEdit.text = "32767"
 		oMessage.quick("Map number cannot be larger than 32767")
@@ -157,3 +159,8 @@ func determine_next_available_map_number_in_dir(path):
 func get_drive(): # This may have problems in Linux
 	var driveOptionButton = get_vbox().get_child(0).get_child(2).get_child(0)
 	return driveOptionButton.get_item_text(driveOptionButton.selected)
+
+
+func _on_FileDialogSaveAs_file_selected(filePath):
+	filePath = filePath.get_basename()
+	oSaveMap.save_map(filePath)

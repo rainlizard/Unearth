@@ -5591,7 +5591,7 @@ script = ExtResource( 88 )
 [connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/ResetToDefault" to="Ui/UiSystem/SettingsWindow" method="_on_ResetToDefault_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/CloseButton" to="Ui/UiSystem/SettingsWindow" method="_on_CloseButton_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/FileDialogSaveAs" to="Ui/UiSystem/FileDialogSaveAs" method="_on_FileDialogSaveAs_about_to_show"]
-[connection signal="files_selected" from="Ui/UiSystem/FileDialogSaveAs" to="SaveMap" method="_on_FileDialogSaveAs_files_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/FileDialogSaveAs" to="Ui/UiSystem/FileDialogSaveAs" method="_on_FileDialogSaveAs_file_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/FileDialogSaveAs" to="Ui/UiSystem/FileDialogSaveAs" method="_on_FileDialogSaveAs_visibility_changed"]
 [connection signal="about_to_show" from="Ui/UiSystem/FileDialogOpen" to="Ui/UiSystem/FileDialogOpen" method="_on_FileDialogOpen_about_to_show"]
 [connection signal="file_selected" from="Ui/UiSystem/FileDialogOpen" to="OpenMap" method="_on_FileDialogOpen_file_selected"]
