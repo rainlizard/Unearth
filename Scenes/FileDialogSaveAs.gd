@@ -43,7 +43,6 @@ func _on_FileDialogSaveAs_about_to_show():
 	current_path = path
 	current_dir = path
 	
-	yield(get_tree(),'idle_frame')
 	if oCurrentMap.path == "":
 		# New number
 		#var newMapNum = Random.randi_range(1,32767)
@@ -54,6 +53,7 @@ func _on_FileDialogSaveAs_about_to_show():
 		var currentMapNumber = oCurrentMap.path.get_file().to_upper().trim_prefix("MAP")
 		lineEdit.text = str(currentMapNumber)
 	
+	yield(get_tree(),'idle_frame')
 	lineEdit.caret_position = lineEdit.text.length()
 	lineEdit.grab_focus()
 
@@ -93,8 +93,9 @@ func _process(delta):
 func working_directory_was_changed():
 	if oCurrentMap.path == "":
 		var newMapNumber = determine_next_available_map_number_in_dir(current_dir)
-		lineEdit.text = str(newMapNumber)
+		lineEdit.text = 'map' + str(newMapNumber)
 		line_edit_focus_exited()
+		
 
 func linedit_was_changed():
 	var rememberCaretPos = lineEdit.caret_position

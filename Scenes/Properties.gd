@@ -139,6 +139,7 @@ func _on_MapFormatSetting_item_selected(index):
 	match index:
 		0: #KeeperFX format
 			oAdvancedMapPropertiesCheckBox.disabled = false
+			oMessage.big("Warning", "'KeeperFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Old format' for now.")
 		1: #Old format
 			oAdvancedMapPropertiesCheckBox.disabled = true
 			oAdvancedMapPropertiesCheckBox.pressed = false

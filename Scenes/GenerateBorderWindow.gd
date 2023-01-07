@@ -16,6 +16,7 @@ onready var oYSizeLine = Nodelist.list["oYSizeLine"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 var noise = OpenSimplexNoise.new()
 var imageData = Image.new()
@@ -215,6 +216,7 @@ func _on_NewMapFormat_item_selected(index):
 		oYSizeLine.editable = true
 		oXSizeLine.hint_tooltip = ""
 		oYSizeLine.hint_tooltip = ""
+		oMessage.big("Warning", "'KeeperFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Old format' for now.")
 	elif index == 1:
 		oXSizeLine.editable = false
 		oYSizeLine.editable = false
