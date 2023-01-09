@@ -57,14 +57,12 @@ func _on_NewMapWindow_visibility_changed():
 	#if oGame.running_keeperfx() == false:
 	#	oSetNewFormat.selected = 1 # Set default format to OLD, for newbies who don't know what KeeperFX is
 	
-	
-	oXSizeLine.text = "85"
-	oYSizeLine.text = "85"
 	reinit_noise_preview()
 	
 	randomize()
 	noise.seed = randi()
 	update_border_image_with_noise()
+	_on_NewMapFormat_item_selected(oSetNewFormat.selected)
 
 func _on_ButtonNewMapOK_pressed():
 	oCurrentMap._on_ButtonNewMap_pressed()
@@ -123,12 +121,12 @@ func _on_YSizeLine_focus_exited():
 	if oYSizeLine.text.to_int() > 512:
 		oYSizeLine.text = "512"
 	reinit_noise_preview()
-	oNoiseUpdateTimer.start(0.01)
+	update_border_image_with_noise()
 func _on_XSizeLine_focus_exited():
 	if oXSizeLine.text.to_int() > 512:
 		oXSizeLine.text = "512"
 	reinit_noise_preview()
-	oNoiseUpdateTimer.start(0.01)
+	update_border_image_with_noise()
 
 
 func _on_NoiseUpdateTimer_timeout():
