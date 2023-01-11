@@ -23,6 +23,7 @@ onready var oDkDat = Nodelist.list["oDkDat"]
 onready var oDkClm = Nodelist.list["oDkClm"]
 onready var oFrailColumnsCheckbox = Nodelist.list["oFrailColumnsCheckbox"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
+onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 
 enum dir {
 	s = 0
@@ -72,19 +73,11 @@ func mirror_placement(shapePositionArray):
 		
 		for fromPos in shapePositionArray:
 			
-			
 			# To
 			var toPos
 			match performAction:
 				0: # Other vertical
 					toPos = Vector2(fromPos.x, M.ySize - fromPos.y - 1)
-					if fromPos.y < floor(M.ySize*0.5):
-						oDataOwnership.set_cellv(fromPos, oMirrorOptions.ownerValue[0])
-						changeOwnershipArray.append(fromPos)
-					else:
-						oDataOwnership.set_cellv(fromPos, oMirrorOptions.ownerValue[1])
-						changeOwnershipArray.append(fromPos)
-					
 				1: # Other horizontal
 					toPos = Vector2(M.xSize - fromPos.x - 1, fromPos.y)
 				2: # Other diagonal
@@ -129,12 +122,8 @@ func mirror_placement(shapePositionArray):
 		
 			mirroredPositionArray.append(toPos)
 	
-	
-	#ownership_paint_shape(changeOwnershipArray, ownership)
-	
 	generate_slabs_based_on_id(mirroredPositionArray, true)
 	oOverheadOwnership.update_ownership_image_based_on_shape(mirroredPositionArray)
-	oOverheadOwnership.update_ownership_image_based_on_shape(changeOwnershipArray)
 
 
 func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
@@ -142,6 +131,14 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	for pos in shapePositionArray:
+		
+		if oMirrorPlacementCheckBox.pressed == true:
+			if pos.y < floor(M.ySize*0.5):
+				oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[0])
+			else:
+				oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[1])
+		else:
+			oDataOwnership.set_cellv(pos, ownership)
 		
 		if slabID < 1000:
 			oDataCustomSlab.set_cellv(pos, 0)
@@ -167,7 +164,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	for i in removeFromShape:
 		shapePositionArray.erase(i)
 	
-	oOverheadOwnership.ownership_paint_shape(shapePositionArray, ownership)
+	oOverheadOwnership.update_ownership_image_based_on_shape(shapePositionArray)
 	print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
