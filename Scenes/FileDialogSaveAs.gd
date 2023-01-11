@@ -29,6 +29,7 @@ func line_edit_focus_exited():
 		lineEdit.text = lineEdit.text.insert(3,"0")
 
 func _on_FileDialogSaveAs_about_to_show():
+	
 	var path
 	if oCurrentMap.path == "":
 		var personalFolder = oGame.DK_LEVELS_DIRECTORY.plus_file("personal")
@@ -56,6 +57,7 @@ func _on_FileDialogSaveAs_about_to_show():
 	yield(get_tree(),'idle_frame')
 	lineEdit.caret_position = lineEdit.text.length()
 	lineEdit.grab_focus()
+	deselect_items()
 
 var previousCurrentDir = ""
 

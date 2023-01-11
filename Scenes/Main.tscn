@@ -1,4 +1,4 @@
-[gd_scene load_steps=163 format=2]
+[gd_scene load_steps=169 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -87,7 +87,7 @@
 [ext_resource path="res://Scenes/Instances.gd" type="Script" id=85]
 [ext_resource path="res://Scenes/CustomSlabsTab.gd" type="Script" id=86]
 [ext_resource path="res://Scenes/EditingMode.gd" type="Script" id=87]
-[ext_resource path="res://Scenes/LevelSpinBox.gd" type="Script" id=88]
+[ext_resource path="res://Scenes/EditBrushSizeValue.gd" type="Script" id=88]
 [ext_resource path="res://Scenes/LineEditFloat.gd" type="Script" id=89]
 [ext_resource path="res://Scenes/SlabNameDisplay.gd" type="Script" id=90]
 [ext_resource path="res://Scenes/AddCustomObjectWindow.gd" type="Script" id=91]
@@ -144,6 +144,11 @@
 [ext_resource path="res://Art/IconPaintBucketHover.png" type="Texture" id=142]
 [ext_resource path="res://Art/IconPaintBucketPressed.png" type="Texture" id=143]
 [ext_resource path="res://Art/Dice.png" type="Texture" id=144]
+[ext_resource path="res://Art/IconBrushPressed.png" type="Texture" id=145]
+[ext_resource path="res://Art/IconBrush.png" type="Texture" id=146]
+[ext_resource path="res://Art/IconBrushHover.png" type="Texture" id=147]
+[ext_resource path="res://Art/SplitNS.png" type="Texture" id=148]
+[ext_resource path="res://Scenes/MirrorOptions.gd" type="Script" id=149]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -307,6 +312,26 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
+
+[sub_resource type="GDScript" id=20]
+script/source = "extends SpinBox
+
+func _ready():
+	get_child(0).connect(\"text_changed\", self, \"text_changed\")
+
+func text_changed(newText):
+	if Input.is_key_pressed(KEY_1) == true: get_child(0).text = \"1\"
+	if Input.is_key_pressed(KEY_2) == true: get_child(0).text = \"2\"
+	if Input.is_key_pressed(KEY_3) == true: get_child(0).text = \"3\"
+	if Input.is_key_pressed(KEY_4) == true: get_child(0).text = \"4\"
+	if Input.is_key_pressed(KEY_5) == true: get_child(0).text = \"5\"
+	if Input.is_key_pressed(KEY_6) == true: get_child(0).text = \"6\"
+	if Input.is_key_pressed(KEY_7) == true: get_child(0).text = \"7\"
+	if Input.is_key_pressed(KEY_8) == true: get_child(0).text = \"8\"
+	if Input.is_key_pressed(KEY_9) == true: get_child(0).text = \"9\"
+	if Input.is_key_pressed(KEY_0) == true: get_child(0).text = \"10\"
+	get_child(0).caret_position = get_child(0).text.length()
+"
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 7 )
@@ -1234,7 +1259,7 @@ script = ExtResource( 73 )
 margin_right = 276.0
 margin_bottom = 1.0
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
+[node name="OwnershipGridContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
 margin_top = 5.0
 margin_right = 276.0
 margin_bottom = 5.0
@@ -1313,6 +1338,18 @@ texture_pressed = ExtResource( 110 )
 texture_hover = ExtResource( 113 )
 expand = true
 
+[node name="ToolBrush" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
+margin_right = 48.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 48 )
+hint_tooltip = "Brush tool"
+toggle_mode = true
+group = ExtResource( 108 )
+texture_normal = ExtResource( 146 )
+texture_pressed = ExtResource( 145 )
+texture_hover = ExtResource( 147 )
+expand = true
+
 [node name="ToolRectangle" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
 margin_left = 52.0
 margin_right = 100.0
@@ -1350,14 +1387,14 @@ margin_bottom = 40.0
 [node name="Label" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer"]
 margin_right = 92.0
 margin_bottom = 21.0
-text = "Brush size"
+text = "Pencil size"
 
 [node name="EditBrushSizeValue" type="SpinBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer"]
 margin_right = 74.0
 margin_bottom = 31.0
 min_value = 1.0
 value = 1.0
-script = ExtResource( 81 )
+script = ExtResource( 88 )
 
 [node name="PlaceLockedCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
 visible = false
@@ -1365,6 +1402,85 @@ margin_top = -55.0
 margin_right = 91.0
 margin_bottom = -26.0
 text = "Place door as locked"
+
+[node name="MirrorPlacementCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
+margin_top = 50.0
+margin_right = 186.0
+margin_bottom = 79.0
+text = "Symmetrical"
+
+[node name="MirrorOptions" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 149 )
+
+[node name="MirrorSplitTextureRect" type="TextureRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions"]
+rect_min_size = Vector2( 128, 128 )
+mouse_filter = 2
+texture = ExtResource( 148 )
+expand = true
+stretch_mode = 5
+
+[node name="MirrorColorContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect"]
+show_behind_parent = true
+rect_min_size = Vector2( 128, 128 )
+mouse_filter = 2
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
+columns = 2
+
+[node name="MirrorColor0" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+show_behind_parent = true
+hint_tooltip = "Click to change ownership that will be used for this area"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 1, 0, 0, 1 )
+
+[node name="MirrorColor1" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+show_behind_parent = true
+margin_right = 40.0
+margin_bottom = 40.0
+hint_tooltip = "Click to change ownership that will be used for this area"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0, 0.156863, 1, 1 )
+
+[node name="MirrorColor2" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+show_behind_parent = true
+margin_right = 40.0
+margin_bottom = 40.0
+hint_tooltip = "Click to change ownership that will be used for this area"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0, 1, 0.0627451, 1 )
+
+[node name="MirrorColor3" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+show_behind_parent = true
+margin_right = 40.0
+margin_bottom = 40.0
+hint_tooltip = "Click to change ownership that will be used for this area"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.827451, 1, 0, 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions"]
+margin_top = 50.0
+margin_right = 40.0
+margin_bottom = 90.0
+
+[node name="SplitDirectionButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
+margin_right = 176.0
+margin_bottom = 27.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Division type"
+
+[node name="MirrorFlipCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
+margin_right = 64.0
+margin_bottom = 29.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Flip"
 
 [node name="LimitThing" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 107.0
@@ -2724,7 +2840,7 @@ visible = true
 margin_left = -2754.0
 margin_top = 720.0
 margin_right = -1623.0
-margin_bottom = 1160.0
+margin_bottom = 1163.0
 window_title = "Controls"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ControlsWindow"]
@@ -2908,7 +3024,7 @@ margin_left = 308.0
 margin_top = 250.0
 margin_right = 674.0
 margin_bottom = 271.0
-text = "Quickly set creature level"
+text = "Quickly set creature level / brush size"
 
 [node name="Label13" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_top = 275.0
@@ -5532,7 +5648,7 @@ max_value = 10.0
 value = 1.0
 rounded = true
 align = 1
-script = ExtResource( 88 )
+script = SubResource( 20 )
 
 [connection signal="visibility_changed" from="Game2D/Selector" to="Game2D/Selector" method="_on_Selector_visibility_changed"]
 [connection signal="visibility_changed" from="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership" to="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership" method="_on_OnlyOwnership_visibility_changed"]
@@ -5545,9 +5661,16 @@ script = ExtResource( 88 )
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" method="_on_UseSlabOwnerCheckBox_toggled"]
 [connection signal="visibility_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" method="_on_UseSlabOwnerCheckBox_visibility_changed"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolPencil" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPencil_toggled"]
+[connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolBrush" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolBrush_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolRectangle" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolRectangle_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolPaintBucket" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPaintBucket_toggled"]
 [connection signal="value_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer/EditBrushSizeValue" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_EditBrushSizeValue_value_changed"]
+[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorPlacementCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorPlacementCheckBox_pressed"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor0" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor0_gui_input"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor1" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor1_gui_input"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor2" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor2_gui_input"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor3" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor3_gui_input"]
+[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer/SplitDirectionButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_SplitDirectionButton_pressed"]
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/PlacingTipsButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_PlacingTipsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonSettings" to="Ui/UiSystem/Menu" method="_on_MenuButtonSettings_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonHelp" to="Ui/UiSystem/Menu" method="_on_MenuButtonHelp_about_to_show"]

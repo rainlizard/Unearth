@@ -25,10 +25,12 @@ onready var oCustomSlabsTab = Nodelist.list["oCustomSlabsTab"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oEditingTools = Nodelist.list["oEditingTools"]
+onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 
 enum {
+	CONSTRUCT_BRUSH
+	CONSTRUCT_PENCIL
 	CONSTRUCT_RECTANGLE
-	CONSTRUCT_CIRCLE
 	CONSTRUCT_FILL
 }
 
@@ -150,7 +152,7 @@ func construct_shape_for_placement(constructType):
 			for y in range(rectStart.y, rectEnd.y+1):
 				for x in range(rectStart.x, rectEnd.x+1):
 					shapePositionArray.append(Vector2(x,y))
-		CONSTRUCT_CIRCLE:
+		CONSTRUCT_PENCIL, CONSTRUCT_BRUSH:
 			var b = ((oEditingTools.BRUSH_SIZE)-1) / 2.0
 			var beginTile = oSelector.world2tile(get_global_mouse_position()) - Vector2(floor(b),floor(b))
 			var endTile = oSelector.world2tile(get_global_mouse_position()) + Vector2(ceil(b),ceil(b))
@@ -169,9 +171,13 @@ func construct_shape_for_placement(constructType):
 			var brushSizeX = abs(rectStart.x-rectEnd.x)
 			var brushSizeY = abs(rectStart.y-rectEnd.y)
 			var center = rectStart + (Vector2(brushSizeX,brushSizeY)*0.5)
+			
 			for y in range(rectStart.y, rectEnd.y+1):
 				for x in range(rectStart.x, rectEnd.x+1):
-					if (Vector2(x,y).distance_to(center)) < (max(brushSizeX+1,brushSizeY+1)*0.47):
+					if constructType == CONSTRUCT_BRUSH:
+						if (Vector2(x,y).distance_to(center)) < (max(brushSizeX+1,brushSizeY+1)*0.47):
+							shapePositionArray.append(Vector2(x,y))
+					else:
 						shapePositionArray.append(Vector2(x,y))
 		CONSTRUCT_FILL:
 			var beginTile = oSelector.world2tile(get_global_mouse_position())
@@ -197,7 +203,7 @@ func construct_shape_for_placement(constructType):
 	if oSlabStyle.visible == true:
 		oDataSlx.set_tileset_shape(shapePositionArray)
 	elif oOnlyOwnership.visible == true:
-		oOverheadOwnership.ownership_update_shape(shapePositionArray, paintOwnership)
+		oOverheadOwnership.ownership_paint_shape(shapePositionArray, paintOwnership)
 		oOverheadOwnership.ownership_update_things(shapePositionArray, paintOwnership)
 		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, true)
 	else:
@@ -207,6 +213,9 @@ func construct_shape_for_placement(constructType):
 			useOwner = 5
 		
 		oSlabPlacement.place_shape_of_slab_id(shapePositionArray, paintSlab, useOwner)
+		
+		if oMirrorPlacementCheckBox.pressed == true:
+			oSlabPlacement.mirror_placement(shapePositionArray)
 		
 		var updateNearby = true
 		# Custom slabs don't update the surroundings

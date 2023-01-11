@@ -58,7 +58,7 @@ func start():
 	#print(oColorRectSlabOwner.rect_scale)
 	#oColorRectSlabOwner.rect_position = Vector2(96,96)
 
-func ownership_update_shape(shapePositionArray, ownership):
+func ownership_paint_shape(shapePositionArray, ownership):
 	
 	var setColour = Constants.ownerRoomCol[ownership]
 	
@@ -69,6 +69,17 @@ func ownership_update_shape(shapePositionArray, ownership):
 	slabOwnershipImage.unlock()
 	
 	slabOwnershipTexture.set_data(slabOwnershipImage)
+
+func update_ownership_image_based_on_shape(shapePositionArray):
+	slabOwnershipImage.lock()
+	for pos in shapePositionArray:
+		var ownership = oDataOwnership.get_cellv(pos) # Get cell data
+		var setColour = Constants.ownerRoomCol[ownership]
+		slabOwnershipImage.set_pixelv(pos, setColour)  # Set image data
+	slabOwnershipImage.unlock()
+	
+	slabOwnershipTexture.set_data(slabOwnershipImage)
+
 
 func ownership_update_things(shapePositionArray, paintOwnership):
 	# Change ownership of spellbooks when placing slab ownership (Ownership tab)

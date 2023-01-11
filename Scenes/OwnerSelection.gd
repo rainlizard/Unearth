@@ -2,6 +2,8 @@ extends VBoxContainer
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oUseSlabOwnerCheckBox = Nodelist.list["oUseSlabOwnerCheckBox"]
+onready var oOwnershipGridContainer = Nodelist.list["oOwnershipGridContainer"]
+onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 
 #onready var oEditor = Nodelist.list["oEditor"]
 onready var gridItemScene = preload("res://Scenes/GenericGridItem.tscn")
@@ -34,7 +36,7 @@ func _ready():
 	set_selection(oSelection.paintOwnership) # Default initial selection
 
 func add_child_to_grid(id, set_text):
-	$GridContainer.add_child(id)
+	oOwnershipGridContainer.add_child(id)
 	set_text = set_text.replace(" ","\n") # Use "New lines" wherever there was a space.
 	id.set_meta("grid_item_text", set_text)
 	id.connect("mouse_entered", self, "_on_hovered_over_item", [id])
@@ -46,6 +48,8 @@ func pressed(id):
 	var setValue = id.get_meta("grid_value")
 	if oUseSlabOwnerCheckBox.pressed == true and oUseSlabOwnerCheckBox.visible == true:
 		setValue = 5
+	if oMirrorOptions.visible == true:
+		return
 	oSelection.paintOwnership = setValue
 	set_selection(setValue)
 	oOnlyOwnership.select_appropriate_button()
@@ -58,6 +62,9 @@ func update_selection():
 	if is_instance_valid(oSelectedRect.boundToItem) == false: return
 	# If checkbox is checked then don't do anything
 	if oUseSlabOwnerCheckBox.pressed == true and oUseSlabOwnerCheckBox.visible == true:
+		oSelectedRect.visible = false
+		return
+	if oMirrorOptions.visible == true:
 		oSelectedRect.visible = false
 		return
 	oSelectedRect.visible = true
@@ -80,7 +87,7 @@ func set_selection(value):
 		oSelectedRect.visible = false
 		return
 
-	for id in $GridContainer.get_children():
+	for id in oOwnershipGridContainer.get_children():
 		if id.get_meta("grid_value") == value:
 			oSelectedRect.boundToItem = id
 

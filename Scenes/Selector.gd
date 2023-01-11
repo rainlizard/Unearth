@@ -80,6 +80,7 @@ func mouse_button_anywhere():
 				oRectangleSelection.clear()
 
 func mouse_button_on_field():
+	# Initial on-press button
 	if Input.is_action_just_pressed("mouse_left"):
 		if Input.is_action_pressed("place_overlapping"):
 			canPlace = true
@@ -92,8 +93,6 @@ func mouse_button_on_field():
 				oInspector.deselect()
 		
 		match oEditingTools.TOOL_SELECTED:
-			oEditingTools.PENCIL:
-				pass
 			oEditingTools.RECTANGLE:
 				oRectangleSelection.set_initial_position(cursorTile)
 			oEditingTools.PAINTBUCKET:
@@ -101,9 +100,10 @@ func mouse_button_on_field():
 					oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_FILL)
 				pass
 	
+	# Holding down button
 	if Input.is_action_pressed("mouse_left"):
 			match oEditingTools.TOOL_SELECTED:
-				oEditingTools.PENCIL:
+				oEditingTools.PENCIL, oEditingTools.BRUSH:
 					if canPlace == true and visible == true:
 						canPlace = false
 						match mode:
@@ -111,7 +111,12 @@ func mouse_button_on_field():
 								var placeSubtile = world2subtile(get_global_mouse_position())
 								oSelection.place_subtile(placeSubtile)
 							MODE_TILE:
-								oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_CIRCLE)
+								match oEditingTools.TOOL_SELECTED:
+									oEditingTools.PENCIL:
+										oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_PENCIL)
+									oEditingTools.BRUSH:
+										oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_BRUSH)
+								
 				oEditingTools.RECTANGLE:
 					oRectangleSelection.update_positions(cursorTile)
 	
