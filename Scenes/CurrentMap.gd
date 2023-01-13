@@ -22,7 +22,7 @@ onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oMenu = Nodelist.list["oMenu"]
-onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oInstances = Nodelist.list["oInstances"]
 
 var path = ""
@@ -99,6 +99,6 @@ func clear_map():
 	oScriptHelpers.clear()
 	
 	# "LOF" # Do this last in case other functions rely on the old map size
-	oDataKeeperFxLof.clear_all()
+	oDataLof.clear_all()
 	print('Cleared map in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 

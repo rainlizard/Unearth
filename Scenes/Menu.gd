@@ -34,7 +34,7 @@ onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
-onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -96,8 +96,8 @@ func populate_recently_opened():
 		filePath = filePath.replace("\\", "/")
 		var mapName = ""
 		
-		if mapName == "": mapName = oDataKeeperFxLof.lof_name_text(filePath + ".lof")
-		if mapName == "": mapName = oDataKeeperFxLof.lof_name_text(filePath + ".LOF")
+		if mapName == "": mapName = oDataLof.lof_name_text(filePath + ".lof")
+		if mapName == "": mapName = oDataLof.lof_name_text(filePath + ".LOF")
 		if mapName == "": mapName = oDataMapName.lif_name_text(filePath + '.lif')
 		if mapName == "": mapName = oDataMapName.lif_name_text(filePath + '.LIF')
 		if mapName == "": mapName = oDataMapName.get_special_lif_text(filePath)

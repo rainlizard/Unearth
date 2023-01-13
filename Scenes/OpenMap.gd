@@ -30,7 +30,7 @@ onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
-onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oXSizeLine = Nodelist.list["oXSizeLine"]
 onready var oYSizeLine = Nodelist.list["oYSizeLine"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
@@ -110,7 +110,7 @@ func open_map(filePath): # auto opens other files
 		# Load files
 		
 		if oNewMapWindow.visible == true:
-			oDataKeeperFxLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
+			oDataLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
 			print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
 		
 		var formatType = 1

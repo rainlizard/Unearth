@@ -1,7 +1,7 @@
 extends Tree
 onready var oGame = Nodelist.list["oGame"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
-onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 
 var treeItemsThatWantNames = {} # <BASENAME> <TreeItem>
 var gatherMapNames = {} # <BASENAME> <LifNameString>
@@ -142,7 +142,7 @@ func LIF_WANTS_TO_GIVE_NAME(pathString):
 		gatherMapNames[BASENAME] = getNameText
 
 func LOF_WANTS_TO_GIVE_NAME(pathString):
-	var getNameText = oDataKeeperFxLof.lof_name_text(pathString)
+	var getNameText = oDataLof.lof_name_text(pathString)
 	
 	var BASENAME = pathString.get_basename().to_upper()
 	if treeItemsThatWantNames.has(BASENAME):

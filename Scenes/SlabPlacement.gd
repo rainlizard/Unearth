@@ -24,6 +24,7 @@ onready var oDkClm = Nodelist.list["oDkClm"]
 onready var oFrailColumnsCheckbox = Nodelist.list["oFrailColumnsCheckbox"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
+onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
 
 enum dir {
 	s = 0
@@ -59,6 +60,8 @@ func mirror_placement(shapePositionArray):
 		1: actions = [1]
 		2: actions = [0,1,2]
 	
+	var flip = oMirrorFlipCheckBox.pressed
+	
 	for performAction in actions:
 		match performAction:
 			0: # Other vertical
@@ -77,40 +80,45 @@ func mirror_placement(shapePositionArray):
 			var toPos
 			match performAction:
 				0: # Other vertical
-					toPos = Vector2(fromPos.x, M.ySize - fromPos.y - 1)
+					if flip == true and oMirrorOptions.splitType == 0:
+						toPos = Vector2(M.xSize - fromPos.x - 1, M.ySize - fromPos.y - 1)
+					else:
+						toPos = Vector2(fromPos.x, M.ySize - fromPos.y - 1)
 				1: # Other horizontal
-					toPos = Vector2(M.xSize - fromPos.x - 1, fromPos.y)
+					if flip == true and oMirrorOptions.splitType == 1:
+						toPos = Vector2(M.xSize - fromPos.x - 1, M.ySize - fromPos.y - 1)
+					else:
+						toPos = Vector2(M.xSize - fromPos.x - 1, fromPos.y)
 				2: # Other diagonal
 					toPos = Vector2(M.xSize - fromPos.x - 1, M.ySize - fromPos.y - 1)
+			
 			
 			var slabID = oDataSlab.get_cellv(fromPos)
 			var ownership = oDataOwnership.get_cellv(fromPos)
 			
-			if ownership != 5:
-				
-				if oMirrorOptions.splitType == 0:
-					if toPos.y < floor(M.ySize*0.5):
-						ownership = oMirrorOptions.ownerValue[0]
-					else:
-						ownership = oMirrorOptions.ownerValue[1]
-				
-				if oMirrorOptions.splitType == 1:
-					if toPos.x < floor(M.xSize*0.5):
-						ownership = oMirrorOptions.ownerValue[0]
-					else:
-						ownership = oMirrorOptions.ownerValue[1]
-				
-				if oMirrorOptions.splitType == 2:
-					if toPos.y < floor(M.ySize*0.5):
+			if slabID_is_ownable(slabID):
+				match oMirrorOptions.splitType:
+					0:
+						if toPos.y < floor(M.ySize*0.5):
+							ownership = oMirrorOptions.ownerValue[0]
+						else:
+							ownership = oMirrorOptions.ownerValue[1]
+					1:
 						if toPos.x < floor(M.xSize*0.5):
 							ownership = oMirrorOptions.ownerValue[0]
 						else:
 							ownership = oMirrorOptions.ownerValue[1]
-					else:
-						if toPos.x < floor(M.xSize*0.5):
-							ownership = oMirrorOptions.ownerValue[2]
+					2:
+						if toPos.y < floor(M.ySize*0.5):
+							if toPos.x < floor(M.xSize*0.5):
+								ownership = oMirrorOptions.ownerValue[0]
+							else:
+								ownership = oMirrorOptions.ownerValue[1]
 						else:
-							ownership = oMirrorOptions.ownerValue[3]
+							if toPos.x < floor(M.xSize*0.5):
+								ownership = oMirrorOptions.ownerValue[2]
+							else:
+								ownership = oMirrorOptions.ownerValue[3]
 			
 			oDataSlab.set_cellv(toPos, slabID)
 			oDataOwnership.set_cellv(toPos, ownership)
@@ -125,18 +133,45 @@ func mirror_placement(shapePositionArray):
 	generate_slabs_based_on_id(mirroredPositionArray, true)
 	oOverheadOwnership.update_ownership_image_based_on_shape(mirroredPositionArray)
 
+func slabID_is_ownable(slabID):
+	if oOwnableNaturalTerrain.pressed == false and Slabs.data.has(slabID) and Slabs.data[slabID][Slabs.IS_OWNABLE] == false:
+		return false
+	return true
+
 
 func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
+	var ownable = slabID_is_ownable(slabID)
+	if ownable == false:
+		ownership = 5
+	
 	var removeFromShape = []
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	for pos in shapePositionArray:
 		
-		if oMirrorPlacementCheckBox.pressed == true:
-			if pos.y < floor(M.ySize*0.5):
-				oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[0])
-			else:
-				oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[1])
+		if oMirrorPlacementCheckBox.pressed == true and ownable == true:
+				match oMirrorOptions.splitType:
+					0:
+						if pos.y < floor(M.ySize*0.5):
+							oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[0])
+						else:
+							oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[1])
+					1:
+						if pos.x < floor(M.xSize*0.5):
+							oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[0])
+						else:
+							oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[1])
+					2:
+						if pos.y < floor(M.ySize*0.5):
+							if pos.x < floor(M.xSize*0.5):
+								oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[0])
+							else:
+								oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[1])
+						else:
+							if pos.x < floor(M.xSize*0.5):
+								oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[2])
+							else:
+								oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[3])
 		else:
 			oDataOwnership.set_cellv(pos, ownership)
 		
@@ -168,7 +203,6 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
-
 
 func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	var CODETIME_START = OS.get_ticks_msec()

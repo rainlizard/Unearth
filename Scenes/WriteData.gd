@@ -12,7 +12,8 @@ onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
-onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
+onready var oDataLof = Nodelist.list["oDataLof"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var value # just so I don't have to initialize the var in every function
 
@@ -20,17 +21,17 @@ func write_keeperfx_lof(buffer):
 	var newString = ""
 	newString += "; KeeperFX Level Overview File (LOF)" + "\n"
 	newString += "MAP_FORMAT_VERSION = " + str(Constants.unearth_map_format_version).pad_decimals(2) + "\n"
-	newString += "NAME_TEXT = " + str(oDataKeeperFxLof.NAME_TEXT) + "\n"
-	newString += "NAME_ID = " + str(oDataKeeperFxLof.NAME_ID) + "\n"
-	newString += "KIND = " + str(oDataKeeperFxLof.KIND) + "\n"
-	newString += "ENSIGN_POS = " + str(oDataKeeperFxLof.ENSIGN_POS) + "\n"
-	newString += "ENSIGN_ZOOM = " + str(oDataKeeperFxLof.ENSIGN_ZOOM) + "\n"
-	newString += "PLAYERS = " + str(oDataKeeperFxLof.PLAYERS) + "\n"
-	newString += "OPTIONS = " + str(oDataKeeperFxLof.OPTIONS) + "\n"
-	newString += "SPEECH = " + str(oDataKeeperFxLof.SPEECH) + "\n"
-	newString += "LAND_VIEW = " + str(oDataKeeperFxLof.LAND_VIEW) + "\n"
-	newString += "AUTHOR = " + str(oDataKeeperFxLof.AUTHOR) + "\n"
-	newString += "DESCRIPTION = " + str(oDataKeeperFxLof.DESCRIPTION) + "\n"
+	newString += "NAME_TEXT = " + str(oDataLof.NAME_TEXT) + "\n"
+	newString += "NAME_ID = " + str(oDataLof.NAME_ID) + "\n"
+	newString += "KIND = " + str(oDataLof.KIND) + "\n"
+	newString += "ENSIGN_POS = " + str(oDataLof.ENSIGN_POS) + "\n"
+	newString += "ENSIGN_ZOOM = " + str(oDataLof.ENSIGN_ZOOM) + "\n"
+	newString += "PLAYERS = " + str(oDataLof.PLAYERS) + "\n"
+	newString += "OPTIONS = " + str(oDataLof.OPTIONS) + "\n"
+	newString += "SPEECH = " + str(oDataLof.SPEECH) + "\n"
+	newString += "LAND_VIEW = " + str(oDataLof.LAND_VIEW) + "\n"
+	newString += "AUTHOR = " + str(oDataLof.AUTHOR) + "\n"
+	newString += "DESCRIPTION = " + str(oDataLof.DESCRIPTION) + "\n"
 	var dict = Time.get_date_dict_from_system()
 	var setDate = str(dict["year"])+"-"+str(dict["month"])+"-"+str(dict["day"])
 	newString += "DATE = " + str(setDate) + "\n"

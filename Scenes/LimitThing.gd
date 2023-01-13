@@ -1,5 +1,6 @@
 extends GridContainer
 onready var oSelection = Nodelist.list["oSelection"]
+onready var oSelector = Nodelist.list["oSelector"]
 
 func _process(delta):
 	var thingType = oSelection.paintThingType
@@ -43,6 +44,9 @@ func _process(delta):
 					limit = Things.LIGHT_LIMIT
 		_:
 			visible = false
+	
+	if oSelector.mode == oSelector.MODE_TILE:
+		visible = false
 	
 	var count = get_tree().get_nodes_in_group(groupName).size()
 	$LimitThingName.text = typeName

@@ -1,4 +1,4 @@
-[gd_scene load_steps=169 format=2]
+[gd_scene load_steps=168 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -137,10 +137,9 @@
 [ext_resource path="res://Class/SliderSetting.tscn" type="PackedScene" id=135]
 [ext_resource path="res://Scenes/QuickMapPreview.gd" type="Script" id=136]
 [ext_resource path="res://Scenes/ClmControls.tscn" type="PackedScene" id=137]
-[ext_resource path="res://Theme/ButtonGroupNewMap.tres" type="ButtonGroup" id=138]
 [ext_resource path="res://Scenes/LimitThing.gd" type="Script" id=139]
 [ext_resource path="res://Shaders/IndividualFloorTexture.tres" type="Material" id=140]
-[ext_resource path="res://Scenes/DataKeeperFxLof.gd" type="Script" id=141]
+[ext_resource path="res://Scenes/DataLof.gd" type="Script" id=141]
 [ext_resource path="res://Art/IconPaintBucketHover.png" type="Texture" id=142]
 [ext_resource path="res://Art/IconPaintBucketPressed.png" type="Texture" id=143]
 [ext_resource path="res://Art/Dice.png" type="Texture" id=144]
@@ -405,7 +404,7 @@ script = ExtResource( 44 )
 [node name="DataScript" type="Node" parent="CurrentMap"]
 script = ExtResource( 117 )
 
-[node name="DataKeeperFxLof" type="Node" parent="CurrentMap"]
+[node name="DataLof" type="Node" parent="CurrentMap"]
 script = ExtResource( 141 )
 
 [node name="DataCustomSlab" type="TileMap" parent="CurrentMap"]
@@ -1403,25 +1402,27 @@ margin_right = 91.0
 margin_bottom = -26.0
 text = "Place door as locked"
 
-[node name="MirrorPlacementCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 50.0
+[node name="MirrorPlacementCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
+margin_top = -5.0
 margin_right = 186.0
-margin_bottom = 79.0
+margin_bottom = 24.0
 text = "Symmetrical"
 
-[node name="MirrorOptions" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
+[node name="MirrorOptions" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = -55.0
+margin_bottom = -10.0
 script = ExtResource( 149 )
 
-[node name="MirrorSplitTextureRect" type="TextureRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions"]
+[node name="MirrorSplitTextureRect" type="TextureRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions"]
 rect_min_size = Vector2( 128, 128 )
 mouse_filter = 2
 texture = ExtResource( 148 )
 expand = true
 stretch_mode = 5
 
-[node name="MirrorColorContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect"]
+[node name="MirrorColorContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect"]
 show_behind_parent = true
 rect_min_size = Vector2( 128, 128 )
 mouse_filter = 2
@@ -1429,14 +1430,14 @@ custom_constants/vseparation = 0
 custom_constants/hseparation = 0
 columns = 2
 
-[node name="MirrorColor0" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+[node name="MirrorColor0" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
 hint_tooltip = "Click to change ownership that will be used for this area"
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 1, 0, 0, 1 )
 
-[node name="MirrorColor1" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+[node name="MirrorColor1" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
 margin_right = 40.0
 margin_bottom = 40.0
@@ -1445,7 +1446,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0, 0.156863, 1, 1 )
 
-[node name="MirrorColor2" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+[node name="MirrorColor2" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
 margin_right = 40.0
 margin_bottom = 40.0
@@ -1454,7 +1455,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0, 1, 0.0627451, 1 )
 
-[node name="MirrorColor3" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+[node name="MirrorColor3" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
 margin_right = 40.0
 margin_bottom = 40.0
@@ -1463,24 +1464,24 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0.827451, 1, 0, 1 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions"]
 margin_top = 50.0
 margin_right = 40.0
 margin_bottom = 90.0
 
-[node name="SplitDirectionButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
+[node name="SplitDirectionButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/VBoxContainer"]
 margin_right = 176.0
 margin_bottom = 27.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Division type"
 
-[node name="MirrorFlipCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
+[node name="MirrorFlipCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/VBoxContainer"]
 margin_right = 64.0
 margin_bottom = 29.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-text = "Flip"
+text = "Flip symmetry"
 
 [node name="LimitThing" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 107.0
@@ -1675,9 +1676,6 @@ color = Color( 1, 1, 1, 0 )
 anchor_left = 0.5
 anchor_right = 0.5
 script = ExtResource( 87 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/EditingMode"]
 grow_horizontal = 2
@@ -3703,7 +3701,7 @@ margin_top = 66.0
 margin_right = 625.0
 margin_bottom = 93.0
 text = "KeeperFX format"
-items = [ "KeeperFX format", null, false, 0, null, "Old format", null, false, 1, null ]
+items = [ "KeeperFX format", null, false, 0, null, "Classic format", null, false, 1, null ]
 selected = 0
 
 [node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/GridContainer"]
@@ -5249,12 +5247,13 @@ text = "Export columns.cfg"
 
 [node name="NewMapWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -132.0
+margin_left = -1036.0
 margin_top = -2256.0
-margin_right = 320.0
-margin_bottom = -1626.0
-rect_min_size = Vector2( 320, 280 )
+margin_right = -310.0
+margin_bottom = -1878.0
+rect_min_size = Vector2( 746, 378 )
 window_title = "New map"
+resizable = true
 script = ExtResource( 134 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/NewMapWindow"]
@@ -5267,58 +5266,63 @@ custom_constants/margin_top = 20
 custom_constants/margin_left = 20
 custom_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 432.0
-margin_bottom = 610.0
+margin_right = 726.0
+margin_bottom = 358.0
+custom_constants/separation = 20
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer"]
-margin_right = 412.0
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
+margin_right = 343.0
+margin_bottom = 338.0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_right = 343.0
 margin_bottom = 27.0
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
 margin_top = 3.0
 margin_right = 139.0
 margin_bottom = 24.0
 text = "Map file format"
 
-[node name="SetNewFormat" type="OptionButton" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer3"]
-margin_left = 212.0
-margin_right = 412.0
+[node name="SetNewFormat" type="OptionButton" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+margin_left = 143.0
+margin_right = 343.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 200, 0 )
-hint_tooltip = "KeeperFX format has more features, such as larger maps, but will produce maps that are incompatible with non-KeeperFX installations and incompatible with old editors."
+hint_tooltip = "KeeperFX format has more features, such as larger maps, but will produce maps that are incompatible with non-KeeperFX installations and be incompatible with old editors."
 size_flags_horizontal = 10
 text = "KeeperFX format"
-items = [ "KeeperFX format", null, false, 0, null, "Old format", null, false, 1, null ]
+items = [ "KeeperFX format", null, false, 0, null, "Classic format", null, false, 1, null ]
 selected = 0
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 31.0
-margin_right = 412.0
+margin_right = 343.0
 margin_bottom = 62.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
 margin_top = 5.0
 margin_right = 76.0
 margin_bottom = 26.0
 text = "Map size"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 277.0
-margin_right = 412.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 208.0
+margin_right = 343.0
 margin_bottom = 31.0
 size_flags_horizontal = 10
 
-[node name="XSizeLine" type="LineEdit" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="XSizeLine" type="LineEdit" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
 margin_right = 58.0
 margin_bottom = 31.0
 size_flags_horizontal = 0
 text = "85"
 align = 2
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
 margin_left = 62.0
 margin_top = 5.0
 margin_right = 73.0
@@ -5326,68 +5330,66 @@ margin_bottom = 26.0
 size_flags_horizontal = 0
 text = "x"
 
-[node name="YSizeLine" type="LineEdit" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="YSizeLine" type="LineEdit" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
 margin_left = 77.0
 margin_right = 135.0
 margin_bottom = 31.0
 size_flags_horizontal = 0
 text = "85"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer"]
-margin_left = 237.0
+[node name="CheckBoxNewMapBorder" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_left = 171.0
 margin_top = 66.0
-margin_right = 412.0
+margin_right = 343.0
 margin_bottom = 95.0
 size_flags_horizontal = 10
-
-[node name="CheckBoxNewMapBorder" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_right = 89.0
-margin_bottom = 29.0
 pressed = true
-group = ExtResource( 138 )
-text = "Border"
+text = "Generate border"
 
-[node name="CheckBoxNewMapBlank" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_left = 93.0
-margin_right = 175.0
-margin_bottom = 29.0
-group = ExtResource( 138 )
-text = "Blank"
-
-[node name="NewMapNoiseOptions" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer"]
+[node name="NewMapNoiseOptions" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 99.0
-margin_right = 412.0
-margin_bottom = 230.0
+margin_right = 343.0
+margin_bottom = 261.0
 
-[node name="NoisePersistence" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
-margin_top = 0.0
-margin_right = 412.0
-margin_bottom = 41.0
+[node name="NewMapSymmetricalBorder" type="OptionButton" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions"]
+margin_left = 143.0
+margin_right = 343.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 10
+text = "No symmetry"
+items = [ "No symmetry", null, false, 0, null, "Vertical symmetry", null, false, 1, null, "Vertical symmetry flipped", null, false, 2, null, "Horizontal symmetry", null, false, 3, null, "Horizontal symmetry flipped", null, false, 4, null, "4-way symmetry", null, false, 5, null ]
+selected = 0
+
+[node name="NoisePersistence" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
+margin_top = 31.0
+margin_right = 343.0
+margin_bottom = 72.0
 label_setting = "Persistence"
 max_value = 1.0
 step = 0.01
 value = 1.0
 
-[node name="NoisePeriod" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
-margin_top = 45.0
-margin_right = 412.0
-margin_bottom = 86.0
+[node name="NoisePeriod" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
+margin_top = 76.0
+margin_right = 343.0
+margin_bottom = 117.0
 label_setting = "Period"
 min_value = 0.01
 max_value = 1.0
 step = 0.01
 value = 0.1
 
-[node name="NoiseLacunarity" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
-margin_top = 90.0
-margin_right = 412.0
-margin_bottom = 131.0
+[node name="NoiseLacunarity" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
+margin_top = 121.0
+margin_right = 343.0
+margin_bottom = 162.0
 label_setting = "Lacunarity"
 max_value = 1.0
 step = 0.01
 value = 0.2
 
-[node name="NoiseOctaves" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
+[node name="NoiseOctaves" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 visible = false
 margin_left = -12.0
 margin_top = 154.0
@@ -5399,25 +5401,24 @@ max_value = 9.0
 step = 1.0
 value = 9.0
 
-[node name="NoiseUpdateTimer" type="Timer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions"]
+[node name="NoiseUpdateTimer" type="Timer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions"]
 one_shot = true
 
-[node name="QuickNoisePreview" type="TextureRect" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer"]
-margin_left = 106.0
-margin_top = 234.0
-margin_right = 306.0
-margin_bottom = 434.0
-rect_min_size = Vector2( 200, 200 )
-size_flags_horizontal = 4
-size_flags_vertical = 4
-expand = true
-
-[node name="ButtonNewMapOK" type="Button" parent="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer"]
-margin_top = 563.0
-margin_right = 412.0
-margin_bottom = 590.0
+[node name="ButtonNewMapOK" type="Button" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 311.0
+margin_right = 343.0
+margin_bottom = 338.0
 size_flags_vertical = 10
 text = "OK"
+
+[node name="QuickNoisePreview" type="TextureRect" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
+margin_left = 363.0
+margin_right = 706.0
+margin_bottom = 338.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+expand = true
+stretch_mode = 6
 
 [node name="ExportSlabsetDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
@@ -5665,12 +5666,12 @@ script = SubResource( 20 )
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolRectangle" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolRectangle_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolPaintBucket" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPaintBucket_toggled"]
 [connection signal="value_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer/EditBrushSizeValue" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_EditBrushSizeValue_value_changed"]
-[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorPlacementCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorPlacementCheckBox_pressed"]
-[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor0" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor0_gui_input"]
-[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor1" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor1_gui_input"]
-[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor2" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor2_gui_input"]
-[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor3" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor3_gui_input"]
-[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer/SplitDirectionButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_SplitDirectionButton_pressed"]
+[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorPlacementCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_MirrorPlacementCheckBox_pressed"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor0" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_MirrorColor0_gui_input"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor1" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_MirrorColor1_gui_input"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor2" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_MirrorColor2_gui_input"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor3" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_MirrorColor3_gui_input"]
+[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/VBoxContainer/SplitDirectionButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_SplitDirectionButton_pressed"]
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/PlacingTipsButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_PlacingTipsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonSettings" to="Ui/UiSystem/Menu" method="_on_MenuButtonSettings_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonHelp" to="Ui/UiSystem/Menu" method="_on_MenuButtonHelp_about_to_show"]
@@ -5799,17 +5800,18 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer/ExportSlabsClm" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsClm_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
-[connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer3/SetNewFormat" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapFormat_item_selected"]
-[connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_focus_exited"]
-[connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/YSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_YSizeLine_focus_exited"]
-[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer/CheckBoxNewMapBorder" to="Ui/UiSystem/NewMapWindow" method="_on_CheckBoxNewMapBorder_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/HBoxContainer/CheckBoxNewMapBlank" to="Ui/UiSystem/NewMapWindow" method="_on_CheckBoxNewMapBlank_pressed"]
-[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions/NoisePersistence" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePersistence_sliderChanged"]
-[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions/NoisePeriod" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePeriod_sliderChanged"]
-[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions/NoiseLacunarity" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseLacunarity_sliderChanged"]
-[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions/NoiseOctaves" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseOctaves_sliderChanged"]
-[connection signal="timeout" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/NewMapNoiseOptions/NoiseUpdateTimer" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseUpdateTimer_timeout"]
-[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/VBoxContainer/ButtonNewMapOK" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonNewMapOK_pressed"]
+[connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/SetNewFormat" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapFormat_item_selected"]
+[connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_focus_exited"]
+[connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/YSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_YSizeLine_focus_exited"]
+[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/CheckBoxNewMapBorder" to="Ui/UiSystem/NewMapWindow" method="_on_CheckBoxNewMapBorder_pressed"]
+[connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NewMapSymmetricalBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapSymmetricalBorder_item_selected"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoisePersistence" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePersistence_sliderChanged"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoisePeriod" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePeriod_sliderChanged"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoiseLacunarity" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseLacunarity_sliderChanged"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoiseOctaves" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseOctaves_sliderChanged"]
+[connection signal="timeout" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoiseUpdateTimer" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseUpdateTimer_timeout"]
+[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/ButtonNewMapOK" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonNewMapOK_pressed"]
+[connection signal="gui_input" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/QuickNoisePreview" to="Ui/UiSystem/NewMapWindow" method="_on_QuickNoisePreview_gui_input"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetDatDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetDatDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetClmDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetClmDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetCfgDialog_file_selected"]

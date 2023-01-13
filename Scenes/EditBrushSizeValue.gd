@@ -1,10 +1,17 @@
 extends SpinBoxPropertiesValue
 onready var oInspector = Nodelist.list["oInspector"]
+onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 
 func _input(event):
 	if visible == false: return
 	if event is InputEventKey and event.pressed == true:
+		
+		if get_focus_owner() is LineEdit and get_focus_owner() != self:
+			return
+		
 		yield(get_tree(),'idle_frame')
+		if oPropertiesTabs.current_tab != 1: return
+		
 		match event.scancode:
 			KEY_1, KEY_KP_1: value = 1
 			KEY_2, KEY_KP_2: value = 2

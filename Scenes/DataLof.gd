@@ -14,7 +14,7 @@ var AUTHOR = ""
 var DESCRIPTION = ""
 var DATE = ""
 
-func use_size(x, y): #called from _on_ButtonNewMapOK_pressed() and read_keeperfx_lof()
+func use_size(x, y): #called from _on_ButtonNewMapOK_pressed() and read_lof()
 	M.xSize = x
 	M.ySize = y
 

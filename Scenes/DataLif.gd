@@ -1,13 +1,13 @@
 extends Node
 onready var oReadData = Nodelist.list["oReadData"]
-onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 
 
 var data = ""
 
 func set_map_name(mapStringName):
 	data = mapStringName
-	oDataKeeperFxLof.NAME_TEXT = mapStringName
+	oDataLof.NAME_TEXT = mapStringName
 
 func _ready():
 	clear()
@@ -20,7 +20,7 @@ func clear():
 	constructString += " map"
 	
 	data = constructString
-	oDataKeeperFxLof.NAME_TEXT = data
+	oDataLof.NAME_TEXT = data
 
 
 func lif_name_text(pathString):

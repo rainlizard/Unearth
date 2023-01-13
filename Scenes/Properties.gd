@@ -4,7 +4,7 @@ onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oDungeonStyleList = Nodelist.list["oDungeonStyleList"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
-onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oAdvancedMapPropertiesCheckBox = Nodelist.list["oAdvancedMapPropertiesCheckBox"]
 
@@ -33,16 +33,16 @@ func _on_MapProperties_visibility_changed():
 	if visible == true:
 		refresh_dungeon_style_options()
 		oMapNameLineEdit.text = oDataMapName.data
-		oNameIDLineEdit.text = oDataKeeperFxLof.NAME_ID
-		oKindLineEdit.text = oDataKeeperFxLof.KIND
-		oEnsignPositionLineEdit.text = oDataKeeperFxLof.ENSIGN_POS
-		oEnsignZoomLineEdit.text = oDataKeeperFxLof.ENSIGN_ZOOM
-		oPlayersLineEdit.text = oDataKeeperFxLof.PLAYERS
-		oOptionsLineEdit.text = oDataKeeperFxLof.OPTIONS
-		oSpeechLineEdit.text = oDataKeeperFxLof.SPEECH
-		oLandViewLineEdit.text = oDataKeeperFxLof.LAND_VIEW
-		oAuthorLineEdit.text = oDataKeeperFxLof.AUTHOR
-		oDescriptionLineEdit.text = oDataKeeperFxLof.DESCRIPTION
+		oNameIDLineEdit.text = oDataLof.NAME_ID
+		oKindLineEdit.text = oDataLof.KIND
+		oEnsignPositionLineEdit.text = oDataLof.ENSIGN_POS
+		oEnsignZoomLineEdit.text = oDataLof.ENSIGN_ZOOM
+		oPlayersLineEdit.text = oDataLof.PLAYERS
+		oOptionsLineEdit.text = oDataLof.OPTIONS
+		oSpeechLineEdit.text = oDataLof.SPEECH
+		oLandViewLineEdit.text = oDataLof.LAND_VIEW
+		oAuthorLineEdit.text = oDataLof.AUTHOR
+		oDescriptionLineEdit.text = oDataLof.DESCRIPTION
 		oSettingsXSizeLine.text = str(M.xSize)
 		oSettingsYSizeLine.text = str(M.ySize)
 		
@@ -104,34 +104,34 @@ func _on_MapNameLineEdit_text_changed(new_text):
 	oDataMapName.set_map_name(new_text)
 func _on_AuthorLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataKeeperFxLof.AUTHOR = new_text
+	oDataLof.AUTHOR = new_text
 func _on_DescriptionLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataKeeperFxLof.DESCRIPTION = new_text
+	oDataLof.DESCRIPTION = new_text
 func _on_NameIDLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataKeeperFxLof.NAME_ID = new_text
+	oDataLof.NAME_ID = new_text
 func _on_KindLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataKeeperFxLof.KIND = new_text
+	oDataLof.KIND = new_text
 func _on_EnsignPositionLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataKeeperFxLof.ENSIGN_POS = new_text
+	oDataLof.ENSIGN_POS = new_text
 func _on_EnsignZoomLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataKeeperFxLof.ENSIGN_ZOOM = new_text
+	oDataLof.ENSIGN_ZOOM = new_text
 func _on_PlayersLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataKeeperFxLof.PLAYERS = new_text
+	oDataLof.PLAYERS = new_text
 func _on_OptionsLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataKeeperFxLof.OPTIONS = new_text
+	oDataLof.OPTIONS = new_text
 func _on_SpeechLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataKeeperFxLof.SPEECH = new_text
+	oDataLof.SPEECH = new_text
 func _on_LandViewLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
-	oDataKeeperFxLof.LAND_VIEW = new_text
+	oDataLof.LAND_VIEW = new_text
 
 
 func _on_MapFormatSetting_item_selected(index):
@@ -139,7 +139,7 @@ func _on_MapFormatSetting_item_selected(index):
 	match index:
 		0: #KeeperFX format
 			oAdvancedMapPropertiesCheckBox.disabled = false
-			oMessage.big("Warning", "'KeeperFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Old format' for now.")
+			oMessage.big("Warning", "'KeeperFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Classic format' for now.")
 		1: #Old format
 			oAdvancedMapPropertiesCheckBox.disabled = true
 			oAdvancedMapPropertiesCheckBox.pressed = false

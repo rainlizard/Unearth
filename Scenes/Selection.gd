@@ -153,9 +153,17 @@ func construct_shape_for_placement(constructType):
 				for x in range(rectStart.x, rectEnd.x+1):
 					shapePositionArray.append(Vector2(x,y))
 		CONSTRUCT_PENCIL, CONSTRUCT_BRUSH:
+			
 			var b = ((oEditingTools.BRUSH_SIZE)-1) / 2.0
 			var beginTile = oSelector.world2tile(get_global_mouse_position()) - Vector2(floor(b),floor(b))
 			var endTile = oSelector.world2tile(get_global_mouse_position()) + Vector2(ceil(b),ceil(b))
+			
+			# Clamp inside map
+			beginTile.x = clamp(beginTile.x, oEditor.fieldBoundary.position.x, oEditor.fieldBoundary.end.x-1)
+			beginTile.y = clamp(beginTile.y, oEditor.fieldBoundary.position.y, oEditor.fieldBoundary.end.y-1)
+			endTile.x = clamp(endTile.x, oEditor.fieldBoundary.position.x, oEditor.fieldBoundary.end.x-1)
+			endTile.y = clamp(endTile.y, oEditor.fieldBoundary.position.y, oEditor.fieldBoundary.end.y-1)
+			
 			if beginTile.x < endTile.x:
 				rectStart.x = beginTile.x
 				rectEnd.x = endTile.x
@@ -184,9 +192,19 @@ func construct_shape_for_placement(constructType):
 			var coordsToCheck = [beginTile]
 			var fillTargetID = oSelector.get_slabID_at_pos(oSelector.cursorTile)
 			
+			var preventFillingBorder = false
+			if fillTargetID == Slabs.ROCK:
+				preventFillingBorder = true
+			
 			while coordsToCheck.size() > 0:
 				var coord = coordsToCheck.pop_back()
 				oSelector.get_slabID_at_pos(oSelector.cursorTile)
+				
+				if preventFillingBorder == true:
+					if coord.x < oEditor.fieldBoundary.position.x: continue
+					if coord.x > oEditor.fieldBoundary.end.x-1: continue
+					if coord.y < oEditor.fieldBoundary.position.y: continue
+					if coord.y > oEditor.fieldBoundary.end.y-1: continue
 				
 				if oSelector.get_slabID_at_pos(coord) == fillTargetID:
 					shapePositionArray.append(coord)
@@ -209,8 +227,6 @@ func construct_shape_for_placement(constructType):
 	else:
 		# Slab placement
 		var useOwner = paintOwnership
-		if oOwnableNaturalTerrain.pressed == false and Slabs.data.has(paintSlab) and Slabs.data[paintSlab][Slabs.IS_OWNABLE] == false:
-			useOwner = 5
 		
 		oSlabPlacement.place_shape_of_slab_id(shapePositionArray, paintSlab, useOwner)
 		

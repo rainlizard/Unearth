@@ -12,7 +12,7 @@ onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
-onready var oDataKeeperFxLof = Nodelist.list["oDataKeeperFxLof"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -23,10 +23,10 @@ onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
 
 var value # just so I don't have to initialize the var in every function
 
-func read_keeperfx_lof(buffer):
+func read_lof(buffer):
 	# Be sure to default to 85x85 in case it can't be read.
-	oDataKeeperFxLof.use_size(85,85)
-	oDataKeeperFxLof.KIND = "FREE" # Default to free if it can't be read. Goes ABOVE the check.
+	oDataLof.use_size(85,85)
+	oDataLof.KIND = "FREE" # Default to free if it can't be read. Goes ABOVE the check.
 	
 	buffer.seek(0)
 	value = buffer.get_string(buffer.get_size())
@@ -40,40 +40,40 @@ func read_keeperfx_lof(buffer):
 		
 		if lineParts.size() == 2:
 			if lineParts[0].strip_edges() == "MAP_FORMAT_VERSION":
-				oDataKeeperFxLof.MAP_FORMAT_VERSION = lineParts[1].strip_edges()
+				oDataLof.MAP_FORMAT_VERSION = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "NAME_TEXT":
 				oDataMapName.set_map_name(lineParts[1].strip_edges())
 			if lineParts[0].strip_edges() == "NAME_ID":
-				oDataKeeperFxLof.NAME_ID = lineParts[1].strip_edges()
+				oDataLof.NAME_ID = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "KIND":
-				oDataKeeperFxLof.KIND = lineParts[1].strip_edges()
+				oDataLof.KIND = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "ENSIGN_POS":
-				oDataKeeperFxLof.ENSIGN_POS = lineParts[1].strip_edges()
+				oDataLof.ENSIGN_POS = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "ENSIGN_ZOOM":
-				oDataKeeperFxLof.ENSIGN_ZOOM = lineParts[1].strip_edges()
+				oDataLof.ENSIGN_ZOOM = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "PLAYERS":
-				oDataKeeperFxLof.PLAYERS = lineParts[1].strip_edges()
+				oDataLof.PLAYERS = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "OPTIONS":
-				oDataKeeperFxLof.OPTIONS = lineParts[1].strip_edges()
+				oDataLof.OPTIONS = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "SPEECH":
-				oDataKeeperFxLof.SPEECH = lineParts[1].strip_edges()
+				oDataLof.SPEECH = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "LAND_VIEW":
-				oDataKeeperFxLof.LAND_VIEW = lineParts[1].strip_edges()
+				oDataLof.LAND_VIEW = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "AUTHOR":
-				oDataKeeperFxLof.AUTHOR = lineParts[1].strip_edges()
+				oDataLof.AUTHOR = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "DESCRIPTION":
-				oDataKeeperFxLof.DESCRIPTION = lineParts[1].strip_edges()
+				oDataLof.DESCRIPTION = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "DATE":
-				oDataKeeperFxLof.DATE = lineParts[1].strip_edges()
+				oDataLof.DATE = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "MAPSIZE":
 				var sizeString = lineParts[1].strip_edges().split(" ")
 				if sizeString.size() == 2:
 					var x = sizeString[0].to_int()
 					var y = sizeString[1].to_int()
-					oDataKeeperFxLof.use_size(x,y)
+					oDataLof.use_size(x,y)
 
 func new_keeperfx_lof():
-	oDataKeeperFxLof.KIND = "FREE"
+	oDataLof.KIND = "FREE"
 
 func read_mapsize_from_lof(buffer):
 	buffer.seek(0)
@@ -444,7 +444,7 @@ func read_tngfx(buffer):
 				"TRAP": id.thingType = Things.TYPE.TRAP
 				"DOOR": id.thingType = Things.TYPE.DOOR
 				"EFFECT":
-					if oDataKeeperFxLof.MAP_FORMAT_VERSION == "": # This is for an old map format bug, read "Effect" as "EffectGen"
+					if oDataLof.MAP_FORMAT_VERSION == "": # This is for an old map format bug, read "Effect" as "EffectGen"
 						id.thingType = Things.TYPE.EFFECTGEN
 				
 				_: id.thingType = Things.TYPE.NONE

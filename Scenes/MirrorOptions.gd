@@ -10,8 +10,9 @@ onready var oMirrorColor0 = Nodelist.list["oMirrorColor0"]
 onready var oMirrorColor1 = Nodelist.list["oMirrorColor1"]
 onready var oMirrorColor2 = Nodelist.list["oMirrorColor2"]
 onready var oMirrorColor3 = Nodelist.list["oMirrorColor3"]
+onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
 
-var splitType = 0
+var splitType = 2
 var ownerValue = [0,1,2,3]
 
 func _ready():
@@ -50,7 +51,6 @@ func _process(delta):
 			flashNode.modulate.a = lerp(flashNode.modulate.a, 1.0, 0.2)
 			if flashTimer >= 0.25:
 				flashTimer = 0
-		
 
 
 func _on_SplitDirectionButton_pressed():
@@ -66,16 +66,19 @@ func establish_type():
 			oMirrorColor2.visible = false
 			oMirrorColor3.visible = false
 			oMirrorColorContainer.columns = 1
+			oMirrorFlipCheckBox.visible = true
 		1:
 			oMirrorSplitTextureRect.texture = splitEW
 			oMirrorColor2.visible = false
 			oMirrorColor3.visible = false
 			oMirrorColorContainer.columns = 2
+			oMirrorFlipCheckBox.visible = true
 		2:
 			oMirrorSplitTextureRect.texture = splitAll
 			oMirrorColor2.visible = true
 			oMirrorColor3.visible = true
 			oMirrorColorContainer.columns = 2
+			oMirrorFlipCheckBox.visible = false
 
 
 func _on_MirrorColor0_gui_input(event):

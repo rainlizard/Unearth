@@ -56,7 +56,7 @@ func read(filePath, EXT):
 	
 	var oReadData = Nodelist.list["oReadData"]
 	match EXT:
-		"LOF" : oReadData.read_keeperfx_lof(buffer)
+		"LOF" : oReadData.read_lof(buffer)
 		"CLM" : oReadData.read_clm(buffer)
 		"DAT" : oReadData.read_dat(buffer)
 		"APT" : oReadData.read_apt(buffer)
