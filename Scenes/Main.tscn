@@ -5249,9 +5249,9 @@ text = "Export columns.cfg"
 visible = true
 margin_left = -1036.0
 margin_top = -2256.0
-margin_right = -310.0
-margin_bottom = -1878.0
-rect_min_size = Vector2( 746, 378 )
+margin_right = -267.0
+margin_bottom = -1845.0
+rect_min_size = Vector2( 775, 411 )
 window_title = "New map"
 resizable = true
 script = ExtResource( 134 )
@@ -5269,13 +5269,13 @@ custom_constants/margin_bottom = 20
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 726.0
-margin_bottom = 358.0
+margin_right = 755.0
+margin_bottom = 391.0
 custom_constants/separation = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
 margin_right = 343.0
-margin_bottom = 338.0
+margin_bottom = 371.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_right = 343.0
@@ -5349,7 +5349,7 @@ text = "Generate border"
 [node name="NewMapNoiseOptions" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 99.0
 margin_right = 343.0
-margin_bottom = 261.0
+margin_bottom = 339.0
 
 [node name="NewMapSymmetricalBorder" type="OptionButton" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions"]
 margin_left = 143.0
@@ -5361,12 +5361,12 @@ text = "No symmetry"
 items = [ "No symmetry", null, false, 0, null, "Vertical symmetry", null, false, 1, null, "Vertical symmetry flipped", null, false, 2, null, "Horizontal symmetry", null, false, 3, null, "Horizontal symmetry flipped", null, false, 4, null, "4-way symmetry", null, false, 5, null ]
 selected = 0
 
-[node name="NoisePersistence" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
+[node name="NoiseDistance" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 31.0
 margin_right = 343.0
 margin_bottom = 72.0
-label_setting = "Persistence"
-max_value = 1.0
+label_setting = "Distance"
+max_value = 5.0
 step = 0.01
 value = 1.0
 
@@ -5374,47 +5374,65 @@ value = 1.0
 margin_top = 76.0
 margin_right = 343.0
 margin_bottom = 117.0
-label_setting = "Period"
+label_setting = "Detail"
 min_value = 0.01
 max_value = 1.0
 step = 0.01
 value = 0.1
 
-[node name="NoiseLacunarity" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
+[node name="NoisePersistence" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 121.0
 margin_right = 343.0
 margin_bottom = 162.0
-label_setting = "Lacunarity"
+label_setting = "Tunnels"
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="NoiseLacunarity" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
+margin_top = 166.0
+margin_right = 343.0
+margin_bottom = 207.0
+label_setting = "Roughness"
 max_value = 1.0
 step = 0.01
 value = 0.2
 
 [node name="NoiseOctaves" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 visible = false
-margin_left = -12.0
-margin_top = 154.0
-margin_right = 291.0
-margin_bottom = 195.0
+margin_top = 166.0
+margin_right = 343.0
+margin_bottom = 207.0
 label_setting = "Octaves"
 min_value = 1.0
 max_value = 9.0
 step = 1.0
 value = 9.0
 
+[node name="NoiseAlgTypeCheckBox" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions"]
+margin_left = 243.0
+margin_top = 211.0
+margin_right = 343.0
+margin_bottom = 240.0
+size_flags_horizontal = 10
+pressed = true
+text = "Tapered"
+
 [node name="NoiseUpdateTimer" type="Timer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions"]
 one_shot = true
 
 [node name="ButtonNewMapOK" type="Button" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 311.0
+margin_top = 344.0
 margin_right = 343.0
-margin_bottom = 338.0
+margin_bottom = 371.0
 size_flags_vertical = 10
 text = "OK"
 
 [node name="QuickNoisePreview" type="TextureRect" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
 margin_left = 363.0
-margin_right = 706.0
-margin_bottom = 338.0
+margin_right = 735.0
+margin_bottom = 371.0
+hint_tooltip = "Click to randomize seed"
 size_flags_horizontal = 7
 size_flags_vertical = 7
 expand = true
@@ -5805,10 +5823,12 @@ script = SubResource( 20 )
 [connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/YSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_YSizeLine_focus_exited"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/CheckBoxNewMapBorder" to="Ui/UiSystem/NewMapWindow" method="_on_CheckBoxNewMapBorder_pressed"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NewMapSymmetricalBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapSymmetricalBorder_item_selected"]
-[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoisePersistence" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePersistence_sliderChanged"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoiseDistance" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseDistance_sliderChanged"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoisePeriod" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePeriod_sliderChanged"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoisePersistence" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePersistence_sliderChanged"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoiseLacunarity" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseLacunarity_sliderChanged"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoiseOctaves" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseOctaves_sliderChanged"]
+[connection signal="toggled" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoiseAlgTypeCheckBox" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseAlgTypeCheckBox_toggled"]
 [connection signal="timeout" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoiseUpdateTimer" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseUpdateTimer_timeout"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/ButtonNewMapOK" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonNewMapOK_pressed"]
 [connection signal="gui_input" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/QuickNoisePreview" to="Ui/UiSystem/NewMapWindow" method="_on_QuickNoisePreview_gui_input"]

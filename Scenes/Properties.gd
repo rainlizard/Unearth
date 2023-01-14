@@ -26,7 +26,8 @@ onready var oSettingsYSizeLine = Nodelist.list["oSettingsYSizeLine"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 func _ready():
-	oAdvancedMapProperties.visible = false #default to hiding
+	# Default to hiding ONCE, when you start the editor.
+	oAdvancedMapProperties.visible = false
 
 func _on_MapProperties_visibility_changed():
 	if is_instance_valid(oDungeonStyleList) == false: return
@@ -48,10 +49,30 @@ func _on_MapProperties_visibility_changed():
 		
 		# Resizing feature isn't implemented, so do not allow changing map format back if you've adjusted size
 		if M.xSize != 85 or M.ySize != 85:
-			oCurrentFormat.disabled = true
 			oCurrentFormat.selected = 0
+			oCurrentFormat.disabled = true
 		else:
 			oCurrentFormat.disabled = false
+		
+		set_format_selection(oCurrentFormat.selected)
+
+func _on_MapFormatSetting_item_selected(index):
+	# Clicked using mouse
+	oEditor.mapHasBeenEdited = true
+	if index == 0:
+		oMessage.big("Warning", "'KeeperFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Classic format' for now.")
+	
+	set_format_selection(index)
+
+func set_format_selection(setFormat):
+	match setFormat:
+		0: # KeeperFX format
+			oAdvancedMapPropertiesCheckBox.disabled = false
+		1: # Classic format
+			oAdvancedMapPropertiesCheckBox.disabled = true
+			oAdvancedMapPropertiesCheckBox.pressed = false
+			oAdvancedMapProperties.visible = false
+
 
 
 func refresh_dungeon_style_options():
@@ -97,7 +118,8 @@ func _on_DungeonStyleList_item_selected(value):
 	oMessage.quick("Loaded : ".plus_file("unearthdata").plus_file("tmapa" + str(value).pad_zeros(3) + ".png"))
 
 func _on_AdvancedMapPropertiesCheckBox_pressed():
-	oAdvancedMapProperties.visible = !oAdvancedMapProperties.visible
+	oAdvancedMapProperties.visible = oAdvancedMapPropertiesCheckBox.pressed
+
 
 func _on_MapNameLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
@@ -134,13 +156,3 @@ func _on_LandViewLineEdit_text_changed(new_text):
 	oDataLof.LAND_VIEW = new_text
 
 
-func _on_MapFormatSetting_item_selected(index):
-	oEditor.mapHasBeenEdited = true
-	match index:
-		0: #KeeperFX format
-			oAdvancedMapPropertiesCheckBox.disabled = false
-			oMessage.big("Warning", "'KeeperFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Classic format' for now.")
-		1: #Old format
-			oAdvancedMapPropertiesCheckBox.disabled = true
-			oAdvancedMapPropertiesCheckBox.pressed = false
-			oAdvancedMapProperties.visible = false

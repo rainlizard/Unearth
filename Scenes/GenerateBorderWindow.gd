@@ -19,6 +19,7 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oCheckBoxNewMapBorder = Nodelist.list["oCheckBoxNewMapBorder"]
 onready var oNewMapSymmetricalBorder = Nodelist.list["oNewMapSymmetricalBorder"]
+onready var oNoiseDistance = Nodelist.list["oNoiseDistance"]
 
 var noise = OpenSimplexNoise.new()
 var imageData = Image.new()
@@ -26,6 +27,12 @@ var textureData = ImageTexture.new()
 
 const earthColour = Color8(255,255,255,255)#Color8(36,24,0,255)
 const impenetrableColour = Color8(0,0,0,255)
+
+var algorithmType = 0
+
+func _ready():
+	randomize()
+	noise.seed = randi()
 
 func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
@@ -37,8 +44,6 @@ func _on_NewMapWindow_visibility_changed():
 	
 	reinit_noise_preview()
 	
-	randomize()
-	noise.seed = randi()
 	_on_CheckBoxNewMapBorder_pressed()
 	_on_NewMapFormat_item_selected(oSetNewFormat.selected)
 
@@ -120,6 +125,15 @@ func _on_NoiseLacunarity_sliderChanged():
 	oNoiseUpdateTimer.start(0.01)
 func _on_NoiseOctaves_sliderChanged():
 	oNoiseUpdateTimer.start(0.01)
+func _on_NoiseDistance_sliderChanged():
+	oNoiseUpdateTimer.start(0.01)
+
+func _on_NoiseAlgTypeCheckBox_toggled(button_pressed):
+	if button_pressed == true:
+		algorithmType = 0
+	else:
+		algorithmType = 1
+	oNoiseUpdateTimer.start(0.01)
 
 func _on_YSizeLine_focus_exited():
 	if oCheckBoxNewMapBorder.pressed == false: return
@@ -146,6 +160,7 @@ func update_border_image_with_noise():
 	noise.period = oNoisePeriod.value
 	noise.persistence = oNoisePersistence.value
 	noise.lacunarity = oNoiseLacunarity.value
+	var borderDist = oNoiseDistance.value
 	
 	var fullMapSize = Vector2(oXSizeLine.text.to_int()-1, oYSizeLine.text.to_int()-1)
 	var halfMapSize = Vector2(fullMapSize.x * 0.5, fullMapSize.y * 0.5)
@@ -160,16 +175,26 @@ func update_border_image_with_noise():
 		aspectRatio.x = 1.0
 		aspectRatio.y = max(fullMapSize.y,1.0) / max(fullMapSize.x,1.0)
 	
+	
+	
 	var edgeDist = Vector2()
-	for x in range(1, fullMapSize.x):
-		for y in range(1, fullMapSize.y):
-			edgeDist.x = 1.0 - (abs(x-halfMapSize.x) / halfMapSize.x)
-			edgeDist.y = 1.0 - (abs(y-halfMapSize.y) / halfMapSize.y)
-			
-			var n = abs(noise.get_noise_2d( (x/fullMapSize.x)*aspectRatio.x, (y/fullMapSize.y)*aspectRatio.y ))
-			
-			if n < edgeDist.x and n < edgeDist.y:
-				floodFillTileMap.set_cell(x,y,1)
+	match algorithmType:
+		0:
+			for x in range(1, fullMapSize.x):
+				for y in range(1, fullMapSize.y):
+					edgeDist.x = (abs(x-halfMapSize.x) / halfMapSize.x) * borderDist
+					edgeDist.y = (abs(y-halfMapSize.y) / halfMapSize.y) * borderDist
+					var n = 1.0-abs(noise.get_noise_2d( (x/fullMapSize.x)*aspectRatio.x, (y/fullMapSize.y)*aspectRatio.y ))
+					if n > edgeDist.x and n > edgeDist.y:
+						floodFillTileMap.set_cell(x,y,1)
+		1:
+			for x in range(1, fullMapSize.x):
+				for y in range(1, fullMapSize.y):
+					edgeDist.x = (abs(x-halfMapSize.x) / halfMapSize.x) * borderDist
+					edgeDist.y = (abs(y-halfMapSize.y) / halfMapSize.y) * borderDist
+					var n = 1.0-noise.get_noise_2d( (x/fullMapSize.x)*aspectRatio.x, (y/fullMapSize.y)*aspectRatio.y )
+					if n > edgeDist.x and n > edgeDist.y:
+						floodFillTileMap.set_cell(x,y,1)
 	
 	var coordsToCheck = [Vector2(halfMapSize.x,halfMapSize.y)]
 	
@@ -260,8 +285,6 @@ func apply_symmetry():
 	
 	# Note: center pixel won't be mirrored on an odd sized map.
 	
-	
-	
 	match oNewMapSymmetricalBorder.selected:
 		1: # Vertical symmetry
 			var imageTopHalf = imageData.get_rect(Rect2(0, 0, w, half_h))
@@ -333,3 +356,4 @@ func apply_symmetry():
 				imageData.set_pixel(x, y, Color(0,0,0,1))
 	
 	imageData.unlock()
+

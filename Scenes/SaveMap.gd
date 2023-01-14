@@ -17,32 +17,19 @@ func save_map(filePath): # auto opens other files
 	
 	var SAVETIME_START = OS.get_ticks_msec()
 	
-	# Delete the old files.
-	# Important for Linux otherwise duplicates can be created. (Lowercase files can be saved without replacing the uppercase files)
-	# Also important to delete files of the other format (TNG and TNGFX shouldn't exist at the same time), if switching formats.
 	delete_existing_files(map)
+	
+	
 	
 	for EXT in Filetypes.FILE_TYPES:
 		
 		# List of file extensions to skip creating
 		# Remember "continue" means skip
 		if oCurrentFormat.selected == 0: # KeeperFX format
-			if EXT == "LIF":
+			if ["LIF","TNG","APT","LGT"].has(EXT):
 				continue
-			if EXT == "TNG":
-				continue
-			if EXT == "APT":
-				continue
-			if EXT == "LGT":
-				continue
-		elif oCurrentFormat.selected == 1: # Old format
-			if EXT == "LOF":
-				continue
-			if EXT == "TNGFX":
-				continue
-			if EXT == "APTFX":
-				continue
-			if EXT == "LGTFX":
+		elif oCurrentFormat.selected == 1: # Classic format
+			if ["LOF","TNGFX","APTFX","LGTFX"].has(EXT):
 				continue
 		
 		var saveToFilePath = map + '.' + EXT.to_lower()
@@ -79,6 +66,18 @@ func save_map(filePath): # auto opens other files
 		get_tree().quit()
 
 func delete_existing_files(map):
+	var fileTypesToDelete = [] 
+	
+	if OS.get_name() == "X11":
+		# Important for Linux to delete all files otherwise duplicates can be created. (Lowercase files can be saved without replacing the uppercase files)
+		fileTypesToDelete = Filetypes.FILE_TYPES
+	else:
+		# Also important to delete files of the other format (TNG and TNGFX shouldn't exist at the same time), if switching formats.
+		if oCurrentFormat.selected == 0: # KeeperFX format
+			fileTypesToDelete = ["LIF", "TNG", "APT", "LGT"]
+		elif oCurrentFormat.selected == 1: # Classic format
+			# Do not delete LOF because Classic format can be used with LOF multiplayer levels
+			fileTypesToDelete = ["TNGFX", "APTFX", "LGTFX"]
 	
 	var baseDirectory = map.get_base_dir()
 	var MAP_NAME = map.get_basename().get_file().to_upper()
@@ -89,7 +88,7 @@ func delete_existing_files(map):
 		while fileName != "":
 			if MAP_NAME in fileName.to_upper():
 				# Only delete the accompanying file types that I'm about to write
-				if Filetypes.FILE_TYPES.has(fileName.get_extension().to_upper()):
+				if fileTypesToDelete.has(fileName.get_extension().to_upper()):
 					
 					if dir.file_exists(fileName) == true: # Ensure any files being removed are definitely files and never directories
 						print("Deleted: " + fileName)
