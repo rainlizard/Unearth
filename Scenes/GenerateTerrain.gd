@@ -14,17 +14,23 @@ func start():
 	var arrayOfArrays = initialize_array_of_arrays()
 	
 	loading_bar_start()
-	var updateLoad = 0
+	
+	var totalLoadingSize:float = max(1, M.ySize*M.xSize)
+	var currentLoad:float = 0.0
+	var loadTime = OS.get_ticks_msec()
 	
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
 			var slabStyleValue = oDataSlx.get_tileset_value(xSlab,ySlab)
 			
 			# Loading bar
-			if ySlab >= updateLoad:
-				updateLoad += (M.ySize*0.10) # should this be M.xSize???
-				oLoadingBar.value += 10
-				yield(get_tree(),"idle_frame")
+			
+			currentLoad += 1
+			if OS.get_ticks_msec() > loadTime+100:
+				loadTime += 100
+				oLoadingBar.value = (currentLoad/(totalLoadingSize))*100
+				yield(get_tree(),'idle_frame')
+			
 			
 			for ySubtile in 3:
 				for xSubtile in 3:

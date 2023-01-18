@@ -1311,7 +1311,7 @@ margin_bottom = 51.0
 [node name="EditingTools" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 55.0
 margin_right = 276.0
-margin_bottom = 103.0
+margin_bottom = 138.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 109 )
@@ -1399,27 +1399,26 @@ margin_right = 91.0
 margin_bottom = -26.0
 text = "Place door as locked"
 
-[node name="MirrorPlacementCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
-margin_top = -5.0
+[node name="MirrorPlacementCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
+margin_top = 50.0
 margin_right = 186.0
-margin_bottom = 24.0
+margin_bottom = 79.0
 text = "Symmetrical"
 
-[node name="MirrorOptions" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
+[node name="MirrorOptions" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -55.0
-margin_bottom = -10.0
+margin_bottom = 45.0
 script = ExtResource( 149 )
 
-[node name="MirrorSplitTextureRect" type="TextureRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions"]
+[node name="MirrorSplitTextureRect" type="TextureRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions"]
 rect_min_size = Vector2( 128, 128 )
 mouse_filter = 2
 texture = ExtResource( 148 )
 expand = true
 stretch_mode = 5
 
-[node name="MirrorColorContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect"]
+[node name="MirrorColorContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect"]
 show_behind_parent = true
 rect_min_size = Vector2( 128, 128 )
 mouse_filter = 2
@@ -1427,14 +1426,14 @@ custom_constants/vseparation = 0
 custom_constants/hseparation = 0
 columns = 2
 
-[node name="MirrorColor0" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+[node name="MirrorColor0" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
 hint_tooltip = "Click to change ownership that will be used for this area"
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 1, 0, 0, 1 )
 
-[node name="MirrorColor1" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+[node name="MirrorColor1" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
 margin_right = 40.0
 margin_bottom = 40.0
@@ -1443,7 +1442,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0, 0.156863, 1, 1 )
 
-[node name="MirrorColor2" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+[node name="MirrorColor2" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
 margin_right = 40.0
 margin_bottom = 40.0
@@ -1452,7 +1451,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0, 1, 0.0627451, 1 )
 
-[node name="MirrorColor3" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
+[node name="MirrorColor3" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
 margin_right = 40.0
 margin_bottom = 40.0
@@ -1461,19 +1460,19 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0.827451, 1, 0, 1 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions"]
 margin_top = 50.0
 margin_right = 40.0
 margin_bottom = 90.0
 
-[node name="SplitDirectionButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/VBoxContainer"]
+[node name="SplitDirectionButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
 margin_right = 176.0
 margin_bottom = 27.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Division axis"
 
-[node name="MirrorFlipCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/VBoxContainer"]
+[node name="MirrorFlipCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
 margin_right = 64.0
 margin_bottom = 29.0
 size_flags_horizontal = 0
@@ -5681,12 +5680,12 @@ script = SubResource( 20 )
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolRectangle" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolRectangle_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolPaintBucket" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPaintBucket_toggled"]
 [connection signal="value_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer/EditBrushSizeValue" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_EditBrushSizeValue_value_changed"]
-[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorPlacementCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_MirrorPlacementCheckBox_pressed"]
-[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor0" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_MirrorColor0_gui_input"]
-[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor1" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_MirrorColor1_gui_input"]
-[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor2" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_MirrorColor2_gui_input"]
-[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor3" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_MirrorColor3_gui_input"]
-[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/VBoxContainer/SplitDirectionButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions" method="_on_SplitDirectionButton_pressed"]
+[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorPlacementCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorPlacementCheckBox_pressed"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor0" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor0_gui_input"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor1" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor1_gui_input"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor2" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor2_gui_input"]
+[connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor3" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor3_gui_input"]
+[connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer/SplitDirectionButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_SplitDirectionButton_pressed"]
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/PlacingTipsButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_PlacingTipsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonSettings" to="Ui/UiSystem/Menu" method="_on_MenuButtonSettings_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonHelp" to="Ui/UiSystem/Menu" method="_on_MenuButtonHelp_about_to_show"]

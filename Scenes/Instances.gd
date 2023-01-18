@@ -6,6 +6,8 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
+onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
+onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
 var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
@@ -42,6 +44,114 @@ func place_new_action_point(newThingType, newSubtype, newPosition, newOwnership)
 	add_child(id)
 	
 	oScriptHelpers.start() # Update when action points change
+
+enum {
+	MIRROR_THING
+	MIRROR_LIGHT
+	MIRROR_ACTIONPOINT
+}
+
+func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirrorType):
+	var fromArea
+	var toArea
+	var actions = []
+	match oMirrorOptions.splitType:
+		0: actions = [0]
+		1: actions = [1]
+		2: actions = [0,1,2]
+	
+	var fromPosZ = fromPos.z
+	
+	var flip = oMirrorFlipCheckBox.pressed
+	
+	var fieldX = M.xSize*3
+	var fieldY = M.ySize*3
+	
+	for performAction in actions:
+		match performAction:
+			0: # Other vertical
+				fromArea = Rect2(0, 0, fieldX, floor(fieldY*0.5))
+				toArea = Rect2(0, floor(fieldY*0.5), fieldX, floor(fieldY*0.5))
+			1: # Other horizontal
+				fromArea = Rect2(0, 0, floor(fieldX*0.5), fieldY)
+				toArea = Rect2(floor(fieldX*0.5), 0, floor(fieldX*0.5), fieldY)
+			2: # Other diagonal
+				fromArea = Rect2(0, 0, floor(fieldX*0.5), floor(fieldY*0.5))
+				toArea = Rect2(floor(fieldX*0.5), floor(fieldY*0.5), floor(fieldX*0.5), floor(fieldY*0.5))
+		
+		# To
+		var toPos
+		match performAction:
+			0: # Other vertical
+				if flip == true and oMirrorOptions.splitType == 0:
+					toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
+				else:
+					toPos = Vector2(fromPos.x, fieldY - fromPos.y - 1)
+			1: # Other horizontal
+				if flip == true and oMirrorOptions.splitType == 1:
+					toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
+				else:
+					toPos = Vector2(fieldX - fromPos.x - 1, fromPos.y)
+			2: # Other diagonal
+				toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
+		
+		var quadrantOwnerDestination = 5
+		var quadrantOwnerClickedOn = 5
+		match oMirrorOptions.splitType:
+			0:
+				if toPos.y < floor(fieldY*0.5):
+					quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
+				else:
+					quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
+				
+				if fromPos.y < ceil(fieldY*0.5):
+					quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
+				else:
+					quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
+			1:
+				if toPos.x < floor(fieldX*0.5):
+					quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
+				else:
+					quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
+				
+				if fromPos.x < ceil(fieldX*0.5):
+					quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
+				else:
+					quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
+			2:
+				if toPos.y < floor(fieldY*0.5):
+					if toPos.x < floor(fieldX*0.5):
+						quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
+					else:
+						quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
+				else:
+					if toPos.x < floor(fieldX*0.5):
+						quadrantOwnerDestination = oMirrorOptions.ownerValue[2]
+					else:
+						quadrantOwnerDestination = oMirrorOptions.ownerValue[3]
+				
+				if fromPos.y < ceil(fieldY*0.5):
+					if fromPos.x < ceil(fieldX*0.5):
+						quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
+					else:
+						quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
+				else:
+					if fromPos.x < ceil(fieldX*0.5):
+						quadrantOwnerClickedOn = oMirrorOptions.ownerValue[2]
+					else:
+						quadrantOwnerClickedOn = oMirrorOptions.ownerValue[3]
+		
+		toPos = Vector3(toPos.x, toPos.y, fromPosZ)
+		if newOwner == quadrantOwnerDestination:
+			match mirrorType:
+				MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, quadrantOwnerClickedOn)
+				MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, quadrantOwnerClickedOn)
+				MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, quadrantOwnerClickedOn)
+		else:
+			match mirrorType:
+				MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, quadrantOwnerDestination)
+				MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, quadrantOwnerDestination)
+				MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, quadrantOwnerDestination)
 
 func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Placed by hand
 	var CODETIME_START = OS.get_ticks_msec()

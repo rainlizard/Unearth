@@ -68,18 +68,21 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 		2: actions = [0,1,2]
 	
 	var flip = oMirrorFlipCheckBox.pressed
-	print('-------------------------')
+	
+	var fieldX = M.xSize
+	var fieldY = M.ySize
+	
 	for performAction in actions:
 		match performAction:
 			0: # Other vertical
-				fromArea = Rect2(0, 0, M.xSize, floor(M.ySize*0.5))
-				toArea = Rect2(0, floor(M.ySize*0.5), M.xSize, floor(M.ySize*0.5))
+				fromArea = Rect2(0, 0, fieldX, floor(fieldY*0.5))
+				toArea = Rect2(0, floor(fieldY*0.5), fieldX, floor(fieldY*0.5))
 			1: # Other horizontal
-				fromArea = Rect2(0, 0, floor(M.xSize*0.5), M.ySize)
-				toArea = Rect2(floor(M.xSize*0.5), 0, floor(M.xSize*0.5), M.ySize)
+				fromArea = Rect2(0, 0, floor(fieldX*0.5), fieldY)
+				toArea = Rect2(floor(fieldX*0.5), 0, floor(fieldX*0.5), fieldY)
 			2: # Other diagonal
-				fromArea = Rect2(0, 0, floor(M.xSize*0.5), floor(M.ySize*0.5))
-				toArea = Rect2(floor(M.xSize*0.5), floor(M.ySize*0.5), floor(M.xSize*0.5), floor(M.ySize*0.5))
+				fromArea = Rect2(0, 0, floor(fieldX*0.5), floor(fieldY*0.5))
+				toArea = Rect2(floor(fieldX*0.5), floor(fieldY*0.5), floor(fieldX*0.5), floor(fieldY*0.5))
 		
 		for fromPos in shapePositionArray:
 			
@@ -88,64 +91,62 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 			match performAction:
 				0: # Other vertical
 					if flip == true and oMirrorOptions.splitType == 0:
-						toPos = Vector2(M.xSize - fromPos.x - 1, M.ySize - fromPos.y - 1)
+						toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
 					else:
-						toPos = Vector2(fromPos.x, M.ySize - fromPos.y - 1)
+						toPos = Vector2(fromPos.x, fieldY - fromPos.y - 1)
 				1: # Other horizontal
 					if flip == true and oMirrorOptions.splitType == 1:
-						toPos = Vector2(M.xSize - fromPos.x - 1, M.ySize - fromPos.y - 1)
+						toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
 					else:
-						toPos = Vector2(M.xSize - fromPos.x - 1, fromPos.y)
+						toPos = Vector2(fieldX - fromPos.x - 1, fromPos.y)
 				2: # Other diagonal
-					toPos = Vector2(M.xSize - fromPos.x - 1, M.ySize - fromPos.y - 1)
+					toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
 			
 			
 			var slabID = oDataSlab.get_cellv(fromPos)
-			#var quadrantOwnerClickedOn = oDataOwnership.get_cellv(fromPos)
-			#var quadrantOwnerDestination = quadrantOwnerClickedOn
 			var quadrantOwnerDestination = 5
 			var quadrantOwnerClickedOn = 5
 			if slabID_is_ownable(slabID) or mirrorWhat == MIRROR_ONLY_OWNERSHIP:
 				match oMirrorOptions.splitType:
 					0:
-						if toPos.y < floor(M.ySize*0.5):
+						if toPos.y < floor(fieldY*0.5):
 							quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
 						else:
 							quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
 						
-						if fromPos.y < ceil(M.ySize*0.5):
+						if fromPos.y < ceil(fieldY*0.5):
 							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
 						else:
 							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
 					1:
-						if toPos.x < floor(M.xSize*0.5):
+						if toPos.x < floor(fieldX*0.5):
 							quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
 						else:
 							quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
 						
-						if fromPos.x < ceil(M.xSize*0.5):
+						if fromPos.x < ceil(fieldX*0.5):
 							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
 						else:
 							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
 					2:
-						if toPos.y < floor(M.ySize*0.5):
-							if toPos.x < floor(M.xSize*0.5):
+						if toPos.y < floor(fieldY*0.5):
+							if toPos.x < floor(fieldX*0.5):
 								quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
 							else:
 								quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
 						else:
-							if toPos.x < floor(M.xSize*0.5):
+							if toPos.x < floor(fieldX*0.5):
 								quadrantOwnerDestination = oMirrorOptions.ownerValue[2]
 							else:
 								quadrantOwnerDestination = oMirrorOptions.ownerValue[3]
 						
-						if fromPos.y < ceil(M.ySize*0.5):
-							if fromPos.x < ceil(M.xSize*0.5):
+						if fromPos.y < ceil(fieldY*0.5):
+							if fromPos.x < ceil(fieldX*0.5):
 								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
 							else:
 								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
 						else:
-							if fromPos.x < ceil(M.xSize*0.5):
+							if fromPos.x < ceil(fieldX*0.5):
 								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[2]
 							else:
 								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[3]
@@ -275,11 +276,9 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	
 	oLoadingBar.visible = true
 	oLoadingBar.value = 0
-	var totalSize = shapePositionArray.size() #abs((rectStart.x)-(rectEnd.x+1)) * abs((rectStart.y)-(rectEnd.y+1))
-	var incrementEvery = 0
-	if totalSize < 1024:
-		incrementEvery = 999999999999 # Don't bother showing loading bar or idling
-	var slabNumber = 0
+	var totalLoadingSize:float = max(1,shapePositionArray.size()) #abs((rectStart.x)-(rectEnd.x+1)) * abs((rectStart.y)-(rectEnd.y+1))
+	var currentLoad:float = 0.0
+	var loadTime = OS.get_ticks_msec()
 	
 	for pos in shapePositionArray:
 		var slabID = oDataSlab.get_cell(pos.x, pos.y)
@@ -288,10 +287,11 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 		
 		oInstances.manage_things_on_slab(pos.x, pos.y, slabID, ownership)
 		
-		slabNumber += 1
-		if slabNumber >= incrementEvery:
-			incrementEvery += totalSize/10.0
-			oLoadingBar.value += 10
+		currentLoad += 1
+		
+		if OS.get_ticks_msec() > loadTime+100:
+			loadTime += 100
+			oLoadingBar.value = (currentLoad/(totalLoadingSize))*100
 			yield(get_tree(),'idle_frame')
 	
 	oLoadingBar.visible = false

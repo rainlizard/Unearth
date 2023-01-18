@@ -258,16 +258,25 @@ func place_subtile(placeSubtile):
 	
 	if paintThingType != null:
 		var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(placeSubtile.x,placeSubtile.y)]
-		var newPos = Vector3(placeSubtile.x + 0.5, placeSubtile.y + 0.5, detectTerrainHeight)
+		var newPos:Vector3 = Vector3(placeSubtile.x + 0.5, placeSubtile.y + 0.5, detectTerrainHeight)
 		
 		match paintThingType:
 			Things.TYPE.EXTRA:
 				match paintSubtype:
-					1: oInstances.place_new_action_point(paintThingType, paintSubtype, newPos, paintOwnership)
-					2: oInstances.place_new_light(paintThingType, paintSubtype, newPos, paintOwnership)
+					1:
+						oInstances.place_new_action_point(paintThingType, paintSubtype, newPos, paintOwnership)
+						if oMirrorPlacementCheckBox.pressed == true:
+							oInstances.mirror_instance_placement(paintThingType, paintSubtype, newPos, paintOwnership, oInstances.MIRROR_ACTIONPOINT)
+					2:
+						oInstances.place_new_light(paintThingType, paintSubtype, newPos, paintOwnership)
+						if oMirrorPlacementCheckBox.pressed == true:
+							oInstances.mirror_instance_placement(paintThingType, paintSubtype, newPos, paintOwnership, oInstances.MIRROR_LIGHT)
 			_:
 				oInstances.place_new_thing(paintThingType, paintSubtype, newPos, paintOwnership)
-
+				if oMirrorPlacementCheckBox.pressed == true:
+					oInstances.mirror_instance_placement(paintThingType, paintSubtype, newPos, paintOwnership, oInstances.MIRROR_THING)
+		
+		
 
 func clean_up_cursor_array():
 	for i in cursorOnInstancesArray:
