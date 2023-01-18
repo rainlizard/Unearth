@@ -771,9 +771,6 @@ mouse_filter = 2
 texture = ExtResource( 84 )
 expand = true
 script = ExtResource( 83 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CenteredLabel" type="Control" parent="Ui/UiTools/PickSlabWindow/Clippy"]
 anchor_right = 1.0
@@ -1474,7 +1471,7 @@ margin_right = 176.0
 margin_bottom = 27.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-text = "Division type"
+text = "Division axis"
 
 [node name="MirrorFlipCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/MirrorOptions/VBoxContainer"]
 margin_right = 64.0

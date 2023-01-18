@@ -48,8 +48,6 @@ func pressed(id):
 	var setValue = id.get_meta("grid_value")
 	if oUseSlabOwnerCheckBox.pressed == true and oUseSlabOwnerCheckBox.visible == true:
 		setValue = 5
-	if oMirrorOptions.visible == true:
-		return
 	oSelection.paintOwnership = setValue
 	set_selection(setValue)
 	oOnlyOwnership.select_appropriate_button()
@@ -62,9 +60,6 @@ func update_selection():
 	if is_instance_valid(oSelectedRect.boundToItem) == false: return
 	# If checkbox is checked then don't do anything
 	if oUseSlabOwnerCheckBox.pressed == true and oUseSlabOwnerCheckBox.visible == true:
-		oSelectedRect.visible = false
-		return
-	if oMirrorOptions.visible == true:
 		oSelectedRect.visible = false
 		return
 	oSelectedRect.visible = true

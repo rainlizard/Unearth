@@ -25,6 +25,8 @@ onready var oFrailColumnsCheckbox = Nodelist.list["oFrailColumnsCheckbox"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
+onready var oSelection = Nodelist.list["oSelection"]
+onready var oDataSlx = Nodelist.list["oDataSlx"]
 
 enum dir {
 	s = 0
@@ -48,9 +50,14 @@ enum {
 	OWNERSHIP_GRAPHIC_DOOR_2
 }
 
-func mirror_placement(shapePositionArray):
+enum {
+	MIRROR_SLAB_AND_OWNER
+	MIRROR_STYLE
+	MIRROR_ONLY_OWNERSHIP
+}
+
+func mirror_placement(shapePositionArray, mirrorWhat):
 	var mirroredPositionArray = []
-	var changeOwnershipArray = []
 	var fromArea
 	var toArea
 	
@@ -61,7 +68,7 @@ func mirror_placement(shapePositionArray):
 		2: actions = [0,1,2]
 	
 	var flip = oMirrorFlipCheckBox.pressed
-	
+	print('-------------------------')
 	for performAction in actions:
 		match performAction:
 			0: # Other vertical
@@ -94,44 +101,91 @@ func mirror_placement(shapePositionArray):
 			
 			
 			var slabID = oDataSlab.get_cellv(fromPos)
-			var ownership = oDataOwnership.get_cellv(fromPos)
-			
-			if slabID_is_ownable(slabID):
+			#var quadrantOwnerClickedOn = oDataOwnership.get_cellv(fromPos)
+			#var quadrantOwnerDestination = quadrantOwnerClickedOn
+			var quadrantOwnerDestination = 5
+			var quadrantOwnerClickedOn = 5
+			if slabID_is_ownable(slabID) or mirrorWhat == MIRROR_ONLY_OWNERSHIP:
 				match oMirrorOptions.splitType:
 					0:
 						if toPos.y < floor(M.ySize*0.5):
-							ownership = oMirrorOptions.ownerValue[0]
+							quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
 						else:
-							ownership = oMirrorOptions.ownerValue[1]
+							quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
+						
+						if fromPos.y < ceil(M.ySize*0.5):
+							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
+						else:
+							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
 					1:
 						if toPos.x < floor(M.xSize*0.5):
-							ownership = oMirrorOptions.ownerValue[0]
+							quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
 						else:
-							ownership = oMirrorOptions.ownerValue[1]
+							quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
+						
+						if fromPos.x < ceil(M.xSize*0.5):
+							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
+						else:
+							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
 					2:
 						if toPos.y < floor(M.ySize*0.5):
 							if toPos.x < floor(M.xSize*0.5):
-								ownership = oMirrorOptions.ownerValue[0]
+								quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
 							else:
-								ownership = oMirrorOptions.ownerValue[1]
+								quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
 						else:
 							if toPos.x < floor(M.xSize*0.5):
-								ownership = oMirrorOptions.ownerValue[2]
+								quadrantOwnerDestination = oMirrorOptions.ownerValue[2]
 							else:
-								ownership = oMirrorOptions.ownerValue[3]
+								quadrantOwnerDestination = oMirrorOptions.ownerValue[3]
+						
+						if fromPos.y < ceil(M.ySize*0.5):
+							if fromPos.x < ceil(M.xSize*0.5):
+								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
+							else:
+								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
+						else:
+							if fromPos.x < ceil(M.xSize*0.5):
+								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[2]
+							else:
+								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[3]
 			
-			oDataSlab.set_cellv(toPos, slabID)
-			oDataOwnership.set_cellv(toPos, ownership)
-			
-			if slabID < 1000:
-				oDataCustomSlab.set_cellv(toPos, 0)
-			else:
-				oDataCustomSlab.set_cellv(toPos, slabID)
-		
+			match mirrorWhat:
+				MIRROR_SLAB_AND_OWNER:
+					# Ownership
+					if oSelection.paintOwnership == quadrantOwnerDestination:
+						oDataOwnership.set_cellv(toPos, quadrantOwnerClickedOn)
+					else:
+						oDataOwnership.set_cellv(toPos, quadrantOwnerDestination)
+					# SlabID
+					oDataSlab.set_cellv(toPos, slabID)
+					# Custom SlabID
+					if slabID < 1000:
+						oDataCustomSlab.set_cellv(toPos, 0)
+					else:
+						oDataCustomSlab.set_cellv(toPos, slabID)
+				MIRROR_STYLE:
+					pass
+				MIRROR_ONLY_OWNERSHIP:
+					# Ownership
+					if oSelection.paintOwnership == quadrantOwnerDestination:
+						oDataOwnership.set_cellv(toPos, quadrantOwnerClickedOn)
+					else:
+						oDataOwnership.set_cellv(toPos, quadrantOwnerDestination)
+			# Always add position to mirroredPositionArray, decide what to do with the positions after the loop is done.
 			mirroredPositionArray.append(toPos)
 	
-	generate_slabs_based_on_id(mirroredPositionArray, true)
-	oOverheadOwnership.update_ownership_image_based_on_shape(mirroredPositionArray)
+	# Do different stuff with mirroredPositionArray depending on what we're mirroring
+	match mirrorWhat:
+		MIRROR_SLAB_AND_OWNER:
+			oOverheadOwnership.update_ownership_image_based_on_shape(mirroredPositionArray)
+		MIRROR_STYLE:
+			oDataSlx.set_tileset_shape(mirroredPositionArray)
+		MIRROR_ONLY_OWNERSHIP:
+			oOverheadOwnership.update_ownership_image_based_on_shape(mirroredPositionArray)
+	
+	generate_slabs_based_on_id(mirroredPositionArray, true) # Always necessary when updating ownership
+
 
 func slabID_is_ownable(slabID):
 	if oOwnableNaturalTerrain.pressed == false and Slabs.data.has(slabID) and Slabs.data[slabID][Slabs.IS_OWNABLE] == false:
@@ -148,32 +202,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	for pos in shapePositionArray:
-		
-		if oMirrorPlacementCheckBox.pressed == true and ownable == true:
-				match oMirrorOptions.splitType:
-					0:
-						if pos.y < floor(M.ySize*0.5):
-							oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[0])
-						else:
-							oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[1])
-					1:
-						if pos.x < floor(M.xSize*0.5):
-							oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[0])
-						else:
-							oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[1])
-					2:
-						if pos.y < floor(M.ySize*0.5):
-							if pos.x < floor(M.xSize*0.5):
-								oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[0])
-							else:
-								oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[1])
-						else:
-							if pos.x < floor(M.xSize*0.5):
-								oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[2])
-							else:
-								oDataOwnership.set_cellv(pos, oMirrorOptions.ownerValue[3])
-		else:
-			oDataOwnership.set_cellv(pos, ownership)
+		oDataOwnership.set_cellv(pos, ownership)
 		
 		if slabID < 1000:
 			oDataCustomSlab.set_cellv(pos, 0)

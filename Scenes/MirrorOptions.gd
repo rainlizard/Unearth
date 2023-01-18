@@ -104,7 +104,3 @@ func gui_input_on_color_fields(event, buttonIndex, buttonNode):
 
 func _on_MirrorPlacementCheckBox_pressed():
 	visible = oMirrorPlacementCheckBox.pressed
-	if visible == true:
-		oOwnershipGridContainer.modulate = Color(1,1,1,0.25)
-	else:
-		oOwnershipGridContainer.modulate = Color(1,1,1,1.00)

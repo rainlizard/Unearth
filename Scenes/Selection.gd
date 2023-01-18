@@ -220,10 +220,16 @@ func construct_shape_for_placement(constructType):
 	
 	if oSlabStyle.visible == true:
 		oDataSlx.set_tileset_shape(shapePositionArray)
+		if oMirrorPlacementCheckBox.pressed == true:
+			oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_STYLE)
 	elif oOnlyOwnership.visible == true:
+		
 		oOverheadOwnership.ownership_paint_shape(shapePositionArray, paintOwnership)
 		oOverheadOwnership.ownership_update_things(shapePositionArray, paintOwnership)
+		if oMirrorPlacementCheckBox.pressed == true:
+			oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_ONLY_OWNERSHIP)
 		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, true)
+
 	else:
 		# Slab placement
 		var useOwner = paintOwnership
@@ -231,7 +237,7 @@ func construct_shape_for_placement(constructType):
 		oSlabPlacement.place_shape_of_slab_id(shapePositionArray, paintSlab, useOwner)
 		
 		if oMirrorPlacementCheckBox.pressed == true:
-			oSlabPlacement.mirror_placement(shapePositionArray)
+			oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_SLAB_AND_OWNER)
 		
 		var updateNearby = true
 		# Custom slabs don't update the surroundings
