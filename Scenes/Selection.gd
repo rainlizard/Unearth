@@ -26,6 +26,7 @@ onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oEditingTools = Nodelist.list["oEditingTools"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
+onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 
 enum {
 	CONSTRUCT_BRUSH
@@ -60,6 +61,8 @@ func _process(delta):
 			$"../SubtileSelector".texture = texGreenCursor
 
 func _input(event):
+	if oLoadingBar.visible == true: return
+	
 	if cursorOnInstancesArray.empty() == false and is_instance_valid(cursorOnInstancesArray[0]) == true and oSelector.mode == oSelector.MODE_SUBTILE:
 		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
 	elif Input.get_current_cursor_shape() == Input.CURSOR_POINTING_HAND:

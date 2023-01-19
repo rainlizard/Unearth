@@ -249,7 +249,7 @@ func toggle_spinning_key(): # Called when you manually change the lock state
 	# If door has no key, then create a key.
 	# If door has key, then destroy the key.
 	oInstances = Nodelist.list["oInstances"]
-	var keyID = oInstances.get_node_on_subtile("Key", locationX, locationY)
+	var keyID = oInstances.get_node_on_subtile(locationX, locationY, "Key")
 	if is_instance_valid(keyID) == true:
 		if doorLocked == 0:
 			keyID.queue_free()

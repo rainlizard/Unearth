@@ -61,6 +61,7 @@ grow_vertical = 2
 mouse_filter = 2
 size_flags_horizontal = 7
 size_flags_vertical = 4
+custom_colors/font_color_uneditable = Color( 1, 1, 1, 1 )
 custom_styles/read_only = ExtResource( 4 )
 custom_styles/normal = ExtResource( 4 )
 align = 1

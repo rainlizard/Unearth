@@ -30,6 +30,8 @@ onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
+onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
+onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 
 
 onready var TILE_SIZE = Constants.TILE_SIZE
@@ -80,6 +82,8 @@ func mouse_button_anywhere():
 				oRectangleSelection.clear()
 
 func mouse_button_on_field():
+	if oLoadingBar.visible == true: return
+	
 	# Initial on-press button
 	if Input.is_action_just_pressed("mouse_left"):
 		if Input.is_action_pressed("place_overlapping"):
@@ -159,7 +163,11 @@ func mouse_button_on_field():
 						canPlace = true # Allow placing on the tile you just deleted, without needing to move cursor off of it
 			
 			MODE_TILE:
-				oInstances.delete_all_on_slab(cursorTile.x,cursorTile.y, ["Thing","ActionPoint","Light"])
+				var nodesOnSlab = oInstances.get_all_nodes_on_slab(cursorTile.x,cursorTile.y, ["Thing","ActionPoint","Light"])
+				for inst in nodesOnSlab:
+					if oMirrorPlacementCheckBox.pressed == true:
+						oInstances.mirror_deletion_of_instance(inst)
+					inst.queue_free()
 		
 		oThingDetails.update_details()
 

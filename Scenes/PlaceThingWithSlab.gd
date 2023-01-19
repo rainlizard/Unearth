@@ -34,7 +34,7 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask,
 
 func create_door_thing(xSlab, ySlab, ownership):
 	var createAtPos = Vector3((xSlab*3)+1.5, (ySlab*3)+1.5, 5)
-	var doorID = oInstances.get_node_on_subtile("Door", createAtPos.x, createAtPos.y)
+	var doorID = oInstances.get_node_on_subtile(createAtPos.x, createAtPos.y, "Door")
 	if is_instance_valid(doorID) == true:
 		# Change existing door thing's ownership
 		doorID.ownership = ownership
@@ -49,7 +49,7 @@ func create_door_thing(xSlab, ySlab, ownership):
 			id.toggle_spinning_key()
 	
 	# This isn't important, key ownership doesn't matter, but change it anyway
-	var keyID = oInstances.get_node_on_subtile("Key", createAtPos.x, createAtPos.y)
+	var keyID = oInstances.get_node_on_subtile(createAtPos.x, createAtPos.y, "Key")
 	if is_instance_valid(keyID) == true:
 		keyID.ownership = ownership
 

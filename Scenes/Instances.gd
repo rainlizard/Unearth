@@ -67,7 +67,7 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust):
 	for performAction in actions:
 		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
 		
-		var getNodeAtMirroredPosition = get_node_on_subtile("Instance", toPos.x, toPos.y)
+		var getNodeAtMirroredPosition = get_node_on_subtile(toPos.x, toPos.y, "Instance")
 		if is_instance_valid(getNodeAtMirroredPosition):
 			if getNodeAtMirroredPosition.subtype == instanceBeingAdjusted.subtype:
 				if getNodeAtMirroredPosition.thingType == instanceBeingAdjusted.thingType:
@@ -106,7 +106,7 @@ func mirror_deletion_of_instance(instanceBeingDeleted):
 	for performAction in actions:
 		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
 		
-		var getNodeAtMirroredPosition = get_node_on_subtile("Instance", toPos.x, toPos.y)
+		var getNodeAtMirroredPosition = get_node_on_subtile(toPos.x, toPos.y, "Instance")
 		if is_instance_valid(getNodeAtMirroredPosition):
 			if getNodeAtMirroredPosition.subtype == instanceBeingDeleted.subtype:
 				if getNodeAtMirroredPosition.thingType == instanceBeingDeleted.thingType:
@@ -249,7 +249,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			# Move away while I check location
 			id.locationX = -32767
 			id.locationY = -32767
-			var goldID = get_node_on_subtile("TreasuryGold", locX, locY)
+			var goldID = get_node_on_subtile(locX, locY, "TreasuryGold")
 			if is_instance_valid(goldID) == true:
 				goldID.queue_free()
 			id.locationX = locX
@@ -321,7 +321,9 @@ func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng 
 
 func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
-		delete_all_on_slab(xSlab, ySlab, ["Thing"])
+		var nodesOnSlab = get_all_nodes_on_slab(xSlab, ySlab, ["Thing"])
+		for i in nodesOnSlab:
+			i.queue_free()
 	else:
 		var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
 		for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
@@ -329,12 +331,28 @@ func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 			on_slab_delete_stray_door_thing_and_key(id, slabID)
 			on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership)
 
-func delete_all_on_slab(xSlab, ySlab, arrayOfGroupNameStrings):
+#func delete_all_on_slab(xSlab, ySlab, arrayOfGroupNameStrings):
+#	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
+#	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
+#		for groupName in arrayOfGroupNameStrings:
+#			if id.is_in_group(groupName):
+#				id.queue_free()
+
+func get_all_nodes_on_slab(xSlab, ySlab, arrayOfGroups):
+	var array = []
 	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
 	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
-		for groupName in arrayOfGroupNameStrings:
-			if id.is_in_group(groupName):
-				id.queue_free()
+		for nodeGroup in arrayOfGroups:
+			if id.is_queued_for_deletion() == false:
+				array.append(id)
+	return array
+
+func get_node_on_subtile(xSubtile, ySubtile, nodeGroup):
+	var checkSlabLocationGroup = "slab_location_group_"+str(floor(xSubtile/3))+'_'+str(floor(ySubtile/3))
+	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
+		if id.is_in_group(nodeGroup) and id.is_queued_for_deletion() == false and floor(id.locationX) == floor(xSubtile) and floor(id.locationY) == floor(ySubtile):
+			return id
+	return null
 
 func on_slab_update_thing_height(id): # Update heights of any manually placed objects
 	if id.is_in_group("Thing"):
@@ -366,12 +384,7 @@ func on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership):
 #		for id in arrayColliders:
 #			id.queue_free()
 
-func get_node_on_subtile(nodegroup, xSubtile, ySubtile):
-	var checkSlabLocationGroup = "slab_location_group_"+str(floor(xSubtile/3))+'_'+str(floor(ySubtile/3))
-	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
-		if id.is_in_group(nodegroup) and id.is_queued_for_deletion() == false and floor(id.locationX) == floor(xSubtile) and floor(id.locationY) == floor(ySubtile):
-			return id
-	return null
+
 
 #func get_all_on_slab(nodegroup, xSlab, ySlab):
 #	var array = []

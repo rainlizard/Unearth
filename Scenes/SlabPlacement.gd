@@ -78,7 +78,7 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 			var slabID = oDataSlab.get_cellv(fromPos)
 			var quadrantOwnerDestination = 5
 			var quadrantOwnerClickedOn = 5
-			if slabID_is_ownable(slabID) or mirrorWhat == MIRROR_ONLY_OWNERSHIP:
+			if (slabID_is_ownable(slabID) or slabID >= 1000) or mirrorWhat == MIRROR_ONLY_OWNERSHIP:
 				quadrantOwnerDestination = oMirrorOptions.mirror_get_quadrant_owner(toPos, fieldX, fieldY)
 				quadrantOwnerClickedOn = oMirrorOptions.mirror_get_quadrant_owner(fromPos, fieldX, fieldY)
 			
@@ -127,7 +127,7 @@ func slabID_is_ownable(slabID):
 
 func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	var ownable = slabID_is_ownable(slabID)
-	if ownable == false:
+	if ownable == false and slabID < 1000:
 		ownership = 5
 	
 	var removeFromShape = []
