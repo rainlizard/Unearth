@@ -291,6 +291,9 @@ func manually_delete_one_instance(inst):
 		if oInspector.inspectingInstance == inst:
 			oInspector.deselect()
 		
+		if oMirrorPlacementCheckBox.pressed == true:
+			oInstances.mirror_deletion_of_instance(inst)
+		
 		if inst.is_in_group("ActionPoint"):
 			oScriptHelpers.start() # Update when action points change
 		

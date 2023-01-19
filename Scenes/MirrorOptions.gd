@@ -92,15 +92,62 @@ func _on_MirrorColor3_gui_input(event):
 
 func gui_input_on_color_fields(event, buttonIndex, buttonNode):
 	if event is InputEventMouseButton and event.is_pressed():
-		if event.button_index == BUTTON_LEFT:
-			var previousColorArrayIndex = Constants.ownerRoomCol.find(buttonNode.color)
-			if previousColorArrayIndex != -1:
-				var setColorIndex = 0
-				if previousColorArrayIndex < Constants.ownerRoomCol.size()-1:
-					setColorIndex = previousColorArrayIndex+1
-				buttonNode.color = Constants.ownerRoomCol[setColorIndex]
-				ownerValue[buttonIndex] = setColorIndex
+		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT:
+			var colorIndex = Constants.ownerRoomCol.find(buttonNode.color)
+			if colorIndex != -1:
+				var newIdx
+				match event.button_index:
+					BUTTON_LEFT:
+						newIdx = colorIndex+1
+						if newIdx >= Constants.ownerRoomCol.size():
+							newIdx = 0
+					BUTTON_RIGHT:
+						newIdx = colorIndex-1
+						if newIdx < 0:
+							newIdx = Constants.ownerRoomCol.size()-1
+				
+				buttonNode.color = Constants.ownerRoomCol[newIdx]
+				ownerValue[buttonIndex] = newIdx
 
 
 func _on_MirrorPlacementCheckBox_pressed():
 	visible = oMirrorPlacementCheckBox.pressed
+
+func mirror_get_quadrant_owner(pos, fieldX, fieldY):
+	match splitType:
+		0:
+			if pos.y < floor(fieldY*0.5):
+				return ownerValue[0]
+			else:
+				return ownerValue[1]
+		1:
+			if pos.x < floor(fieldX*0.5):
+				return ownerValue[0]
+			else:
+				return ownerValue[1]
+		2:
+			if pos.y < floor(fieldY*0.5):
+				if pos.x < floor(fieldX*0.5):
+					return ownerValue[0]
+				else:
+					return ownerValue[1]
+			else:
+				if pos.x < floor(fieldX*0.5):
+					return ownerValue[2]
+				else:
+					return ownerValue[3]
+
+func mirror_calculation(performAction, flip, fromPos, fieldX, fieldY):
+	match performAction:
+		0: # Other vertical
+			if flip == true and splitType == 0:
+				return Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
+			else:
+				return Vector2(fromPos.x, fieldY - fromPos.y - 1)
+		1: # Other horizontal
+			if flip == true and splitType == 1:
+				return Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
+			else:
+				return Vector2(fieldX - fromPos.x - 1, fromPos.y)
+		2: # Other diagonal
+			return Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)

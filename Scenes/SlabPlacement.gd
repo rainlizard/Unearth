@@ -58,9 +58,6 @@ enum {
 
 func mirror_placement(shapePositionArray, mirrorWhat):
 	var mirroredPositionArray = []
-	var fromArea
-	var toArea
-	
 	var actions = []
 	match oMirrorOptions.splitType:
 		0: actions = [0]
@@ -73,83 +70,17 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 	var fieldY = M.ySize
 	
 	for performAction in actions:
-		match performAction:
-			0: # Other vertical
-				fromArea = Rect2(0, 0, fieldX, floor(fieldY*0.5))
-				toArea = Rect2(0, floor(fieldY*0.5), fieldX, floor(fieldY*0.5))
-			1: # Other horizontal
-				fromArea = Rect2(0, 0, floor(fieldX*0.5), fieldY)
-				toArea = Rect2(floor(fieldX*0.5), 0, floor(fieldX*0.5), fieldY)
-			2: # Other diagonal
-				fromArea = Rect2(0, 0, floor(fieldX*0.5), floor(fieldY*0.5))
-				toArea = Rect2(floor(fieldX*0.5), floor(fieldY*0.5), floor(fieldX*0.5), floor(fieldY*0.5))
-		
 		for fromPos in shapePositionArray:
 			
 			# To
-			var toPos
-			match performAction:
-				0: # Other vertical
-					if flip == true and oMirrorOptions.splitType == 0:
-						toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
-					else:
-						toPos = Vector2(fromPos.x, fieldY - fromPos.y - 1)
-				1: # Other horizontal
-					if flip == true and oMirrorOptions.splitType == 1:
-						toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
-					else:
-						toPos = Vector2(fieldX - fromPos.x - 1, fromPos.y)
-				2: # Other diagonal
-					toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
-			
+			var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
 			
 			var slabID = oDataSlab.get_cellv(fromPos)
 			var quadrantOwnerDestination = 5
 			var quadrantOwnerClickedOn = 5
 			if slabID_is_ownable(slabID) or mirrorWhat == MIRROR_ONLY_OWNERSHIP:
-				match oMirrorOptions.splitType:
-					0:
-						if toPos.y < floor(fieldY*0.5):
-							quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
-						else:
-							quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
-						
-						if fromPos.y < ceil(fieldY*0.5):
-							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
-						else:
-							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
-					1:
-						if toPos.x < floor(fieldX*0.5):
-							quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
-						else:
-							quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
-						
-						if fromPos.x < ceil(fieldX*0.5):
-							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
-						else:
-							quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
-					2:
-						if toPos.y < floor(fieldY*0.5):
-							if toPos.x < floor(fieldX*0.5):
-								quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
-							else:
-								quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
-						else:
-							if toPos.x < floor(fieldX*0.5):
-								quadrantOwnerDestination = oMirrorOptions.ownerValue[2]
-							else:
-								quadrantOwnerDestination = oMirrorOptions.ownerValue[3]
-						
-						if fromPos.y < ceil(fieldY*0.5):
-							if fromPos.x < ceil(fieldX*0.5):
-								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
-							else:
-								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
-						else:
-							if fromPos.x < ceil(fieldX*0.5):
-								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[2]
-							else:
-								quadrantOwnerClickedOn = oMirrorOptions.ownerValue[3]
+				quadrantOwnerDestination = oMirrorOptions.mirror_get_quadrant_owner(toPos, fieldX, fieldY)
+				quadrantOwnerClickedOn = oMirrorOptions.mirror_get_quadrant_owner(fromPos, fieldX, fieldY)
 			
 			match mirrorWhat:
 				MIRROR_SLAB_AND_OWNER:

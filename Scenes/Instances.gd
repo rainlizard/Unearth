@@ -8,6 +8,7 @@ onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
+onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
 var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
@@ -51,9 +52,31 @@ enum {
 	MIRROR_ACTIONPOINT
 }
 
+func mirror_deletion_of_instance(instanceBeingDeleted):
+	var actions = []
+	match oMirrorOptions.splitType:
+		0: actions = [0]
+		1: actions = [1]
+		2: actions = [0,1,2]
+	
+	var flip = oMirrorFlipCheckBox.pressed
+	var fieldX = M.xSize*3
+	var fieldY = M.ySize*3
+	
+#	if oInspector.inspectingInstance == inst:
+#		oInspector.deselect()
+	var fromPos = Vector2(instanceBeingDeleted.locationX, instanceBeingDeleted.locationY)
+	
+	for performAction in actions:
+		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
+		
+		var getNodeAtMirroredPosition = get_node_on_subtile("Instance", toPos.x, toPos.y)
+		if is_instance_valid(getNodeAtMirroredPosition):
+			if getNodeAtMirroredPosition.subtype == instanceBeingDeleted.subtype:
+				if getNodeAtMirroredPosition.thingType == instanceBeingDeleted.thingType:
+					getNodeAtMirroredPosition.queue_free()
+
 func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirrorType):
-	var fromArea
-	var toArea
 	var actions = []
 	match oMirrorOptions.splitType:
 		0: actions = [0]
@@ -68,78 +91,10 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 	var fieldY = M.ySize*3
 	
 	for performAction in actions:
-		match performAction:
-			0: # Other vertical
-				fromArea = Rect2(0, 0, fieldX, floor(fieldY*0.5))
-				toArea = Rect2(0, floor(fieldY*0.5), fieldX, floor(fieldY*0.5))
-			1: # Other horizontal
-				fromArea = Rect2(0, 0, floor(fieldX*0.5), fieldY)
-				toArea = Rect2(floor(fieldX*0.5), 0, floor(fieldX*0.5), fieldY)
-			2: # Other diagonal
-				fromArea = Rect2(0, 0, floor(fieldX*0.5), floor(fieldY*0.5))
-				toArea = Rect2(floor(fieldX*0.5), floor(fieldY*0.5), floor(fieldX*0.5), floor(fieldY*0.5))
+		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
 		
-		# To
-		var toPos
-		match performAction:
-			0: # Other vertical
-				if flip == true and oMirrorOptions.splitType == 0:
-					toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
-				else:
-					toPos = Vector2(fromPos.x, fieldY - fromPos.y - 1)
-			1: # Other horizontal
-				if flip == true and oMirrorOptions.splitType == 1:
-					toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
-				else:
-					toPos = Vector2(fieldX - fromPos.x - 1, fromPos.y)
-			2: # Other diagonal
-				toPos = Vector2(fieldX - fromPos.x - 1, fieldY - fromPos.y - 1)
-		
-		var quadrantOwnerDestination = 5
-		var quadrantOwnerClickedOn = 5
-		match oMirrorOptions.splitType:
-			0:
-				if toPos.y < floor(fieldY*0.5):
-					quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
-				else:
-					quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
-				
-				if fromPos.y < ceil(fieldY*0.5):
-					quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
-				else:
-					quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
-			1:
-				if toPos.x < floor(fieldX*0.5):
-					quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
-				else:
-					quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
-				
-				if fromPos.x < ceil(fieldX*0.5):
-					quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
-				else:
-					quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
-			2:
-				if toPos.y < floor(fieldY*0.5):
-					if toPos.x < floor(fieldX*0.5):
-						quadrantOwnerDestination = oMirrorOptions.ownerValue[0]
-					else:
-						quadrantOwnerDestination = oMirrorOptions.ownerValue[1]
-				else:
-					if toPos.x < floor(fieldX*0.5):
-						quadrantOwnerDestination = oMirrorOptions.ownerValue[2]
-					else:
-						quadrantOwnerDestination = oMirrorOptions.ownerValue[3]
-				
-				if fromPos.y < ceil(fieldY*0.5):
-					if fromPos.x < ceil(fieldX*0.5):
-						quadrantOwnerClickedOn = oMirrorOptions.ownerValue[0]
-					else:
-						quadrantOwnerClickedOn = oMirrorOptions.ownerValue[1]
-				else:
-					if fromPos.x < ceil(fieldX*0.5):
-						quadrantOwnerClickedOn = oMirrorOptions.ownerValue[2]
-					else:
-						quadrantOwnerClickedOn = oMirrorOptions.ownerValue[3]
+		var quadrantOwnerDestination = oMirrorOptions.mirror_get_quadrant_owner(toPos, fieldX, fieldY)
+		var quadrantOwnerClickedOn = oMirrorOptions.mirror_get_quadrant_owner(fromPos, fieldX, fieldY)
 		
 		toPos = Vector3(toPos.x, toPos.y, fromPosZ)
 		if newOwner == quadrantOwnerDestination:
@@ -375,13 +330,11 @@ func on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership):
 #		for id in arrayColliders:
 #			id.queue_free()
 
-
-
 func get_node_on_subtile(nodegroup, xSubtile, ySubtile):
-	for id in get_tree().get_nodes_in_group(nodegroup):
-		if id.is_queued_for_deletion() == false:
-			if floor(id.locationX) == floor(xSubtile) and floor(id.locationY) == floor(ySubtile):
-				return id
+	var checkSlabLocationGroup = "slab_location_group_"+str(floor(xSubtile/3))+'_'+str(floor(ySubtile/3))
+	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
+		if id.is_in_group(nodegroup) and id.is_queued_for_deletion() == false and floor(id.locationX) == floor(xSubtile) and floor(id.locationY) == floor(ySubtile):
+			return id
 	return null
 
 #func get_all_on_slab(nodegroup, xSlab, ySlab):
