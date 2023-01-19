@@ -126,6 +126,7 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 	var fieldX = (M.xSize*3)+1 # Don't know why this +1 works, but it does.
 	var fieldY = (M.ySize*3)+1
 	
+	var placedInstances = 0
 	for performAction in actions:
 		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
 		
@@ -133,6 +134,22 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 		var quadrantOwnerClickedOn = oMirrorOptions.mirror_get_quadrant_owner(fromPos, fieldX, fieldY)
 		
 		toPos = Vector3(toPos.x, toPos.y, fromPosZ)
+		
+		# Prevent overlapping placements along the center line
+		if oMirrorOptions.splitType == 0: # Don't use 'match', 'continue' doesn't work correctly there.
+			if toPos == fromPos:
+				continue
+		elif oMirrorOptions.splitType == 1:
+			if toPos == fromPos:
+				continue
+		elif oMirrorOptions.splitType == 2:
+			if toPos == fromPos:
+				continue
+			if placedInstances > 0:
+				if toPos.x == (fieldX-1) * 0.5 or toPos.y == (fieldY-1) * 0.5:
+					continue
+		
+		placedInstances += 1
 		if newOwner == quadrantOwnerDestination:
 			match mirrorType:
 				MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, quadrantOwnerClickedOn)
@@ -143,7 +160,7 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 				MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, quadrantOwnerDestination)
 				MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, quadrantOwnerDestination)
 				MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, quadrantOwnerDestination)
-
+		
 func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Placed by hand
 	var CODETIME_START = OS.get_ticks_msec()
 	var xSlab = floor(newPosition.x / 3)
