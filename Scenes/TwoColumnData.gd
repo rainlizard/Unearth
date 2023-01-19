@@ -9,6 +9,10 @@ onready var oSelection = Nodelist.list["oSelection"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
+onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
+onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
+onready var oInstances = Nodelist.list["oInstances"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 
 const columnLeftSize = 120
@@ -133,6 +137,8 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 	if callingNode is SpinBox:
 		valueNumber = callingNode.value
 	
+	var aValueWasAdjustedSoMirrorIt = ""
+	
 	match leftText:
 		"Position":
 			match name:
@@ -143,12 +149,16 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 						if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
 							inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0, M.xSize*3)
 						oInspector.set_inspector_subtile(Vector2(inst.locationX,inst.locationY))
+						
+						if oMirrorPlacementCheckBox.pressed == true:
+							oMessage.quick("Note: Position adjustments are not made symmetrical.")
 		"Custom box":
 			valueNumber = clamp(int(valueNumber), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
 						inst.boxNumber = valueNumber
+						aValueWasAdjustedSoMirrorIt = "boxNumber"
 				"PlacingListData":
 					oPlacingSettings.boxNumber = valueNumber
 		"Level":
@@ -157,6 +167,7 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 				"ThingListData":
 					if is_instance_valid(inst):
 						inst.creatureLevel = valueNumber
+						aValueWasAdjustedSoMirrorIt = "creatureLevel"
 				"PlacingListData":
 					oPlacingSettings.creatureLevel = valueNumber
 		"Point #":
@@ -181,6 +192,7 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 				"ThingListData":
 					if is_instance_valid(inst):
 						inst.lightIntensity = valueNumber
+						aValueWasAdjustedSoMirrorIt = "lightIntensity"
 				"PlacingListData":
 					oPlacingSettings.lightIntensity = valueNumber
 		"Effect range":
@@ -189,6 +201,7 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 				"ThingListData":
 					if is_instance_valid(inst):
 						inst.effectRange = valueNumber
+						aValueWasAdjustedSoMirrorIt = "effectRange"
 				"PlacingListData":
 					oPlacingSettings.effectRange = valueNumber
 		"Light range":
@@ -197,6 +210,7 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 				"ThingListData":
 					if is_instance_valid(inst):
 						inst.lightRange = valueNumber
+						aValueWasAdjustedSoMirrorIt = "lightRange"
 				"PlacingListData":
 					oPlacingSettings.lightRange = valueNumber
 		"Point range":
@@ -205,6 +219,7 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 				"ThingListData":
 					if is_instance_valid(inst):
 						inst.pointRange = valueNumber
+						aValueWasAdjustedSoMirrorIt = "pointRange"
 				"PlacingListData":
 					oPlacingSettings.pointRange = valueNumber
 		"Unknown 9":
@@ -277,7 +292,10 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 	#if callingNode is LineEdit: callingNode.text = String(valueNumber)
 	if callingNode is SpinBox:
 		callingNode.value = float(valueNumber)
-
+	
+	if oMirrorPlacementCheckBox.pressed == true:
+		if aValueWasAdjustedSoMirrorIt != "":
+			oInstances.mirror_adjusted_value(inst, aValueWasAdjustedSoMirrorIt)
 
 func _on_optionbutton_toggled(state,nameValue):
 	oUi.optionButtonIsOpened = state
@@ -286,6 +304,8 @@ func _on_optionbutton_item_selected(indexSelected, leftText): # When pressing En
 	oEditor.mapHasBeenEdited = true
 	
 	var inst = oInspector.inspectingInstance
+	
+	var aValueWasAdjustedSoMirrorIt = ""
 	
 	match leftText:
 		"Ownership":
@@ -302,8 +322,13 @@ func _on_optionbutton_item_selected(indexSelected, leftText): # When pressing En
 					if is_instance_valid(inst):
 						inst.doorLocked = indexSelected
 						inst.toggle_spinning_key()
+						aValueWasAdjustedSoMirrorIt = "doorLocked"
 				"PlacingListData":
 					oPlacingSettings.doorLocked = indexSelected
+	
+	if oMirrorPlacementCheckBox.pressed == true:
+		if aValueWasAdjustedSoMirrorIt != "":
+			oInstances.mirror_adjusted_value(inst, aValueWasAdjustedSoMirrorIt)
 
 #func _on_lineedit_focus_entered(lineEditId): # When pressing Enter on LineEdit, lose focus
 #	for i in 1:

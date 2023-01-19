@@ -1477,7 +1477,7 @@ margin_right = 64.0
 margin_bottom = 29.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-text = "Flip symmetry"
+text = "Inverted"
 
 [node name="LimitThing" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 107.0

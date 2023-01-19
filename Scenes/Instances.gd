@@ -52,6 +52,42 @@ enum {
 	MIRROR_ACTIONPOINT
 }
 
+func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust):
+	var actions = []
+	match oMirrorOptions.splitType:
+		0: actions = [0]
+		1: actions = [1]
+		2: actions = [0,1,2]
+	
+	var flip = oMirrorFlipCheckBox.pressed
+	var fieldX = (M.xSize*3)+1 # Don't know why this +1 works, but it does.
+	var fieldY = (M.ySize*3)+1
+	var fromPos = Vector2(instanceBeingAdjusted.locationX, instanceBeingAdjusted.locationY)
+	
+	for performAction in actions:
+		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
+		
+		var getNodeAtMirroredPosition = get_node_on_subtile("Instance", toPos.x, toPos.y)
+		if is_instance_valid(getNodeAtMirroredPosition):
+			if getNodeAtMirroredPosition.subtype == instanceBeingAdjusted.subtype:
+				if getNodeAtMirroredPosition.thingType == instanceBeingAdjusted.thingType:
+					match variableNameToAdjust:
+						"pointRange":
+							getNodeAtMirroredPosition.pointRange = instanceBeingAdjusted.pointRange
+						"lightRange":
+							getNodeAtMirroredPosition.lightRange = instanceBeingAdjusted.lightRange
+						"effectRange":
+							getNodeAtMirroredPosition.effectRange = instanceBeingAdjusted.effectRange
+						"lightIntensity":
+							getNodeAtMirroredPosition.lightIntensity = instanceBeingAdjusted.lightIntensity
+						"creatureLevel":
+							getNodeAtMirroredPosition.creatureLevel = instanceBeingAdjusted.creatureLevel
+						"boxNumber":
+							getNodeAtMirroredPosition.boxNumber = instanceBeingAdjusted.boxNumber
+						"doorLocked":
+							getNodeAtMirroredPosition.doorLocked = instanceBeingAdjusted.doorLocked
+							instanceBeingAdjusted.toggle_spinning_key()
+
 func mirror_deletion_of_instance(instanceBeingDeleted):
 	var actions = []
 	match oMirrorOptions.splitType:
@@ -60,8 +96,8 @@ func mirror_deletion_of_instance(instanceBeingDeleted):
 		2: actions = [0,1,2]
 	
 	var flip = oMirrorFlipCheckBox.pressed
-	var fieldX = M.xSize*3
-	var fieldY = M.ySize*3
+	var fieldX = (M.xSize*3)+1 # Don't know why this +1 works, but it does.
+	var fieldY = (M.ySize*3)+1
 	
 #	if oInspector.inspectingInstance == inst:
 #		oInspector.deselect()
@@ -87,8 +123,8 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 	
 	var flip = oMirrorFlipCheckBox.pressed
 	
-	var fieldX = M.xSize*3
-	var fieldY = M.ySize*3
+	var fieldX = (M.xSize*3)+1 # Don't know why this +1 works, but it does.
+	var fieldY = (M.ySize*3)+1
 	
 	for performAction in actions:
 		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
