@@ -137,6 +137,17 @@ func get_quadrant(pos, fieldX, fieldY):
 				else:
 					return 3
 
+func ui_quadrants_have_owner(ownership):
+	match splitType:
+		0,1:
+			if ownerValue[0] == ownership or ownerValue[1] == ownership:
+				return true
+			else:
+				return false
+		2:
+			return ownerValue.has(ownership)
+	return false
+
 
 func mirror_calculation(performAction, flip, fromPos, fieldX, fieldY):
 	match performAction:

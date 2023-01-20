@@ -6,6 +6,7 @@ onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 
 func _ready():
+	get_line_edit().expand_to_text_length = true
 	set_tooltip("You can also use keyboard keys 0-9 as a shortcut for setting levels")
 
 func _input(event):

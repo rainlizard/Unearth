@@ -130,11 +130,6 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 	for performAction in actions:
 		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
 		
-		var quadrantDestination = oMirrorOptions.get_quadrant(toPos, fieldX, fieldY)
-		var quadrantClickedOn = oMirrorOptions.get_quadrant(fromPos, fieldX, fieldY)
-		var quadrantDestinationOwner = oMirrorOptions.ownerValue[quadrantDestination]
-		var quadrantClickedOnOwner = oMirrorOptions.ownerValue[quadrantClickedOn]
-		
 		toPos = Vector3(toPos.x, toPos.y, fromPosZ)
 		
 		# Prevent overlapping placements along the center line
@@ -152,17 +147,44 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 					continue
 		
 		placedInstances += 1
-		if newOwner == quadrantDestinationOwner:
-			match mirrorType:
-				MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, quadrantClickedOnOwner)
-				MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, quadrantClickedOnOwner)
-				MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, quadrantClickedOnOwner)
-		else:
-			match mirrorType:
-				MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, quadrantDestinationOwner)
-				MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, quadrantDestinationOwner)
-				MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, quadrantDestinationOwner)
 		
+		var quadrantDestination = oMirrorOptions.get_quadrant(toPos, fieldX, fieldY)
+		var quadrantClickedOn = oMirrorOptions.get_quadrant(fromPos, fieldX, fieldY)
+		var quadrantDestinationOwner = oMirrorOptions.ownerValue[quadrantDestination]
+		var quadrantClickedOnOwner = oMirrorOptions.ownerValue[quadrantClickedOn]
+		
+		var mainPaint = newOwner
+		var finalOwner = 5
+		
+		if oMirrorOptions.ui_quadrants_have_owner(mainPaint) == false:
+			finalOwner = mainPaint
+		else:
+			if mainPaint == quadrantDestinationOwner:
+				finalOwner = quadrantClickedOnOwner
+			else:
+				match oMirrorOptions.splitType:
+					0,1:
+						finalOwner = quadrantDestinationOwner
+					2:
+						var otherTwoQuadrants = []
+						for i in 4:
+							if oMirrorOptions.ownerValue[i] == quadrantClickedOnOwner: continue
+							if oMirrorOptions.ownerValue[i] == mainPaint: continue
+							otherTwoQuadrants.append(oMirrorOptions.ownerValue[i])
+						
+						if otherTwoQuadrants.size() == 2:
+							if quadrantDestinationOwner == otherTwoQuadrants[0]:
+								finalOwner = otherTwoQuadrants[1]
+							else:
+								finalOwner = otherTwoQuadrants[0]
+						else:
+							finalOwner = quadrantDestinationOwner
+		
+		match mirrorType:
+			MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, finalOwner)
+			MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, finalOwner)
+			MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, finalOwner)
+
 func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Placed by hand
 	var CODETIME_START = OS.get_ticks_msec()
 	var xSlab = floor(newPosition.x / 3)

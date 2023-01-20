@@ -1,10 +1,13 @@
-extends SpinBoxPropertiesValue
+extends SpinBox
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+
+func _ready():
+	get_line_edit().expand_to_text_length = true
 
 func _input(event):
 	if visible == false: return

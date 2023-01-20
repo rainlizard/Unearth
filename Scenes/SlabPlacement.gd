@@ -69,8 +69,6 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 	var fieldX = M.xSize
 	var fieldY = M.ySize
 	
-	print('======================')
-	
 	for performAction in actions:
 		for fromPos in shapePositionArray:
 			
@@ -84,52 +82,18 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 			
 			var quadrantDestinationOwner = 5
 			var quadrantClickedOnOwner = 5
+			var mainPaint = 5
 			if slabID_is_ownable(slabID) or slabID >= 1000 or mirrorWhat == MIRROR_ONLY_OWNERSHIP:
 				quadrantDestinationOwner = oMirrorOptions.ownerValue[quadrantDestination]
 				quadrantClickedOnOwner = oMirrorOptions.ownerValue[quadrantClickedOn]
+				mainPaint = oSelection.paintOwnership
+			
+			var calculateOwner = false
 			
 			match mirrorWhat:
 				MIRROR_SLAB_AND_OWNER:
-					if quadrantClickedOnOwner == oSelection.paintOwnership:
-						# Normal symmetry placement, other areas just get their designated colour
-						oDataOwnership.set_cellv(toPos, quadrantDestinationOwner)
-					else: # You've clicked on an area while having a different ownership
-						
-						# Swap opposing colours
-						if quadrantDestinationOwner == oSelection.paintOwnership:
-							oDataOwnership.set_cellv(toPos, quadrantClickedOnOwner)
-						else:
-							# Swap the other two opposing colours
-							
-							if oMirrorOptions.splitType == 2:
-								
-								if quadrantDestinationOwner != quadrantClickedOnOwner:
-									
-									var otherTwoOwners = []
-									for buttonIndex in 4:
-										if oMirrorOptions.ownerValue[buttonIndex] == quadrantClickedOnOwner: continue
-										if oMirrorOptions.ownerValue[buttonIndex] == oSelection.paintOwnership: continue
-										otherTwoOwners.append(oMirrorOptions.ownerValue[buttonIndex])
-									
-									if otherTwoOwners.size() >= 2:
-										if quadrantDestinationOwner == otherTwoOwners[0]:
-											oDataOwnership.set_cellv(toPos, otherTwoOwners[1])
-										else:
-											oDataOwnership.set_cellv(toPos, otherTwoOwners[0])
-								
-								
-						#oDataOwnership.set_cellv(toPos, quadrantClickedOnOwner)
-					#else:
-						
-						#if quadrantDestinationOwner != oSelection.paintOwnership:
-						#oDataOwnership.set_cellv(toPos, quadrantClickedOnOwner)
-					#else:
-						#oDataOwnership.set_cellv(toPos, quadrantDestinationOwner)
-						
-					
-					# SlabID
+					calculateOwner = true
 					oDataSlab.set_cellv(toPos, slabID)
-					# Custom SlabID
 					if slabID < 1000:
 						oDataCustomSlab.set_cellv(toPos, 0)
 					else:
@@ -137,11 +101,33 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 				MIRROR_STYLE:
 					pass
 				MIRROR_ONLY_OWNERSHIP:
-					# Ownership
-					if oSelection.paintOwnership == quadrantDestinationOwner:
+					calculateOwner = true
+			
+			if calculateOwner == true:
+				if oMirrorOptions.ui_quadrants_have_owner(mainPaint) == false:
+					oDataOwnership.set_cellv(toPos, mainPaint)
+				else:
+					if mainPaint == quadrantDestinationOwner:
 						oDataOwnership.set_cellv(toPos, quadrantClickedOnOwner)
 					else:
-						oDataOwnership.set_cellv(toPos, quadrantDestinationOwner)
+						match oMirrorOptions.splitType:
+							0,1:
+								oDataOwnership.set_cellv(toPos, quadrantDestinationOwner)
+							2:
+								var otherTwoQuadrants = []
+								for i in 4:
+									if oMirrorOptions.ownerValue[i] == quadrantClickedOnOwner: continue
+									if oMirrorOptions.ownerValue[i] == mainPaint: continue
+									otherTwoQuadrants.append(oMirrorOptions.ownerValue[i])
+								
+								if otherTwoQuadrants.size() == 2:
+									if quadrantDestinationOwner == otherTwoQuadrants[0]:
+										oDataOwnership.set_cellv(toPos, otherTwoQuadrants[1])
+									else:
+										oDataOwnership.set_cellv(toPos, otherTwoQuadrants[0])
+								else:
+									oDataOwnership.set_cellv(toPos, quadrantDestinationOwner)
+			
 			# Always add position to mirroredPositionArray, decide what to do with the positions after the loop is done.
 			mirroredPositionArray.append(toPos)
 	
