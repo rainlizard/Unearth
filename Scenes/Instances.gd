@@ -130,8 +130,10 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 	for performAction in actions:
 		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
 		
-		var quadrantOwnerDestination = oMirrorOptions.mirror_get_quadrant_owner(toPos, fieldX, fieldY)
-		var quadrantOwnerClickedOn = oMirrorOptions.mirror_get_quadrant_owner(fromPos, fieldX, fieldY)
+		var quadrantDestination = oMirrorOptions.get_quadrant(toPos, fieldX, fieldY)
+		var quadrantClickedOn = oMirrorOptions.get_quadrant(fromPos, fieldX, fieldY)
+		var quadrantDestinationOwner = oMirrorOptions.ownerValue[quadrantDestination]
+		var quadrantClickedOnOwner = oMirrorOptions.ownerValue[quadrantClickedOn]
 		
 		toPos = Vector3(toPos.x, toPos.y, fromPosZ)
 		
@@ -150,16 +152,16 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 					continue
 		
 		placedInstances += 1
-		if newOwner == quadrantOwnerDestination:
+		if newOwner == quadrantDestinationOwner:
 			match mirrorType:
-				MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, quadrantOwnerClickedOn)
-				MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, quadrantOwnerClickedOn)
-				MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, quadrantOwnerClickedOn)
+				MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, quadrantClickedOnOwner)
+				MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, quadrantClickedOnOwner)
+				MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, quadrantClickedOnOwner)
 		else:
 			match mirrorType:
-				MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, quadrantOwnerDestination)
-				MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, quadrantOwnerDestination)
-				MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, quadrantOwnerDestination)
+				MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, quadrantDestinationOwner)
+				MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, quadrantDestinationOwner)
+				MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, quadrantDestinationOwner)
 		
 func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Placed by hand
 	var CODETIME_START = OS.get_ticks_msec()

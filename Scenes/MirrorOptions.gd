@@ -113,29 +113,30 @@ func gui_input_on_color_fields(event, buttonIndex, buttonNode):
 func _on_MirrorPlacementCheckBox_pressed():
 	visible = oMirrorPlacementCheckBox.pressed
 
-func mirror_get_quadrant_owner(pos, fieldX, fieldY):
+func get_quadrant(pos, fieldX, fieldY):
 	match splitType:
 		0:
 			if pos.y < floor(fieldY*0.5):
-				return ownerValue[0]
+				return 0
 			else:
-				return ownerValue[1]
+				return 1
 		1:
 			if pos.x < floor(fieldX*0.5):
-				return ownerValue[0]
+				return 0
 			else:
-				return ownerValue[1]
+				return 1
 		2:
 			if pos.y < floor(fieldY*0.5):
 				if pos.x < floor(fieldX*0.5):
-					return ownerValue[0]
+					return 0
 				else:
-					return ownerValue[1]
+					return 1
 			else:
 				if pos.x < floor(fieldX*0.5):
-					return ownerValue[2]
+					return 2
 				else:
-					return ownerValue[3]
+					return 3
+
 
 func mirror_calculation(performAction, flip, fromPos, fieldX, fieldY):
 	match performAction:
