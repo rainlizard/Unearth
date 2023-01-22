@@ -54,26 +54,28 @@ func get_cubescfg_modified_time():
 
 func _notification(what: int):
 	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
-		if cubesCfgLastModifiedTime != get_cubescfg_modified_time():
-			
-			var oMessage = Nodelist.list["oMessage"]
-			var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
-			var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
-			var oColumnEditor = Nodelist.list["oColumnEditor"]
-			var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
-			var oEditor = Nodelist.list["oEditor"]
-			var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
-			
-			read_cubes_cfg()
-			# Refresh the display of anything that handles cubes
-			oOverheadGraphics.update_map_overhead_2d_textures()
-			oPickSlabWindow.add_slabs()
-			oColumnEditor._on_ColumnEditor_visibility_changed()
-			oSlabsetWindow._on_SlabsetWindow_visibility_changed()
-			if oEditor.currentView == oEditor.VIEW_3D:
-				oGenerateTerrain.start()
-			
-			oMessage.quick("Reloaded cubes.cfg")
+		var oDataClm = Nodelist.list["oDataClm"]
+		if oDataClm.cubes.empty() == false: # fixes a crash when you've got no map loaded
+			if cubesCfgLastModifiedTime != get_cubescfg_modified_time():
+				var oMessage = Nodelist.list["oMessage"]
+				var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
+				var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
+				var oColumnEditor = Nodelist.list["oColumnEditor"]
+				var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+				var oEditor = Nodelist.list["oEditor"]
+				var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
+				
+				read_cubes_cfg()
+				# Refresh the display of anything that handles cubes
+				
+				oOverheadGraphics.update_map_overhead_2d_textures()
+				oPickSlabWindow.add_slabs()
+				oColumnEditor._on_ColumnEditor_visibility_changed()
+				oSlabsetWindow._on_SlabsetWindow_visibility_changed()
+				if oEditor.currentView == oEditor.VIEW_3D:
+					oGenerateTerrain.start()
+				
+				oMessage.quick("Reloaded cubes.cfg")
 
 func read_cubes_cfg():
 	

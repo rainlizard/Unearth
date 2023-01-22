@@ -27,6 +27,7 @@ onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oEditingTools = Nodelist.list["oEditingTools"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
+onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 
 enum {
 	CONSTRUCT_BRUSH
@@ -134,12 +135,11 @@ func update_paint():
 
 func construct_shape_for_placement(constructType):
 	oEditor.mapHasBeenEdited = true
-	var rectStart = Vector2()
-	var rectEnd = Vector2()
-	
 	var shapePositionArray = []
 	match constructType:
 		CONSTRUCT_RECTANGLE:
+			var rectStart = Vector2()
+			var rectEnd = Vector2()
 			if oRectangleSelection.beginTile.x < oRectangleSelection.endTile.x:
 				rectStart.x = oRectangleSelection.beginTile.x
 				rectEnd.x = oRectangleSelection.endTile.x
@@ -156,40 +156,14 @@ func construct_shape_for_placement(constructType):
 				for x in range(rectStart.x, rectEnd.x+1):
 					shapePositionArray.append(Vector2(x,y))
 		CONSTRUCT_PENCIL, CONSTRUCT_BRUSH:
-			
-			var b = ((oEditingTools.BRUSH_SIZE)-1) / 2.0
-			var beginTile = oSelector.world2tile(get_global_mouse_position()) - Vector2(floor(b),floor(b))
-			var endTile = oSelector.world2tile(get_global_mouse_position()) + Vector2(ceil(b),ceil(b))
-			
-			# Clamp inside map
-			beginTile.x = clamp(beginTile.x, oEditor.fieldBoundary.position.x, oEditor.fieldBoundary.end.x-1)
-			beginTile.y = clamp(beginTile.y, oEditor.fieldBoundary.position.y, oEditor.fieldBoundary.end.y-1)
-			endTile.x = clamp(endTile.x, oEditor.fieldBoundary.position.x, oEditor.fieldBoundary.end.x-1)
-			endTile.y = clamp(endTile.y, oEditor.fieldBoundary.position.y, oEditor.fieldBoundary.end.y-1)
-			
-			if beginTile.x < endTile.x:
-				rectStart.x = beginTile.x
-				rectEnd.x = endTile.x
-			else:
-				rectStart.x = endTile.x
-				rectEnd.x = beginTile.x
-			if beginTile.y < endTile.y:
-				rectStart.y = beginTile.y
-				rectEnd.y = endTile.y
-			else:
-				rectStart.y = endTile.y
-				rectEnd.y = beginTile.y
-			var brushSizeX = abs(rectStart.x-rectEnd.x)
-			var brushSizeY = abs(rectStart.y-rectEnd.y)
-			var center = rectStart + (Vector2(brushSizeX,brushSizeY)*0.5)
-			
-			for y in range(rectStart.y, rectEnd.y+1):
-				for x in range(rectStart.x, rectEnd.x+1):
-					if constructType == CONSTRUCT_BRUSH:
-						if (Vector2(x,y).distance_to(center)) < (max(brushSizeX+1,brushSizeY+1)*0.47):
-							shapePositionArray.append(Vector2(x,y))
-					else:
-						shapePositionArray.append(Vector2(x,y))
+			var ct_and_offset = oSelector.cursorTile + oBrushPreview.offsetBrushPos
+			for pos in oBrushPreview.brushShapeArray:
+				var newPos = pos + ct_and_offset
+				if newPos.x < oEditor.fieldBoundary.position.x: continue
+				if newPos.x > oEditor.fieldBoundary.end.x-1: continue
+				if newPos.y < oEditor.fieldBoundary.position.y: continue
+				if newPos.y > oEditor.fieldBoundary.end.y-1: continue
+				shapePositionArray.append(newPos)
 		CONSTRUCT_FILL:
 			var beginTile = oSelector.world2tile(get_global_mouse_position())
 			var coordsToCheck = [beginTile]
@@ -248,6 +222,7 @@ func construct_shape_for_placement(constructType):
 			updateNearby = false
 		
 		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
+
 
 
 func place_subtile(placeSubtile):

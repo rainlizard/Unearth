@@ -314,6 +314,7 @@ func _on_optionbutton_item_selected(indexSelected, leftText): # When pressing En
 				"ThingListData":
 					if is_instance_valid(inst):
 						inst.ownership = oSelection.paintOwnership
+						aValueWasAdjustedSoMirrorIt = "ownership"
 				"PlacingListData":
 					oPlacingSettings.ownership = oSelection.paintOwnership
 		"Door locked":

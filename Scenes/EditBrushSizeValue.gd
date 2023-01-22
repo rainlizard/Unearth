@@ -5,9 +5,12 @@ onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+onready var oSelector = Nodelist.list["oSelector"]
+
 
 func _ready():
 	get_line_edit().expand_to_text_length = true
+
 
 func _input(event):
 	if visible == false: return
@@ -19,6 +22,7 @@ func _input(event):
 		if oMapBrowser.visible == true: return
 		if oColumnEditor.visible == true: return
 		if oSlabsetWindow.visible == true: return
+		if oSelector.mode == oSelector.MODE_SUBTILE: return
 		
 		yield(get_tree(),'idle_frame')
 		if oPropertiesTabs.current_tab != 1: return

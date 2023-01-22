@@ -1,4 +1,4 @@
-[gd_scene load_steps=168 format=2]
+[gd_scene load_steps=172 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -137,6 +137,7 @@
 [ext_resource path="res://Class/SliderSetting.tscn" type="PackedScene" id=135]
 [ext_resource path="res://Scenes/QuickMapPreview.gd" type="Script" id=136]
 [ext_resource path="res://Scenes/ClmControls.tscn" type="PackedScene" id=137]
+[ext_resource path="res://Scenes/BrushPlacingPreview.gd" type="Script" id=138]
 [ext_resource path="res://Scenes/LimitThing.gd" type="Script" id=139]
 [ext_resource path="res://Shaders/IndividualFloorTexture.tres" type="Material" id=140]
 [ext_resource path="res://Scenes/DataLof.gd" type="Script" id=141]
@@ -148,6 +149,7 @@
 [ext_resource path="res://Art/IconBrushHover.png" type="Texture" id=147]
 [ext_resource path="res://Art/SplitNS.png" type="Texture" id=148]
 [ext_resource path="res://Scenes/MirrorOptions.gd" type="Script" id=149]
+[ext_resource path="res://Shaders/brightenbrush.shader" type="Shader" id=150]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -233,6 +235,14 @@ shader_param/color2 = null
 shader_param/color3 = null
 shader_param/color4 = null
 shader_param/color5 = null
+
+[sub_resource type="ShaderMaterial" id=23]
+shader = ExtResource( 150 )
+shader_param/brightness = 1.75
+
+[sub_resource type="ShaderMaterial" id=22]
+shader = ExtResource( 150 )
+shader_param/brightness = 1.75
 
 [sub_resource type="ShaderMaterial" id=19]
 shader = ExtResource( 36 )
@@ -542,6 +552,27 @@ texture = ExtResource( 24 )
 centered = false
 script = ExtResource( 18 )
 
+[node name="Centerer" type="Control" parent="Game2D/Selector/TileSelector"]
+margin_right = 96.0
+margin_bottom = 96.0
+mouse_filter = 2
+
+[node name="FillUseDisplay" type="TextureRect" parent="Game2D/Selector/TileSelector/Centerer"]
+visible = false
+modulate = Color( 1, 1, 1, 0.752941 )
+anchor_left = 0.15
+anchor_top = 0.15
+anchor_right = 0.85
+anchor_bottom = 0.85
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 143 )
+expand = true
+stretch_mode = 1
+
 [node name="Inspector" type="Node2D" parent="Game2D"]
 z_index = 200
 script = ExtResource( 94 )
@@ -558,7 +589,18 @@ script = ExtResource( 98 )
 script = ExtResource( 101 )
 
 [node name="RectangleSelection" type="Node2D" parent="Game2D"]
+material = SubResource( 23 )
 script = ExtResource( 114 )
+
+[node name="BrushPreview" type="Node2D" parent="Game2D"]
+script = ExtResource( 138 )
+
+[node name="BrushPreviewDisplay" type="TextureRect" parent="Game2D/BrushPreview"]
+material = SubResource( 22 )
+margin_right = 500.0
+margin_bottom = 500.0
+mouse_filter = 2
+expand = true
 
 [node name="ScriptHelpers" type="Node2D" parent="Game2D"]
 script = ExtResource( 133 )
@@ -1328,6 +1370,7 @@ hint_tooltip = "Pencil tool"
 focus_mode = 0
 toggle_mode = true
 pressed = true
+enabled_focus_mode = 0
 group = ExtResource( 108 )
 texture_normal = ExtResource( 107 )
 texture_pressed = ExtResource( 110 )
@@ -1339,7 +1382,9 @@ margin_right = 48.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Brush tool"
+focus_mode = 0
 toggle_mode = true
+enabled_focus_mode = 0
 group = ExtResource( 108 )
 texture_normal = ExtResource( 146 )
 texture_pressed = ExtResource( 145 )
@@ -1397,12 +1442,14 @@ visible = false
 margin_top = -55.0
 margin_right = 91.0
 margin_bottom = -26.0
+focus_mode = 0
 text = "Place door as locked"
 
 [node name="MirrorPlacementCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 50.0
 margin_right = 186.0
 margin_bottom = 79.0
+focus_mode = 0
 text = "Symmetrical"
 
 [node name="MirrorOptions" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
@@ -1468,6 +1515,7 @@ margin_bottom = 90.0
 [node name="SplitDirectionButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
 margin_right = 176.0
 margin_bottom = 27.0
+focus_mode = 0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Division axis"
@@ -1475,6 +1523,7 @@ text = "Division axis"
 [node name="MirrorFlipCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
 margin_right = 64.0
 margin_bottom = 29.0
+focus_mode = 0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Inverted"
@@ -1502,6 +1551,7 @@ margin_bottom = 21.0
 margin_top = 132.0
 margin_right = 276.0
 margin_bottom = 159.0
+focus_mode = 0
 text = "Tips"
 
 [node name="ColumnDetails" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs"]

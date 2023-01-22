@@ -87,6 +87,9 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust):
 						"doorLocked":
 							getNodeAtMirroredPosition.doorLocked = instanceBeingAdjusted.doorLocked
 							instanceBeingAdjusted.toggle_spinning_key()
+						"ownership":
+							var finalOwner = calculate_mirrored_ownership(toPos, fromPos, fieldX, fieldY, instanceBeingAdjusted.ownership)
+							getNodeAtMirroredPosition.ownership = finalOwner
 
 func mirror_deletion_of_instance(instanceBeingDeleted):
 	var actions = []
@@ -148,42 +151,45 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 		
 		placedInstances += 1
 		
-		var quadrantDestination = oMirrorOptions.get_quadrant(toPos, fieldX, fieldY)
-		var quadrantClickedOn = oMirrorOptions.get_quadrant(fromPos, fieldX, fieldY)
-		var quadrantDestinationOwner = oMirrorOptions.ownerValue[quadrantDestination]
-		var quadrantClickedOnOwner = oMirrorOptions.ownerValue[quadrantClickedOn]
-		
-		var mainPaint = newOwner
-		var finalOwner = 5
-		
-		if oMirrorOptions.ui_quadrants_have_owner(mainPaint) == false:
-			finalOwner = mainPaint
-		else:
-			if mainPaint == quadrantDestinationOwner:
-				finalOwner = quadrantClickedOnOwner
-			else:
-				match oMirrorOptions.splitType:
-					0,1:
-						finalOwner = quadrantDestinationOwner
-					2:
-						var otherTwoQuadrants = []
-						for i in 4:
-							if oMirrorOptions.ownerValue[i] == quadrantClickedOnOwner: continue
-							if oMirrorOptions.ownerValue[i] == mainPaint: continue
-							otherTwoQuadrants.append(oMirrorOptions.ownerValue[i])
-						
-						if otherTwoQuadrants.size() == 2:
-							if quadrantDestinationOwner == otherTwoQuadrants[0]:
-								finalOwner = otherTwoQuadrants[1]
-							else:
-								finalOwner = otherTwoQuadrants[0]
-						else:
-							finalOwner = quadrantDestinationOwner
+		var finalOwner = calculate_mirrored_ownership(toPos, fromPos, fieldX, fieldY, newOwner)
 		
 		match mirrorType:
 			MIRROR_THING: place_new_thing(newThingType, newSubtype, toPos, finalOwner)
 			MIRROR_LIGHT: place_new_light(newThingType, newSubtype, toPos, finalOwner)
 			MIRROR_ACTIONPOINT: place_new_action_point(newThingType, newSubtype, toPos, finalOwner)
+
+func calculate_mirrored_ownership(toPos, fromPos, fieldX, fieldY, mainPaint):
+	var quadrantDestination = oMirrorOptions.get_quadrant(toPos, fieldX, fieldY)
+	var quadrantClickedOn = oMirrorOptions.get_quadrant(fromPos, fieldX, fieldY)
+	var quadrantDestinationOwner = oMirrorOptions.ownerValue[quadrantDestination]
+	var quadrantClickedOnOwner = oMirrorOptions.ownerValue[quadrantClickedOn]
+	
+	var finalOwner = 5
+	
+	if oMirrorOptions.ui_quadrants_have_owner(mainPaint) == false:
+		finalOwner = mainPaint
+	else:
+		if mainPaint == quadrantDestinationOwner:
+			finalOwner = quadrantClickedOnOwner
+		else:
+			match oMirrorOptions.splitType:
+				0,1:
+					finalOwner = quadrantDestinationOwner
+				2:
+					var otherTwoQuadrants = []
+					for i in 4:
+						if oMirrorOptions.ownerValue[i] == quadrantClickedOnOwner: continue
+						if oMirrorOptions.ownerValue[i] == mainPaint: continue
+						otherTwoQuadrants.append(oMirrorOptions.ownerValue[i])
+					
+					if otherTwoQuadrants.size() == 2:
+						if quadrantDestinationOwner == otherTwoQuadrants[0]:
+							finalOwner = otherTwoQuadrants[1]
+						else:
+							finalOwner = otherTwoQuadrants[0]
+					else:
+						finalOwner = quadrantDestinationOwner
+	return finalOwner
 
 func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Placed by hand
 	var CODETIME_START = OS.get_ticks_msec()

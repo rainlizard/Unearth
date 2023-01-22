@@ -13,6 +13,8 @@ var overheadTexData = ImageTexture.new()
 var arrayOfColorRects = []
 
 func update_map_overhead_2d_textures():
+	
+	
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	if arrayOfColorRects.empty() == true:

@@ -61,6 +61,7 @@ func set_paths(path):
 		oKeeperFXDetection.text = "KeeperFX not detected"
 		oKeeperFXDetection.set("custom_colors/font_color", Color(1.0,0.5,0.5,1))
 		oKeeperFXDetection.visible = true
+	reconstruct_command_line()
 
 func _on_CmdLineDkCommands_text_changed(new_text):
 	Settings.set_setting("dk_commands", new_text)

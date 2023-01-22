@@ -6,6 +6,7 @@ onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oModeSwitchButton = Nodelist.list["oModeSwitchButton"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
+onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 
 func _ready():
 	get_viewport().connect("size_changed",self, "_on_viewport_size_changed")
@@ -29,6 +30,7 @@ func _on_ModeSwitchButton_pressed():
 		oSelector.change_mode(oSelector.MODE_TILE) # will also call switch_mode in here
 	
 	oPlacingSettings.editing_mode_was_switched(oModeSwitchButton.text)
+	oBrushPreview.update_img()
 
 func switch_mode(string): # Called from oSelection too
 	if is_instance_valid(oPickSlabWindow) == false: return
