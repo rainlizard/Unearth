@@ -32,6 +32,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
+onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 
 
 onready var TILE_SIZE = Constants.TILE_SIZE
@@ -229,6 +230,7 @@ func change_mode(changeModeTo):
 			oEditingMode.switch_mode("Slab")
 			oEditingTools.switched_to_slab_mode()
 			oInspector.deselect()
+			oBrushPreview.update_img()
 		MODE_SUBTILE:
 			position = cursorSubtile * SUBTILE_SIZE
 			$SubtileSelector.visible = true
@@ -236,6 +238,7 @@ func change_mode(changeModeTo):
 			oUseSlabOwnerCheckBox.visible = true
 			oEditingTools.switched_to_thing_mode()
 			oEditingMode.switch_mode("Thing")
+			oBrushPreview.update_img()
 
 func world2tile(pos):
 	return Vector2(floor(pos.x/TILE_SIZE),floor(pos.y/TILE_SIZE))

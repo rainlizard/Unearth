@@ -29,3 +29,11 @@ func _on_BridgesOnlyOnLiquidCheckbox_toggled(button_pressed):
 
 func _on_FrailColumnsCheckbox_toggled(button_pressed):
 	Settings.set_setting("frail_columns", button_pressed)
+
+
+func _on_LavaEffectPercent_value_changed(value):
+	Settings.set_setting("chance_effect_lava", value)
+
+
+func _on_WaterEffectPercent_value_changed(value):
+	Settings.set_setting("chance_effect_water", value)

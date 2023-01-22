@@ -18,6 +18,9 @@ func _ready():
 	update_img()
 
 func update_img():
+	if is_instance_valid(oEditingTools) == false:
+		yield(get_tree(),'idle_frame')
+	
 	img.resize(oEditingTools.BRUSH_SIZE,oEditingTools.BRUSH_SIZE, Image.INTERPOLATE_NEAREST)
 	var imgW = img.get_width()
 	var imgH = img.get_height()

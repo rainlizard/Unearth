@@ -30,7 +30,6 @@ func _on_ModeSwitchButton_pressed():
 		oSelector.change_mode(oSelector.MODE_TILE) # will also call switch_mode in here
 	
 	oPlacingSettings.editing_mode_was_switched(oModeSwitchButton.text)
-	oBrushPreview.update_img()
 
 func switch_mode(string): # Called from oSelection too
 	if is_instance_valid(oPickSlabWindow) == false: return
@@ -45,7 +44,6 @@ func switch_mode(string): # Called from oSelection too
 			oPickThingWindow.visible = true
 			#oPropertiesWindow.oPropertiesTabs.current_tab = 0
 	oModeSwitchButton.text = string
-
 
 func _on_ModeSwitch_pressed():
 	pass # Replace with function body.

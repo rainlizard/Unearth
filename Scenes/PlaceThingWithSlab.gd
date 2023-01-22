@@ -3,6 +3,8 @@ onready var oInstances = Nodelist.list["oInstances"]
 onready var oDkTng = Nodelist.list["oDkTng"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
+onready var oLavaEffectPercent = Nodelist.list["oLavaEffectPercent"]
+onready var oWaterEffectPercent = Nodelist.list["oWaterEffectPercent"]
 
 onready var dir = oSlabPlacement.dir
 
@@ -20,6 +22,20 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask,
 		bitmask = torch_object_bitmask(xSlab, ySlab, surrID)
 	elif slabID in [Slabs.WOODEN_DOOR_1, Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_1, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_1, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_1, Slabs.MAGIC_DOOR_2]:
 		create_door_thing(xSlab, ySlab, ownership)
+	elif slabID == Slabs.WATER:
+		if Random.rng.randf_range(0.0, 100.0) < oWaterEffectPercent.value:
+			var xSubtile = (xSlab*3) + Random.randi_range(0,2) + 0.5
+			var ySubtile = (ySlab*3) + Random.randi_range(0,2) + 0.5
+			var zSubtile = 0
+			var createAtPos = Vector3(xSubtile, ySubtile, zSubtile)
+			oInstances.place_new_thing(Things.TYPE.EFFECTGEN, 2, createAtPos, ownership)
+	elif slabID == Slabs.LAVA:
+		if Random.rng.randf_range(0.0, 100.0) < oLavaEffectPercent.value:
+			var xSubtile = (xSlab*3) + Random.randi_range(0,2) + 0.5
+			var ySubtile = (ySlab*3) + Random.randi_range(0,2) + 0.5
+			var zSubtile = 0
+			var createAtPos = Vector3(xSubtile, ySubtile, zSubtile)
+			oInstances.place_new_thing(Things.TYPE.EFFECTGEN, 1, createAtPos, ownership)
 	
 	var constructedSlab = oSlabPlacement.bitmaskToSlab[bitmask]
 	if bitmask == 0 and Slabs.rooms_with_middle_object.has(slabID):

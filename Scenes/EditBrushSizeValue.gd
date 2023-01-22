@@ -6,11 +6,17 @@ onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oSelector = Nodelist.list["oSelector"]
+onready var oEditingTools = Nodelist.list["oEditingTools"]
 
 
 func _ready():
 	get_line_edit().expand_to_text_length = true
+	get_line_edit().connect("text_changed",self,"text_changed")
 
+func text_changed(txt):
+	var newNumber = txt.to_int()
+	newNumber = clamp(newNumber, min_value, max_value)
+	oEditingTools._on_EditBrushSizeValue_value_changed(newNumber)
 
 func _input(event):
 	if visible == false: return

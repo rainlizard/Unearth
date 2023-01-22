@@ -63,6 +63,8 @@ var listOfSettings = [
 	"wallauto_damaged",
 	"recently_opened",
 	"placing_tutorial",
+	"chance_effect_water",
+	"chance_effect_lava",
 	# These four are read inside Viewport script
 #	"editor_window_position",
 #	"editor_window_size",
@@ -338,6 +340,14 @@ func game_setting(doWhat,string,value):
 			var oUiSystem = $'../Main/Ui/UiSystem'
 			if doWhat == SET: oUiSystem.theme.get_font("font","").size = value
 			if doWhat == GET: return oUiSystem.theme.get_font("font","").size
+		"chance_effect_water":
+			var oWaterEffectPercent = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/HBoxContainer/WaterEffectPercent'
+			if doWhat == SET: oWaterEffectPercent.value = value
+			if doWhat == GET: return oWaterEffectPercent.value
+		"chance_effect_lava":
+			var oLavaEffectPercent = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent'
+			if doWhat == SET: oLavaEffectPercent.value = value
+			if doWhat == GET: return oLavaEffectPercent.value
 
 func delete_settings():
 	var dir = Directory.new()
