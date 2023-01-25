@@ -67,6 +67,8 @@ func activate(path):
 
 func _on_DynamicMapTree_item_selected():
 	var selectedTreeItem = oDynamicMapTree.get_selected()
+	if selectedTreeItem == null:
+		return
 	var path = selectedTreeItem.get_metadata(0)
 	# Set modified time, if it's a file
 	if selectedTreeItem.get_metadata(1) == "is_a_file":
