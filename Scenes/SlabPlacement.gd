@@ -271,7 +271,7 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 		return
 	
 	# Do not update custom slabs
-	if oDataCustomSlab.get_cell(xSlab, ySlab) != 0:
+	if oDataCustomSlab.get_cell(xSlab, ySlab) > 0:
 		return
 	
 	# WIB (wibble)

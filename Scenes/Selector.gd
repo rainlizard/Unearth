@@ -262,7 +262,7 @@ func position_meeting(checkPos, checkGroup):
 
 func get_slabID_at_pos(pos):
 	var customSlabID = oDataCustomSlab.get_cellv(pos)
-	if customSlabID != 0:
+	if customSlabID > 0:
 		return customSlabID
 	else:
 		return oDataSlab.get_cellv(pos)
