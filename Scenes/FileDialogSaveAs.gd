@@ -27,6 +27,7 @@ func line_edit_focus_exited():
 		lineEdit.text = "1"
 	while lineEdit.text.length() < 8:
 		lineEdit.text = lineEdit.text.insert(3,"0")
+	lineEdit.caret_position = lineEdit.text.length()
 
 func _on_FileDialogSaveAs_about_to_show():
 	
@@ -95,6 +96,7 @@ func _process(delta):
 func working_directory_was_changed():
 	if oCurrentMap.path == "":
 		var newMapNumber = determine_next_available_map_number_in_dir(current_dir)
+		yield(get_tree(),'idle_frame')
 		lineEdit.text = 'map' + str(newMapNumber)
 		line_edit_focus_exited()
 		
