@@ -132,7 +132,11 @@ func _on_FileDialogSaveAs_visibility_changed():
 		oUi.show_tools()
 
 func determine_next_available_map_number_in_dir(path):
-	path = get_drive().plus_file(path)
+	var drive = get_drive()
+	if drive == "":
+		return 1
+	path = drive.plus_file(path)
+	
 	var mapFileNumbers = []
 	var dir = Directory.new()
 	if dir.open(path) == OK:
@@ -159,9 +163,12 @@ func determine_next_available_map_number_in_dir(path):
 				return i+1
 		return 1
 
-func get_drive(): # This may have problems in Linux
+func get_drive():
 	var driveOptionButton = get_vbox().get_child(0).get_child(2).get_child(0)
-	return driveOptionButton.get_item_text(driveOptionButton.selected)
+	if is_instance_valid(driveOptionButton):
+		return driveOptionButton.get_item_text(driveOptionButton.selected)
+	else:
+		return "" # Because this has problems on linux, return "" and dont bother trying to detect the next filename
 
 
 func _on_FileDialogSaveAs_file_selected(filePath):
