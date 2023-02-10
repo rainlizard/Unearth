@@ -27,7 +27,7 @@ func line_edit_focus_exited():
 		lineEdit.text = "1"
 	while lineEdit.text.length() < 8:
 		lineEdit.text = lineEdit.text.insert(3,"0")
-	lineEdit.caret_position = lineEdit.text.length()
+	lineEdit.caret_position = lineEdit.text.length() #Needed for linux when canceling and reopening save as dialog
 
 func _on_FileDialogSaveAs_about_to_show():
 	
