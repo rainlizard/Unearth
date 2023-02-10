@@ -60,13 +60,13 @@ func _on_MapFormatSetting_item_selected(index):
 	# Clicked using mouse
 	oEditor.mapHasBeenEdited = true
 	if index == 0:
-		oMessage.big("Warning", "'KeeperFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Classic format' for now.")
+		oMessage.big("Warning", "'KFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Classic format' for now.")
 	
 	set_format_selection(index)
 
 func set_format_selection(setFormat):
 	match setFormat:
-		0: # KeeperFX format
+		0: # KFX format
 			oAdvancedMapPropertiesCheckBox.disabled = false
 		1: # Classic format
 			oAdvancedMapPropertiesCheckBox.disabled = true

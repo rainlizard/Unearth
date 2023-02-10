@@ -25,7 +25,7 @@ func save_map(filePath): # auto opens other files
 		
 		# List of file extensions to skip creating
 		# Remember "continue" means skip
-		if oCurrentFormat.selected == 0: # KeeperFX format
+		if oCurrentFormat.selected == 0: # KFX format
 			if ["LIF","TNG","APT","LGT"].has(EXT):
 				continue
 		elif oCurrentFormat.selected == 1: # Classic format
@@ -73,7 +73,7 @@ func delete_existing_files(map):
 		fileTypesToDelete = Filetypes.FILE_TYPES
 	else:
 		# Also important to delete files of the other format (TNG and TNGFX shouldn't exist at the same time), if switching formats.
-		if oCurrentFormat.selected == 0: # KeeperFX format
+		if oCurrentFormat.selected == 0: # KFX format
 			fileTypesToDelete = ["LIF", "TNG", "APT", "LGT"]
 		elif oCurrentFormat.selected == 1: # Classic format
 			# Do not delete LOF because Classic format can be used with LOF multiplayer levels

@@ -3785,8 +3785,8 @@ margin_left = 315.0
 margin_top = 66.0
 margin_right = 625.0
 margin_bottom = 93.0
-text = "KeeperFX format"
-items = [ "KeeperFX format", null, false, 0, null, "Classic format", null, false, 1, null ]
+text = "KFX format [do not use]"
+items = [ "KFX format [do not use]", null, false, 0, null, "Classic format", null, false, 1, null ]
 selected = 0
 
 [node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/GridContainer"]
@@ -5359,11 +5359,11 @@ margin_bottom = 391.0
 custom_constants/separation = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 371.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 27.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
@@ -5374,18 +5374,18 @@ text = "Map file format"
 
 [node name="SetNewFormat" type="OptionButton" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
 margin_left = 143.0
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 200, 0 )
 hint_tooltip = "KeeperFX format has more features, such as larger maps, but will produce maps that are incompatible with non-KeeperFX installations and be incompatible with old editors."
 size_flags_horizontal = 10
-text = "KeeperFX format"
-items = [ "KeeperFX format", null, false, 0, null, "Classic format", null, false, 1, null ]
+text = "KFX format [do not use]"
+items = [ "KFX format [do not use]", null, false, 0, null, "Classic format", null, false, 1, null ]
 selected = 0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 31.0
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 62.0
 
 [node name="Label" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
@@ -5395,8 +5395,8 @@ margin_bottom = 26.0
 text = "Map size"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 208.0
-margin_right = 343.0
+margin_left = 246.0
+margin_right = 381.0
 margin_bottom = 31.0
 size_flags_horizontal = 10
 
@@ -5423,9 +5423,9 @@ size_flags_horizontal = 0
 text = "85"
 
 [node name="CheckBoxNewMapBorder" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
-margin_left = 171.0
+margin_left = 209.0
 margin_top = 66.0
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 95.0
 size_flags_horizontal = 10
 pressed = true
@@ -5433,12 +5433,12 @@ text = "Generate border"
 
 [node name="NewMapNoiseOptions" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 99.0
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 339.0
 
 [node name="NewMapSymmetricalBorder" type="OptionButton" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions"]
-margin_left = 143.0
-margin_right = 343.0
+margin_left = 181.0
+margin_right = 381.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 10
@@ -5448,7 +5448,7 @@ selected = 0
 
 [node name="NoiseDistance" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 31.0
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 72.0
 label_setting = "Distance"
 max_value = 5.0
@@ -5457,7 +5457,7 @@ value = 1.0
 
 [node name="NoisePeriod" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 76.0
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 117.0
 label_setting = "Detail"
 min_value = 0.01
@@ -5467,7 +5467,7 @@ value = 0.1
 
 [node name="NoisePersistence" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 121.0
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 162.0
 label_setting = "Tunnels"
 max_value = 1.0
@@ -5476,7 +5476,7 @@ value = 1.0
 
 [node name="NoiseLacunarity" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 166.0
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 207.0
 label_setting = "Roughness"
 max_value = 1.0
@@ -5495,9 +5495,9 @@ step = 1.0
 value = 9.0
 
 [node name="NoiseAlgTypeCheckBox" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions"]
-margin_left = 243.0
+margin_left = 281.0
 margin_top = 211.0
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 240.0
 size_flags_horizontal = 10
 pressed = true
@@ -5508,13 +5508,13 @@ one_shot = true
 
 [node name="ButtonNewMapOK" type="Button" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 344.0
-margin_right = 343.0
+margin_right = 381.0
 margin_bottom = 371.0
 size_flags_vertical = 10
 text = "OK"
 
 [node name="QuickNoisePreview" type="TextureRect" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
-margin_left = 363.0
+margin_left = 401.0
 margin_right = 735.0
 margin_bottom = 371.0
 hint_tooltip = "Click to randomize seed"

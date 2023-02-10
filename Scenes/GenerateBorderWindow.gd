@@ -249,7 +249,7 @@ func _on_NewMapFormat_item_selected(index):
 		oYSizeLine.editable = true
 		oXSizeLine.hint_tooltip = ""
 		oYSizeLine.hint_tooltip = ""
-		oMessage.big("Warning", "'KeeperFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Classic format' for now.")
+		oMessage.big("Warning", "'KFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Classic format' for now.")
 	elif index == 1:
 		oXSizeLine.editable = false
 		oYSizeLine.editable = false
@@ -257,8 +257,8 @@ func _on_NewMapFormat_item_selected(index):
 		oYSizeLine.text = "85"
 		_on_XSizeLine_focus_exited()
 		_on_YSizeLine_focus_exited()
-		oXSizeLine.hint_tooltip = "Map size can only be changed if KeeperFX format is used."
-		oYSizeLine.hint_tooltip = "Map size can only be changed if KeeperFX format is used."
+		oXSizeLine.hint_tooltip = "Map size can only be changed if KFX format is used."
+		oYSizeLine.hint_tooltip = "Map size can only be changed if KFX format is used."
 
 
 func _on_QuickNoisePreview_gui_input(event):

@@ -117,7 +117,7 @@ func open_map(filePath): # auto opens other files
 		for EXT in Filetypes.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
 				
-				# Don't bother reading original formats if keeperFX formats have been found
+				# Don't bother reading original formats if KFX format files have been found
 				if EXT == "TNG" and oCurrentMap.currentFilePaths.has("TNGFX") == true:
 					continue
 				if EXT == "APT" and oCurrentMap.currentFilePaths.has("APTFX") == true:
@@ -126,7 +126,7 @@ func open_map(filePath): # auto opens other files
 					continue
 				if EXT == "LIF" and oCurrentMap.currentFilePaths.has("LOF") == true:
 					continue
-				# Set current format setting to new KeeperFX format, if any new files are detected
+				# Set current format setting to new KFX format, if any new files are detected
 				
 				if EXT == "TNGFX": formatType = 0
 				if EXT == "APTFX": formatType = 0
