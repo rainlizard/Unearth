@@ -117,14 +117,10 @@ func _process(delta):
 	constantly_monitor_play_button_state()
 	
 	if oCurrentMap.path == "": # Certain features hould only be available to maps that exist as files - maps that have already been "Saved as".
-		oMenuButtonFile.get_popup().set_item_disabled(4,true) # Disable "Save map"
-		oMenuButtonEdit.get_popup().set_item_disabled(1,true) # Disable "Open map folder"
-		oMenuButtonEdit.get_popup().set_item_disabled(2,true) # Disable "Open script file"
+		oMenuButtonFile.get_popup().set_item_disabled(oMenuButtonFile.get_popup().get_item_index(4),true) # Disable "Save map"
 		oPlayButton.disabled = true # Can only play a map that has been "Saved as"
 	else:
-		oMenuButtonFile.get_popup().set_item_disabled(4,false) # Enable "Save map"
-		oMenuButtonEdit.get_popup().set_item_disabled(1,false) # Enable "Open script file"
-		oMenuButtonEdit.get_popup().set_item_disabled(2,false) # Enable "Open map folder"
+		oMenuButtonFile.get_popup().set_item_disabled(oMenuButtonFile.get_popup().get_item_index(4),false) # Enable "Save map"
 	
 	# Fix button being stretched
 	if visible == true and fixMenuExpansion != oEditor.mapHasBeenEdited:

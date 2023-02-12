@@ -66,11 +66,7 @@ func _process(delta):
 	if oEditor.currentView == oEditor.VIEW_3D: visible = false
 	if oPreferencesWindow.visible == true: visible = false
 	if oQuickMapPreview.visible == true: visible = false
-	
-	if oDataSlab.get_cellv(oSelector.cursorTile) == 0:
-		oBrushPreviewDisplay.material.set_shader_param("brightness", 3.00)
-	else:
-		oBrushPreviewDisplay.material.set_shader_param("brightness", 1.75)
+
 
 
 func make_brush_shape(constructType):
