@@ -4712,7 +4712,7 @@ visible = true
 margin_left = -1273.0
 margin_top = 954.0
 margin_right = -741.0
-margin_bottom = 1377.0
+margin_bottom = 1389.0
 window_title = "Texture editing"
 resizable = true
 script = ExtResource( 126 )
@@ -4724,9 +4724,6 @@ margin_left = 10.0
 margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CreateFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_right = 512.0
@@ -4742,7 +4739,7 @@ text = "Load filelist pack"
 [node name="ReloaderContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_top = 62.0
 margin_right = 512.0
-margin_bottom = 372.0
+margin_bottom = 384.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -4780,7 +4777,7 @@ __meta__ = {
 margin_left = 118.0
 margin_right = 176.0
 margin_bottom = 31.0
-text = "1.5"
+text = "0.25"
 script = ExtResource( 89 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -4806,9 +4803,9 @@ rect_min_size = Vector2( 24, 24 )
 margin_top = 116.0
 margin_right = 512.0
 margin_bottom = 281.0
-text = "Now actively reloading files from filelist pack folder, this means as you edit and save those .PNGs, any changes you make will be shown in Unearth (in 3D view too).
+text = "Now actively reloading files from filelist pack folder, this means as you edit and save those .PNGs, any changes you make will be shown realtime in Unearth (in the 3D view too).
 
-Be sure to set your Dungeon style in Map settings to match the pack number you're editing. Restart the editor when you want to stop."
+Your Dungeon style in Map settings has been set to the texture pack # you're editing."
 autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -4821,9 +4818,9 @@ margin_bottom = 309.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="ExportTmapaButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_top = 376.0
+margin_top = 388.0
 margin_right = 512.0
-margin_bottom = 403.0
+margin_bottom = 415.0
 text = "Export as tmapa*.dat"
 __meta__ = {
 "_edit_use_anchors_": false
