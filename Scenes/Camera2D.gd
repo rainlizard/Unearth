@@ -1,7 +1,7 @@
 extends Camera2D
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
-onready var oSettingsWindow = Nodelist.list["oSettingsWindow"]
+onready var oPreferencesWindow = Nodelist.list["oPreferencesWindow"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oMain = Nodelist.list["oMain"]
@@ -85,7 +85,7 @@ func _process(delta):
 #	print('zoom : ' + str((zoom-desired_zoom).abs()))
 
 func _unhandled_input(event):
-	if oSettingsWindow.visible == true: return
+	if oPreferencesWindow.visible == true: return
 	if current == false: return #View is 3D
 	
 	if event.is_action_released('zoom_in') or event.is_action_pressed('keyboard_zoom_in'):

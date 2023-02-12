@@ -16,8 +16,8 @@ func set_label(newLabel):
 	$Label.text = newLabel
 
 func update_value(newValue):
-	var oSettingsWindow = Nodelist.list["oSettingsWindow"]
-	oSettingsWindow.call("edited_"+name, lineEdit.text)
+	var oPreferencesWindow = Nodelist.list["oPreferencesWindow"]
+	oPreferencesWindow.call("edited_"+name, lineEdit.text)
 
 func update_appearance(value):
 	$Slider.value = value

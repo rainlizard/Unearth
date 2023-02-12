@@ -7,7 +7,7 @@ onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oUiTools = Nodelist.list["oUiTools"]
 onready var oInstances = Nodelist.list["oInstances"]
-onready var oSettingsWindow = Nodelist.list["oSettingsWindow"]
+onready var oPreferencesWindow = Nodelist.list["oPreferencesWindow"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oUseSlabOwnerCheckBox = Nodelist.list["oUseSlabOwnerCheckBox"]
 onready var oDataOwnership = Nodelist.list["oDataOwnership"]
@@ -64,7 +64,7 @@ func _process(delta):
 	if oUi.mouseOnUi == true: visible = false
 	if oEditor.currentView == oEditor.VIEW_3D: visible = false
 	if oUiTools.visible == false: visible = false
-	if oSettingsWindow.visible == true: visible = false
+	if oPreferencesWindow.visible == true: visible = false
 	if oQuickMapPreview.visible == true: visible = false
 	if oEditor.fieldBoundary.has_point(cursorTile) == false: visible = false
 	

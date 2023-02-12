@@ -690,18 +690,18 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 317.0
-margin_bottom = 608.0
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 312.0
+margin_bottom = 603.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs/ScrollContainer"]
-margin_left = 156.0
-margin_top = 302.0
-margin_right = 156.0
-margin_bottom = 302.0
+margin_left = 151.0
+margin_top = 297.0
+margin_right = 151.0
+margin_bottom = 297.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
@@ -874,18 +874,18 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Creature"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 646.0
-margin_bottom = 169.0
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 641.0
+margin_bottom = 164.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Creature/ScrollContainer"]
-margin_left = 321.0
-margin_top = 82.0
-margin_right = 321.0
-margin_bottom = 82.0
+margin_left = 316.0
+margin_top = 77.0
+margin_right = 316.0
+margin_bottom = 77.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
@@ -1206,7 +1206,7 @@ script = ExtResource( 90 )
 [node name="PropertiesTabs" type="TabContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer"]
 margin_top = 53.0
 margin_right = 300.0
-margin_bottom = 147.0
+margin_bottom = 157.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -1229,18 +1229,18 @@ script = ExtResource( 79 )
 
 [node name="SelectionStatus" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails"]
 margin_right = 276.0
-margin_bottom = 35.0
+margin_bottom = 45.0
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus"]
 margin_right = 136.0
-margin_bottom = 35.0
+margin_bottom = 45.0
 size_flags_horizontal = 3
 
 [node name="SelectionStatusButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 132.0
-margin_bottom = 31.0
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 127.0
+margin_bottom = 36.0
 focus_mode = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1250,14 +1250,14 @@ flat = true
 [node name="PanelContainer2" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus"]
 margin_left = 140.0
 margin_right = 276.0
-margin_bottom = 35.0
+margin_bottom = 45.0
 size_flags_horizontal = 3
 
 [node name="DeleteSelectedButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer2"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 132.0
-margin_bottom = 31.0
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 127.0
+margin_bottom = 36.0
 focus_mode = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1265,9 +1265,9 @@ text = "Delete"
 flat = true
 
 [node name="ThingListData" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails"]
-margin_top = 39.0
+margin_top = 49.0
 margin_right = 276.0
-margin_bottom = 39.0
+margin_bottom = 49.0
 mouse_filter = 2
 script = ExtResource( 42 )
 
@@ -1592,10 +1592,10 @@ margin_bottom = 35.0
 script = ExtResource( 71 )
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/Menu"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 427.0
-margin_bottom = 31.0
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 471.0
+margin_bottom = 36.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1608,7 +1608,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "File"
 align = 0
-items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Open recent", null, 0, false, false, 3, 0, null, "", false, "Save map", null, 0, false, false, 4, 0, null, "", false, "Save map as", null, 0, false, false, 5, 0, null, "", false, "Reload map", null, 0, false, false, 6, 0, null, "", false, "Load image as map", null, 0, false, false, 7, 0, null, "", false, "Exit", null, 0, false, false, 8, 0, null, "", false ]
+items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Open recent", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Save map", null, 0, false, false, 4, 0, null, "", false, "Save map as", null, 0, false, false, 5, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Reload map", null, 0, false, false, 6, 0, null, "", false, "Image to map", null, 0, false, false, 7, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Preferences", null, 0, false, false, 8, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Exit", null, 0, false, false, 9, 0, null, "", false ]
 switch_on_hover = true
 
 [node name="VSeparator1" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
@@ -1625,7 +1625,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map settings", null, 0, false, false, 0, 0, null, "", false, "Open map folder", null, 0, false, false, 1, 0, null, "", false, "Open script file", null, 0, false, false, 2, 0, null, "", false, "Column editor", null, 0, false, false, 3, 0, null, "", false, "Placement options", null, 0, false, false, 4, 0, null, "", false, "Update all slabs", null, 0, false, false, 5, 0, null, "", false, "Add custom object", null, 0, false, false, 6, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Texture editing", null, 0, false, false, 7, 0, null, "", false, "Slabset", null, 0, false, false, 8, 0, null, "", false ]
+items = [ "Columns", null, 0, false, false, 0, 0, null, "", false, "Custom objects", null, 0, false, false, 1, 0, null, "", false, "Update all slabs", null, 0, false, false, 2, 0, null, "", false, "Placement options", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Textures", null, 0, false, false, 4, 0, null, "", false, "Slabset", null, 0, false, false, 5, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1645,7 +1645,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "View"
 align = 0
-items = [ "2D", null, 0, false, false, 0, 0, null, "", false, "3D: Overhead", null, 0, false, false, 1, 0, null, "", false, "3D: 1st person", null, 0, false, false, 2, 0, null, "", false ]
+items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 2, 0, null, "", false, "3D: Overhead", null, 0, false, false, 3, 0, null, "", false, "2D", null, 0, false, false, 4, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1659,11 +1659,11 @@ margin_bottom = 27.0
 
 [node name="MenuButtonSettings" type="MenuButton" parent="Ui/UiSystem/Menu/HBoxContainer2"]
 margin_left = 188.0
-margin_right = 276.0
+margin_right = 315.0
 margin_bottom = 27.0
 custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
-text = "Settings"
+text = "Map settings"
 align = 0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1671,38 +1671,39 @@ __meta__ = {
 
 [node name="VSeparator4" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
 modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
-margin_left = 280.0
-margin_right = 284.0
+margin_left = 319.0
+margin_right = 323.0
 margin_bottom = 27.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="MenuButtonHelp" type="MenuButton" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-margin_left = 288.0
-margin_right = 342.0
+margin_left = 327.0
+margin_right = 381.0
 margin_bottom = 27.0
 custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Help"
 align = 0
 items = [ "KeeperFX script commands", null, 0, false, false, 0, 0, null, "", false, "Creating a new campaign", null, 0, false, false, 1, 0, null, "", false, "Old script commands", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Controls", null, 0, false, false, 3, 0, null, "", false, "About", null, 0, false, false, 4, 0, null, "", false ]
+switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VSeparator5" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
 modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
-margin_left = 346.0
-margin_right = 350.0
+margin_left = 385.0
+margin_right = 389.0
 margin_bottom = 27.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PlayButton" type="Button" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-margin_left = 354.0
-margin_right = 407.0
+margin_left = 393.0
+margin_right = 446.0
 margin_bottom = 27.0
 focus_mode = 0
 custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
@@ -1712,8 +1713,8 @@ flat = true
 align = 0
 
 [node name="Spacing3" type="ColorRect" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-margin_left = 411.0
-margin_right = 423.0
+margin_left = 450.0
+margin_right = 462.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 12, 12 )
 color = Color( 1, 1, 1, 0 )
@@ -1730,10 +1731,10 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/EditingMode/PanelContainer"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 142.0
-margin_bottom = 31.0
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 147.0
+margin_bottom = 36.0
 
 [node name="Spacing2" type="Control" parent="Ui/UiSystem/EditingMode/PanelContainer/HBoxContainer"]
 margin_right = 12.0
@@ -1806,10 +1807,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 306.0
-margin_bottom = 780.0
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 301.0
+margin_bottom = 775.0
 size_flags_vertical = 3
 custom_constants/separation = 0
 __meta__ = {
@@ -1817,7 +1818,7 @@ __meta__ = {
 }
 
 [node name="LineEditFilter" type="LineEdit" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer"]
-margin_right = 302.0
+margin_right = 292.0
 margin_bottom = 42.0
 focus_mode = 1
 mouse_filter = 1
@@ -1835,7 +1836,7 @@ __meta__ = {
 
 [node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer"]
 margin_top = 42.0
-margin_right = 302.0
+margin_right = 292.0
 margin_bottom = 50.0
 mouse_filter = 1
 custom_constants/separation = 8
@@ -1846,8 +1847,8 @@ __meta__ = {
 
 [node name="DynamicMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer"]
 margin_top = 50.0
-margin_right = 302.0
-margin_bottom = 698.0
+margin_right = 292.0
+margin_bottom = 688.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1880,12 +1881,12 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer"]
-margin_top = 698.0
-margin_right = 302.0
-margin_bottom = 776.0
+margin_top = 688.0
+margin_right = 292.0
+margin_bottom = 766.0
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer"]
-margin_right = 302.0
+margin_right = 292.0
 margin_bottom = 37.0
 custom_constants/margin_right = 5
 custom_constants/margin_top = 5
@@ -1895,7 +1896,7 @@ custom_constants/margin_bottom = 5
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 297.0
+margin_right = 287.0
 margin_bottom = 32.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1933,7 +1934,7 @@ __meta__ = {
 
 [node name="BrowserFilename" type="Label" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 28.0
-margin_right = 235.0
+margin_right = 225.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1945,14 +1946,14 @@ __meta__ = {
 }
 
 [node name="BrowseButton" type="Button" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
-margin_left = 239.0
-margin_right = 292.0
+margin_left = 229.0
+margin_right = 282.0
 margin_bottom = 27.0
 text = "Play"
 
 [node name="RandomMapContainer" type="MarginContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer"]
 margin_top = 41.0
-margin_right = 302.0
+margin_right = 292.0
 margin_bottom = 78.0
 custom_constants/margin_right = 5
 custom_constants/margin_top = 5
@@ -1962,7 +1963,7 @@ custom_constants/margin_bottom = 5
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer"]
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 297.0
+margin_right = 287.0
 margin_bottom = 32.0
 
 [node name="TextureRect" type="TextureRect" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer/HBoxContainer"]
@@ -1974,8 +1975,8 @@ texture = ExtResource( 144 )
 expand = true
 
 [node name="PlayRandomMapButton" type="Button" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer/HBoxContainer"]
-margin_left = 121.0
-margin_right = 292.0
+margin_left = 111.0
+margin_right = 282.0
 margin_bottom = 27.0
 size_flags_horizontal = 10
 text = "Play random map"
@@ -2175,18 +2176,18 @@ margin_right = 251.0
 margin_bottom = 27.0
 text = "Cancel"
 
-[node name="SettingsWindow" type="WindowDialog" parent="Ui/UiSystem"]
+[node name="PreferencesWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -2520.0
 margin_top = 104.0
 margin_right = -1932.0
 margin_bottom = 644.0
 rect_min_size = Vector2( 588, 540 )
-window_title = "Settings"
+window_title = "Preferences"
 resizable = true
 script = ExtResource( 62 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 10.0
@@ -2198,7 +2199,7 @@ mouse_filter = 2
 size_flags_horizontal = 7
 size_flags_vertical = 7
 
-[node name="TabSettings" type="TabContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer"]
+[node name="TabSettings" type="TabContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer"]
 margin_right = 568.0
 margin_bottom = 430.0
 rect_min_size = Vector2( 439, 263 )
@@ -2208,7 +2209,7 @@ tab_align = 0
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
 
-[node name="TabEditor" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings"]
+[node name="TabEditor" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -2219,20 +2220,20 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor"]
 margin_right = 544.0
 margin_bottom = 375.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_right = 544.0
 margin_bottom = 27.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SetDirButton" type="Button" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3"]
+[node name="SetDirButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3"]
 margin_right = 162.0
 margin_bottom = 27.0
 text = "Game executable"
@@ -2240,7 +2241,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SetDirPath" type="Label" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3"]
+[node name="SetDirPath" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3"]
 margin_left = 166.0
 margin_right = 544.0
 margin_bottom = 27.0
@@ -2250,14 +2251,14 @@ text = "Path"
 valign = 1
 autowrap = true
 
-[node name="KeeperFXDetection" type="Label" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="KeeperFXDetection" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 31.0
 margin_right = 544.0
 margin_bottom = 52.0
 custom_colors/font_color = Color( 1, 0.658824, 0.329412, 1 )
 text = "Need to set executable"
 
-[node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 56.0
 margin_right = 240.0
 margin_bottom = 83.0
@@ -2268,13 +2269,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 87.0
 margin_right = 544.0
 margin_bottom = 116.0
 text = "Always decompress maps"
 
-[node name="Label" type="Label" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 120.0
 margin_right = 544.0
 margin_bottom = 141.0
@@ -2283,7 +2284,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CmdLineDkCommands" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="CmdLineDkCommands" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 145.0
 margin_right = 58.0
 margin_bottom = 185.0
@@ -2291,7 +2292,7 @@ rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 0
 expand_to_text_length = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
 margin_top = 189.0
 margin_right = 544.0
 margin_bottom = 229.0
@@ -2299,7 +2300,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer"]
 margin_right = 544.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
@@ -2307,7 +2308,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CmdLineConsole" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="CmdLineConsole" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
 margin_right = 58.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
@@ -2315,7 +2316,7 @@ size_flags_horizontal = 0
 editable = false
 expand_to_text_length = true
 
-[node name="CmdLineConsoleArg" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="CmdLineConsoleArg" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
 margin_left = 62.0
 margin_right = 120.0
 margin_bottom = 40.0
@@ -2324,7 +2325,7 @@ size_flags_horizontal = 0
 editable = false
 expand_to_text_length = true
 
-[node name="CmdLineExecute" type="LineEdit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="CmdLineExecute" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
 margin_left = 124.0
 margin_right = 544.0
 margin_bottom = 40.0
@@ -2333,7 +2334,7 @@ size_flags_horizontal = 3
 editable = false
 expand_to_text_length = true
 
-[node name="TabGeneralView" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings"]
+[node name="TabGeneralView" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2346,7 +2347,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView"]
 margin_right = 544.0
 margin_bottom = 375.0
 size_flags_horizontal = 3
@@ -2355,7 +2356,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="UiScale" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="UiScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2365,7 +2366,7 @@ settingText = "UI scale"
 minimum_value = 0.5
 maximum_value = 4.0
 
-[node name="SlabWindowScale" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="SlabWindowScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2376,7 +2377,7 @@ settingText = "Slab window scale"
 minimum_value = 0.1
 maximum_value = 4.0
 
-[node name="ThingWindowScale" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="ThingWindowScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2387,7 +2388,7 @@ settingText = "Thing window scale"
 minimum_value = 0.1
 maximum_value = 4.0
 
-[node name="EditorFontSize" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="EditorFontSize" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2399,7 +2400,7 @@ slider_step = 1.0
 minimum_value = 1.0
 maximum_value = 24.0
 
-[node name="ScriptEditorFontSize" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="ScriptEditorFontSize" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2411,13 +2412,13 @@ slider_step = 1.0
 minimum_value = 1.0
 maximum_value = 72.0
 
-[node name="CheckBoxHideUnknown" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer"]
+[node name="CheckBoxHideUnknown" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer"]
 margin_top = 105.0
 margin_right = 544.0
 margin_bottom = 134.0
 text = "Hide unknown data (thing details)"
 
-[node name="Tab2DView" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings"]
+[node name="Tab2DView" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2430,7 +2431,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView"]
 margin_right = 544.0
 margin_bottom = 375.0
 size_flags_horizontal = 3
@@ -2439,7 +2440,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SmoothingRate" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="SmoothingRate" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2450,7 +2451,7 @@ slider_step = 1.0
 minimum_value = 1.0
 maximum_value = 100.0
 
-[node name="ZoomStep" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="ZoomStep" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2461,7 +2462,7 @@ settingText = "Zoom step"
 minimum_value = 0.05
 maximum_value = 0.95
 
-[node name="DirectionalPanSpeed" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="DirectionalPanSpeed" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2473,7 +2474,7 @@ slider_step = 1.0
 minimum_value = 200.0
 maximum_value = 10000.0
 
-[node name="CheckBoxSmoothPan" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer"]
+[node name="CheckBoxSmoothPan" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer"]
 margin_top = 105.0
 margin_right = 532.0
 margin_bottom = 134.0
@@ -2482,7 +2483,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CheckBoxMouseEdgePanning" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer"]
+[node name="CheckBoxMouseEdgePanning" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer"]
 margin_top = 138.0
 margin_right = 532.0
 margin_bottom = 167.0
@@ -2491,7 +2492,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OwnerAlpha" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="OwnerAlpha" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2500,7 +2501,7 @@ margin_right = 532.0
 margin_bottom = 241.0
 settingText = "Ownership alpha"
 
-[node name="CreatureLevelFontSizeScale" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="CreatureLevelFontSizeScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2510,7 +2511,7 @@ margin_bottom = 241.0
 settingText = "Creature level font size scale"
 maximum_value = 10.0
 
-[node name="CreatureLevelFontSizeMaxZoom" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="CreatureLevelFontSizeMaxZoom" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2520,7 +2521,7 @@ margin_bottom = 290.0
 settingText = "Creature level font size max zoom"
 maximum_value = 80.0
 
-[node name="SciptIconScale" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="SciptIconScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2530,7 +2531,7 @@ margin_bottom = 325.0
 settingText = "Script icon scale"
 maximum_value = 10.0
 
-[node name="SciptIconMaxZoom" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="SciptIconMaxZoom" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2540,7 +2541,7 @@ margin_bottom = 360.0
 settingText = "Script icon max zoom"
 maximum_value = 80.0
 
-[node name="Tab3DView" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings"]
+[node name="Tab3DView" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2553,7 +2554,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab3DView"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab3DView"]
 margin_right = 544.0
 margin_bottom = 375.0
 size_flags_horizontal = 3
@@ -2562,7 +2563,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MouseSensitivity" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="MouseSensitivity" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2570,7 +2571,7 @@ margin_right = 544.0
 margin_bottom = 31.0
 settingText = "Mouse sensitivity"
 
-[node name="FieldOfView" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="FieldOfView" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2581,7 +2582,7 @@ settingText = "Field of view"
 slider_step = 1.0
 maximum_value = 179.0
 
-[node name="CheckBoxDisplay3dInfo" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer"]
+[node name="CheckBoxDisplay3dInfo" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer"]
 margin_top = 70.0
 margin_right = 544.0
 margin_bottom = 99.0
@@ -2590,7 +2591,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TabGraphics" type="ScrollContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings"]
+[node name="TabGraphics" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2602,7 +2603,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics"]
 margin_right = 544.0
 margin_bottom = 375.0
 size_flags_horizontal = 3
@@ -2611,7 +2612,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MenuMSAA" type="MenuButton" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer"]
+[node name="MenuMSAA" type="MenuButton" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer"]
 margin_right = 66.0
 margin_bottom = 27.0
 size_flags_horizontal = 0
@@ -2622,13 +2623,13 @@ flat = false
 align = 0
 script = ExtResource( 63 )
 
-[node name="CheckBoxVsync" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer"]
+[node name="CheckBoxVsync" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer"]
 margin_top = 31.0
 margin_right = 544.0
 margin_bottom = 60.0
 text = "Vsync"
 
-[node name="FramerateLimit" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer" instance=ExtResource( 16 )]
+[node name="FramerateLimit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2639,7 +2640,7 @@ settingText = "Framerate limit"
 slider_step = 1.0
 maximum_value = 240.0
 
-[node name="CheckBoxDisplayFPS" type="CheckBox" parent="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer"]
+[node name="CheckBoxDisplayFPS" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer"]
 margin_top = 99.0
 margin_right = 544.0
 margin_bottom = 128.0
@@ -2648,25 +2649,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ResetToDefault" type="Button" parent="Ui/UiSystem/SettingsWindow/VBoxContainer"]
+[node name="ResetToDefault" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer"]
 margin_top = 434.0
-margin_right = 267.0
+margin_right = 296.0
 margin_bottom = 461.0
 size_flags_horizontal = 2
 size_flags_vertical = 8
-text = "Reset settings (closes editor)"
+text = "Reset preferences (closes editor)"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/SettingsWindow/VBoxContainer"]
+[node name="Spacing" type="Control" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer"]
 margin_top = 465.0
 margin_right = 568.0
 margin_bottom = 489.0
 rect_min_size = Vector2( 24, 24 )
 size_flags_vertical = 8
 
-[node name="CloseButton" type="Button" parent="Ui/UiSystem/SettingsWindow/VBoxContainer"]
+[node name="CloseButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer"]
 margin_left = 253.0
 margin_top = 493.0
 margin_right = 314.0
@@ -5789,9 +5790,9 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/BrowseButton" to="Ui/UiSystem/MapBrowser" method="_on_BrowseButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer/HBoxContainer/PlayRandomMapButton" to="Ui/UiSystem/MapBrowser" method="_on_PlayRandomMapButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/ChooseDkExe" method="_on_ChooseDkExe_file_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/SettingsWindow" method="_on_ChooseDkExe_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/PreferencesWindow" method="_on_ChooseDkExe_file_selected"]
 [connection signal="dir_selected" from="Ui/UiSystem/ChooseDefaultSaveFolder" to="Ui/UiSystem/ChooseDefaultSaveFolder" method="_on_ChooseDefaultSaveFolder_dir_selected"]
-[connection signal="dir_selected" from="Ui/UiSystem/ChooseDefaultSaveFolder" to="Ui/UiSystem/SettingsWindow" method="_on_ChooseDefaultSaveFolder_dir_selected"]
+[connection signal="dir_selected" from="Ui/UiSystem/ChooseDefaultSaveFolder" to="Ui/UiSystem/PreferencesWindow" method="_on_ChooseDefaultSaveFolder_dir_selected"]
 [connection signal="about_to_show" from="Ui/UiSystem/ConfirmDecompression" to="Ui/UiSystem/ConfirmDecompression" method="_on_ConfirmDecompression_about_to_show"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDecompression" to="OpenMap" method="_on_ConfirmDecompression_confirmed"]
 [connection signal="item_rect_changed" from="Ui/UiSystem/ConfirmDecompression" to="Ui/UiSystem/ConfirmDecompression" method="_on_ConfirmDecompression_item_rect_changed"]
@@ -5801,19 +5802,19 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitSave" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitSave_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitDontSave" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitDontSave_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitCancel" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitCancel_pressed"]
-[connection signal="about_to_show" from="Ui/UiSystem/SettingsWindow" to="Ui/UiSystem/SettingsWindow" method="_on_SettingsWindow_about_to_show"]
-[connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/SettingsWindow" method="_on_SetDirButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ReloadTextureMapsButton" to="TextureCache" method="_on_ReloadTextureMapsButton_pressed"]
-[connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
-[connection signal="text_changed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CmdLineDkCommands" to="Game" method="_on_CmdLineDkCommands_text_changed"]
-[connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer/CheckBoxHideUnknown" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxHideUnknown_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer/CheckBoxSmoothPan" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxSmoothPan_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer/CheckBoxMouseEdgePanning" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxMouseEdgePanning_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer/CheckBoxDisplay3dInfo" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxDisplay3dInfo_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer/CheckBoxVsync" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxVsync_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SettingsWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer/CheckBoxDisplayFPS" to="Ui/UiSystem/SettingsWindow" method="_on_CheckBoxDisplayFPS_toggled"]
-[connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/ResetToDefault" to="Ui/UiSystem/SettingsWindow" method="_on_ResetToDefault_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SettingsWindow/VBoxContainer/CloseButton" to="Ui/UiSystem/SettingsWindow" method="_on_CloseButton_pressed"]
+[connection signal="about_to_show" from="Ui/UiSystem/PreferencesWindow" to="Ui/UiSystem/PreferencesWindow" method="_on_SettingsWindow_about_to_show"]
+[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/PreferencesWindow" method="_on_SetDirButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ReloadTextureMapsButton" to="TextureCache" method="_on_ReloadTextureMapsButton_pressed"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
+[connection signal="text_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CmdLineDkCommands" to="Game" method="_on_CmdLineDkCommands_text_changed"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer/CheckBoxHideUnknown" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxHideUnknown_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer/CheckBoxSmoothPan" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxSmoothPan_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer/CheckBoxMouseEdgePanning" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxMouseEdgePanning_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer/CheckBoxDisplay3dInfo" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxDisplay3dInfo_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer/CheckBoxVsync" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxVsync_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer/CheckBoxDisplayFPS" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxDisplayFPS_toggled"]
+[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/ResetToDefault" to="Ui/UiSystem/PreferencesWindow" method="_on_ResetToDefault_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/CloseButton" to="Ui/UiSystem/PreferencesWindow" method="_on_CloseButton_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/FileDialogSaveAs" to="Ui/UiSystem/FileDialogSaveAs" method="_on_FileDialogSaveAs_about_to_show"]
 [connection signal="file_selected" from="Ui/UiSystem/FileDialogSaveAs" to="Ui/UiSystem/FileDialogSaveAs" method="_on_FileDialogSaveAs_file_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/FileDialogSaveAs" to="Ui/UiSystem/FileDialogSaveAs" method="_on_FileDialogSaveAs_visibility_changed"]

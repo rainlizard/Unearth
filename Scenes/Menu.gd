@@ -3,7 +3,7 @@ onready var oSaveMap = Nodelist.list["oSaveMap"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oEditor = Nodelist.list["oEditor"]
-onready var oSettingsWindow = Nodelist.list["oSettingsWindow"]
+onready var oPreferencesWindow = Nodelist.list["oPreferencesWindow"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oMenuButtonFile = Nodelist.list["oMenuButtonFile"]
 onready var oMenuButtonEdit = Nodelist.list["oMenuButtonEdit"]
@@ -41,6 +41,10 @@ var recentlyOpenedPopupMenu = PopupMenu.new()
 var fixMenuExpansion
 
 func _ready():
+	for i in $HBoxContainer2.get_children():
+		if i is MenuButton:
+			i.get_popup().rect_min_size.x = 180
+	
 	recentlyOpenedPopupMenu.set_name("recentlyOpened")
 	var popup = oMenuButtonFile.get_popup()
 	popup.add_child(recentlyOpenedPopupMenu)
@@ -164,42 +168,23 @@ func _on_FileSubmenu_Pressed(pressedID):
 		5: Utils.popup_centered(oFileDialogSaveAs) # Save as
 		6: Utils.popup_centered(oConfirmDiscardChanges) # Reload map
 		7: Utils.popup_centered(oImageAsMapDialog) # Load image as map
-		8: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
+		8: oPreferencesWindow._on_ButtonSettings_pressed()
+		9: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:
-		0: # Map Settings
-			Utils.popup_centered(oMapSettingsWindow)
-		1: # Open map folder
-			if oCurrentMap.path != "":
-				var pathToTryAndOpen = oCurrentMap.path.get_base_dir()
-				var err = OS.shell_open(pathToTryAndOpen)
-				if err != OK:
-					oMessage.quick("Could not open: " + pathToTryAndOpen)
-			else:
-				oMessage.quick("No map path detected. Try saving first.")
-		2: # Open script file
-			if oCurrentMap.path != "":
-				var pathToTryAndOpen = oCurrentMap.path + '.txt'
-				var err = OS.shell_open(pathToTryAndOpen)
-				if err != OK:
-					oMessage.quick("Could not open: " + pathToTryAndOpen)
-			else:
-				oMessage.quick("No map path detected. Try saving first.")
-		3: # Custom slabs
+		0: # Custom columns
 			Utils.popup_centered(oColumnEditor)
-		4: # Slab placement
-			Utils.popup_centered(oSlabSettingsWindow)
-		5: # Update all slabs
+		1: # Custom objects
+			Utils.popup_centered(oAddCustomObjectWindow)
+		2: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oConfirmAutoGen)
-		6: # Add custom object
-			Utils.popup_centered(oAddCustomObjectWindow)
-		7:
-			# Texture editing
+		3: # Slab placement
+			Utils.popup_centered(oSlabSettingsWindow)
+		4: # Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
-		8:
-			# Modify dynamic slabs
+		5: # Modify dynamic slabs
 			Utils.popup_centered(oSlabsetWindow)
 
 func _on_slab_style_window_close_button_clicked():
@@ -230,23 +215,39 @@ func _on_HelpSubmenu_Pressed(pressedID):
 
 func _on_ViewSubmenu_Pressed(pressedID):
 	match pressedID:
-		0:
-			if oEditor.currentView == oEditor.VIEW_3D:
-				oEditor.set_view_2d()
-		1:
-			if oEditor.currentView == oEditor.VIEW_2D:
-				oEditor.set_view_3d()
-				oGenerateTerrain.start()
-			oUi.switch_to_3D_overhead()
+		0: # Open map folder
+			if oCurrentMap.path != "":
+				var pathToTryAndOpen = oCurrentMap.path.get_base_dir()
+				var err = OS.shell_open(pathToTryAndOpen)
+				if err != OK:
+					oMessage.quick("Could not open: " + pathToTryAndOpen)
+			else:
+				oMessage.quick("No map path detected. Try saving first.")
+		1: # Open script file
+			if oCurrentMap.path != "":
+				var pathToTryAndOpen = oCurrentMap.path + '.txt'
+				var err = OS.shell_open(pathToTryAndOpen)
+				if err != OK:
+					oMessage.quick("Could not open: " + pathToTryAndOpen)
+			else:
+				oMessage.quick("No map path detected. Try saving first.")
 		2:
 			if oEditor.currentView == oEditor.VIEW_2D:
 				oEditor.set_view_3d()
 				oGenerateTerrain.start()
 			oUi.switch_to_1st_person()
+		3:
+			if oEditor.currentView == oEditor.VIEW_2D:
+				oEditor.set_view_3d()
+				oGenerateTerrain.start()
+			oUi.switch_to_3D_overhead()
+		4:
+			if oEditor.currentView == oEditor.VIEW_3D:
+				oEditor.set_view_2d()
 
 func _on_MenuButtonSettings_pressed():
 	oMenuButtonSettings.get_popup().visible = false
-	oSettingsWindow._on_ButtonSettings_pressed()
+	Utils.popup_centered(oMapSettingsWindow)
 
 func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in combination with OS.execute otherwise a Godot bug occurs
 	if oCurrentFormat.selected == 0:

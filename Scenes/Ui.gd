@@ -21,6 +21,8 @@ onready var o3DCameraInfo = Nodelist.list["o3DCameraInfo"]
 var FONT_SIZE_CR_LVL_BASE := 1.00 setget set_FONT_SIZE_CR_LVL_BASE
 var FONT_SIZE_CR_LVL_MAX := 8.00 setget set_FONT_SIZE_CR_LVL_MAX
 
+const topMargin = 69
+
 var optionButtonIsOpened = false
 var mouseOnUi = false
 
@@ -43,7 +45,7 @@ func _on_any_window_was_dragged(callingNode):
 	
 	var viewSize = get_viewport().size/Settings.UI_SCALE
 	callingNode.rect_size.x = clamp(callingNode.rect_size.x, 0, viewSize.x)
-	callingNode.rect_size.y = clamp(callingNode.rect_size.y, 0, viewSize.y-58)
+	callingNode.rect_size.y = clamp(callingNode.rect_size.y, 0, viewSize.y-topMargin)
 	
 	# Don't use clamp for rect_position, prioritize the window being above 0,0 by checking that last
 	if callingNode.rect_position.x > viewSize.x-callingNode.rect_size.x:
@@ -52,8 +54,8 @@ func _on_any_window_was_dragged(callingNode):
 		callingNode.rect_position.y = viewSize.y-callingNode.rect_size.y
 	if callingNode.rect_position.x < 0:
 		callingNode.rect_position.x = 0
-	if callingNode.rect_position.y < 58:
-		callingNode.rect_position.y = 58
+	if callingNode.rect_position.y < topMargin:
+		callingNode.rect_position.y = topMargin
 	callingNode.connect("item_rect_changed",self,"_on_any_window_was_dragged", [callingNode])
 
 func _input(event):
