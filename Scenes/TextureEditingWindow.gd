@@ -148,7 +148,6 @@ func _on_LoadFilelistButton_pressed():
 	oChooseFileListFileDialog.current_dir = Settings.unearth_path.plus_file("textures").plus_file("")
 	oChooseFileListFileDialog.current_path = Settings.unearth_path.plus_file("textures").plus_file("")
 	oChooseFileListFileDialog.current_file = "filelist_tmapa000.txt"
-	print(oChooseFileListFileDialog.get_vbox())
 
 
 
@@ -163,6 +162,18 @@ func _on_CreateFilelistButton_pressed():
 	oChooseTmapaFileDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oChooseTmapaFileDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oChooseTmapaFileDialog.current_file = "tmapa000.dat"
+
+#	yield(get_tree(),'idle_frame')
+#	print(oChooseFileListFileDialog.get_vbox().get_child(2).get_child(0))
+#	var tree = oChooseFileListFileDialog.get_vbox().get_child(2).get_child(0)
+#	tree.visible = false
+#	for i in 100:
+#		tree.visible = false
+#		yield(get_tree(),'idle_frame')
+#	var treeSelected = tree.get_selected()
+#	var get_selected_column = tree.get_selected_column()
+#	var get_edited = tree.get_edited()
+#	tree.scroll_to_item(treeSelected)
 
 
 func get_tmapa_filename():
