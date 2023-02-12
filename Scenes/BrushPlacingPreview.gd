@@ -4,6 +4,10 @@ onready var oSelector = Nodelist.list["oSelector"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oEditingTools = Nodelist.list["oEditingTools"]
 onready var oEditor = Nodelist.list["oEditor"]
+onready var oUi = Nodelist.list["oUi"]
+onready var oPreferencesWindow = Nodelist.list["oPreferencesWindow"]
+onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
+onready var oDataSlab = Nodelist.list["oDataSlab"]
 
 var img = Image.new()
 var tex = ImageTexture.new()
@@ -56,6 +60,18 @@ func update_img():
 
 func _process(delta):
 	oBrushPreviewDisplay.rect_position = (oSelector.cursorTile+offsetBrushPos) * Vector2(96,96)
+	visible = true
+	if oUi.mouseOnUi == true: visible = false
+	if oEditor.fieldBoundary.has_point(oSelector.cursorTile) == false: visible = false
+	if oEditor.currentView == oEditor.VIEW_3D: visible = false
+	if oPreferencesWindow.visible == true: visible = false
+	if oQuickMapPreview.visible == true: visible = false
+	
+	if oDataSlab.get_cellv(oSelector.cursorTile) == 0:
+		oBrushPreviewDisplay.material.set_shader_param("brightness", 3.00)
+	else:
+		oBrushPreviewDisplay.material.set_shader_param("brightness", 1.75)
+
 
 func make_brush_shape(constructType):
 	var array = []

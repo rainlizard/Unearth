@@ -1625,7 +1625,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Columns", null, 0, false, false, 0, 0, null, "", false, "Custom objects", null, 0, false, false, 1, 0, null, "", false, "Update all slabs", null, 0, false, false, 2, 0, null, "", false, "Placement options", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Textures", null, 0, false, false, 4, 0, null, "", false, "Slabset", null, 0, false, false, 5, 0, null, "", false ]
+items = [ "Columns", null, 0, false, false, 0, 0, null, "", false, "Custom objects", null, 0, false, false, 1, 0, null, "", false, "Update all slabs", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Textures", null, 0, false, false, 3, 0, null, "", false, "Slabset", null, 0, false, false, 4, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2226,9 +2226,17 @@ margin_bottom = 424.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+[node name="KeeperFXDetection" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_right = 544.0
-margin_bottom = 27.0
+margin_bottom = 21.0
+custom_colors/font_color = Color( 1, 0.658824, 0.329412, 1 )
+text = "Need to set executable"
+align = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 25.0
+margin_right = 544.0
+margin_bottom = 52.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -2250,13 +2258,6 @@ size_flags_vertical = 3
 text = "Path"
 valign = 1
 autowrap = true
-
-[node name="KeeperFXDetection" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 31.0
-margin_right = 544.0
-margin_bottom = 52.0
-custom_colors/font_color = Color( 1, 0.658824, 0.329412, 1 )
-text = "Need to set executable"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 56.0
@@ -2281,27 +2282,10 @@ rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 expand_to_text_length = true
 
-[node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 100.0
-margin_right = 240.0
-margin_bottom = 127.0
-hint_tooltip = "Reads tmapa00x.dat files from Dungeon Keeper's /data/ directory and then recreates cache files in Unearth's /unearthdata/ directory."
-size_flags_horizontal = 2
-text = "Reload texture map cache"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 131.0
-margin_right = 544.0
-margin_bottom = 160.0
-text = "Always decompress maps"
-
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 164.0
+margin_top = 100.0
 margin_right = 544.0
-margin_bottom = 204.0
+margin_bottom = 140.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
@@ -2339,6 +2323,23 @@ rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 editable = false
 expand_to_text_length = true
+
+[node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 144.0
+margin_right = 240.0
+margin_bottom = 171.0
+hint_tooltip = "Reads tmapa00x.dat files from Dungeon Keeper's /data/ directory and then recreates cache files in Unearth's /unearthdata/ directory."
+size_flags_horizontal = 2
+text = "Reload texture map cache"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 175.0
+margin_right = 544.0
+margin_bottom = 204.0
+text = "Always decompress maps"
 
 [node name="TabPlacements" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
@@ -2582,6 +2583,12 @@ margin_right = 532.0
 margin_bottom = 439.0
 text = "Hide unknown data (thing details)"
 
+[node name="CheckBoxNewMapAutoOpensMapSettings" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer"]
+margin_top = 410.0
+margin_right = 532.0
+margin_bottom = 439.0
+text = "Open map settings for new map"
+
 [node name="TabCamera" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
 anchor_right = 1.0
@@ -2773,7 +2780,7 @@ scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance"]
 margin_right = 544.0
-margin_bottom = 480.0
+margin_bottom = 424.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -4093,17 +4100,17 @@ __meta__ = {
 }
 
 [node name="GeneratorContainer" type="ScrollContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator"]
-margin_right = 835.0
-margin_bottom = 944.0
+margin_right = 825.0
+margin_bottom = 934.0
 size_flags_vertical = 3
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer"]
-margin_right = 835.0
+margin_right = 825.0
 margin_bottom = 471.0
 size_flags_horizontal = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-margin_right = 835.0
+margin_right = 825.0
 margin_bottom = 410.0
 custom_constants/hseparation = 28
 columns = 2
@@ -4394,14 +4401,14 @@ columns = 4
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
 margin_top = 414.0
-margin_right = 835.0
+margin_right = 825.0
 margin_bottom = 438.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="AdjustResearchCheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-margin_left = 306.0
+margin_left = 301.0
 margin_top = 442.0
-margin_right = 528.0
+margin_right = 523.0
 margin_bottom = 471.0
 focus_mode = 0
 size_flags_horizontal = 6
@@ -4545,23 +4552,23 @@ rounded = true
 script = ExtResource( 81 )
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator"]
-margin_top = 948.0
-margin_right = 835.0
-margin_bottom = 975.0
+margin_top = 938.0
+margin_right = 825.0
+margin_bottom = 965.0
 alignment = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="SendToClipboardButton" type="Button" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/HBoxContainer4"]
-margin_left = 512.0
-margin_right = 682.0
+margin_left = 502.0
+margin_right = 672.0
 margin_bottom = 27.0
 text = "Send to clipboard"
 
 [node name="GenerateScriptButton" type="Button" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/HBoxContainer4"]
-margin_left = 686.0
-margin_right = 835.0
+margin_left = 676.0
+margin_right = 825.0
 margin_bottom = 27.0
 text = "Generate script"
 
@@ -4582,21 +4589,22 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="ScriptEmptyStatus" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer"]
-margin_right = 835.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer"]
+margin_right = 825.0
 margin_bottom = 21.0
-size_flags_horizontal = 3
+
+[node name="ScriptEmptyStatus" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/HBoxContainer"]
+margin_right = 825.0
+margin_bottom = 21.0
+size_flags_horizontal = 11
 text = "Your script file is empty!"
 align = 1
 
 [node name="ScriptTextEdit" type="TextEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer"]
 margin_top = 25.0
-margin_right = 835.0
-margin_bottom = 975.0
+margin_right = 825.0
+margin_bottom = 965.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 16 )
@@ -5821,6 +5829,7 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_AutoWallArtButton_pressed"]
 [connection signal="focus_exited" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_DamagedWallLineEdit_focus_exited"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/CheckBoxHideUnknown" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxHideUnknown_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/CheckBoxNewMapAutoOpensMapSettings" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxNewMapAutoOpensMapSettings_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxSmoothPan" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxSmoothPan_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxMouseEdgePanning" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxMouseEdgePanning_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxDisplay3dInfo" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxDisplay3dInfo_toggled"]

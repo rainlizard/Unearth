@@ -20,6 +20,8 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oCheckBoxNewMapBorder = Nodelist.list["oCheckBoxNewMapBorder"]
 onready var oNewMapSymmetricalBorder = Nodelist.list["oNewMapSymmetricalBorder"]
 onready var oNoiseDistance = Nodelist.list["oNoiseDistance"]
+onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
+onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
 
 var noise = OpenSimplexNoise.new()
 var imageData = Image.new()
@@ -99,6 +101,9 @@ func _on_ButtonNewMapOK_pressed():
 	oCurrentFormat.selected = oSetNewFormat.selected
 	
 	visible = false # Close New Map window after pressing OK button
+	
+	if oCheckBoxNewMapAutoOpensMapSettings.pressed == true:
+		Utils.popup_centered(oMapSettingsWindow)
 
 func overwrite_map_with_blank_values():
 	for y in range(1, M.ySize-1):

@@ -65,6 +65,7 @@ var listOfSettings = [
 	"placing_tutorial",
 	"chance_effect_water",
 	"chance_effect_lava",
+	"auto_open_map_settings",
 	# These four are read inside Viewport script
 #	"editor_window_position",
 #	"editor_window_size",
@@ -348,6 +349,10 @@ func game_setting(doWhat,string,value):
 			var oLavaEffectPercent = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent'
 			if doWhat == SET: oLavaEffectPercent.value = value
 			if doWhat == GET: return oLavaEffectPercent.value
+		"auto_open_map_settings":
+			var oCheckBoxNewMapAutoOpensMapSettings = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/CheckBoxNewMapAutoOpensMapSettings'
+			if doWhat == SET: oCheckBoxNewMapAutoOpensMapSettings.pressed = value
+			if doWhat == GET: return oCheckBoxNewMapAutoOpensMapSettings.pressed
 
 func delete_settings():
 	var dir = Directory.new()

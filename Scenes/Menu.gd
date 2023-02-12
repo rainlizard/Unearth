@@ -180,11 +180,9 @@ func _on_EditSubmenu_Pressed(pressedID):
 		2: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oConfirmAutoGen)
-		3: # Slab placement
-			Utils.popup_centered(oTabPlacements)
-		4: # Texture editing
+		3: # Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
-		5: # Modify dynamic slabs
+		4: # Modify dynamic slabs
 			Utils.popup_centered(oSlabsetWindow)
 
 func _on_slab_style_window_close_button_clicked():

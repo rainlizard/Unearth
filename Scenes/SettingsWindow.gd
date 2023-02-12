@@ -29,6 +29,7 @@ onready var oFramerateLimit = Nodelist.list["oFramerateLimit"]
 onready var oOwnerAlpha = Nodelist.list["oOwnerAlpha"]
 onready var oScriptEditorFontSize = Nodelist.list["oScriptEditorFontSize"]
 onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
+onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
 #onready var oTabGraphics = Nodelist.list["oTabGraphics"]
@@ -83,6 +84,7 @@ func _on_SettingsWindow_about_to_show():
 	oSciptIconMaxZoom.update_appearance(Settings.get_setting("script_icon_max"))
 	oEditorFontSize.update_appearance(Settings.get_setting("editor_font_size"))
 	oScriptEditorFontSize.update_appearance(Settings.get_setting("script_editor_font_size"))
+	oCheckBoxNewMapAutoOpensMapSettings.pressed = Settings.get_setting("auto_open_map_settings")
 
 func _on_CheckBoxVsync_toggled(button_pressed):
 	Settings.set_setting("vsync", button_pressed)
@@ -182,3 +184,6 @@ func _on_CheckBoxDisplay3dInfo_toggled(button_pressed):
 
 func _on_CheckBoxHideUnknown_toggled(button_pressed):
 	Settings.set_setting("hide_unknown_data", button_pressed)
+
+func _on_CheckBoxNewMapAutoOpensMapSettings_toggled(button_pressed):
+	Settings.set_setting("auto_open_map_settings", button_pressed)
