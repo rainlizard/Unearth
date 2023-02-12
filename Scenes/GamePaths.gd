@@ -22,7 +22,7 @@ var DK_CAMPGNS_DIRECTORY = ""
 var COMMAND_LINE = ""
 var COMMAND_LINE_CONSOLE = ""
 var COMMAND_LINE_CONSOLE_ARG = ""
-var DK_COMMANDS = "-nointro -alex"
+var DK_COMMANDS = "-nointro -alex -nocd"
 
 func running_keeperfx():
 	if EXECUTABLE_PATH.get_file().to_lower() == "keeperfx.exe":

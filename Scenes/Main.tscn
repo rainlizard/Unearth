@@ -2179,10 +2179,10 @@ text = "Cancel"
 [node name="PreferencesWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -2520.0
-margin_top = 104.0
+margin_top = 97.0
 margin_right = -1932.0
-margin_bottom = 644.0
-rect_min_size = Vector2( 588, 540 )
+margin_bottom = 686.0
+rect_min_size = Vector2( 588, 416 )
 window_title = "Preferences"
 resizable = true
 script = ExtResource( 62 )
@@ -2201,7 +2201,7 @@ size_flags_vertical = 7
 
 [node name="TabSettings" type="TabContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer"]
 margin_right = 568.0
-margin_bottom = 430.0
+margin_bottom = 479.0
 rect_min_size = Vector2( 439, 263 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -2209,7 +2209,7 @@ tab_align = 0
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
 
-[node name="TabEditor" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
+[node name="TabFiles" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -2220,20 +2220,20 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles"]
 margin_right = 544.0
-margin_bottom = 375.0
+margin_bottom = 424.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_right = 544.0
 margin_bottom = 27.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SetDirButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3"]
+[node name="SetDirButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3"]
 margin_right = 162.0
 margin_bottom = 27.0
 text = "Game executable"
@@ -2241,7 +2241,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SetDirPath" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3"]
+[node name="SetDirPath" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3"]
 margin_left = 166.0
 margin_right = 544.0
 margin_bottom = 27.0
@@ -2251,17 +2251,40 @@ text = "Path"
 valign = 1
 autowrap = true
 
-[node name="KeeperFXDetection" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="KeeperFXDetection" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 31.0
 margin_right = 544.0
 margin_bottom = 52.0
 custom_colors/font_color = Color( 1, 0.658824, 0.329412, 1 )
 text = "Need to set executable"
 
-[node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 56.0
+margin_right = 544.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
+margin_top = 9.0
+margin_right = 238.0
+margin_bottom = 30.0
+text = "Play button command line"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CmdLineDkCommands" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
+margin_left = 242.0
+margin_right = 544.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 3
+expand_to_text_length = true
+
+[node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 100.0
 margin_right = 240.0
-margin_bottom = 83.0
+margin_bottom = 127.0
 hint_tooltip = "Reads tmapa00x.dat files from Dungeon Keeper's /data/ directory and then recreates cache files in Unearth's /unearthdata/ directory."
 size_flags_horizontal = 2
 text = "Reload texture map cache"
@@ -2269,38 +2292,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
-margin_top = 87.0
+[node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 131.0
 margin_right = 544.0
-margin_bottom = 116.0
+margin_bottom = 160.0
 text = "Always decompress maps"
 
-[node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
-margin_top = 120.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 164.0
 margin_right = 544.0
-margin_bottom = 141.0
-text = "Play button command line"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CmdLineDkCommands" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
-margin_top = 145.0
-margin_right = 58.0
-margin_bottom = 185.0
-rect_min_size = Vector2( 0, 40 )
-size_flags_horizontal = 0
-expand_to_text_length = true
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer"]
-margin_top = 189.0
-margin_right = 544.0
-margin_bottom = 229.0
+margin_bottom = 204.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ScrollContainer"]
 margin_right = 544.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
@@ -2308,7 +2314,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CmdLineConsole" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="CmdLineConsole" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ScrollContainer/HBoxContainer"]
 margin_right = 58.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
@@ -2316,7 +2322,7 @@ size_flags_horizontal = 0
 editable = false
 expand_to_text_length = true
 
-[node name="CmdLineConsoleArg" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="CmdLineConsoleArg" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ScrollContainer/HBoxContainer"]
 margin_left = 62.0
 margin_right = 120.0
 margin_bottom = 40.0
@@ -2325,7 +2331,7 @@ size_flags_horizontal = 0
 editable = false
 expand_to_text_length = true
 
-[node name="CmdLineExecute" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ScrollContainer/HBoxContainer"]
+[node name="CmdLineExecute" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ScrollContainer/HBoxContainer"]
 margin_left = 124.0
 margin_right = 544.0
 margin_bottom = 40.0
@@ -2334,7 +2340,156 @@ size_flags_horizontal = 3
 editable = false
 expand_to_text_length = true
 
-[node name="TabGeneralView" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
+[node name="TabPlacements" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 43.0
+margin_right = -12.0
+margin_bottom = -12.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+script = ExtResource( 103 )
+
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements"]
+margin_right = 544.0
+margin_bottom = 424.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer"]
+margin_right = 544.0
+margin_bottom = 424.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_right = 544.0
+margin_bottom = 31.0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_top = 5.0
+margin_right = 248.0
+margin_bottom = 26.0
+text = "Place Dripping Water effect"
+
+[node name="WaterEffectPercent" type="SpinBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 470.0
+margin_right = 544.0
+margin_bottom = 31.0
+size_flags_horizontal = 10
+step = 0.1
+value = 2.5
+suffix = "%"
+script = ExtResource( 81 )
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 35.0
+margin_right = 544.0
+margin_bottom = 66.0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_top = 5.0
+margin_right = 149.0
+margin_bottom = 26.0
+text = "Place Lava effect"
+
+[node name="LavaEffectPercent" type="SpinBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 470.0
+margin_right = 544.0
+margin_bottom = 31.0
+size_flags_horizontal = 10
+step = 0.1
+value = 2.5
+suffix = "%"
+script = ExtResource( 81 )
+
+[node name="FrailColumnsCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 70.0
+margin_right = 544.0
+margin_bottom = 99.0
+pressed = true
+text = "Frail corners"
+
+[node name="BridgesOnlyOnLiquidCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 103.0
+margin_right = 544.0
+margin_bottom = 132.0
+pressed = true
+text = "Place bridges only on liquid"
+
+[node name="OwnableNaturalTerrain" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 136.0
+margin_right = 544.0
+margin_bottom = 165.0
+text = "Ownable natural terrain"
+
+[node name="EditableBordersCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 169.0
+margin_right = 544.0
+margin_bottom = 198.0
+text = "Editable borders"
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 202.0
+margin_right = 544.0
+margin_bottom = 229.0
+columns = 2
+
+[node name="ArtLabel" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer"]
+margin_top = 3.0
+margin_right = 254.0
+margin_bottom = 24.0
+text = "Twins/Woman/Pair Pattern"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AutoWallArtButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer"]
+margin_left = 456.0
+margin_right = 544.0
+margin_bottom = 27.0
+size_flags_horizontal = 10
+text = "Grouped"
+align = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DamagedWallLabel" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer"]
+visible = false
+margin_top = 36.0
+margin_right = 181.0
+margin_bottom = 57.0
+text = "Damaged Wall %"
+
+[node name="DamagedWallLineEdit" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer"]
+visible = false
+margin_top = 31.0
+margin_right = 181.0
+margin_bottom = 62.0
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WarningLabel" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+visible = false
+self_modulate = Color( 1, 1, 1, 0.25098 )
+margin_top = 216.0
+margin_right = 278.0
+margin_bottom = 261.0
+text = "Warning: Damaged Walls may display buggy behaviour"
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TabUI" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2347,16 +2502,16 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI"]
 margin_right = 544.0
-margin_bottom = 375.0
+margin_bottom = 424.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="UiScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="UiScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2366,7 +2521,7 @@ settingText = "UI scale"
 minimum_value = 0.5
 maximum_value = 4.0
 
-[node name="SlabWindowScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="SlabWindowScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2377,7 +2532,7 @@ settingText = "Slab window scale"
 minimum_value = 0.1
 maximum_value = 4.0
 
-[node name="ThingWindowScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="ThingWindowScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2388,7 +2543,7 @@ settingText = "Thing window scale"
 minimum_value = 0.1
 maximum_value = 4.0
 
-[node name="EditorFontSize" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="EditorFontSize" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2400,7 +2555,7 @@ slider_step = 1.0
 minimum_value = 1.0
 maximum_value = 24.0
 
-[node name="ScriptEditorFontSize" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="ScriptEditorFontSize" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2412,13 +2567,22 @@ slider_step = 1.0
 minimum_value = 1.0
 maximum_value = 72.0
 
-[node name="CheckBoxHideUnknown" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer"]
-margin_top = 105.0
-margin_right = 544.0
-margin_bottom = 134.0
+[node name="OwnerAlpha" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 375.0
+margin_right = 532.0
+margin_bottom = 406.0
+settingText = "Ownership alpha"
+
+[node name="CheckBoxHideUnknown" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer"]
+margin_top = 410.0
+margin_right = 532.0
+margin_bottom = 439.0
 text = "Hide unknown data (thing details)"
 
-[node name="Tab2DView" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
+[node name="TabCamera" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2431,16 +2595,33 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera"]
 margin_right = 544.0
-margin_bottom = 375.0
+margin_bottom = 480.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SmoothingRate" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="HSeparator5" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
+margin_top = 61.0
+margin_right = 532.0
+margin_bottom = 62.0
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+text = "2D"
+align = 1
+
+[node name="HSeparator4" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
+margin_top = 61.0
+margin_right = 532.0
+margin_bottom = 62.0
+
+[node name="SmoothingRate" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2451,7 +2632,7 @@ slider_step = 1.0
 minimum_value = 1.0
 maximum_value = 100.0
 
-[node name="ZoomStep" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="ZoomStep" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2462,7 +2643,7 @@ settingText = "Zoom step"
 minimum_value = 0.05
 maximum_value = 0.95
 
-[node name="DirectionalPanSpeed" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="DirectionalPanSpeed" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2474,7 +2655,7 @@ slider_step = 1.0
 minimum_value = 200.0
 maximum_value = 10000.0
 
-[node name="CheckBoxSmoothPan" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer"]
+[node name="CheckBoxSmoothPan" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
 margin_top = 105.0
 margin_right = 532.0
 margin_bottom = 134.0
@@ -2483,7 +2664,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CheckBoxMouseEdgePanning" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer"]
+[node name="CheckBoxMouseEdgePanning" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
 margin_top = 138.0
 margin_right = 532.0
 margin_bottom = 167.0
@@ -2492,16 +2673,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OwnerAlpha" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 0.0
-margin_top = 196.0
-margin_right = 532.0
-margin_bottom = 241.0
-settingText = "Ownership alpha"
-
-[node name="CreatureLevelFontSizeScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="CreatureLevelFontSizeScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2511,7 +2683,7 @@ margin_bottom = 241.0
 settingText = "Creature level font size scale"
 maximum_value = 10.0
 
-[node name="CreatureLevelFontSizeMaxZoom" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="CreatureLevelFontSizeMaxZoom" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2521,7 +2693,7 @@ margin_bottom = 290.0
 settingText = "Creature level font size max zoom"
 maximum_value = 80.0
 
-[node name="SciptIconScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="SciptIconScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2531,7 +2703,7 @@ margin_bottom = 325.0
 settingText = "Script icon scale"
 maximum_value = 10.0
 
-[node name="SciptIconMaxZoom" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="SciptIconMaxZoom" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
@@ -2541,7 +2713,52 @@ margin_bottom = 360.0
 settingText = "Script icon max zoom"
 maximum_value = 80.0
 
-[node name="Tab3DView" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
+[node name="HSeparator2" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
+margin_top = 61.0
+margin_right = 532.0
+margin_bottom = 62.0
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+text = "3D"
+align = 1
+
+[node name="HSeparator3" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
+margin_top = 61.0
+margin_right = 532.0
+margin_bottom = 62.0
+
+[node name="MouseSensitivity" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_right = 544.0
+margin_bottom = 31.0
+settingText = "Mouse sensitivity"
+
+[node name="FieldOfView" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 35.0
+margin_right = 544.0
+margin_bottom = 66.0
+settingText = "Field of view"
+slider_step = 1.0
+maximum_value = 179.0
+
+[node name="CheckBoxDisplay3dInfo" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
+margin_top = 70.0
+margin_right = 544.0
+margin_bottom = 99.0
+text = "Show camera coordinates"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TabPerformance" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2554,67 +2771,36 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab3DView"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance"]
 margin_right = 544.0
-margin_bottom = 375.0
+margin_bottom = 480.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MouseSensitivity" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer" instance=ExtResource( 16 )]
+[node name="FramerateLimit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
+margin_top = 208.0
 margin_right = 544.0
-margin_bottom = 31.0
-settingText = "Mouse sensitivity"
-
-[node name="FieldOfView" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer" instance=ExtResource( 16 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 0.0
-margin_top = 35.0
-margin_right = 544.0
-margin_bottom = 66.0
-settingText = "Field of view"
+margin_bottom = 239.0
+settingText = "Framerate limit"
 slider_step = 1.0
-maximum_value = 179.0
+maximum_value = 240.0
 
-[node name="CheckBoxDisplay3dInfo" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer"]
-margin_top = 70.0
+[node name="CheckBoxVsync" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer"]
+margin_top = 243.0
 margin_right = 544.0
-margin_bottom = 99.0
-text = "Show camera coordinates"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_bottom = 272.0
+text = "Vsync"
 
-[node name="TabGraphics" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 12.0
-margin_top = 43.0
-margin_right = -12.0
-margin_bottom = -12.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-scroll_horizontal_enabled = false
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics"]
-margin_right = 544.0
-margin_bottom = 375.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MenuMSAA" type="MenuButton" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer"]
+[node name="MenuMSAA" type="MenuButton" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer"]
+margin_top = 276.0
 margin_right = 66.0
-margin_bottom = 27.0
+margin_bottom = 303.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme = SubResource( 13 )
@@ -2623,36 +2809,19 @@ flat = false
 align = 0
 script = ExtResource( 63 )
 
-[node name="CheckBoxVsync" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer"]
-margin_top = 31.0
+[node name="CheckBoxDisplayFPS" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer"]
+margin_top = 307.0
 margin_right = 544.0
-margin_bottom = 60.0
-text = "Vsync"
-
-[node name="FramerateLimit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer" instance=ExtResource( 16 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 0.0
-margin_top = 64.0
-margin_right = 544.0
-margin_bottom = 95.0
-settingText = "Framerate limit"
-slider_step = 1.0
-maximum_value = 240.0
-
-[node name="CheckBoxDisplayFPS" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer"]
-margin_top = 99.0
-margin_right = 544.0
-margin_bottom = 128.0
+margin_bottom = 336.0
 text = "Display FPS"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ResetToDefault" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer"]
-margin_top = 434.0
+margin_top = 483.0
 margin_right = 296.0
-margin_bottom = 461.0
+margin_bottom = 510.0
 size_flags_horizontal = 2
 size_flags_vertical = 8
 text = "Reset preferences (closes editor)"
@@ -2661,17 +2830,17 @@ __meta__ = {
 }
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer"]
-margin_top = 465.0
+margin_top = 514.0
 margin_right = 568.0
-margin_bottom = 489.0
+margin_bottom = 538.0
 rect_min_size = Vector2( 24, 24 )
 size_flags_vertical = 8
 
 [node name="CloseButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer"]
 margin_left = 253.0
-margin_top = 493.0
+margin_top = 542.0
 margin_right = 314.0
-margin_bottom = 520.0
+margin_bottom = 569.0
 grow_horizontal = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
@@ -2754,170 +2923,6 @@ window_title = "Clear unused columns"
 dialog_text = "Delete all columns which have no presence on the map? (a utilized value of 0)"
 dialog_autowrap = true
 script = ExtResource( 61 )
-
-[node name="SlabSettingsWindow" type="WindowDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = 832.0
-margin_top = 1216.0
-margin_right = 1228.0
-margin_bottom = 1543.0
-rect_min_size = Vector2( 314, 220 )
-window_title = "Placement options"
-script = ExtResource( 103 )
-
-[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/SlabSettingsWindow"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 20.0
-margin_top = 20.0
-margin_right = -20.0
-margin_bottom = -20.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer"]
-margin_right = 356.0
-margin_bottom = 287.0
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_right = 356.0
-margin_bottom = 31.0
-
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_top = 5.0
-margin_right = 248.0
-margin_bottom = 26.0
-text = "Place Dripping Water effect"
-
-[node name="WaterEffectPercent" type="SpinBox" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_left = 282.0
-margin_right = 356.0
-margin_bottom = 31.0
-size_flags_horizontal = 10
-step = 0.1
-value = 2.5
-suffix = "%"
-script = ExtResource( 81 )
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 35.0
-margin_right = 356.0
-margin_bottom = 66.0
-
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_top = 5.0
-margin_right = 149.0
-margin_bottom = 26.0
-text = "Place Lava effect"
-
-[node name="LavaEffectPercent" type="SpinBox" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 282.0
-margin_right = 356.0
-margin_bottom = 31.0
-size_flags_horizontal = 10
-step = 0.1
-value = 2.5
-suffix = "%"
-script = ExtResource( 81 )
-
-[node name="FrailColumnsCheckbox" type="CheckBox" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 70.0
-margin_right = 356.0
-margin_bottom = 99.0
-pressed = true
-text = "Frail corners"
-
-[node name="BridgesOnlyOnLiquidCheckbox" type="CheckBox" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 103.0
-margin_right = 356.0
-margin_bottom = 132.0
-pressed = true
-text = "Place bridges only on liquid"
-
-[node name="OwnableNaturalTerrain" type="CheckBox" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 136.0
-margin_right = 356.0
-margin_bottom = 165.0
-text = "Ownable natural terrain"
-
-[node name="EditableBordersCheckbox" type="CheckBox" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 169.0
-margin_right = 356.0
-margin_bottom = 198.0
-text = "Editable borders"
-
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 202.0
-margin_right = 356.0
-margin_bottom = 226.0
-rect_min_size = Vector2( 24, 24 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 230.0
-margin_right = 356.0
-margin_bottom = 251.0
-text = "Wall Automatic"
-align = 1
-autowrap = true
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-margin_top = 255.0
-margin_right = 356.0
-margin_bottom = 282.0
-columns = 2
-
-[node name="ArtLabel" type="Label" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_top = 3.0
-margin_right = 181.0
-margin_bottom = 24.0
-text = "Twins/Woman/Pair"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="AutoWallArtButton" type="Button" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 185.0
-margin_right = 273.0
-margin_bottom = 27.0
-text = "Grouped"
-align = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="DamagedWallLabel" type="Label" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer"]
-visible = false
-margin_top = 36.0
-margin_right = 181.0
-margin_bottom = 57.0
-text = "Damaged Wall %"
-
-[node name="DamagedWallLineEdit" type="LineEdit" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer"]
-visible = false
-margin_top = 31.0
-margin_right = 181.0
-margin_bottom = 62.0
-text = "0"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="WarningLabel" type="Label" parent="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer"]
-visible = false
-self_modulate = Color( 1, 1, 1, 0.25098 )
-margin_top = 216.0
-margin_right = 278.0
-margin_bottom = 261.0
-text = "Warning: Damaged Walls may display buggy behaviour"
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ControlsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -5803,16 +5808,24 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitDontSave" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitDontSave_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitCancel" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitCancel_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/PreferencesWindow" to="Ui/UiSystem/PreferencesWindow" method="_on_SettingsWindow_about_to_show"]
-[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/PreferencesWindow" method="_on_SetDirButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/ReloadTextureMapsButton" to="TextureCache" method="_on_ReloadTextureMapsButton_pressed"]
-[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
-[connection signal="text_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabEditor/VBoxContainer/CmdLineDkCommands" to="Game" method="_on_CmdLineDkCommands_text_changed"]
-[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGeneralView/VBoxContainer/CheckBoxHideUnknown" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxHideUnknown_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer/CheckBoxSmoothPan" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxSmoothPan_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab2DView/VBoxContainer/CheckBoxMouseEdgePanning" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxMouseEdgePanning_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/Tab3DView/VBoxContainer/CheckBoxDisplay3dInfo" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxDisplay3dInfo_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer/CheckBoxVsync" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxVsync_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabGraphics/VBoxContainer/CheckBoxDisplayFPS" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxDisplayFPS_toggled"]
+[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/PreferencesWindow" method="_on_SetDirButton_pressed"]
+[connection signal="text_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer/CmdLineDkCommands" to="Game" method="_on_CmdLineDkCommands_text_changed"]
+[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ReloadTextureMapsButton" to="TextureCache" method="_on_ReloadTextureMapsButton_pressed"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
+[connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer/WaterEffectPercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_WaterEffectPercent_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_LavaEffectPercent_value_changed"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/FrailColumnsCheckbox" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_FrailColumnsCheckbox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_BridgesOnlyOnLiquidCheckbox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/OwnableNaturalTerrain" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_OwnableNaturalTerrain_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/EditableBordersCheckbox" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_EditableBordersCheckbox_toggled"]
+[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_AutoWallArtButton_pressed"]
+[connection signal="focus_exited" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_DamagedWallLineEdit_focus_exited"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/CheckBoxHideUnknown" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxHideUnknown_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxSmoothPan" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxSmoothPan_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxMouseEdgePanning" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxMouseEdgePanning_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxDisplay3dInfo" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxDisplay3dInfo_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/CheckBoxVsync" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxVsync_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/CheckBoxDisplayFPS" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxDisplayFPS_toggled"]
 [connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/ResetToDefault" to="Ui/UiSystem/PreferencesWindow" method="_on_ResetToDefault_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/CloseButton" to="Ui/UiSystem/PreferencesWindow" method="_on_CloseButton_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/FileDialogSaveAs" to="Ui/UiSystem/FileDialogSaveAs" method="_on_FileDialogSaveAs_about_to_show"]
@@ -5824,15 +5837,6 @@ script = SubResource( 20 )
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmAutoGen" to="SlabPlacement" method="_on_ConfirmAutoGen_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmGenerateScript" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_ConfirmGenerateScript_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmClmClearUnused" to="Ui/UiSystem/ColumnEditor" method="_on_ConfirmClmClearUnused_confirmed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/HBoxContainer/WaterEffectPercent" to="Ui/UiSystem/SlabSettingsWindow" method="_on_WaterEffectPercent_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent" to="Ui/UiSystem/SlabSettingsWindow" method="_on_LavaEffectPercent_value_changed"]
-[connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/FrailColumnsCheckbox" to="Ui/UiSystem/SlabSettingsWindow" method="_on_FrailColumnsCheckbox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox" to="Ui/UiSystem/SlabSettingsWindow" method="_on_BridgesOnlyOnLiquidCheckbox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/OwnableNaturalTerrain" to="Ui/UiSystem/SlabSettingsWindow" method="_on_OwnableNaturalTerrain_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox" to="Editor" method="_on_EditableBordersCheckbox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox" to="Ui/UiSystem/SlabSettingsWindow" method="_on_EditableBordersCheckbox_toggled"]
-[connection signal="pressed" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton" to="Ui/UiSystem/SlabSettingsWindow" method="_on_AutoWallArtButton_pressed"]
-[connection signal="focus_exited" from="Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit" to="Ui/UiSystem/SlabSettingsWindow" method="_on_DamagedWallLineEdit_focus_exited"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/AddCustomObjectWindow" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_AddCustomObjectWindow_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/CustomObjectHelpButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_CustomObjectHelpButton_pressed"]

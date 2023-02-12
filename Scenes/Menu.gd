@@ -13,7 +13,7 @@ onready var oPlayButton = Nodelist.list["oPlayButton"]
 onready var oFileDialogSaveAs = Nodelist.list["oFileDialogSaveAs"]
 onready var oFileDialogOpen = Nodelist.list["oFileDialogOpen"]
 onready var oConfirmAutoGen = Nodelist.list["oConfirmAutoGen"]
-onready var oSlabSettingsWindow = Nodelist.list["oSlabSettingsWindow"]
+onready var oTabPlacements = Nodelist.list["oTabPlacements"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oMenuButtonHelp = Nodelist.list["oMenuButtonHelp"]
 onready var oAboutWindow = Nodelist.list["oAboutWindow"]
@@ -181,7 +181,7 @@ func _on_EditSubmenu_Pressed(pressedID):
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oConfirmAutoGen)
 		3: # Slab placement
-			Utils.popup_centered(oSlabSettingsWindow)
+			Utils.popup_centered(oTabPlacements)
 		4: # Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
 		5: # Modify dynamic slabs

@@ -301,27 +301,27 @@ func game_setting(doWhat,string,value):
 			if doWhat == SET: oThingDetails.HIDE_UNKNOWN_DATA = value
 			if doWhat == GET: return oThingDetails.HIDE_UNKNOWN_DATA
 		"ownable_natural_terrain":
-			var oOwnableNaturalTerrain = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/OwnableNaturalTerrain'
+			var oOwnableNaturalTerrain = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/OwnableNaturalTerrain'
 			if doWhat == SET: oOwnableNaturalTerrain.pressed = value
 			if doWhat == GET: return oOwnableNaturalTerrain.pressed
 		"editable_borders":
-			var oEditableBordersCheckbox = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/EditableBordersCheckbox'
+			var oEditableBordersCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/EditableBordersCheckbox'
 			if doWhat == SET: oEditableBordersCheckbox.pressed = value
 			if doWhat == GET: return oEditableBordersCheckbox.pressed
 		"bridges_only_on_liquid":
-			var oBridgesOnlyOnLiquidCheckbox = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox'
+			var oBridgesOnlyOnLiquidCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox'
 			if doWhat == SET: oBridgesOnlyOnLiquidCheckbox.pressed = value
 			if doWhat == GET: return oBridgesOnlyOnLiquidCheckbox.pressed
 		"frail_columns":
-			var oFrailColumnsCheckbox = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/FrailColumnsCheckbox'
+			var oFrailColumnsCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/FrailColumnsCheckbox'
 			if doWhat == SET: oFrailColumnsCheckbox.pressed = value
 			if doWhat == GET: return oFrailColumnsCheckbox.pressed
 		"wallauto_art":
-			var oAutoWallArtButton = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton'
+			var oAutoWallArtButton = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton'
 			if doWhat == SET: oAutoWallArtButton.text = value
 			if doWhat == GET: return oAutoWallArtButton.text
 		"wallauto_damaged":
-			var oDamagedWallLineEdit = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit'
+			var oDamagedWallLineEdit = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit'
 			if doWhat == SET: oDamagedWallLineEdit.text = value
 			if doWhat == GET: return oDamagedWallLineEdit.text
 		"recently_opened":
@@ -341,11 +341,11 @@ func game_setting(doWhat,string,value):
 			if doWhat == SET: oUiSystem.theme.get_font("font","").size = value
 			if doWhat == GET: return oUiSystem.theme.get_font("font","").size
 		"chance_effect_water":
-			var oWaterEffectPercent = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/HBoxContainer/WaterEffectPercent'
+			var oWaterEffectPercent = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer/WaterEffectPercent'
 			if doWhat == SET: oWaterEffectPercent.value = value
 			if doWhat == GET: return oWaterEffectPercent.value
 		"chance_effect_lava":
-			var oLavaEffectPercent = $'../Main/Ui/UiSystem/SlabSettingsWindow/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent'
+			var oLavaEffectPercent = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent'
 			if doWhat == SET: oLavaEffectPercent.value = value
 			if doWhat == GET: return oLavaEffectPercent.value
 

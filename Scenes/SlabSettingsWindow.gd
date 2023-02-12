@@ -1,4 +1,4 @@
-extends WindowDialog
+extends ScrollContainer
 onready var oAutoWallArtButton = Nodelist.list["oAutoWallArtButton"]
 onready var oDamagedWallLineEdit = Nodelist.list["oDamagedWallLineEdit"]
 

@@ -39,11 +39,11 @@ onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
 onready var oCheckBoxHideUnknown = Nodelist.list["oCheckBoxHideUnknown"]
 
 func _ready():
-	oTabSettings.set_tab_title(0,"Editor")
-	oTabSettings.set_tab_title(1,"General")
-	oTabSettings.set_tab_title(2,"2D view")
-	oTabSettings.set_tab_title(3,"3D view")
-	oTabSettings.set_tab_title(4,"Graphics")
+	oTabSettings.set_tab_title(0,"Files")
+	oTabSettings.set_tab_title(1,"Placements")
+	oTabSettings.set_tab_title(2,"UI")
+	oTabSettings.set_tab_title(3,"Camera")
+	oTabSettings.set_tab_title(4,"Performance")
 
 func _on_ButtonSettings_pressed():
 	Utils.popup_centered(self)
@@ -83,8 +83,7 @@ func _on_SettingsWindow_about_to_show():
 	oSciptIconMaxZoom.update_appearance(Settings.get_setting("script_icon_max"))
 	oEditorFontSize.update_appearance(Settings.get_setting("editor_font_size"))
 	oScriptEditorFontSize.update_appearance(Settings.get_setting("script_editor_font_size"))
-	
-	
+
 func _on_CheckBoxVsync_toggled(button_pressed):
 	Settings.set_setting("vsync", button_pressed)
 
