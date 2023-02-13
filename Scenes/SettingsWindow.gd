@@ -44,7 +44,7 @@ func _ready():
 	oTabSettings.set_tab_title(1,"Placements")
 	oTabSettings.set_tab_title(2,"UI")
 	oTabSettings.set_tab_title(3,"Camera")
-	oTabSettings.set_tab_title(4,"Performance")
+	oTabSettings.set_tab_title(4,"Graphics")
 
 func _on_ButtonSettings_pressed():
 	Utils.popup_centered(self)
