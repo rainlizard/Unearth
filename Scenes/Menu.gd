@@ -9,7 +9,7 @@ onready var oMenuButtonFile = Nodelist.list["oMenuButtonFile"]
 onready var oMenuButtonEdit = Nodelist.list["oMenuButtonEdit"]
 onready var oMenuButtonSettings = Nodelist.list["oMenuButtonSettings"]
 onready var oMenuButtonView = Nodelist.list["oMenuButtonView"]
-onready var oPlayButton = Nodelist.list["oPlayButton"]
+onready var oMenuPlayButton = Nodelist.list["oMenuPlayButton"]
 onready var oFileDialogSaveAs = Nodelist.list["oFileDialogSaveAs"]
 onready var oFileDialogOpen = Nodelist.list["oFileDialogOpen"]
 onready var oConfirmAutoGen = Nodelist.list["oConfirmAutoGen"]
@@ -41,6 +41,12 @@ var recentlyOpenedPopupMenu = PopupMenu.new()
 var fixMenuExpansion
 
 func _ready():
+	# Allow Settings and Play button to be hovered without the dropdown menu appearing
+	oMenuButtonSettings.get_popup().mouse_filter = Control.MOUSE_FILTER_IGNORE
+	oMenuButtonSettings.get_popup().modulate = Color(0,0,0,0)
+	oMenuPlayButton.get_popup().mouse_filter = Control.MOUSE_FILTER_IGNORE
+	oMenuPlayButton.get_popup().modulate = Color(0,0,0,0)
+	
 	for i in $HBoxContainer2.get_children():
 		if i is MenuButton:
 			i.get_popup().rect_min_size.x = 180
@@ -118,7 +124,7 @@ func _process(delta):
 	
 	if oCurrentMap.path == "": # Certain features hould only be available to maps that exist as files - maps that have already been "Saved as".
 		oMenuButtonFile.get_popup().set_item_disabled(oMenuButtonFile.get_popup().get_item_index(4),true) # Disable "Save map"
-		oPlayButton.disabled = true # Can only play a map that has been "Saved as"
+		oMenuPlayButton.disabled = true # Can only play a map that has been "Saved as"
 	else:
 		oMenuButtonFile.get_popup().set_item_disabled(oMenuButtonFile.get_popup().get_item_index(4),false) # Enable "Save map"
 	
@@ -143,16 +149,16 @@ func constantly_monitor_play_button_state():
 			mapIsInCorrectDirectory = true
 	
 	if mapIsInCorrectDirectory == true: # Is playable path
-		oPlayButton.disabled = false
-		oPlayButton.hint_tooltip = ""
+		oMenuPlayButton.disabled = false
+		oMenuPlayButton.hint_tooltip = ""
 	else: # Is not a playable path
-		oPlayButton.disabled = true
-		oPlayButton.hint_tooltip = "Map must be saved in the correct directory in order to play."
+		oMenuPlayButton.disabled = true
+		oMenuPlayButton.hint_tooltip = "Map must be saved in the correct directory in order to play."
 	
 	if oEditor.mapHasBeenEdited == true:
-		oPlayButton.text = "Save & Play"
+		oMenuPlayButton.text = "Save & Play"
 	else:
-		oPlayButton.text = "Play"
+		oMenuPlayButton.text = "Play"
 
 func _on_FileSubmenu_Pressed(pressedID):
 	match pressedID:
@@ -251,9 +257,9 @@ func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in comb
 	
 	oGame.menu_play_clicked()
 	
-	oPlayButton.disconnect("pressed",self,"_on_PlayButton_pressed")
+	oMenuPlayButton.disconnect("pressed",self,"_on_PlayButton_pressed")
 	yield(get_tree().create_timer(2.5), "timeout")
-	oPlayButton.connect("pressed",self,"_on_PlayButton_pressed")
+	oMenuPlayButton.connect("pressed",self,"_on_PlayButton_pressed")
 
 func _on_ConfirmDiscardChanges_confirmed():
 	oOpenMap.open_map(oCurrentMap.path)
