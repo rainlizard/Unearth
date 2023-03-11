@@ -59,8 +59,6 @@ func _on_MapProperties_visibility_changed():
 func _on_MapFormatSetting_item_selected(index):
 	# Clicked using mouse
 	oEditor.mapHasBeenEdited = true
-	if index == 0:
-		oMessage.big("Warning", "'KFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Classic format' for now.")
 	
 	set_format_selection(index)
 

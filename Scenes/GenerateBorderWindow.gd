@@ -36,19 +36,24 @@ func _ready():
 	randomize()
 	noise.seed = randi()
 
+var showed_warning = false
+
 func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
 	
-	# Always set default format to Old Format until Bigger Maps feature is done in KeeperFX
-	oSetNewFormat.selected = 1
-	#if oGame.running_keeperfx() == false:
-	#	oSetNewFormat.selected = 1 # Set default format to OLD, for newbies who don't know what KeeperFX is
+	# Default to KFX format
+	if oGame.running_keeperfx() == true:
+		oSetNewFormat.selected = 0 # Set default format to KFX format
+	else:
+		oSetNewFormat.selected = 1 # Set default format to OLD, for newbies who don't know what KeeperFX is
 	
 	reinit_noise_preview()
 	
 	_on_CheckBoxNewMapBorder_pressed()
-	_on_NewMapFormat_item_selected(oSetNewFormat.selected)
-
+	
+	if showed_warning == false:
+		showed_warning = true
+		oMessage.quick("For KFX format to function correctly you may need the latest KeeperFX alpha.")
 
 func reinit_noise_preview():
 	var sizeX = oXSizeLine.text.to_int()
@@ -142,14 +147,14 @@ func _on_NoiseAlgTypeCheckBox_toggled(button_pressed):
 
 func _on_YSizeLine_focus_exited():
 	if oCheckBoxNewMapBorder.pressed == false: return
-	if oYSizeLine.text.to_int() > 512:
-		oYSizeLine.text = "512"
+	if oYSizeLine.text.to_int() > 170:
+		oYSizeLine.text = "170"
 	reinit_noise_preview()
 	update_border_image_with_noise()
 func _on_XSizeLine_focus_exited():
 	if oCheckBoxNewMapBorder.pressed == false: return
-	if oXSizeLine.text.to_int() > 512:
-		oXSizeLine.text = "512"
+	if oXSizeLine.text.to_int() > 170:
+		oXSizeLine.text = "170"
 	reinit_noise_preview()
 	update_border_image_with_noise()
 
@@ -247,14 +252,12 @@ func _on_CheckBoxNewMapBorder_pressed():
 		oNewMapNoiseOptions.visible = false
 		update_border_image_with_blank()
 
-
 func _on_NewMapFormat_item_selected(index):
 	if index == 0:
 		oXSizeLine.editable = true
 		oYSizeLine.editable = true
 		oXSizeLine.hint_tooltip = ""
 		oYSizeLine.hint_tooltip = ""
-		oMessage.big("Warning", "'KFX format' may not produce functional maps, it's currently under heavy development. Stick with 'Classic format' for now.")
 	elif index == 1:
 		oXSizeLine.editable = false
 		oYSizeLine.editable = false
