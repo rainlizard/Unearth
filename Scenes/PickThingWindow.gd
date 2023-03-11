@@ -60,6 +60,7 @@ func _ready():
 	$ThingTabs.initialize([])
 
 func initialize_thing_grid_items():
+	yield(get_tree(),'idle_frame') # Needed for loading animation IDs from call_deferred in Things singleton
 	remove_all_grid_items()
 	
 	var CODETIME_START = OS.get_ticks_msec()

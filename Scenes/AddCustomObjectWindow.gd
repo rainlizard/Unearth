@@ -9,8 +9,6 @@ onready var oSelector = Nodelist.list["oSelector"]
 onready var oThingTabs = Nodelist.list["oThingTabs"]
 onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oWarningIdInUse = Nodelist.list["oWarningIdInUse"]
-onready var oCustomObjectImageFileDialog = Nodelist.list["oCustomObjectImageFileDialog"]
-onready var oLabelCustomObjectImagePath = Nodelist.list["oLabelCustomObjectImagePath"]
 
 var tab = Things.TAB_CREATURE
 
@@ -29,15 +27,6 @@ func _process(delta):
 	oWarningIdInUse.visible = thinglist_has_subtype(get_thingType(), value)
 
 func _on_AddCustomObjectButton_pressed():
-	var imgSrc = oLabelCustomObjectImagePath.text
-	if imgSrc != "":
-		var imgDest = Settings.unearthdata.plus_file("custom-object-images").plus_file(imgSrc.get_file())
-		var dir = Directory.new()
-		var successOrFailure = dir.copy(imgSrc, imgDest)
-		if successOrFailure != OK:
-			oMessage.quick("Error " + str(successOrFailure) + ": failed copying image.")
-			return
-	
 	var givenName = oNewObjectName.text
 	
 	if givenName == "":
@@ -57,8 +46,8 @@ func _on_AddCustomObjectButton_pressed():
 	get_thingType(), # thingType
 	int(oNewObjectSubtypeID.text), # subtype
 	givenName, # Name
-	imgSrc.get_file(), # Image
-	imgSrc.get_file(), # Portrait
+	null, # Image
+	null, # Portrait
 	tabToPlaceIn,
 	])
 	
@@ -67,7 +56,6 @@ func _on_AddCustomObjectButton_pressed():
 	
 	# Switch to show the thing you've added
 	oSelector.change_mode(oSelector.MODE_SUBTILE)
-	
 	
 	for i in oThingTabs.get_tab_count():
 		if oThingTabs.get_tab_control(i) == oPickThingWindow.tabs[tabToPlaceIn][oPickThingWindow.GRIDCON_PATH]:
@@ -93,7 +81,6 @@ func _on_AddCustomObjectWindow_visibility_changed():
 		auto_fill_subtype_field()
 	else:
 		yield(get_tree(),'idle_frame')
-		oLabelCustomObjectImagePath.text = ""
 
 
 func auto_fill_subtype_field():
@@ -137,14 +124,6 @@ func get_empty_entry_thinglist(thingType):
 		i += 1
 
 
-func _on_NewObjectImage_pressed():
-	Utils.popup_centered(oCustomObjectImageFileDialog)
-
-
-func _on_CustomObjectImageFileDialog_file_selected(filePath):
-	oLabelCustomObjectImagePath.text = filePath
-
-
 func _on_CustomObjectHelpButton_pressed():
 	var helptext = ""
 	helptext += "'Type' and 'ID' are the important fields that affect how the custom object will be read by the game. The other fields only affect how it appears within the Unearth Editor."
@@ -161,9 +140,14 @@ func _on_CustomObjectHelpButton_pressed():
 	helptext += "\n"
 	helptext += "5. In the Thing selection window, look for the object you've added inside the Editor tab you chose and place it on your map."
 	helptext += "\n"
-	helptext += "Keep in mind a custom object without an Editor Image will appear as a diamond shape, but it will appear correctly in-game."
+	helptext += "Keep in mind a custom object without an editor Image will appear as a diamond shape, but it will appear correctly in-game."
 	helptext += "\n\n"
 	helptext += "After adding one, right click on its portrait within the thing selection window to remove custom things from the editor."
 	#helptext += "\n\n"
 	#helptext += "For now, placing a custom slab on a new/different map than the one you created it on, will not carry over the exact same column data."
 	oMessage.big("Help",helptext)
+
+
+func _on_CustomObjectImagesButton_pressed():
+	print("This button works in stand alone but not in editor")
+	OS.shell_open(Settings.unearthdata.plus_file("custom-object-images"))

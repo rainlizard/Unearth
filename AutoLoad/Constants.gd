@@ -1,5 +1,5 @@
 extends Node
-const VERSION = "0.32c"
+const VERSION = "0.33"
 const unearth_map_format_version:float = 1.00
 
 const TILE_SIZE = 96
@@ -28,4 +28,5 @@ const TEXTURE_MAP_NAMES = {
 10: "Lilac Stone",
 11: "Swamp Serpent",
 12: "Lava Cavern",
+13: "Laterite Cavern",
 }

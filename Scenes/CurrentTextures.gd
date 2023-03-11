@@ -47,7 +47,7 @@ func _notification(what: int):
 
 func _on_ReloadTextureMapsButton_pressed():
 	if texturesLoadedState != LOADING_IN_PROGRESS: # Don't do anything if it's already doing something
-		oMessage.quick("Reloading texture maps")
+		oMessage.quick("Reloading tilesets")
 		REMEMBER_TMAPA_PATHS.clear()
 		start()
 
@@ -147,7 +147,7 @@ func save_image_as_png(img, inputPath):
 	imgTex.create_from_image(img, Texture.FLAG_MIPMAPS + Texture.FLAG_ANISOTROPIC_FILTER)
 	var savePath = Settings.unearthdata.plus_file(fileName)
 	ResourceSaver.save(savePath, imgTex)
-	oMessage.quick("Caching texture maps : ".plus_file("unearthdata").plus_file(fileName))
+	oMessage.quick("Caching tilesets : ".plus_file("unearthdata").plus_file(fileName))
 
 
 func load_cache_filename(path):
@@ -207,10 +207,10 @@ func set_current_texture_pack():
 	var value = oDataLevelStyle.data
 	
 	if cachedTextures.empty() == true:
-		oMessage.big("Error", "No texture maps could be loaded. Try pressing the [Reload texture map cache] button in Settings and then reopen the map.")
+		oMessage.big("Error", "No tilesets could be loaded. Try pressing the [Reload tileset cache] button in Settings and then reopen the map.")
 		return
 	if cachedTextures[value] == null or cachedTextures[value][0] == null or cachedTextures[value][1] == null:
-		oMessage.big("Error", "Unable to load texture map number " + str(value) + ". Try pressing the [Reload texture map cache] button in Settings.")
+		oMessage.big("Error", "Unable to load tileset number " + str(value) + ". Try pressing the [Reload tileset cache] button in Settings.")
 		return
 	
 	# 2D

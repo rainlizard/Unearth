@@ -1,2 +1,0 @@
-Images for custom objects are copied into this directory.
-Also, you can change the appearance of existing custom objects by editing custom_objects.cfg

@@ -1625,7 +1625,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Columns", null, 0, false, false, 0, 0, null, "", false, "Custom objects", null, 0, false, false, 1, 0, null, "", false, "Update all slabs", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Textures", null, 0, false, false, 3, 0, null, "", false, "Slabset", null, 0, false, false, 4, 0, null, "", false ]
+items = [ "Columns", null, 0, false, false, 0, 0, null, "", false, "Custom objects", null, 0, false, false, 1, 0, null, "", false, "Update all slabs", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Make a tileset", null, 0, false, false, 3, 0, null, "", false, "Slabset", null, 0, false, false, 4, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2325,11 +2325,11 @@ expand_to_text_length = true
 
 [node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 144.0
-margin_right = 240.0
+margin_right = 188.0
 margin_bottom = 171.0
 hint_tooltip = "Reads tmapa00x.dat files from Dungeon Keeper's /data/ directory and then recreates cache files in Unearth's /unearthdata/ directory."
 size_flags_horizontal = 2
-text = "Reload texture map cache"
+text = "Reload tileset cache"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -3436,8 +3436,8 @@ visible = true
 margin_left = 648.0
 margin_top = 687.0
 margin_right = 1010.0
-margin_bottom = 1007.0
-rect_min_size = Vector2( 329, 320 )
+margin_bottom = 961.0
+rect_min_size = Vector2( 329, 274 )
 window_title = "Add custom object"
 resizable = true
 script = ExtResource( 91 )
@@ -3454,21 +3454,38 @@ size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer"]
 margin_right = 332.0
-margin_bottom = 290.0
+margin_bottom = 244.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="CustomObjectHelpButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
+margin_right = 332.0
+margin_bottom = 27.0
+
+[node name="CustomObjectHelpButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
 margin_right = 54.0
 margin_bottom = 27.0
 size_flags_horizontal = 0
 text = "Help"
 
-[node name="WarningIdInUse" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
-modulate = Color( 1, 0.28, 0.28, 1 )
+[node name="CustomObjectImagesButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 182.0
+margin_right = 332.0
+margin_bottom = 27.0
+size_flags_horizontal = 10
+text = "Custom images"
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
 margin_top = 31.0
 margin_right = 332.0
-margin_bottom = 52.0
+margin_bottom = 55.0
+rect_min_size = Vector2( 24, 24 )
+
+[node name="WarningIdInUse" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
+modulate = Color( 1, 0.28, 0.28, 1 )
+margin_top = 59.0
+margin_right = 332.0
+margin_bottom = 80.0
 text = "Warning: ID already in use by editor."
 align = 1
 __meta__ = {
@@ -3476,9 +3493,9 @@ __meta__ = {
 }
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
-margin_top = 56.0
+margin_top = 84.0
 margin_right = 332.0
-margin_bottom = 215.0
+margin_bottom = 212.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -3486,7 +3503,7 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
 margin_top = 3.0
-margin_right = 120.0
+margin_right = 114.0
 margin_bottom = 24.0
 text = "Type:"
 
@@ -3504,7 +3521,7 @@ __meta__ = {
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
 margin_top = 36.0
-margin_right = 120.0
+margin_right = 114.0
 margin_bottom = 57.0
 text = "ID:"
 
@@ -3517,7 +3534,7 @@ size_flags_horizontal = 10
 
 [node name="Label3" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
 margin_top = 71.0
-margin_right = 120.0
+margin_right = 114.0
 margin_bottom = 92.0
 text = "Editor name:"
 __meta__ = {
@@ -3537,7 +3554,7 @@ __meta__ = {
 
 [node name="Label5" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
 margin_top = 104.0
-margin_right = 120.0
+margin_right = 114.0
 margin_bottom = 125.0
 text = "Editor tab:"
 __meta__ = {
@@ -3554,37 +3571,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label4" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_top = 135.0
-margin_right = 120.0
-margin_bottom = 156.0
-text = "Editor image:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NewObjectImage" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 196.0
-margin_top = 132.0
-margin_right = 332.0
-margin_bottom = 159.0
-size_flags_horizontal = 8
-text = "Choose image"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="LabelCustomObjectImagePath" type="Label" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
-margin_top = 219.0
-margin_right = 332.0
-margin_bottom = 240.0
-align = 2
-clip_text = true
-
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer"]
-margin_top = 263.0
+margin_top = 217.0
 margin_right = 332.0
-margin_bottom = 290.0
+margin_bottom = 244.0
 size_flags_vertical = 10
 
 [node name="AddCustomObjectButton" type="Button" parent="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/HBoxContainer"]
@@ -3767,7 +3757,7 @@ grow_vertical = 2
 hint_tooltip = "This affects the map's name in both .lif and .lof files"
 size_flags_horizontal = 7
 
-[node name="LabelDungeonStyle" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/GridContainer"]
+[node name="LabelTileset" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/GridContainer"]
 margin_top = 35.0
 margin_right = 311.0
 margin_bottom = 62.0
@@ -3775,7 +3765,7 @@ grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Dungeon style"
+text = "Tileset"
 valign = 1
 
 [node name="DungeonStyleList" type="OptionButton" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/GridContainer"]
@@ -4689,23 +4679,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CustomObjectImageFileDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = -2004.0
-margin_top = 2879.0
-margin_right = -1324.0
-margin_bottom = 3439.0
-rect_min_size = Vector2( 250, 87.5 )
-window_title = "Open a File"
-resizable = true
-dialog_text = "The image you select will be copied to /unearthdata/.
-Be sure it has a unique filename.
-"
-mode = 0
-access = 2
-filters = PoolStringArray( "*.png" )
-show_hidden_files = true
-
 [node name="ExportTmapaDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -1278.0
@@ -4726,7 +4699,7 @@ margin_left = -1273.0
 margin_top = 954.0
 margin_right = -741.0
 margin_bottom = 1389.0
-window_title = "Texture editing"
+window_title = "Tileset editing"
 resizable = true
 script = ExtResource( 126 )
 
@@ -4818,7 +4791,7 @@ margin_right = 512.0
 margin_bottom = 281.0
 text = "Now actively reloading files from filelist pack folder, this means as you edit and save those .PNGs, any changes you make will be shown realtime in Unearth (in the 3D view too).
 
-Your Dungeon style in Map settings has been set to the texture pack # you're editing."
+Your Tileset in Map settings has been set to the texture pack # you're editing."
 autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -5847,10 +5820,10 @@ script = SubResource( 20 )
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmClmClearUnused" to="Ui/UiSystem/ColumnEditor" method="_on_ConfirmClmClearUnused_confirmed"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/AddCustomObjectWindow" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_AddCustomObjectWindow_visibility_changed"]
-[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/CustomObjectHelpButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_CustomObjectHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/HBoxContainer2/CustomObjectHelpButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_CustomObjectHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/HBoxContainer2/CustomObjectImagesButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_CustomObjectImagesButton_pressed"]
 [connection signal="item_selected" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer/NewObjectType" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectType_item_selected"]
 [connection signal="focus_exited" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer/NewObjectSubtypeID" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectSubtypeID_focus_exited"]
-[connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/GridContainer/NewObjectImage" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_NewObjectImage_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomObjectWindow/MarginContainer/VBoxContainer/HBoxContainer/AddCustomObjectButton" to="Ui/UiSystem/AddCustomObjectWindow" method="_on_AddCustomObjectButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ImageAsMapDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImageAsMapDialog_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonNewMap" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonNewMap_pressed"]

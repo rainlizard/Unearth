@@ -121,7 +121,7 @@ func generation():
 			if GENERATED_TYPE == GEN_MAP:
 				slabStyleValue = oDataSlx.get_tileset_value(xSlab,ySlab)
 			else:
-				slabStyleValue = 0 # Use Default Dungeon Style for CLM view
+				slabStyleValue = 0 # Use Default Tileset for CLM view
 			
 			for ySubtile in 3:
 				for xSubtile in 3:

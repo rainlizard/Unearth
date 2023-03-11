@@ -7,8 +7,8 @@ func add_object(array):
 	print("Objected added: " + str(array))
 	var section = 'OBJECT:' + str(array[0]) + ':' + str(array[1])
 	objectsFile.set_value(section,"NAME", array[2])
-	objectsFile.set_value(section,"IMAGE", array[3])
-	objectsFile.set_value(section,"PORTRAIT", array[4])
+	#objectsFile.set_value(section,"IMAGE", array[3])
+	#objectsFile.set_value(section,"PORTRAIT", array[4])
 	objectsFile.set_value(section,"TAB", array[5])
 	
 	objectsFile.save(Settings.unearthdata.plus_file("custom_objects.cfg"))
@@ -26,41 +26,17 @@ func load_file():
 		var objSubtype = int(sectionNameArray[2])
 		
 		var objName = objectsFile.get_value(sectionName, "NAME", "")
-		var objImage = objectsFile.get_value(sectionName, "IMAGE", "")
-		var objPortrait = objectsFile.get_value(sectionName, "PORTRAIT", "")
+#		var objImage = objectsFile.get_value(sectionName, "IMAGE", "")
+#		var objPortrait = objectsFile.get_value(sectionName, "PORTRAIT", "")
 		var objTab = objectsFile.get_value(sectionName, "TAB", 0)
-		
-		if objImage == "":
-			objImage = null # This is to prevent an annoying line in the Debugger
-		else:
-			var img = Image.new()
-			var err = img.load(Settings.unearthdata.plus_file("custom-object-images").plus_file(objImage))
-			if err == OK:
-				var tex = ImageTexture.new()
-				tex.create_from_image(img)
-				objImage = tex
-			else:
-				objImage = null
-		
-		if objPortrait == "":
-			objPortrait = null
-		else:
-			var img = Image.new()
-			var err = img.load(Settings.unearthdata.plus_file("custom-object-images").plus_file(objPortrait))
-			if err == OK:
-				var tex = ImageTexture.new()
-				tex.create_from_image(img)
-				objPortrait = tex
-			else:
-				objPortrait = null
 		
 		var constructArray = [
 			objName, # NAME
 			null, # KEEPERFX_NAME
 			null, # ANIMATION_ID
-			objImage, # TEXTURE
-			objPortrait, # PORTRAIT
-			objTab, 
+			null, # TEXTURE
+			null, # PORTRAIT
+			objTab,
 		]
 		match objThingType:
 			Things.TYPE.OBJECT: Things.DATA_OBJECT[objSubtype] = constructArray

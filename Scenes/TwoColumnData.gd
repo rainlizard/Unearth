@@ -292,6 +292,7 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 	#if callingNode is LineEdit: callingNode.text = String(valueNumber)
 	if callingNode is SpinBox:
 		callingNode.value = float(valueNumber)
+		callingNode.get_line_edit().caret_position = callingNode.get_line_edit().text.length()
 	
 	if oMirrorPlacementCheckBox.pressed == true:
 		if aValueWasAdjustedSoMirrorIt != "":

@@ -183,6 +183,8 @@ func load_cfg_stuff(map):
 	if fullPathToMainCfg != "":
 		Things.get_cfgs_directory(fullPathToMainCfg)
 
+
+
 func finish_opening_map(map):
 	oPickThingWindow.initialize_thing_grid_items()
 	oCurrentMap.set_path_and_title(map)
@@ -236,7 +238,6 @@ func _on_ConfirmDecompression_confirmed():
 
 func _on_FileDialogOpen_file_selected(path):
 	open_map(path)
-
 
 func get_accompanying_files(map):
 	var baseDir = map.get_base_dir()

@@ -76,13 +76,13 @@ func initialize_filelist():
 		for i in fileTimes.size():
 			fileTimes[i] = -1
 	
-	# Change current map's Dungeon Style setting if it's a different one
+	# Change current map's Tileset setting if it's a different one
 	var fn = get_tmapa_filename()
 	if oDataLevelStyle.data != int(fn):
 		oDataLevelStyle.data = int(fn)
 		oTextureCache.set_current_texture_pack()
 		oEditor.mapHasBeenEdited = true
-		oMessage.quick("Changed map's Dungeon style to show what you're currently editing")
+		oMessage.quick("Changed map's Tileset to show what you're currently editing")
 
 
 func execute():

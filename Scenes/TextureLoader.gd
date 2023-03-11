@@ -49,5 +49,4 @@ extends Node2D
 #			#tileSetID.tile_set_texture(tileID, oTextures.tex[texturePath])
 #
 #	currentPack = newPack
-#	print('Loaded style : ' + newPack)
 #	print('Redirected tileset paths in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')

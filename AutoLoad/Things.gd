@@ -60,6 +60,10 @@ var GENRE_TO_TAB = {
 	"WORKSHOPBOX": TAB_BOX,
 }
 
+var animation_id_to_image = {} # Just a shortcut, the real images are stored in the data structures
+
+var custom_images_list = {} # Contains uppercase filename and real filename
+
 var default_data = {}
 
 func _init():
@@ -352,6 +356,8 @@ enum SPELLBOOK {
 
 var haveFullySetupDefaultData = false
 
+
+
 func reset_thing_data_to_default():
 	if haveFullySetupDefaultData == false:
 		haveFullySetupDefaultData = true
@@ -365,6 +371,7 @@ func reset_thing_data_to_default():
 	DATA_EFFECTGEN = default_data["DATA_EFFECTGEN"].duplicate(true)
 	DATA_CREATURE = default_data["DATA_CREATURE"].duplicate(true)
 	DATA_OBJECT = default_data["DATA_OBJECT"].duplicate(true)
+
 
 func get_cfgs_directory(fullPathToMainCfg):
 	var oGame = Nodelist.list["oGame"]
@@ -451,6 +458,7 @@ func cfg_objects(massiveString, DATA_ARRAY):
 					if do == true:
 						DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName # Always set CFG name
 						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
+						look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName)
 					
 				elif componentsOfLine[0].strip_edges() == "GENRE" and objectID != 0:
 					var thingGenre = componentsOfLine[1].strip_edges()
@@ -467,8 +475,13 @@ func cfg_objects(massiveString, DATA_ARRAY):
 					
 				elif componentsOfLine[0].strip_edges() == "ANIMATIONID":
 					var thingAnimationID = componentsOfLine[1].strip_edges()
+					look_for_images_to_load(DATA_ARRAY, objectID, thingAnimationID)
 					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
-
+					
+					if DATA_ARRAY[objectID][TEXTURE] == null:
+						call_deferred("set_image_based_on_animation_id", TYPE.OBJECT, objectID, thingAnimationID) # Do it next frame after everything has been appended inside animation_id_to_image, so we can look through it all.
+					else:
+						animation_id_to_image[thingAnimationID] = DATA_ARRAY[objectID][TEXTURE]
 
 func cfg_traps(massiveString, DATA_ARRAY):
 	var listSections = massiveString.split('[TRAP',false)
@@ -496,11 +509,17 @@ func cfg_traps(massiveString, DATA_ARRAY):
 					already_assigned_name = true
 					if DATA_ARRAY[objectID][NAME] == null or objectID >= 7: # Only change name if it's a newly added item OR a Dummy Trap
 						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
+					look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName)
 				elif componentsOfLine[0].strip_edges() == "ANIMATIONID" and already_assigned_animation_id == false:
 					var thingAnimationID = componentsOfLine[1].strip_edges()
+					look_for_images_to_load(DATA_ARRAY, objectID, thingAnimationID)
 					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
 					already_assigned_animation_id = true
-
+					
+					if DATA_ARRAY[objectID][TEXTURE] == null:
+						call_deferred("set_image_based_on_animation_id", TYPE.TRAP, objectID, thingAnimationID) # Do it next frame after everything has been appended inside animation_id_to_image, so we can look through it all.
+					else:
+						animation_id_to_image[thingAnimationID] = DATA_ARRAY[objectID][TEXTURE]
 
 
 func cfg_doors(massiveString, DATA_ARRAY):
@@ -529,11 +548,17 @@ func cfg_doors(massiveString, DATA_ARRAY):
 					already_assigned_name = true
 					if DATA_ARRAY[objectID][NAME] == null: # Only set editor name if it's a newly added item
 						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
+					look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName)
 				elif componentsOfLine[0].strip_edges() == "ANIMATIONID" and already_assigned_animation_id == false:
 					var thingAnimationID = componentsOfLine[1].strip_edges()
+					look_for_images_to_load(DATA_ARRAY, objectID, thingAnimationID)
 					DATA_ARRAY[objectID][ANIMATION_ID] = thingAnimationID
 					already_assigned_animation_id = true
-
+					
+					if DATA_ARRAY[objectID][TEXTURE] == null:
+						call_deferred("set_image_based_on_animation_id", TYPE.DOOR, objectID, thingAnimationID) # Do it next frame after everything has been appended inside animation_id_to_image, so we can look through it all.
+					else:
+						animation_id_to_image[thingAnimationID] = DATA_ARRAY[objectID][TEXTURE]
 
 func cfg_creatures(massiveString, DATA_ARRAY):
 	var bigListOfLines = massiveString.split('\n',false)
@@ -545,11 +570,16 @@ func cfg_creatures(massiveString, DATA_ARRAY):
 				var objectID = 0
 				creaturesList.insert(0, "")
 				while true:
-					
-					if DATA_ARRAY.has(objectID):
+					if objectID > 0: # Ignore null
+						if DATA_ARRAY.has(objectID) == false:
+							DATA_ARRAY[objectID] = [null, null, null, null, null, null] # Initialize empty space for each new entry in .cfg
+						
 						var thingCfgName = creaturesList[objectID].strip_edges()
 						#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
 						DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName
+						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
+						DATA_ARRAY[objectID][EDITOR_TAB] = TAB_CREATURE
+						look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName)
 					
 					objectID += 1
 					if objectID >= creaturesList.size():
@@ -557,7 +587,15 @@ func cfg_creatures(massiveString, DATA_ARRAY):
 				
 				return # exit early
 
-
+func set_image_based_on_animation_id(thingType, objectID, thingAnimationID):
+	if animation_id_to_image.has(thingAnimationID):
+		match thingType:
+			Things.TYPE.OBJECT: DATA_OBJECT[objectID][TEXTURE] = animation_id_to_image[thingAnimationID]
+			Things.TYPE.CREATURE: DATA_CREATURE[objectID][TEXTURE] = animation_id_to_image[thingAnimationID]
+			Things.TYPE.EFFECTGEN: DATA_EFFECTGEN[objectID][TEXTURE] = animation_id_to_image[thingAnimationID]
+			Things.TYPE.TRAP: DATA_TRAP[objectID][TEXTURE] = animation_id_to_image[thingAnimationID]
+			Things.TYPE.DOOR: DATA_DOOR[objectID][TEXTURE] = animation_id_to_image[thingAnimationID]
+			Things.TYPE.EXTRA: DATA_EXTRA[objectID][TEXTURE] = animation_id_to_image[thingAnimationID]
 
 func file_to_upper_string(dir, fileName):
 	var oGame = Nodelist.list["oGame"]
@@ -587,6 +625,59 @@ func get_zip_files_in_dir(path):
 	else:
 		print("An error occurred when trying to access the path.")
 	return array
+
+func look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName):
+	if custom_images_list.empty() == true:
+		custom_images_list = get_png_filenames_in_dir(Settings.unearthdata.plus_file("custom-object-images"))
+	
+	var dir = Settings.unearthdata.plus_file("custom-object-images")
+	
+	var uppercaseImageFilename = thingCfgName+".PNG".to_upper()
+	var uppercasePortraitFilename = thingCfgName+"_PORTRAIT.PNG".to_upper()
+	
+	var realImageFilename = ""
+	var realPortraitFilename = ""
+	
+	if custom_images_list.has(uppercaseImageFilename):
+		 realImageFilename = custom_images_list[uppercaseImageFilename]
+	
+	if custom_images_list.has(uppercasePortraitFilename):
+		 realPortraitFilename = custom_images_list[uppercasePortraitFilename]
+	
+	if realImageFilename != "":
+		var img = Image.new()
+		var err = img.load(dir.plus_file(realImageFilename))
+		if err == OK:
+			var tex = ImageTexture.new()
+			tex.create_from_image(img, Texture.FLAG_MIPMAPS)
+			DATA_ARRAY[objectID][TEXTURE] = tex
+	
+	if realPortraitFilename != "":
+		var img = Image.new()
+		var err = img.load(dir.plus_file(realPortraitFilename))
+		if err == OK:
+			var tex = ImageTexture.new()
+			tex.create_from_image(img, Texture.FLAG_MIPMAPS)
+			DATA_ARRAY[objectID][PORTRAIT] = tex
+
+
+
+func get_png_filenames_in_dir(path):
+	var dictionary = {}
+	var dir = Directory.new()
+	if dir.open(path) == OK:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if dir.current_is_dir():
+				pass
+			else:
+				if file_name.get_extension().to_upper() == "PNG":
+					dictionary[file_name.to_upper().replace(" ", "_")] = file_name
+			file_name = dir.get_next()
+	else:
+		print("An error occurred when trying to access the path.")
+	return dictionary
 
 
 #func load_custom_images_into_array(DATA_ARRAY, thingtypeImageFolder):
