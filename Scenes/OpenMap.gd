@@ -70,8 +70,7 @@ func start():
 func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
-func open_map(filePath): # auto opens other files
-	oCurrentMap.clear_map()
+func open_map(filePath):
 	# a filePath of "" means make a blank map.
 	
 	# This will replace \ with /, just for the sake of fixing ugliness
@@ -79,7 +78,7 @@ func open_map(filePath): # auto opens other files
 	
 	# Prevent opening any maps under any circumstance if you haven't set the dk exe yet. (Fix to launching via file association)
 	if oGame.EXECUTABLE_PATH == "":
-		oMessage.quick("Error: Cannot open map because executable path is not set")
+		oMessage.quick("Error: Cannot open map because game executable is not set. Set in File -> Preferences")
 		return
 	
 	# Prevent opening any maps under any circumstance if textures haven't been loaded. (Fix to launching via file association)
@@ -87,7 +86,8 @@ func open_map(filePath): # auto opens other files
 		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
 		return
 	
-	
+	# Always begin by clearing map
+	oCurrentMap.clear_map()
 	
 	# Close windows that I want closed
 	oMapSettingsWindow.visible = false

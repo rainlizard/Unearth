@@ -36,8 +36,6 @@ func _ready():
 	randomize()
 	noise.seed = randi()
 
-var showed_warning = false
-
 func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
 	
@@ -50,10 +48,7 @@ func _on_NewMapWindow_visibility_changed():
 	reinit_noise_preview()
 	
 	_on_CheckBoxNewMapBorder_pressed()
-	
-	if showed_warning == false:
-		showed_warning = true
-		oMessage.quick("For KFX format to function correctly you may need the latest KeeperFX alpha.")
+
 
 func reinit_noise_preview():
 	var sizeX = oXSizeLine.text.to_int()
@@ -81,6 +76,10 @@ func reinit_noise_preview():
 
 
 func _on_ButtonNewMapOK_pressed():
+	if oGame.EXECUTABLE_PATH == "":
+		oMessage.quick("Error: Game executable is not set. Set in File -> Preferences")
+		return
+	
 	oCurrentMap._on_ButtonNewMap_pressed()
 	
 	var rectStart = Vector2(0, 0)

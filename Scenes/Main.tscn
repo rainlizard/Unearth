@@ -5320,9 +5320,9 @@ text = "Export columns.cfg"
 visible = true
 margin_left = -1036.0
 margin_top = -2256.0
-margin_right = -267.0
-margin_bottom = -1845.0
-rect_min_size = Vector2( 775, 411 )
+margin_right = -261.0
+margin_bottom = -1791.0
+rect_min_size = Vector2( 775, 465 )
 window_title = "New map"
 resizable = true
 script = ExtResource( 134 )
@@ -5336,17 +5336,20 @@ custom_constants/margin_right = 20
 custom_constants/margin_top = 20
 custom_constants/margin_left = 20
 custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer"]
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 755.0
-margin_bottom = 391.0
+margin_bottom = 445.0
 custom_constants/separation = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
 margin_right = 343.0
-margin_bottom = 371.0
+margin_bottom = 425.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_right = 343.0
@@ -5494,17 +5497,29 @@ text = "Tapered"
 [node name="NoiseUpdateTimer" type="Timer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions"]
 one_shot = true
 
-[node name="ButtonNewMapOK" type="Button" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
-margin_top = 344.0
+[node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 343.0
 margin_right = 343.0
-margin_bottom = 371.0
+margin_bottom = 344.0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 348.0
+margin_right = 343.0
+margin_bottom = 393.0
+text = "Note: KFX format requires the latest KeeperFX alpha patch. (3288 or later)"
+autowrap = true
+
+[node name="ButtonNewMapOK" type="Button" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
+margin_top = 398.0
+margin_right = 343.0
+margin_bottom = 425.0
 size_flags_vertical = 10
 text = "OK"
 
 [node name="QuickNoisePreview" type="TextureRect" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
 margin_left = 363.0
 margin_right = 735.0
-margin_bottom = 371.0
+margin_bottom = 425.0
 hint_tooltip = "Click to randomize seed"
 size_flags_horizontal = 7
 size_flags_vertical = 7
