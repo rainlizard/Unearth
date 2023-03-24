@@ -67,29 +67,30 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust):
 	for performAction in actions:
 		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
 		
-		var getNodeAtMirroredPosition = get_node_on_subtile(toPos.x, toPos.y, "Instance")
-		if is_instance_valid(getNodeAtMirroredPosition):
-			if getNodeAtMirroredPosition.subtype == instanceBeingAdjusted.subtype:
-				if getNodeAtMirroredPosition.thingType == instanceBeingAdjusted.thingType:
-					match variableNameToAdjust:
-						"pointRange":
-							getNodeAtMirroredPosition.pointRange = instanceBeingAdjusted.pointRange
-						"lightRange":
-							getNodeAtMirroredPosition.lightRange = instanceBeingAdjusted.lightRange
-						"effectRange":
-							getNodeAtMirroredPosition.effectRange = instanceBeingAdjusted.effectRange
-						"lightIntensity":
-							getNodeAtMirroredPosition.lightIntensity = instanceBeingAdjusted.lightIntensity
-						"creatureLevel":
-							getNodeAtMirroredPosition.creatureLevel = instanceBeingAdjusted.creatureLevel
-						"boxNumber":
-							getNodeAtMirroredPosition.boxNumber = instanceBeingAdjusted.boxNumber
-						"doorLocked":
-							getNodeAtMirroredPosition.doorLocked = instanceBeingAdjusted.doorLocked
-							instanceBeingAdjusted.update_spinning_key()
-						"ownership":
-							var finalOwner = calculate_mirrored_ownership(toPos, fromPos, fieldX, fieldY, instanceBeingAdjusted.ownership)
-							getNodeAtMirroredPosition.ownership = finalOwner
+		var arrayOfInstances = get_all_instances_on_subtile(toPos.x, toPos.y)
+		for getNodeAtMirroredPosition in arrayOfInstances:
+			if is_instance_valid(getNodeAtMirroredPosition):
+				if getNodeAtMirroredPosition.subtype == instanceBeingAdjusted.subtype:
+					if getNodeAtMirroredPosition.thingType == instanceBeingAdjusted.thingType:
+						match variableNameToAdjust:
+							"pointRange":
+								getNodeAtMirroredPosition.pointRange = instanceBeingAdjusted.pointRange
+							"lightRange":
+								getNodeAtMirroredPosition.lightRange = instanceBeingAdjusted.lightRange
+							"effectRange":
+								getNodeAtMirroredPosition.effectRange = instanceBeingAdjusted.effectRange
+							"lightIntensity":
+								getNodeAtMirroredPosition.lightIntensity = instanceBeingAdjusted.lightIntensity
+							"creatureLevel":
+								getNodeAtMirroredPosition.creatureLevel = instanceBeingAdjusted.creatureLevel
+							"boxNumber":
+								getNodeAtMirroredPosition.boxNumber = instanceBeingAdjusted.boxNumber
+							"doorLocked":
+								getNodeAtMirroredPosition.doorLocked = instanceBeingAdjusted.doorLocked
+								getNodeAtMirroredPosition.update_spinning_key()
+							"ownership":
+								var finalOwner = calculate_mirrored_ownership(toPos, fromPos, fieldX, fieldY, instanceBeingAdjusted.ownership)
+								getNodeAtMirroredPosition.ownership = finalOwner
 
 func mirror_deletion_of_instance(instanceBeingDeleted):
 	var actions = []
@@ -109,11 +110,12 @@ func mirror_deletion_of_instance(instanceBeingDeleted):
 	for performAction in actions:
 		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
 		
-		var getNodeAtMirroredPosition = get_node_on_subtile(toPos.x, toPos.y, "Instance")
-		if is_instance_valid(getNodeAtMirroredPosition):
-			if getNodeAtMirroredPosition.subtype == instanceBeingDeleted.subtype:
-				if getNodeAtMirroredPosition.thingType == instanceBeingDeleted.thingType:
-					getNodeAtMirroredPosition.queue_free()
+		var arrayOfInstances = get_all_instances_on_subtile(toPos.x, toPos.y)
+		for getNodeAtMirroredPosition in arrayOfInstances:
+			if is_instance_valid(getNodeAtMirroredPosition):
+				if getNodeAtMirroredPosition.subtype == instanceBeingDeleted.subtype:
+					if getNodeAtMirroredPosition.thingType == instanceBeingDeleted.thingType:
+						getNodeAtMirroredPosition.queue_free()
 
 func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirrorType):
 	var actions = []
@@ -400,6 +402,14 @@ func get_node_on_subtile(xSubtile, ySubtile, nodeGroup):
 		if id.is_in_group(nodeGroup) and id.is_queued_for_deletion() == false and floor(id.locationX) == floor(xSubtile) and floor(id.locationY) == floor(ySubtile):
 			return id
 	return null
+
+func get_all_instances_on_subtile(xSubtile, ySubtile):
+	var checkSlabLocationGroup = "slab_location_group_"+str(floor(xSubtile/3))+'_'+str(floor(ySubtile/3))
+	var array = []
+	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
+		if id.is_in_group("Instance") and id.is_queued_for_deletion() == false and floor(id.locationX) == floor(xSubtile) and floor(id.locationY) == floor(ySubtile):
+			array.append(id)
+	return array
 
 func on_slab_update_thing_height(id): # Update heights of any manually placed objects
 	if id.is_in_group("Thing"):

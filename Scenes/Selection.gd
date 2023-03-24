@@ -205,8 +205,9 @@ func construct_shape_for_placement(constructType):
 		oOverheadOwnership.ownership_update_things(shapePositionArray, paintOwnership)
 		if oMirrorPlacementCheckBox.pressed == true:
 			oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_ONLY_OWNERSHIP)
-		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, true)
-
+		
+		var updateNearby = some_manual_placements_dont_update_nearby(paintSlab)
+		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
 	else:
 		# Slab placement
 		var useOwner = paintOwnership
@@ -216,14 +217,16 @@ func construct_shape_for_placement(constructType):
 		if oMirrorPlacementCheckBox.pressed == true:
 			oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_SLAB_AND_OWNER)
 		
-		var updateNearby = true
-		# Custom slabs don't update the surroundings
-		if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
-			updateNearby = false
-		
+		var updateNearby = some_manual_placements_dont_update_nearby(paintSlab)
 		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
 
-
+func some_manual_placements_dont_update_nearby(paintSlab):
+	# Custom slabs don't update the surroundings
+	if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
+		return false
+	elif Slabs.doors.has(paintSlab): # Doors don't update the surroundings
+		return false
+	return true
 
 func place_subtile(placeSubtile):
 	if placeSubtile.x < 0 or placeSubtile.y < 0 or placeSubtile.x >= (M.xSize*3) or placeSubtile.y >= (M.ySize*3):
@@ -269,16 +272,11 @@ func manually_delete_one_instance(inst):
 		if oInspector.inspectingInstance == inst:
 			oInspector.deselect()
 		
-		if oMirrorPlacementCheckBox.pressed == true:
-			oInstances.mirror_deletion_of_instance(inst)
-		
 		if inst.is_in_group("ActionPoint"):
 			oScriptHelpers.start() # Update when action points change
-		elif inst.is_in_group("Key"):
-			# If you manually delete a key, change the door's lock state
-			var doorID = oInstances.get_node_on_subtile(inst.locationX, inst.locationY, "Door")
-			if is_instance_valid(doorID) == true:
-				doorID.doorLocked = 0
+		
+		if oMirrorPlacementCheckBox.pressed == true:
+			oInstances.mirror_deletion_of_instance(inst)
 		
 		inst.queue_free()
 

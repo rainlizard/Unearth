@@ -69,12 +69,12 @@ func create_door_thing(xSlab, ySlab, ownership):
 	# Overwrite locked state with ui checkbox setting
 	if oPlaceLockedCheckBox.visible == true:
 		# Only affect the slab under cursor
-		if xSlab == oSelector.cursorTile.x and ySlab == oSelector.cursorTile.y:
-			# Set locked state to checkbox state
-			if oPlaceLockedCheckBox.pressed == true:
-				id.doorLocked = 1
-			else:
-				id.doorLocked = 0
+		#if xSlab == oSelector.cursorTile.x and ySlab == oSelector.cursorTile.y:
+		# Set locked state to checkbox state
+		if oPlaceLockedCheckBox.pressed == true:
+			id.doorLocked = 1
+		else:
+			id.doorLocked = 0
 	
 	id.update_spinning_key()
 

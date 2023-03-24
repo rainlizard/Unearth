@@ -76,7 +76,17 @@ func _enter_tree():
 			_on_zoom_level_changed(oCamera2D.zoom)
 		Things.TYPE.EFFECTGEN:
 			add_to_group("EffectGen")
-		
+
+
+
+func _exit_tree():
+	# If a key is removed (manually deleted or otherwise) then change the door's lock state
+	# This is good to put here to handle symmetry
+	if subtype == 44 and thingType == Things.TYPE.OBJECT and is_in_group("Key"):
+		var doorID = oInstances.get_node_on_subtile(locationX, locationY, "Door")
+		if is_instance_valid(doorID) == true:
+			doorID.doorLocked = 0
+
 func set_location_x(setVal):
 	locationX = setVal
 	position.x = locationX * 32
