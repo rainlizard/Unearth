@@ -323,7 +323,7 @@ func _on_optionbutton_item_selected(indexSelected, leftText): # When pressing En
 				"ThingListData":
 					if is_instance_valid(inst):
 						inst.doorLocked = indexSelected
-						inst.toggle_spinning_key()
+						inst.update_spinning_key()
 						aValueWasAdjustedSoMirrorIt = "doorLocked"
 				"PlacingListData":
 					oPlacingSettings.doorLocked = indexSelected

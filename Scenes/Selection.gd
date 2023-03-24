@@ -274,6 +274,11 @@ func manually_delete_one_instance(inst):
 		
 		if inst.is_in_group("ActionPoint"):
 			oScriptHelpers.start() # Update when action points change
+		elif inst.is_in_group("Key"):
+			# If you manually delete a key, change the door's lock state
+			var doorID = oInstances.get_node_on_subtile(inst.locationX, inst.locationY, "Door")
+			if is_instance_valid(doorID) == true:
+				doorID.doorLocked = 0
 		
 		inst.queue_free()
 

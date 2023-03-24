@@ -5,6 +5,7 @@ onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 onready var oLavaEffectPercent = Nodelist.list["oLavaEffectPercent"]
 onready var oWaterEffectPercent = Nodelist.list["oWaterEffectPercent"]
+onready var oSelector = Nodelist.list["oSelector"]
 
 onready var dir = oSlabPlacement.dir
 
@@ -50,24 +51,32 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask,
 
 func create_door_thing(xSlab, ySlab, ownership):
 	var createAtPos = Vector3((xSlab*3)+1.5, (ySlab*3)+1.5, 5)
+	
+	var rememberLockedState = 0 # This is the fallback value if oPlaceLockedCheckBox isn't being used
+	
+	# Destroy existing door thing
 	var doorID = oInstances.get_node_on_subtile(createAtPos.x, createAtPos.y, "Door")
 	if is_instance_valid(doorID) == true:
-		# Change existing door thing's ownership
-		doorID.ownership = ownership
-	else:
-		# No door thing, so create it
-		var id = oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership) #subtype determined in oInstances
-		if oPlaceLockedCheckBox.visible == true and oPlaceLockedCheckBox.pressed == true:
+		rememberLockedState = doorID.doorLocked
+		
+		doorID.position = Vector2(-500000,-500000) # Not sure if this is necessary
+		doorID.queue_free()
+	
+	# Recreate door thing
+	var id = oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership) #subtype determined in oInstances
+	id.doorLocked = rememberLockedState
+	
+	# Overwrite locked state with ui checkbox setting
+	if oPlaceLockedCheckBox.visible == true:
+		# Only affect the slab under cursor
+		if xSlab == oSelector.cursorTile.x and ySlab == oSelector.cursorTile.y:
+			# Set locked state to checkbox state
 			if oPlaceLockedCheckBox.pressed == true:
 				id.doorLocked = 1
 			else:
 				id.doorLocked = 0
-			id.toggle_spinning_key()
 	
-	# This isn't important, key ownership doesn't matter, but change it anyway
-	var keyID = oInstances.get_node_on_subtile(createAtPos.x, createAtPos.y, "Key")
-	if is_instance_valid(keyID) == true:
-		keyID.ownership = ownership
+	id.update_spinning_key()
 
 func determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner):
 	if bitmask == 0:

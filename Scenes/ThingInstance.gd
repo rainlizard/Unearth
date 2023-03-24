@@ -245,17 +245,24 @@ func _draw():
 		draw_arc(Vector2(0,0), (effectRange * 32)+16, 0, PI*2, 64, Color(0.75,1,0.75,1), 4, false)
 
 
-func toggle_spinning_key(): # Called when you manually change the lock state
-	# If door has no key, then create a key.
-	# If door has key, then destroy the key.
+func update_spinning_key(): # Called after changing the lock state
+	# Get any overlapping key if one exists
 	oInstances = Nodelist.list["oInstances"]
 	var keyID = oInstances.get_node_on_subtile(locationX, locationY, "Key")
-	if is_instance_valid(keyID) == true:
-		if doorLocked == 0:
+	
+	if doorLocked == 0:
+		# Door is unlocked
+		if is_instance_valid(keyID) == true:
+			# There's a key, so remove it
 			keyID.queue_free()
 	else:
-		if doorLocked == 1:
+		# Door is locked
+		if is_instance_valid(keyID) == false:
+			# There's no key, so create one
 			oInstances.place_new_thing(Things.TYPE.OBJECT, 44, Vector3(locationX,locationY,locationZ), ownership)
+		else:
+			# There is a key, so update its ownership to match the lock's
+			keyID.ownership = ownership
 
 func _on_VisibilityNotifier2D_screen_entered():
 	visible = true
