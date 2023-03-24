@@ -231,17 +231,22 @@ func _on_ViewSubmenu_Pressed(pressedID):
 					oMessage.quick("Could not open: " + pathToTryAndOpen)
 			else:
 				oMessage.quick("No map path detected. Try saving first.")
-		2:
-			if oEditor.currentView == oEditor.VIEW_2D:
-				oEditor.set_view_3d()
-				oGenerateTerrain.start()
-			oUi.switch_to_1st_person()
+		2: # Open log file
+			var pathToTryAndOpen = oGame.get_precise_filepath(oGame.GAME_DIRECTORY, "KEEPERFX.LOG")
+			var err = OS.shell_open(pathToTryAndOpen)
+			if err != OK:
+				oMessage.quick("Could not open: " + pathToTryAndOpen)
 		3:
 			if oEditor.currentView == oEditor.VIEW_2D:
 				oEditor.set_view_3d()
 				oGenerateTerrain.start()
-			oUi.switch_to_3D_overhead()
+			oUi.switch_to_1st_person()
 		4:
+			if oEditor.currentView == oEditor.VIEW_2D:
+				oEditor.set_view_3d()
+				oGenerateTerrain.start()
+			oUi.switch_to_3D_overhead()
+		5:
 			if oEditor.currentView == oEditor.VIEW_3D:
 				oEditor.set_view_2d()
 
