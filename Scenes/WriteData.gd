@@ -218,6 +218,16 @@ func write_tngfx(buffer):
 			elif thingNode.boxNumber != null:
 				t += "CustomBox = " +str(thingNode.boxNumber) + "\n"
 			
+			# Extended KeeperFX variables
+			if thingNode.creatureName != null and thingNode.creatureName != "":
+				t += "CreatureName = " +str(thingNode.creatureName) + "\n"
+			if thingNode.goldHeld != null:
+				t += "GoldHeld = " +str(thingNode.goldHeld) + "\n"
+			if thingNode.initialHealth != null:
+				t += "InitialHealth = " +str(thingNode.initialHealth) + "\n"
+			if thingNode.facingDirection != null:
+				t += "FacingDirection = " +str(thingNode.facingDirection) + "\n"
+			
 			var x = str(int(thingNode.locationX))
 			var xInner = str(fmod(thingNode.locationX,1.0) * 256)
 			var y = str(int(thingNode.locationY))

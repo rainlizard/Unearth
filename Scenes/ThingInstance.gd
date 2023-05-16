@@ -16,7 +16,6 @@ var thingType = null
 var subtype = null
 var ownership = null setget set_ownership
 
-
 var effectRange = null setget set_effectRange
 var sensitiveTile = null setget set_sensitiveTile
 var doorOrientation = null setget set_doorOrientation
@@ -39,6 +38,12 @@ var data19 = null
 var data20 = null
 
 var baseZindex = 0
+
+# FX extended fields
+var goldHeld = null
+var initialHealth = null
+var creatureName = null setget set_creatureName
+var facingDirection = null
 
 func _enter_tree():
 	set_texture_based_on_thingtype()
@@ -150,6 +155,10 @@ func set_boxNumber(setval):
 func set_doorLocked(setval):
 	data14 = null
 	doorLocked = setval
+
+func set_creatureName(setval):
+	#setval = Utils.strip_special_chars_from_string(setval)
+	creatureName = setval
 
 func set_herogateNumber(setval):
 	data14 = null

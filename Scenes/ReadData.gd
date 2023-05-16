@@ -456,9 +456,13 @@ func read_tngfx(buffer):
 						id.herogateNumber = c.get_value(section, "HEROGATENUMBER")
 					elif id.subtype == 133: # Mysterious Box
 						id.boxNumber = c.get_value(section, "CUSTOMBOX")
+					id.facingDirection = c.get_value(section, "FACINGDIRECTION", 0)
 				Things.TYPE.CREATURE:
 					id.index = c.get_value(section, "INDEX")
 					id.creatureLevel = c.get_value(section, "CREATURELEVEL")
+					id.creatureName = c.get_value(section, "CREATURENAME", "")
+					id.goldHeld = c.get_value(section, "GOLDHELD", 0)
+					id.initialHealth = c.get_value(section, "INITIALHEALTH", 100)
 				Things.TYPE.EFFECTGEN:
 					id.effectRange = c.get_value(section, "EFFECTRANGE")[0] + (c.get_value(section, "EFFECTRANGE")[1] / 256.0)
 					id.sensitiveTile = c.get_value(section, "PARENTTILE")

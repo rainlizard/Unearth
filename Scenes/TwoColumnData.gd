@@ -34,76 +34,104 @@ func add_item(leftText, rightText):
 	add_child(nameDesc)
 	
 	# Right column item
-	var nameValue
+	var nodeRightColumn
 	match leftText:
 		"Door locked":
-			nameValue = OptionButton.new()
-			nameValue.add_item("False")
-			nameValue.add_item("True")
+			nodeRightColumn = OptionButton.new()
+			nodeRightColumn.add_item("False")
+			nodeRightColumn.add_item("True")
 			
-			nameValue.connect("item_selected",self,"_on_optionbutton_item_selected", [leftText])
-			for i in nameValue.get_item_count():
-				if nameValue.get_item_text(nameValue.get_item_index(i)) == rightText:
-					nameValue.selected = i
+			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftText])
+			for i in nodeRightColumn.get_item_count():
+				if nodeRightColumn.get_item_text(nodeRightColumn.get_item_index(i)) == rightText:
+					nodeRightColumn.selected = i
 		"Ownership":
-			nameValue = OptionButton.new()
-			nameValue.focus_mode = 0 # I don't know whether I need this
-			nameValue.get_popup().focus_mode = 0
-			nameValue.add_item("Red")
-			nameValue.add_item("Blue")
-			nameValue.add_item("Green")
-			nameValue.add_item("Yellow")
-			nameValue.add_item("White")
-			nameValue.add_item("None")
+			nodeRightColumn = OptionButton.new()
+			nodeRightColumn.focus_mode = 0 # I don't know whether I need this
+			nodeRightColumn.get_popup().focus_mode = 0
+			nodeRightColumn.add_item("Red")
+			nodeRightColumn.add_item("Blue")
+			nodeRightColumn.add_item("Green")
+			nodeRightColumn.add_item("Yellow")
+			nodeRightColumn.add_item("White")
+			nodeRightColumn.add_item("None")
 			
-#			print(nameValue.get_popup().mouse_filter)
+#			print(nodeRightColumn.get_popup().mouse_filter)
 			
-			nameValue.connect("item_selected",self,"_on_optionbutton_item_selected", [leftText])
-			nameValue.connect("toggled",self,"_on_optionbutton_toggled", [nameValue])
+			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftText])
+			nodeRightColumn.connect("toggled",self,"_on_optionbutton_toggled", [nodeRightColumn])
 			# Select the correct option
-			for i in nameValue.get_item_count():
-				if nameValue.get_item_text(nameValue.get_item_index(i)) == rightText:
-					nameValue.selected = i
+			for i in nodeRightColumn.get_item_count():
+				if nodeRightColumn.get_item_text(nodeRightColumn.get_item_index(i)) == rightText:
+					nodeRightColumn.selected = i
 		"Level":
-			nameValue = scnLevelChanger.instance()
-			#nameValue.expand_to_text_length = true
-			nameValue.theme = thinLineEditTheme #!!!!!!!!!!!!!
-			nameValue.connect("value_changed", self, "_on_property_value_changed", [nameValue, leftText])
-			nameValue.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nameValue, leftText])
-			nameValue.value = float(rightText)
-		"Effect range","Light range","Intensity","Gate #","Point range","Point #","Custom box","Unknown 9","Unknown 10","Unknown 11-12","Unknown 13","Unknown 14","Unknown 15","Unknown 16","Unknown 17","Unknown 18","Unknown 19","Unknown 20":
-			nameValue = scnSpinBoxPropertiesValue.instance()
-			#nameValue.expand_to_text_length = true
-			nameValue.theme = thinLineEditTheme #!!!!!!!!!!!!!
-			nameValue.connect("value_changed", self, "_on_property_value_changed", [nameValue, leftText])
-			nameValue.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nameValue, leftText])
-			nameValue.value = float(rightText)
+			nodeRightColumn = scnLevelChanger.instance()
+			#nodeRightColumn.expand_to_text_length = true
+			nodeRightColumn.theme = thinLineEditTheme #!!!!!!!!!!!!!
+			nodeRightColumn.connect("value_changed", self, "_on_property_value_changed", [nodeRightColumn, leftText])
+			nodeRightColumn.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftText])
+			nodeRightColumn.value = float(rightText)
+		"Effect range","Light range","Intensity","Gate #","Point range","Point #","Custom box","Unknown 9","Unknown 10","Unknown 11-12","Unknown 13","Unknown 14","Unknown 15","Unknown 16","Unknown 17","Unknown 18","Unknown 19","Unknown 20","Gold held","Health %":
+			nodeRightColumn = scnSpinBoxPropertiesValue.instance()
+			#nodeRightColumn.expand_to_text_length = true
+			nodeRightColumn.theme = thinLineEditTheme #!!!!!!!!!!!!!
+			nodeRightColumn.connect("value_changed", self, "_on_property_value_changed", [nodeRightColumn, leftText])
+			nodeRightColumn.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftText])
+			nodeRightColumn.value = int(rightText)
+			
+			match leftText:
+				"Gold held":
+					nodeRightColumn.min_value = 0
+					nodeRightColumn.max_value = 1000000
+					nodeRightColumn.get_line_edit().placeholder_text = "0"
+					nodeRightColumn.get_line_edit().placeholder_alpha = 0.33
+				"Health %":
+					nodeRightColumn.min_value = 0
+					nodeRightColumn.max_value = 100
+					nodeRightColumn.get_line_edit().placeholder_text = "100"
+					nodeRightColumn.get_line_edit().placeholder_alpha = 0.33
 		"Position":
 			var scn = preload('res://Scenes/PositionEditor.tscn')
-			nameValue = scn.instance()
-			nameValue.set_txt(rightText.split(' '))
-			nameValue.connect("position_editor_text_entered", self, "_on_property_value_entered", [nameValue])
-			nameValue.connect("position_editor_text_changed", self, "_on_property_value_typed_in_manually", [nameValue, leftText])
-			nameValue.connect("position_editor_focus_exited", self, "_on_property_value_focus_exited", [nameValue,leftText])
+			nodeRightColumn = scn.instance()
+			nodeRightColumn.set_txt(rightText.split(' '))
+			nodeRightColumn.connect("position_editor_text_entered", self, "_on_property_value_entered", [nodeRightColumn])
+			nodeRightColumn.connect("position_editor_text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftText])
+			nodeRightColumn.connect("position_editor_focus_exited", self, "_on_property_value_focus_exited", [nodeRightColumn,leftText])
 			
-			nameValue.text = rightText
-			nameValue.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_END # To handle the other side's autowrap text
-			nameValue.align = HALIGN_LEFT
+			nodeRightColumn.text = rightText
+			nodeRightColumn.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_END # To handle the other side's autowrap text
+			nodeRightColumn.align = HALIGN_LEFT
+		"Facing":
+			nodeRightColumn = OptionButton.new()
+			nodeRightColumn.add_item("North")
+			nodeRightColumn.add_item("NorthEast")
+			nodeRightColumn.add_item("East")
+			nodeRightColumn.add_item("SouthEast")
+			nodeRightColumn.add_item("South")
+			nodeRightColumn.add_item("SouthWest")
+			nodeRightColumn.add_item("West")
+			nodeRightColumn.add_item("NorthWest")
+		"Name": #Creature name
+			nodeRightColumn = LineEdit.new()
+			nodeRightColumn.placeholder_text = "Default"
+			nodeRightColumn.placeholder_alpha = 0.33
+			nodeRightColumn.text = rightText #Utils.strip_special_chars_from_string(rightText)
+			nodeRightColumn.connect("text_changed", self, "_on_property_value_changed", [nodeRightColumn, leftText])
 		_:
-			nameValue = Label.new()
-			nameValue.autowrap = true
-			nameValue.rect_min_size.x = columnRightSize
-			#if name == "ColumnListData": nameValue.rect_min_size.x = columnRightSize-50
+			nodeRightColumn = Label.new()
+			nodeRightColumn.autowrap = true
+			nodeRightColumn.rect_min_size.x = columnRightSize
+			#if name == "ColumnListData": nodeRightColumn.rect_min_size.x = columnRightSize-50
 			# This is for when highlighting something in the Thing Window
 			if rightText == "":
-				nameValue.rect_min_size.x = 0
+				nodeRightColumn.rect_min_size.x = 0
 				nameDesc.autowrap = false
 			
-			nameValue.text = rightText
-			nameValue.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_END # To handle the other side's autowrap text
-			nameValue.align = HALIGN_LEFT
+			nodeRightColumn.text = rightText
+			nodeRightColumn.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_END # To handle the other side's autowrap text
+			nodeRightColumn.align = HALIGN_LEFT
 	
-	add_child(nameValue)
+	add_child(nodeRightColumn)
 
 func _on_property_value_entered(new_val, callingNode): # When pressing Enter on LineEdit, lose focus
 	oEditor.mapHasBeenEdited = true
@@ -121,7 +149,7 @@ func _on_property_value_focus_exited(callingNode, leftText):
 	update_property_value(callingNode, leftText)
 
 func _on_property_value_typed_in_manually(new_text, callingNode, leftText):
-	#if callingNode is LineEdit: callingNode.text = float(new_text)
+	if callingNode is LineEdit: callingNode.text = new_text
 	if callingNode is SpinBox:  callingNode.value = float(new_text)
 	update_property_value(callingNode, leftText)
 
@@ -132,10 +160,12 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 	oEditor.mapHasBeenEdited = true
 	var inst = oInspector.inspectingInstance
 	
-	var valueNumber
-	#if callingNode is LineEdit: valueNumber = callingNode.text
+	var value
+	
 	if callingNode is SpinBox:
-		valueNumber = callingNode.value
+		value = callingNode.value
+	elif callingNode is LineEdit:
+		value = callingNode.text
 	
 	var aValueWasAdjustedSoMirrorIt = ""
 	
@@ -153,152 +183,186 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 						if oMirrorPlacementCheckBox.pressed == true:
 							oMessage.quick("Note: Position adjustments are not made symmetrical.")
 		"Custom box":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.boxNumber = valueNumber
+						inst.boxNumber = value
 						aValueWasAdjustedSoMirrorIt = "boxNumber"
 				"PlacingListData":
-					oPlacingSettings.boxNumber = valueNumber
+					oPlacingSettings.boxNumber = value
 		"Level":
-			valueNumber = clamp(int(valueNumber), 1, 10)
+			value = clamp(int(value), 1, 10)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.creatureLevel = valueNumber
+						inst.creatureLevel = value
 						aValueWasAdjustedSoMirrorIt = "creatureLevel"
 				"PlacingListData":
-					oPlacingSettings.creatureLevel = valueNumber
+					oPlacingSettings.creatureLevel = value
 		"Point #":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.pointNumber = valueNumber
+						inst.pointNumber = value
 				"PlacingListData":
-					oPlacingSettings.pointNumber = valueNumber
+					oPlacingSettings.pointNumber = value
 		"Gate #":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.herogateNumber = valueNumber
+						inst.herogateNumber = value
 				"PlacingListData":
-					oPlacingSettings.herogateNumber = valueNumber
+					oPlacingSettings.herogateNumber = value
 		"Intensity":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.lightIntensity = valueNumber
+						inst.lightIntensity = value
 						aValueWasAdjustedSoMirrorIt = "lightIntensity"
 				"PlacingListData":
-					oPlacingSettings.lightIntensity = valueNumber
+					oPlacingSettings.lightIntensity = value
 		"Effect range":
-			valueNumber = clamp(float(valueNumber), 0, 255)
+			value = clamp(float(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.effectRange = valueNumber
+						inst.effectRange = value
 						aValueWasAdjustedSoMirrorIt = "effectRange"
 				"PlacingListData":
-					oPlacingSettings.effectRange = valueNumber
+					oPlacingSettings.effectRange = value
 		"Light range":
-			valueNumber = clamp(float(valueNumber), 0, 255)
+			value = clamp(float(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.lightRange = valueNumber
+						inst.lightRange = value
 						aValueWasAdjustedSoMirrorIt = "lightRange"
 				"PlacingListData":
-					oPlacingSettings.lightRange = valueNumber
+					oPlacingSettings.lightRange = value
 		"Point range":
-			valueNumber = clamp(float(valueNumber), 0, 255)
+			value = clamp(float(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.pointRange = valueNumber
+						inst.pointRange = value
 						aValueWasAdjustedSoMirrorIt = "pointRange"
 				"PlacingListData":
-					oPlacingSettings.pointRange = valueNumber
+					oPlacingSettings.pointRange = value
 		"Unknown 9":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data9 = valueNumber
+						inst.data9 = value
 		"Unknown 10":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data10 = valueNumber
+						inst.data10 = value
 		"Unknown 11-12":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data11_12 = valueNumber
+						inst.data11_12 = value
 		"Unknown 13":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data13 = valueNumber
+						inst.data13 = value
 		"Unknown 14":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data14 = valueNumber
+						inst.data14 = value
 		"Unknown 15":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data15 = valueNumber
+						inst.data15 = value
 		"Unknown 16":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data16 = valueNumber
+						inst.data16 = value
 		"Unknown 17":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data17 = valueNumber
+						inst.data17 = value
 		"Unknown 18":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data18 = valueNumber
+						inst.data18 = value
 		"Unknown 19":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data19 = valueNumber
+						inst.data19 = value
 		"Unknown 20":
-			valueNumber = clamp(int(valueNumber), 0, 255)
+			value = clamp(int(value), 0, 255)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.data20 = valueNumber
+						inst.data20 = value
+		"Name": #Creature name
+			match name:
+				"ThingListData":
+					if is_instance_valid(inst):
+						inst.creatureName = value
+						aValueWasAdjustedSoMirrorIt = "creatureLevel"
+				"PlacingListData":
+					oPlacingSettings.creatureName = value
+		"Gold held":
+			value = clamp(int(value), 0, 1000000)
+			match name:
+				"ThingListData":
+					if is_instance_valid(inst):
+						inst.goldHeld = value
+						aValueWasAdjustedSoMirrorIt = "goldHeld"
+				"PlacingListData":
+					oPlacingSettings.goldHeld = value
+		"Health %":
+			value = clamp(int(value), 0, 100)
+			match name:
+				"ThingListData":
+					if is_instance_valid(inst):
+						inst.initialHealth = value
+						aValueWasAdjustedSoMirrorIt = "initialHealth"
+				"PlacingListData":
+					oPlacingSettings.initialHealth = value
+		"Facing":
+			value = clamp(int(value), 0, 2047)
+			match name:
+				"ThingListData":
+					if is_instance_valid(inst):
+						inst.facingDirection = value
+						aValueWasAdjustedSoMirrorIt = "facingDirection"
+				"PlacingListData":
+					oPlacingSettings.facingDirection = value
 	
-	#if callingNode is LineEdit: callingNode.text = String(valueNumber)
 	if callingNode is SpinBox:
-		callingNode.value = float(valueNumber)
+		callingNode.value = float(value)
 		callingNode.get_line_edit().caret_position = callingNode.get_line_edit().text.length()
 	
 	if oMirrorPlacementCheckBox.pressed == true:
 		if aValueWasAdjustedSoMirrorIt != "":
 			oInstances.mirror_adjusted_value(inst, aValueWasAdjustedSoMirrorIt)
 
-func _on_optionbutton_toggled(state,nameValue):
+func _on_optionbutton_toggled(state,nodeRightColumn):
 	oUi.optionButtonIsOpened = state
 
 func _on_optionbutton_item_selected(indexSelected, leftText): # When pressing Enter on LineEdit, lose focus

@@ -17,17 +17,26 @@ var lightIntensity = 32
 var pointRange = 5
 var boxNumber = 0
 
+var creatureName = ""
+var goldHeld = 0
+var initialHealth = 100
+var facingDirection = 0
+
 enum FIELDS {
-	NAME = 0
-	TYPE = 1
-	OWNERSHIP = 2
-	EFFECT_RANGE = 3
-	CREATURE_LEVEL = 4
-	DOOR_LOCKED = 5
-	POINT_RANGE = 6
-	LIGHT_RANGE = 7
-	LIGHT_INTENSITY = 8
-	CUSTOM_BOX_ID = 9
+	ID
+	TYPE
+	OWNERSHIP
+	EFFECT_RANGE
+	CREATURE_LEVEL
+	DOOR_LOCKED
+	POINT_RANGE
+	LIGHT_RANGE
+	LIGHT_INTENSITY
+	CUSTOM_BOX_ID
+	FACING_DIRECTION
+	INITIAL_HEALTH
+	GOLD_HELD
+	CREATURE_NAME
 }
 
 func _ready():
@@ -53,35 +62,33 @@ func update_and_set_placing_tab():
 	var availableFields = []
 	match thingType:
 		Things.TYPE.NONE:
-			availableFields = [FIELDS.NAME]
+			availableFields = [FIELDS.ID]
 		Things.TYPE.OBJECT:
-			availableFields = [FIELDS.NAME, FIELDS.TYPE]
+			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.FACING_DIRECTION]
 			if subtype == 133: #Mysterious Box
-				availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.CUSTOM_BOX_ID]
+				availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.CUSTOM_BOX_ID]
 		Things.TYPE.CREATURE:
-			availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.CREATURE_LEVEL]
+			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.CREATURE_LEVEL, FIELDS.INITIAL_HEALTH, FIELDS.GOLD_HELD, FIELDS.CREATURE_NAME]
 		Things.TYPE.EFFECTGEN:
-			availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.EFFECT_RANGE]
+			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.EFFECT_RANGE]
 		Things.TYPE.TRAP:
-			availableFields = [FIELDS.NAME, FIELDS.TYPE]
+			availableFields = [FIELDS.ID, FIELDS.TYPE]
 		Things.TYPE.DOOR:
-			availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.DOOR_LOCKED]
+			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.DOOR_LOCKED]
 		Things.TYPE.EXTRA:
 			match subtype:
 				1:
-					availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.POINT_RANGE] # Action point
+					availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.POINT_RANGE] # Action point
 				2:
-					availableFields = [FIELDS.NAME, FIELDS.TYPE, FIELDS.LIGHT_RANGE, FIELDS.LIGHT_INTENSITY] # Light
-	
-	
+					availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.LIGHT_RANGE, FIELDS.LIGHT_INTENSITY] # Light
 	
 	for i in FIELDS.size():
 		var description = null
 		var value = null
 		if i in availableFields:
 			match i:
-				FIELDS.NAME:
-					description = "Name"
+				FIELDS.ID:
+					description = "ID"
 					value = oThingDetails.retrieve_thing_name(thingType, subtype)
 				FIELDS.TYPE:
 					description = "Type"
@@ -112,10 +119,21 @@ func update_and_set_placing_tab():
 				FIELDS.CUSTOM_BOX_ID:
 					description = "Custom box" # 14
 					value = boxNumber
+				FIELDS.CREATURE_NAME:
+					description = "Name" #Creature name
+					value = creatureName
+				FIELDS.GOLD_HELD:
+					description = "Gold held"
+					value = goldHeld
+				FIELDS.INITIAL_HEALTH:
+					description = "Health %"
+					value = initialHealth
+				FIELDS.FACING_DIRECTION:
+					description = "Facing"
+					value = facingDirection
 
 		if value != null:
 			oPlacingListData.add_item(description, str(value))
-
 
 func _on_PlacingTipsButton_pressed():
 	var buildPlacingString = ""

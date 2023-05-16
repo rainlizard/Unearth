@@ -15,6 +15,8 @@ var DK_DATA_DIRECTORY = ""
 var DK_FXDATA_DIRECTORY = ""
 var DK_LEVELS_DIRECTORY = ""
 var DK_CAMPGNS_DIRECTORY = ""
+var KEEPERFX_VERSION_INT = 0 # This is set in set_paths() when EXECUTABLE_PATH is set.
+var KEEPERFX_VERSION_STRING = "0"
 #var nosound = true
 #var cheats = true
 #var gameSpeed = 25
@@ -45,6 +47,7 @@ func set_paths(path):
 	if path == null: path = ""
 	EXECUTABLE_PATH = path
 	GAME_DIRECTORY = path.get_base_dir()
+	set_keeperfx_version()
 	
 	for i in get_main_subdirectories(GAME_DIRECTORY): # Directories only
 		match i.to_upper():
@@ -54,7 +57,7 @@ func set_paths(path):
 			"CAMPGNS": DK_CAMPGNS_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 	
 	if running_keeperfx() == true:
-		oKeeperFXDetection.text = "KeeperFX detected"
+		oKeeperFXDetection.text = "KeeperFX detected. " + "(Version " + KEEPERFX_VERSION_STRING + ")"
 		oKeeperFXDetection.set("custom_colors/font_color", Color(0.5,1.0,0.5,1))
 		oKeeperFXDetection.visible = true
 	else:
@@ -182,6 +185,16 @@ func get_precise_filepath(lookInDirectory, lookForFileName):
 			fileName = dir.get_next()
 	return ""
 
+func set_keeperfx_version():
+	var output = []
+	var getVer = Settings.unearthdata.plus_file("GetVersion.cmd")
+	var exit_code = OS.execute(getVer, [EXECUTABLE_PATH], true, output)
+	if output.size() == 1:
+		KEEPERFX_VERSION_STRING = output[0].strip_edges()
+		KEEPERFX_VERSION_INT = int(KEEPERFX_VERSION_STRING.replace(".",""))
+	else:
+		KEEPERFX_VERSION_STRING = "Undetected"
+		KEEPERFX_VERSION_INT = 0
 
 #func load_command_line_from_settings(COMMAND_LINE):
 #	COMMAND_LINE = COMMAND_LINE.replace("%DIR%", GAME_DIRECTORY)

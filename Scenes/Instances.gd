@@ -91,6 +91,14 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust):
 							"ownership":
 								var finalOwner = calculate_mirrored_ownership(toPos, fromPos, fieldX, fieldY, instanceBeingAdjusted.ownership)
 								getNodeAtMirroredPosition.ownership = finalOwner
+							"creatureName":
+								getNodeAtMirroredPosition.creatureName = instanceBeingAdjusted.creatureName
+							"goldHeld":
+								getNodeAtMirroredPosition.goldHeld = instanceBeingAdjusted.goldHeld
+							"initialHealth":
+								getNodeAtMirroredPosition.initialHealth = instanceBeingAdjusted.initialHealth
+							"facingDirection":
+								getNodeAtMirroredPosition.facingDirection = instanceBeingAdjusted.facingDirection
 
 func mirror_deletion_of_instance(instanceBeingDeleted):
 	var actions = []
@@ -222,7 +230,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 	match id.thingType:
 		Things.TYPE.OBJECT:
 			id.sensitiveTile = 65535 # "None"
-			
+			id.facingDirection = oPlacingSettings.facingDirection
 			if id.subtype == 49: # Hero Gate
 				id.herogateNumber = get_free_hero_gate_number() #originalInstance.herogateNumber
 			elif id.subtype == 133: # Mysterious Box
@@ -243,6 +251,9 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 				update_stray_torch_height(id)
 		Things.TYPE.CREATURE:
 			id.creatureLevel = oPlacingSettings.creatureLevel
+			id.creatureName = oPlacingSettings.creatureName
+			id.goldHeld = oPlacingSettings.goldHeld
+			id.initialHealth = oPlacingSettings.initialHealth
 			id.index = get_free_index_number()
 		Things.TYPE.EFFECTGEN:
 			id.effectRange = oPlacingSettings.effectRange

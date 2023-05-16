@@ -18,7 +18,6 @@ func _ready():
 #		yield(get_tree(),'idle_frame')
 #	$Editor._on_ButtonViewType_pressed()
 
-
 func initialize_window_settings():
 	#var vp = get_viewport()
 	

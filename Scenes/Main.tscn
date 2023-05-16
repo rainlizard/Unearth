@@ -1173,7 +1173,7 @@ mouse_filter = 2
 
 [node name="UniversalDetails" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer"]
 margin_right = 300.0
-margin_bottom = 49.0
+margin_bottom = 55.0
 grow_horizontal = 2
 grow_vertical = 2
 custom_styles/panel = SubResource( 15 )
@@ -1187,26 +1187,32 @@ one_shot = true
 margin_left = 12.0
 margin_top = 12.0
 margin_right = 288.0
-margin_bottom = 37.0
+margin_bottom = 43.0
 
 [node name="UniversalListData" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/VBoxContainer"]
 margin_right = 276.0
 mouse_filter = 2
+custom_constants/vseparation = 8
 script = ExtResource( 42 )
 
+[node name="Spacing" type="Control" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/VBoxContainer"]
+rect_min_size = Vector2( 0, 2 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [node name="SlabNameDisplay" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/VBoxContainer"]
-margin_top = 4.0
+margin_top = 10.0
 margin_right = 276.0
-margin_bottom = 25.0
+margin_bottom = 31.0
 text = "Torture Chamber wall"
 valign = 1
 autowrap = true
 script = ExtResource( 90 )
 
 [node name="PropertiesTabs" type="TabContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer"]
-margin_top = 53.0
+margin_top = 59.0
 margin_right = 300.0
-margin_bottom = 157.0
+margin_bottom = 163.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -1269,6 +1275,7 @@ margin_top = 49.0
 margin_right = 276.0
 margin_bottom = 49.0
 mouse_filter = 2
+custom_constants/vseparation = 8
 script = ExtResource( 42 )
 
 [node name="PlacingSettings" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs"]
@@ -1285,6 +1292,7 @@ script = ExtResource( 10 )
 margin_right = 276.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_constants/vseparation = 8
 script = ExtResource( 42 )
 
 [node name="OwnerSelection" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
@@ -1575,6 +1583,7 @@ __meta__ = {
 mouse_filter = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
+custom_constants/vseparation = 8
 script = ExtResource( 42 )
 
 [node name="UiSystem" type="Control" parent="Ui"]

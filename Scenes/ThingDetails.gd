@@ -138,12 +138,12 @@ func light_details(id):
 			oThingListData.add_item(description, str(value))
 
 func thing_details(id):
-	for i in 23:
+	for i in 27:
 		var description = null
 		var value = null
 		match i:
 			0:
-				description = "Name"
+				description = "ID"
 				value = retrieve_thing_name(id.thingType, id.subtype)
 			1:
 				description = "Type"
@@ -168,19 +168,11 @@ func thing_details(id):
 			7:
 				description = "Attached to" # 11-12
 				if id.sensitiveTile != null:
-					
-					
 					var sensY = int(id.sensitiveTile/M.ySize)
 					var sensX = id.sensitiveTile - (sensY*M.xSize)
 					value = Slabs.data[oDataSlab.get_cell(sensX,sensY)][Slabs.NAME]
-					
 					if sensX == 0 and sensY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
-					
 					value += ' (' + str(sensX) + ','+str(sensY) + ')'
-					
-					
-					
-					
 				if id.sensitiveTile == 65535:
 					value = "Manually placed"
 			8:
@@ -241,6 +233,20 @@ func thing_details(id):
 				description = "Unknown 20"
 				value = id.data20
 				if HIDE_UNKNOWN_DATA == true: value = null
+			# FX extended fields
+			23:
+				description = "Facing"
+				value = id.facingDirection
+			24:
+				description = "Health %"
+				value = id.initialHealth
+			25:
+				description = "Gold held"
+				value = id.goldHeld
+			26:
+				description = "Name" # Creature name
+				value = id.creatureName
+		
 		if value != null:
 			oThingListData.add_item(description, str(value))
 
