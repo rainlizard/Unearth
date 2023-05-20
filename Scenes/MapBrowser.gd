@@ -22,8 +22,8 @@ onready var oRandomMapContainer = Nodelist.list["oRandomMapContainer"]
 func _ready():
 	oBrowserFilename.text = oGame.GAME_DIRECTORY
 	oBrowseButton.visible = false
-	$MapBrowserTabContainer.set_tab_title(0, "Play")
-	$MapBrowserTabContainer.set_tab_title(1, "Edit")
+	$MapBrowserTabContainer.set_tab_title(0, "Edit")
+	$MapBrowserTabContainer.set_tab_title(1, "Play")
 
 func _on_BrowseMapsMenu_pressed():
 	match visible:
@@ -58,7 +58,7 @@ func _on_PlayRandomMapButton_pressed():
 
 
 func activate(path):
-	if oMapBrowserTabContainer.current_tab == 0: # Play
+	if oMapBrowserTabContainer.current_tab == 1: # Play
 		oGame.launch_game(oGame.cmdline(path))
 	else: # Edit
 		path = path.get_basename()
@@ -174,15 +174,15 @@ func toggle_map_preview(togglePreview):
 func _on_MapBrowserTabContainer_tab_changed(tab):
 	match tab:
 		0:
-			var n = oMapBrowserTabEdit.get_child(0)
-			oMapBrowserTabEdit.remove_child(n)
-			oMapBrowserTabPlay.add_child(n)
-			oBrowseButton.text = "Play"
-			oRandomMapContainer.visible = true
-		1:
 			var n = oMapBrowserTabPlay.get_child(0)
 			oMapBrowserTabPlay.remove_child(n)
 			oMapBrowserTabEdit.add_child(n)
 			oBrowseButton.text = "Edit"
 			oRandomMapContainer.visible = false
+		1:
+			var n = oMapBrowserTabEdit.get_child(0)
+			oMapBrowserTabEdit.remove_child(n)
+			oMapBrowserTabPlay.add_child(n)
+			oBrowseButton.text = "Play"
+			oRandomMapContainer.visible = true
 	_on_DynamicMapTree_item_selected()

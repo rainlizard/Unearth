@@ -220,7 +220,7 @@ func write_tngfx(buffer):
 			
 			# Extended KeeperFX variables
 			if thingNode.creatureName != null and thingNode.creatureName != "":
-				t += "CreatureName = " +str(thingNode.creatureName) + "\n"
+				t += "CreatureName = " + '"' + str(thingNode.creatureName) + '"' + "\n"
 			if thingNode.creatureGold != null:
 				t += "CreatureGold = " +str(thingNode.creatureGold) + "\n"
 			if thingNode.creatureInitialHealth != null:

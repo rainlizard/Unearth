@@ -1803,22 +1803,21 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_align = 0
 
-[node name="MapBrowserTabPlay" type="Control" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer"]
+[node name="MapBrowserTabEdit" type="Control" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
 margin_top = 43.0
 margin_right = -12.0
 margin_bottom = -12.0
-hint_tooltip = "Spoiler free"
 
-[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay"]
+[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 301.0
@@ -1829,7 +1828,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LineEditFilter" type="LineEdit" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer"]
+[node name="LineEditFilter" type="LineEdit" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer"]
 margin_right = 292.0
 margin_bottom = 42.0
 focus_mode = 1
@@ -1846,7 +1845,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer"]
 margin_top = 42.0
 margin_right = 292.0
 margin_bottom = 50.0
@@ -1857,7 +1856,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DynamicMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer"]
+[node name="DynamicMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer"]
 margin_top = 50.0
 margin_right = 292.0
 margin_bottom = 688.0
@@ -1875,7 +1874,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SourceMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer"]
+[node name="SourceMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer"]
 visible = false
 margin_top = 297.0
 margin_right = 586.0
@@ -1892,12 +1891,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer"]
 margin_top = 688.0
 margin_right = 292.0
 margin_bottom = 766.0
 
-[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer"]
 margin_right = 292.0
 margin_bottom = 37.0
 custom_constants/margin_right = 5
@@ -1905,7 +1904,7 @@ custom_constants/margin_top = 5
 custom_constants/margin_left = 5
 custom_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 287.0
@@ -1914,7 +1913,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureButton" type="TextureButton" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="TextureButton" type="TextureButton" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 margin_right = 24.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 24, 24 )
@@ -1927,7 +1926,7 @@ texture_hover = ExtResource( 59 )
 expand = true
 stretch_mode = 5
 
-[node name="UNUSEDLineEditFilename" type="LineEdit" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="UNUSEDLineEditFilename" type="LineEdit" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 visible = false
 margin_left = 28.0
 margin_right = 519.0
@@ -1944,7 +1943,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BrowserFilename" type="Label" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="BrowserFilename" type="Label" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 28.0
 margin_right = 225.0
 margin_bottom = 27.0
@@ -1957,13 +1956,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BrowseButton" type="Button" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="BrowseButton" type="Button" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 229.0
 margin_right = 282.0
 margin_bottom = 27.0
 text = "Play"
 
-[node name="RandomMapContainer" type="MarginContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer"]
+[node name="RandomMapContainer" type="MarginContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer"]
 margin_top = 41.0
 margin_right = 292.0
 margin_bottom = 78.0
@@ -1972,13 +1971,13 @@ custom_constants/margin_top = 5
 custom_constants/margin_left = 5
 custom_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 287.0
 margin_bottom = 32.0
 
-[node name="TextureRect" type="TextureRect" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer/HBoxContainer"]
 margin_right = 27.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 27, 27 )
@@ -1986,14 +1985,14 @@ size_flags_horizontal = 8
 texture = ExtResource( 144 )
 expand = true
 
-[node name="PlayRandomMapButton" type="Button" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer/HBoxContainer"]
+[node name="PlayRandomMapButton" type="Button" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer/HBoxContainer"]
 margin_left = 111.0
 margin_right = 282.0
 margin_bottom = 27.0
 size_flags_horizontal = 10
 text = "Play random map"
 
-[node name="MapBrowserTabEdit" type="Control" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer"]
+[node name="MapBrowserTabPlay" type="Control" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2001,6 +2000,7 @@ margin_left = 12.0
 margin_top = 43.0
 margin_right = -12.0
 margin_bottom = -12.0
+hint_tooltip = "Spoiler free"
 
 [node name="FocusController" type="Control" parent="Ui/UiSystem"]
 margin_right = 40.0
@@ -5794,13 +5794,13 @@ script = SubResource( 20 )
 [connection signal="item_rect_changed" from="Ui/UiSystem/MapBrowser" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowser_item_rect_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapBrowser" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowser_visibility_changed"]
 [connection signal="tab_changed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowserTabContainer_tab_changed"]
-[connection signal="text_changed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/LineEditFilter" to="Ui/UiSystem/MapBrowser" method="_on_LineEdit_text_changed"]
-[connection signal="item_activated" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser" method="_on_DynamicMapTree_item_activated"]
-[connection signal="item_selected" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser" method="_on_DynamicMapTree_item_selected"]
-[connection signal="item_selected" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/DynamicMapTree" method="_on_DynamicMapTree_item_selected"]
-[connection signal="pressed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/TextureButton" to="Ui/UiSystem/MapBrowser" method="_on_TextureButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/BrowseButton" to="Ui/UiSystem/MapBrowser" method="_on_BrowseButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabPlay/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer/HBoxContainer/PlayRandomMapButton" to="Ui/UiSystem/MapBrowser" method="_on_PlayRandomMapButton_pressed"]
+[connection signal="text_changed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/LineEditFilter" to="Ui/UiSystem/MapBrowser" method="_on_LineEdit_text_changed"]
+[connection signal="item_activated" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser" method="_on_DynamicMapTree_item_activated"]
+[connection signal="item_selected" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser" method="_on_DynamicMapTree_item_selected"]
+[connection signal="item_selected" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/DynamicMapTree" to="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/DynamicMapTree" method="_on_DynamicMapTree_item_selected"]
+[connection signal="pressed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/TextureButton" to="Ui/UiSystem/MapBrowser" method="_on_TextureButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/BrowseButton" to="Ui/UiSystem/MapBrowser" method="_on_BrowseButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/RandomMapContainer/HBoxContainer/PlayRandomMapButton" to="Ui/UiSystem/MapBrowser" method="_on_PlayRandomMapButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/ChooseDkExe" method="_on_ChooseDkExe_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/PreferencesWindow" method="_on_ChooseDkExe_file_selected"]
 [connection signal="dir_selected" from="Ui/UiSystem/ChooseDefaultSaveFolder" to="Ui/UiSystem/ChooseDefaultSaveFolder" method="_on_ChooseDefaultSaveFolder_dir_selected"]

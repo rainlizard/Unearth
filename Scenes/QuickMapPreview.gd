@@ -90,7 +90,7 @@ func _ready():
 
 func update_img(slbFilePath):
 	var hideSpoilers = false
-	if oMapBrowserTabContainer.current_tab == 0:
+	if oMapBrowserTabContainer.current_tab == 1: # Play
 		hideSpoilers = true
 	
 	if File.new().file_exists(slbFilePath) == false:
