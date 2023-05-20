@@ -93,12 +93,14 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust):
 								getNodeAtMirroredPosition.ownership = finalOwner
 							"creatureName":
 								getNodeAtMirroredPosition.creatureName = instanceBeingAdjusted.creatureName
-							"goldHeld":
-								getNodeAtMirroredPosition.goldHeld = instanceBeingAdjusted.goldHeld
-							"initialHealth":
-								getNodeAtMirroredPosition.initialHealth = instanceBeingAdjusted.initialHealth
-							"facingDirection":
-								getNodeAtMirroredPosition.facingDirection = instanceBeingAdjusted.facingDirection
+							"creatureGold":
+								getNodeAtMirroredPosition.creatureGold = instanceBeingAdjusted.creatureGold
+							"creatureInitialHealth":
+								getNodeAtMirroredPosition.creatureInitialHealth = instanceBeingAdjusted.creatureInitialHealth
+							"orientation":
+								getNodeAtMirroredPosition.orientation = instanceBeingAdjusted.orientation
+							"goldValue":
+								getNodeAtMirroredPosition.goldValue = instanceBeingAdjusted.goldValue
 
 func mirror_deletion_of_instance(instanceBeingDeleted):
 	var actions = []
@@ -230,7 +232,8 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 	match id.thingType:
 		Things.TYPE.OBJECT:
 			id.sensitiveTile = 65535 # "None"
-			id.facingDirection = oPlacingSettings.facingDirection
+			id.orientation = oPlacingSettings.orientation
+			id.goldValue = oPlacingSettings.goldValue
 			if id.subtype == 49: # Hero Gate
 				id.herogateNumber = get_free_hero_gate_number() #originalInstance.herogateNumber
 			elif id.subtype == 133: # Mysterious Box
@@ -252,8 +255,8 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 		Things.TYPE.CREATURE:
 			id.creatureLevel = oPlacingSettings.creatureLevel
 			id.creatureName = oPlacingSettings.creatureName
-			id.goldHeld = oPlacingSettings.goldHeld
-			id.initialHealth = oPlacingSettings.initialHealth
+			id.creatureGold = oPlacingSettings.creatureGold
+			id.creatureInitialHealth = oPlacingSettings.creatureInitialHealth
 			id.index = get_free_index_number()
 		Things.TYPE.EFFECTGEN:
 			id.effectRange = oPlacingSettings.effectRange

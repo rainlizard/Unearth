@@ -90,14 +90,10 @@ func set_view_3d():
 	oCamera2D.current = false
 	oCamera3D.current = true
 
-func _on_EditableBordersCheckbox_toggled(button_pressed):
-	print(button_pressed)
-	match button_pressed:
-		true: fieldBoundary = Rect2(Vector2(0,0), Vector2(M.xSize,M.ySize))
-		false: fieldBoundary = Rect2(Vector2(1,1), Vector2(M.xSize-2,M.ySize-2))
-
 func _on_ConfirmQuit_confirmed():
 	get_tree().quit()
 
 func update_boundaries():
 	fieldBoundary = Rect2(Vector2(1,1), Vector2(M.xSize-2,M.ySize-2)) # Position, Size
+	if oEditableBordersCheckbox.pressed == true:
+		fieldBoundary = Rect2(Vector2(0,0), Vector2(M.xSize,M.ySize))

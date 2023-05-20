@@ -7,6 +7,7 @@ onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oSelectionStatusButton = Nodelist.list["oSelectionStatusButton"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 
 var HIDE_UNKNOWN_DATA = true
@@ -137,8 +138,9 @@ func light_details(id):
 		if value != null:
 			oThingListData.add_item(description, str(value))
 
+
 func thing_details(id):
-	for i in 27:
+	for i in 28:
 		var description = null
 		var value = null
 		match i:
@@ -176,8 +178,9 @@ func thing_details(id):
 				if id.sensitiveTile == 65535:
 					value = "Manually placed"
 			8:
-				description = "Index" # 11-12
-				value = id.index
+				#description = "Index" # 11-12
+				#value = id.index
+				value = null # skip
 			9:
 				description = "Unknown 11-12"
 				value = id.data11_12
@@ -235,24 +238,34 @@ func thing_details(id):
 				if HIDE_UNKNOWN_DATA == true: value = null
 			# FX extended fields
 			23:
-				description = "Facing"
-				value = id.facingDirection
+				description = "Orientation"
+				value = id.orientation
+				if oCurrentFormat.selected == 0: value = null # Classic format
 			24:
 				description = "Health %"
-				value = id.initialHealth
+				value = id.creatureInitialHealth
+				if oCurrentFormat.selected == 0: value = null # Classic format
 			25:
 				description = "Gold held"
-				value = id.goldHeld
+				value = id.creatureGold
+				if oCurrentFormat.selected == 0: value = null # Classic format
 			26:
 				description = "Name" # Creature name
 				value = id.creatureName
+				if oCurrentFormat.selected == 0: value = null # Classic format
+			27:
+				description = "Gold value"
+				value = id.goldValue
+				if oCurrentFormat.selected == 0: value = null # Classic format
 		
 		if value != null:
 			oThingListData.add_item(description, str(value))
 
+
 func _on_DeleteSelectedButton_pressed():
 	oSelection.manually_delete_one_instance(oInspector.inspectingInstance)
 	update_details()
+
 
 func _on_SelectionStatusButton_pressed():
 	oSelectionStatusButton.text = "Selected"

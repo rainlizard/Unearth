@@ -6,6 +6,8 @@ onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oPlacingTipsButton = Nodelist.list["oPlacingTipsButton"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oLimitThing = Nodelist.list["oLimitThing"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 
 # Default values for placement
 var effectRange = 5
@@ -18,9 +20,10 @@ var pointRange = 5
 var boxNumber = 0
 
 var creatureName = ""
-var goldHeld = 0
-var initialHealth = 100
-var facingDirection = 0
+var creatureGold = 0
+var creatureInitialHealth = 100
+var orientation = 0
+var goldValue = 0
 
 enum FIELDS {
 	ID
@@ -33,10 +36,11 @@ enum FIELDS {
 	LIGHT_RANGE
 	LIGHT_INTENSITY
 	CUSTOM_BOX_ID
-	FACING_DIRECTION
+	ORIENTATION
 	INITIAL_HEALTH
-	GOLD_HELD
+	CREATURE_GOLD
 	CREATURE_NAME
+	GOLD_VALUE
 }
 
 func _ready():
@@ -46,14 +50,17 @@ func editing_mode_was_switched(modeString):
 	if modeString == "Slab":
 		oPlacingListData.clear()
 	else:
-		update_and_set_placing_tab()
+		set_placing_tab_and_update_it()
 
 func _on_PropertiesTabs_tab_changed(tab):
 	if tab == 1:
-		update_and_set_placing_tab()
+		set_placing_tab_and_update_it()
 
-func update_and_set_placing_tab():
+func set_placing_tab_and_update_it():
 	oPropertiesTabs.current_tab = 1
+	update_placing_tab()
+
+func update_placing_tab():
 	oPlacingListData.clear()
 	
 	var thingType = oSelection.paintThingType
@@ -64,15 +71,27 @@ func update_and_set_placing_tab():
 		Things.TYPE.NONE:
 			availableFields = [FIELDS.ID]
 		Things.TYPE.OBJECT:
-			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.FACING_DIRECTION]
+			availableFields = [FIELDS.ID, FIELDS.TYPE]
 			if subtype == 133: #Mysterious Box
 				availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.CUSTOM_BOX_ID]
+			elif subtype in Things.LIST_OF_GOLDPILES: # Is a gold pile with a value that can be set
+				availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.GOLD_VALUE]
+			if oCurrentFormat.selected != 0: # Classic format
+				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.CREATURE:
-			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.CREATURE_LEVEL, FIELDS.INITIAL_HEALTH, FIELDS.GOLD_HELD, FIELDS.CREATURE_NAME]
+			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.CREATURE_LEVEL]
+			if oCurrentFormat.selected != 0: # Classic format
+				availableFields.append(FIELDS.INITIAL_HEALTH)
+				availableFields.append(FIELDS.CREATURE_GOLD)
+				availableFields.append(FIELDS.CREATURE_NAME)
 		Things.TYPE.EFFECTGEN:
-			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.EFFECT_RANGE]
+			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.EFFECT_RANGE, FIELDS.ORIENTATION]
+			if oCurrentFormat.selected != 0: # Classic format
+				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.TRAP:
-			availableFields = [FIELDS.ID, FIELDS.TYPE]
+			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.ORIENTATION]
+			if oCurrentFormat.selected != 0: # Classic format
+				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.DOOR:
 			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.DOOR_LOCKED]
 		Things.TYPE.EXTRA:
@@ -122,15 +141,18 @@ func update_and_set_placing_tab():
 				FIELDS.CREATURE_NAME:
 					description = "Name" #Creature name
 					value = creatureName
-				FIELDS.GOLD_HELD:
+				FIELDS.CREATURE_GOLD:
 					description = "Gold held"
-					value = goldHeld
+					value = creatureGold
 				FIELDS.INITIAL_HEALTH:
 					description = "Health %"
-					value = initialHealth
-				FIELDS.FACING_DIRECTION:
-					description = "Facing"
-					value = facingDirection
+					value = creatureInitialHealth
+				FIELDS.ORIENTATION:
+					description = "Orientation"
+					value = orientation
+				FIELDS.GOLD_VALUE:
+					description = "Gold value"
+					value = goldValue
 
 		if value != null:
 			oPlacingListData.add_item(description, str(value))

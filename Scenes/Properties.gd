@@ -7,7 +7,8 @@ onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oAdvancedMapPropertiesCheckBox = Nodelist.list["oAdvancedMapPropertiesCheckBox"]
-
+onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
+onready var oInspector = Nodelist.list["oInspector"]
 onready var oAdvancedMapProperties = Nodelist.list["oAdvancedMapProperties"]
 
 onready var oMapNameLineEdit = Nodelist.list["oMapNameLineEdit"]
@@ -49,7 +50,7 @@ func _on_MapProperties_visibility_changed():
 		
 		# Resizing feature isn't implemented, so do not allow changing map format back if you've adjusted size
 		if M.xSize != 85 or M.ySize != 85:
-			oCurrentFormat.selected = 0
+			oCurrentFormat.selected = 1
 			oCurrentFormat.disabled = true
 		else:
 			oCurrentFormat.disabled = false
@@ -64,14 +65,16 @@ func _on_MapFormatSetting_item_selected(index):
 
 func set_format_selection(setFormat):
 	match setFormat:
-		0: # KFX format
-			oAdvancedMapPropertiesCheckBox.disabled = false
-		1: # Classic format
+		0: # Classic format
 			oAdvancedMapPropertiesCheckBox.disabled = true
 			oAdvancedMapPropertiesCheckBox.pressed = false
 			oAdvancedMapProperties.visible = false
-
-
+		1: # KFX format
+			oAdvancedMapPropertiesCheckBox.disabled = false
+	
+	# When you change format, the object settings that are available also change
+	oPlacingSettings.update_placing_tab()
+	oInspector.deselect()
 
 func refresh_dungeon_style_options():
 	oDungeonStyleList.clear()

@@ -25,12 +25,12 @@ func save_map(filePath): # auto opens other files
 		
 		# List of file extensions to skip creating
 		# Remember "continue" means skip
-		if oCurrentFormat.selected == 0: # KFX format
-			if ["LIF","TNG","APT","LGT"].has(EXT):
-				continue
-		elif oCurrentFormat.selected == 1: # Classic format
+		if oCurrentFormat.selected == 0: # Classic format
 			if ["LOF","TNGFX","APTFX","LGTFX"].has(EXT):
-				continue
+				continue # skip saving this filetype
+		elif oCurrentFormat.selected == 1: # KFX format
+			if ["LIF","TNG","APT","LGT"].has(EXT):
+				continue # skip saving this filetype
 		
 		var saveToFilePath = map + '.' + EXT.to_lower()
 		
@@ -54,7 +54,7 @@ func save_map(filePath): # auto opens other files
 	
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	if oDataScript.data == "":
-		oMessage.big("Warning","Your map has no script! Use the Script Generator in Map Settings to give your map basic functionality.")
+		oMessage.big("Warning","Your map has no script. Use the Script Generator in Map Settings to give your map basic functionality.")
 	oMessage.quick('Saved map')
 	oCurrentMap.set_path_and_title(filePath)
 	oEditor.mapHasBeenEdited = false
@@ -73,12 +73,12 @@ func delete_existing_files(map):
 		fileTypesToDelete = Filetypes.FILE_TYPES
 	else:
 		# Also important to delete files of the other format (TNG and TNGFX shouldn't exist at the same time), if switching formats.
-		if oCurrentFormat.selected == 0: # KFX format
-			fileTypesToDelete = ["LIF", "TNG", "APT", "LGT"]
-		elif oCurrentFormat.selected == 1: # Classic format
+		if oCurrentFormat.selected == 0: # Classic format
 			# Do not delete LOF because Classic format can be used with LOF multiplayer levels
 			fileTypesToDelete = ["TNGFX", "APTFX", "LGTFX"]
-	
+		elif oCurrentFormat.selected == 1: # KFX format
+			fileTypesToDelete = ["LIF", "TNG", "APT", "LGT"]
+		
 	var baseDirectory = map.get_base_dir()
 	var MAP_NAME = map.get_basename().get_file().to_upper()
 	var dir = Directory.new()

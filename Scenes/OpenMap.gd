@@ -113,7 +113,7 @@ func open_map(filePath):
 			oDataLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
 			print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
 		
-		var formatType = 1
+		var formatType = 0
 		for EXT in Filetypes.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
 				
@@ -128,9 +128,9 @@ func open_map(filePath):
 					continue
 				# Set current format setting to new KFX format, if any new files are detected
 				
-				if EXT == "TNGFX": formatType = 0
-				if EXT == "APTFX": formatType = 0
-				if EXT == "LGTFX": formatType = 0
+				if EXT == "TNGFX": formatType = 1
+				if EXT == "APTFX": formatType = 1
+				if EXT == "LGTFX": formatType = 1
 				
 				Filetypes.read(oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING], EXT.to_upper())
 			else:
@@ -220,6 +220,10 @@ func finish_opening_map(map):
 		oDataClm.delete_column(0)
 		oEditor.mapHasBeenEdited = true
 		oMessage.quick("Fixed column index 0, re-save your map.")
+	
+	if oGame.running_keeperfx() == true:
+		if oGame.KEEPERFX_VERSION_INT != 0 and oGame.KEEPERFX_VERSION_INT < oGame.KEEPERFX_VERSION_REQUIRED_INT:
+			oMessage.big("Warning", "Your KeeperFX version is " + oGame.KEEPERFX_VERSION_STRING + " which is too old to use the features of KFX Map Format in-game. Download the latest alpha to rectify.")
 	
 	print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 

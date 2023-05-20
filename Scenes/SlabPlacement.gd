@@ -140,7 +140,7 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 		MIRROR_ONLY_OWNERSHIP:
 			oOverheadOwnership.update_ownership_image_based_on_shape(mirroredPositionArray)
 	
-	var updateNearby = oSelection.some_manual_placements_dont_update_nearby(oSelection.paintSlab)
+	var updateNearby = oSelection.some_manual_placements_dont_update_nearby()
 	generate_slabs_based_on_id(mirroredPositionArray, updateNearby) # Always necessary when updating ownership
 
 

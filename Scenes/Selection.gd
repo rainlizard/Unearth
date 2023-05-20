@@ -206,7 +206,7 @@ func construct_shape_for_placement(constructType):
 		if oMirrorPlacementCheckBox.pressed == true:
 			oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_ONLY_OWNERSHIP)
 		
-		var updateNearby = some_manual_placements_dont_update_nearby(paintSlab)
+		var updateNearby = some_manual_placements_dont_update_nearby()
 		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
 	else:
 		# Slab placement
@@ -217,10 +217,10 @@ func construct_shape_for_placement(constructType):
 		if oMirrorPlacementCheckBox.pressed == true:
 			oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_SLAB_AND_OWNER)
 		
-		var updateNearby = some_manual_placements_dont_update_nearby(paintSlab)
+		var updateNearby = some_manual_placements_dont_update_nearby()
 		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
 
-func some_manual_placements_dont_update_nearby(paintSlab):
+func some_manual_placements_dont_update_nearby():
 	# Custom slabs don't update the surroundings
 	if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
 		return false

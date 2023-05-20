@@ -1,12 +1,14 @@
 extends ScrollContainer
 onready var oAutoWallArtButton = Nodelist.list["oAutoWallArtButton"]
 onready var oDamagedWallLineEdit = Nodelist.list["oDamagedWallLineEdit"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 func _ready():
 	pass
 
 func _on_EditableBordersCheckbox_toggled(button_pressed):
 	Settings.set_setting("editable_borders", button_pressed)
+	oEditor.update_boundaries()
 
 func _on_OwnableNaturalTerrain_toggled(button_pressed):
 	Settings.set_setting("ownable_natural_terrain", button_pressed)

@@ -60,7 +60,7 @@ func update_details():
 				description = "Utilized"
 				value = oDataClm.utilized[entryIndex]
 			2:
-				description = "Orientation"
+				description = "Health %"
 				value = oDataClm.orientation[entryIndex]
 			3:
 				description = "Solid mask"

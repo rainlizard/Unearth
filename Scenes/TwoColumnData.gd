@@ -21,11 +21,11 @@ const columnRightSize = 150
 func _ready():
 	columns = 2
 
-func add_item(leftText, rightText):
+func add_item(leftString, rightString):
 	# Left column item
 	var nameDesc = Label.new()
 	nameDesc.align = HALIGN_LEFT
-	nameDesc.text = leftText
+	nameDesc.text = leftString
 	nameDesc.autowrap = true
 	nameDesc.rect_min_size.x = columnLeftSize # minimum text width based on the word: "Floor texture"
 	nameDesc.valign = VALIGN_TOP
@@ -35,20 +35,21 @@ func add_item(leftText, rightText):
 	
 	# Right column item
 	var nodeRightColumn
-	match leftText:
+	match leftString:
 		"Door locked":
 			nodeRightColumn = OptionButton.new()
 			nodeRightColumn.add_item("False")
 			nodeRightColumn.add_item("True")
 			
-			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftText])
+			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftString])
+			nodeRightColumn.connect("toggled",self,"_on_optionbutton_toggled", [nodeRightColumn])
 			for i in nodeRightColumn.get_item_count():
-				if nodeRightColumn.get_item_text(nodeRightColumn.get_item_index(i)) == rightText:
+				if nodeRightColumn.get_item_text(nodeRightColumn.get_item_index(i)) == rightString:
 					nodeRightColumn.selected = i
 		"Ownership":
 			nodeRightColumn = OptionButton.new()
-			nodeRightColumn.focus_mode = 0 # I don't know whether I need this
-			nodeRightColumn.get_popup().focus_mode = 0
+			nodeRightColumn.focus_mode = 0 # Fixes clicking on the menu
+			nodeRightColumn.get_popup().focus_mode = 0 # Fixes clicking on the menu
 			nodeRightColumn.add_item("Red")
 			nodeRightColumn.add_item("Blue")
 			nodeRightColumn.add_item("Green")
@@ -58,28 +59,28 @@ func add_item(leftText, rightText):
 			
 #			print(nodeRightColumn.get_popup().mouse_filter)
 			
-			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftText])
+			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftString])
 			nodeRightColumn.connect("toggled",self,"_on_optionbutton_toggled", [nodeRightColumn])
 			# Select the correct option
 			for i in nodeRightColumn.get_item_count():
-				if nodeRightColumn.get_item_text(nodeRightColumn.get_item_index(i)) == rightText:
+				if nodeRightColumn.get_item_text(nodeRightColumn.get_item_index(i)) == rightString:
 					nodeRightColumn.selected = i
 		"Level":
 			nodeRightColumn = scnLevelChanger.instance()
 			#nodeRightColumn.expand_to_text_length = true
 			nodeRightColumn.theme = thinLineEditTheme #!!!!!!!!!!!!!
-			nodeRightColumn.connect("value_changed", self, "_on_property_value_changed", [nodeRightColumn, leftText])
-			nodeRightColumn.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftText])
-			nodeRightColumn.value = float(rightText)
-		"Effect range","Light range","Intensity","Gate #","Point range","Point #","Custom box","Unknown 9","Unknown 10","Unknown 11-12","Unknown 13","Unknown 14","Unknown 15","Unknown 16","Unknown 17","Unknown 18","Unknown 19","Unknown 20","Gold held","Health %":
+			nodeRightColumn.connect("value_changed", self, "_on_property_value_changed", [nodeRightColumn, leftString])
+			nodeRightColumn.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftString])
+			nodeRightColumn.value = float(rightString)
+		"Effect range","Light range","Intensity","Gate #","Point range","Point #","Custom box","Unknown 9","Unknown 10","Unknown 11-12","Unknown 13","Unknown 14","Unknown 15","Unknown 16","Unknown 17","Unknown 18","Unknown 19","Unknown 20","Gold held","Health %","Gold value":
 			nodeRightColumn = scnSpinBoxPropertiesValue.instance()
 			#nodeRightColumn.expand_to_text_length = true
 			nodeRightColumn.theme = thinLineEditTheme #!!!!!!!!!!!!!
-			nodeRightColumn.connect("value_changed", self, "_on_property_value_changed", [nodeRightColumn, leftText])
-			nodeRightColumn.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftText])
-			nodeRightColumn.value = int(rightText)
+			nodeRightColumn.connect("value_changed", self, "_on_property_value_changed", [nodeRightColumn, leftString])
+			nodeRightColumn.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftString])
+			nodeRightColumn.value = int(rightString)
 			
-			match leftText:
+			match leftString:
 				"Gold held":
 					nodeRightColumn.min_value = 0
 					nodeRightColumn.max_value = 1000000
@@ -93,16 +94,20 @@ func add_item(leftText, rightText):
 		"Position":
 			var scn = preload('res://Scenes/PositionEditor.tscn')
 			nodeRightColumn = scn.instance()
-			nodeRightColumn.set_txt(rightText.split(' '))
+			nodeRightColumn.set_txt(rightString.split(' '))
 			nodeRightColumn.connect("position_editor_text_entered", self, "_on_property_value_entered", [nodeRightColumn])
-			nodeRightColumn.connect("position_editor_text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftText])
-			nodeRightColumn.connect("position_editor_focus_exited", self, "_on_property_value_focus_exited", [nodeRightColumn,leftText])
+			nodeRightColumn.connect("position_editor_text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftString])
+			nodeRightColumn.connect("position_editor_focus_exited", self, "_on_property_value_focus_exited", [nodeRightColumn,leftString])
 			
-			nodeRightColumn.text = rightText
+			nodeRightColumn.text = rightString
 			nodeRightColumn.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_END # To handle the other side's autowrap text
 			nodeRightColumn.align = HALIGN_LEFT
-		"Facing":
+		"Orientation":
 			nodeRightColumn = OptionButton.new()
+			nodeRightColumn.focus_mode = 0 # Fixes clicking on the menu
+			nodeRightColumn.get_popup().focus_mode = 0 # Fixes clicking on the menu
+			
+			# The order of this list must match the listOrientations array in Constants
 			nodeRightColumn.add_item("North")
 			nodeRightColumn.add_item("NorthEast")
 			nodeRightColumn.add_item("East")
@@ -111,23 +116,30 @@ func add_item(leftText, rightText):
 			nodeRightColumn.add_item("SouthWest")
 			nodeRightColumn.add_item("West")
 			nodeRightColumn.add_item("NorthWest")
+			
+			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftString])
+			nodeRightColumn.connect("toggled",self,"_on_optionbutton_toggled", [nodeRightColumn])
+			# Select the correct option
+			var orientIndex = Constants.listOrientations.find(int(rightString))
+			if orientIndex != -1:
+				nodeRightColumn.selected = orientIndex
 		"Name": #Creature name
 			nodeRightColumn = LineEdit.new()
 			nodeRightColumn.placeholder_text = "Default"
 			nodeRightColumn.placeholder_alpha = 0.33
-			nodeRightColumn.text = rightText #Utils.strip_special_chars_from_string(rightText)
-			nodeRightColumn.connect("text_changed", self, "_on_property_value_changed", [nodeRightColumn, leftText])
+			nodeRightColumn.text = rightString #Utils.strip_special_chars_from_string(rightString)
+			nodeRightColumn.connect("text_changed", self, "_on_property_value_changed", [nodeRightColumn, leftString])
 		_:
 			nodeRightColumn = Label.new()
 			nodeRightColumn.autowrap = true
 			nodeRightColumn.rect_min_size.x = columnRightSize
 			#if name == "ColumnListData": nodeRightColumn.rect_min_size.x = columnRightSize-50
 			# This is for when highlighting something in the Thing Window
-			if rightText == "":
+			if rightString == "":
 				nodeRightColumn.rect_min_size.x = 0
 				nameDesc.autowrap = false
 			
-			nodeRightColumn.text = rightText
+			nodeRightColumn.text = rightString
 			nodeRightColumn.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_END # To handle the other side's autowrap text
 			nodeRightColumn.align = HALIGN_LEFT
 	
@@ -137,8 +149,8 @@ func _on_property_value_entered(new_val, callingNode): # When pressing Enter on 
 	oEditor.mapHasBeenEdited = true
 	callingNode.release_focus()
 
-func _on_property_value_focus_exited(callingNode, leftText):
-	match leftText:
+func _on_property_value_focus_exited(callingNode, leftString):
+	match leftString:
 		"Position":
 			callingNode.oLineEditX.text = str(clamp(float(callingNode.oLineEditX.text), 0.0, M.xSize*3))
 			callingNode.oLineEditY.text = str(clamp(float(callingNode.oLineEditY.text), 0.0, M.xSize*3))
@@ -146,17 +158,17 @@ func _on_property_value_focus_exited(callingNode, leftText):
 				callingNode.oLineEditZ.text = str(clamp(float(callingNode.oLineEditZ.text), 0.0, M.xSize*3))
 #	if callingNode is SpinBox:
 #		callingNode.value = float(callingNode.value)
-	update_property_value(callingNode, leftText)
+	update_property_value(callingNode, leftString)
 
-func _on_property_value_typed_in_manually(new_text, callingNode, leftText):
+func _on_property_value_typed_in_manually(new_text, callingNode, leftString):
 	if callingNode is LineEdit: callingNode.text = new_text
 	if callingNode is SpinBox:  callingNode.value = float(new_text)
-	update_property_value(callingNode, leftText)
+	update_property_value(callingNode, leftString)
 
-func _on_property_value_changed(new_val, callingNode, leftText):
-	update_property_value(callingNode, leftText)
+func _on_property_value_changed(new_val, callingNode, leftString):
+	update_property_value(callingNode, leftString)
 
-func update_property_value(callingNode, leftText): # This signal will go off first even if you click the "Deselect" button.
+func update_property_value(callingNode, leftString): # This signal will go off first even if you click the "Deselect" button.
 	oEditor.mapHasBeenEdited = true
 	var inst = oInspector.inspectingInstance
 	
@@ -169,7 +181,7 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 	
 	var aValueWasAdjustedSoMirrorIt = ""
 	
-	match leftText:
+	match leftString:
 		"Position":
 			match name:
 				"ThingListData":
@@ -331,29 +343,38 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.goldHeld = value
-						aValueWasAdjustedSoMirrorIt = "goldHeld"
+						inst.creatureGold = value
+						aValueWasAdjustedSoMirrorIt = "creatureGold"
 				"PlacingListData":
-					oPlacingSettings.goldHeld = value
+					oPlacingSettings.creatureGold = value
 		"Health %":
 			value = clamp(int(value), 0, 100)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.initialHealth = value
-						aValueWasAdjustedSoMirrorIt = "initialHealth"
+						inst.creatureInitialHealth = value
+						aValueWasAdjustedSoMirrorIt = "creatureInitialHealth"
 				"PlacingListData":
-					oPlacingSettings.initialHealth = value
-		"Facing":
+					oPlacingSettings.creatureInitialHealth = value
+		"Orientation":
 			value = clamp(int(value), 0, 2047)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
-						inst.facingDirection = value
-						aValueWasAdjustedSoMirrorIt = "facingDirection"
+						inst.orientation = value
+						aValueWasAdjustedSoMirrorIt = "orientation"
 				"PlacingListData":
-					oPlacingSettings.facingDirection = value
-	
+					oPlacingSettings.orientation = value
+		"Gold value":
+			value = clamp(int(value), 0, 1000000)
+			match name:
+				"ThingListData":
+					if is_instance_valid(inst):
+						inst.goldValue = value
+						aValueWasAdjustedSoMirrorIt = "goldValue"
+				"PlacingListData":
+					oPlacingSettings.goldValue = value
+		
 	if callingNode is SpinBox:
 		callingNode.value = float(value)
 		callingNode.get_line_edit().caret_position = callingNode.get_line_edit().text.length()
@@ -365,14 +386,14 @@ func update_property_value(callingNode, leftText): # This signal will go off fir
 func _on_optionbutton_toggled(state,nodeRightColumn):
 	oUi.optionButtonIsOpened = state
 
-func _on_optionbutton_item_selected(indexSelected, leftText): # When pressing Enter on LineEdit, lose focus
+func _on_optionbutton_item_selected(indexSelected, leftString): # When pressing Enter on LineEdit, lose focus
 	oEditor.mapHasBeenEdited = true
 	
 	var inst = oInspector.inspectingInstance
 	
 	var aValueWasAdjustedSoMirrorIt = ""
 	
-	match leftText:
+	match leftString:
 		"Ownership":
 			oSelection.paintOwnership = indexSelected
 			match name:
@@ -391,6 +412,14 @@ func _on_optionbutton_item_selected(indexSelected, leftText): # When pressing En
 						aValueWasAdjustedSoMirrorIt = "doorLocked"
 				"PlacingListData":
 					oPlacingSettings.doorLocked = indexSelected
+		"Orientation":
+			match name:
+				"ThingListData":
+					if is_instance_valid(inst):
+						inst.orientation = Constants.listOrientations[indexSelected]
+						aValueWasAdjustedSoMirrorIt = "orientation"
+				"PlacingListData":
+					oPlacingSettings.orientation = Constants.listOrientations[indexSelected]
 	
 	if oMirrorPlacementCheckBox.pressed == true:
 		if aValueWasAdjustedSoMirrorIt != "":

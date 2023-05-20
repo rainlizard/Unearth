@@ -17,6 +17,7 @@ var DK_LEVELS_DIRECTORY = ""
 var DK_CAMPGNS_DIRECTORY = ""
 var KEEPERFX_VERSION_INT = 0 # This is set in set_paths() when EXECUTABLE_PATH is set.
 var KEEPERFX_VERSION_STRING = "0"
+const KEEPERFX_VERSION_REQUIRED_INT = 0503372
 #var nosound = true
 #var cheats = true
 #var gameSpeed = 25
@@ -188,7 +189,7 @@ func get_precise_filepath(lookInDirectory, lookForFileName):
 func set_keeperfx_version():
 	var output = []
 	var getVer = Settings.unearthdata.plus_file("GetVersion.cmd")
-	var exit_code = OS.execute(getVer, [EXECUTABLE_PATH], true, output)
+	var _exit_code = OS.execute(getVer, [EXECUTABLE_PATH], true, output)
 	if output.size() == 1:
 		KEEPERFX_VERSION_STRING = output[0].strip_edges()
 		KEEPERFX_VERSION_INT = int(KEEPERFX_VERSION_STRING.replace(".",""))

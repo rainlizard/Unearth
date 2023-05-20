@@ -40,10 +40,12 @@ func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
 	
 	# Default to KFX format
-	if oGame.running_keeperfx() == true:
-		oSetNewFormat.selected = 0 # Set default format to KFX format
+	if oGame.running_keeperfx() == false:
+		oSetNewFormat.selected = 0 # Set default format to Classic format, for newbies who don't know what KeeperFX is
+		_on_NewMapFormat_item_selected(0)
 	else:
-		oSetNewFormat.selected = 1 # Set default format to OLD, for newbies who don't know what KeeperFX is
+		oSetNewFormat.selected = 1 # Set default format to KFX format
+		_on_NewMapFormat_item_selected(1)
 	
 	reinit_noise_preview()
 	
@@ -253,19 +255,20 @@ func _on_CheckBoxNewMapBorder_pressed():
 
 func _on_NewMapFormat_item_selected(index):
 	if index == 0:
-		oXSizeLine.editable = true
-		oYSizeLine.editable = true
-		oXSizeLine.hint_tooltip = ""
-		oYSizeLine.hint_tooltip = ""
-	elif index == 1:
 		oXSizeLine.editable = false
 		oYSizeLine.editable = false
 		oXSizeLine.text = "85"
 		oYSizeLine.text = "85"
 		_on_XSizeLine_focus_exited()
 		_on_YSizeLine_focus_exited()
-		oXSizeLine.hint_tooltip = "Map size can only be changed if KFX format is used."
-		oYSizeLine.hint_tooltip = "Map size can only be changed if KFX format is used."
+		oXSizeLine.hint_tooltip = "" #"Map size can only be changed if KFX format is used."
+		oYSizeLine.hint_tooltip = "" #"Map size can only be changed if KFX format is used."
+	elif index == 1:
+		oXSizeLine.editable = false#true
+		oYSizeLine.editable = false#true
+		oXSizeLine.hint_tooltip = ""
+		oYSizeLine.hint_tooltip = ""
+	
 
 
 func _on_QuickNoisePreview_gui_input(event):
@@ -364,3 +367,18 @@ func apply_symmetry():
 	
 	imageData.unlock()
 
+
+
+# This is for dev purposes
+func _on_XSizeLine_gui_input(event):
+	event_on_map_size_fields(event)
+func _on_YSizeLine_gui_input(event):
+	event_on_map_size_fields(event)
+func event_on_map_size_fields(event):
+	if event is InputEventMouseButton and event.is_pressed():
+		if event.button_index == BUTTON_MIDDLE:
+			oXSizeLine.editable = true
+			oYSizeLine.editable = true
+		if event.button_index == BUTTON_LEFT:
+			if oXSizeLine.editable == false or oYSizeLine.editable == false:
+				oMessage.big("Disabled", "Big maps are disabled until a game-breaking pathfinding bug is fixed. If you think you can help solve this bug, head on over to KeeperFX's github or the discord.")

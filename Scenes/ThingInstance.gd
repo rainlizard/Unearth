@@ -40,10 +40,11 @@ var data20 = null
 var baseZindex = 0
 
 # FX extended fields
-var goldHeld = null
-var initialHealth = null
+var creatureGold = null
+var creatureInitialHealth = null
 var creatureName = null setget set_creatureName
-var facingDirection = null
+var orientation = null
+var goldValue = null
 
 func _enter_tree():
 	set_texture_based_on_thingtype()

@@ -236,7 +236,7 @@ func pressed(id):
 	
 	set_selection(id.get_meta("thingType"), id.get_meta("thingSubtype"))
 	
-	oPlacingSettings.update_and_set_placing_tab()
+	oPlacingSettings.set_placing_tab_and_update_it()
 	oInspector.deselect()
 
 func set_selection(setType, setSubtype):

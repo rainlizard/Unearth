@@ -304,7 +304,9 @@ var LIST_OF_BOXES = {
 108 : [TYPE.DOOR, 3], # Iron Door
 109 : [TYPE.DOOR, 4], # Magic Door
 }
-
+var LIST_OF_GOLDPILES = [
+	3, 6, 43, 128, 136
+]
 
 var LIST_OF_SPELLBOOKS = [
 SPELLBOOK.HAND,

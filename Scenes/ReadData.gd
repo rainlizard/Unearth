@@ -13,6 +13,7 @@ onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oDataLof = Nodelist.list["oDataLof"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -350,7 +351,8 @@ func read_lgtfx(buffer):
 			id.data18 = 0
 			id.data19 = 0
 			oInstances.add_child(id)
-
+	else:
+		oMessage.big(".lgtfx unparsable", "The map did not load correctly! Because the .lgtfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .lgtfx file.")
 
 func new_lgtfx():
 	pass
@@ -456,18 +458,22 @@ func read_tngfx(buffer):
 						id.herogateNumber = c.get_value(section, "HEROGATENUMBER")
 					elif id.subtype == 133: # Mysterious Box
 						id.boxNumber = c.get_value(section, "CUSTOMBOX")
-					id.facingDirection = c.get_value(section, "FACINGDIRECTION", 0)
+					id.orientation = c.get_value(section, "ORIENTATION", 0)
+					id.goldValue = c.get_value(section, "GOLDVALUE", 0)
 				Things.TYPE.CREATURE:
 					id.index = c.get_value(section, "INDEX")
 					id.creatureLevel = c.get_value(section, "CREATURELEVEL")
 					id.creatureName = c.get_value(section, "CREATURENAME", "")
-					id.goldHeld = c.get_value(section, "GOLDHELD", 0)
-					id.initialHealth = c.get_value(section, "INITIALHEALTH", 100)
+					id.creatureGold = c.get_value(section, "CREATUREGOLD", 0)
+					id.creatureInitialHealth = c.get_value(section, "CREATUREINITIALHEALTH", 100)
+					id.orientation = c.get_value(section, "ORIENTATION", 0)
 				Things.TYPE.EFFECTGEN:
 					id.effectRange = c.get_value(section, "EFFECTRANGE")[0] + (c.get_value(section, "EFFECTRANGE")[1] / 256.0)
 					id.sensitiveTile = c.get_value(section, "PARENTTILE")
+					id.orientation = c.get_value(section, "ORIENTATION", 0)
 				Things.TYPE.TRAP:
 					id.index = c.get_value(section, "INDEX")
+					id.orientation = c.get_value(section, "ORIENTATION", 0)
 				Things.TYPE.DOOR:
 					id.index = c.get_value(section, "INDEX")
 					id.doorOrientation = c.get_value(section, "DOORORIENTATION")
@@ -484,6 +490,8 @@ func read_tngfx(buffer):
 			id.data19 = 0
 			id.data20 = 0
 			oInstances.add_child(id)
+	else:
+		oMessage.big(".tngfx unparsable", "The map did not load correctly! Because the .tngfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .tngfx file.")
 
 func new_tngfx():
 	pass
@@ -514,6 +522,8 @@ func read_aptfx(buffer):
 			id.pointRange = c.get_value(section, "POINTRANGE")[0] + (c.get_value(section, "POINTRANGE")[1] / 256.0)
 			id.data7 = 0
 			oInstances.add_child(id)
+	else:
+		oMessage.big(".aptfx unparsable", "The map did not load correctly! Because the .aptfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .aptfx file.")
 
 func new_aptfx():
 	pass

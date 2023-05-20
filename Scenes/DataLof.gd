@@ -21,7 +21,7 @@ func use_size(x, y): #called from _on_ButtonNewMapOK_pressed() and read_lof()
 func clear_all():
 	MAP_FORMAT_VERSION = ""
 	KIND = ""
-	NAME_TEXT = ""
+	#NAME_TEXT = "" # This is set inside of oDataMapName, so don't clear it here
 	OPTIONS = ""
 	AUTHOR = ""
 	DESCRIPTION = ""

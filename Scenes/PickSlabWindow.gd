@@ -149,7 +149,7 @@ func pressed(id):
 	oSelection.paintSlab = setValue
 	oPickThingWindow.set_selection(null,null)
 	set_selection(setValue)
-	oPlacingSettings.update_and_set_placing_tab()
+	oPlacingSettings.set_placing_tab_and_update_it()
 
 
 func add_child_to_grid(tabID, id, set_text):
