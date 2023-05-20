@@ -238,26 +238,26 @@ func thing_details(id):
 				if HIDE_UNKNOWN_DATA == true: value = null
 			# FX extended fields
 			23:
-				description = "Orientation"
-				value = id.orientation
-				if oCurrentFormat.selected == 0: value = null # Classic format
-			24:
 				description = "Health %"
 				value = id.creatureInitialHealth
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			25:
+			24:
 				description = "Gold held"
 				value = id.creatureGold
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			26:
+			25:
 				description = "Name" # Creature name
 				value = id.creatureName
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			27:
+			26:
 				description = "Gold value"
 				value = id.goldValue
 				if oCurrentFormat.selected == 0: value = null # Classic format
-		
+			27:
+				description = "Orientation"
+				value = id.orientation
+				if oCurrentFormat.selected == 0: value = null # Classic format
+			
 		if value != null:
 			oThingListData.add_item(description, str(value))
 

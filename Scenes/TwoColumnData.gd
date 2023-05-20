@@ -78,12 +78,11 @@ func add_item(leftString, rightString):
 			nodeRightColumn.theme = thinLineEditTheme #!!!!!!!!!!!!!
 			nodeRightColumn.connect("value_changed", self, "_on_property_value_changed", [nodeRightColumn, leftString])
 			nodeRightColumn.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftString])
-			nodeRightColumn.value = int(rightString)
 			
 			match leftString:
-				"Gold held":
+				"Gold held","Gold value":
 					nodeRightColumn.min_value = 0
-					nodeRightColumn.max_value = 1000000
+					nodeRightColumn.max_value = 1000000000
 					nodeRightColumn.get_line_edit().placeholder_text = "0"
 					nodeRightColumn.get_line_edit().placeholder_alpha = 0.33
 				"Health %":
@@ -91,6 +90,8 @@ func add_item(leftString, rightString):
 					nodeRightColumn.max_value = 100
 					nodeRightColumn.get_line_edit().placeholder_text = "100"
 					nodeRightColumn.get_line_edit().placeholder_alpha = 0.33
+			
+			nodeRightColumn.value = int(rightString)
 		"Position":
 			var scn = preload('res://Scenes/PositionEditor.tscn')
 			nodeRightColumn = scn.instance()
@@ -339,7 +340,7 @@ func update_property_value(callingNode, leftString): # This signal will go off f
 				"PlacingListData":
 					oPlacingSettings.creatureName = value
 		"Gold held":
-			value = clamp(int(value), 0, 1000000)
+			value = clamp(int(value), 0, 1000000000)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):
@@ -366,7 +367,7 @@ func update_property_value(callingNode, leftString): # This signal will go off f
 				"PlacingListData":
 					oPlacingSettings.orientation = value
 		"Gold value":
-			value = clamp(int(value), 0, 1000000)
+			value = clamp(int(value), 0, 1000000000)
 			match name:
 				"ThingListData":
 					if is_instance_valid(inst):

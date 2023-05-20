@@ -233,7 +233,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 		Things.TYPE.OBJECT:
 			id.sensitiveTile = 65535 # "None"
 			id.orientation = oPlacingSettings.orientation
-			id.goldValue = oPlacingSettings.goldValue
+			
 			if id.subtype == 49: # Hero Gate
 				id.herogateNumber = get_free_hero_gate_number() #originalInstance.herogateNumber
 			elif id.subtype == 133: # Mysterious Box
@@ -252,17 +252,27 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 					id.locationY -= 0.25
 					id.sensitiveTile = (xSlab) + ((ySlab-1) * M.xSize) # Should this be M.ySize ???
 				update_stray_torch_height(id)
+			elif id.subtype in Things.LIST_OF_GOLDPILES:
+				match id.subtype:
+					3: id.goldValue = 500
+					6: id.goldValue = 250
+					43: id.goldValue = 200
+					128: id.goldValue = 1
+					136: id.goldValue = 100
 		Things.TYPE.CREATURE:
 			id.creatureLevel = oPlacingSettings.creatureLevel
 			id.creatureName = oPlacingSettings.creatureName
 			id.creatureGold = oPlacingSettings.creatureGold
 			id.creatureInitialHealth = oPlacingSettings.creatureInitialHealth
+			id.orientation = oPlacingSettings.orientation
 			id.index = get_free_index_number()
 		Things.TYPE.EFFECTGEN:
 			id.effectRange = oPlacingSettings.effectRange
 			id.sensitiveTile = (floor(newPosition.y/3) * M.xSize) + floor(newPosition.x/3) # Should this be M.ySize ???
+			id.orientation = oPlacingSettings.orientation
 		Things.TYPE.TRAP:
 			id.index = get_free_index_number()
+			id.orientation = oPlacingSettings.orientation
 		Things.TYPE.DOOR:
 			id.index = get_free_index_number()
 			id.doorLocked = oPlacingSettings.doorLocked

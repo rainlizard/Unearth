@@ -36,11 +36,10 @@ enum FIELDS {
 	LIGHT_RANGE
 	LIGHT_INTENSITY
 	CUSTOM_BOX_ID
-	ORIENTATION
 	INITIAL_HEALTH
 	CREATURE_GOLD
 	CREATURE_NAME
-	GOLD_VALUE
+	ORIENTATION
 }
 
 func _ready():
@@ -74,8 +73,6 @@ func update_placing_tab():
 			availableFields = [FIELDS.ID, FIELDS.TYPE]
 			if subtype == 133: #Mysterious Box
 				availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.CUSTOM_BOX_ID]
-			elif subtype in Things.LIST_OF_GOLDPILES: # Is a gold pile with a value that can be set
-				availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.GOLD_VALUE]
 			if oCurrentFormat.selected != 0: # Classic format
 				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.CREATURE:
@@ -84,6 +81,7 @@ func update_placing_tab():
 				availableFields.append(FIELDS.INITIAL_HEALTH)
 				availableFields.append(FIELDS.CREATURE_GOLD)
 				availableFields.append(FIELDS.CREATURE_NAME)
+				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.EFFECTGEN:
 			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.EFFECT_RANGE, FIELDS.ORIENTATION]
 			if oCurrentFormat.selected != 0: # Classic format
@@ -150,9 +148,6 @@ func update_placing_tab():
 				FIELDS.ORIENTATION:
 					description = "Orientation"
 					value = orientation
-				FIELDS.GOLD_VALUE:
-					description = "Gold value"
-					value = goldValue
 
 		if value != null:
 			oPlacingListData.add_item(description, str(value))
