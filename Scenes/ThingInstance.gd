@@ -39,12 +39,12 @@ var data20 = null
 
 var baseZindex = 0
 
-# FX extended fields
-var creatureGold = null
-var creatureInitialHealth = null
-var creatureName = null setget set_creatureName
-var orientation = null
-var goldValue = null
+# FX extended fields. Default initial values, important for when loading an old classic format map then switching it to KFX format in Map Settings.
+var creatureGold = 0
+var creatureInitialHealth = 100
+var creatureName = "" setget set_creatureName
+var orientation = 0
+var goldValue = 0
 
 func _enter_tree():
 	set_texture_based_on_thingtype()
