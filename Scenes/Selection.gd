@@ -269,6 +269,8 @@ func clean_up_cursor_array():
 
 func manually_delete_one_instance(inst):
 	if is_instance_valid(inst) == true:
+		oEditor.mapHasBeenEdited = true
+		
 		if oInspector.inspectingInstance == inst:
 			oInspector.deselect()
 		

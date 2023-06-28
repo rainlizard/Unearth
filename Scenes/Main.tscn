@@ -614,8 +614,6 @@ script = ExtResource( 136 )
 
 [node name="QuickMapPreviewDisplay" type="TextureRect" parent="Game2D/Node2D/QuickMapPreview"]
 material = SubResource( 19 )
-margin_right = 500.0
-margin_bottom = 500.0
 expand = true
 
 [node name="Ui" type="CanvasLayer" parent="."]

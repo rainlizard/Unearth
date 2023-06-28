@@ -420,32 +420,32 @@ func read_tngfx(buffer):
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	
 	var c = ConfigFile.new()
-	var err = c.parse(value.to_upper())
+	var err = c.parse(value)
 	
 	if err == OK:
-		var numberOfTngEntries = c.get_value("COMMON", "THINGSCOUNT")
+		var numberOfTngEntries = c.get_value("common", "ThingsCount")
 		var thingScn = preload("res://Scenes/ThingInstance.tscn")
 		for entryNumber in numberOfTngEntries:
-			var section = "THING"+str(entryNumber)
+			var section = "thing"+str(entryNumber)
 			if c.has_section(section) == false:
 				continue
 			
 			var id = thingScn.instance()
 			
-			id.locationX = c.get_value(section, "SUBTILEX")[0] + (c.get_value(section, "SUBTILEX")[1] / 256.0)
-			id.locationY = c.get_value(section, "SUBTILEY")[0] + (c.get_value(section, "SUBTILEY")[1] / 256.0)
-			id.locationZ = c.get_value(section, "SUBTILEZ")[0] + (c.get_value(section, "SUBTILEZ")[1] / 256.0)
+			id.locationX = c.get_value(section, "SubtileX")[0] + (c.get_value(section, "SubtileX")[1] / 256.0)
+			id.locationY = c.get_value(section, "SubtileY")[0] + (c.get_value(section, "SubtileY")[1] / 256.0)
+			id.locationZ = c.get_value(section, "SubtileZ")[0] + (c.get_value(section, "SubtileZ")[1] / 256.0)
 			
-			id.subtype = c.get_value(section, "SUBTYPE")
-			id.ownership = c.get_value(section, "OWNERSHIP")
+			id.subtype = c.get_value(section, "Subtype")
+			id.ownership = c.get_value(section, "Ownership")
 			
-			match c.get_value(section, "THINGTYPE"):
-				"OBJECT": id.thingType = Things.TYPE.OBJECT
-				"CREATURE": id.thingType = Things.TYPE.CREATURE
-				"EFFECTGEN": id.thingType = Things.TYPE.EFFECTGEN
-				"TRAP": id.thingType = Things.TYPE.TRAP
-				"DOOR": id.thingType = Things.TYPE.DOOR
-				"EFFECT":
+			match c.get_value(section, "ThingType"):
+				"Object": id.thingType = Things.TYPE.OBJECT
+				"Creature": id.thingType = Things.TYPE.CREATURE
+				"EffectGen": id.thingType = Things.TYPE.EFFECTGEN
+				"Trap": id.thingType = Things.TYPE.TRAP
+				"Door": id.thingType = Things.TYPE.DOOR
+				"Effect":
 					if oDataLof.MAP_FORMAT_VERSION == "": # This is for an old map format bug, read "Effect" as "EffectGen"
 						id.thingType = Things.TYPE.EFFECTGEN
 				
@@ -453,31 +453,32 @@ func read_tngfx(buffer):
 			
 			match id.thingType:
 				Things.TYPE.OBJECT:
-					id.sensitiveTile = c.get_value(section, "PARENTTILE")
+					id.sensitiveTile = c.get_value(section, "ParentTile")
 					if id.subtype == 49: # Hero Gate
-						id.herogateNumber = c.get_value(section, "HEROGATENUMBER")
+						id.herogateNumber = c.get_value(section, "HerogateNumber")
 					elif id.subtype == 133: # Mysterious Box
-						id.boxNumber = c.get_value(section, "CUSTOMBOX")
-					id.orientation = c.get_value(section, "ORIENTATION", 0)
-					id.goldValue = c.get_value(section, "GOLDVALUE", 0)
+						id.boxNumber = c.get_value(section, "CustomBox")
+					elif id.subtype in Things.LIST_OF_GOLDPILES:
+						id.goldValue = c.get_value(section, "GoldValue", -1)
+					id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.CREATURE:
-					id.index = c.get_value(section, "INDEX")
-					id.creatureLevel = c.get_value(section, "CREATURELEVEL")
-					id.creatureName = c.get_value(section, "CREATURENAME", "")
-					id.creatureGold = c.get_value(section, "CREATUREGOLD", 0)
-					id.creatureInitialHealth = c.get_value(section, "CREATUREINITIALHEALTH", 100)
-					id.orientation = c.get_value(section, "ORIENTATION", 0)
+					id.index = c.get_value(section, "Index")
+					id.creatureLevel = c.get_value(section, "CreatureLevel")
+					id.creatureName = c.get_value(section, "CreatureName", "")
+					id.creatureGold = c.get_value(section, "CreatureGold", -1)
+					id.creatureInitialHealth = c.get_value(section, "CreatureInitialHealth", -1)
+					id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.EFFECTGEN:
-					id.effectRange = c.get_value(section, "EFFECTRANGE")[0] + (c.get_value(section, "EFFECTRANGE")[1] / 256.0)
-					id.sensitiveTile = c.get_value(section, "PARENTTILE")
-					id.orientation = c.get_value(section, "ORIENTATION", 0)
+					id.effectRange = c.get_value(section, "EffectRange")[0] + (c.get_value(section, "EffectRange")[1] / 256.0)
+					id.sensitiveTile = c.get_value(section, "ParentTile")
+					id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.TRAP:
-					id.index = c.get_value(section, "INDEX")
-					id.orientation = c.get_value(section, "ORIENTATION", 0)
+					id.index = c.get_value(section, "Index")
+					id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.DOOR:
-					id.index = c.get_value(section, "INDEX")
-					id.doorOrientation = c.get_value(section, "DOORORIENTATION")
-					id.doorLocked = c.get_value(section, "DOORLOCKED")
+					id.index = c.get_value(section, "Index")
+					id.doorOrientation = c.get_value(section, "DoorOrientation")
+					id.doorLocked = c.get_value(section, "DoorLocked")
 			id.data9 = 0
 			id.data10 = 0
 			id.data11_12 = 0
@@ -491,7 +492,7 @@ func read_tngfx(buffer):
 			id.data20 = 0
 			oInstances.add_child(id)
 	else:
-		oMessage.big(".tngfx unparsable", "The map did not load correctly! Because the .tngfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .tngfx file.")
+		oMessage.big(".tngfx unparsable", "The map did not load correctly! The .tngfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .tngfx file.")
 
 func new_tngfx():
 	pass

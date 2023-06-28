@@ -169,7 +169,10 @@ func toggle_map_preview(togglePreview):
 		
 		if oDynamicMapTree.get_selected() != null and currentSlbPath == oDynamicMapTree.get_selected().get_metadata(0):
 			oQuickMapPreview.visible = false
-
+	
+	match oQuickMapPreview.visible:
+		true: VisualServer.set_default_clear_color(Color8(10,10,20))
+		false: VisualServer.set_default_clear_color(Color8(0,0,0))
 
 func _on_MapBrowserTabContainer_tab_changed(tab):
 	match tab:

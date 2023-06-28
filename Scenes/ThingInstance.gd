@@ -40,11 +40,11 @@ var data20 = null
 var baseZindex = 0
 
 # FX extended fields. Default initial values, important for when loading an old classic format map then switching it to KFX format in Map Settings.
-var creatureGold = 0
-var creatureInitialHealth = 100
-var creatureName = "" setget set_creatureName
-var orientation = 0
-var goldValue = 0
+var creatureGold = null
+var creatureInitialHealth = null
+var creatureName = null setget set_creatureName
+var orientation = null
+var goldValue = null
 
 func _enter_tree():
 	set_texture_based_on_thingtype()
@@ -54,6 +54,8 @@ func _enter_tree():
 		add_to_group('attachedtotile_'+str(sensitiveTile))
 	
 	add_to_group("slab_location_group_"+str(floor(locationX/3))+'_'+str(floor(locationY/3)))
+	
+	load_default_kfx_values()
 	
 	match thingType:
 		Things.TYPE.TRAP:
@@ -71,10 +73,6 @@ func _enter_tree():
 				add_to_group("TreasuryGold")
 			elif subtype in Things.LIST_OF_SPELLBOOKS:
 				add_to_group("Spellbook")
-#			if subtype == 49:
-#				var oCamera2D = Nodelist.list["oCamera2D"]
-#				oCamera2D.connect("zoom_level_changed",self,"_on_zoom_level_changed")
-#				_on_zoom_level_changed(oCamera2D.zoom)
 		Things.TYPE.CREATURE:
 			add_to_group("Creature")
 			var oCamera2D = Nodelist.list["oCamera2D"]
@@ -83,6 +81,38 @@ func _enter_tree():
 		Things.TYPE.EFFECTGEN:
 			add_to_group("EffectGen")
 
+
+func load_default_kfx_values():
+	match thingType:
+		Things.TYPE.OBJECT:
+			if orientation == null or orientation == -1:
+				orientation = 0
+			if subtype in Things.LIST_OF_GOLDPILES:
+				if goldValue == null or goldValue == -1:
+					match subtype:
+						3: goldValue = 500
+						6: goldValue = 250
+						43: goldValue = 200
+						128: goldValue = 1
+						136: goldValue = 100
+		
+		Things.TYPE.CREATURE:
+			if creatureName == null:
+				creatureName = ""
+			if creatureInitialHealth == null or creatureInitialHealth == -1:
+				creatureInitialHealth = 100
+			if creatureGold == null or creatureGold == -1:
+				creatureGold = 0
+			if orientation == null or orientation == -1:
+				orientation = 0
+		Things.TYPE.EFFECTGEN:
+			if orientation == null or orientation == -1:
+				orientation = 0
+		Things.TYPE.TRAP:
+			if orientation == null or orientation == -1:
+				orientation = 0
+		Things.TYPE.DOOR:
+			pass
 
 
 func _exit_tree():
@@ -93,6 +123,7 @@ func _exit_tree():
 		if is_instance_valid(doorID) == true:
 			doorID.doorLocked = 0
 
+
 func set_location_x(setVal):
 	locationX = setVal
 	position.x = locationX * 32
@@ -101,6 +132,7 @@ func set_location_y(setVal):
 	position.y = locationY * 32
 func set_location_z(setVal):
 	locationZ = setVal
+
 
 func _on_zoom_level_changed(zoom):
 	var oUi = Nodelist.list["oUi"]
