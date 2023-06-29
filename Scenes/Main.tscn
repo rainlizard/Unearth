@@ -3402,9 +3402,6 @@ margin_right = 32.0
 margin_bottom = 99.0
 mouse_filter = 2
 script = ExtResource( 102 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/DisplayOverlapping"]
 anchor_right = 1.0

@@ -3,6 +3,7 @@ onready var oSelector = Nodelist.list["oSelector"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oSelectionStatus = Nodelist.list["oSelectionStatus"]
+onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
 
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
 
@@ -16,6 +17,7 @@ func set_inspector_subtile(setval):
 	position = setval * SUBTILE_SIZE - Vector2(SUBTILE_SIZE/2,SUBTILE_SIZE/2)
 	inspectorSubtile = setval
 
+
 func set_inspector_instance(setval):
 	# Previously selected instance
 	if is_instance_valid(inspectingInstance):
@@ -23,9 +25,12 @@ func set_inspector_instance(setval):
 	
 	# Newly selected instance
 	inspectingInstance = setval
-	if is_instance_valid(setval): setval.instance_was_selected()
+	if is_instance_valid(setval):
+		setval.instance_was_selected()
+		oPropertiesWindow.oPropertiesTabs.current_tab = 0
 	
 	oThingDetails.update_details()
+
 
 func inspect_something(id):
 	if is_instance_valid(id) and inspectingInstance != id: # Allow deselect by left clicking the same thing again
@@ -34,6 +39,7 @@ func inspect_something(id):
 		oSelectionStatus.visible = true
 	else:
 		deselect()
+
 
 func deselect():
 	if is_instance_valid(oThingDetails) == false: return # (initial mode select)

@@ -92,7 +92,6 @@ func mouse_button_on_field():
 		else:
 			if oSelection.cursorOnInstancesArray.empty() == false and mode == MODE_SUBTILE:
 				if is_instance_valid(oSelection.cursorOnInstancesArray[0]) == true:
-					oPropertiesWindow.oPropertiesTabs.current_tab = 0
 					oInspector.inspect_something(oSelection.cursorOnInstancesArray[0])
 			else:
 				oInspector.deselect()

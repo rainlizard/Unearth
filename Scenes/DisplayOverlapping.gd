@@ -19,6 +19,10 @@ func _unhandled_input(event):
 		if oSelection.cursorOnInstancesArray.size() >= 2:
 			oSelection.cursorOnInstancesArray.push_front(oSelection.cursorOnInstancesArray.pop_back())
 			
+			#oInspector.set_inspector_subtile(oSelection.cursorOnInstancesArray[0].position)
+			var id = oSelection.cursorOnInstancesArray[0]
+			oInspector.set_inspector_subtile(Vector2(id.locationX, id.locationY))
+			
 			# If cursor is hovering the subtile that's selected via inspector, switch inspector selection
 			if oInspector.inspectorSubtile.floor() == oSelector.cursorSubtile.floor():
 				oInspector.set_inspector_instance(oSelection.cursorOnInstancesArray[0])
