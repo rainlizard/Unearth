@@ -19,7 +19,7 @@ func save_map(filePath): # auto opens other files
 	
 	delete_existing_files(map)
 	
-	
+	var writeFailure = false
 	
 	for EXT in Filetypes.FILE_TYPES:
 		
@@ -47,23 +47,26 @@ func save_map(filePath): # auto opens other files
 #				print("file doesn't exist")
 				pass
 		
-		Filetypes.write(saveToFilePath, EXT.to_upper())
-		
+		var err = Filetypes.write(saveToFilePath, EXT.to_upper())
+		if err != OK:
+			writeFailure = true
 		var getModifiedTime = File.new().get_modified_time(saveToFilePath)
 		oCurrentMap.currentFilePaths[EXT] = [saveToFilePath, getModifiedTime]
 	
-	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
-	if oDataScript.data == "":
-		oMessage.big("Warning","Your map has no script. Use the Script Generator in Map Settings to give your map basic functionality.")
-	oMessage.quick('Saved map')
-	oCurrentMap.set_path_and_title(filePath)
-	oEditor.mapHasBeenEdited = false
-	oScriptEditor.set_script_as_edited(false)
-	oMapSettingsWindow.visible = false
-	
-	# This goes last. Queued from when doing "save before quitting" and "save as" before quitting.
-	if queueExit == true:
-		get_tree().quit()
+	if writeFailure == true:
+		oMessage.big("Error","Failed saving, maybe try a different directory.")
+	else:
+		print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
+		if oDataScript.data == "":
+			oMessage.big("Warning","Your map has no script. Use the Script Generator in Map Settings to give your map basic functionality.")
+		oMessage.quick('Saved map')
+		oCurrentMap.set_path_and_title(filePath)
+		oEditor.mapHasBeenEdited = false
+		oScriptEditor.set_script_as_edited(false)
+		oMapSettingsWindow.visible = false
+		# This goes last. Queued from when doing "save before quitting" and "save as" before quitting.
+		if queueExit == true:
+			get_tree().quit()
 
 func delete_existing_files(map):
 	var fileTypesToDelete = [] 

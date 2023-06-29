@@ -104,10 +104,12 @@ func write(filePath, EXT):
 		"UNE" : oWriteData.write_une(buffer)
 	
 	var file = File.new()
-	file.open(filePath,File.WRITE)
-	file.store_buffer(buffer.data_array)
-	file.close()
-	print('.'+EXT+' wrote in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	var err = file.open(filePath,File.WRITE)
+	if err == OK:
+		file.store_buffer(buffer.data_array)
+		file.close()
+		print('.'+EXT+' wrote in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	return err
 
 func file_path_to_buffer(filePath):
 	var buffer = StreamPeerBuffer.new()
