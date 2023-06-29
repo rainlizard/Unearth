@@ -80,6 +80,7 @@ func update_all_solid_mask():
 
 
 func clear_unused_entries():
+	update_all_utilized()
 	for clmIndex in 2048:
 		if utilized[clmIndex] == 0:
 			delete_column(clmIndex)
