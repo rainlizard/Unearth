@@ -63,6 +63,7 @@ func start():
 			#yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
 			open_map("D:/DungeonKeeper/levels/personal/map00002.slb")
+			pass
 		else:
 			# initialize a cleared map
 			oCurrentMap.clear_map()

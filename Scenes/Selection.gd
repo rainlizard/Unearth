@@ -166,6 +166,13 @@ func construct_shape_for_placement(constructType):
 				shapePositionArray.append(newPos)
 		CONSTRUCT_FILL:
 			var beginTile = oSelector.world2tile(get_global_mouse_position())
+			
+			# Prevent clicking outside
+			if beginTile.x < oEditor.fieldBoundary.position.x: return
+			if beginTile.x > oEditor.fieldBoundary.end.x-1: return
+			if beginTile.y < oEditor.fieldBoundary.position.y: return
+			if beginTile.y > oEditor.fieldBoundary.end.y-1: return
+			
 			var coordsToCheck = [beginTile]
 			var fillTargetID = oSelector.get_slabID_at_pos(oSelector.cursorTile)
 			

@@ -7,6 +7,7 @@ onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oImageAsMapGuide = Nodelist.list["oImageAsMapGuide"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
+onready var oDataClm = Nodelist.list["oDataClm"]
 
 var imageData = Image.new()
 var textureData = ImageTexture.new()
@@ -71,6 +72,7 @@ func _on_ChooseMapImageFileDialog_file_selected(path):
 	oMapImageTextureRect.texture = textureData
 	oImageAsMapGuide.visible = true
 
+
 func _on_MapImageTextureRect_gui_input(event):
 	if visible == false: return
 	if oMapImageTextureRect.texture == null: return
@@ -103,20 +105,27 @@ func _on_MapImageTextureRect_gui_input(event):
 			else:
 				i.pressed = false
 				i.release_focus()
+		
+		#oMessage.quick("Highlighted colour: " + str(highlightedColour.r8) + "," + str(highlightedColour.g8) + "," + str(highlightedColour.b8))
 
 #CODETIME_START = OS.get_ticks_msec()
 #print('Map to image time: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func _on_slab_button_pressed(buttonID):
 	yield(get_tree(),'idle_frame')
+	buttonID.pressed = false
 	
-	if highlightedColour == null:
-		buttonID.pressed = false
-		oMessage.quick("Click on a pixel within the image first.")
+	if oDataClm.cubes.size() == 0:
+		oMessage.quick("Must first create a new map or load an existing map.")
 		return
-	if oMapImageTextureRect.texture == null:
-		oMessage.quick("Load an image first.")
+	elif oMapImageTextureRect.texture == null:
+		oMessage.quick("Must first load an image.")
 		return
+	elif highlightedColour == null:
+		oMessage.quick("Must first click on a pixel within the image.")
+		return
+	
+	
 	var slabID = buttonID.get_meta("slabID")
 	
 	
@@ -134,10 +143,13 @@ func _on_slab_button_pressed(buttonID):
 	
 	
 	yield(get_tree(),'idle_frame')
-	apply_colour_as_slabIDs_to_map(highlightedColour, slabID)
+	var numberOfSlabsApplied = apply_colour_as_slabIDs_to_map(highlightedColour, slabID)
 	yield(get_tree(),'idle_frame')
 	
-	finish_up()
+	if numberOfSlabsApplied > 0:
+		finish_up()
+	else:
+		oMessage.quick("Must first click on a pixel within the image.")
 	
 	oImageAsMapGuide.visible = false
 
@@ -177,6 +189,7 @@ func apply_colour_as_slabIDs_to_map(doColour, slabID):
 	var useOwner = 5
 	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner)
 	oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, true)
+	return shapePositionArray.size()
 
 func finish_up():
 	oMessage.quick("Applied slabs to map.")

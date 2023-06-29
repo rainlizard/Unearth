@@ -20,8 +20,10 @@ func _unhandled_input(event):
 			oSelection.cursorOnInstancesArray.push_front(oSelection.cursorOnInstancesArray.pop_back())
 			
 			#oInspector.set_inspector_subtile(oSelection.cursorOnInstancesArray[0].position)
-			var id = oSelection.cursorOnInstancesArray[0]
-			oInspector.set_inspector_subtile(Vector2(id.locationX, id.locationY))
+			if oSelector.mode == oSelector.MODE_SUBTILE:
+				# Auto-select the subtile when you press shift
+				var id = oSelection.cursorOnInstancesArray[0]
+				oInspector.set_inspector_subtile(Vector2(id.locationX, id.locationY))
 			
 			# If cursor is hovering the subtile that's selected via inspector, switch inspector selection
 			if oInspector.inspectorSubtile.floor() == oSelector.cursorSubtile.floor():
