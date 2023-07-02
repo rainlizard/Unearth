@@ -142,6 +142,7 @@ func open_map(filePath):
 				if EXT == "LIF":
 					var mapName = oDataMapName.get_special_lif_text(filePath)
 					if mapName != "":
+						print("LIF was missing so assign the special name: " + mapName)
 						oDataMapName.set_map_name(mapName)
 				
 				# Some maps can function without WLB files. So build them here.

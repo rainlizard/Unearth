@@ -1857,7 +1857,7 @@ __meta__ = {
 [node name="DynamicMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer"]
 margin_top = 50.0
 margin_right = 292.0
-margin_bottom = 688.0
+margin_bottom = 729.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1890,7 +1890,7 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer"]
-margin_top = 688.0
+margin_top = 729.0
 margin_right = 292.0
 margin_bottom = 766.0
 
@@ -1943,7 +1943,7 @@ __meta__ = {
 
 [node name="BrowserFilename" type="Label" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 28.0
-margin_right = 225.0
+margin_right = 229.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1955,12 +1955,13 @@ __meta__ = {
 }
 
 [node name="BrowseButton" type="Button" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
-margin_left = 229.0
+margin_left = 233.0
 margin_right = 282.0
 margin_bottom = 27.0
-text = "Play"
+text = "Edit"
 
 [node name="RandomMapContainer" type="MarginContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/PanelContainer/VBoxContainer/VBoxContainer"]
+visible = false
 margin_top = 41.0
 margin_right = 292.0
 margin_bottom = 78.0
