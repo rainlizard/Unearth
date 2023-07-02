@@ -579,7 +579,7 @@ func cfg_creatures(massiveString, DATA_ARRAY):
 						var thingCfgName = creaturesList[objectID].strip_edges()
 						#if DATA_ARRAY[objectID][KEEPERFX_NAME] == null:
 						DATA_ARRAY[objectID][KEEPERFX_NAME] = thingCfgName
-						DATA_ARRAY[objectID][NAME] = thingCfgName.capitalize()
+						DATA_ARRAY[objectID][NAME] = get_proper_creature_name(thingCfgName.capitalize())
 						DATA_ARRAY[objectID][EDITOR_TAB] = TAB_CREATURE
 						look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName)
 					
@@ -588,6 +588,15 @@ func cfg_creatures(massiveString, DATA_ARRAY):
 						return
 				
 				return # exit early
+
+func get_proper_creature_name(nm):
+	match nm:
+		"Horny": return "Horned Reaper"
+		"Dwarfa": return "Dwarf"
+		"Demonspawn": return "Demon Spawn"
+		"Sorcerer": return "Warlock"
+		"Bug": return "Beetle"
+	return nm
 
 func set_image_based_on_animation_id(thingType, objectID, thingAnimationID):
 	if animation_id_to_image.has(thingAnimationID):
