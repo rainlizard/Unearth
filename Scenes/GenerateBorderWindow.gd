@@ -104,8 +104,6 @@ func _on_ButtonNewMapOK_pressed():
 	#Vector2(0,0), Vector2(M.xSize-1,M.ySize-1)
 	oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, false)
 	
-	oCurrentFormat.selected = oSetNewFormat.selected
-	
 	visible = false # Close New Map window after pressing OK button
 	
 	if oCheckBoxNewMapAutoOpensMapSettings.pressed == true:

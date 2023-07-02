@@ -39,6 +39,8 @@ onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
+
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -152,9 +154,11 @@ func open_map(filePath):
 						for xSlab in M.xSize:
 							var slabID = oDataSlab.get_cell(xSlab, ySlab)
 							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.REMEMBER_TYPE])
-		
 		# Set map format
 		oCurrentFormat.selected = formatType
+		# If it's a new map, then map format is set to the format you selected on New Map window
+		if map == "":
+			oCurrentFormat.selected = oSetNewFormat.selected
 		
 		finish_opening_map(map)
 	else:
@@ -224,8 +228,9 @@ func finish_opening_map(map):
 		oMessage.quick("Fixed column index 0, re-save your map.")
 	
 	if oGame.running_keeperfx() == true:
-		if oGame.KEEPERFX_VERSION_INT != 0 and oGame.KEEPERFX_VERSION_INT < oGame.KEEPERFX_VERSION_REQUIRED_INT:
-			oMessage.big("Warning", "Your KeeperFX version is " + oGame.KEEPERFX_VERSION_STRING + " which is too old to use the features of KFX Map Format in-game. Download the latest alpha to rectify.")
+		if oCurrentFormat.selected == 1: # KFX format
+			if oGame.KEEPERFX_VERSION_INT != 0 and oGame.KEEPERFX_VERSION_INT < oGame.KEEPERFX_VERSION_REQUIRED_INT:
+				oMessage.big("Warning", "Your KeeperFX version is " + oGame.KEEPERFX_VERSION_STRING + " which is too old to use the features of KFX Map Format in-game. Download the latest alpha to rectify.")
 	
 	print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 
