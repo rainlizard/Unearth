@@ -39,8 +39,14 @@ func _ready():
 func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
 	
+	
+	var kfxOutOfDate = false
+	if oGame.KEEPERFX_VERSION_INT != 0 and oGame.KEEPERFX_VERSION_INT < oGame.KEEPERFX_VERSION_REQUIRED_INT:
+		kfxOutOfDate = true
+	
 	# Default to KFX format
-	if oGame.running_keeperfx() == false:
+	
+	if oGame.running_keeperfx() == false or kfxOutOfDate == true:
 		oSetNewFormat.selected = 0 # Set default format to Classic format, for newbies who don't know what KeeperFX is
 		_on_NewMapFormat_item_selected(0)
 	else:
