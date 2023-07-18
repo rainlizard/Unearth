@@ -444,6 +444,8 @@ func on_slab_update_thing_height(id): # Update heights of any manually placed ob
 			id.locationZ = detectTerrainHeight
 			if id.subtype in [2,7]:
 				update_stray_torch_height(id)
+			elif id.subtype == 44:
+				id.locationZ = detectTerrainHeight-1
 func update_stray_torch_height(id):
 	id.locationZ = 2.875
 

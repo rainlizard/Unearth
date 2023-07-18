@@ -311,7 +311,7 @@ func update_spinning_key(): # Called after changing the lock state
 		# Door is locked
 		if is_instance_valid(keyID) == false:
 			# There's no key, so create one
-			oInstances.place_new_thing(Things.TYPE.OBJECT, 44, Vector3(locationX,locationY,locationZ), ownership)
+			oInstances.place_new_thing(Things.TYPE.OBJECT, 44, Vector3(locationX,locationY,locationZ-1), ownership)
 		else:
 			# There is a key, so update its ownership to match the lock's
 			keyID.ownership = ownership
@@ -321,6 +321,33 @@ func _on_VisibilityNotifier2D_screen_entered():
 
 func _on_VisibilityNotifier2D_screen_exited():
 	visible = false
+
+#func print_key_data():
+#	print("data9 : " + str(data9))
+#	print("data10 : " + str(data10))
+#	print("data11_12 : " + str(data11_12))
+#	print("data13 : " + str(data13))
+#	print("data14 : " + str(data14))
+#	print("data15 : " + str(data15))
+#	print("data16 : " + str(data16))
+#	print("data17 : " + str(data17))
+#	print("data18 : " + str(data18))
+#	print("data19 : " + str(data19))
+#	print("data20 : " + str(data20))
+#	print("locationX : " + str(locationX))
+#	print("locationY : " + str(locationY))
+#	print("locationZ : " + str(locationZ))
+#	print("thingType : " + str(thingType))
+#	print("subtype : " + str(subtype))
+#	print("ownership : " + str(ownership))
+#	print("effectRange : " + str(effectRange))
+#	print("sensitiveTile : " + str(sensitiveTile))
+#	print("doorOrientation : " + str(doorOrientation))
+#	print("creatureLevel : " + str(creatureLevel))
+#	print("doorLocked : " + str(doorLocked))
+#	print("herogateNumber : " + str(herogateNumber))
+#	print("boxNumber : " + str(boxNumber))
+#	print("index : " + str(index))
 
 #
 #

@@ -155,6 +155,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	if ownable == false and slabID < 1000:
 		ownership = 5
 	
+	var surroundingPositions = {}
 	var removeFromShape = []
 	
 	var CODETIME_START = OS.get_ticks_msec()
@@ -181,7 +182,32 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 				oDataSlab.set_cellv(pos, autoWallID)
 			_:
 				oDataSlab.set_cellv(pos, slabID)
+		
+		if ownership != 5 and slabID != Slabs.WALL_AUTOMATIC:
+			var surrPos = [
+				Vector2(pos.x - 1, pos.y),
+				Vector2(pos.x + 1, pos.y),
+				Vector2(pos.x, pos.y - 1),
+				Vector2(pos.x, pos.y + 1),
+				Vector2(pos.x - 1, pos.y - 1),
+				Vector2(pos.x + 1, pos.y - 1),
+				Vector2(pos.x - 1, pos.y + 1),
+				Vector2(pos.x + 1, pos.y + 1),
+			]
+			for i in surrPos:
+				surroundingPositions[i] = true
 	
+	# Fortify any walls that surround the shape
+	for i in surroundingPositions.keys():
+		if shapePositionArray.has(i) == false: # Skip the inside of the shape
+			var surrSlab = oDataSlab.get_cellv(i)
+			if surrSlab == Slabs.EARTH or surrSlab == Slabs.EARTH_WITH_TORCH:
+				oDataOwnership.set_cellv(i, ownership)
+				var autoWallID = auto_wall(i.x, i.y)
+				oDataSlab.set_cellv(i, autoWallID)
+				shapePositionArray.append(i)
+	
+	# Any removals to the shape
 	for i in removeFromShape:
 		shapePositionArray.erase(i)
 	

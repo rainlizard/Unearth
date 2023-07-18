@@ -157,7 +157,7 @@ func write_tngfx(buffer):
 	t += "ThingsCount = " + str(numberOfTngEntries) + "\n"
 	
 	var entryNumber = 0
-	for thingType in [Things.TYPE.OBJECT, Things.TYPE.CREATURE, Things.TYPE.EFFECTGEN, Things.TYPE.TRAP, Things.TYPE.DOOR]:
+	for thingType in [Things.TYPE.DOOR, Things.TYPE.OBJECT, Things.TYPE.CREATURE, Things.TYPE.EFFECTGEN, Things.TYPE.TRAP]:
 		var groupName = "UnknownThingType"
 		match thingType:
 			Things.TYPE.OBJECT: groupName = "Object"
