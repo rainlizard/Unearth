@@ -25,10 +25,25 @@ onready var oDescriptionLineEdit = Nodelist.list["oDescriptionLineEdit"]
 onready var oSettingsXSizeLine = Nodelist.list["oSettingsXSizeLine"]
 onready var oSettingsYSizeLine = Nodelist.list["oSettingsYSizeLine"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oKindOptionButton = Nodelist.list["oKindOptionButton"]
+
+const kind_options = [
+	"SINGLE",
+	"MULTI",
+	"BONUS",
+	"EXTRA",
+	"FREE",
+]
 
 func _ready():
 	# Default to hiding ONCE, when you start the editor.
 	oAdvancedMapProperties.visible = false
+	
+	
+	# Construct oKindOptionButton
+	for i in kind_options.size():
+		oKindOptionButton.add_item(kind_options[i])
+		oKindOptionButton.selected = 0
 
 func _on_MapProperties_visibility_changed():
 	if is_instance_valid(oDungeonStyleList) == false: return
@@ -36,7 +51,7 @@ func _on_MapProperties_visibility_changed():
 		refresh_dungeon_style_options()
 		oMapNameLineEdit.text = oDataMapName.data
 		oNameIDLineEdit.text = oDataLof.NAME_ID
-		oKindLineEdit.text = oDataLof.KIND
+		oKindOptionButton.selected = kind_text_to_button_id()
 		oEnsignPositionLineEdit.text = oDataLof.ENSIGN_POS
 		oEnsignZoomLineEdit.text = oDataLof.ENSIGN_ZOOM
 		oPlayersLineEdit.text = oDataLof.PLAYERS
@@ -134,9 +149,7 @@ func _on_DescriptionLineEdit_text_changed(new_text):
 func _on_NameIDLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataLof.NAME_ID = new_text
-func _on_KindLineEdit_text_changed(new_text):
-	oEditor.mapHasBeenEdited = true
-	oDataLof.KIND = new_text
+
 func _on_EnsignPositionLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataLof.ENSIGN_POS = new_text
@@ -157,3 +170,16 @@ func _on_LandViewLineEdit_text_changed(new_text):
 	oDataLof.LAND_VIEW = new_text
 
 
+#func _on_KindLineEdit_text_changed(new_text):
+#	oEditor.mapHasBeenEdited = true
+#	oDataLof.KIND = new_text
+
+func _on_KindOptionButton_item_selected(index):
+	oDataLof.KIND = kind_options[index]
+	oEditor.mapHasBeenEdited = true
+
+func kind_text_to_button_id():
+	for i in kind_options.size():
+		if oDataLof.KIND == kind_options[i]:
+			return i
+	return 4 # FREE

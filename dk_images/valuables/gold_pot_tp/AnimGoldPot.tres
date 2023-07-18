@@ -10,7 +10,9 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id=2]
+flags = 3
 storage = 2
+flags = 3
 image = SubResource( 13 )
 size = Vector2( 27, 26 )
 
@@ -24,7 +26,9 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id=4]
+flags = 3
 storage = 2
+flags = 3
 image = SubResource( 14 )
 size = Vector2( 27, 26 )
 
@@ -38,7 +42,9 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id=6]
+flags = 3
 storage = 2
+flags = 3
 image = SubResource( 15 )
 size = Vector2( 27, 26 )
 
@@ -52,7 +58,9 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id=8]
+flags = 3
 storage = 2
+flags = 3
 image = SubResource( 16 )
 size = Vector2( 27, 26 )
 
@@ -66,7 +74,9 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id=10]
+flags = 3
 storage = 2
+flags = 3
 image = SubResource( 17 )
 size = Vector2( 27, 26 )
 
@@ -80,12 +90,14 @@ data = {
 }
 
 [sub_resource type="ImageTexture" id=12]
+flags = 3
 storage = 2
+flags = 3
 image = SubResource( 18 )
 size = Vector2( 27, 26 )
 
 [resource]
-flags = 7
+flags = 3
 frames = 6
 fps = 7.0
 frame_0/texture = SubResource( 2 )

@@ -46,6 +46,8 @@ var cursorSubtile = Vector2()
 var previousPosTile = Vector2()
 var previousPosSubtile = Vector2()
 
+var preventClickWhenFocusing = false
+
 enum {MODE_TILE, MODE_SUBTILE}
 var mode = MODE_TILE
 
@@ -67,6 +69,7 @@ func _process(delta):
 	if oPreferencesWindow.visible == true: visible = false
 	if oQuickMapPreview.visible == true: visible = false
 	if oEditor.fieldBoundary.has_point(cursorTile) == false: visible = false
+	if preventClickWhenFocusing == true: visible = false
 	
 	if oEditor.currentView == oEditor.VIEW_2D:
 		mouse_button_anywhere()
@@ -82,8 +85,10 @@ func mouse_button_anywhere():
 				oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_RECTANGLE)
 				oRectangleSelection.clear()
 
+
 func mouse_button_on_field():
 	if oLoadingBar.visible == true: return
+	if preventClickWhenFocusing == true: return
 	
 	# Initial on-press button
 	if Input.is_action_just_pressed("mouse_left"):
@@ -272,3 +277,10 @@ func _on_Selector_visibility_changed():
 	# For example, this prevents placing a block when closing the map browser
 	if visible == true:
 		canPlace = false
+
+func _notification(what: int):
+	if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
+		preventClickWhenFocusing = true
+	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+		yield(get_tree().create_timer(0.25), "timeout")
+		preventClickWhenFocusing = false

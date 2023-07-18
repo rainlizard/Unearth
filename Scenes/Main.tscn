@@ -658,7 +658,7 @@ script = ExtResource( 76 )
 visible = true
 margin_top = 60.0
 margin_right = 321.0
-margin_bottom = 707.0
+margin_bottom = 718.0
 window_title = "Slab"
 resizable = true
 script = ExtResource( 68 )
@@ -676,14 +676,14 @@ margin_bottom = 31.0
 [node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs"]
 margin_top = 35.0
 margin_right = 321.0
-margin_bottom = 647.0
+margin_bottom = 658.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MainSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
 margin_right = 321.0
-margin_bottom = 612.0
+margin_bottom = 623.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -691,15 +691,15 @@ size_flags_vertical = 3
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 312.0
-margin_bottom = 603.0
+margin_bottom = 614.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs/ScrollContainer"]
 margin_left = 151.0
-margin_top = 297.0
+margin_top = 302.0
 margin_right = 151.0
-margin_bottom = 297.0
+margin_bottom = 302.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
@@ -3883,7 +3883,7 @@ text = "Edit Level Overview File"
 [node name="AdvancedMapProperties" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer"]
 margin_top = 165.0
 margin_right = 625.0
-margin_bottom = 511.0
+margin_bottom = 507.0
 columns = 2
 
 [node name="Label5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
@@ -3947,7 +3947,7 @@ size_flags_horizontal = 7
 [node name="Label2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
 margin_top = 105.0
 margin_right = 311.0
-margin_bottom = 136.0
+margin_bottom = 132.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 3
@@ -3955,19 +3955,26 @@ size_flags_vertical = 1
 text = "Kind"
 valign = 1
 
-[node name="KindLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
+[node name="KindOptionButton" type="OptionButton" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
 margin_left = 315.0
 margin_top = 105.0
 margin_right = 625.0
-margin_bottom = 136.0
+margin_bottom = 132.0
+align = 1
+
+[node name="KindLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
+visible = false
+margin_top = 136.0
+margin_right = 311.0
+margin_bottom = 167.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 7
 
 [node name="Label3" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
-margin_top = 140.0
+margin_top = 136.0
 margin_right = 311.0
-margin_bottom = 171.0
+margin_bottom = 167.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 3
@@ -3977,17 +3984,17 @@ valign = 1
 
 [node name="EnsignPositionLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
 margin_left = 315.0
-margin_top = 140.0
+margin_top = 136.0
 margin_right = 625.0
-margin_bottom = 171.0
+margin_bottom = 167.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 7
 
 [node name="Label9" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
-margin_top = 175.0
+margin_top = 171.0
 margin_right = 311.0
-margin_bottom = 206.0
+margin_bottom = 202.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 3
@@ -3997,17 +4004,17 @@ valign = 1
 
 [node name="EnsignZoomLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
 margin_left = 315.0
-margin_top = 175.0
+margin_top = 171.0
 margin_right = 625.0
-margin_bottom = 206.0
+margin_bottom = 202.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 7
 
 [node name="Label10" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
-margin_top = 210.0
+margin_top = 206.0
 margin_right = 311.0
-margin_bottom = 241.0
+margin_bottom = 237.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 3
@@ -4017,17 +4024,17 @@ valign = 1
 
 [node name="PlayersLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
 margin_left = 315.0
-margin_top = 210.0
+margin_top = 206.0
 margin_right = 625.0
-margin_bottom = 241.0
+margin_bottom = 237.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 7
 
 [node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
-margin_top = 245.0
+margin_top = 241.0
 margin_right = 311.0
-margin_bottom = 276.0
+margin_bottom = 272.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 3
@@ -4037,17 +4044,17 @@ valign = 1
 
 [node name="OptionsLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
 margin_left = 315.0
-margin_top = 245.0
+margin_top = 241.0
 margin_right = 625.0
-margin_bottom = 276.0
+margin_bottom = 272.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 7
 
 [node name="Label11" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
-margin_top = 280.0
+margin_top = 276.0
 margin_right = 311.0
-margin_bottom = 311.0
+margin_bottom = 307.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 3
@@ -4057,17 +4064,17 @@ valign = 1
 
 [node name="SpeechLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
 margin_left = 315.0
-margin_top = 280.0
+margin_top = 276.0
 margin_right = 625.0
-margin_bottom = 311.0
+margin_bottom = 307.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 7
 
 [node name="Label12" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
-margin_top = 315.0
+margin_top = 311.0
 margin_right = 311.0
-margin_bottom = 346.0
+margin_bottom = 342.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 3
@@ -4077,9 +4084,9 @@ valign = 1
 
 [node name="LandViewLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
 margin_left = 315.0
-margin_top = 315.0
+margin_top = 311.0
 margin_right = 625.0
-margin_bottom = 346.0
+margin_bottom = 342.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 7
@@ -5863,6 +5870,7 @@ script = SubResource( 20 )
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/AuthorLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_AuthorLineEdit_text_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/DescriptionLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_DescriptionLineEdit_text_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/NameIDLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_NameIDLineEdit_text_changed"]
+[connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/KindOptionButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_KindOptionButton_item_selected"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/KindLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_KindLineEdit_text_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/EnsignPositionLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_EnsignPositionLineEdit_text_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/EnsignZoomLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_EnsignZoomLineEdit_text_changed"]

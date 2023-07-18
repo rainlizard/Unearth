@@ -62,11 +62,12 @@ func _process(delta):
 	oBrushPreviewDisplay.rect_position = (oSelector.cursorTile+offsetBrushPos) * Vector2(96,96)
 	visible = true
 	if oUi.mouseOnUi == true: visible = false
-	if oEditor.fieldBoundary.has_point(oSelector.cursorTile) == false: visible = false
+	
 	if oEditor.currentView == oEditor.VIEW_3D: visible = false
 	if oPreferencesWindow.visible == true: visible = false
 	if oQuickMapPreview.visible == true: visible = false
-
+	if oEditor.fieldBoundary.has_point(oSelector.cursorTile) == false: visible = false
+	if oSelector.preventClickWhenFocusing == true: visible = false
 
 
 func make_brush_shape(constructType):
