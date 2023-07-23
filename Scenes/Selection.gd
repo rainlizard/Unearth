@@ -121,7 +121,8 @@ func update_paint():
 #					if Slabs.data[cursorOverSlab][Slabs.IS_OWNABLE] == true:
 #						specialCircumstancesForOwnershipUpdate = true
 #				if oOwnableNaturalTerrain.pressed == true or specialCircumstancesForOwnershipUpdate == true:
-				newOwnership(cursorOverSlabOwner)
+				if oOwnableNaturalTerrain.pressed == true:
+					newOwnership(cursorOverSlabOwner)
 				
 		oSelector.MODE_SUBTILE:
 			if cursorOnInstancesArray.empty() == false:

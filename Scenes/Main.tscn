@@ -1454,6 +1454,14 @@ margin_bottom = -26.0
 focus_mode = 0
 text = "Place door as locked"
 
+[node name="FortifyCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
+margin_top = 50.0
+margin_right = 186.0
+margin_bottom = 79.0
+focus_mode = 0
+pressed = true
+text = "Fortify"
+
 [node name="MirrorPlacementCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 50.0
 margin_right = 186.0

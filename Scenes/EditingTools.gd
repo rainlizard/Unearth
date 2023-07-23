@@ -3,6 +3,7 @@ onready var oToolPencil = Nodelist.list["oToolPencil"]
 onready var oBrushSizeContainer = Nodelist.list["oBrushSizeContainer"]
 onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 onready var oFillUseDisplay = Nodelist.list["oFillUseDisplay"]
+onready var oFortifyCheckBox = Nodelist.list["oFortifyCheckBox"]
 
 var BRUSH_SIZE = 1
 
@@ -43,12 +44,15 @@ func _on_ToolPaintBucket_toggled(button_pressed):
 
 func switched_to_slab_mode():
 	visible = true
+	
+	if is_instance_valid(oFortifyCheckBox):
+		oFortifyCheckBox.visible = true
 
 func switched_to_thing_mode():
 	oToolPencil.pressed = true
 	visible = false
 	oFillUseDisplay.visible = false
-
+	oFortifyCheckBox.visible = false
 
 func _on_EditBrushSizeValue_value_changed(value):
 	BRUSH_SIZE = value

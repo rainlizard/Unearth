@@ -27,6 +27,7 @@ onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
+onready var oFortifyCheckBox = Nodelist.list["oFortifyCheckBox"]
 
 enum dir {
 	s = 0
@@ -183,29 +184,43 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 			_:
 				oDataSlab.set_cellv(pos, slabID)
 		
-		if ownership != 5 and slabID != Slabs.WALL_AUTOMATIC:
-			var surrPos = [
-				Vector2(pos.x - 1, pos.y),
-				Vector2(pos.x + 1, pos.y),
-				Vector2(pos.x, pos.y - 1),
-				Vector2(pos.x, pos.y + 1),
-				Vector2(pos.x - 1, pos.y - 1),
-				Vector2(pos.x + 1, pos.y - 1),
-				Vector2(pos.x - 1, pos.y + 1),
-				Vector2(pos.x + 1, pos.y + 1),
-			]
-			for i in surrPos:
-				surroundingPositions[i] = true
+		if oFortifyCheckBox.pressed == true:
+			if ownership != 5 and slabID != Slabs.WALL_AUTOMATIC:
+				surroundingPositions[Vector2(pos.x - 1, pos.y)] = 1
+				surroundingPositions[Vector2(pos.x + 1, pos.y)] = 1
+				surroundingPositions[Vector2(pos.x, pos.y - 1)] = 2
+				surroundingPositions[Vector2(pos.x, pos.y + 1)] = 2
 	
 	# Fortify any walls that surround the shape
-	for i in surroundingPositions.keys():
-		if shapePositionArray.has(i) == false: # Skip the inside of the shape
-			var surrSlab = oDataSlab.get_cellv(i)
-			if surrSlab == Slabs.EARTH or surrSlab == Slabs.EARTH_WITH_TORCH:
-				oDataOwnership.set_cellv(i, ownership)
-				var autoWallID = auto_wall(i.x, i.y)
-				oDataSlab.set_cellv(i, autoWallID)
-				shapePositionArray.append(i)
+
+	for doPos in surroundingPositions.keys():
+		if shapePositionArray.has(doPos) == false: # Skip the inside of the shape
+			
+			var side1
+			var side2
+			match surroundingPositions[doPos]:
+				1:
+					side1 = Vector2(0,1)
+					side2 = Vector2(0,-1)
+				2:
+					side1 = Vector2(1,0)
+					side2 = Vector2(-1,0)
+			
+			var threePosArray = [doPos, doPos+side1, doPos+side2]
+			for i in 3:
+				var threePos = threePosArray[i]
+				
+				var surrSlab = oDataSlab.get_cellv(threePos)
+				if surrSlab == Slabs.EARTH or surrSlab == Slabs.EARTH_WITH_TORCH:
+					oDataOwnership.set_cellv(threePos, ownership)
+					var autoWallID = auto_wall(threePos.x, threePos.y)
+					oDataSlab.set_cellv(threePos, autoWallID)
+					shapePositionArray.append(threePos)
+				else:
+					# Skip the corners if the NSEW direction isn't a reinforced wall
+					if i == 0:
+						if Slabs.auto_wall_updates_these.has(surrSlab) == false:
+							break
 	
 	# Any removals to the shape
 	for i in removeFromShape:
