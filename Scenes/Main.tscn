@@ -2278,10 +2278,16 @@ text = "Path"
 valign = 1
 autowrap = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 56.0
 margin_right = 544.0
-margin_bottom = 96.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 80.0
+margin_right = 544.0
+margin_bottom = 120.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
@@ -2301,9 +2307,9 @@ rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 100.0
+margin_top = 124.0
 margin_right = 544.0
-margin_bottom = 140.0
+margin_bottom = 164.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
@@ -2342,10 +2348,16 @@ size_flags_horizontal = 3
 editable = false
 expand_to_text_length = true
 
+[node name="HSeparator4" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 168.0
+margin_right = 544.0
+margin_bottom = 188.0
+rect_min_size = Vector2( 0, 20 )
+
 [node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 144.0
+margin_top = 192.0
 margin_right = 188.0
-margin_bottom = 171.0
+margin_bottom = 219.0
 hint_tooltip = "Reads tmapa00x.dat files from Dungeon Keeper's /data/ directory and then recreates cache files in Unearth's /unearthdata/ directory."
 size_flags_horizontal = 2
 text = "Reload tileset cache"
@@ -2354,9 +2366,9 @@ __meta__ = {
 }
 
 [node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 175.0
+margin_top = 223.0
 margin_right = 544.0
-margin_bottom = 204.0
+margin_bottom = 252.0
 text = "Always decompress maps"
 
 [node name="TabPlacements" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]

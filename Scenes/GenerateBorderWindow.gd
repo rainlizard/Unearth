@@ -89,11 +89,11 @@ func _on_ButtonNewMapOK_pressed():
 		oMessage.quick("Error: Game executable is not set. Set in File -> Preferences")
 		return
 	
-	if oDkDat.dat.empty() == true:
-		oMessage.quick("Error: Game executable might not be correct. Set in File -> Preferences")
-		return
-	
 	oCurrentMap._on_ButtonNewMap_pressed()
+	
+	if oDkDat.dat.empty() == true:
+		oMessage.quick("Failed loading slabset, game executable might not be correct. Set in File -> Preferences")
+		return
 	
 	var rectStart = Vector2(0, 0)
 	var rectEnd = Vector2(M.xSize-1, M.ySize-1)

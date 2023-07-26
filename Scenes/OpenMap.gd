@@ -85,10 +85,6 @@ func open_map(filePath):
 		oMessage.quick("Error: Cannot open map because game executable is not set. Set in File -> Preferences")
 		return
 	
-	if oDkDat.dat.empty() == true:
-		oMessage.quick("Error: Game executable might not be correct. Set in File -> Preferences")
-		return
-	
 	# Prevent opening any maps under any circumstance if textures haven't been loaded. (Fix to launching via file association)
 	if oTextureCache.texturesLoadedState != oTextureCache.LOADING_SUCCESS:
 		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
