@@ -40,6 +40,7 @@ onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
+onready var oDkDat = Nodelist.list["oDkDat"]
 
 
 var TOTAL_TIME_TO_OPEN_MAP
@@ -82,6 +83,10 @@ func open_map(filePath):
 	# Prevent opening any maps under any circumstance if you haven't set the dk exe yet. (Fix to launching via file association)
 	if oGame.EXECUTABLE_PATH == "":
 		oMessage.quick("Error: Cannot open map because game executable is not set. Set in File -> Preferences")
+		return
+	
+	if oDkDat.dat.empty() == true:
+		oMessage.quick("Error: Game executable might not be correct. Set in File -> Preferences")
 		return
 	
 	# Prevent opening any maps under any circumstance if textures haven't been loaded. (Fix to launching via file association)
