@@ -66,6 +66,7 @@ var listOfSettings = [
 	"round_gold_near_path",
 	"round_gold_near_liquid",
 	"round_water_near_lava",
+	"place_things_anywhere",
 	"wallauto_art",
 	"wallauto_damaged",
 	"recently_opened",
@@ -352,6 +353,10 @@ func game_setting(doWhat,string,value):
 			var oRoundWaterNearLava = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/RoundWaterNearLava'
 			if doWhat == SET: oRoundWaterNearLava.pressed = value
 			if doWhat == GET: return oRoundWaterNearLava.pressed
+		"place_things_anywhere":
+			var oPlaceThingsAnywhere = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/PlaceThingsAnywhere'
+			if doWhat == SET: oPlaceThingsAnywhere.pressed = value
+			if doWhat == GET: return oPlaceThingsAnywhere.pressed
 		"wallauto_art":
 			var oAutoWallArtButton = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton'
 			if doWhat == SET: oAutoWallArtButton.text = value

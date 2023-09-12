@@ -28,6 +28,7 @@ onready var oEditingTools = Nodelist.list["oEditingTools"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oBrushPreview = Nodelist.list["oBrushPreview"]
+onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
 
 enum {
 	CONSTRUCT_BRUSH
@@ -240,13 +241,18 @@ func place_subtile(placeSubtile):
 	if placeSubtile.x < 0 or placeSubtile.y < 0 or placeSubtile.x >= (M.xSize*3) or placeSubtile.y >= (M.ySize*3):
 		return
 	
+	var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(placeSubtile.x,placeSubtile.y)]
+	
+	if oPlaceThingsAnywhere.pressed == false:
+		if detectTerrainHeight >= 5:
+			return
+	
 	if oSelector.position_meeting(get_global_mouse_position(), "Instance") == true:
 		if Input.is_action_pressed("place_overlapping") == false: # While holding control, allow overlapping placements
 			return
 	oEditor.mapHasBeenEdited = true
 	
 	if paintThingType != null:
-		var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(placeSubtile.x,placeSubtile.y)]
 		var newPos:Vector3 = Vector3(placeSubtile.x + 0.5, placeSubtile.y + 0.5, detectTerrainHeight)
 		
 		match paintThingType:
