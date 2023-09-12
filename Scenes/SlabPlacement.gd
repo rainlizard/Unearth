@@ -21,13 +21,20 @@ onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
 onready var oDkDat = Nodelist.list["oDkDat"]
 onready var oDkClm = Nodelist.list["oDkClm"]
-onready var oFrailColumnsCheckbox = Nodelist.list["oFrailColumnsCheckbox"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oFortifyCheckBox = Nodelist.list["oFortifyCheckBox"]
+onready var oRoundPathNearLiquid = Nodelist.list["oRoundPathNearLiquid"]
+onready var oRoundEarthNearPath = Nodelist.list["oRoundEarthNearPath"]
+onready var oRoundEarthNearLiquid = Nodelist.list["oRoundEarthNearLiquid"]
+onready var oRoundRockNearPath = Nodelist.list["oRoundRockNearPath"]
+onready var oRoundRockNearLiquid = Nodelist.list["oRoundRockNearLiquid"]
+onready var oRoundGoldNearPath = Nodelist.list["oRoundGoldNearPath"]
+onready var oRoundGoldNearLiquid = Nodelist.list["oRoundGoldNearLiquid"]
+onready var oRoundWaterNearLava = Nodelist.list["oRoundWaterNearLava"]
 
 enum dir {
 	s = 0
@@ -475,26 +482,35 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	
 	match slabID:
 		Slabs.ROCK:
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.PATH, false)
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, false)
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, false)
+			if oRoundRockNearPath.pressed == true:
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.PATH, false)
+			if oRoundRockNearLiquid.pressed == true:
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, false)
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, false)
 		Slabs.GOLD:
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.PATH, false)
-			# Only solo blocks are adjusted for gold. Because there's already frailness going on by default
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, true)
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, true)
+			if oRoundGoldNearPath.pressed == true:
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.PATH, false)
+			if oRoundGoldNearLiquid.pressed == true:
+				# Only solo blocks are adjusted for gold. Because there's already frailness going on by default
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, true)
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, true)
 		Slabs.EARTH:
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.PATH, false)
-			# Only solo blocks are adjusted for earth. Because there's already frailness going on by default
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, true)
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, true)
+			if oRoundEarthNearPath.pressed == true:
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.PATH, false)
+			if oRoundEarthNearLiquid.pressed == true:
+				# Only solo blocks are adjusted for earth. Because there's already frailness going on by default
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, true)
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, true)
 		Slabs.PATH:
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, false) # This plays better than the inversion of it. (WATER->PATH VS PATH->WATER)
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, false) # This plays better than the inversion of it. (LAVA->PATH VS PATH->LAVA)
+			if oRoundPathNearLiquid.pressed == true:
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, false) # This plays better than the inversion of it. (WATER->PATH VS PATH->WATER)
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, false) # This plays better than the inversion of it. (LAVA->PATH VS PATH->LAVA)
 		Slabs.LAVA:
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, false)
+			if oRoundWaterNearLava.pressed == true:
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.WATER, false)
 		Slabs.WATER:
-			fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, false)
+			if oRoundWaterNearLava.pressed == true:
+				fullSlabData = make_frail(fullSlabData, slabID, surrID, Slabs.LAVA, false)
 		Slabs.EARTH_WITH_TORCH:
 			slabCubes = adjust_torch_cubes(slabCubes, calculate_torch_side(xSlab, ySlab))
 		Slabs.CLAIMED_GROUND:
@@ -503,7 +519,6 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_HEART, bitmask, slabID)
 		Slabs.PORTAL:
 			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
-		
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
@@ -1319,9 +1334,6 @@ const blankCubes = [0,0,0,0,0,0,0,0]
 
 
 func make_frail(fullSlabData, slabID, surrID, frailCornerType, onlyAdjustSoloBlocks):
-	if oFrailColumnsCheckbox.pressed == false:
-		return fullSlabData
-	
 	var slabCubes = fullSlabData[0]
 	var slabFloor = fullSlabData[1]
 	

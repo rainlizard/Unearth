@@ -58,7 +58,14 @@ var listOfSettings = [
 	"ownable_natural_terrain",
 	"editable_borders",
 	"bridges_only_on_liquid",
-	"frail_columns",
+	"round_path_near_liquid",
+	"round_earth_near_path",
+	"round_earth_near_liquid",
+	"round_rock_near_path",
+	"round_rock_near_liquid",
+	"round_gold_near_path",
+	"round_gold_near_liquid",
+	"round_water_near_lava",
 	"wallauto_art",
 	"wallauto_damaged",
 	"recently_opened",
@@ -313,10 +320,38 @@ func game_setting(doWhat,string,value):
 			var oBridgesOnlyOnLiquidCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox'
 			if doWhat == SET: oBridgesOnlyOnLiquidCheckbox.pressed = value
 			if doWhat == GET: return oBridgesOnlyOnLiquidCheckbox.pressed
-		"frail_columns":
-			var oFrailColumnsCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/FrailColumnsCheckbox'
-			if doWhat == SET: oFrailColumnsCheckbox.pressed = value
-			if doWhat == GET: return oFrailColumnsCheckbox.pressed
+		"round_path_near_liquid":
+			var oRoundPathNearLiquid = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/RoundPathNearLiquid'
+			if doWhat == SET: oRoundPathNearLiquid.pressed = value
+			if doWhat == GET: return oRoundPathNearLiquid.pressed
+		"round_earth_near_path":
+			var oRoundEarthNearPath = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/RoundEarthNearPath'
+			if doWhat == SET: oRoundEarthNearPath.pressed = value
+			if doWhat == GET: return oRoundEarthNearPath.pressed
+		"round_earth_near_liquid":
+			var oRoundEarthNearLiquid = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/RoundEarthNearLiquid'
+			if doWhat == SET: oRoundEarthNearLiquid.pressed = value
+			if doWhat == GET: return oRoundEarthNearLiquid.pressed
+		"round_rock_near_path":
+			var oRoundRockNearPath = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/RoundRockNearPath'
+			if doWhat == SET: oRoundRockNearPath.pressed = value
+			if doWhat == GET: return oRoundRockNearPath.pressed
+		"round_rock_near_liquid":
+			var oRoundRockNearLiquid = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/RoundRockNearLiquid'
+			if doWhat == SET: oRoundRockNearLiquid.pressed = value
+			if doWhat == GET: return oRoundRockNearLiquid.pressed
+		"round_gold_near_path":
+			var oRoundGoldNearPath = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/RoundGoldNearPath'
+			if doWhat == SET: oRoundGoldNearPath.pressed = value
+			if doWhat == GET: return oRoundGoldNearPath.pressed
+		"round_gold_near_liquid":
+			var oRoundGoldNearLiquid = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/RoundGoldNearLiquid'
+			if doWhat == SET: oRoundGoldNearLiquid.pressed = value
+			if doWhat == GET: return oRoundGoldNearLiquid.pressed
+		"round_water_near_lava":
+			var oRoundWaterNearLava = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/RoundWaterNearLava'
+			if doWhat == SET: oRoundWaterNearLava.pressed = value
+			if doWhat == GET: return oRoundWaterNearLava.pressed
 		"wallauto_art":
 			var oAutoWallArtButton = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton'
 			if doWhat == SET: oAutoWallArtButton.text = value

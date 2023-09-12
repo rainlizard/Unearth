@@ -8,6 +8,7 @@ onready var oSaveMap = Nodelist.list["oSaveMap"]
 var saveInstruction = Label.new()
 var lineEdit
 var lineEditPreviousText = "sadfdfgfdhgfds" # this should be something that won't be initially written in linedit
+var acceptButton
 
 func _ready():
 	# Get rid of filetypes dropdown
@@ -21,6 +22,8 @@ func _ready():
 	get_vbox().add_child(saveInstruction)
 	get_vbox().move_child(saveInstruction,3)
 	lineEdit.connect('focus_exited',self, 'line_edit_focus_exited')
+	
+	acceptButton = get_ok()
 
 func line_edit_focus_exited():
 	if int(lineEdit.text) == 0:
@@ -174,5 +177,10 @@ func get_drive():
 
 
 func _on_FileDialogSaveAs_file_selected(filePath):
-	filePath = filePath.get_basename()
-	oSaveMap.save_map(filePath)
+	oSaveMap.save_map(filePath.get_basename())
+
+func _input(event):
+	if visible and event.is_action_pressed("ui_accept"):
+		get_tree().set_input_as_handled() # Consume the input event to stop the default behavior
+		lineEdit.release_focus()
+		acceptButton.emit_signal("pressed")
