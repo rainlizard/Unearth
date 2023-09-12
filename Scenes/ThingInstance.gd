@@ -53,8 +53,6 @@ func _enter_tree():
 	if sensitiveTile != null:
 		add_to_group('attachedtotile_'+str(sensitiveTile))
 	
-	add_to_group("slab_location_group_"+str(floor(locationX/3))+'_'+str(floor(locationY/3)))
-	
 	load_default_kfx_values()
 	
 	match thingType:
@@ -125,11 +123,22 @@ func _exit_tree():
 
 
 func set_location_x(setVal):
-	locationX = setVal
-	position.x = locationX * 32
+    if locationX != null and locationY != null:
+        remove_from_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+    locationX = setVal
+    position.x = locationX * 32
+    if locationX != null and locationY != null:
+        add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+
 func set_location_y(setVal):
-	locationY = setVal
-	position.y = locationY * 32
+    if locationX != null and locationY != null:
+        remove_from_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+    locationY = setVal
+    position.y = locationY * 32
+    if locationX != null and locationY != null:
+        add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+
+
 func set_location_z(setVal):
 	locationZ = setVal
 

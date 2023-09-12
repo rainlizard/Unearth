@@ -52,7 +52,7 @@ enum {
 	MIRROR_ACTIONPOINT
 }
 
-func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust):
+func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust, originalPosition):
 	var actions = []
 	match oMirrorOptions.splitType:
 		0: actions = [0]
@@ -62,17 +62,22 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust):
 	var flip = oMirrorFlipCheckBox.pressed
 	var fieldX = (M.xSize*3)+1 # Don't know why this +1 works, but it does.
 	var fieldY = (M.ySize*3)+1
-	var fromPos = Vector2(instanceBeingAdjusted.locationX, instanceBeingAdjusted.locationY)
 	
 	for performAction in actions:
-		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
+		var mirroredPos = oMirrorOptions.mirror_calculation(performAction, flip, originalPosition, fieldX, fieldY)
 		
-		var arrayOfInstances = get_all_instances_on_subtile(toPos.x, toPos.y)
-		for getNodeAtMirroredPosition in arrayOfInstances:
+		var arrayOfMirroredInstances = get_all_instances_on_subtile(mirroredPos.x, mirroredPos.y)
+		for getNodeAtMirroredPosition in arrayOfMirroredInstances:
 			if is_instance_valid(getNodeAtMirroredPosition):
 				if getNodeAtMirroredPosition.subtype == instanceBeingAdjusted.subtype:
 					if getNodeAtMirroredPosition.thingType == instanceBeingAdjusted.thingType:
 						match variableNameToAdjust:
+							"Position":
+								var movedPosition = Vector2(instanceBeingAdjusted.locationX, instanceBeingAdjusted.locationY)
+								var mirrorMovedPosition = oMirrorOptions.mirror_calculation(performAction, flip, movedPosition, fieldX, fieldY)
+								getNodeAtMirroredPosition.locationX = mirrorMovedPosition.x
+								getNodeAtMirroredPosition.locationY = mirrorMovedPosition.y
+								getNodeAtMirroredPosition.locationZ = instanceBeingAdjusted.locationZ
 							"pointRange":
 								getNodeAtMirroredPosition.pointRange = instanceBeingAdjusted.pointRange
 							"lightRange":
@@ -89,7 +94,7 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust):
 								getNodeAtMirroredPosition.doorLocked = instanceBeingAdjusted.doorLocked
 								getNodeAtMirroredPosition.update_spinning_key()
 							"ownership":
-								var finalOwner = calculate_mirrored_ownership(toPos, fromPos, fieldX, fieldY, instanceBeingAdjusted.ownership)
+								var finalOwner = calculate_mirrored_ownership(mirroredPos, originalPosition, fieldX, fieldY, instanceBeingAdjusted.ownership)
 								getNodeAtMirroredPosition.ownership = finalOwner
 							"creatureName":
 								getNodeAtMirroredPosition.creatureName = instanceBeingAdjusted.creatureName

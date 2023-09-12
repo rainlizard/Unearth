@@ -46,6 +46,8 @@ var cursorSubtile = Vector2()
 var previousPosTile = Vector2()
 var previousPosSubtile = Vector2()
 
+var draggedThing = null
+
 var preventClickWhenFocusing = false
 
 enum {MODE_TILE, MODE_SUBTILE}
@@ -76,15 +78,12 @@ func _process(delta):
 		if oUi.mouseOnUi == false:
 			mouse_button_on_field()
 
-
-
 func mouse_button_anywhere():
 	if Input.is_action_pressed("mouse_left") == false:
 		if oEditingTools.TOOL_SELECTED == oEditingTools.RECTANGLE:
 			if oRectangleSelection.visible == true:
 				oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_RECTANGLE)
 				oRectangleSelection.clear()
-
 
 func mouse_button_on_field():
 	if oLoadingBar.visible == true: return
@@ -101,6 +100,12 @@ func mouse_button_on_field():
 			else:
 				oInspector.deselect()
 		
+		# Check if a Thing is under the cursor and initiate dragging
+		var thingAtCursor = instance_position(get_global_mouse_position(), "Thing")
+		print(thingAtCursor)
+		if thingAtCursor:
+			draggedThing = thingAtCursor
+		
 		match oEditingTools.TOOL_SELECTED:
 			oEditingTools.RECTANGLE:
 				oRectangleSelection.set_initial_position(cursorTile)
@@ -111,6 +116,9 @@ func mouse_button_on_field():
 	
 	# Holding down button
 	if Input.is_action_pressed("mouse_left"):
+		if draggedThing:
+			draggedThing.global_position = get_global_mouse_position()
+		else:
 			match oEditingTools.TOOL_SELECTED:
 				oEditingTools.PENCIL, oEditingTools.BRUSH:
 					if canPlace == true and visible == true:
@@ -128,6 +136,19 @@ func mouse_button_on_field():
 								
 				oEditingTools.RECTANGLE:
 					oRectangleSelection.update_positions(cursorTile)
+	
+	# Release button
+	if Input.is_action_just_released("mouse_left") and draggedThing:
+		var snapToPos = world2subtile(get_global_mouse_position())
+		var originalPosition = Vector2(draggedThing.locationX, draggedThing.locationY)
+		draggedThing.locationX = snapToPos.x + 0.5
+		draggedThing.locationY = snapToPos.y + 0.5
+		oInstances.mirror_adjusted_value(draggedThing, "Position", originalPosition)
+		oInspector.inspect_something(draggedThing)
+		oInspector.set_inspector_instance(draggedThing)
+		oInspector.set_inspector_subtile(Vector2(draggedThing.locationX, draggedThing.locationY))
+		oInspector.oSelectionStatus.visible = true
+		draggedThing = null
 	
 	if Input.is_action_pressed("mouse_right"):
 		if visible == true:
