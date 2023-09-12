@@ -5547,7 +5547,7 @@ margin_bottom = 72.0
 label_setting = "Distance"
 max_value = 5.0
 step = 0.01
-value = 1.0
+value = 1.05
 
 [node name="NoisePeriod" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 76.0
@@ -6001,9 +6001,7 @@ script = SubResource( 20 )
 [connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/SetNewFormat" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapFormat_item_selected"]
 [connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_focus_exited"]
-[connection signal="gui_input" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_gui_input"]
 [connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/YSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_YSizeLine_focus_exited"]
-[connection signal="gui_input" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/YSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_YSizeLine_gui_input"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/CheckBoxNewMapBorder" to="Ui/UiSystem/NewMapWindow" method="_on_CheckBoxNewMapBorder_pressed"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NewMapSymmetricalBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapSymmetricalBorder_item_selected"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoiseDistance" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseDistance_sliderChanged"]

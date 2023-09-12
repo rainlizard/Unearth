@@ -35,6 +35,7 @@ onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oDataLof = Nodelist.list["oDataLof"]
+onready var oDkClm = Nodelist.list["oDkClm"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -252,7 +253,12 @@ func _on_ViewSubmenu_Pressed(pressedID):
 
 func _on_MenuButtonSettings_pressed():
 	oMenuButtonSettings.get_popup().visible = false
-	Utils.popup_centered(oMapSettingsWindow)
+	
+	if oDkClm.cubes.empty() == true:
+		oMessage.quick("No currently opened map.")
+	else:
+		Utils.popup_centered(oMapSettingsWindow)
+
 
 func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in combination with OS.execute otherwise a Godot bug occurs
 	if oCurrentFormat.selected == 1: # KFX Format
