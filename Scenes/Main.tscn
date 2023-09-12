@@ -612,6 +612,9 @@ z_index = 100
 color = Color( 0, 0, 0, 1 )
 script = ExtResource( 136 )
 
+[node name="QuickMapBorder" type="ColorRect" parent="Game2D/Node2D/QuickMapPreview"]
+color = Color( 0.172549, 0.164706, 0.196078, 1 )
+
 [node name="QuickMapPreviewDisplay" type="TextureRect" parent="Game2D/Node2D/QuickMapPreview"]
 material = SubResource( 19 )
 expand = true

@@ -185,8 +185,11 @@ func update_img(slbFilePath):
 	$QuickMapPreviewDisplay.rect_size = Vector2(xy.x*96, xy.y*96)
 	#$QuickMapPreviewDisplay.rect_position = Vector2(xy.x*96*0.5, xy.y*96*0.5)
 	
-	oCamera2D.reset_camera(xy.x, xy.y)
+	$QuickMapBorder.rect_position = Vector2(-96,-96)
+	$QuickMapBorder.rect_size = Vector2((xy.x*96) + (96*2), (xy.y*96) + (96*2))
 	
+	oCamera2D.reset_camera(xy.x, xy.y)
+	#xy.x, xy.y
 	rect_size = Vector2(M.xSize*96, M.ySize*96) # Cover current map in darkness
 	
 	#print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
