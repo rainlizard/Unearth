@@ -139,6 +139,7 @@ func mouse_button_on_field():
 				oEditingTools.RECTANGLE:
 					oRectangleSelection.update_positions(cursorTile)
 	
+	# Reset every frame
 	mouse_movement_vector = Vector2(0,0)
 	
 	# Release button
