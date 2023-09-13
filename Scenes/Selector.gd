@@ -100,8 +100,8 @@ func mouse_button_on_field():
 			else:
 				oInspector.deselect()
 		
-		# Check if a Thing is under the cursor and initiate dragging
-		var thingAtCursor = instance_position(get_global_mouse_position(), "Thing")
+		# Check if something is under the cursor and initiate dragging
+		var thingAtCursor = instance_position(get_global_mouse_position(), "Instance")
 		print(thingAtCursor)
 		if thingAtCursor:
 			draggedThing = thingAtCursor
