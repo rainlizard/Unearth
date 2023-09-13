@@ -46,7 +46,12 @@ var cursorSubtile = Vector2()
 var previousPosTile = Vector2()
 var previousPosSubtile = Vector2()
 
-var draggedThing = null
+var prev_global_mouse_position = Vector2()
+var mouse_movement_vector = Vector2()
+
+var holdClickOnInstance = null
+var draggingInstance = false
+#var specialAdjust = false
 var drag_init_relative_pos = Vector2()
 
 var preventClickWhenFocusing = false
@@ -92,6 +97,10 @@ func mouse_button_on_field():
 	
 	# Initial on-press button
 	if Input.is_action_just_pressed("mouse_left"):
+		#specialAdjust = false
+		draggingInstance = false
+		
+		print("Mouse left just pressed")
 		if Input.is_action_pressed("place_overlapping"):
 			canPlace = true
 		else:
@@ -104,8 +113,11 @@ func mouse_button_on_field():
 		# Check if something is under the cursor and initiate dragging
 		var thingAtCursor = instance_position(get_global_mouse_position(), "Instance")
 		if thingAtCursor:
-			draggedThing = thingAtCursor
+			holdClickOnInstance = thingAtCursor
 			drag_init_relative_pos = thingAtCursor.global_position - get_global_mouse_position()
+#		else:
+#			if thingAtCursor.thingType == Things.TYPE.EXTRA:
+#				specialAdjust = true
 		
 		match oEditingTools.TOOL_SELECTED:
 			oEditingTools.RECTANGLE:
@@ -117,9 +129,14 @@ func mouse_button_on_field():
 	
 	# Holding down button
 	if Input.is_action_pressed("mouse_left"):
-		if draggedThing:
-			if mouse_movement_vector != Vector2(0,0):
-				draggedThing.global_position = get_global_mouse_position() + drag_init_relative_pos
+		if holdClickOnInstance:
+#			if specialAdjust == true:
+#				pass
+#			else:
+				if mouse_movement_vector != Vector2(0,0) or get_global_mouse_position() != prev_global_mouse_position:
+					print('a')
+					draggingInstance = true
+					holdClickOnInstance.global_position = get_global_mouse_position() + drag_init_relative_pos
 		else:
 			match oEditingTools.TOOL_SELECTED:
 				oEditingTools.PENCIL, oEditingTools.BRUSH:
@@ -139,21 +156,25 @@ func mouse_button_on_field():
 				oEditingTools.RECTANGLE:
 					oRectangleSelection.update_positions(cursorTile)
 	
-	# Reset every frame
-	mouse_movement_vector = Vector2(0,0)
+	mouse_movement_vector = get_global_mouse_position()-prev_global_mouse_position
+	prev_global_mouse_position = get_global_mouse_position()
 	
 	# Release button
-	if Input.is_action_just_released("mouse_left") and draggedThing:
-		var snapToPos = world2subtile(get_global_mouse_position())
-		var originalPosition = Vector2(draggedThing.locationX, draggedThing.locationY)
-		draggedThing.locationX = snapToPos.x + 0.5
-		draggedThing.locationY = snapToPos.y + 0.5
-		oInstances.mirror_adjusted_value(draggedThing, "Position", originalPosition)
-		oInspector.inspect_something(draggedThing)
-		oInspector.set_inspector_instance(draggedThing)
-		oInspector.set_inspector_subtile(Vector2(draggedThing.locationX, draggedThing.locationY))
-		oInspector.oSelectionStatus.visible = true
-		draggedThing = null
+	if Input.is_action_just_released("mouse_left"):
+		if holdClickOnInstance:
+			if draggingInstance == true:
+				draggingInstance = false
+				var snapToPos = world2subtile(get_global_mouse_position())
+				var originalPosition = Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY)
+				holdClickOnInstance.locationX = snapToPos.x + 0.5
+				holdClickOnInstance.locationY = snapToPos.y + 0.5
+				oInstances.mirror_adjusted_value(holdClickOnInstance, "Position", originalPosition)
+				oInspector.inspect_something(holdClickOnInstance)
+				oInspector.set_inspector_instance(holdClickOnInstance)
+				oInspector.set_inspector_subtile(Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY))
+				oInspector.oSelectionStatus.visible = true
+			
+			holdClickOnInstance = null
 	
 	if Input.is_action_pressed("mouse_right"):
 		if visible == true:
@@ -201,14 +222,6 @@ func mouse_button_on_field():
 					inst.queue_free()
 		
 		oThingDetails.update_details()
-
-var previous_mouse_position = Vector2()
-var mouse_movement_vector = Vector2()
-
-func _input(event):
-	if event is InputEventMouseMotion:
-		mouse_movement_vector = event.global_position - previous_mouse_position
-		previous_mouse_position = event.global_position
 
 #func _unhandled_input(event):
 #	if event is InputEventMouseButton:
