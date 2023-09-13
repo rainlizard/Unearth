@@ -245,7 +245,8 @@ func place_subtile(placeSubtile):
 	
 	if oPlaceThingsAnywhere.pressed == false:
 		if detectTerrainHeight >= 5:
-			return
+			if paintThingType != Things.TYPE.EXTRA: # Lights and Action Points can always be placed anywhere
+				return
 	
 	if oSelector.position_meeting(get_global_mouse_position(), "Instance") == true:
 		if Input.is_action_pressed("place_overlapping") == false: # While holding control, allow overlapping placements
@@ -270,8 +271,6 @@ func place_subtile(placeSubtile):
 				oInstances.place_new_thing(paintThingType, paintSubtype, newPos, paintOwnership)
 				if oMirrorPlacementCheckBox.pressed == true:
 					oInstances.mirror_instance_placement(paintThingType, paintSubtype, newPos, paintOwnership, oInstances.MIRROR_THING)
-		
-		
 
 func clean_up_cursor_array():
 	for i in cursorOnInstancesArray:

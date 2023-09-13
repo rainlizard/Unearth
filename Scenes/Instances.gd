@@ -9,6 +9,8 @@ onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
+onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
+onready var oSelector = Nodelist.list["oSelector"]
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
 var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
@@ -53,6 +55,9 @@ enum {
 }
 
 func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust, originalPosition):
+	if oMirrorPlacementCheckBox.pressed == false:
+		return
+	
 	var actions = []
 	match oMirrorOptions.splitType:
 		0: actions = [0]
@@ -62,6 +67,10 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust, original
 	var flip = oMirrorFlipCheckBox.pressed
 	var fieldX = (M.xSize*3)+1 # Don't know why this +1 works, but it does.
 	var fieldY = (M.ySize*3)+1
+	
+	# Force set the original position here, in the case of adjusting a value while dragging it
+	if oSelector.draggingInstance == true:
+		originalPosition = oSelector.draggedFromSubtile
 	
 	for performAction in actions:
 		var mirroredPos = oMirrorOptions.mirror_calculation(performAction, flip, originalPosition, fieldX, fieldY)

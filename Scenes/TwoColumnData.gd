@@ -360,9 +360,8 @@ func update_property_value(callingNode, leftString): # This signal will go off f
 		callingNode.value = float(value)
 		callingNode.get_line_edit().caret_position = callingNode.get_line_edit().text.length()
 	
-	if oMirrorPlacementCheckBox.pressed == true:
-		if aValueWasAdjustedSoMirrorIt != "":
-			oInstances.mirror_adjusted_value(inst, aValueWasAdjustedSoMirrorIt, originalPosition)
+	if aValueWasAdjustedSoMirrorIt != "":
+		oInstances.mirror_adjusted_value(inst, aValueWasAdjustedSoMirrorIt, originalPosition)
 
 func _on_optionbutton_toggled(state,nodeRightColumn):
 	oUi.optionButtonIsOpened = state
@@ -404,9 +403,8 @@ func _on_optionbutton_item_selected(indexSelected, leftString): # When pressing 
 				"PlacingListData":
 					oPlacingSettings.orientation = Constants.listOrientations[indexSelected]
 	
-	if oMirrorPlacementCheckBox.pressed == true:
-		if aValueWasAdjustedSoMirrorIt != "":
-			oInstances.mirror_adjusted_value(inst, aValueWasAdjustedSoMirrorIt, originalPosition)
+	if aValueWasAdjustedSoMirrorIt != "":
+		oInstances.mirror_adjusted_value(inst, aValueWasAdjustedSoMirrorIt, originalPosition)
 
 #func _on_lineedit_focus_entered(lineEditId): # When pressing Enter on LineEdit, lose focus
 #	for i in 1:

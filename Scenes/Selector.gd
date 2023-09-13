@@ -51,6 +51,7 @@ var mouse_movement_vector = Vector2()
 
 var holdClickOnInstance = null
 var draggingInstance = false
+var draggedFromSubtile = Vector2()
 #var specialAdjust = false
 var drag_init_relative_pos = Vector2()
 
@@ -99,6 +100,7 @@ func mouse_button_on_field():
 	if Input.is_action_just_pressed("mouse_left"):
 		#specialAdjust = false
 		draggingInstance = false
+		draggedFromSubtile = Vector2(-1, -1)
 		
 		if Input.is_action_pressed("place_overlapping"):
 			canPlace = true
@@ -114,6 +116,7 @@ func mouse_button_on_field():
 		if thingAtCursor:
 			holdClickOnInstance = thingAtCursor
 			drag_init_relative_pos = thingAtCursor.global_position - get_global_mouse_position()
+			draggedFromSubtile = Vector2(thingAtCursor.locationX, thingAtCursor.locationY)
 #		else:
 #			if thingAtCursor.thingType == Things.TYPE.EXTRA:
 #				specialAdjust = true
@@ -128,7 +131,7 @@ func mouse_button_on_field():
 	
 	# Holding down button
 	if Input.is_action_pressed("mouse_left"):
-		if holdClickOnInstance:
+		if is_instance_valid(holdClickOnInstance):
 			if mouse_movement_vector != Vector2(0,0) or get_global_mouse_position() != prev_global_mouse_position:
 				draggingInstance = true
 				holdClickOnInstance.global_position = get_global_mouse_position() + drag_init_relative_pos
@@ -156,7 +159,7 @@ func mouse_button_on_field():
 	
 	# Release button
 	if Input.is_action_just_released("mouse_left"):
-		if holdClickOnInstance:
+		if is_instance_valid(holdClickOnInstance):
 			if draggingInstance == true:
 				draggingInstance = false
 				var snapToPos = world2subtile(get_global_mouse_position())
@@ -218,23 +221,31 @@ func mouse_button_on_field():
 		
 		oThingDetails.update_details()
 
-func _input(event):
-	if holdClickOnInstance:
-		if holdClickOnInstance.thingType == Things.TYPE.EXTRA:
-			if holdClickOnInstance.subtype == 1:
-				if event.is_action_released('zoom_in') or event.is_action_pressed('keyboard_zoom_in'):
-					var newRange = clamp(holdClickOnInstance.pointRange+1,0,32767)
-					holdClickOnInstance.set_pointrange(newRange)
-					oThingDetails.update_details()
-					oMessage.quick("Action point range: " + str(newRange))
-					get_tree().set_input_as_handled()
-				if event.is_action_released('zoom_out') or event.is_action_pressed('keyboard_zoom_out'):
-					var newRange = clamp(holdClickOnInstance.pointRange-1,0,32767)
-					holdClickOnInstance.set_pointrange(newRange)
-					oThingDetails.update_details()
-					oMessage.quick("Action point range: " + str(newRange))
-					get_tree().set_input_as_handled()
 
+
+func _input(event):
+	if is_instance_valid(holdClickOnInstance):
+		if holdClickOnInstance.thingType == Things.TYPE.EFFECTGEN:
+			handle_zoom(event, holdClickOnInstance, "effectRange", "Effect range: ")
+		elif holdClickOnInstance.thingType == Things.TYPE.EXTRA and holdClickOnInstance.subtype == 1:
+			handle_zoom(event, holdClickOnInstance, "pointRange", "Action point range: ")
+		if holdClickOnInstance.thingType == Things.TYPE.EXTRA and holdClickOnInstance.subtype == 2:
+			handle_zoom(event, holdClickOnInstance, "lightRange", "Light range: ")
+
+func handle_zoom(event, instance, property_name, message_prefix):
+	if event.is_action_released('zoom_in') or event.is_action_pressed('keyboard_zoom_in'):
+		adjust_range(instance, property_name, 1, message_prefix)
+	if event.is_action_released('zoom_out') or event.is_action_pressed('keyboard_zoom_out'):
+		adjust_range(instance, property_name, -1, message_prefix)
+
+func adjust_range(instance, property_name, increment, message_prefix):
+	var newRange = clamp(instance.get(property_name) + increment, 0, 32767)
+	instance.set(property_name, newRange)
+	oThingDetails.update_details()
+	oMessage.quick(message_prefix + str(newRange))
+	get_tree().set_input_as_handled()
+	var originalPosition = Vector2(instance.locationX, instance.locationY)
+	oInstances.mirror_adjusted_value(instance, property_name, originalPosition)
 
 #func _unhandled_input(event):
 #	if event is InputEventMouseButton:
