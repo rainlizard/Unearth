@@ -100,7 +100,6 @@ func mouse_button_on_field():
 		#specialAdjust = false
 		draggingInstance = false
 		
-		print("Mouse left just pressed")
 		if Input.is_action_pressed("place_overlapping"):
 			canPlace = true
 		else:
@@ -130,13 +129,9 @@ func mouse_button_on_field():
 	# Holding down button
 	if Input.is_action_pressed("mouse_left"):
 		if holdClickOnInstance:
-#			if specialAdjust == true:
-#				pass
-#			else:
-				if mouse_movement_vector != Vector2(0,0) or get_global_mouse_position() != prev_global_mouse_position:
-					print('a')
-					draggingInstance = true
-					holdClickOnInstance.global_position = get_global_mouse_position() + drag_init_relative_pos
+			if mouse_movement_vector != Vector2(0,0) or get_global_mouse_position() != prev_global_mouse_position:
+				draggingInstance = true
+				holdClickOnInstance.global_position = get_global_mouse_position() + drag_init_relative_pos
 		else:
 			match oEditingTools.TOOL_SELECTED:
 				oEditingTools.PENCIL, oEditingTools.BRUSH:
@@ -222,6 +217,24 @@ func mouse_button_on_field():
 					inst.queue_free()
 		
 		oThingDetails.update_details()
+
+func _input(event):
+	if holdClickOnInstance:
+		if holdClickOnInstance.thingType == Things.TYPE.EXTRA:
+			if holdClickOnInstance.subtype == 1:
+				if event.is_action_released('zoom_in') or event.is_action_pressed('keyboard_zoom_in'):
+					var newRange = clamp(holdClickOnInstance.pointRange+1,0,32767)
+					holdClickOnInstance.set_pointrange(newRange)
+					oThingDetails.update_details()
+					oMessage.quick("Action point range: " + str(newRange))
+					get_tree().set_input_as_handled()
+				if event.is_action_released('zoom_out') or event.is_action_pressed('keyboard_zoom_out'):
+					var newRange = clamp(holdClickOnInstance.pointRange-1,0,32767)
+					holdClickOnInstance.set_pointrange(newRange)
+					oThingDetails.update_details()
+					oMessage.quick("Action point range: " + str(newRange))
+					get_tree().set_input_as_handled()
+
 
 #func _unhandled_input(event):
 #	if event is InputEventMouseButton:
