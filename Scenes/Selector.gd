@@ -47,6 +47,7 @@ var previousPosTile = Vector2()
 var previousPosSubtile = Vector2()
 
 var draggedThing = null
+var drag_init_relative_pos = Vector2()
 
 var preventClickWhenFocusing = false
 
@@ -102,9 +103,9 @@ func mouse_button_on_field():
 		
 		# Check if something is under the cursor and initiate dragging
 		var thingAtCursor = instance_position(get_global_mouse_position(), "Instance")
-		print(thingAtCursor)
 		if thingAtCursor:
 			draggedThing = thingAtCursor
+			drag_init_relative_pos = thingAtCursor.global_position - get_global_mouse_position()
 		
 		match oEditingTools.TOOL_SELECTED:
 			oEditingTools.RECTANGLE:
@@ -117,7 +118,8 @@ func mouse_button_on_field():
 	# Holding down button
 	if Input.is_action_pressed("mouse_left"):
 		if draggedThing:
-			draggedThing.global_position = get_global_mouse_position()
+			if mouse_movement_vector != Vector2(0,0):
+				draggedThing.global_position = get_global_mouse_position() + drag_init_relative_pos
 		else:
 			match oEditingTools.TOOL_SELECTED:
 				oEditingTools.PENCIL, oEditingTools.BRUSH:
@@ -136,6 +138,8 @@ func mouse_button_on_field():
 								
 				oEditingTools.RECTANGLE:
 					oRectangleSelection.update_positions(cursorTile)
+	
+	mouse_movement_vector = Vector2(0,0)
 	
 	# Release button
 	if Input.is_action_just_released("mouse_left") and draggedThing:
@@ -196,6 +200,14 @@ func mouse_button_on_field():
 					inst.queue_free()
 		
 		oThingDetails.update_details()
+
+var previous_mouse_position = Vector2()
+var mouse_movement_vector = Vector2()
+
+func _input(event):
+	if event is InputEventMouseMotion:
+		mouse_movement_vector = event.global_position - previous_mouse_position
+		previous_mouse_position = event.global_position
 
 #func _unhandled_input(event):
 #	if event is InputEventMouseButton:
