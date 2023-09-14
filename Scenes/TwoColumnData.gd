@@ -169,199 +169,341 @@ func _on_property_value_typed_in_manually(new_text, callingNode, leftString):
 func _on_property_value_changed(new_val, callingNode, leftString):
 	update_property_value(callingNode, leftString)
 
-func update_property_value(callingNode, leftString): # This signal will go off first even if you click the "Deselect" button.
+func update_property_value(callingNode, leftString):
 	oEditor.mapHasBeenEdited = true
 	var inst = oInspector.inspectingInstance
-	if is_instance_valid(inst) == false:
-		return
-	
+
+    # Extract value from the calling node
 	var value
+	if callingNode is SpinBox: value = callingNode.value
+	elif callingNode is LineEdit: value = callingNode.text
 	
-	if callingNode is SpinBox:
-		value = callingNode.value
-	elif callingNode is LineEdit:
-		value = callingNode.text
+	# Default clamping and type information
+	var is_float = false
+	var property_name
 	
-	var aValueWasAdjustedSoMirrorIt = ""
-	
-	# Need to store original position in order to mirror any changes to position.
-	var originalPosition = Vector2(inst.locationX, inst.locationY)
-	
+	# Adjustments based on the property
 	match leftString:
 		"Position":
-			match name:
-				"ThingListData":
-					inst.locationX = clamp(float(callingNode.oLineEditX.text), 0.0, M.xSize*3)
-					inst.locationY = clamp(float(callingNode.oLineEditY.text), 0.0, M.xSize*3)
-					if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
-						inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0, M.xSize*3)
-					oInspector.set_inspector_subtile(Vector2(inst.locationX,inst.locationY))
-					aValueWasAdjustedSoMirrorIt = "Position"
-#						if oMirrorPlacementCheckBox.pressed == true:
-#							oMessage.quick("Note: Position adjustments are not made symmetrical.")
+			if is_instance_valid(inst):
+				var originalLocation = Vector2(inst.locationX,inst.locationY)
+				inst.locationX = clamp(float(callingNode.oLineEditX.text), 0.0, M.xSize*3)
+				inst.locationY = clamp(float(callingNode.oLineEditY.text), 0.0, M.xSize*3)
+				if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
+					inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0, M.xSize*3)
+				oInstances.mirror_adjusted_value(inst, "locationXYZ", originalLocation)
+				oInspector.set_inspector_subtile(Vector2(inst.locationX,inst.locationY))
+			return # Exit after handling "Position"
 		"Custom box":
+			property_name = "boxNumber"
 			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.boxNumber = value
-					aValueWasAdjustedSoMirrorIt = "boxNumber"
-				"PlacingListData":
-					oPlacingSettings.boxNumber = value
 		"Level":
+			property_name = "creatureLevel"
 			value = clamp(int(value), 1, 10)
-			match name:
-				"ThingListData":
-					inst.creatureLevel = value
-					aValueWasAdjustedSoMirrorIt = "creatureLevel"
-				"PlacingListData":
-					oPlacingSettings.creatureLevel = value
 		"Point #":
+			property_name = "pointNumber"
 			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.pointNumber = value
-				"PlacingListData":
-					oPlacingSettings.pointNumber = value
 		"Gate #":
+			property_name = "herogateNumber"
 			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.herogateNumber = value
-				"PlacingListData":
-					oPlacingSettings.herogateNumber = value
 		"Intensity":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.lightIntensity = value
-					aValueWasAdjustedSoMirrorIt = "lightIntensity"
-				"PlacingListData":
-					oPlacingSettings.lightIntensity = value
+			property_name = "lightIntensity"
+			value = clamp(float(value), 0, 255)
 		"Effect range":
+			property_name = "effectRange"
 			value = clamp(float(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.effectRange = value
-					aValueWasAdjustedSoMirrorIt = "effectRange"
-				"PlacingListData":
-					oPlacingSettings.effectRange = value
 		"Light range":
+			property_name = "lightRange"
 			value = clamp(float(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.lightRange = value
-					aValueWasAdjustedSoMirrorIt = "lightRange"
-				"PlacingListData":
-					oPlacingSettings.lightRange = value
 		"Point range":
+			property_name = "pointRange"
 			value = clamp(float(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.pointRange = value
-					aValueWasAdjustedSoMirrorIt = "pointRange"
-				"PlacingListData":
-					oPlacingSettings.pointRange = value
-		"Unknown 9":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data9 = value
-		"Unknown 10":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data10 = value
-		"Unknown 11-12":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data11_12 = value
-		"Unknown 13":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data13 = value
-		"Unknown 14":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data14 = value
-		"Unknown 15":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data15 = value
-		"Unknown 16":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data16 = value
-		"Unknown 17":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data17 = value
-		"Unknown 18":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data18 = value
-		"Unknown 19":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data19 = value
-		"Unknown 20":
-			value = clamp(int(value), 0, 255)
-			match name:
-				"ThingListData":
-					inst.data20 = value
-		"Name": #Creature name
-			match name:
-				"ThingListData":
-					inst.creatureName = value
-					aValueWasAdjustedSoMirrorIt = "creatureLevel"
-				"PlacingListData":
-					oPlacingSettings.creatureName = value
+		"Name":
+			property_name = "creatureName"
+			# String, so no clamping
 		"Gold held":
+			property_name = "creatureGold"
 			value = clamp(int(value), 0, 1000000000)
-			match name:
-				"ThingListData":
-					inst.creatureGold = value
-					aValueWasAdjustedSoMirrorIt = "creatureGold"
-				"PlacingListData":
-					oPlacingSettings.creatureGold = value
 		"Health %":
+			property_name = "creatureInitialHealth"
 			value = clamp(int(value), 0, 100)
-			match name:
-				"ThingListData":
-					inst.creatureInitialHealth = value
-					aValueWasAdjustedSoMirrorIt = "creatureInitialHealth"
-				"PlacingListData":
-					oPlacingSettings.creatureInitialHealth = value
 		"Orientation":
+			property_name = "orientation"
 			value = clamp(int(value), 0, 2047)
-			match name:
-				"ThingListData":
-					inst.orientation = value
-					aValueWasAdjustedSoMirrorIt = "orientation"
-				"PlacingListData":
-					oPlacingSettings.orientation = value
 		"Gold value":
+			property_name = "goldValue"
 			value = clamp(int(value), 0, 1000000000)
-			match name:
-				"ThingListData":
-					inst.goldValue = value
-					aValueWasAdjustedSoMirrorIt = "goldValue"
-				"PlacingListData":
-					oPlacingSettings.goldValue = value
-		
+		"Unknown 9":
+			property_name = "data9"
+			value = clamp(int(value), 0, 255)
+		"Unknown 10":
+			property_name = "data10"
+			value = clamp(int(value), 0, 255)
+		"Unknown 11-12":
+			property_name = "data11_12"
+			value = clamp(int(value), 0, 255)
+		"Unknown 13":
+			property_name = "data13"
+			value = clamp(int(value), 0, 255)
+		"Unknown 14":
+			property_name = "data14"
+			value = clamp(int(value), 0, 255)
+		"Unknown 15":
+			property_name = "data15"
+			value = clamp(int(value), 0, 255)
+		"Unknown 16":
+			property_name = "data16"
+			value = clamp(int(value), 0, 255)
+		"Unknown 17":
+			property_name = "data17"
+			value = clamp(int(value), 0, 255)
+		"Unknown 18":
+			property_name = "data18"
+			value = clamp(int(value), 0, 255)
+		"Unknown 19":
+			property_name = "data19"
+			value = clamp(int(value), 0, 255)
+		"Unknown 20":
+			property_name = "data20"
+			value = clamp(int(value), 0, 255)
+		"_":
+			print("Warning: Property leftString isn't recognized.")
+			return # Exit if the property isn't recognized
+	
+	# Adjust SpinBox if applicable
 	if callingNode is SpinBox:
 		callingNode.value = float(value)
 		callingNode.get_line_edit().caret_position = callingNode.get_line_edit().text.length()
 	
-	if aValueWasAdjustedSoMirrorIt != "":
-		oInstances.mirror_adjusted_value(inst, aValueWasAdjustedSoMirrorIt, originalPosition)
+	# Determine whether if we're adjusting an inspected instance (ThingListData) or the Placing Settings (PlacingListData)
+	match name:
+		"ThingListData":
+			if is_instance_valid(inst):
+				inst.set(property_name, value)
+				oInstances.mirror_adjusted_value(inst, property_name, Vector2(inst.locationX, inst.locationY))
+		"PlacingListData":
+			oPlacingSettings.set(property_name, value)
+
+
+#func update_property_value(callingNode, leftString): # This signal will go off first even if you click the "Deselect" button.
+#	oEditor.mapHasBeenEdited = true
+#	var inst = oInspector.inspectingInstance
+#
+#	var value
+#
+#	if callingNode is SpinBox:
+#		value = callingNode.value
+#	elif callingNode is LineEdit:
+#		value = callingNode.text
+#
+#	var aValueWasAdjustedSoMirrorIt = ""
+#
+#	# Need to store original position in order to mirror any changes to position.
+#	var originalPosition
+#	if is_instance_valid(inst):
+#		originalPosition = Vector2(inst.locationX, inst.locationY)
+#
+#	match leftString:
+#		"Position":
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.locationX = clamp(float(callingNode.oLineEditX.text), 0.0, M.xSize*3)
+#						inst.locationY = clamp(float(callingNode.oLineEditY.text), 0.0, M.xSize*3)
+#						if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
+#							inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0, M.xSize*3)
+#						oInspector.set_inspector_subtile(Vector2(inst.locationX,inst.locationY))
+#						aValueWasAdjustedSoMirrorIt = "Position"
+##						if oMirrorPlacementCheckBox.pressed == true:
+##							oMessage.quick("Note: Position adjustments are not made symmetrical.")
+#		"Custom box":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.boxNumber = value
+#						aValueWasAdjustedSoMirrorIt = "boxNumber"
+#				"PlacingListData":
+#					oPlacingSettings.boxNumber = value
+#		"Level":
+#			value = clamp(int(value), 1, 10)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.creatureLevel = value
+#						aValueWasAdjustedSoMirrorIt = "creatureLevel"
+#				"PlacingListData":
+#					oPlacingSettings.creatureLevel = value
+#		"Point #":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.pointNumber = value
+#				"PlacingListData":
+#					oPlacingSettings.pointNumber = value
+#		"Gate #":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.herogateNumber = value
+#				"PlacingListData":
+#					oPlacingSettings.herogateNumber = value
+#		"Intensity":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.lightIntensity = value
+#						aValueWasAdjustedSoMirrorIt = "lightIntensity"
+#				"PlacingListData":
+#					oPlacingSettings.lightIntensity = value
+#		"Effect range":
+#			value = clamp(float(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.effectRange = value
+#						aValueWasAdjustedSoMirrorIt = "effectRange"
+#				"PlacingListData":
+#					oPlacingSettings.effectRange = value
+#		"Light range":
+#			value = clamp(float(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.lightRange = value
+#						aValueWasAdjustedSoMirrorIt = "lightRange"
+#				"PlacingListData":
+#					oPlacingSettings.lightRange = value
+#		"Point range":
+#			value = clamp(float(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.pointRange = value
+#						aValueWasAdjustedSoMirrorIt = "pointRange"
+#				"PlacingListData":
+#					oPlacingSettings.pointRange = value
+#		"Unknown 9":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data9 = value
+#		"Unknown 10":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data10 = value
+#		"Unknown 11-12":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data11_12 = value
+#		"Unknown 13":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data13 = value
+#		"Unknown 14":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data14 = value
+#		"Unknown 15":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data15 = value
+#		"Unknown 16":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data16 = value
+#		"Unknown 17":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data17 = value
+#		"Unknown 18":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data18 = value
+#		"Unknown 19":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data19 = value
+#		"Unknown 20":
+#			value = clamp(int(value), 0, 255)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.data20 = value
+#		"Name": #Creature name
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.creatureName = value
+#						aValueWasAdjustedSoMirrorIt = "creatureLevel"
+#				"PlacingListData":
+#					oPlacingSettings.creatureName = value
+#		"Gold held":
+#			value = clamp(int(value), 0, 1000000000)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.creatureGold = value
+#						aValueWasAdjustedSoMirrorIt = "creatureGold"
+#				"PlacingListData":
+#					oPlacingSettings.creatureGold = value
+#		"Health %":
+#			value = clamp(int(value), 0, 100)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.creatureInitialHealth = value
+#						aValueWasAdjustedSoMirrorIt = "creatureInitialHealth"
+#				"PlacingListData":
+#					oPlacingSettings.creatureInitialHealth = value
+#		"Orientation":
+#			value = clamp(int(value), 0, 2047)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.orientation = value
+#						aValueWasAdjustedSoMirrorIt = "orientation"
+#				"PlacingListData":
+#					oPlacingSettings.orientation = value
+#		"Gold value":
+#			value = clamp(int(value), 0, 1000000000)
+#			match name:
+#				"ThingListData":
+#					if is_instance_valid(inst):
+#						inst.goldValue = value
+#						aValueWasAdjustedSoMirrorIt = "goldValue"
+#				"PlacingListData":
+#					oPlacingSettings.goldValue = value
+#
+#	if callingNode is SpinBox:
+#		callingNode.value = float(value)
+#		callingNode.get_line_edit().caret_position = callingNode.get_line_edit().text.length()
+#
+#	if is_instance_valid(inst):
+#		if aValueWasAdjustedSoMirrorIt != "":
+#			oInstances.mirror_adjusted_value(inst, aValueWasAdjustedSoMirrorIt, originalPosition)
 
 func _on_optionbutton_toggled(state,nodeRightColumn):
 	oUi.optionButtonIsOpened = state

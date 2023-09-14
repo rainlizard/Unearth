@@ -173,7 +173,7 @@ func mouse_button_on_field():
 				var originalPosition = Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY)
 				holdClickOnInstance.locationX = snapToPos.x + 0.5
 				holdClickOnInstance.locationY = snapToPos.y + 0.5
-				oInstances.mirror_adjusted_value(holdClickOnInstance, "Position", originalPosition)
+				oInstances.mirror_adjusted_value(holdClickOnInstance, "locationXYZ", originalPosition)
 				oInspector.inspect_something(holdClickOnInstance)
 				oInspector.set_inspector_instance(holdClickOnInstance)
 				oInspector.set_inspector_subtile(Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY))

@@ -81,7 +81,7 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust, original
 				if getNodeAtMirroredPosition.subtype == instanceBeingAdjusted.subtype:
 					if getNodeAtMirroredPosition.thingType == instanceBeingAdjusted.thingType:
 						match variableNameToAdjust:
-							"Position":
+							"locationXYZ":
 								var movedPosition = Vector2(instanceBeingAdjusted.locationX, instanceBeingAdjusted.locationY)
 								var mirrorMovedPosition = oMirrorOptions.mirror_calculation(performAction, flip, movedPosition, fieldX, fieldY)
 								getNodeAtMirroredPosition.locationX = mirrorMovedPosition.x
