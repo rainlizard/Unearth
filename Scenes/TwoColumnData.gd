@@ -172,15 +172,12 @@ func _on_property_value_changed(new_val, callingNode, leftString):
 func update_property_value(callingNode, leftString):
 	oEditor.mapHasBeenEdited = true
 	var inst = oInspector.inspectingInstance
-
-    # Extract value from the calling node
+	
+	var property_name
 	var value
+	# Extract value from the calling node
 	if callingNode is SpinBox: value = callingNode.value
 	elif callingNode is LineEdit: value = callingNode.text
-	
-	# Default clamping and type information
-	var is_float = false
-	var property_name
 	
 	# Adjustments based on the property
 	match leftString:
@@ -284,45 +281,36 @@ func update_property_value(callingNode, leftString):
 		"PlacingListData":
 			oPlacingSettings.set(property_name, value)
 
-func _on_optionbutton_item_selected(indexSelected, leftString): # When pressing Enter on LineEdit, lose focus
+func _on_optionbutton_item_selected(indexSelected, leftString):
 	oEditor.mapHasBeenEdited = true
-	
 	var inst = oInspector.inspectingInstance
-	if is_instance_valid(inst) == false:
-		return
-	
-	# Need to store original position in order to mirror any changes to position.
-	var originalPosition = Vector2(inst.locationX, inst.locationY)
-	
-	var aValueWasAdjustedSoMirrorIt = ""
-	
+	var property_name = ""
+	var value
+    
 	match leftString:
 		"Ownership":
 			oSelection.paintOwnership = indexSelected
-			match name:
-				"ThingListData":
-					inst.ownership = oSelection.paintOwnership
-					aValueWasAdjustedSoMirrorIt = "ownership"
-				"PlacingListData":
-					oPlacingSettings.ownership = oSelection.paintOwnership
-		"Door locked":
-			match name:
-				"ThingListData":
-					inst.doorLocked = indexSelected
-					inst.update_spinning_key()
-					aValueWasAdjustedSoMirrorIt = "doorLocked"
-				"PlacingListData":
-					oPlacingSettings.doorLocked = indexSelected
+			property_name = "ownership"
+			value = indexSelected
 		"Orientation":
-			match name:
-				"ThingListData":
-					inst.orientation = Constants.listOrientations[indexSelected]
-					aValueWasAdjustedSoMirrorIt = "orientation"
-				"PlacingListData":
-					oPlacingSettings.orientation = Constants.listOrientations[indexSelected]
+			property_name = "orientation"
+			value = Constants.listOrientations[indexSelected]
+		"Door locked":
+			property_name = "doorLocked"
+			value = indexSelected
+			if name == "ThingListData":
+				if is_instance_valid(inst):
+					inst.set(property_name, value) # Must be set before update_spinning_key()
+					inst.update_spinning_key()
 	
-	if aValueWasAdjustedSoMirrorIt != "":
-		oInstances.mirror_adjusted_value(inst, aValueWasAdjustedSoMirrorIt, originalPosition)
+	# Determine whether if we're adjusting an inspected instance (ThingListData) or the Placing Settings (PlacingListData)
+	match name:
+		"ThingListData":
+			if is_instance_valid(inst):
+				inst.set(property_name, value)
+				oInstances.mirror_adjusted_value(inst, property_name, Vector2(inst.locationX, inst.locationY))
+		"PlacingListData":
+			oPlacingSettings.set(property_name, value)
 
 func _on_optionbutton_toggled(state,nodeRightColumn):
 	oUi.optionButtonIsOpened = state
