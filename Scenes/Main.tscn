@@ -3036,7 +3036,7 @@ visible = true
 margin_left = -2754.0
 margin_top = 720.0
 margin_right = -1623.0
-margin_bottom = 1163.0
+margin_bottom = 1192.0
 window_title = "Controls"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ControlsWindow"]
@@ -3045,7 +3045,7 @@ anchor_bottom = 1.0
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer"]
 margin_right = 1130.0
-margin_bottom = 439.0
+margin_bottom = 464.0
 custom_constants/margin_right = 20
 custom_constants/margin_top = 20
 custom_constants/margin_left = 20
@@ -3055,12 +3055,12 @@ custom_constants/margin_bottom = 20
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 1110.0
-margin_bottom = 419.0
+margin_bottom = 444.0
 custom_constants/separation = 24
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer"]
 margin_right = 674.0
-margin_bottom = 399.0
+margin_bottom = 424.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_right = 674.0
@@ -3077,7 +3077,7 @@ rect_min_size = Vector2( 24, 24 )
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 53.0
 margin_right = 674.0
-margin_bottom = 399.0
+margin_bottom = 424.0
 custom_constants/hseparation = 21
 columns = 2
 
@@ -3200,7 +3200,7 @@ text = "Delete all objects under cursor"
 margin_top = 225.0
 margin_right = 287.0
 margin_bottom = 246.0
-text = "Ctrl+Delete"
+text = "Ctrl + Delete"
 
 [node name="Label27" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
@@ -3222,49 +3222,62 @@ margin_right = 674.0
 margin_bottom = 271.0
 text = "Cycle between overlapping objects"
 
-[node name="Label12" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+[node name="Label16" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_top = 275.0
 margin_right = 287.0
 margin_bottom = 296.0
+text = "Alt + Mouse wheel"
+
+[node name="Label17" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 275.0
+margin_right = 674.0
+margin_bottom = 296.0
+text = "Adjust 'range' of inspected object"
+
+[node name="Label12" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 300.0
+margin_right = 287.0
+margin_bottom = 321.0
 text = "Number keys [0-9]"
 
 [node name="Label29" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
-margin_top = 275.0
+margin_top = 300.0
 margin_right = 674.0
-margin_bottom = 296.0
+margin_bottom = 321.0
 text = "Quickly set creature level / brush size"
 
 [node name="Label14" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
-margin_top = 300.0
+margin_top = 325.0
 margin_right = 287.0
-margin_bottom = 321.0
+margin_bottom = 346.0
 text = "Alt + Enter"
 
 [node name="Label31" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
-margin_top = 300.0
+margin_top = 325.0
 margin_right = 674.0
-margin_bottom = 321.0
+margin_bottom = 346.0
 text = "Fullscreen"
 
 [node name="Label15" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
-margin_top = 325.0
+margin_top = 350.0
 margin_right = 287.0
-margin_bottom = 346.0
+margin_bottom = 371.0
 text = "ESC"
 
 [node name="Label32" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
-margin_top = 325.0
+margin_top = 350.0
 margin_right = 674.0
-margin_bottom = 346.0
+margin_bottom = 371.0
 text = "Exit"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer"]
 margin_left = 698.0
 margin_right = 1090.0
-margin_bottom = 399.0
+margin_bottom = 424.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
 margin_right = 392.0
