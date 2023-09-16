@@ -68,10 +68,6 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust, original
 	var fieldX = (M.xSize*3)+1 # Don't know why this +1 works, but it does.
 	var fieldY = (M.ySize*3)+1
 	
-	# Force set the original position here, in the case of adjusting a value while dragging it
-	if oSelector.draggingInstance == true:
-		originalPosition = oSelector.draggedFromSubtile
-	
 	for performAction in actions:
 		var mirroredPos = oMirrorOptions.mirror_calculation(performAction, flip, originalPosition, fieldX, fieldY)
 		

@@ -33,6 +33,8 @@ onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oBrushPreview = Nodelist.list["oBrushPreview"]
+onready var oDataClm = Nodelist.list["oDataClm"]
+onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 
 
 onready var TILE_SIZE = Constants.TILE_SIZE
@@ -51,7 +53,6 @@ var mouse_movement_vector = Vector2()
 
 var holdClickOnInstance = null
 var draggingInstance = false
-var draggedFromSubtile = Vector2()
 var drag_init_relative_pos = Vector2()
 
 var preventClickWhenFocusing = false
@@ -98,7 +99,6 @@ func mouse_button_on_field():
 	# Initial on-press button
 	if Input.is_action_just_pressed("mouse_left"):
 		draggingInstance = false
-		draggedFromSubtile = Vector2(-1, -1)
 		
 		var youClickedOnAnAlreadyInspectedThing = false
 		if oInspector.inspectorSubtile.floor() == cursorSubtile.floor():
@@ -171,8 +171,15 @@ func mouse_button_on_field():
 				draggingInstance = false
 				var snapToPos = world2subtile(get_global_mouse_position())
 				var originalPosition = Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY)
+				
 				holdClickOnInstance.locationX = snapToPos.x + 0.5
 				holdClickOnInstance.locationY = snapToPos.y + 0.5
+				
+				# Readjust the thing's height when dragging it from different heights
+				if holdClickOnInstance.locationZ != 2.875: # don't knock torches onto the ground if dragging them (accidental clicks would knock them down too)
+					var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cellv(snapToPos)]
+					holdClickOnInstance.locationZ = detectTerrainHeight
+				
 				oInstances.mirror_adjusted_value(holdClickOnInstance, "locationXYZ", originalPosition)
 				oInspector.inspect_something(holdClickOnInstance)
 				oInspector.set_inspector_instance(holdClickOnInstance)
