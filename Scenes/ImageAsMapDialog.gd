@@ -187,8 +187,7 @@ func apply_colour_as_slabIDs_to_map(doColour, slabID):
 	imageData.unlock()
 	
 	var useOwner = 5
-	var useStyle = 0
-	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner, useStyle)
+	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner)
 	oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, true)
 	return shapePositionArray.size()
 

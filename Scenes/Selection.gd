@@ -29,7 +29,6 @@ onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
-onready var oSelection = Nodelist.list["oSelection"]
 
 enum {
 	CONSTRUCT_BRUSH
@@ -51,15 +50,6 @@ var paintSlab = 0 setget newPaintSlab
 var paintThingType = null setget newPaintThingType
 var paintSubtype = null setget newPaintSubtype
 var paintOwnership = 0 setget newOwnership
-var paintStyle = 0 setget newStyle
-
-func reset_selections():
-	newPaintSlab(0)
-	newPaintThingType(null)
-	newPaintSubtype(null)
-	newOwnership(0)
-	newStyle(0)
-	oPickSlabWindow.set_selection(null) # Deselect anything in slab window
 
 func _process(delta):
 	get_slab_under_cursor()
@@ -86,7 +76,6 @@ func newPaintThingType(value):
 		oPickSlabWindow.set_selection(null) # Deselect anything in slab window
 	paintThingType = value
 
-
 func newPaintSubtype(value):
 	if value != null: # This check is important
 		oSelector.change_mode(oSelector.MODE_SUBTILE)
@@ -97,10 +86,6 @@ func newOwnership(value):
 	oUi.update_theme_colour(value)
 	oOwnerSelection.set_selection(value)
 	paintOwnership = value
-
-func newStyle(value):
-	
-	paintStyle = value
 
 func newPaintSlab(value):
 	oSelector.change_mode(oSelector.MODE_TILE)
@@ -220,7 +205,7 @@ func construct_shape_for_placement(constructType):
 							coordsToCheck.append(neighbor)
 	
 	if oSlabStyle.visible == true:
-		oDataSlx.set_tileset_shape(shapePositionArray, oSelection.paintStyle)
+		oDataSlx.set_tileset_shape(shapePositionArray)
 		if oMirrorPlacementCheckBox.pressed == true:
 			oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_STYLE)
 	elif oOnlyOwnership.visible == true:
@@ -235,9 +220,8 @@ func construct_shape_for_placement(constructType):
 	else:
 		# Slab placement
 		var useOwner = paintOwnership
-		var useStyle = paintStyle
 		
-		oSlabPlacement.place_shape_of_slab_id(shapePositionArray, paintSlab, useOwner, useStyle)
+		oSlabPlacement.place_shape_of_slab_id(shapePositionArray, paintSlab, useOwner)
 		
 		if oMirrorPlacementCheckBox.pressed == true:
 			oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_SLAB_AND_OWNER)

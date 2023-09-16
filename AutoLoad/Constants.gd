@@ -1,5 +1,5 @@
 extends Node
-const VERSION = "0.39 test"
+const VERSION = "0.38e"
 const unearth_map_format_version:float = 1.05
 
 const TILE_SIZE = 96

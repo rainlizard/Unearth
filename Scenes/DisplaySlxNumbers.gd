@@ -1,7 +1,6 @@
 extends Node2D
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oSlabStyle = Nodelist.list["oSlabStyle"]
-onready var oSelection = Nodelist.list["oSelection"]
 
 var tileDrawDist = 96
 var draw_grid = false
@@ -27,7 +26,7 @@ func _draw():
 				pos.x -= dynamic_font.get_string_size(string).x * 0.5 # Center string
 				pos.y += dynamic_font.get_string_size(string).y * 0.25
 				var color
-				if oSelection.paintStyle == value:
+				if oSlabStyle.paintSlabStyle == value:
 					color = Color(1,1,1,1)
 				else:
 					color = Color(1,1,1,0.5)

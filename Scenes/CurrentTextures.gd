@@ -234,10 +234,12 @@ func set_current_texture_pack():
 	assign_textures_to_slab_window(value)
 
 
-func assign_textures_to_slab_window(value):
+func assign_textures_to_slab_window(value): # Called by SlabStyleWindow
 	for nodeID in get_tree().get_nodes_in_group("SlabDisplay"):
 		nodeID.get_material().set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
 		nodeID.get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+
+
 
 
 
