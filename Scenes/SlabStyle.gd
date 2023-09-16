@@ -3,9 +3,10 @@ onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
+onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
+onready var oSelection = Nodelist.list["oSelection"]
 
 var scnSlabStyleButton = preload("res://Scenes/SlabStyleButton.tscn")
-var paintSlabStyle = 0 setget set_paintSlabStyle
 onready var oSelectedRect = get_node("../../../Clippy/SelectedRect")
 
 func initialize_grid_items():
@@ -32,33 +33,40 @@ func initialize_grid_items():
 			else:
 				btnId.set_meta("grid_item_text", "")
 		
-		if i == paintSlabStyle:
+		if i == oSelection.paintStyle:
 			btnId.pressed = true
 		
 		oGridContainer.add_child(btnId)
-#aaa.text = Constants.TEXTURE_MAP_NAMES[i]
-func set_paintSlabStyle(setval):
-	paintSlabStyle = setval
-	oDisplaySlxNumbers.update_grid()
 
 func _on_SlabStyleButtonPressed(btnId,value):
 	oSelectedRect.boundToItem = btnId
 	oSelectedRect.visible = true
-	set_paintSlabStyle(value)
+	set_style(value)
+
 
 func update_paint_for_slab_style(tile):
-	set_paintSlabStyle(oDataSlx.get_tileset_value(tile.x,tile.y))
+	set_style(oDataSlx.get_tileset_value(tile.x,tile.y))
 	# Select grid item in window
 	for id in current_grid_container().get_children():
 		if id is Button:
-			if id.text == str(paintSlabStyle-1):
+			if id.text == str(oSelection.paintStyle-1):
 				id.pressed = true
 				oSelectedRect.boundToItem = id
 				oSelectedRect.visible = true
-			elif id.text == '~' and paintSlabStyle == 0:
+			elif id.text == '~' and oSelection.paintStyle == 0:
 				id.pressed = true
 				oSelectedRect.boundToItem = id
 				oSelectedRect.visible = true
+
+
+func set_style(setval):
+	oSelection.paintStyle = setval
+	oDisplaySlxNumbers.update_grid()
+	
+	var setNewStyle = setval-1
+	if setNewStyle == -1:
+		setNewStyle = oDataLevelStyle.data
+	oTextureCache.assign_textures_to_slab_window(setNewStyle)
 
 func current_grid_container():
 	return $"ScrollContainer/GridContainer"

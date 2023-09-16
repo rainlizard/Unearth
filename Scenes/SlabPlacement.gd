@@ -144,7 +144,7 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 		MIRROR_SLAB_AND_OWNER:
 			oOverheadOwnership.update_ownership_image_based_on_shape(mirroredPositionArray)
 		MIRROR_STYLE:
-			oDataSlx.set_tileset_shape(mirroredPositionArray)
+			oDataSlx.set_tileset_shape(mirroredPositionArray, oSelection.paintStyle)
 		MIRROR_ONLY_OWNERSHIP:
 			oOverheadOwnership.update_ownership_image_based_on_shape(mirroredPositionArray)
 	
@@ -158,7 +158,7 @@ func slabID_is_ownable(slabID):
 	return true
 
 
-func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
+func place_shape_of_slab_id(shapePositionArray, slabID, ownership, style):
 	var ownable = slabID_is_ownable(slabID)
 	if ownable == false and slabID < 1000:
 		ownership = 5
@@ -167,6 +167,9 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	var removeFromShape = []
 	
 	var CODETIME_START = OS.get_ticks_msec()
+	
+	oDataSlx.set_tileset_shape(shapePositionArray, style)
+	
 	for pos in shapePositionArray:
 		oDataOwnership.set_cellv(pos, ownership)
 		

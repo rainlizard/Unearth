@@ -1,6 +1,7 @@
 extends Node
 onready var oSlabStyle = Nodelist.list["oSlabStyle"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
+onready var oSelection = Nodelist.list["oSelection"]
 
 var slxImgData = Image.new()
 var slxTexData = ImageTexture.new()
@@ -18,8 +19,8 @@ func clear_img():
 #	slxTexData.set_data(slxImgData)
 #	oDisplaySlxNumbers.update_grid()
 
-func set_tileset_shape(shapePositionArray):
-	var value = Color8(oSlabStyle.paintSlabStyle,0,0)
+func set_tileset_shape(shapePositionArray, style):
+	var value = Color8(style,0,0)
 	slxImgData.lock()
 	for pos in shapePositionArray:
 		slxImgData.set_pixelv(pos,value)

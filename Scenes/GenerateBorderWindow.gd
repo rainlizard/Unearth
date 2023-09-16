@@ -103,7 +103,8 @@ func _on_ButtonNewMapOK_pressed():
 			shapePositionArray.append(Vector2(x,y))
 	var slabID = Slabs.ROCK
 	var useOwner = 5
-	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner)
+	var useStyle = 0
+	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner, useStyle)
 	
 	if oNewMapNoiseOptions.visible == true:
 		# Border

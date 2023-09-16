@@ -41,6 +41,7 @@ onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
 onready var oDkDat = Nodelist.list["oDkDat"]
+onready var oSelection = Nodelist.list["oSelection"]
 
 
 var TOTAL_TIME_TO_OPEN_MAP
@@ -191,7 +192,6 @@ func load_cfg_stuff(map):
 		Things.get_cfgs_directory(fullPathToMainCfg)
 
 
-
 func finish_opening_map(map):
 	oPickThingWindow.initialize_thing_grid_items()
 	oCurrentMap.set_path_and_title(map)
@@ -217,7 +217,7 @@ func finish_opening_map(map):
 		oMessage.quick('Opened map')
 	
 	oEditor.set_view_2d()
-	
+	oSelection.reset_selections()
 	oMenu.add_recent(map)
 	
 	# When opening a map, be sure that column 0 is empty. Otherwise apply a fix.
