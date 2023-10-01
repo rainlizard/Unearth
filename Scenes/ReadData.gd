@@ -126,7 +126,9 @@ func read_une(buffer):
 			value = buffer.get_u16()
 			oDataCustomSlab.set_cell(xSlab,ySlab,value)
 func new_une():
-	pass
+	for ySlab in M.ySize:
+		for xSlab in M.xSize:
+			oDataCustomSlab.set_cell(xSlab,ySlab,0)
 
 func read_wlb(buffer):
 	buffer.seek(0)
@@ -276,7 +278,6 @@ func read_apt(buffer):
 		oInstances.add_child(id)
 func new_apt():
 	pass
-
 
 func read_lgt(buffer):
 	buffer.seek(0)
