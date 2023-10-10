@@ -249,6 +249,10 @@ adjust_range={
 
 debugger_agent/wait_timeout=15000
 
+[network]
+
+limits/debugger_stdout/max_chars_per_second=204800
+
 [rendering]
 
 threads/thread_model=2

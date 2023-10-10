@@ -17,6 +17,7 @@ onready var oMapBrowserTabEdit = Nodelist.list["oMapBrowserTabEdit"]
 onready var oMapBrowserTabPlay = Nodelist.list["oMapBrowserTabPlay"]
 onready var oMapBrowserTabContainer = Nodelist.list["oMapBrowserTabContainer"]
 onready var oRandomMapContainer = Nodelist.list["oRandomMapContainer"]
+onready var oMenu = Nodelist.list["oMenu"]
 
 
 func _ready():
@@ -31,7 +32,9 @@ func _on_BrowseMapsMenu_pressed():
 		false: popup()
 
 func _on_MapBrowser_about_to_show():
-	yield(get_tree(),'idle_frame')
+	for i in 2: # Needs to be 2
+		yield(get_tree(),'idle_frame')
+	
 	oSourceMapTree.update_source_tree()
 	oDynamicMapTree.update_dynamic_tree()
 	
@@ -151,12 +154,12 @@ func _on_MapBrowser_visibility_changed():
 	if is_instance_valid(oUi) == false: return
 	if visible == true:
 		oUi.hide_tools()
-		toggle_map_preview(true)
+		oMenu.visible = true
+		toggle_map_preview(false)
 	else:
 		oUi.show_tools()
+		oMenu.visible = true
 		toggle_map_preview(false)
-
-
 
 
 func toggle_map_preview(togglePreview):
