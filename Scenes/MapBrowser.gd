@@ -32,6 +32,8 @@ func _on_BrowseMapsMenu_pressed():
 		false: popup()
 
 func _on_MapBrowser_about_to_show():
+	if oCurrentMap.path == "": oDynamicMapTree.clear() # Just fixes a visual glitch when you don't have a map open, so don't mind this.
+	
 	for i in 2: # Needs to be 2
 		yield(get_tree(),'idle_frame')
 	

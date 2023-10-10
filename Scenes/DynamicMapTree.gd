@@ -5,13 +5,13 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oLineEditFilter = Nodelist.list["oLineEditFilter"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 
-
-
 var searchResultTreeItemDirs = [] # Just used for killing items with no children
+
 
 func _ready():
 	set_column_expand(0,false)
 	set_column_min_width(0,135)
+
 
 func update_dynamic_tree():
 	# Display tree. Collapse things depending on the state of the CURRENT_MAP and search field.
@@ -21,6 +21,7 @@ func update_dynamic_tree():
 		search_tree(oLineEditFilter.text, true)
 	else:
 		search_tree(oLineEditFilter.text, false)
+
 
 func search_tree(searchText, collapseResults):
 	var CODETIME_START = OS.get_ticks_msec()
@@ -36,6 +37,7 @@ func search_tree(searchText, collapseResults):
 	print('Tree searched in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	highlight_current_map()
+
 
 func get_tree_items_recursively(fromItem, toItem, searchText, collapseResults):
 	var currentSlbPath = ""
@@ -78,6 +80,7 @@ func get_tree_items_recursively(fromItem, toItem, searchText, collapseResults):
 			if fromItem == null:
 				break
 
+
 func _on_DynamicMapTree_item_selected():
 	# Never collapse root node
 	var item = get_selected()
@@ -90,6 +93,7 @@ func _on_DynamicMapTree_item_selected():
 	item.collapsed = !item.collapsed
 	connect('item_selected',self,"_on_DynamicMapTree_item_selected")
 	connect('item_selected',oMapBrowser,"_on_DynamicMapTree_item_selected")
+
 
 func highlight_current_map():
 	var currentSlbPath = ""

@@ -65,11 +65,15 @@ func start():
 		if OS.has_feature("standalone") == false:
 			#yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
-			open_map("D:/DungeonKeeper/levels/personal/map00002.slb")
+			open_map("D:/Dungeon Keeper/levels/personal/map00002.slb")
 			pass
 		else:
 			# initialize a cleared map
 			oCurrentMap.clear_map()
+			
+			for i in 2:
+				yield(get_tree(),'idle_frame')
+			oMapBrowser._on_BrowseMapsMenu_pressed()
 
 func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
