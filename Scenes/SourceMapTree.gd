@@ -47,8 +47,8 @@ func deep_scan(rootPath, parentTreeItem):
 
 func add_directory_contents(dir, treeItem):
 	var fileName = dir.get_next()
-	
 	var pathsToSort = []
+	var itemsToAdd = []  # Temporary list to batch add items
 	
 	while (fileName != ""):
 		var pathString = dir.get_current_dir().plus_file(fileName)
@@ -60,19 +60,23 @@ func add_directory_contents(dir, treeItem):
 	
 	for i in pathsToSort:
 		var pathString = i[0]
-		
-		if i[1] == true: # Is a directory
-			# Directory
-			
-			var newTreeItem = add_tree_dir(self, treeItem, pathString)
-			
+		if i[1] == true:  # Is a directory
+			itemsToAdd.append(["dir", pathString, treeItem])
+		else:
+			itemsToAdd.append(["file", pathString, treeItem])
+	
+    # Now, add the items to the Tree in one batch
+	for itemData in itemsToAdd:
+		var itemType = itemData[0]
+		var pathString = itemData[1]
+		var parentItem = itemData[2]
+		if itemType == "dir":
+			var newTreeItem = add_tree_dir(self, parentItem, pathString)
 			var subDir = Directory.new()
 			subDir.open(pathString)
 			subDir.list_dir_begin(true, false)
 			add_directory_contents(subDir, newTreeItem)
-			#subDir.list_dir_end()
-		else:
-			# File
+		elif itemType == "file":
 			var EXT = pathString.get_extension().to_upper()
 			if EXT == "SLB":
 				var newTreeItem = add_tree_file(self,treeItem, pathString)
@@ -82,7 +86,6 @@ func add_directory_contents(dir, treeItem):
 				LIF_WANTS_TO_GIVE_NAME(pathString)
 			elif EXT == "LOF":
 				LOF_WANTS_TO_GIVE_NAME(pathString)
-			
 
 class MyCustomSorter:
 	static func sort_ascending(a, b):

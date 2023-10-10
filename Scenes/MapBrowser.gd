@@ -31,11 +31,10 @@ func _on_BrowseMapsMenu_pressed():
 		false: popup()
 
 func _on_MapBrowser_about_to_show():
+	yield(get_tree(),'idle_frame')
 	oSourceMapTree.update_source_tree()
-	
 	oDynamicMapTree.update_dynamic_tree()
 	
-	yield(get_tree(), "idle_frame") #Needs to be here for grab focus to work
 	oLineEditFilter.grab_focus()
 
 func _on_DynamicMapTree_item_activated():

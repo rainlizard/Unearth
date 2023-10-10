@@ -8,9 +8,9 @@ var include_files = []
 var output_root_dir
 var theExportFeatures
 
-func _export_begin(features, is_debug, path, flags):
+func _export_begin(features, is_debug, export_path, flags):
 	theExportFeatures = features
-	output_root_dir = path.get_base_dir()
+	output_root_dir = export_path.get_base_dir()
 	
 	# Export all the PNGs in /thing-images/
 	for i in dir_contents("res://unearthdata/custom-object-images/"):
@@ -79,7 +79,7 @@ func dir_contents(path):
 
 func zip_it_up(folder_to_zip_up):
 	var createFileName
-	if theExportFeatures.has("Windows") == true:
+	if theExportFeatures.has("Windows") == true: # On 3.5, it's capitalized "Windows", on 4.0 it's lowercase "windows"
 		createFileName = "Unearth v" + Constants.VERSION + ".zip"
 	else:
 		createFileName = "UnearthLinux v" + Constants.VERSION + ".zip"
