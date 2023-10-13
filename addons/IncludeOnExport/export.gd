@@ -19,8 +19,8 @@ func _export_begin(features, is_debug, export_path, flags):
 func _export_end():
 	print("Unearth v" + Constants.VERSION)
 	
-	if OS.get_name() == "Windows":
-		zip_it_up(output_root_dir)
+#	if OS.get_name() == "Windows":
+#		zip_it_up(output_root_dir)
 
 func _export_file(path, type, features):
 	#print(path)
@@ -77,42 +77,42 @@ func dir_contents(path):
 		print("An error occurred when trying to access the path.")
 	return array
 
-func zip_it_up(folder_to_zip_up):
-	var createFileName
-	if theExportFeatures.has("Windows") == true: # On 3.5, it's capitalized "Windows", on 4.0 it's lowercase "windows"
-		createFileName = "Unearth v" + Constants.VERSION + ".zip"
-	else:
-		createFileName = "UnearthLinux v" + Constants.VERSION + ".zip"
-	
-	var output_zip_filepath = folder_to_zip_up.get_base_dir().plus_file(createFileName)
-	
-	# Create new zip file
-	run_minizip(folder_to_zip_up, output_zip_filepath)
-	
-	# Delete the directory we zipped up
-	#delete_files_and_folders(source_folder_path)
-	
-	# Open the directory of the zip file we created
-	OS.shell_open(folder_to_zip_up.get_base_dir())
+#func zip_it_up(folder_to_zip_up):
+#	var createFileName
+#	if theExportFeatures.has("Windows") == true: # On 3.5, it's capitalized "Windows", on 4.0 it's lowercase "windows"
+#		createFileName = "Unearth v" + Constants.VERSION + ".zip"
+#	else:
+#		createFileName = "UnearthLinux v" + Constants.VERSION + ".zip"
+#
+#	var output_zip_filepath = folder_to_zip_up.get_base_dir().plus_file(createFileName)
+#
+#	# Create new zip file
+#	run_minizip(folder_to_zip_up, output_zip_filepath)
+#
+#	# Delete the directory we zipped up
+#	#delete_files_and_folders(source_folder_path)
+#
+#	# Open the directory of the zip file we created
+#	OS.shell_open(folder_to_zip_up.get_base_dir())
 
-func run_minizip(folder_to_zip_up: String, output_zip_filepath: String):
-	print("output_zip_filepath: " + output_zip_filepath)
-	print("folder_to_zip_up: " + folder_to_zip_up)
-	
-    # Construct the command in parts for clarity
-	var command = ""
-	command += "cd /d \"" + folder_to_zip_up.get_base_dir() + "\""
-	command += " && "
-	command += ProjectSettings.globalize_path("res://addons/IncludeOnExport/minizip.exe") + " -o -i \"" + output_zip_filepath.get_base_dir().plus_file(output_zip_filepath.get_file()) + "\" \"" + folder_to_zip_up.get_file() + "\""
-	print(command)
-	
-	var output = Array()
-	var err_output = Array()
-	var exit_code = OS.execute("cmd.exe", ["/C", command], true, output)
-
-	if exit_code == 0:
-		print("Minizip executed successfully")
-		#print("Output: ", output)
-	else:
-		print("Minizip execution failed")
-		#print("Error output: ", output)
+#func run_minizip(folder_to_zip_up: String, output_zip_filepath: String):
+#	print("output_zip_filepath: " + output_zip_filepath)
+#	print("folder_to_zip_up: " + folder_to_zip_up)
+#
+#    # Construct the command in parts for clarity
+#	var command = ""
+#	command += "cd /d \"" + folder_to_zip_up.get_base_dir() + "\""
+#	command += " && "
+#	command += ProjectSettings.globalize_path("res://addons/IncludeOnExport/minizip.exe") + " -o -i \"" + output_zip_filepath.get_base_dir().plus_file(output_zip_filepath.get_file()) + "\" \"" + folder_to_zip_up.get_file() + "\""
+#	print(command)
+#
+#	var output = Array()
+#	var err_output = Array()
+#	var exit_code = OS.execute("cmd.exe", ["/C", command], true, output)
+#
+#	if exit_code == 0:
+#		print("Minizip executed successfully")
+#		#print("Output: ", output)
+#	else:
+#		print("Minizip execution failed")
+#		#print("Error output: ", output)
