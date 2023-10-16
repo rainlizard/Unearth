@@ -29,6 +29,10 @@ jobs:
         unzip Godot_v${{ env.GODOT_VERSION }}-stable_linux_headless.64.zip
         unzip Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
 
+        # Moving the export templates to the expected directory
+        mkdir -p ~/.local/share/godot/templates/${{ env.GODOT_VERSION }}.stable/
+        mv templates/* ~/.local/share/godot/templates/${{ env.GODOT_VERSION }}.stable/
+
         # Making Godot executable and exporting the game
         chmod +x Godot_v${{ env.GODOT_VERSION }}-stable_linux_headless.64
         ./Godot_v${{ env.GODOT_VERSION }}-stable_linux_headless.64 --export "Linux/X11" my_game_linux.x86_64
