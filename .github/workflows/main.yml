@@ -53,7 +53,7 @@ jobs:
 
     - name: Download Godot Icon Script
       run: |
-        wget https://raw.githubusercontent.com/pkowal1982/godoticon/master/ReplaceIcon.gd
+        wget https://github.com/pkowal1982/godoticon/blob/3.x/ReplaceIcon.gd
 
     - name: Replace Icon in Windows Export
       run: |
