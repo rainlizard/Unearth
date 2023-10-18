@@ -27,26 +27,29 @@ jobs:
 
     - name: Prepare Directories
       run: |
-        mkdir -p ./bin/UnearthLinux/ ./bin/Unearth/
-        rm -rf ./bin/UnearthLinux/* ./bin/Unearth/*
+        # Cleanup previous exports
+        rm -rf ./bin/*
+        
+        # Prepare directories for game exports
+        mkdir -p ./bin/ExportLinux/UnearthLinux/ ./bin/ExportWindows/Unearth/
 
     - name: Export Godot Game (Linux)
-      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" bin/UnearthLinux/Unearth.x86_64
+      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" ./bin/ExportLinux/UnearthLinux/Unearth.x86_64
+
+    - name: Export Godot Game (Windows)
+      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" ./bin/ExportWindows/Unearth/Unearth.exe
+
+    - name: Replace Icon in Windows Export
+      run: ./Godot_v3.5.3-stable_linux_headless.64 -s Art/ReplaceIcon.gd Art/UnearthIcon.ico ./bin/ExportWindows/Unearth/Unearth.exe
 
     - name: Upload Linux Artifacts
       uses: actions/upload-artifact@v2
       with:
         name: UnearthLinux
-        path: ./bin/UnearthLinux/
-
-    - name: Export Godot Game (Windows)
-      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" bin/Unearth/Unearth.exe
-
-    - name: Replace Icon in Windows Export
-      run: ./Godot_v3.5.3-stable_linux_headless.64 -s Art/ReplaceIcon.gd Art/UnearthIcon.ico bin/Unearth/Unearth.exe
+        path: ./bin/ExportLinux/
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Unearth
-        path: ./bin/Unearth/
+        name: UnearthWindows
+        path: ./bin/ExportWindows/
