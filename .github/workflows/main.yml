@@ -17,6 +17,9 @@ jobs:
 
     - name: Export Godot Game (Linux)
       run: |
+        echo "Current directory: $(pwd)" # Debug: Print the current directory
+        ls -al # Debug: List all files and directories
+
         # Downloading Godot executable and templates
         wget https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_linux_headless.64.zip
         wget https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_export_templates.tpz
@@ -33,6 +36,8 @@ jobs:
         chmod +x Godot_v3.5.3-stable_linux_headless.64
         ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" bin/UnearthLinux/Unearth.x86_64
 
+        ls -al bin/UnearthLinux/ # Debug: List files in the output directory
+
     - name: Upload Linux Artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -48,6 +53,9 @@ jobs:
   
     - name: Export Godot Game (Windows)
       run: |
+        echo "Current directory: $(Get-Location)" # Debug: Print the current directory using PowerShell
+        Get-ChildItem -Path ./ # Debug: List all files in the current directory
+
         # Downloading Godot executable and templates using PowerShell
         Invoke-WebRequest -Uri https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_win64.exe.zip -OutFile godot_win.zip
         Invoke-WebRequest -Uri https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_export_templates.tpz -OutFile templates.tpz
@@ -59,8 +67,7 @@ jobs:
         # Exporting the game
         ./Godot_v3.5.3-stable_win64.exe --export "Windows Desktop" bin/Unearth/Unearth.exe
         
-        # Diagnostic logging: list all files in the current directory
-        Get-ChildItem -Path ./
+        Get-ChildItem -Path ./bin/Unearth/ # Debug: List files in the output directory
     
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v2
