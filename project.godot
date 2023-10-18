@@ -70,7 +70,7 @@ window/dpi/allow_hidpi=true
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/GDScriptMacros/plugin.cfg", "res://addons/IncludeOnExport/plugin.cfg", "res://addons/SingletonScriptsShortcut/plugin.cfg", "res://addons/UnearthEditorPlugin/plugin.cfg", "res://addons/godot-plugin-refresher/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/GDScriptMacros/plugin.cfg", "res://addons/SingletonScriptsShortcut/plugin.cfg", "res://addons/UnearthEditorPlugin/plugin.cfg", "res://addons/godot-plugin-refresher/plugin.cfg" )
 
 [gd2cs]
 
