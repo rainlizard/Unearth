@@ -61,6 +61,9 @@ jobs:
         Invoke-WebRequest -Uri https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_export_templates.tpz -OutFile templates.tpz
   
         # Unzipping downloaded files
+        # Move the export templates to the expected directory for Godot on Windows
+        New-Item -Path $Env:APPDATA\Godot\templates\3.5.3.stable -ItemType Directory -Force
+        Move-Item -Path templates\* $Env:APPDATA\Godot\templates\3.5.3.stable\
         Expand-Archive -Path godot_win.zip -DestinationPath ./
         Expand-Archive -Path templates.tpz -DestinationPath ./
   
