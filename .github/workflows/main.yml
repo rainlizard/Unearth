@@ -19,7 +19,8 @@ jobs:
       run: |
         wget -q https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_linux_headless.64.zip
         wget -q https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_export_templates.tpz
-        unzip -q '*.zip' '*.tpz'
+        unzip -q Godot_v3.5.3-stable_linux_headless.64.zip
+        unzip -q Godot_v3.5.3-stable_export_templates.tpz
         mkdir -p ~/.local/share/godot/templates/3.5.3.stable/
         mv templates/* ~/.local/share/godot/templates/3.5.3.stable/
         chmod +x Godot_v3.5.3-stable_linux_headless.64
