@@ -62,7 +62,10 @@ jobs:
   
         # Exporting the game
         ./Godot_v${{ env.GODOT_VERSION }}-stable_win64.exe --path "${{ github.workspace }}" --export "Windows Desktop" my_game_windows.exe
-  
+        
+        # Diagnostic logging: list all files in the current directory
+        Get-ChildItem -Path ./
+    
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v2
       with:
