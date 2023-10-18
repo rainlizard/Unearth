@@ -58,7 +58,7 @@ jobs:
     - name: Set Exe Icon and Version Info
       run: |
         # Construct the file version
-        $version = "1.0.$env:GITHUB_RUN_NUMBER.0"
+        $version = "0.0.0.$env:GITHUB_RUN_NUMBER"
         ./rcedit.exe ./bin/Unearth/Unearth.exe --set-icon ./Art/UnearthIcon.ico
         ./rcedit.exe ./bin/Unearth/Unearth.exe --set-file-version $version
 
