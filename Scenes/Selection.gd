@@ -168,28 +168,28 @@ func construct_shape_for_placement(constructType):
 				shapePositionArray.append(newPos)
 		CONSTRUCT_FILL:
 			var beginTile = oSelector.world2tile(get_global_mouse_position())
-		    
-		    # Prevent clicking outside
+			
+			# Prevent clicking outside
 			if beginTile.x < oEditor.fieldBoundary.position.x: return
 			if beginTile.x > oEditor.fieldBoundary.end.x-1: return
 			if beginTile.y < oEditor.fieldBoundary.position.y: return
 			if beginTile.y > oEditor.fieldBoundary.end.y-1: return
-		    
+			
 			var coordsToCheck = [beginTile]
 			var fillTargetID = oSelector.get_slabID_at_pos(oSelector.cursorTile)
 			var checkedCoords = {}  # Use a dictionary to mimic set behavior for checked coordinates
-		    
+			
 			var preventFillingBorder = false
 			if fillTargetID == Slabs.ROCK:
 				preventFillingBorder = true
 			
 			while coordsToCheck.size() > 0:
 				var coord = coordsToCheck.pop_back()
-		        
+				
 				if coord in checkedCoords: # Skip if already checked
 					continue
 				checkedCoords[coord] = true
-		        
+				
 				if preventFillingBorder:
 					if coord.x < oEditor.fieldBoundary.position.x: continue
 					if coord.x > oEditor.fieldBoundary.end.x-1: continue
@@ -198,7 +198,7 @@ func construct_shape_for_placement(constructType):
 				
 				if oSelector.get_slabID_at_pos(coord) == fillTargetID:
 					shapePositionArray.append(coord)
-		            
+					
 					var neighbors = [coord + Vector2(0,1), coord + Vector2(0,-1), coord + Vector2(1,0), coord + Vector2(-1,0)]
 					for neighbor in neighbors:
 						if not checkedCoords.has(neighbor):

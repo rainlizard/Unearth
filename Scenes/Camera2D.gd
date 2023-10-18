@@ -29,31 +29,31 @@ func _ready():
 	reset_camera(M.xSize, M.ySize)
 
 func reset_camera(x, y):
-    # Add 2 units for the border
-    x += 2
-    y += 2
-    
-    # Calculate the width and height of the map in pixels
-    var mapWidthInPixels = x * 96
-    var mapHeightInPixels = y * 96
+	# Add 2 units for the border
+	x += 2
+	y += 2
+	
+	# Calculate the width and height of the map in pixels
+	var mapWidthInPixels = x * 96
+	var mapHeightInPixels = y * 96
 
-    # Center the camera on the map, adjusting for the border
-    offset = Vector2(mapWidthInPixels, mapHeightInPixels) * Vector2(0.5, 0.5) - Vector2(96, 96)  # Subtracting one unit (96 pixels) to center the map with the border
-    desired_offset = offset
+	# Center the camera on the map, adjusting for the border
+	offset = Vector2(mapWidthInPixels, mapHeightInPixels) * Vector2(0.5, 0.5) - Vector2(96, 96)  # Subtracting one unit (96 pixels) to center the map with the border
+	desired_offset = offset
 
-    # Determine the zoom levels required to fit the map's width and height within the viewport
-    var zoomForWidth = mapWidthInPixels / OS.window_size.x
-    var zoomForHeight = mapHeightInPixels / OS.window_size.y
+	# Determine the zoom levels required to fit the map's width and height within the viewport
+	var zoomForWidth = mapWidthInPixels / OS.window_size.x
+	var zoomForHeight = mapHeightInPixels / OS.window_size.y
 
-    # Set the zoom level to the maximum of the two calculated zoom levels to ensure the entire map fits within the viewport
-    var initialZoom = max(zoomForWidth, zoomForHeight) * Settings.UI_SCALE.y
-    zoom = Vector2(initialZoom, initialZoom)
-    desired_zoom = zoom
+	# Set the zoom level to the maximum of the two calculated zoom levels to ensure the entire map fits within the viewport
+	var initialZoom = max(zoomForWidth, zoomForHeight) * Settings.UI_SCALE.y
+	zoom = Vector2(initialZoom, initialZoom)
+	desired_zoom = zoom
 
-    # Notify other nodes about the zoom level change
-    yield(get_tree(), 'idle_frame')
-    for id in get_tree().get_nodes_in_group("Thing"):
-        id._on_zoom_level_changed(zoom)
+	# Notify other nodes about the zoom level change
+	yield(get_tree(), 'idle_frame')
+	for id in get_tree().get_nodes_in_group("Thing"):
+		id._on_zoom_level_changed(zoom)
 
 
 

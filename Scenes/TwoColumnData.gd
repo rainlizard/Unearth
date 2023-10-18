@@ -286,7 +286,7 @@ func _on_optionbutton_item_selected(indexSelected, leftString):
 	var inst = oInspector.inspectingInstance
 	var property_name = ""
 	var value
-    
+	
 	match leftString:
 		"Ownership":
 			oSelection.paintOwnership = indexSelected

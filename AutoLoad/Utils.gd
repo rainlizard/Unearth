@@ -21,8 +21,8 @@ func _ready():
 	noSpecialCharsRegex.compile("[^a-zA-Z0-9]")
 
 func strip_special_chars_from_string(input_string: String) -> String:
-    var output_string = noSpecialCharsRegex.sub(input_string, "", true)
-    return output_string
+	var output_string = noSpecialCharsRegex.sub(input_string, "", true)
+	return output_string
 
 func strip_letters_from_string(string):
 	for character in string:

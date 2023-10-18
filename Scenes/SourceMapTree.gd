@@ -65,7 +65,7 @@ func add_directory_contents(dir, treeItem):
 		else:
 			itemsToAdd.append(["file", pathString, treeItem])
 	
-    # Now, add the items to the Tree in one batch
+	# Now, add the items to the Tree in one batch
 	for itemData in itemsToAdd:
 		var itemType = itemData[0]
 		var pathString = itemData[1]

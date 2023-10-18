@@ -15,20 +15,20 @@ var pointNumber = null setget set_pointNumber
 var data7 = null
 
 func set_location_x(setVal):
-    if locationX != null and locationY != null:
-        remove_from_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
-    locationX = setVal
-    position.x = locationX * 32
-    if locationX != null and locationY != null:
-        add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+	if locationX != null and locationY != null:
+		remove_from_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+	locationX = setVal
+	position.x = locationX * 32
+	if locationX != null and locationY != null:
+		add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
 
 func set_location_y(setVal):
-    if locationX != null and locationY != null:
-        remove_from_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
-    locationY = setVal
-    position.y = locationY * 32
-    if locationX != null and locationY != null:
-        add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+	if locationX != null and locationY != null:
+		remove_from_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+	locationY = setVal
+	position.y = locationY * 32
+	if locationX != null and locationY != null:
+		add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
 
 func set_location_z(setVal): # This is actually unused for action points, but its presence fixes errors
 	locationZ = setVal
