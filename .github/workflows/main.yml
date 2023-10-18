@@ -7,10 +7,6 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
-env:
-  GODOT_VERSION: '3.5.3'
-  GODOT_URL_BASE: 'https://downloads.tuxfamily.org/godotengine/'
-
 jobs:
   linux_build:
     runs-on: ubuntu-latest
@@ -22,26 +18,26 @@ jobs:
     - name: Export Godot Game (Linux)
       run: |
         # Downloading Godot executable and templates
-        wget ${{ env.GODOT_URL_BASE }}${{ env.GODOT_VERSION }}/Godot_v${{ env.GODOT_VERSION }}-stable_linux_headless.64.zip
-        wget ${{ env.GODOT_URL_BASE }}${{ env.GODOT_VERSION }}/Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
+        wget https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_linux_headless.64.zip
+        wget https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_export_templates.tpz
 
         # Unzipping downloaded files
-        unzip Godot_v${{ env.GODOT_VERSION }}-stable_linux_headless.64.zip
-        unzip Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz
+        unzip Godot_v3.5.3-stable_linux_headless.64.zip
+        unzip Godot_v3.5.3-stable_export_templates.tpz
 
         # Moving the export templates to the expected directory
-        mkdir -p ~/.local/share/godot/templates/${{ env.GODOT_VERSION }}.stable/
-        mv templates/* ~/.local/share/godot/templates/${{ env.GODOT_VERSION }}.stable/
+        mkdir -p ~/.local/share/godot/templates/3.5.3.stable/
+        mv templates/* ~/.local/share/godot/templates/3.5.3.stable/
 
         # Making Godot executable and exporting the game
-        chmod +x Godot_v${{ env.GODOT_VERSION }}-stable_linux_headless.64
-        ./Godot_v${{ env.GODOT_VERSION }}-stable_linux_headless.64 --export "Linux/X11" my_game_linux.x86_64
+        chmod +x Godot_v3.5.3-stable_linux_headless.64
+        ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" bin/UnearthLinux/Unearth.x86_64
 
     - name: Upload Linux Artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: my_game_linux
-        path: ./my_game_linux.x86_64
+        name: UnearthLinux
+        path: ./bin/UnearthLinux/Unearth.x86_64
 
   windows_build:
     runs-on: windows-latest
@@ -53,15 +49,15 @@ jobs:
     - name: Export Godot Game (Windows)
       run: |
         # Downloading Godot executable and templates using PowerShell
-        Invoke-WebRequest -Uri ${{ env.GODOT_URL_BASE }}${{ env.GODOT_VERSION }}/Godot_v${{ env.GODOT_VERSION }}-stable_win64.exe.zip -OutFile godot_win.zip
-        Invoke-WebRequest -Uri ${{ env.GODOT_URL_BASE }}${{ env.GODOT_VERSION }}/Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz -OutFile templates.tpz
+        Invoke-WebRequest -Uri https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_win64.exe.zip -OutFile godot_win.zip
+        Invoke-WebRequest -Uri https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_export_templates.tpz -OutFile templates.tpz
   
         # Unzipping downloaded files
         Expand-Archive -Path godot_win.zip -DestinationPath ./
         Expand-Archive -Path templates.tpz -DestinationPath ./
   
         # Exporting the game
-        ./Godot_v${{ env.GODOT_VERSION }}-stable_win64.exe --path "${{ github.workspace }}" --export "Windows Desktop" my_game_windows.exe
+        ./Godot_v3.5.3-stable_win64.exe --export "Windows Desktop" bin/Unearth/Unearth.exe
         
         # Diagnostic logging: list all files in the current directory
         Get-ChildItem -Path ./
@@ -69,5 +65,5 @@ jobs:
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: my_game_windows
-        path: ./my_game_windows.exe
+        name: Unearth
+        path: ./bin/Unearth/Unearth.exe
