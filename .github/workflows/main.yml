@@ -51,13 +51,9 @@ jobs:
         ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" bin/Unearth/Unearth.exe
         ls -al bin/Unearth/ # Debug: List files in the output directory
 
-    - name: Download Godot Icon Script
-      run: |
-        wget https://raw.githubusercontent.com/pkowal1982/godoticon/3.x/ReplaceIcon.gd
-
     - name: Replace Icon in Windows Export
       run: |
-        ./Godot_v3.5.3-stable_linux_headless.64 -s ReplaceIcon.gd Art/UnearthIcon.ico bin/Unearth/Unearth.exe
+        ./Godot_v3.5.3-stable_linux_headless.64 -s Art/ReplaceIcon.gd Art/UnearthIcon.ico bin/Unearth/Unearth.exe
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v2
