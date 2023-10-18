@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup Godot and Export Templates
       run: |
@@ -40,13 +40,13 @@ jobs:
       run: ./Godot_v3.5.3-stable_linux_headless.64 -s Art/ReplaceIcon.gd Art/UnearthIcon.ico ./bin/ExportWindows/Unearth/Unearth.exe
 
     - name: Upload Linux Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: UnearthLinux
         path: ./bin/ExportLinux/
 
     - name: Upload Windows Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: UnearthWindows
         path: ./bin/ExportWindows/
