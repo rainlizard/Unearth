@@ -1,4 +1,4 @@
-name: Unearth Automatic Builds
+name: Automatic builds
 
 on:
   push:
