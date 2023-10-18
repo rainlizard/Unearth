@@ -51,18 +51,6 @@ jobs:
         ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" bin/Unearth/Unearth.exe
         ls -al bin/Unearth/ # Debug: List files in the output directory
 
-    - name: Download rcedit
-      run: |
-        wget https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe -O rcedit.exe
-        chmod +x rcedit.exe
-
-    - name: Set Exe Icon and Version Info
-      run: |
-        # Construct the file version based on commit count
-        version="0.0.0.$(git rev-list --count HEAD)"
-        ./rcedit.exe ./bin/Unearth/Unearth.exe --set-icon ./Art/UnearthIcon.ico
-        ./rcedit.exe ./bin/Unearth/Unearth.exe --set-file-version $version
-
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v2
       with:
