@@ -53,12 +53,13 @@ jobs:
 
     - name: Download rcedit
       run: |
-        Invoke-WebRequest -Uri https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe -OutFile rcedit.exe
+        wget https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe -O rcedit.exe
+        chmod +x rcedit.exe
 
     - name: Set Exe Icon and Version Info
       run: |
-        # Construct the file version
-        $version = "0.0.0.$env:GITHUB_RUN_NUMBER"
+        # Construct the file version based on commit count
+        version="0.0.0.$(git rev-list --count HEAD)"
         ./rcedit.exe ./bin/Unearth/Unearth.exe --set-icon ./Art/UnearthIcon.ico
         ./rcedit.exe ./bin/Unearth/Unearth.exe --set-file-version $version
 
