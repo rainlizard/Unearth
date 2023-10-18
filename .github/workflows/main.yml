@@ -8,14 +8,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  linux_build:
+  game_build:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Export Godot Game (Linux)
+    - name: Setup Godot and Export Templates
       run: |
         echo "Current directory: $(pwd)" # Debug: Print the current directory
         ls -al # Debug: List all files and directories
@@ -32,10 +32,12 @@ jobs:
         mkdir -p ~/.local/share/godot/templates/3.5.3.stable/
         mv templates/* ~/.local/share/godot/templates/3.5.3.stable/
 
-        # Making Godot executable and exporting the game
+        # Making Godot executable
         chmod +x Godot_v3.5.3-stable_linux_headless.64
-        ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" bin/UnearthLinux/Unearth.x86_64
 
+    - name: Export Godot Game (Linux)
+      run: |
+        ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" bin/UnearthLinux/Unearth.x86_64
         ls -al bin/UnearthLinux/ # Debug: List files in the output directory
 
     - name: Upload Linux Artifacts
@@ -44,39 +46,13 @@ jobs:
         name: UnearthLinux
         path: ./bin/UnearthLinux/Unearth.x86_64
 
-  windows_build:
-    runs-on: windows-latest
-  
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-  
     - name: Export Godot Game (Windows)
       run: |
-        echo "Current directory: $(Get-Location)" # Debug: Print the current directory using PowerShell
-        Get-ChildItem -Path ./ # Debug: List all files in the current directory
-  
-        # Downloading Godot executable and templates using PowerShell
-        Invoke-WebRequest -Uri https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_win64.exe.zip -OutFile godot_win.zip
-        Invoke-WebRequest -Uri https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_export_templates.tpz -OutFile templates.tpz
-  
-        # Prepare the directory for Godot templates
-        New-Item -Path $Env:APPDATA\Godot\templates\3.5.3.stable -ItemType Directory -Force
-        
-        # Unzipping downloaded files
-        Expand-Archive -Path godot_win.zip -DestinationPath ./
-        Expand-Archive -Path templates.tpz -DestinationPath ./templates/
-  
-        # Move the export templates to the expected directory for Godot on Windows
-        Move-Item -Path templates\* $Env:APPDATA\Godot\templates\3.5.3.stable\
-  
-        # Exporting the game
-        ./Godot_v3.5.3-stable_win64.exe --export "Windows Desktop" bin/Unearth/Unearth.exe
-        
-        Get-ChildItem -Path ./bin/Unearth/ # Debug: List files in the output directory
-  
+        ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" bin/Unearth/Unearth.exe
+        ls -al bin/Unearth/ # Debug: List files in the output directory
+
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Unearth
+        name: UnearthWindows
         path: ./bin/Unearth/Unearth.exe
