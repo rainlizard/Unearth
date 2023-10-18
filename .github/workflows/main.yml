@@ -53,7 +53,7 @@ jobs:
 
     - name: Replace Icon in Windows Export
       run: |
-        ./Godot_v3.5.3-stable_linux_headless.64 -s ReplaceIcon.gd Art/UnearthIcon.ico bin/Unearth/Unearth.exe
+        ./Godot_v3.5.3-stable_linux_headless.64 -s Art/ReplaceIcon.gd Art/UnearthIcon.ico bin/Unearth/Unearth.exe
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v2
