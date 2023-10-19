@@ -40,8 +40,7 @@ _global_script_class_icons={
 
 config/name="Unearth"
 run/main_scene="res://Scenes/Main.tscn"
-boot_splash/image="abcdefg"
-boot_splash/bg_color=Color( 0, 0, 0, 0 )
+boot_splash/image="Skip-loading-screen"
 config/icon="res://Art/UnearthIcon.png"
 config/windows_native_icon="res://Art/UnearthIcon.ico"
 
