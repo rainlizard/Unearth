@@ -12,6 +12,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Extract Version & Determine Patch
+      id: version_info
+      run: |
+        MAJOR_MINOR=$(grep "const VERSION" Autoload/Constants.gd | awk -F\" '{print $2}')
+        PATCH=$(git rev-list --count HEAD)
+        FULL_VERSION="$MAJOR_MINOR.$PATCH"
+        echo "::set-output name=FULL_VERSION::$FULL_VERSION"
+
     - name: Setup Godot and Export Templates
       run: |
         wget -q https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_linux_headless.64.zip
@@ -24,11 +32,8 @@ jobs:
 
     - name: Prepare Directories
       run: |
-        # Cleanup previous exports
-        rm -rf ./bin/*
-        
-        # Prepare directories for game exports
-        mkdir -p ./bin/ExportLinux/UnearthLinux/ ./bin/ExportWindows/Unearth/
+        rm -rf ./bin
+        mkdir -p ./bin/ExportLinux/UnearthLinux ./bin/ExportWindows/Unearth
 
     - name: Export Godot Game (Linux)
       run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" ./bin/ExportLinux/UnearthLinux/Unearth.x86_64
@@ -36,17 +41,17 @@ jobs:
     - name: Export Godot Game (Windows)
       run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" ./bin/ExportWindows/Unearth/Unearth.exe
 
-    - name: Replace Icon in Windows Export
-      run: ./Godot_v3.5.3-stable_linux_headless.64 -s Art/ReplaceIcon.gd Art/UnearthIcon.ico ./bin/ExportWindows/Unearth/Unearth.exe
+#    - name: Replace Icon in Windows Export
+#      run: ./Godot_v3.5.3-stable_linux_headless.64 -s Art/ReplaceIcon.gd Art/UnearthIcon.ico ./bin/ExportWindows/Unearth/Unearth.exe
 
     - name: Upload Linux Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: UnearthLinux
+        name: UnearthLinux-${{ steps.version_info.outputs.FULL_VERSION }}
         path: ./bin/ExportLinux/
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: UnearthWindows
+        name: UnearthWindows-${{ steps.version_info.outputs.FULL_VERSION }}
         path: ./bin/ExportWindows/
