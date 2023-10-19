@@ -33,25 +33,25 @@ jobs:
     - name: Prepare Directories
       run: |
         rm -rf ./bin
-        mkdir -p ./bin/ExportLinux/UnearthLinux ./bin/ExportWindows/Unearth
+        mkdir -p ./bin/ExportLinux ./bin/ExportWindows
 
     - name: Export Godot Game (Linux)
-      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" ./bin/ExportLinux/UnearthLinux/Unearth.x86_64
+      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" ./bin/ExportLinux/unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.x86_64
 
     - name: Export Godot Game (Windows)
-      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" ./bin/ExportWindows/Unearth/Unearth.exe
+      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" ./bin/ExportWindows/unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.exe
 
-#    - name: Replace Icon in Windows Export
-#      run: ./Godot_v3.5.3-stable_linux_headless.64 -s Art/ReplaceIcon.gd Art/UnearthIcon.ico ./bin/ExportWindows/Unearth/Unearth.exe
+    - name: Replace Icon in Windows Export
+      run: ./Godot_v3.5.3-stable_linux_headless.64 -s Art/ReplaceIcon.gd Art/UnearthIcon.ico ./bin/ExportWindows/unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.exe
 
     - name: Upload Linux Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: UnearthLinux-${{ steps.version_info.outputs.FULL_VERSION }}
+        name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux
         path: ./bin/ExportLinux/
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: UnearthWindows-${{ steps.version_info.outputs.FULL_VERSION }}
+        name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
         path: ./bin/ExportWindows/
