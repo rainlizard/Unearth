@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  game_build:
+  build_application:
     runs-on: ubuntu-latest
 
     steps:
