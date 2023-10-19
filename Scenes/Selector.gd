@@ -60,7 +60,6 @@ var preventClickWhenFocusing = false
 enum {MODE_TILE, MODE_SUBTILE}
 var mode = MODE_TILE
 
-
 func _ready():
 	change_mode(MODE_TILE)
 
@@ -98,43 +97,46 @@ func mouse_button_on_field():
 	
 	# Initial on-press button
 	if Input.is_action_just_pressed("mouse_left"):
-		draggingInstance = false
+		match mode:
+			MODE_TILE:
+				match oEditingTools.TOOL_SELECTED:
+					oEditingTools.RECTANGLE:
+						oRectangleSelection.set_initial_position(cursorTile)
+					oEditingTools.PAINTBUCKET:
+						oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_FILL)
+			MODE_SUBTILE:
+				draggingInstance = false
+				
+				var youClickedOnAnAlreadyInspectedThing = false
+				if oInspector.inspectorSubtile.floor() == cursorSubtile.floor():
+					if is_instance_valid(oInspector.inspectingInstance):
+						youClickedOnAnAlreadyInspectedThing = true
+				
+				if Input.is_action_pressed("place_overlapping"):
+					canPlace = true
+				
+				# Check if something is under the cursor and initiate dragging
+				# If you're clicking on an inspected subtile, then drag the inspected object. (helps with stacked objects))
+				
+				var thingAtCursor
+				
+				if youClickedOnAnAlreadyInspectedThing == true:
+					thingAtCursor = oInspector.inspectingInstance
+					oInspector.deselect()
+				else:
+					thingAtCursor = instance_position(get_global_mouse_position(), "Instance")
+				if is_instance_valid(thingAtCursor):
+					holdClickOnInstance = thingAtCursor
+					drag_init_relative_pos = thingAtCursor.global_position - get_global_mouse_position()
+				
+				if youClickedOnAnAlreadyInspectedThing == false:
+					if oSelection.cursorOnInstancesArray.empty() == false:
+						if is_instance_valid(oSelection.cursorOnInstancesArray[0]) == true:
+							oInspector.inspect_something(oSelection.cursorOnInstancesArray[0])
+					else:
+						oInspector.deselect()
 		
-		var youClickedOnAnAlreadyInspectedThing = false
-		if oInspector.inspectorSubtile.floor() == cursorSubtile.floor():
-			if is_instance_valid(oInspector.inspectingInstance):
-				youClickedOnAnAlreadyInspectedThing = true
-		
-		if Input.is_action_pressed("place_overlapping"):
-			canPlace = true
-		
-		# Check if something is under the cursor and initiate dragging
-		# If you're clicking on an inspected subtile, then drag the inspected object. (helps with stacked objects))
-		
-		var thingAtCursor
-		if youClickedOnAnAlreadyInspectedThing == true:
-			thingAtCursor = oInspector.inspectingInstance
-			oInspector.deselect()
-		else:
-			thingAtCursor = instance_position(get_global_mouse_position(), "Instance")
-		if is_instance_valid(thingAtCursor):
-			holdClickOnInstance = thingAtCursor
-			drag_init_relative_pos = thingAtCursor.global_position - get_global_mouse_position()
-		
-		if youClickedOnAnAlreadyInspectedThing == false:
-			if oSelection.cursorOnInstancesArray.empty() == false and mode == MODE_SUBTILE:
-				if is_instance_valid(oSelection.cursorOnInstancesArray[0]) == true:
-					oInspector.inspect_something(oSelection.cursorOnInstancesArray[0])
-			else:
-				oInspector.deselect()
-		
-		match oEditingTools.TOOL_SELECTED:
-			oEditingTools.RECTANGLE:
-				oRectangleSelection.set_initial_position(cursorTile)
-			oEditingTools.PAINTBUCKET:
-				if mode == MODE_TILE:
-					oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_FILL)
-				pass
+
 	
 	# Holding down button
 	if Input.is_action_pressed("mouse_left"):
