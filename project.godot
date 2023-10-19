@@ -47,16 +47,16 @@ config/windows_native_icon="res://Art/UnearthIcon.ico"
 
 [autoload]
 
-Slabs="*res://AutoLoad/Slabs.gd"
-Random="*res://AutoLoad/Random.gd"
-Constants="*res://AutoLoad/Constants.gd"
-Cube="*res://AutoLoad/Cube.gd"
-Settings="*res://AutoLoad/Settings.gd"
-Things="*res://AutoLoad/Things.gd"
-Nodelist="*res://AutoLoad/Nodelist.gd"
-Utils="*res://AutoLoad/Utils.gd"
-Filetypes="*res://AutoLoad/Filetypes.gd"
-M="*res://AutoLoad/M.gd"
+Slabs="*res://Autoload/Slabs.gd"
+Random="*res://Autoload/Random.gd"
+Constants="*res://Autoload/Constants.gd"
+Cube="*res://Autoload/Cube.gd"
+Settings="*res://Autoload/Settings.gd"
+Things="*res://Autoload/Things.gd"
+Nodelist="*res://Autoload/Nodelist.gd"
+Utils="*res://Autoload/Utils.gd"
+Filetypes="*res://Autoload/Filetypes.gd"
+M="*res://Autoload/M.gd"
 
 [debug]
 
