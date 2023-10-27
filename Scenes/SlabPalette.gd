@@ -382,7 +382,7 @@ func test_write_to_file(data):
 #				rngColumnsCubes[RNG_ENUM].append(addCubes)
 #				rngColumnsFloor[RNG_ENUM].append(addFloor)
 
-func create_keeperfx_cfg_columns(filePath): #"res://columns.cfg"
+func create_cfg_columns(filePath): #"res://columns.cfg"
 	var textFile = File.new()
 	if textFile.open(filePath, File.WRITE) == OK:
 	
@@ -405,7 +405,7 @@ func create_keeperfx_cfg_columns(filePath): #"res://columns.cfg"
 	else:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
-func create_keeperfx_cfg_slab_autotile_data(filePath): #"res://slab_autotile_data.cfg"
+func create_cfg_slabset(filePath): #"res://slabset.cfg"
 	var textFile = File.new()
 	if textFile.open(filePath, File.WRITE) == OK:
 		var slabSection = 0
@@ -421,18 +421,21 @@ func create_keeperfx_cfg_slab_autotile_data(filePath): #"res://slab_autotile_dat
 			if slabID >= 42:
 				variationCount = 8
 			
+			textFile.store_line('[slab' + str(slabID) + ']')
+			
 			for variationNumber in variationCount:
 				if variationStart + variationNumber < oDkDat.dat.size():
 					#var beginLine = get_dir_text(variationNumber) + ' = '
 					textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + ']')
 					textFile.store_line('columns = ' + String(oDkDat.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
 				
+				var objectNumber = 0
 				var hasObjects = false
 				for i in oDkTng.tngObject.size():
 					if oDkTng.tngObject[i][1] == variationStart + variationNumber: #VariationIndex
 						textFile.store_line("\r")
 						hasObjects = true
-						textFile.store_line('[[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '.objects]]')
+						textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '.object' + str(objectNumber) + ']')
 						for z in 9:
 							var val = oDkTng.tngObject[i][z]
 							var beginLine = ''
@@ -451,6 +454,7 @@ func create_keeperfx_cfg_slab_autotile_data(filePath): #"res://slab_autotile_dat
 							beginLine += ' = '
 							
 							textFile.store_line(beginLine + String(val))
+						objectNumber += 1
 				
 				if hasObjects == false:
 					textFile.store_line('objects = []')
@@ -462,7 +466,7 @@ func create_keeperfx_cfg_slab_autotile_data(filePath): #"res://slab_autotile_dat
 			slabSection += 1
 		
 		textFile.close()
-		oMessage.quick("Saved: " + filePath)
+		oMessage.quick("aaaaa Saved: " + filePath)
 	else:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 

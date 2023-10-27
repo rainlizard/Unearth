@@ -187,8 +187,8 @@ func convert_img_to_two_texture_arrays(img):
 	var ySlices = 34
 	var sliceWidth = 32 #img.get_width() / xSlices;
 	var sliceHeight = 32 #img.get_height() / ySlices;
-	twoTextureArrays[0].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS)
-	twoTextureArrays[1].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS)
+	twoTextureArrays[0].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS+TextureLayered.FLAG_ANISOTROPIC_FILTER)
+	twoTextureArrays[1].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS+TextureLayered.FLAG_ANISOTROPIC_FILTER)
 	
 	for i in 2:
 		var yOffset = 0

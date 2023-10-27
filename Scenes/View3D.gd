@@ -22,3 +22,7 @@ func create_material(map):
 	mat.set_shader_param("dkTextureMap_Split_B", oTextureCache.cachedTextures[map][1])
 	mat.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
 	return mat
+
+func enable_or_disable_mipmaps_on_all_materials(enabled): # set to 0 or 1
+	for mat in materialArray:
+		mat.set_shader_param("use_mipmaps", enabled)

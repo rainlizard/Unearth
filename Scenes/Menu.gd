@@ -36,6 +36,7 @@ onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oDkClm = Nodelist.list["oDkClm"]
+onready var oExportPreview = Nodelist.list["oExportPreview"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -171,8 +172,9 @@ func _on_FileSubmenu_Pressed(pressedID):
 		5: Utils.popup_centered(oFileDialogSaveAs) # Save as
 		6: Utils.popup_centered(oConfirmDiscardChanges) # Reload map
 		7: Utils.popup_centered(oImageAsMapDialog) # Load image as map
-		8: oPreferencesWindow._on_ButtonSettings_pressed()
-		9: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
+		8: Utils.popup_centered(oExportPreview) # Export preview
+		9: oPreferencesWindow._on_ButtonSettings_pressed()
+		10: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:

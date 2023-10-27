@@ -6,6 +6,8 @@ onready var oHead = Nodelist.list["oHead"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oMenu = Nodelist.list["oMenu"]
+onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 
 var mouseSensitivity = 0.1
 var direction = Vector3()
@@ -28,7 +30,7 @@ onready var oCamera2D = $'../../Game2D/Camera2D'
 
 func switch_camera_type(type):
 	velocity = Vector3(0,0,0) # stop moving
-	
+
 	if type == 0: # 3D overhead orthogonal
 		if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
 			rememberPerspective = [transform, oHead.transform, oCamera3D.transform]
@@ -38,18 +40,15 @@ func switch_camera_type(type):
 				oCamera3D.transform = rememberOrthogonal[2]
 			else:
 				# Default orthogonal camera position and rotation
-				rotation_degrees.y = -135
-				rotation_degrees.x = -45
-				oHead.rotation_degrees.x = 0
-				translation.x = 0#0
-				translation.y = 60
-				translation.z = 0#0
-		
+				rotation_degrees = Vector3(-45, -135, 0) #Vector2(270, 45, 0)
+				oHead.rotation_degrees = Vector3(0, 0, 0)
+				translation = Vector3(0,60,0)
+
 		oCamera3D.size = translation.y
-		
+
 		oCamera3D.set_orthogonal(oCamera3D.size, 0.01, 8192)
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	
+
 	if type == 1: # 3D 1st person perspective
 		if oCamera3D.projection == Camera.PROJECTION_ORTHOGONAL:
 			rememberOrthogonal = [transform, oHead.transform, oCamera3D.transform]
@@ -57,7 +56,7 @@ func switch_camera_type(type):
 				transform = rememberPerspective[0]
 				oHead.transform = rememberPerspective[1]
 				oCamera3D.transform = rememberPerspective[2]
-		
+
 		oCamera3D.set_perspective(oCamera3D.fov, 0.01, 8192)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 

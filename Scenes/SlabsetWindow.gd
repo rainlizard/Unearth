@@ -222,9 +222,9 @@ func _on_ExportColumnsCfg_pressed():
 	oExportColumnCfgDialog.current_file = "columns.cfg"
 
 func _on_ExportSlabsetCfgDialog_file_selected(filePath):
-	oSlabPalette.create_keeperfx_cfg_slab_autotile_data(filePath)
+	oSlabPalette.create_cfg_slabset(filePath)
 func _on_ExportColumnCfgDialog_file_selected(filePath):
-	oSlabPalette.create_keeperfx_cfg_columns(filePath)
+	oSlabPalette.create_cfg_columns(filePath)
 
 func _on_ExportSlabsetDatDialog_file_selected(filePath):
 	var buffer = StreamPeerBuffer.new()

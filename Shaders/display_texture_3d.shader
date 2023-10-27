@@ -3,6 +3,8 @@ render_mode blend_mix, cull_back, depth_draw_opaque, skip_vertex_transform; //fo
 uniform sampler2DArray dkTextureMap_Split_A;
 uniform sampler2DArray dkTextureMap_Split_B;
 
+uniform int use_mipmaps = 1;
+
 uniform bool useFullSizeMap = true;
 uniform sampler2D animationDatabase;
 varying vec4 worldPos;
@@ -47,8 +49,8 @@ void fragment() {
 		index = getAnimationFrame(frame, (index-544) );
 	}
 	
-	
-	float mipmapLevel = calc_mip_level(UV * vec2(8.0,68.0));
+	//mipmapLevel 0.0 is way sharper
+	float mipmapLevel = calc_mip_level(UV * vec2(8.0,68.0)) * float(use_mipmaps);
 	
 	if (index < 272) { // Splitting the TextureArray into 2, so that it will work on older PCs.
 		ALBEDO = textureLod(dkTextureMap_Split_A, vec3(UV.x, UV.y, float(index)), mipmapLevel).rgb;
