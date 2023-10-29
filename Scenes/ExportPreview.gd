@@ -4,6 +4,11 @@ onready var oSavePreviewMipmapsCheckbox = Nodelist.list["oSavePreviewMipmapsChec
 onready var oSavePreviewPngButton = Nodelist.list["oSavePreviewPngButton"]
 onready var oSavePreviewTrimBlackCheckbox = Nodelist.list["oSavePreviewTrimBlackCheckbox"]
 onready var oSavePreviewMsaaSlider = Nodelist.list["oSavePreviewMsaaSlider"]
+onready var oPreviewResizeGridContainer = Nodelist.list["oPreviewResizeGridContainer"]
+onready var oSavePreviewResizeCheckBox = Nodelist.list["oSavePreviewResizeCheckBox"]
+onready var oPreviewWidthSpinBox = Nodelist.list["oPreviewWidthSpinBox"]
+onready var oPreviewHeightSpinBox = Nodelist.list["oPreviewHeightSpinBox"]
+onready var oPreviewZoom = Nodelist.list["oPreviewZoom"]
 
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
@@ -18,8 +23,22 @@ onready var oUiSystem = Nodelist.list["oUiSystem"]
 onready var oUiTools = Nodelist.list["oUiTools"]
 onready var oUi3D = Nodelist.list["oUi3D"]
 onready var oGame3D = Nodelist.list["oGame3D"]
+onready var oPreviewRotX = Nodelist.list["oPreviewRotX"]
+onready var oPreviewRotY = Nodelist.list["oPreviewRotY"]
+onready var oPreviewRotZ = Nodelist.list["oPreviewRotZ"]
+#onready var oTerrainMesh = Nodelist.list["oTerrainMesh"]
+#onready var oPivotTerrainMesh = Nodelist.list["oPivotTerrainMesh"]
 
+var previewRotation = Vector3(-45, 45, 0)
+var zoomAdjust = 20
 var remember_original_msaa
+
+func _ready():
+	oPreviewRotX.value = previewRotation.x
+	oPreviewRotY.value = previewRotation.y
+	oPreviewRotZ.value = previewRotation.z
+	oPreviewZoom.value = zoomAdjust
+	get_viewport().connect("size_changed",self, "_on_viewport_size_changed")
 
 func _on_ExportPreview_about_to_show():
 	# Store the previous MSAA value
@@ -39,6 +58,9 @@ func _on_ExportPreview_about_to_show():
 	_on_SavePreviewMipmapsCheckbox_toggled(oSavePreviewMipmapsCheckbox.pressed)
 	_on_SavePreviewMsaaSlider_sliderChanged()
 	set_basic_camera_stuff()
+	
+	rect_position = Vector2(0,0)
+	
 
 func _on_ExportPreview_hide():
 	if is_instance_valid(oEditor) and modulate.a == 1.0:
@@ -49,21 +71,32 @@ func _on_ExportPreview_hide():
 		oUi3D.visible = true
 		oGame3D.enable_or_disable_mipmaps_on_all_materials(1)
 		get_viewport().msaa = remember_original_msaa
+		#oPivotTerrainMesh.translation = Vector3(0,0,0)
+		#oTerrainMesh.translation = Vector3(0,0,0)
+		oPlayer.oHead.translation = Vector3(0,0,0)
 
 func set_basic_camera_stuff():
+	oCamera3D.set_orthogonal(oCamera3D.size, -1000000, 1000000)
 	# Set camera
 	oPlayer.velocity = Vector3(0, 0, 0) # stop moving
-	oCamera3D.projection = Camera.PROJECTION_ORTHOGONAL
 
-	var terrain_size = Vector2(M.xSize * 3, M.ySize * 3)
-	var terrain_center = terrain_size / 2.0
-
+	var terrain_size = Vector3(M.xSize * 3, 8, M.ySize * 3)
+	var terrain_center:Vector3 = terrain_size/2.0
+	
+	#oTerrainMesh.translation = -terrain_center
+	#oPivotTerrainMesh.translation = Vector3(-terrain_center.x, 0, -terrain_center.y)
+	
 	# Orthogonal camera position and rotation
-	oPlayer.rotation_degrees = Vector3(270, 0, 0) #Vector2(270, 45, 0)
-	oPlayer.oHead.rotation_degrees = Vector3(0, 0, 0)
+	oPlayer.translation = terrain_center
+	oPlayer.oHead.translation = Vector3(0, 0, 0)
+	
+	oPlayer.rotation_degrees = Vector3(0, 0, 0) # -45 is not the same as 270!
+	oPlayer.oHead.rotation_degrees = previewRotation
+	
+	calculate_zoom()
 
-	oPlayer.translation = Vector3(terrain_center.x, 100, terrain_center.y)
-
+func calculate_zoom():
+	var terrain_size = Vector3(M.xSize * 3, 8, M.ySize * 3)
 	# Calculate the window's aspect ratio
 	var window_aspect_ratio = OS.window_size.x / OS.window_size.y
 
@@ -71,9 +104,9 @@ func set_basic_camera_stuff():
 	if window_aspect_ratio > 1:  # Landscape mode
 		oCamera3D.size = terrain_size.x * window_aspect_ratio
 	else:  # Portrait mode
-		oCamera3D.size = terrain_size.y
-	
-	oCamera3D.set_orthogonal(oCamera3D.size, 0.01, 8192)
+		oCamera3D.size = terrain_size.z
+	oCamera3D.size += zoomAdjust
+
 
 func _on_SavePreviewPngButton_pressed():
 	Utils.popup_centered(oExportPreviewPngDialog)
@@ -98,7 +131,10 @@ func _on_ExportPreviewPngDialog_file_selected(save_path):
 		img = trim_image(img)
 	
 	# Resize to new size
-	#trimmed_img.resize(256, 256, Image.INTERPOLATE_LANCZOS)
+	if oSavePreviewResizeCheckBox.pressed == true:
+		var trimmed_aspect_ratio = float(img.get_width()) / float(img.get_height())
+		var new_width = int(oPreviewHeightSpinBox.value * trimmed_aspect_ratio)
+		img.resize(new_width, oPreviewHeightSpinBox.value, Image.INTERPOLATE_LANCZOS)
 	
 	# Save as a PNG file
 	img.save_png(save_path)
@@ -160,3 +196,65 @@ func _on_SavePreviewMipmapsCheckbox_toggled(button_pressed):
 		oGame3D.enable_or_disable_mipmaps_on_all_materials(1)
 	else:
 		oGame3D.enable_or_disable_mipmaps_on_all_materials(0)
+
+
+#func adjust_rotation():
+#	terrainRot += Vector3(0,0,0)
+#	oPlayer.rotation_degrees = terrainRot
+
+func _on_PreviewRotX_value_changed(value):
+	previewRotation.x = value
+	update_rot()
+
+func _on_PreviewRotY_value_changed(value):
+	previewRotation.y = value
+	update_rot()
+
+func _on_PreviewRotZ_value_changed(value):
+	previewRotation.z = value
+	update_rot()
+
+func update_rot():
+	oPlayer.oHead.rotation_degrees = previewRotation
+
+
+func _on_SavePreviewResizeCheckBox_toggled(button_pressed):
+	if button_pressed == true:
+		oPreviewResizeGridContainer.visible = true
+	else:
+		oPreviewResizeGridContainer.visible = false
+
+
+func _on_PreviewWidthSpinBox_value_changed(value):
+	pass # Replace with function body.
+
+
+func _on_PreviewHeightSpinBox_value_changed(value):
+	pass # Replace with function body.
+
+
+func _on_PreviewPreset1Button_pressed():
+	oPreviewRotX.value = 270
+	oPreviewRotY.value = 0
+	oPreviewRotZ.value = 0
+	oPreviewZoom.value = 0
+	oSavePreviewMipmapsCheckbox.pressed = true
+	oSavePreviewMsaaSlider.value = Viewport.MSAA_16X
+	calculate_zoom() # Do this anyway
+
+
+func _on_PreviewPreset2Button_pressed():
+	oPreviewRotX.value = -45
+	oPreviewRotY.value = 45
+	oPreviewRotZ.value = 0
+	oPreviewZoom.value = 20
+	oSavePreviewMipmapsCheckbox.pressed = true
+	oSavePreviewMsaaSlider.value = Viewport.MSAA_16X
+	calculate_zoom() # Do this anyway
+
+func _on_PreviewZoom_value_changed(value):
+	zoomAdjust = value
+	calculate_zoom()
+
+func _on_viewport_size_changed():
+	calculate_zoom()

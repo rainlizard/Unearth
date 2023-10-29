@@ -1,4 +1,4 @@
-[gd_scene load_steps=173 format=2]
+[gd_scene load_steps=174 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -151,6 +151,7 @@
 [ext_resource path="res://Scenes/MirrorOptions.gd" type="Script" id=149]
 [ext_resource path="res://Shaders/brightenbrush.shader" type="Shader" id=150]
 [ext_resource path="res://Scenes/ExportPreview.gd" type="Script" id=151]
+[ext_resource path="res://Scenes/SpinBoxPropertiesValue.tscn" type="PackedScene" id=152]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -5771,9 +5772,9 @@ theme = ExtResource( 17 )
 [node name="ExportPreview" type="WindowDialog" parent="Ui/UiPreviewExporter"]
 visible = true
 margin_left = 40.0
-margin_top = 1384.0
+margin_top = 1072.0
 margin_right = 426.0
-margin_bottom = 1628.0
+margin_bottom = 1522.0
 rect_min_size = Vector2( 386, 244 )
 window_title = "Export preview"
 resizable = true
@@ -5793,39 +5794,205 @@ custom_constants/margin_bottom = 20
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 366.0
-margin_bottom = 224.0
+margin_bottom = 430.0
+
+[node name="HSeparator5" type="HSeparator" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
+margin_right = 346.0
+margin_bottom = 1.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
+margin_top = 5.0
+margin_right = 346.0
+margin_bottom = 32.0
+
+[node name="PreviewPreset1Button" type="Button" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 79.0
+margin_bottom = 27.0
+text = "Preset 1"
+
+[node name="PreviewPreset2Button" type="Button" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 83.0
+margin_right = 166.0
+margin_bottom = 27.0
+text = "Preset 2"
+
+[node name="HSeparator3" type="HSeparator" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 346.0
+margin_bottom = 37.0
+
+[node name="GridContainer2" type="GridContainer" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
+margin_top = 41.0
+margin_right = 346.0
+margin_bottom = 177.0
+columns = 2
+
+[node name="Label" type="Label" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2"]
+margin_top = 5.0
+margin_right = 75.0
+margin_bottom = 26.0
+text = "Rotate X"
+
+[node name="PreviewRotX" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2" instance=ExtResource( 152 )]
+margin_left = 272.0
+margin_right = 346.0
+margin_bottom = 31.0
+size_flags_horizontal = 10
+min_value = -1e+10
+max_value = 1e+10
+allow_greater = true
+allow_lesser = true
+
+[node name="Label2" type="Label" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2"]
+margin_top = 40.0
+margin_right = 75.0
+margin_bottom = 61.0
+text = "Rotate Y"
+
+[node name="PreviewRotY" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2" instance=ExtResource( 152 )]
+margin_left = 272.0
+margin_top = 35.0
+margin_right = 346.0
+margin_bottom = 66.0
+size_flags_horizontal = 10
+min_value = -1e+10
+max_value = 1e+10
+allow_greater = true
+allow_lesser = true
+
+[node name="Label3" type="Label" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2"]
+margin_top = 75.0
+margin_right = 75.0
+margin_bottom = 96.0
+text = "Rotate Z"
+
+[node name="PreviewRotZ" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2" instance=ExtResource( 152 )]
+margin_left = 272.0
+margin_top = 70.0
+margin_right = 346.0
+margin_bottom = 101.0
+size_flags_horizontal = 10
+min_value = -1e+10
+max_value = 1e+10
+allow_greater = true
+allow_lesser = true
+
+[node name="Label4" type="Label" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2"]
+margin_top = 110.0
+margin_right = 75.0
+margin_bottom = 131.0
+text = "Zoom"
+
+[node name="PreviewZoom" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2" instance=ExtResource( 152 )]
+margin_left = 272.0
+margin_top = 105.0
+margin_right = 346.0
+margin_bottom = 136.0
+hint_tooltip = "Pressing ALT+Enter can also help with framing the screenshot"
+size_flags_horizontal = 10
+min_value = -1e+10
+max_value = 1e+10
+allow_greater = true
+allow_lesser = true
+
+[node name="HSeparator4" type="HSeparator" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
+margin_top = 181.0
+margin_right = 346.0
+margin_bottom = 182.0
 
 [node name="SavePreviewMsaaSlider" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer" instance=ExtResource( 135 )]
-margin_top = 0.0
+margin_top = 186.0
 margin_right = 346.0
-margin_bottom = 41.0
+margin_bottom = 227.0
 label_setting = "MSAA"
 max_value = 4.0
 step = 1.0
 value = 4.0
 
 [node name="SavePreviewMipmapsCheckbox" type="CheckBox" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
-margin_top = 45.0
+margin_top = 231.0
 margin_right = 110.0
-margin_bottom = 74.0
+margin_bottom = 260.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
+pressed = true
 text = "Mipmaps"
 
+[node name="HSeparator" type="HSeparator" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
+margin_top = 264.0
+margin_right = 346.0
+margin_bottom = 265.0
+
 [node name="SavePreviewTrimBlackCheckbox" type="CheckBox" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
-margin_top = 78.0
+margin_top = 269.0
 margin_right = 180.0
-margin_bottom = 107.0
+margin_bottom = 298.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 pressed = true
 text = "Trim black edges"
 
+[node name="SavePreviewResizeCheckBox" type="CheckBox" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
+margin_top = 302.0
+margin_right = 346.0
+margin_bottom = 331.0
+hint_tooltip = "Warning: resolutions larger than the window will be stretched"
+pressed = true
+text = "Resize"
+
+[node name="PreviewResizeGridContainer" type="GridContainer" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
+margin_top = 335.0
+margin_right = 346.0
+margin_bottom = 366.0
+columns = 2
+
+[node name="Label" type="Label" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/PreviewResizeGridContainer"]
+visible = false
+margin_top = 5.0
+margin_right = 171.0
+margin_bottom = 26.0
+text = "Width"
+
+[node name="PreviewWidthSpinBox" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/PreviewResizeGridContainer" instance=ExtResource( 152 )]
+visible = false
+margin_left = 97.0
+margin_right = 171.0
+margin_bottom = 31.0
+size_flags_horizontal = 10
+min_value = 1.0
+max_value = 4096.0
+value = 512.0
+rounded = true
+allow_greater = true
+
+[node name="Label2" type="Label" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/PreviewResizeGridContainer"]
+margin_top = 5.0
+margin_right = 161.0
+margin_bottom = 26.0
+text = "Resolution height"
+
+[node name="PreviewHeightSpinBox" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/PreviewResizeGridContainer" instance=ExtResource( 152 )]
+margin_left = 272.0
+margin_right = 346.0
+margin_bottom = 31.0
+hint_tooltip = "Note: width is automated"
+size_flags_horizontal = 10
+min_value = 1.0
+max_value = 4096.0
+value = 512.0
+rounded = true
+allow_greater = true
+
+[node name="HSeparator2" type="HSeparator" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
+margin_top = 370.0
+margin_right = 346.0
+margin_bottom = 371.0
+
 [node name="SavePreviewPngButton" type="Button" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer"]
 margin_left = 107.0
-margin_top = 177.0
+margin_top = 383.0
 margin_right = 238.0
-margin_bottom = 204.0
+margin_bottom = 410.0
 size_flags_horizontal = 4
 size_flags_vertical = 10
 text = "Save .png file"
@@ -6128,7 +6295,16 @@ script = SubResource( 20 )
 [connection signal="about_to_show" from="Ui/UiPreviewExporter/ExportPreview" to="Ui/UiPreviewExporter/ExportPreview" method="_on_ExportPreview_about_to_show"]
 [connection signal="hide" from="Ui/UiPreviewExporter/ExportPreview" to="Ui/UiPreviewExporter/ExportPreview" method="_on_ExportPreview_hide"]
 [connection signal="modal_closed" from="Ui/UiPreviewExporter/ExportPreview" to="Ui/UiPreviewExporter/ExportPreview" method="_on_ExportPreview_modal_closed"]
+[connection signal="pressed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/HBoxContainer/PreviewPreset1Button" to="Ui/UiPreviewExporter/ExportPreview" method="_on_PreviewPreset1Button_pressed"]
+[connection signal="pressed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/HBoxContainer/PreviewPreset2Button" to="Ui/UiPreviewExporter/ExportPreview" method="_on_PreviewPreset2Button_pressed"]
+[connection signal="value_changed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2/PreviewRotX" to="Ui/UiPreviewExporter/ExportPreview" method="_on_PreviewRotX_value_changed"]
+[connection signal="value_changed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2/PreviewRotY" to="Ui/UiPreviewExporter/ExportPreview" method="_on_PreviewRotY_value_changed"]
+[connection signal="value_changed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2/PreviewRotZ" to="Ui/UiPreviewExporter/ExportPreview" method="_on_PreviewRotZ_value_changed"]
+[connection signal="value_changed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/GridContainer2/PreviewZoom" to="Ui/UiPreviewExporter/ExportPreview" method="_on_PreviewZoom_value_changed"]
 [connection signal="sliderChanged" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/SavePreviewMsaaSlider" to="Ui/UiPreviewExporter/ExportPreview" method="_on_SavePreviewMsaaSlider_sliderChanged"]
 [connection signal="toggled" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/SavePreviewMipmapsCheckbox" to="Ui/UiPreviewExporter/ExportPreview" method="_on_SavePreviewMipmapsCheckbox_toggled"]
+[connection signal="toggled" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/SavePreviewResizeCheckBox" to="Ui/UiPreviewExporter/ExportPreview" method="_on_SavePreviewResizeCheckBox_toggled"]
+[connection signal="value_changed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/PreviewResizeGridContainer/PreviewWidthSpinBox" to="Ui/UiPreviewExporter/ExportPreview" method="_on_PreviewWidthSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/PreviewResizeGridContainer/PreviewHeightSpinBox" to="Ui/UiPreviewExporter/ExportPreview" method="_on_PreviewHeightSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/SavePreviewPngButton" to="Ui/UiPreviewExporter/ExportPreview" method="_on_SavePreviewPngButton_pressed"]
 [connection signal="file_selected" from="Ui/UiPreviewExporter/ExportPreviewPngDialog" to="Ui/UiPreviewExporter/ExportPreview" method="_on_ExportPreviewPngDialog_file_selected"]
