@@ -74,6 +74,7 @@ var listOfSettings = [
 	"chance_effect_water",
 	"chance_effect_lava",
 	"auto_open_map_settings",
+	"fortify",
 	# These four are read inside Viewport script
 #	"editor_window_position",
 #	"editor_window_size",
@@ -393,6 +394,10 @@ func game_setting(doWhat,string,value):
 			var oCheckBoxNewMapAutoOpensMapSettings = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/CheckBoxNewMapAutoOpensMapSettings'
 			if doWhat == SET: oCheckBoxNewMapAutoOpensMapSettings.pressed = value
 			if doWhat == GET: return oCheckBoxNewMapAutoOpensMapSettings.pressed
+		"fortify":
+			var oFortifyCheckBox = $"../Main/Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/FortifyCheckBox"
+			if doWhat == SET: oFortifyCheckBox.pressed = value
+			if doWhat == GET: return oFortifyCheckBox.pressed
 
 func delete_settings():
 	var dir = Directory.new()

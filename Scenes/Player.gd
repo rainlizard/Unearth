@@ -84,14 +84,16 @@ func _input(event):
 		if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
 			translation.y -= 3
 		else: #Camera.PROJECTION_ORTHOGONAL
-			translation.y -= 9
-			oCamera3D.size = translation.y
+			pass
+			#translation.y -= 9
+			#oCamera3D.size = translation.y
 	if Input.is_action_just_pressed("zoom_out"):
 		if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
 			translation.y += 3
 		else: #Camera.PROJECTION_ORTHOGONAL
-			translation.y += 9
-			oCamera3D.size = translation.y
+			pass
+			#translation.y += 9
+			#oCamera3D.size = translation.y
 
 func _process(delta):
 	if oEditor.currentView != oEditor.VIEW_3D: return

@@ -10,7 +10,7 @@ onready var oAdvancedMapPropertiesCheckBox = Nodelist.list["oAdvancedMapProperti
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oAdvancedMapProperties = Nodelist.list["oAdvancedMapProperties"]
-
+onready var oMapSizeTextLabel = Nodelist.list["oMapSizeTextLabel"]
 onready var oMapNameLineEdit = Nodelist.list["oMapNameLineEdit"]
 onready var oNameIDLineEdit = Nodelist.list["oNameIDLineEdit"]
 onready var oKindLineEdit = Nodelist.list["oKindLineEdit"]
@@ -22,8 +22,6 @@ onready var oSpeechLineEdit = Nodelist.list["oSpeechLineEdit"]
 onready var oLandViewLineEdit = Nodelist.list["oLandViewLineEdit"]
 onready var oAuthorLineEdit = Nodelist.list["oAuthorLineEdit"]
 onready var oDescriptionLineEdit = Nodelist.list["oDescriptionLineEdit"]
-onready var oSettingsXSizeLine = Nodelist.list["oSettingsXSizeLine"]
-onready var oSettingsYSizeLine = Nodelist.list["oSettingsYSizeLine"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oKindOptionButton = Nodelist.list["oKindOptionButton"]
 
@@ -60,8 +58,7 @@ func _on_MapProperties_visibility_changed():
 		oLandViewLineEdit.text = oDataLof.LAND_VIEW
 		oAuthorLineEdit.text = oDataLof.AUTHOR
 		oDescriptionLineEdit.text = oDataLof.DESCRIPTION
-		oSettingsXSizeLine.text = str(M.xSize)
-		oSettingsYSizeLine.text = str(M.ySize)
+		oMapSizeTextLabel.text = str(M.xSize) + " x " + str(M.ySize)
 		
 		# Resizing feature isn't implemented, so do not allow changing map format back if you've adjusted size
 		if M.xSize != 85 or M.ySize != 85:

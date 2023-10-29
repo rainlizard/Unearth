@@ -163,3 +163,7 @@ func _on_PlacingTipsButton_pressed():
 	buildPlacingString += "Check the controls in Help -> Controls for more."
 	oMessage.big("Placing tips", buildPlacingString)
 	Settings.set_setting("placing_tutorial", false)
+
+
+func _on_FortifyCheckBox_toggled(button_pressed):
+	Settings.set_setting("fortify", button_pressed)

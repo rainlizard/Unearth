@@ -9,6 +9,7 @@ onready var oSavePreviewResizeCheckBox = Nodelist.list["oSavePreviewResizeCheckB
 onready var oPreviewWidthSpinBox = Nodelist.list["oPreviewWidthSpinBox"]
 onready var oPreviewHeightSpinBox = Nodelist.list["oPreviewHeightSpinBox"]
 onready var oPreviewZoom = Nodelist.list["oPreviewZoom"]
+onready var oTooHighResErrorLabel = Nodelist.list["oTooHighResErrorLabel"]
 
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
@@ -34,6 +35,7 @@ var zoomAdjust = 20
 var remember_original_msaa
 
 func _ready():
+	oTooHighResErrorLabel.visible = false
 	oPreviewRotX.value = previewRotation.x
 	oPreviewRotY.value = previewRotation.y
 	oPreviewRotZ.value = previewRotation.z
@@ -60,7 +62,6 @@ func _on_ExportPreview_about_to_show():
 	set_basic_camera_stuff()
 	
 	rect_position = Vector2(0,0)
-	
 
 func _on_ExportPreview_hide():
 	if is_instance_valid(oEditor) and modulate.a == 1.0:
@@ -105,7 +106,12 @@ func calculate_zoom():
 		oCamera3D.size = terrain_size.x * window_aspect_ratio
 	else:  # Portrait mode
 		oCamera3D.size = terrain_size.z
-	oCamera3D.size += zoomAdjust
+	
+	if oCamera3D.size+zoomAdjust >= 0.001 and oCamera3D.size+zoomAdjust <= 16384: # Fixes an error with Camera Size.
+		oCamera3D.size += zoomAdjust
+	
+	if oPreviewHeightSpinBox.value > OS.window_size.y:
+		oPreviewHeightSpinBox.value = OS.window_size.y
 
 
 func _on_SavePreviewPngButton_pressed():
@@ -228,9 +234,15 @@ func _on_SavePreviewResizeCheckBox_toggled(button_pressed):
 func _on_PreviewWidthSpinBox_value_changed(value):
 	pass # Replace with function body.
 
-
 func _on_PreviewHeightSpinBox_value_changed(value):
-	pass # Replace with function body.
+	if value > OS.window_size.y:
+		# Set it to the maximum possible value (which is Window Height)
+		oPreviewHeightSpinBox.value = OS.window_size.y
+		# Show an error message
+		if OS.window_fullscreen == false:
+			oTooHighResErrorLabel.show()
+	else:
+		oTooHighResErrorLabel.hide()
 
 
 func _on_PreviewPreset1Button_pressed():

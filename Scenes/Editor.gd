@@ -12,6 +12,7 @@ onready var oEditingMode = Nodelist.list["oEditingMode"]
 onready var oEditableBordersCheckbox = Nodelist.list["oEditableBordersCheckbox"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oConfirmSaveBeforeQuit = Nodelist.list["oConfirmSaveBeforeQuit"]
+onready var oExportPreview = Nodelist.list["oExportPreview"]
 
 enum {
 	VIEW_2D = 0
@@ -44,6 +45,8 @@ func _unhandled_input(event):
 				if foundDialogToClose == false:
 					notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 			VIEW_3D:
+				if oExportPreview.visible == true:
+					oExportPreview.hide()
 				set_view_2d()
 	
 	if currentView == VIEW_3D:

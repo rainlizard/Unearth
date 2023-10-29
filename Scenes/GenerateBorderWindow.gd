@@ -375,3 +375,7 @@ func apply_symmetry():
 				imageData.set_pixel(x, y, Color(0,0,0,1))
 	
 	imageData.unlock()
+
+
+func _on_ResizeApplyButton_pressed():
+	pass # Replace with function body.
