@@ -15,6 +15,8 @@ onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 onready var oDkDat = Nodelist.list["oDkDat"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
+onready var oConfirmDeleteCustomSlab = Nodelist.list["oConfirmDeleteCustomSlab"]
+
 
 
 onready var oSelectedRect = $Clippy/SelectedRect
@@ -233,13 +235,16 @@ func _on_slab_portrait_gui_input(event, id):
 	if event.is_action_pressed("mouse_right"):
 		var slabID = id.get_meta("ID_of_slab")
 		if slabID >= 1000:
-			oCustomSlabSystem.remove_custom_slab(slabID)
-			
-			for child in current_grid_container().get_children():
-				if child.get_meta("ID_of_slab") == slabID:
-					child.queue_free()
-			
+			Utils.popup_centered(oConfirmDeleteCustomSlab)
+			oConfirmDeleteCustomSlab.set_meta("ID_TO_DELETE", slabID)
 			_on_hovered_none()
 
 func rect_changed_start_timer():
 	rectChangedTimer.start(0.2)
+
+func _on_ConfirmDeleteCustomSlab_confirmed():
+	var slabID = oConfirmDeleteCustomSlab.get_meta("ID_TO_DELETE")
+	for child in tabs[Slabs.TAB_CUSTOM][GRIDCON_PATH].get_children():
+		if child.has_meta("ID_of_slab") and child.get_meta("ID_of_slab") == slabID:
+			child.queue_free()
+	oCustomSlabSystem.remove_custom_slab(slabID)

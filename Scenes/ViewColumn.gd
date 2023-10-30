@@ -40,14 +40,14 @@ func update_details():
 #				oColumnListData.clear()
 #				return
 	
-	if oColumnEditor.visible == true:
-		if oColumnEditorVoxelView.visible == true:
-			entryIndex = oColumnEditorVoxelView.viewObject
-		if oCustomSlabVoxelView.visible == true:
-			if is_instance_valid(get_focus_owner()):
-				if is_instance_valid(get_focus_owner().get_parent()):
-					if get_focus_owner().get_parent() is SpinBox:
-						entryIndex = get_focus_owner().get_parent().value
+#	if oColumnEditor.visible == true:
+#		if oColumnEditorVoxelView.visible == true:
+#			entryIndex = oColumnEditorVoxelView.viewObject
+#		if oCustomSlabVoxelView.visible == true:
+#			if is_instance_valid(get_focus_owner()):
+#				if is_instance_valid(get_focus_owner().get_parent()):
+#					if get_focus_owner().get_parent() is SpinBox:
+#						entryIndex = get_focus_owner().get_parent().value
 	
 	for i in 16:
 		var description
