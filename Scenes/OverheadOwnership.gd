@@ -48,8 +48,9 @@ func start():
 	slabOwnershipImage.lock()
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
-			var setValue = Constants.ownerRoomCol[oDataOwnership.get_cell(xSlab,ySlab)]
-			slabOwnershipImage.set_pixel(xSlab, ySlab, setValue)
+			var getOwner = oDataOwnership.get_cell(xSlab,ySlab)
+			if getOwner <= 5:
+				slabOwnershipImage.set_pixel(xSlab, ySlab, Constants.ownerRoomCol[getOwner])
 	slabOwnershipImage.unlock()
 	
 	slabOwnershipTexture.create_from_image(slabOwnershipImage, 0)

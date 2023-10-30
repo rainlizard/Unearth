@@ -37,6 +37,7 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oDkClm = Nodelist.list["oDkClm"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
+onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -182,12 +183,14 @@ func _on_EditSubmenu_Pressed(pressedID):
 			Utils.popup_centered(oColumnEditor)
 		1: # Custom objects
 			Utils.popup_centered(oAddCustomObjectWindow)
-		2: # Update all slabs
+		2: # Resize and shift
+			Utils.popup_centered(oResizeCurrentMapSize)
+		3: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oConfirmAutoGen)
-		3: # Texture editing
+		4: # Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
-		4: # Modify dynamic slabs
+		5: # Modify slabset
 			Utils.popup_centered(oSlabsetWindow)
 
 func _on_slab_style_window_close_button_clicked():
