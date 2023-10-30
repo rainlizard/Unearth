@@ -233,12 +233,12 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	for i in removeFromShape:
 		shapePositionArray.erase(i)
 	
-	oOverheadOwnership.update_ownership_image_based_on_shape(shapePositionArray)
 	print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 
 func generate_slabs_based_on_id(shapePositionArray, updateNearby):
+	oOverheadOwnership.update_ownership_image_based_on_shape(shapePositionArray)
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	oEditor.mapHasBeenEdited = true

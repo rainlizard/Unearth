@@ -13,15 +13,13 @@ var overheadTexData = ImageTexture.new()
 var arrayOfColorRects = []
 
 func update_map_overhead_2d_textures():
-	
-	
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	if arrayOfColorRects.empty() == true:
 		initialize_display_fields()
 	else:
 		update_display_fields_size()
-	
+
 	overheadImgData.create((M.xSize*3), (M.ySize*3), false, Image.FORMAT_RGB8)
 	overheadTexData.create_from_image(overheadImgData, 0)
 	
