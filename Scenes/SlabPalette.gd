@@ -429,13 +429,13 @@ func create_cfg_slabset(filePath): #"res://slabset.cfg"
 					textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + ']')
 					textFile.store_line('columns = ' + String(oDkDat.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
 				
-				var objectNumber = 0
+				#var objectNumber = 0
 				var hasObjects = false
 				for i in oDkTng.tngObject.size():
 					if oDkTng.tngObject[i][1] == variationStart + variationNumber: #VariationIndex
 						textFile.store_line("\r")
 						hasObjects = true
-						textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '.object' + str(objectNumber) + ']')
+						textFile.store_line('[[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '_objects' + ']]')
 						for z in 9:
 							var val = oDkTng.tngObject[i][z]
 							var beginLine = ''
@@ -454,7 +454,7 @@ func create_cfg_slabset(filePath): #"res://slabset.cfg"
 							beginLine += ' = '
 							
 							textFile.store_line(beginLine + String(val))
-						objectNumber += 1
+						#objectNumber += 1
 				
 				if hasObjects == false:
 					textFile.store_line('objects = []')
