@@ -253,6 +253,7 @@ shader = ExtResource( 36 )
 [sub_resource type="ShaderMaterial" id=9]
 shader = ExtResource( 8 )
 shader_param/zoom = 1.0
+shader_param/thickness = 4.0
 
 [sub_resource type="StyleBoxFlat" id=15]
 content_margin_left = 12.0
@@ -1670,7 +1671,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "View"
 align = 0
-items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "3D: Overhead", null, 0, false, false, 4, 0, null, "", false, "2D", null, 0, false, false, 5, 0, null, "", false ]
+items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false

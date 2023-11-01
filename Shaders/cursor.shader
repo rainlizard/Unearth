@@ -1,7 +1,7 @@
 shader_type canvas_item;
 
 uniform float zoom = 1.00;
-
+uniform float thickness = 2.00;
 const float animationRate = 0.15;
 
 void fragment() {
@@ -13,7 +13,7 @@ void fragment() {
 	
 	baseCol.a = 0.0;
 	
-	float superPixel = max(texel.x, texel.x*zoom)*2.0;
+	float superPixel = max(texel.x, texel.x*zoom)*thickness;
 	
 	if ( UV.x <= superPixel ) {
 		baseCol.a = 1.0;

@@ -116,7 +116,7 @@ func update_paint():
 				newPaintSlab(cursorOverSlab)
 				oPickSlabWindow.set_selection(cursorOverSlab)
 				
-				if cursorOverSlabOwner != 5 or oOwnableNaturalTerrain.pressed == true:
+				if cursorOverSlabOwner != 5 or oOwnableNaturalTerrain.pressed == true or Slabs.data[cursorOverSlab][Slabs.IS_OWNABLE] == true:
 					newOwnership(cursorOverSlabOwner)
 				
 		oSelector.MODE_SUBTILE:

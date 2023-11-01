@@ -30,32 +30,13 @@ onready var oCamera2D = $'../../Game2D/Camera2D'
 
 func switch_camera_type(type):
 	velocity = Vector3(0,0,0) # stop moving
-
-	if type == 0: # 3D overhead orthogonal
-		if oCamera3D.projection == Camera.PROJECTION_PERSPECTIVE:
-			rememberPerspective = [transform, oHead.transform, oCamera3D.transform]
-			if rememberOrthogonal != [null,null,null]:
-				transform = rememberOrthogonal[0]
-				oHead.transform = rememberOrthogonal[1]
-				oCamera3D.transform = rememberOrthogonal[2]
-			else:
-				# Default orthogonal camera position and rotation
-				rotation_degrees = Vector3(-45, -135, 0) #Vector2(270, 45, 0)
-				oHead.rotation_degrees = Vector3(0, 0, 0)
-				translation = Vector3(0,60,0)
-
-		oCamera3D.size = translation.y
-
-		oCamera3D.set_orthogonal(oCamera3D.size, -1000000, 1000000)
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
 	if type == 1: # 3D 1st person perspective
-		if oCamera3D.projection == Camera.PROJECTION_ORTHOGONAL:
-			rememberOrthogonal = [transform, oHead.transform, oCamera3D.transform]
-			if rememberPerspective != [null,null,null]:
-				transform = rememberPerspective[0]
-				oHead.transform = rememberPerspective[1]
-				oCamera3D.transform = rememberPerspective[2]
+		if rememberPerspective == [null,null,null]:
+			oHead.rotation_degrees = Vector3(0,0,0)
+		else:
+			transform = rememberPerspective[0]
+			oHead.transform = rememberPerspective[1]
+			oCamera3D.transform = rememberPerspective[2]
 
 		oCamera3D.set_perspective(oCamera3D.fov, 0.01, 8192)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
