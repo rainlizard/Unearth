@@ -1,4 +1,4 @@
-[gd_scene load_steps=175 format=2]
+[gd_scene load_steps=177 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -153,6 +153,8 @@
 [ext_resource path="res://Scenes/ExportPreview.gd" type="Script" id=151]
 [ext_resource path="res://Scenes/SpinBoxPropertiesValue.tscn" type="PackedScene" id=152]
 [ext_resource path="res://Scenes/ResizeCurrentMapSize.gd" type="Script" id=153]
+[ext_resource path="res://Scenes/oAnalyzeGrids.gd" type="Script" id=154]
+[ext_resource path="res://Scenes/GridDataButtongroup.tres" type="ButtonGroup" id=155]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -622,6 +624,9 @@ color = Color( 0.172549, 0.164706, 0.196078, 1 )
 [node name="QuickMapPreviewDisplay" type="TextureRect" parent="Game2D/Node2D/QuickMapPreview"]
 material = SubResource( 19 )
 expand = true
+
+[node name="oAnalyzeGrids" type="Node2D" parent="Game2D"]
+script = ExtResource( 154 )
 
 [node name="Ui" type="CanvasLayer" parent="."]
 layer = 2
@@ -1671,7 +1676,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "View"
 align = 0
-items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false ]
+items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Grid data", null, 0, false, false, 4, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -5874,6 +5879,82 @@ rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 6
 size_flags_vertical = 8
 text = "Apply"
+
+[node name="GridDataWindow" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = 1704.0
+margin_top = -2160.0
+margin_right = 1985.0
+margin_bottom = -1894.0
+rect_min_size = Vector2( 281, 266 )
+mouse_filter = 1
+window_title = "Display grid data"
+resizable = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/GridDataWindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/GridDataWindow/MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 262.0
+margin_bottom = 247.0
+
+[node name="GridDataCheckBox1" type="CheckBox" parent="Ui/UiSystem/GridDataWindow/MarginContainer/VBoxContainer"]
+margin_right = 242.0
+margin_bottom = 29.0
+group = ExtResource( 155 )
+text = "Slab (.slb)"
+
+[node name="GridDataCheckBox2" type="CheckBox" parent="Ui/UiSystem/GridDataWindow/MarginContainer/VBoxContainer"]
+margin_top = 33.0
+margin_right = 242.0
+margin_bottom = 62.0
+group = ExtResource( 155 )
+text = "Ownership (.own)"
+
+[node name="GridDataCheckBox3" type="CheckBox" parent="Ui/UiSystem/GridDataWindow/MarginContainer/VBoxContainer"]
+margin_top = 66.0
+margin_right = 242.0
+margin_bottom = 95.0
+group = ExtResource( 155 )
+text = "Column Positions (.dat)"
+
+[node name="GridDataCheckBox4" type="CheckBox" parent="Ui/UiSystem/GridDataWindow/MarginContainer/VBoxContainer"]
+margin_top = 99.0
+margin_right = 242.0
+margin_bottom = 128.0
+group = ExtResource( 155 )
+text = "Wibble (.wib)"
+
+[node name="GridDataCheckBox5" type="CheckBox" parent="Ui/UiSystem/GridDataWindow/MarginContainer/VBoxContainer"]
+margin_top = 132.0
+margin_right = 242.0
+margin_bottom = 161.0
+group = ExtResource( 155 )
+text = "Liquid (.wlb)"
+
+[node name="GridDataCheckBox6" type="CheckBox" parent="Ui/UiSystem/GridDataWindow/MarginContainer/VBoxContainer"]
+margin_top = 165.0
+margin_right = 242.0
+margin_bottom = 194.0
+group = ExtResource( 155 )
+text = "Style (.slx)"
+
+[node name="GridDataCheckBox7" type="CheckBox" parent="Ui/UiSystem/GridDataWindow/MarginContainer/VBoxContainer"]
+margin_top = 198.0
+margin_right = 242.0
+margin_bottom = 227.0
+group = ExtResource( 155 )
+text = "Custom Slabs (.une)"
 
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0

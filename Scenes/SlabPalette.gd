@@ -447,7 +447,7 @@ func create_cfg_slabset(filePath): #"res://slabset.cfg"
 								4: beginLine = 'RelativeY'
 								5: beginLine = 'RelativeZ'
 								6: beginLine = 'ThingType'
-								7: beginLine = 'ThingSubtype'
+								7: beginLine = 'Subtype'
 								8: beginLine = 'EffectRange'
 							if z == 1: continue # skip "VariationIndex"
 							

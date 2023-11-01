@@ -99,7 +99,7 @@ func set_basic_camera_stuff():
 func calculate_zoom():
 	var terrain_size = Vector3(M.xSize * 3, 8, M.ySize * 3)
 	# Calculate the window's aspect ratio
-	var window_aspect_ratio = OS.window_size.x / OS.window_size.y
+	var window_aspect_ratio = OS.window_size.x / max(1, OS.window_size.y)
 
 	# Zoom out based on the dominant dimension
 	if window_aspect_ratio > 1:  # Landscape mode

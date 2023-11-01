@@ -38,6 +38,7 @@ onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oDkClm = Nodelist.list["oDkClm"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
 onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
+onready var oGridDataWindow = Nodelist.list["oGridDataWindow"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -248,13 +249,15 @@ func _on_ViewSubmenu_Pressed(pressedID):
 				oGenerateTerrain.start()
 			oUi.switch_to_1st_person()
 		4:
-			if oEditor.currentView == oEditor.VIEW_2D:
-				oEditor.set_view_3d()
-				oGenerateTerrain.start()
-			oUi.switch_to_3D_overhead()
-		5:
-			if oEditor.currentView == oEditor.VIEW_3D:
-				oEditor.set_view_2d()
+			Utils.popup_centered(oGridDataWindow)
+#		4:
+#			if oEditor.currentView == oEditor.VIEW_2D:
+#				oEditor.set_view_3d()
+#				oGenerateTerrain.start()
+#			oUi.switch_to_3D_overhead()
+#		5:
+#			if oEditor.currentView == oEditor.VIEW_3D:
+#				oEditor.set_view_2d()
 
 func _on_MenuButtonSettings_pressed():
 	oMenuButtonSettings.get_popup().visible = false

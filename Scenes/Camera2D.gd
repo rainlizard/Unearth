@@ -42,8 +42,8 @@ func reset_camera(x, y):
 	desired_offset = offset
 
 	# Determine the zoom levels required to fit the map's width and height within the viewport
-	var zoomForWidth = mapWidthInPixels / OS.window_size.x
-	var zoomForHeight = mapHeightInPixels / OS.window_size.y
+	var zoomForWidth = mapWidthInPixels / max(1, OS.window_size.x)
+	var zoomForHeight = mapHeightInPixels / max(1, OS.window_size.y)
 
 	# Set the zoom level to the maximum of the two calculated zoom levels to ensure the entire map fits within the viewport
 	var initialZoom = max(zoomForWidth, zoomForHeight) * Settings.UI_SCALE.y
