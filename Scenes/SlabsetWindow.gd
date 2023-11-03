@@ -91,22 +91,21 @@ func variation_changed(variation):
 	#constructString += "Byte " + str(byte) + ' - ' + str(byte)
 	#constructString += '\n'
 	
-	if slabID < 42:
-		if variation != 27:
-			match variation % 9:
-				0: constructString += "South"
-				1: constructString += "West"
-				2: constructString += "North"
-				3: constructString += "East"
-				4: constructString += "South West"
-				5: constructString += "North West"
-				6: constructString += "North East"
-				7: constructString += "South East"
-				8: constructString += "All direction"
-		else:
-			constructString += "Center"
-		
-		constructString += '\n'
+	if variation != 27:
+		match variation % 9:
+			0: constructString += "South"
+			1: constructString += "West"
+			2: constructString += "North"
+			3: constructString += "East"
+			4: constructString += "South West"
+			5: constructString += "North West"
+			6: constructString += "North East"
+			7: constructString += "South East"
+			8: constructString += "All direction"
+	else:
+		constructString += "Center"
+	
+	constructString += '\n'
 	
 	if variation < 9:
 		constructString += ""
@@ -148,29 +147,16 @@ func update_columns_ui():
 	var variation = int(oVariationNumberSpinBox.value)
 	var slabID = int(oSlabsetIDSpinBox.value)
 	
-	var variationStart = (slabID * 28)
-	if slabID >= 42:
-		variationStart = (42 * 28) + (8 * (slabID - 42))
-	variation += variationStart
-	
-	if variation >= 1304:
-		return
-	
-	for i in columnSettersArray.size():
-		var spinbox = columnSettersArray[i].get_node("CustomSpinBox")
+	for subtile in columnSettersArray.size():
+		var spinbox = columnSettersArray[subtile].get_node("CustomSpinBox")
 		spinbox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
-		var clmIndex = oDkDat.dat[variation][i]
+		var clmIndex = oDkDat.dat[slabID][variation][subtile]
 		spinbox.value = clmIndex
 		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
 func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 	var variation = int(oVariationNumberSpinBox.value)
 	var slabID = int(oSlabsetIDSpinBox.value)
-	
-	var variationStart = (slabID * 28)
-	if slabID >= 42:
-		variationStart = (42 * 28) + (8 * (slabID - 42))
-	variation += variationStart
 	
 	for y in 3:
 		for x in 3:
@@ -179,7 +165,7 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 			var spinbox = id.get_node("CustomSpinBox")
 			var clmIndex = spinbox.value
 			
-			oDkDat.dat[variation][i] = clmIndex
+			oDkDat.dat[slabID][variation][i] = clmIndex
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
 
 

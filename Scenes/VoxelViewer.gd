@@ -70,10 +70,7 @@ func _input(event):
 
 func set_object(setVal):
 	if displayingType == DK_SLABSET:
-		if oSlabsetIDSpinBox.value < 42:
-			setVal = clamp(setVal,0,27)
-		else:
-			setVal = clamp(setVal,0,7)
+		setVal = clamp(setVal,0,27)
 	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
 		setVal = clamp(setVal,0,2047)
 	previousObject = viewObject
@@ -134,18 +131,10 @@ func do_all():
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	if displayingType == DK_SLABSET: # This is not for custom slab, this is for dynamic slabs
-		
 		var slabID = oSlabsetIDSpinBox.value
-		var variationStart = (slabID * 28)
-		var numberOfVariations = 28
-		
-		if slabID >= 42:
-			variationStart = (42 * 28) + (8 * (slabID - 42))
-			numberOfVariations = 8
-		
 		var separation = 0
 		
-		for variation in numberOfVariations:
+		for variation in 28:
 			var surrClmIndex = [-1,-1,-1,-1]
 			for ySubtile in 3:
 				for xSubtile in 3:
@@ -154,8 +143,7 @@ func do_all():
 					var x = (variation*3) + xSubtile + separation
 					var z = (variation*3) + ySubtile + separation
 					
-					var clmIndex = oDkDat.dat[variationStart+variation][subtile]
-					
+					var clmIndex = oDkDat.dat[slabID][variation][subtile]
 					
 					oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, true, oDkClm)
 			
@@ -200,8 +188,6 @@ func do_one():
 		
 #		var slabID = oSlabsetIDSpinBox.value
 #		var variationStart = (slabID * 28)
-#		if slabID >= 42:
-#			variationStart = (42 * 28) + (8 * (slabID - 42))
 #		var variation = variationStart+viewObject
 		
 		var surrClmIndex = [-1,-1,-1,-1]

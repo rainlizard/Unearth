@@ -565,6 +565,7 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 
 
 func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType): # These slabs only have 8 variations each, compared to the others which have 28 each.
+	var slabVariation = slabID * 28
 	# Make sure door is facing the correct direction by changing its Slab based on surrounding slabs.
 	if slabID in [Slabs.WOODEN_DOOR_1, Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_1, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_1, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_1, Slabs.MAGIC_DOOR_2]:
 		if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == true and Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == true:
@@ -582,7 +583,6 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 				Slabs.MAGIC_DOOR_2: slabID = Slabs.MAGIC_DOOR_1
 			oDataSlab.set_cell(xSlab, ySlab, slabID)
 	
-	var slabVariation = (42 * 28) + (8 * (slabID - 42))
 	var bitmask = 1
 	var asset3x3group = make_slab(slabVariation, bitmask)
 	
@@ -751,11 +751,13 @@ func set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_TYPE, bitmask
 func dkdat_position_to_column_data(asset3x3group):
 	var slabCubes = []
 	var slabFloor = []
-	for i in 9:
-		# Convert asset3x3group's index to slabvar and subtile then read it from oDkDat
-		var slabvar = asset3x3group[i] / 9
-		var subtile = asset3x3group[i] - (slabvar*9)
-		var dkClmIndex = oDkDat.dat[slabvar][subtile]
+	#print(asset3x3group)
+	
+	for subtile in 9:
+		var index = asset3x3group[subtile] / 9
+		var variation = index % 28
+		var slabID = index / 28
+		var dkClmIndex = oDkDat.dat[slabID][variation][subtile]
 		
 		# Get the cube data from oDkClm
 		slabCubes.append(oDkClm.cubes[dkClmIndex])
