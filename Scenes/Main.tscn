@@ -625,7 +625,7 @@ color = Color( 0.172549, 0.164706, 0.196078, 1 )
 material = SubResource( 19 )
 expand = true
 
-[node name="oAnalyzeGrids" type="Node2D" parent="Game2D"]
+[node name="AnalyzeGrids" type="Node2D" parent="Game2D"]
 script = ExtResource( 154 )
 
 [node name="Ui" type="CanvasLayer" parent="."]
@@ -1656,7 +1656,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Columns", null, 0, false, false, 0, 0, null, "", false, "Custom objects", null, 0, false, false, 1, 0, null, "", false, "Resize and shift", null, 0, false, false, 2, 0, null, "", false, "Update all slabs", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Make a tileset", null, 0, false, false, 4, 0, null, "", false, "Slabset", null, 0, false, false, 5, 0, null, "", false ]
+items = [ "Columns", null, 0, false, false, 0, 0, null, "", false, "Custom objects", null, 0, false, false, 1, 0, null, "", false, "Resize map", null, 0, false, false, 2, 0, null, "", false, "Update all slabs", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Make a tileset", null, 0, false, false, 4, 0, null, "", false, "Slabset", null, 0, false, false, 5, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -6590,6 +6590,7 @@ script = SubResource( 20 )
 [connection signal="focus_exited" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer/SettingsYSizeLine" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_SettingsYSizeLine_focus_exited"]
 [connection signal="value_changed" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/ResizeFillWithID" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeFillWithID_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/ResizeApplyButton" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeApplyButton_pressed"]
+[connection signal="visibility_changed" from="Ui/UiSystem/GridDataWindow" to="Game2D/AnalyzeGrids" method="_on_GridDataWindow_visibility_changed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]
 [connection signal="about_to_show" from="Ui/UiPreviewExporter/ExportPreview" to="Ui/UiPreviewExporter/ExportPreview" method="_on_ExportPreview_about_to_show"]
 [connection signal="hide" from="Ui/UiPreviewExporter/ExportPreview" to="Ui/UiPreviewExporter/ExportPreview" method="_on_ExportPreview_hide"]

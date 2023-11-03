@@ -14,67 +14,103 @@ onready var oGridDataCheckBox4 = Nodelist.list["oGridDataCheckBox4"]
 onready var oGridDataCheckBox5 = Nodelist.list["oGridDataCheckBox5"]
 onready var oGridDataCheckBox6 = Nodelist.list["oGridDataCheckBox6"]
 onready var oGridDataCheckBox7 = Nodelist.list["oGridDataCheckBox7"]
+onready var oGridDataWindow = Nodelist.list["oGridDataWindow"]
+onready var oCamera2D = Nodelist.list["oCamera2D"]
 
 onready var tilemap_data = {
-	"Wibble": {
-		"extension": ".wib",
-		"node": oDataWibble
-	},
-	"Liquid": {
-		"extension": ".wlb",
-		"node": oDataLiquid
-	},
-	"Slab": {
-		"extension": ".slb",
-		"node": oDataSlab
-	},
-	"Ownership": {
-		"extension": ".own",
-		"node": oDataOwnership
-	},
-	"ColumnPositions": {
-		"extension": ".dat",
-		"node": oDataClmPos
-	},
-	"CustomSlabs": {
-		"extension": ".une",
-		"node": oDataCustomSlab
-	},
-	"Style": {
-		"extension": ".slx",
-		"node": oDataSlx
-	}
+	"Wibble":           {"extension": ".wib", "grid_type": "SUBTILE", "node": oDataWibble},
+	"Liquid":           {"extension": ".wlb", "grid_type": "TILE",    "node": oDataLiquid},
+	"Slab":             {"extension": ".slb", "grid_type": "TILE",    "node": oDataSlab},
+	"Ownership":        {"extension": ".own", "grid_type": "TILE",    "node": oDataOwnership},
+	"Column Positions": {"extension": ".dat", "grid_type": "SUBTILE", "node": oDataClmPos},
+	"Custom Slabs":     {"extension": ".une", "grid_type": "TILE",    "node": oDataCustomSlab},
+	"Style":            {"extension": ".slx", "grid_type": "TILE",    "node": oDataSlx}
 }
 
-var tileDrawDist = 96  # Example value, adjust as needed
+var currentlySelected = ""
+
 var dynamic_font = DynamicFont.new()  # Initialize DynamicFont
 
 func _ready():
+	set_process(false)
 	dynamic_font.font_data = preload("res://Theme/ClassicConsole.ttf")
 	dynamic_font.size = 36
 	
-	oGridDataCheckBox1.connect("pressed", self, "_on_checkbox", ["Slab"])
-	oGridDataCheckBox2.connect("pressed", self, "_on_checkbox", ["Ownership"])
-	oGridDataCheckBox3.connect("pressed", self, "_on_checkbox", ["Column Positions"])
-	oGridDataCheckBox4.connect("pressed", self, "_on_checkbox", ["Wibble"])
-	oGridDataCheckBox5.connect("pressed", self, "_on_checkbox", ["Liquid"])
-	oGridDataCheckBox6.connect("pressed", self, "_on_checkbox", ["Style"])
-	oGridDataCheckBox7.connect("pressed", self, "_on_checkbox", ["Custom Slabs"])
+	oGridDataCheckBox1.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox1,"Slab"])
+	oGridDataCheckBox2.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox2,"Ownership"])
+	oGridDataCheckBox3.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox3,"Column Positions"])
+	oGridDataCheckBox4.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox4,"Wibble"])
+	oGridDataCheckBox5.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox5,"Liquid"])
+	oGridDataCheckBox6.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox6,"Style"])
+	oGridDataCheckBox7.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox7,"Custom Slabs"])
 
-func _on_checkbox(aaa):
-	print(aaa)
+func _on_checkbox(checkboxNodeThatWasPressed, pressedString):
+	for i in [oGridDataCheckBox1, oGridDataCheckBox2, oGridDataCheckBox3, oGridDataCheckBox4, oGridDataCheckBox5, oGridDataCheckBox6, oGridDataCheckBox7]:
+		i.add_color_override("font_color", Color("40ffffff"))
+	checkboxNodeThatWasPressed.add_color_override("font_color", Color("40ffffff"))
+	
+	currentlySelected = pressedString
+
+
+func _on_GridDataWindow_visibility_changed():
+	if is_instance_valid(oGridDataWindow) == false: return
+	if oGridDataWindow.visible == true:
+		set_process(true)
+		yield(get_tree(),'idle_frame')
+		oGridDataWindow.rect_position.x = 0
+	else:
+		update()
+		set_process(false)
+
+var frame_counter = 0  # Initialize a frame counter
+
+func _process(delta):
+	frame_counter += 1  # Increment the frame counter each frame
+	if frame_counter >= 30:  # Check if 30 frames have passed
+		update()  # Call the update function to redraw the screen
+		frame_counter = 0  # Reset the frame counter
 
 func _draw():
-	return
-	if is_instance_valid(oDataWibble) == false: return
+	if currentlySelected == "" or oGridDataWindow.visible == false:
+		return
 	
-	var node = tilemap_data["Slab"]["node"]
+	var node = tilemap_data[currentlySelected]["node"]
+	var grid_type = tilemap_data[currentlySelected]["grid_type"]
+	var value
+	var pos
+	var factor
+	if grid_type == "TILE":
+		factor = 1
+	else:
+		factor = 3
+	var tileDrawDist = 96/factor
+	if currentlySelected == "Column Positions":
+		dynamic_font.size = 18
+	else:
+		dynamic_font.size = 36
 	
-	for x in range(M.xSize):
-		for y in range(M.ySize):
-			var value = node.get_cell(x,y)
+	var half_tileDrawDist = tileDrawDist * 0.5
+	if currentlySelected == "Style": oDataSlx.slxImgData.lock()
+	
+	var offsetTilePos = Vector2(half_tileDrawDist, half_tileDrawDist)
+	if currentlySelected == "Wibble":
+		offsetTilePos = Vector2(0,0)
+	
+	var viewport_size = get_viewport_rect().size
+	var screen_start = oCamera2D.get_camera_screen_center() - (viewport_size * 0.5) * oCamera2D.zoom
+	var screen_end = oCamera2D.get_camera_screen_center() + (viewport_size * 0.5) * oCamera2D.zoom
+	
+	for x in range(max(0, floor(screen_start.x / tileDrawDist)), min(M.xSize * factor, ceil(screen_end.x / tileDrawDist))):
+		for y in range(max(0, floor(screen_start.y / tileDrawDist)), min(M.ySize * factor, ceil(screen_end.y / tileDrawDist))):
+			if currentlySelected == "Style":
+				value = oDataSlx.slxImgData.get_pixel(x,y).r8
+			else:
+				value = node.get_cell(x,y)
 			var string = str(value)
-			var pos = Vector2(x * tileDrawDist, y * tileDrawDist) + Vector2(tileDrawDist * 0.5, tileDrawDist * 0.5)
-			pos.x -= dynamic_font.get_string_size(string).x * 0.5 # Center string
-			pos.y += dynamic_font.get_string_size(string).y * 0.25
+			
+			pos = Vector2(x * tileDrawDist, y * tileDrawDist) + offsetTilePos
+			var stringSize = dynamic_font.get_string_size(string)
+			pos += Vector2(-stringSize.x * 0.5, stringSize.y * 0.25) # Center string
 			draw_string(dynamic_font, pos, string, Color(1, 1, 1, 1))
+	
+	if currentlySelected == "Style": oDataSlx.slxImgData.unlock()
