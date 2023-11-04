@@ -1,4 +1,4 @@
-[gd_scene load_steps=177 format=2]
+[gd_scene load_steps=175 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -65,7 +65,6 @@
 [ext_resource path="res://Scenes/OptionButtonMSAA.gd" type="Script" id=63]
 [ext_resource path="res://Scenes/OverheadGraphics.gd" type="Script" id=64]
 [ext_resource path="res://Scenes/SlabPalette.gd" type="Script" id=65]
-[ext_resource path="res://Scenes/DkClm.gd" type="Script" id=66]
 [ext_resource path="res://Scenes/ChooseDkExe.gd" type="Script" id=67]
 [ext_resource path="res://Scenes/PickSlabWindow.gd" type="Script" id=68]
 [ext_resource path="res://Art/IconRectangle.png" type="Texture" id=69]
@@ -127,7 +126,6 @@
 [ext_resource path="res://Scenes/ScriptWindow.gd" type="Script" id=125]
 [ext_resource path="res://Scenes/TextureEditingWindow.gd" type="Script" id=126]
 [ext_resource path="res://Scenes/CustomSlabSystem.gd" type="Script" id=127]
-[ext_resource path="res://Scenes/DkDat.gd" type="Script" id=128]
 [ext_resource path="res://Scenes/CustomTooltip.gd" type="Script" id=129]
 [ext_resource path="res://Theme/StyleBoxThinnerPanel.tres" type="StyleBox" id=130]
 [ext_resource path="res://Scenes/SGRectHighlighter.gd" type="Script" id=131]
@@ -371,12 +369,6 @@ script = ExtResource( 80 )
 
 [node name="SlabPalette" type="Node" parent="."]
 script = ExtResource( 65 )
-
-[node name="DkDat" type="Node" parent="SlabPalette"]
-script = ExtResource( 128 )
-
-[node name="DkClm" type="Node" parent="SlabPalette"]
-script = ExtResource( 66 )
 
 [node name="DkTng" type="Node" parent="SlabPalette"]
 script = ExtResource( 34 )
@@ -4968,8 +4960,6 @@ margin_bottom = 655.0
 
 [node name="ColumnEditorControls" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2" instance=ExtResource( 137 )]
 margin_bottom = 593.0
-nodeClm = NodePath("../../../../../../../CurrentMap/DataClm")
-nodeVoxelView = NodePath("../../ColumnEditorVoxelView")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/ColumnEditorTabs/HBoxContainer/VBoxContainer2"]
 margin_top = 597.0
@@ -5294,7 +5284,7 @@ margin_right = 167.0
 margin_bottom = 31.0
 mouse_filter = 1
 size_flags_horizontal = 4
-max_value = 57.0
+max_value = 255.0
 rounded = true
 align = 1
 script = ExtResource( 81 )
@@ -5391,7 +5381,7 @@ margin_bottom = 645.0
 size_flags_horizontal = 11
 text = "Help"
 
-[node name="TabDkClm" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
+[node name="TabColumnset" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -5402,23 +5392,21 @@ margin_bottom = -12.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="DkClmVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm" instance=ExtResource( 19 )]
+[node name="ColumnsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset" instance=ExtResource( 19 )]
 margin_right = 1012.0
 margin_bottom = 645.0
 displayingType = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset"]
 margin_left = 1016.0
 margin_right = 1236.0
 margin_bottom = 645.0
 
-[node name="DkClmControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer" instance=ExtResource( 137 )]
+[node name="ColumnsetControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer" instance=ExtResource( 137 )]
 margin_bottom = 614.0
 size_flags_horizontal = 1
-nodeClm = NodePath("../../../../../../../SlabPalette/DkClm")
-nodeVoxelView = NodePath("../../DkClmVoxelView")
 
-[node name="ExportSlabsClm" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer"]
+[node name="ExportSlabsClm" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer"]
 visible = false
 margin_left = 32.0
 margin_top = 556.0
@@ -5427,7 +5415,7 @@ margin_bottom = 583.0
 size_flags_horizontal = 9
 text = "Export slabs.clm"
 
-[node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer"]
+[node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer"]
 margin_top = 618.0
 margin_right = 220.0
 margin_bottom = 645.0
@@ -6564,8 +6552,8 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ExportSlabsDat" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsDat_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ExportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsCfg_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer/ExportSlabsClm" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsClm_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabDkClm/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/ExportSlabsClm" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsClm_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/SetNewFormat" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapFormat_item_selected"]
 [connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_focus_exited"]

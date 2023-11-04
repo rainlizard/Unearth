@@ -187,6 +187,9 @@ func mouse_button_on_field():
 				oInspector.set_inspector_instance(holdClickOnInstance)
 				oInspector.set_inspector_subtile(Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY))
 				oInspector.oSelectionStatus.visible = true
+				
+				if Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY) != originalPosition:
+					oEditor.mapHasBeenEdited = true
 			
 			holdClickOnInstance = null
 	

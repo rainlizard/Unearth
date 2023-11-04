@@ -15,7 +15,6 @@ func _ready():
 	$AspectRatioContainer.anchor_right += iconSize
 
 func set_visual(columnArray):
-	var oDkClm = Nodelist.list["oDkClm"]
 	
 	var slabID = get_meta("ID_of_slab")
 	
@@ -40,7 +39,7 @@ func set_visual(columnArray):
 			for y in 3:
 				for x in 3:
 					var clmIndex = columnArray[(y*3) + x]
-					var cubeFace = oDkClm.get_top_cube_face(clmIndex, slabID)
+					var cubeFace = Columnset.get_top_cube_face(clmIndex, slabID)
 					var valueInput = cubeFace
 					var r = clamp(valueInput, 0, 255)
 					valueInput -= 255
@@ -75,7 +74,7 @@ func set_visual(columnArray):
 			for z in range(0, 3):
 				var clmIndex = columnArray[(y*3) + x]
 				
-				var cubeID = oDkClm.cubes[clmIndex][sideViewZoffset-z]
+				var cubeID = Columnset.cubes[clmIndex][sideViewZoffset-z]
 				var cubeFace = Cube.tex[cubeID][Cube.SIDE_SOUTH]
 				
 				var valueInput = cubeFace

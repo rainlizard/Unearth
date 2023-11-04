@@ -1,12 +1,10 @@
 extends WindowDialog
 onready var oDkSlabsetVoxelView = Nodelist.list["oDkSlabsetVoxelView"]
-onready var oDkClmVoxelView = Nodelist.list["oDkClmVoxelView"]
+onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oVariationInfoLabel = Nodelist.list["oVariationInfoLabel"]
 onready var oSlabsetIDSpinBox = Nodelist.list["oSlabsetIDSpinBox"]
 onready var oSlabsetIDLabel = Nodelist.list["oSlabsetIDLabel"]
 onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
-onready var oDkClm = Nodelist.list["oDkClm"]
-onready var oDkDat = Nodelist.list["oDkDat"]
 onready var oDkTng = Nodelist.list["oDkTng"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oSlabPalette = Nodelist.list["oSlabPalette"]
@@ -16,7 +14,7 @@ onready var oGame = Nodelist.list["oGame"]
 onready var oExportColumnCfgDialog = Nodelist.list["oExportColumnCfgDialog"]
 onready var oExportSlabsetCfgDialog = Nodelist.list["oExportSlabsetCfgDialog"]
 onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
-onready var oDkClmControls = Nodelist.list["oDkClmControls"]
+onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
 onready var oExportSlabsetClmDialog = Nodelist.list["oExportSlabsetClmDialog"]
@@ -58,7 +56,7 @@ func shortcut_pressed(id):
 	var spinbox = id.get_node("CustomSpinBox")
 	var clmIndex = spinbox.value
 	oSlabsetTabs.set_current_tab(1)
-	oDkClmControls.oColumnIndexSpinBox.value = clmIndex
+	oColumnsetControls.oColumnIndexSpinBox.value = clmIndex
 
 func _on_SlabsetWindow_visibility_changed():
 	if visible == true:
@@ -73,13 +71,13 @@ func _on_SlabsetWindow_visibility_changed():
 func _on_SlabsetTabs_tab_changed(tab):
 	match tab:
 		0: # dat
-			oDkClmVoxelView.visible = false
+			oColumnsetVoxelView.visible = false
 			oDkSlabsetVoxelView.visible = true
 			oDkSlabsetVoxelView.initialize()
 		1: # clm
-			oDkClmVoxelView.visible = true
+			oColumnsetVoxelView.visible = true
 			oDkSlabsetVoxelView.visible = false
-			oDkClmVoxelView.initialize()
+			oColumnsetVoxelView.initialize()
 
 
 func variation_changed(variation):
@@ -150,7 +148,7 @@ func update_columns_ui():
 	for subtile in columnSettersArray.size():
 		var spinbox = columnSettersArray[subtile].get_node("CustomSpinBox")
 		spinbox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
-		var clmIndex = oDkDat.dat[slabID][variation][subtile]
+		var clmIndex = Slabset.dat[slabID][variation][subtile]
 		spinbox.value = clmIndex
 		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
@@ -165,7 +163,7 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 			var spinbox = id.get_node("CustomSpinBox")
 			var clmIndex = spinbox.value
 			
-			oDkDat.dat[slabID][variation][i] = clmIndex
+			Slabset.dat[slabID][variation][i] = clmIndex
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
 
 
@@ -218,7 +216,7 @@ func _on_ExportSlabsetDatDialog_file_selected(filePath):
 	buffer.put_u16(1304)
 	for slab in 1304:
 		for subtile in 9:
-			var value = 65536 - oDkDat.dat[slab][subtile]
+			var value = 65536 - Slabset.dat[slab][subtile]
 			buffer.put_u16(value)
 	
 	var file = File.new()
@@ -242,14 +240,14 @@ func _on_ExportSlabsetClmDialog_file_selected(filePath):
 #	buffer.put_data([0,0])
 	
 	for entry in numberOfClmEntries:
-		buffer.put_16(oDkClm.utilized[entry]) # 0-1
-		buffer.put_8((oDkClm.permanent[entry] & 1) + ((oDkClm.lintel[entry] & 7) << 1) + ((oDkClm.height[entry] & 15) << 4))
-		buffer.put_16(oDkClm.solidMask[entry]) # 3-4
-		buffer.put_16(oDkClm.floorTexture[entry]) # 5-6
-		buffer.put_8(oDkClm.orientation[entry]) # 7
+		buffer.put_16(Columnset.utilized[entry]) # 0-1
+		buffer.put_8((Columnset.permanent[entry] & 1) + ((Columnset.lintel[entry] & 7) << 1) + ((Columnset.height[entry] & 15) << 4))
+		buffer.put_16(Columnset.solidMask[entry]) # 3-4
+		buffer.put_16(Columnset.floorTexture[entry]) # 5-6
+		buffer.put_8(Columnset.orientation[entry]) # 7
 		
 		for cubeNumber in 8:
-			buffer.put_16(oDkClm.cubes[entry][cubeNumber]) # 8-23
+			buffer.put_16(Columnset.cubes[entry][cubeNumber]) # 8-23
 	
 	var file = File.new()
 	if file.open(filePath,File.WRITE) == OK:

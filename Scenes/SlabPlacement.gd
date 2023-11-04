@@ -19,8 +19,6 @@ onready var oOwnableNaturalTerrain = Nodelist.list["oOwnableNaturalTerrain"]
 onready var oBridgesOnlyOnLiquidCheckbox = Nodelist.list["oBridgesOnlyOnLiquidCheckbox"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
-onready var oDkDat = Nodelist.list["oDkDat"]
-onready var oDkClm = Nodelist.list["oDkClm"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
@@ -757,11 +755,11 @@ func dkdat_position_to_column_data(asset3x3group):
 		var index = asset3x3group[subtile] / 9
 		var variation = index % 28
 		var slabID = index / 28
-		var dkClmIndex = oDkDat.dat[slabID][variation][subtile]
+		var dkClmIndex = Slabset.dat[slabID][variation][subtile]
 		
 		# Get the cube data from oDkClm
-		slabCubes.append(oDkClm.cubes[dkClmIndex])
-		slabFloor.append(oDkClm.floorTexture[dkClmIndex])
+		slabCubes.append(Columnset.cubes[dkClmIndex])
+		slabFloor.append(Columnset.floorTexture[dkClmIndex])
 	return [slabCubes.duplicate(true), slabFloor.duplicate(true)] # So they're no longer references
 
 

@@ -16,7 +16,6 @@ onready var oWibbleEdgesCheckBox = Nodelist.list["oWibbleEdgesCheckBox"]
 onready var oWibbleEdgesSpacing = Nodelist.list["oWibbleEdgesSpacing"]
 onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
-onready var oDkClm = Nodelist.list["oDkClm"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 
@@ -99,8 +98,8 @@ func _on_SlabWibbleOptionButton_item_selected(index):
 func copy_values_from_slabset_and_index_them():
 	for i in 9:
 		var srcClmIndex = oSlabsetWindow.columnSettersArray[i].get_node("CustomSpinBox").value
-		var cubeArray = oDkClm.cubes[srcClmIndex]
-		var setFloorID = oDkClm.floorTexture[srcClmIndex]
+		var cubeArray = Columnset.cubes[srcClmIndex]
+		var setFloorID = Columnset.floorTexture[srcClmIndex]
 		var newIndex = oDataClm.index_entry(cubeArray, setFloorID)
 		customSlabArrayOfSpinbox[i].value = newIndex
 	

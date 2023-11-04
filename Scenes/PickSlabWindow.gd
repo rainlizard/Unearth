@@ -13,7 +13,6 @@ onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
-onready var oDkDat = Nodelist.list["oDkDat"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 onready var oConfirmDeleteCustomSlab = Nodelist.list["oConfirmDeleteCustomSlab"]
 
@@ -92,14 +91,14 @@ func add_slabs():
 			match slabID:
 				Slabs.PORTAL:
 					for i in 9:
-						columnArray[i] = oDkDat.dat[slabID][8][i]
+						columnArray[i] = Slabset.dat[slabID][8][i]
 				Slabs.WALL_AUTOMATIC:
 					for i in 9:
-						columnArray[i] = oDkDat.dat[Slabs.WALL_WITH_BANNER][slabVariation][i]
+						columnArray[i] = Slabset.dat[Slabs.WALL_WITH_BANNER][slabVariation][i]
 				_:
 					if slabID < 1000:
 						for i in 9:
-							columnArray[i] = oDkDat.dat[slabID][slabVariation][i] # !!!!!!!!!!!!!
+							columnArray[i] = Slabset.dat[slabID][slabVariation][i] # !!!!!!!!!!!!!
 					else:
 						# Custom slab
 						pass

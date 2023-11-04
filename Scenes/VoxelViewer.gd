@@ -4,12 +4,10 @@ onready var oVoxelGen = Nodelist.list["oVoxelGen"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
 onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
-onready var oDkClm = Nodelist.list["oDkClm"]
-onready var oDkDat = Nodelist.list["oDkDat"]
 onready var oSlabsetIDSpinBox = Nodelist.list["oSlabsetIDSpinBox"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
-onready var oDkClmControls = Nodelist.list["oDkClmControls"]
+onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
 
 
@@ -92,7 +90,7 @@ func set_object(setVal):
 		oColumnEditorControls.oColumnIndexSpinBox.value = setVal
 		oColumnDetails.update_details()
 	if displayingType == DK_COLUMN:
-		oDkClmControls.oColumnIndexSpinBox.value = setVal
+		oColumnsetControls.oColumnIndexSpinBox.value = setVal
 	
 	 # Reset camera back
 	oVoxelCameraPivotPoint.rotation_degrees.z = -28.125
@@ -123,7 +121,7 @@ func do_all():
 				for clmIndex in 2048:
 					var x = clmIndex*2
 					var y = clmIndex*2
-					oVoxelGen.column_gen(genArray, x, y, clmIndex, surrClmIndex, true, oDkClm)
+					oVoxelGen.column_gen(genArray, x, y, clmIndex, surrClmIndex, true, Columnset)
 		
 		oAllVoxelObjects.mesh = oVoxelGen.complete_mesh(genArray)
 		oAllVoxelObjects.translation.z = -0.5
@@ -143,9 +141,9 @@ func do_all():
 					var x = (variation*3) + xSubtile + separation
 					var z = (variation*3) + ySubtile + separation
 					
-					var clmIndex = oDkDat.dat[slabID][variation][subtile]
+					var clmIndex = Slabset.dat[slabID][variation][subtile]
 					
-					oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, true, oDkClm)
+					oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, true, Columnset)
 			
 			separation += 1
 		
@@ -178,7 +176,7 @@ func do_one():
 		
 		match displayingType:
 			MAP_COLUMN: oVoxelGen.column_gen(genArray, 0, 0, viewObject, surrClmIndex, true, oDataClm)
-			DK_COLUMN: oVoxelGen.column_gen(genArray, 0, 0, viewObject, surrClmIndex, true, oDkClm)
+			DK_COLUMN: oVoxelGen.column_gen(genArray, 0, 0, viewObject, surrClmIndex, true, Columnset)
 		
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
 		oSelectedPivotPoint.translation.z = (viewObject * 2)
@@ -198,7 +196,7 @@ func do_one():
 				var spinbox = id.get_node("CustomSpinBox")
 				var clmIndex = spinbox.value
 				
-				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true, oDkClm)
+				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true, Columnset)
 		
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
 		oSelectedPivotPoint.translation.z = (viewObject * 4)
@@ -239,9 +237,9 @@ func _on_ColumnIndexSpinBox_value_changed(value):
 			set_object(value)
 			oColumnEditorControls.oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 		DK_COLUMN:
-			oDkClmControls.oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
+			oColumnsetControls.oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 			set_object(value)
-			oDkClmControls.oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
+			oColumnsetControls.oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 
 
 

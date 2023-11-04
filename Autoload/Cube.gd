@@ -641,9 +641,9 @@ func load_dk_original_cubes():
 
 func set_max_cubes():
 	var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
-	var oDkClmControls = Nodelist.list["oDkClmControls"]
+	var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 	
 	CUBES_COUNT = Cube.tex.size()-1
 	
 	oColumnEditorControls.establish_maximum_cube_field_values()
-	oDkClmControls.establish_maximum_cube_field_values()
+	oColumnsetControls.establish_maximum_cube_field_values()

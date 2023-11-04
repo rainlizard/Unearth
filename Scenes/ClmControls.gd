@@ -4,9 +4,8 @@ onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
-
-export(NodePath) onready var nodeClm = get_node(nodeClm) as Node
-export(NodePath) onready var nodeVoxelView = get_node(nodeVoxelView) as Node
+onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
+onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 
 onready var oHeightSpinBox = $"VBoxContainer/GridAdvancedValues/HeightSpinBox"
 onready var oSolidMaskSpinBox = $"VBoxContainer/GridAdvancedValues/SolidMaskSpinBox"
@@ -41,7 +40,18 @@ onready var cubeSpinBoxArray = [
 	oCube8SpinBox,
 ]
 
+var nodeClm
+var nodeVoxelView
+
 func _ready():
+	match name:
+		"ColumnEditorControls":
+			nodeClm = oDataClm
+			nodeVoxelView = oColumnEditorVoxelView
+		"ColumnsetControls":
+			nodeClm = Columnset
+			nodeVoxelView = oColumnsetVoxelView
+	
 	oColumnIndexSpinBox.connect("value_changed", nodeVoxelView, "_on_ColumnIndexSpinBox_value_changed")
 	
 	oFloorTextureSpinBox.connect("mouse_entered", self, "_on_floortexture_mouse_entered")

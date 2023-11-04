@@ -1,6 +1,5 @@
 extends 'res://Class/ClmClass.gd'
 onready var oGame = Nodelist.list["oGame"]
-onready var oDkDat = Nodelist.list["oDkDat"]
 
 var utilized = []
 var orientation = []

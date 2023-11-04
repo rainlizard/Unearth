@@ -1,9 +1,8 @@
 extends Node
 onready var oGame = Nodelist.list["oGame"]
 
-var dat = [] # 1304 sets of 9 column indexes
-
 # dat[slabID][variation][subtile]
+var dat = []
 
 func dat_load_slabset():
 	var CODETIME_START = OS.get_ticks_msec()

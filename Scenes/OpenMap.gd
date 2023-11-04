@@ -40,7 +40,6 @@ onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
-onready var oDkDat = Nodelist.list["oDkDat"]
 
 
 var TOTAL_TIME_TO_OPEN_MAP

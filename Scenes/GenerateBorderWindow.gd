@@ -22,7 +22,6 @@ onready var oNewMapSymmetricalBorder = Nodelist.list["oNewMapSymmetricalBorder"]
 onready var oNoiseDistance = Nodelist.list["oNoiseDistance"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
-onready var oDkDat = Nodelist.list["oDkDat"]
 
 var noise = OpenSimplexNoise.new()
 var imageData = Image.new()
@@ -91,7 +90,7 @@ func _on_ButtonNewMapOK_pressed():
 	
 	oCurrentMap._on_ButtonNewMap_pressed()
 	
-	if oDkDat.dat.empty() == true:
+	if Slabset.dat.empty() == true:
 		oMessage.quick("Failed loading slabset, game executable might not be correct. Set in File -> Preferences")
 		return
 	

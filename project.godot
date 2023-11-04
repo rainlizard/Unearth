@@ -56,6 +56,8 @@ Nodelist="*res://Autoload/Nodelist.gd"
 Utils="*res://Autoload/Utils.gd"
 Filetypes="*res://Autoload/Filetypes.gd"
 M="*res://Autoload/M.gd"
+Slabset="*res://Autoload/Slabset.gd"
+Columnset="*res://Autoload/Columnset.gd"
 
 [debug]
 

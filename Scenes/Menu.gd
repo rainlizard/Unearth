@@ -35,7 +35,6 @@ onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oDataLof = Nodelist.list["oDataLof"]
-onready var oDkClm = Nodelist.list["oDkClm"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
 onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 onready var oGridDataWindow = Nodelist.list["oGridDataWindow"]
@@ -262,7 +261,7 @@ func _on_ViewSubmenu_Pressed(pressedID):
 func _on_MenuButtonSettings_pressed():
 	oMenuButtonSettings.get_popup().visible = false
 	
-	if oDkClm.cubes.empty() == true:
+	if Columnset.cubes.empty() == true:
 		oMessage.quick("No currently opened map.")
 	else:
 		Utils.popup_centered(oMapSettingsWindow)
