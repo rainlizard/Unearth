@@ -1,4 +1,4 @@
-extends ScrollContainer
+extends PanelContainer
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oMessage = Nodelist.list["oMessage"]
@@ -7,27 +7,27 @@ onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 
-onready var oHeightSpinBox = $"VBoxContainer/GridAdvancedValues/HeightSpinBox"
-onready var oSolidMaskSpinBox = $"VBoxContainer/GridAdvancedValues/SolidMaskSpinBox"
-onready var oPermanentSpinBox = $"VBoxContainer/GridAdvancedValues/PermanentSpinBox"
-onready var oOrientationSpinBox = $"VBoxContainer/GridAdvancedValues/OrientationSpinBox"
-onready var oLintelSpinBox = $"VBoxContainer/GridAdvancedValues/LintelSpinBox"
-onready var oGridAdvancedValues = $"VBoxContainer/GridAdvancedValues"
-onready var oGridSimpleValues = $"VBoxContainer/GridSimpleValues"
-onready var oColumnIndexSpinBox = $"VBoxContainer/HBoxContainer/ColumnIndexSpinBox"
-onready var oColumnFirstUnusedButton = $"VBoxContainer/ColumnFirstUnusedButton"
-onready var oColumnViewDeleteButton = $"VBoxContainer/ColumnViewDeleteButton"
-onready var oFloorTextureSpinBox = $"VBoxContainer/GridSimpleValues/FloorTextureSpinBox"
+onready var oHeightSpinBox = $"ScrollContainer/VBoxContainer/GridAdvancedValues/HeightSpinBox"
+onready var oSolidMaskSpinBox = $"ScrollContainer/VBoxContainer/GridAdvancedValues/SolidMaskSpinBox"
+onready var oPermanentSpinBox = $"ScrollContainer/VBoxContainer/GridAdvancedValues/PermanentSpinBox"
+onready var oOrientationSpinBox = $"ScrollContainer/VBoxContainer/GridAdvancedValues/OrientationSpinBox"
+onready var oLintelSpinBox = $"ScrollContainer/VBoxContainer/GridAdvancedValues/LintelSpinBox"
+onready var oGridAdvancedValues = $"ScrollContainer/VBoxContainer/GridAdvancedValues"
+onready var oGridSimpleValues = $"ScrollContainer/VBoxContainer/GridSimpleValues"
+onready var oColumnIndexSpinBox = $"ScrollContainer/VBoxContainer/HBoxContainer/ColumnIndexSpinBox"
+onready var oColumnFirstUnusedButton = $"ScrollContainer/VBoxContainer/ColumnFirstUnusedButton"
+onready var oColumnViewDeleteButton = $"ScrollContainer/VBoxContainer/ColumnViewDeleteButton"
+onready var oFloorTextureSpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/FloorTextureSpinBox"
 
-onready var oUtilizedSpinBox = $"VBoxContainer/HBoxContainer2/UtilizedSpinBox"
-onready var oCube8SpinBox = $"VBoxContainer/GridSimpleValues/Cube8SpinBox"
-onready var oCube7SpinBox = $"VBoxContainer/GridSimpleValues/Cube7SpinBox"
-onready var oCube6SpinBox = $"VBoxContainer/GridSimpleValues/Cube6SpinBox"
-onready var oCube5SpinBox = $"VBoxContainer/GridSimpleValues/Cube5SpinBox"
-onready var oCube4SpinBox = $"VBoxContainer/GridSimpleValues/Cube4SpinBox"
-onready var oCube3SpinBox = $"VBoxContainer/GridSimpleValues/Cube3SpinBox"
-onready var oCube2SpinBox = $"VBoxContainer/GridSimpleValues/Cube2SpinBox"
-onready var oCube1SpinBox = $"VBoxContainer/GridSimpleValues/Cube1SpinBox"
+onready var oUtilizedSpinBox = $"ScrollContainer/VBoxContainer/HBoxContainer2/UtilizedSpinBox"
+onready var oCube8SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube8SpinBox"
+onready var oCube7SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube7SpinBox"
+onready var oCube6SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube6SpinBox"
+onready var oCube5SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube5SpinBox"
+onready var oCube4SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube4SpinBox"
+onready var oCube3SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube3SpinBox"
+onready var oCube2SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube2SpinBox"
+onready var oCube1SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube1SpinBox"
 
 onready var cubeSpinBoxArray = [
 	oCube1SpinBox,
