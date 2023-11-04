@@ -14,7 +14,7 @@ var floorTexture = []
 # map0000x.clm : 49,160 bytes. first 4 bytes contains 2048, second 4 bytes are ???, then comes the column data.
 # slabs.clm : 49,156 bytes. first 4 bytes contains 2048, then comes the column data.
 
-func clm_load_slabset():
+func load_columnset():
 	var CODETIME_START = OS.get_ticks_msec()
 	clear_all_column_data() # Important, for reloading/refreshing slabs.clm
 	
@@ -47,4 +47,29 @@ func clm_load_slabset():
 		for cubeNumber in 8:
 			cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
 	
-	print('Created CLM asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	print('Created Columnset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+
+
+func create_cfg_columns(filePath): #"res://columns.cfg"
+	var oMessage = Nodelist.list["oMessage"]
+	var textFile = File.new()
+	if textFile.open(filePath, File.WRITE) == OK:
+	
+		textFile.store_line('[common]')
+		textFile.store_line('ColumnsCount = 2048')
+		textFile.store_line('\r')
+		
+		for i in Columnset.utilized.size():
+			textFile.store_line('[column' + str(i) +']')
+			textFile.store_line('Utilized = ' + str(Columnset.utilized[i])) #(0-1)
+			textFile.store_line('Permanent = ' + str(Columnset.permanent[i])) #(2)
+			textFile.store_line('Lintel = ' + str(Columnset.lintel[i])) #(2)
+			textFile.store_line('Height = ' + str(Columnset.height[i])) #(2)
+			textFile.store_line('SolidMask = ' + str(Columnset.solidMask[i])) #(3-4)
+			textFile.store_line('FloorTexture = ' + str(Columnset.floorTexture[i])) #(5-6)
+			textFile.store_line('Orientation = ' + str(Columnset.orientation[i])) #(7)
+			textFile.store_line('Cubes = ' + str(Columnset.cubes[i])) #(8-23)
+			textFile.store_line('\r')
+		oMessage.quick("Saved: " + filePath)
+	else:
+		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")

@@ -1,161 +1,18 @@
 extends Node
-onready var oDataClmPos = Nodelist.list["oDataClmPos"]
-onready var oDataClm = Nodelist.list["oDataClm"]
-onready var oDkTng = Nodelist.list["oDkTng"]
-onready var oMessage = Nodelist.list["oMessage"]
-
-enum dir {
-	s = 0
-	w = 1
-	n = 2
-	e = 3
-	sw = 4
-	nw = 5
-	ne = 6
-	se = 7
-	all = 8
-	center = 27
-}
-
-# 0 1 2
-# 3 4 5
-# 6 7 8
-
-var CODETIME_START
 
 func start():
 	# Do this only once.
-	if Slabset.dat.empty() == true: Slabset.dat_load_slabset()
-	if Columnset.cubes.empty() == true: Columnset.clm_load_slabset()
-	if oDkTng.tngIndex.empty() == true: oDkTng.tng_load_slabset()
+	if Slabset.dat.empty() == true: Slabset.load_slabset()
+	if Columnset.cubes.empty() == true: Columnset.load_columnset()
+	if Slabset.tngIndex.empty() == true: Slabset.load_slabset_things()
 
-func create_cfg_columns(filePath): #"res://columns.cfg"
-	var textFile = File.new()
-	if textFile.open(filePath, File.WRITE) == OK:
-	
-		textFile.store_line('[common]')
-		textFile.store_line('ColumnsCount = 2048')
-		textFile.store_line('\r')
-		
-		for i in Columnset.utilized.size():
-			textFile.store_line('[column' + str(i) +']')
-			textFile.store_line('Utilized = ' + str(Columnset.utilized[i])) #(0-1)
-			textFile.store_line('Permanent = ' + str(Columnset.permanent[i])) #(2)
-			textFile.store_line('Lintel = ' + str(Columnset.lintel[i])) #(2)
-			textFile.store_line('Height = ' + str(Columnset.height[i])) #(2)
-			textFile.store_line('SolidMask = ' + str(Columnset.solidMask[i])) #(3-4)
-			textFile.store_line('FloorTexture = ' + str(Columnset.floorTexture[i])) #(5-6)
-			textFile.store_line('Orientation = ' + str(Columnset.orientation[i])) #(7)
-			textFile.store_line('Cubes = ' + str(Columnset.cubes[i])) #(8-23)
-			textFile.store_line('\r')
-		oMessage.quick("Saved: " + filePath)
-	else:
-		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
-
-func create_cfg_slabset(filePath): #"res://slabset.cfg"
-	var textFile = File.new()
-	if textFile.open(filePath, File.WRITE) == OK:
-		var slabSection = 0
-		
-		for slabID in 58:
-			#textFile.store_line('[[slab' + str(slabSection) + '.columns]]')
-			
-			var variationStart = (slabID * 28)
-			if slabID >= 42:
-				variationStart = (42 * 28) + (8 * (slabID - 42))
-			
-			var variationCount = 28
-			if slabID >= 42:
-				variationCount = 8
-			
-			textFile.store_line('[slab' + str(slabID) + ']')
-			
-			for variationNumber in variationCount:
-				if variationStart + variationNumber < Slabset.dat.size():
-					#var beginLine = get_dir_text(variationNumber) + ' = '
-					textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + ']')
-					textFile.store_line('columns = ' + String(Slabset.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
-				
-				#var objectNumber = 0
-				var hasObjects = false
-				for i in oDkTng.tngObject.size():
-					if oDkTng.tngObject[i][1] == variationStart + variationNumber: #VariationIndex
-						textFile.store_line("\r")
-						hasObjects = true
-						textFile.store_line('[[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '_objects' + ']]')
-						for z in 9:
-							var val = oDkTng.tngObject[i][z]
-							var beginLine = ''
-							match z:
-								0: beginLine = 'IsLight'
-								1: beginLine = 'VariationIndex'
-								2: beginLine = 'Subtile'
-								3: beginLine = 'RelativeX'
-								4: beginLine = 'RelativeY'
-								5: beginLine = 'RelativeZ'
-								6: beginLine = 'ThingType'
-								7: beginLine = 'Subtype'
-								8: beginLine = 'EffectRange'
-							if z == 1: continue # skip "VariationIndex"
-							
-							beginLine += ' = '
-							
-							textFile.store_line(beginLine + String(val))
-						#objectNumber += 1
-				
-				if hasObjects == false:
-					textFile.store_line('objects = []')
-				
-				textFile.store_line("\r")
-				
-			textFile.store_line("\r")
-			
-			slabSection += 1
-		
-		textFile.close()
-		oMessage.quick("aaaaa Saved: " + filePath)
-	else:
-		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
-
-func get_dir_text(variationNumber):
-	match variationNumber:
-		00: return 'S'
-		01: return 'W'
-		02: return 'N'
-		03: return 'E'
-		04: return 'SW'
-		05: return 'NW'
-		06: return 'NE'
-		07: return 'SE'
-		08: return 'ALL' #SWNE
-		09: return 'S_LAVA'
-		10: return 'W_LAVA'
-		11: return 'N_LAVA'
-		12: return 'E_LAVA'
-		13: return 'SW_LAVA'
-		14: return 'NW_LAVA'
-		15: return 'NE_LAVA'
-		16: return 'SE_LAVA'
-		17: return 'ALL_LAVA' #SWNE_LAVA
-		18: return 'S_WATER'
-		19: return 'W_WATER'
-		20: return 'N_WATER'
-		21: return 'E_WATER'
-		22: return 'SW_WATER'
-		23: return 'NW_WATER'
-		24: return 'NE_WATER'
-		25: return 'SE_WATER'
-		26: return 'ALL_WATER' #SWNE_WATER
-		27: return 'CENTER'
-
-
-func test_write_to_file(data):
-	print('WRITING TO CLM.TXT')
-	var file = File.new()
-	file.open("clm.txt", File.WRITE)
-	for i in data:
-		file.store_line(str(i))
-	file.close()
+#func test_write_to_file(data):
+#	print('WRITING TO CLM.TXT')
+#	var file = File.new()
+#	file.open("clm.txt", File.WRITE)
+#	for i in data:
+#		file.store_line(str(i))
+#	file.close()
 
 
 # Randomized columns

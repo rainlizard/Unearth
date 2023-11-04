@@ -5,7 +5,6 @@ onready var oVariationInfoLabel = Nodelist.list["oVariationInfoLabel"]
 onready var oSlabsetIDSpinBox = Nodelist.list["oSlabsetIDSpinBox"]
 onready var oSlabsetIDLabel = Nodelist.list["oSlabsetIDLabel"]
 onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
-onready var oDkTng = Nodelist.list["oDkTng"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oSlabPalette = Nodelist.list["oSlabPalette"]
 onready var oMessage = Nodelist.list["oMessage"]
@@ -28,8 +27,10 @@ var columnSettersArray = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	oSlabsetTabs.set_tab_title(0, "slabs.dat")
-	oSlabsetTabs.set_tab_title(1, "slabs.clm")
+	oSlabsetTabs.set_tab_title(0, "Slabset") #slabs.dat
+	oSlabsetTabs.set_tab_title(1, "Columnset") #slabs.clm
+	oSlabsetTabs.set_tab_title(2, "Objectset")
+	
 #	for i in 2:
 #		yield(get_tree(),'idle_frame')
 #	Utils.popup_centered(self)
@@ -82,7 +83,7 @@ func _on_SlabsetTabs_tab_changed(tab):
 
 func variation_changed(variation):
 	variation = int(variation)
-	var slabID = oSlabsetIDSpinBox.value
+	#var slabID = oSlabsetIDSpinBox.value
 	#variation
 	var constructString = ""
 	#var byte = (slabID * 28) + variation
@@ -170,7 +171,12 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 
 func _on_SlabsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "This feature is for viewing and editing slabs.dat and slabs.clm from DK's /data/ directory. Export and replace files to mod the game. The cfg exports have no use at the moment."
+	helptxt += "Slabset is loaded from /data/slabs.dat \n"
+	helptxt += "Columnset is loaded from /data/slabs.clm \n"
+	helptxt += "Objectset is loaded from /data/slabs.tng \n"
+	helptxt += "These sets determine the slab's appearance when placed. \n"
+	helptxt += "To mod the slabs that are placed in-game you'll need to export .cfg files and use them in a mappack/campaign."
+	
 	#helptxt += '\n'
 	#helptxt += '\n'
 	#helptxt += ""
@@ -206,9 +212,9 @@ func _on_ExportColumnsCfg_pressed():
 	oExportColumnCfgDialog.current_file = "columns.cfg"
 
 func _on_ExportSlabsetCfgDialog_file_selected(filePath):
-	oSlabPalette.create_cfg_slabset(filePath)
+	Slabset.create_cfg_slabset(filePath)
 func _on_ExportColumnCfgDialog_file_selected(filePath):
-	oSlabPalette.create_cfg_columns(filePath)
+	Columnset.create_cfg_columns(filePath)
 
 func _on_ExportSlabsetDatDialog_file_selected(filePath):
 	var buffer = StreamPeerBuffer.new()
