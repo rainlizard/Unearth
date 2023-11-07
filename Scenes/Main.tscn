@@ -5403,32 +5403,32 @@ margin_bottom = 342.0
 size_flags_horizontal = 3
 columns = 2
 
-[node name="Label9" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
-margin_top = 5.0
+[node name="ObjAddButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
 margin_right = 113.0
-margin_bottom = 26.0
-text = "Object index"
-
-[node name="SpinBoxPropertiesValue9" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
-margin_left = 117.0
-margin_right = 191.0
-margin_bottom = 31.0
-size_flags_horizontal = 10
-
-[node name="Button" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
-margin_top = 35.0
-margin_right = 113.0
-margin_bottom = 62.0
+margin_bottom = 27.0
 size_flags_horizontal = 3
 text = "Add"
 
-[node name="Button2" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="ObjDeleteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
 margin_left = 117.0
-margin_top = 35.0
 margin_right = 191.0
-margin_bottom = 62.0
+margin_bottom = 27.0
 size_flags_horizontal = 3
 text = "Delete"
+
+[node name="Label9" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
+margin_top = 36.0
+margin_right = 113.0
+margin_bottom = 57.0
+text = "Object index"
+
+[node name="ObjObjectIndexSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
+margin_left = 117.0
+margin_top = 31.0
+margin_right = 191.0
+margin_bottom = 62.0
+size_flags_horizontal = 10
+max_value = 1e+06
 
 [node name="Label6" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 71.0
@@ -5436,12 +5436,13 @@ margin_right = 113.0
 margin_bottom = 92.0
 text = "ThingType"
 
-[node name="SpinBoxPropertiesValue6" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
+[node name="ObjThingTypeSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
 margin_left = 117.0
 margin_top = 66.0
 margin_right = 191.0
 margin_bottom = 97.0
 size_flags_horizontal = 10
+max_value = 1e+06
 
 [node name="Label7" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 106.0
@@ -5449,12 +5450,13 @@ margin_right = 113.0
 margin_bottom = 127.0
 text = "Subtype"
 
-[node name="SpinBoxPropertiesValue8" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
+[node name="ObjSubtypeSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
 margin_left = 117.0
 margin_top = 101.0
 margin_right = 191.0
 margin_bottom = 132.0
 size_flags_horizontal = 10
+max_value = 1e+06
 
 [node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 141.0
@@ -5462,12 +5464,13 @@ margin_right = 113.0
 margin_bottom = 162.0
 text = "IsLight"
 
-[node name="SpinBoxPropertiesValue" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
+[node name="ObjIsLightSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
 margin_left = 117.0
 margin_top = 136.0
 margin_right = 191.0
 margin_bottom = 167.0
 size_flags_horizontal = 10
+max_value = 1.0
 
 [node name="Label8" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 176.0
@@ -5475,12 +5478,13 @@ margin_right = 113.0
 margin_bottom = 197.0
 text = "EffectRange"
 
-[node name="SpinBoxPropertiesValue7" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
+[node name="ObjEffectRangeSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
 margin_left = 117.0
 margin_top = 171.0
 margin_right = 191.0
 margin_bottom = 202.0
 size_flags_horizontal = 10
+max_value = 1e+06
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 211.0
@@ -5488,12 +5492,13 @@ margin_right = 113.0
 margin_bottom = 232.0
 text = "Subtile"
 
-[node name="SpinBoxPropertiesValue2" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
+[node name="ObjSubtileSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
 margin_left = 117.0
 margin_top = 206.0
 margin_right = 191.0
 margin_bottom = 237.0
 size_flags_horizontal = 10
+max_value = 8.0
 
 [node name="Label3" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 246.0
@@ -5501,12 +5506,14 @@ margin_right = 113.0
 margin_bottom = 267.0
 text = "RelativeX"
 
-[node name="SpinBoxPropertiesValue3" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
+[node name="ObjRelativeXSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
 margin_left = 117.0
 margin_top = 241.0
 margin_right = 191.0
 margin_bottom = 272.0
 size_flags_horizontal = 10
+min_value = -255.0
+step = 0.01
 
 [node name="Label4" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 281.0
@@ -5514,12 +5521,14 @@ margin_right = 113.0
 margin_bottom = 302.0
 text = "RelativeY"
 
-[node name="SpinBoxPropertiesValue4" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
+[node name="ObjRelativeYSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
 margin_left = 117.0
 margin_top = 276.0
 margin_right = 191.0
 margin_bottom = 307.0
 size_flags_horizontal = 10
+min_value = -255.0
+step = 0.01
 
 [node name="Label5" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer"]
 margin_top = 316.0
@@ -5527,12 +5536,14 @@ margin_right = 113.0
 margin_bottom = 337.0
 text = "RelativeZ"
 
-[node name="SpinBoxPropertiesValue5" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
+[node name="ObjRelativeZSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
 margin_left = 117.0
 margin_top = 311.0
 margin_right = 191.0
 margin_bottom = 342.0
 size_flags_horizontal = 10
+min_value = -255.0
+step = 0.01
 
 [node name="SlabsetCopyValues" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer"]
 visible = false
@@ -6731,6 +6742,16 @@ script = SubResource( 20 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/DkSlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/DkSlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer/ObjAddButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjAddButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer/ObjDeleteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjDeleteButton_pressed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer/ObjThingTypeSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjThingTypeSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer/ObjSubtypeSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjSubtypeSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer/ObjIsLightSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjIsLightSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer/ObjEffectRangeSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjEffectRangeSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer/ObjSubtileSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjSubtileSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer/ObjRelativeXSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjRelativeXSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer/ObjRelativeYSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjRelativeYSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/ScrollContainer/VBoxContainer/GridContainer/ObjRelativeZSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjRelativeZSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetCopyValues" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetCopyValues_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ExportSlabsDat" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsDat_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ExportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsCfg_pressed"]

@@ -6,6 +6,7 @@ var numberOfThings = 0
 
 # dat[slabID][variation][subtile]
 var dat = []
+var blank_dat_entry = []
 var CODETIME_START
 
 enum dir {
@@ -20,6 +21,8 @@ enum dir {
 	all = 8
 	center = 27
 }
+
+
 
 func load_slabset():
 	var oGame = Nodelist.list["oGame"]
@@ -46,7 +49,21 @@ func load_slabset():
 				for subtile in 9:
 					dat[slabID][variation][subtile] = 0
 	
+	blank_dat_entry = []
+	blank_dat_entry.resize(28)
+	for variation in 28:
+		blank_dat_entry[variation] = []
+		blank_dat_entry[variation].resize(9)
+		for subtile in 9:
+			blank_dat_entry[variation][subtile] = 0
+	
 	print('Created Slabset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+
+func fetch_slab(slabID, variation, subtile):
+	if dat.size() > slabID:
+		return dat[slabID][variation][subtile]
+	else:
+		return blank_dat_entry[variation][subtile]
 
 
 func create_cfg_slabset(filePath): #"res://slabset.cfg"
@@ -114,7 +131,6 @@ func create_cfg_slabset(filePath): #"res://slabset.cfg"
 		oMessage.quick("aaaaa Saved: " + filePath)
 	else:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
-
 
 func get_dir_text(variationNumber):
 	match variationNumber:

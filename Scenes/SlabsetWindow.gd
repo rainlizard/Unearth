@@ -18,6 +18,19 @@ onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
 onready var oExportSlabsetClmDialog = Nodelist.list["oExportSlabsetClmDialog"]
 
+onready var oObjObjectIndexSpinBox = Nodelist.list["oObjObjectIndexSpinBox"]
+onready var oObjAddButton = Nodelist.list["oObjAddButton"]
+onready var oObjDeleteButton = Nodelist.list["oObjDeleteButton"]
+onready var oObjThingTypeSpinBox = Nodelist.list["oObjThingTypeSpinBox"]
+onready var oObjSubtypeSpinBox = Nodelist.list["oObjSubtypeSpinBox"]
+onready var oObjIsLightSpinBox = Nodelist.list["oObjIsLightSpinBox"]
+onready var oObjEffectRangeSpinBox = Nodelist.list["oObjEffectRangeSpinBox"]
+onready var oObjSubtileSpinBox = Nodelist.list["oObjSubtileSpinBox"]
+onready var oObjRelativeXSpinBox = Nodelist.list["oObjRelativeXSpinBox"]
+onready var oObjRelativeYSpinBox = Nodelist.list["oObjRelativeYSpinBox"]
+onready var oObjRelativeZSpinBox = Nodelist.list["oObjRelativeZSpinBox"]
+
+
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
 
 # Declare member variables here. Examples:
@@ -149,7 +162,7 @@ func update_columns_ui():
 	for subtile in columnSettersArray.size():
 		var spinbox = columnSettersArray[subtile].get_node("CustomSpinBox")
 		spinbox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
-		var clmIndex = Slabset.dat[slabID][variation][subtile]
+		var clmIndex = Slabset.fetch_slab(slabID, variation, subtile)
 		spinbox.value = clmIndex
 		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
@@ -262,3 +275,43 @@ func _on_ExportSlabsetClmDialog_file_selected(filePath):
 		oMessage.quick("Saved: " + filePath)
 	else:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
+
+
+func _on_ObjAddButton_pressed():
+	pass # Replace with function body.
+
+
+func _on_ObjDeleteButton_pressed():
+	pass # Replace with function body.
+
+
+func _on_ObjThingTypeSpinBox_value_changed(value):
+	pass # Replace with function body.
+
+
+func _on_ObjSubtypeSpinBox_value_changed(value):
+	pass # Replace with function body.
+
+
+func _on_ObjIsLightSpinBox_value_changed(value):
+	pass # Replace with function body.
+
+
+func _on_ObjEffectRangeSpinBox_value_changed(value):
+	pass # Replace with function body.
+
+
+func _on_ObjSubtileSpinBox_value_changed(value):
+	pass # Replace with function body.
+
+
+func _on_ObjRelativeXSpinBox_value_changed(value):
+	pass # Replace with function body.
+
+
+func _on_ObjRelativeYSpinBox_value_changed(value):
+	pass # Replace with function body.
+
+
+func _on_ObjRelativeZSpinBox_value_changed(value):
+	pass # Replace with function body.
