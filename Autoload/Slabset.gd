@@ -1,7 +1,6 @@
 extends Node
 
-var tngIndex = []
-var tngObject = []
+var tng = []
 var numberOfThings = 0
 
 # dat[slabID][variation][subtile]
@@ -22,81 +21,77 @@ enum dir {
 	center = 27
 }
 
-
-
 func load_slabset():
+	tng = []
+	dat = []
 	var CODETIME_START = OS.get_ticks_msec()
 	var oGame = Nodelist.list["oGame"]
+	var oMessage = Nodelist.list["oMessage"]
+	
 	var dat_buffer = Filetypes.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.DAT"))
-	dat_buffer.seek(2)
+	var tng_buffer = Filetypes.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG"))
+	
+	var object_info = create_object_list(tng_buffer)
+	if object_info.size() == 0:
+		oMessage.quick("Failed to load objects")
+		return
 	
 	var totalSlabs = 42 + 16
-	dat = []
-	dat.resize(28*totalSlabs) # Ensure each slab has space for 28 variations
+	var totalVariations = totalSlabs * 28
+	tng.resize(totalVariations)
+	dat.resize(totalVariations)
+	tng_buffer.seek(2)
+	dat_buffer.seek(2)
+	
 	for variation in dat.size():
-		dat[variation] = []
-		dat[variation].resize(9)
+		tng[variation] = []
+		dat[variation] = [0,0,0, 0,0,0, 0,0,0]
 		if variation < 42*28 or (variation % 28) < 8: # Handle the longslabs and the shortslabs
-		#if variation < 42*28 or (variation >= 42*28 and (variation % 28) < 8):
+			
 			for subtile in 9:
-				var value = 65536 - dat_buffer.get_u16()
-				dat[variation][subtile] = value
-		else: # Fill the extra space at the end of the shortslabs
-			for subtile in 9:
-				dat[variation][subtile] = 0
+				dat[variation][subtile] = 65536 - dat_buffer.get_u16()
+			
+			var getObjectIndex = tng_buffer.get_u16()
+			
+			while getObjectIndex < object_info.size(): # Continue until "break"
+				var objectStuff = object_info[getObjectIndex]
+				if objectStuff[1] != variation:
+					break
+				tng[variation].append(objectStuff)
+				getObjectIndex += 1
 	
 	print('Created Slabset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-func load_slabset_things():
-	CODETIME_START = OS.get_ticks_msec()
-	var oGame = Nodelist.list["oGame"]
-	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG")
-	var buffer = Filetypes.file_path_to_buffer(filePath)
-	
-	buffer.seek(0)
-	numberOfThings = buffer.get_u16() # It says 359, however there are actually 362 entries in the file.
+func create_object_list(tng_buffer):
+	tng_buffer.seek(0)
+	numberOfThings = tng_buffer.get_u16() # It says 359, however there are actually 362 entries in the file.
 	print('Number of Things: '+str(numberOfThings))
 	
-	buffer.seek(2)
-	var numberOfSets = 1304
-	tngIndex.resize(numberOfSets)
+	tng_buffer.seek(2 + (1304*2))
 	
-	for i in tngIndex.size():
-		var value = buffer.get_u16()
-		tngIndex[i] = value
+	var object_info = []
+	object_info.resize(numberOfThings)
+	for i in object_info.size():
+		object_info[i] = []
+		object_info[i].resize(9) #(this is coincidentally size 9, it has nothing to do with subtiles)
+		object_info[i][0] = tng_buffer.get_u8() # 0 = object/effectgen, 1 = light
+		
+		var variation = tng_buffer.get_u16() # Extract the old slab variation index
+		if variation >= 1176: # If the variation index is from the short slabs in the original structure, calculate its new index in the uniform 58*28 structure.
+			variation = 1176 + ((variation - 1176) / 8) * 28 + (variation % 8)
+		object_info[i][1] = variation # Set the new slab variation index
+		
+		object_info[i][2] = tng_buffer.get_u8() # subtile (between 0 and 8)
+		
+		for xxx in [3,4,5]: # Location values can look like 255.75, this is supposed to be -0.25
+			var datnum = tng_buffer.get_u16() / 256.0
+			if datnum > 255: datnum -= 256
+			object_info[i][xxx] = datnum
+		
+		for xxx in [6,7,8]: # Thing type, # Thing subtype, # Effect range
+			object_info[i][xxx] = tng_buffer.get_u8() 
 	
-	buffer.seek(2 + (1304*2))
-	
-	tngObject.resize(numberOfThings)
-	for i in tngObject.size():
-		
-		tngObject[i] = []
-		tngObject[i].resize(9) #(this is coincidentally size 9, it has nothing to do with subtiles)
-		tngObject[i][0] = buffer.get_u8() # 0 = object/effectgen, 1 = light
-		tngObject[i][1] = buffer.get_u16() # slabVariation
-		tngObject[i][2] = buffer.get_u8() # subtile (between 0 and 8)
-		
-		var datnum
-		
-		# Location values can look like 255.75, this is supposed to be -0.25
-		datnum = buffer.get_u16() / 256.0
-		if datnum > 255: datnum -= 256
-		tngObject[i][3] = datnum
-		
-		datnum = buffer.get_u16() / 256.0
-		if datnum > 255: datnum -= 256
-		tngObject[i][4] = datnum
-		
-		datnum = buffer.get_u16() / 256.0
-		if datnum > 255: datnum -= 256
-		tngObject[i][5] = datnum
-		
-		tngObject[i][6] = buffer.get_u8() # Thing type
-		tngObject[i][7] = buffer.get_u8() # Thing subtype
-		tngObject[i][8] = buffer.get_u8() # Effect range
-	
-	print('slabtng_object_entry_asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-
+	return object_info
 
 func fetch_column_index(variation, subtile):
 	if variation < dat.size():

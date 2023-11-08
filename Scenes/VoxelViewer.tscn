@@ -41,7 +41,7 @@ transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -6, 0, 
 projection = 1
 current = true
 fov = 90.0
-size = 11.5
+size = 20.0
 far = 8192.0
 script = ExtResource( 1 )
 

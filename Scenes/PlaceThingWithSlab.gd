@@ -13,7 +13,7 @@ onready var dir = oSlabPlacement.dir
 # For example the Prison bars need extra rules for detecting nearby walls, but the original slab cubes did not need these rules.
 # So objects have their own placement rules, though we use the original bitmask/fullVariationIndex (from oSlabPlacement) as a basis to work from.
 
-func place_slab_objects(xSlab, ySlab, slabID, ownership, fullVariationIndex, bitmask, surrID, surrOwner):
+func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVar, bitmask, surrID, surrOwner):
 	oInstances.delete_attached_objects_on_slab(xSlab, ySlab)
 	
 	if slabID == Slabs.PRISON:
@@ -42,11 +42,13 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, fullVariationIndex, bit
 		var isMiddle = determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner)
 		if isMiddle == false:
 			constructedSlab = oSlabPlacement.slab_all
-	#print(fullVariationIndex + constructedSlab[0])
+	#print(slabVar + constructedSlab[0])
+	#print(slabVar)
+	
 	for subtile in 9:
-		var idx = get_obj_idx(fullVariationIndex + constructedSlab[subtile], subtile)
-		if idx != -1:
-			oInstances.spawn(xSlab, ySlab, slabID, ownership, subtile, Slabset.tngObject[idx])
+		var objectStuff = get_object(slabVar + constructedSlab[subtile], subtile)
+		if objectStuff.size() > 0:
+			oInstances.spawn(xSlab, ySlab, slabID, ownership, subtile, objectStuff)
 
 func create_door_thing(xSlab, ySlab, ownership):
 	var createAtPos = Vector3((xSlab*3)+1.5, (ySlab*3)+1.5, 5)
@@ -83,21 +85,25 @@ func determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner):
 			return true
 	return false
 
-func get_obj_idx(newSlabVar, subtile):
-	if newSlabVar >= Slabset.tngIndex.size(): return -1 # Out of bounds, causes crash
-	
-	var idx = Slabset.tngIndex[newSlabVar]
-	if idx >= Slabset.numberOfThings: return -1
-	# "tngIndex" has one index per fullVariationIndex.
-	# But there are actually multiple entries inside "tngObject" with the same fullVariationIndex value. Their index is grouped up, that's why I do idx+=1.
-	while true:
-		if subtile == Slabset.tngObject[idx][2]:
-			return idx
-		
-		idx += 1
-		if idx >= Slabset.numberOfThings: return -1
-		if Slabset.tngObject[idx][1] != newSlabVar:
-			return -1
+func get_object(slabVar, subtile):
+	for objectStuff in Slabset.tng[slabVar]:
+		if subtile == objectStuff[2]:
+			return objectStuff
+	return []
+#	if slabVar >= Slabset.tng.size(): return -1 # Out of bounds, causes crash
+#
+#	var idx = Slabset.tng[slabVar]
+#	if idx >= Slabset.numberOfThings: return -1
+#	# "tng" has one index per fullVariationIndex.
+#	# But there are actually multiple entries inside "tngObject" with the same fullVariationIndex value. Their index is grouped up, that's why I do idx+=1.
+#	while true:
+#		if subtile == Slabset.tngObject[idx][2]:
+#			return idx
+#
+#		idx += 1
+#		if idx >= Slabset.numberOfThings: return -1
+#		if Slabset.tngObject[idx][1] != slabVar:
+#			return -1
 
 func prison_bar_bitmask(slabID, surrID):
 	var bitmask = 0
