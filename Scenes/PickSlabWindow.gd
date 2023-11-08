@@ -85,20 +85,24 @@ func add_slabs():
 		if putIntoTab != Slabs.TAB_NONE:
 			var scene = load("res://Scenes/SlabDisplay.tscn")
 			var id = scene.instance()
-			var slabVariation = 0
+			var slabVariation
 			
 			var columnArray = [0,0,0, 0,0,0, 0,0,0]
 			match slabID:
 				Slabs.PORTAL:
+					slabVariation = (Slabs.PORTAL*28) + 8
 					for i in 9:
-						columnArray[i] = Slabset.fetch_column_index(slabID, 8, i)
+						columnArray[i] = Slabset.fetch_column_index(slabVariation, i)
 				Slabs.WALL_AUTOMATIC:
+					slabVariation = Slabs.WALL_WITH_BANNER*28
 					for i in 9:
-						columnArray[i] = Slabset.fetch_column_index(Slabs.WALL_WITH_BANNER, slabVariation, i)
+						columnArray[i] = Slabset.fetch_column_index(slabVariation, i)
 				_:
 					if slabID < 1000:
+						# Normal slab
+						slabVariation = slabID*28
 						for i in 9:
-							columnArray[i] = Slabset.fetch_column_index(slabID, slabVariation, i)
+							columnArray[i] = Slabset.fetch_column_index(slabVariation, i)
 					else:
 						# Custom slab
 						pass

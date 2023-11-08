@@ -154,20 +154,19 @@ func _on_VariationNumberSpinBox_value_changed(value):
 	update_columns_ui()
 
 func update_columns_ui():
-	
-	var variation = int(oVariationNumberSpinBox.value)
 	var slabID = int(oSlabsetIDSpinBox.value)
+	var variation = (slabID * 28) + int(oVariationNumberSpinBox.value)
 	
 	for subtile in columnSettersArray.size():
 		var spinbox = columnSettersArray[subtile].get_node("CustomSpinBox")
 		spinbox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
-		var clmIndex = Slabset.fetch_column_index(slabID, variation, subtile)
+		var clmIndex = Slabset.fetch_column_index(variation, subtile)
 		spinbox.value = clmIndex
 		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
 func _on_Slabset3x3ColumnSpinBox_value_changed(value):
-	var variation = int(oVariationNumberSpinBox.value)
 	var slabID = int(oSlabsetIDSpinBox.value)
+	var variation = (slabID * 28) + int(oVariationNumberSpinBox.value)
 	
 	for y in 3:
 		for x in 3:
@@ -176,7 +175,7 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 			var spinbox = id.get_node("CustomSpinBox")
 			var clmIndex = spinbox.value
 			
-			Slabset.dat[slabID][variation][i] = clmIndex
+			Slabset.dat[variation][i] = clmIndex
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
 
 

@@ -752,10 +752,8 @@ func dkdat_position_to_column_data(clmIndexGroup):
 	#print(clmIndexGroup)
 	
 	for subtile in 9:
-		var index = clmIndexGroup[subtile] / 9
-		var slabID = index / 28
-		var variation = index % 28
-		var dkClmIndex = Slabset.fetch_column_index(slabID, variation, subtile)
+		var variation = clmIndexGroup[subtile] / 9
+		var dkClmIndex = Slabset.fetch_column_index(variation, subtile)
 		
 		# Get the cube data from oDkClm
 		slabCubes.append(Columnset.cubes[dkClmIndex])

@@ -128,10 +128,12 @@ func do_all():
 		oAllVoxelObjects.translation.x = -0.5
 	var CODETIME_START = OS.get_ticks_msec()
 	
+	
+	
 	if displayingType == DK_SLABSET: # This is not for custom slab, this is for dynamic slabs
 		var slabID = oSlabsetIDSpinBox.value
 		var separation = 0
-		
+		var variationStart = slabID * 28
 		for variation in 28:
 			var surrClmIndex = [-1,-1,-1,-1]
 			for ySubtile in 3:
@@ -141,7 +143,7 @@ func do_all():
 					var x = (variation*3) + xSubtile + separation
 					var z = (variation*3) + ySubtile + separation
 					
-					var clmIndex = Slabset.fetch_column_index(slabID, variation, subtile)
+					var clmIndex = Slabset.fetch_column_index(variationStart+variation, subtile)
 					
 					oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, true, Columnset)
 			

@@ -31,28 +31,19 @@ func load_slabset():
 	dat_buffer.seek(2)
 	
 	var totalSlabs = 42 + 16
-	dat.resize(totalSlabs)
-	for slabID in totalSlabs:
-		dat[slabID] = []
-		dat[slabID].resize(28) # Ensure each slab has space for 28 variations
-		for variation in 28:
-			dat[slabID][variation] = []
-			dat[slabID][variation].resize(9)
-			if slabID < 42 or variation < 8: # Only fill the data for the first 42 slabs and the first 8 variations of the next 16 slabs
-				for subtile in 9:
-					var value = 65536 - dat_buffer.get_u16()
-					dat[slabID][variation][subtile] = value
-			else:
-				for subtile in 9:
-					dat[slabID][variation][subtile] = 0
-	
-	blank_dat_entry = []
-	blank_dat_entry.resize(28)
-	for variation in 28:
-		blank_dat_entry[variation] = []
-		blank_dat_entry[variation].resize(9)
-		for subtile in 9:
-			blank_dat_entry[variation][subtile] = 0
+	dat = []
+	dat.resize(28*totalSlabs) # Ensure each slab has space for 28 variations
+	for variation in dat.size():
+		dat[variation] = []
+		dat[variation].resize(9)
+		if variation < 42*28 or (variation % 28) < 8: # Handle the longslabs and the shortslabs
+		#if variation < 42*28 or (variation >= 42*28 and (variation % 28) < 8):
+			for subtile in 9:
+				var value = 65536 - dat_buffer.get_u16()
+				dat[variation][subtile] = value
+		else: # Fill the extra space at the end of the shortslabs
+			for subtile in 9:
+				dat[variation][subtile] = 0
 	
 	print('Created Slabset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
@@ -107,13 +98,11 @@ func load_slabset_things():
 	print('slabtng_object_entry_asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 
-
-
-func fetch_column_index(slabID, variation, subtile):
-	if dat.size() > slabID:
-		return dat[slabID][variation][subtile]
+func fetch_column_index(variation, subtile):
+	if variation < dat.size():
+		return dat[variation][subtile]
 	else:
-		return blank_dat_entry[variation][subtile]
+		return 0
 
 
 #func create_cfg_slabset(filePath): #"res://slabset.cfg"

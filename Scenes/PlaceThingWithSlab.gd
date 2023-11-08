@@ -84,7 +84,7 @@ func determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner):
 	return false
 
 func get_obj_idx(newSlabVar, subtile):
-	if newSlabVar >= 1304: return -1 # Out of bounds, causes crash
+	if newSlabVar >= Slabset.tngIndex.size(): return -1 # Out of bounds, causes crash
 	
 	var idx = Slabset.tngIndex[newSlabVar]
 	if idx >= Slabset.numberOfThings: return -1
