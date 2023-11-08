@@ -141,7 +141,7 @@ func do_all():
 					var x = (variation*3) + xSubtile + separation
 					var z = (variation*3) + ySubtile + separation
 					
-					var clmIndex = Slabset.fetch_slab(slabID, variation, subtile)
+					var clmIndex = Slabset.fetch_column_index(slabID, variation, subtile)
 					
 					oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, true, Columnset)
 			

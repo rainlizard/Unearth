@@ -25,13 +25,10 @@ enum dir {
 
 
 func load_slabset():
+	var CODETIME_START = OS.get_ticks_msec()
 	var oGame = Nodelist.list["oGame"]
-	
-	CODETIME_START = OS.get_ticks_msec()
-	
-	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.DAT")
-	var buffer = Filetypes.file_path_to_buffer(filePath)
-	buffer.seek(2)
+	var dat_buffer = Filetypes.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.DAT"))
+	dat_buffer.seek(2)
 	
 	var totalSlabs = 42 + 16
 	dat.resize(totalSlabs)
@@ -43,7 +40,7 @@ func load_slabset():
 			dat[slabID][variation].resize(9)
 			if slabID < 42 or variation < 8: # Only fill the data for the first 42 slabs and the first 8 variations of the next 16 slabs
 				for subtile in 9:
-					var value = 65536 - buffer.get_u16()
+					var value = 65536 - dat_buffer.get_u16()
 					dat[slabID][variation][subtile] = value
 			else:
 				for subtile in 9:
@@ -59,78 +56,131 @@ func load_slabset():
 	
 	print('Created Slabset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-func fetch_slab(slabID, variation, subtile):
+func load_slabset_things():
+	CODETIME_START = OS.get_ticks_msec()
+	var oGame = Nodelist.list["oGame"]
+	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG")
+	var buffer = Filetypes.file_path_to_buffer(filePath)
+	
+	buffer.seek(0)
+	numberOfThings = buffer.get_u16() # It says 359, however there are actually 362 entries in the file.
+	print('Number of Things: '+str(numberOfThings))
+	
+	buffer.seek(2)
+	var numberOfSets = 1304
+	tngIndex.resize(numberOfSets)
+	
+	for i in tngIndex.size():
+		var value = buffer.get_u16()
+		tngIndex[i] = value
+	
+	buffer.seek(2 + (1304*2))
+	
+	tngObject.resize(numberOfThings)
+	for i in tngObject.size():
+		
+		tngObject[i] = []
+		tngObject[i].resize(9) #(this is coincidentally size 9, it has nothing to do with subtiles)
+		tngObject[i][0] = buffer.get_u8() # 0 = object/effectgen, 1 = light
+		tngObject[i][1] = buffer.get_u16() # slabVariation
+		tngObject[i][2] = buffer.get_u8() # subtile (between 0 and 8)
+		
+		var datnum
+		
+		# Location values can look like 255.75, this is supposed to be -0.25
+		datnum = buffer.get_u16() / 256.0
+		if datnum > 255: datnum -= 256
+		tngObject[i][3] = datnum
+		
+		datnum = buffer.get_u16() / 256.0
+		if datnum > 255: datnum -= 256
+		tngObject[i][4] = datnum
+		
+		datnum = buffer.get_u16() / 256.0
+		if datnum > 255: datnum -= 256
+		tngObject[i][5] = datnum
+		
+		tngObject[i][6] = buffer.get_u8() # Thing type
+		tngObject[i][7] = buffer.get_u8() # Thing subtype
+		tngObject[i][8] = buffer.get_u8() # Effect range
+	
+	print('slabtng_object_entry_asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+
+
+
+
+func fetch_column_index(slabID, variation, subtile):
 	if dat.size() > slabID:
 		return dat[slabID][variation][subtile]
 	else:
 		return blank_dat_entry[variation][subtile]
 
 
-func create_cfg_slabset(filePath): #"res://slabset.cfg"
-	var oMessage = Nodelist.list["oMessage"]
-	var textFile = File.new()
-	if textFile.open(filePath, File.WRITE) == OK:
-		var slabSection = 0
-		
-		for slabID in 58:
-			#textFile.store_line('[[slab' + str(slabSection) + '.columns]]')
-			
-			var variationStart = (slabID * 28)
-			if slabID >= 42:
-				variationStart = (42 * 28) + (8 * (slabID - 42))
-			
-			var variationCount = 28
-			if slabID >= 42:
-				variationCount = 8
-			
-			textFile.store_line('[slab' + str(slabID) + ']')
-			
-			for variationNumber in variationCount:
-				if variationStart + variationNumber < Slabset.dat.size():
-					#var beginLine = get_dir_text(variationNumber) + ' = '
-					textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + ']')
-					textFile.store_line('columns = ' + String(Slabset.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
-				
-				#var objectNumber = 0
-				var hasObjects = false
-				for i in tngObject.size():
-					if tngObject[i][1] == variationStart + variationNumber: #VariationIndex
-						textFile.store_line("\r")
-						hasObjects = true
-						textFile.store_line('[[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '_objects' + ']]')
-						for z in 9:
-							var val = tngObject[i][z]
-							var beginLine = ''
-							match z:
-								0: beginLine = 'IsLight'
-								1: beginLine = 'VariationIndex'
-								2: beginLine = 'Subtile'
-								3: beginLine = 'RelativeX'
-								4: beginLine = 'RelativeY'
-								5: beginLine = 'RelativeZ'
-								6: beginLine = 'ThingType'
-								7: beginLine = 'Subtype'
-								8: beginLine = 'EffectRange'
-							if z == 1: continue # skip "VariationIndex"
-							
-							beginLine += ' = '
-							
-							textFile.store_line(beginLine + String(val))
-						#objectNumber += 1
-				
-				if hasObjects == false:
-					textFile.store_line('objects = []')
-				
-				textFile.store_line("\r")
-				
-			textFile.store_line("\r")
-			
-			slabSection += 1
-		
-		textFile.close()
-		oMessage.quick("aaaaa Saved: " + filePath)
-	else:
-		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
+#func create_cfg_slabset(filePath): #"res://slabset.cfg"
+#	var oMessage = Nodelist.list["oMessage"]
+#	var textFile = File.new()
+#	if textFile.open(filePath, File.WRITE) == OK:
+#		var slabSection = 0
+#
+#		for slabID in 58:
+#			#textFile.store_line('[[slab' + str(slabSection) + '.columns]]')
+#
+#			var variationStart = (slabID * 28)
+#			if slabID >= 42:
+#				variationStart = (42 * 28) + (8 * (slabID - 42))
+#
+#			var variationCount = 28
+#			if slabID >= 42:
+#				variationCount = 8
+#
+#			textFile.store_line('[slab' + str(slabID) + ']')
+#
+#			for variationNumber in variationCount:
+#				if variationStart + variationNumber < Slabset.dat.size():
+#					#var beginLine = get_dir_text(variationNumber) + ' = '
+#					textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + ']')
+#					textFile.store_line('columns = ' + String(Slabset.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
+#
+#				#var objectNumber = 0
+#				var hasObjects = false
+#				for i in tngObject.size():
+#					if tngObject[i][1] == variationStart + variationNumber: #VariationIndex
+#						textFile.store_line("\r")
+#						hasObjects = true
+#						textFile.store_line('[[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '_objects' + ']]')
+#						for z in 9:
+#							var val = tngObject[i][z]
+#							var beginLine = ''
+#							match z:
+#								0: beginLine = 'IsLight'
+#								1: beginLine = 'VariationIndex'
+#								2: beginLine = 'Subtile'
+#								3: beginLine = 'RelativeX'
+#								4: beginLine = 'RelativeY'
+#								5: beginLine = 'RelativeZ'
+#								6: beginLine = 'ThingType'
+#								7: beginLine = 'Subtype'
+#								8: beginLine = 'EffectRange'
+#							if z == 1: continue # skip "VariationIndex"
+#
+#							beginLine += ' = '
+#
+#							textFile.store_line(beginLine + String(val))
+#						#objectNumber += 1
+#
+#				if hasObjects == false:
+#					textFile.store_line('objects = []')
+#
+#				textFile.store_line("\r")
+#
+#			textFile.store_line("\r")
+#
+#			slabSection += 1
+#
+#		textFile.close()
+#		oMessage.quick("aaaaa Saved: " + filePath)
+#	else:
+#		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
 func get_dir_text(variationNumber):
 	match variationNumber:
@@ -163,86 +213,6 @@ func get_dir_text(variationNumber):
 		26: return 'ALL_WATER' #SWNE_WATER
 		27: return 'CENTER'
 
-func load_slabset_things():
-	var oGame = Nodelist.list["oGame"]
-	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG")
-	var buffer = Filetypes.file_path_to_buffer(filePath)
-	
-	buffer.seek(0)
-	numberOfThings = buffer.get_u16() # It says 359, however there are actually 362 entries in the file.
-	print('Number of Things: '+str(numberOfThings))
-	
-	slabtng_index_asset(buffer)
-	slabtng_object_entry_asset(buffer)
-	
-	#test_creation_of_object()
-
-func slabtng_index_asset(buffer):
-	CODETIME_START = OS.get_ticks_msec()
-	
-#	var textFile = File.new()
-#	textFile.open("res://slabtng_index_asset.txt", File.WRITE)
-	
-	buffer.seek(2)
-	var numberOfSets = 1304
-	tngIndex.resize(numberOfSets)
-	
-	for i in tngIndex.size():
-		var value = buffer.get_u16()
-		tngIndex[i] = value
-		#var lineOfText = str(value)
-		#textFile.store_line(lineOfText)
-	
-	#textFile.close()
-	#print('slabtng_index_asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-
-func slabtng_object_entry_asset(buffer):
-	CODETIME_START = OS.get_ticks_msec()
-	
-	buffer.seek(2 + (1304*2))
-	
-	#var textFile = File.new()
-	#textFile.open("res://slabtng_object_entry_asset.txt", File.WRITE)
-	
-	tngObject.resize(numberOfThings)
-	for i in tngObject.size():
-		
-		tngObject[i] = []
-		tngObject[i].resize(9) #(this is coincidentally size 9, it has nothing to do with subtiles)
-		tngObject[i][0] = buffer.get_u8() # 0 = object/effectgen, 1 = light
-		tngObject[i][1] = buffer.get_u16() # slabVariation
-		tngObject[i][2] = buffer.get_u8() # subtile (between 0 and 8)
-		
-		var datnum
-		
-		# Location values can look like 255.75, this is supposed to be -0.25
-		datnum = buffer.get_u16() / 256.0
-		if datnum > 255: datnum -= 256
-		tngObject[i][3] = datnum
-		
-		datnum = buffer.get_u16() / 256.0
-		if datnum > 255: datnum -= 256
-		tngObject[i][4] = datnum
-		
-		datnum = buffer.get_u16() / 256.0
-		if datnum > 255: datnum -= 256
-		tngObject[i][5] = datnum
-		
-		tngObject[i][6] = buffer.get_u8() # Thing type
-		tngObject[i][7] = buffer.get_u8() # Thing subtype
-		tngObject[i][8] = buffer.get_u8() # Effect range
-		
-#		textFile.store_line(str(i)+'---------------------')
-#		for blah in 9:
-#			textFile.store_line(str(tngObject[i][blah]))
-	
-	#textFile.close()
-	
-	print('slabtng_object_entry_asset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-
-#		tngObject[i][3] = wrapi(file.get_u16(), -511, 65025) / 256.0
-#		tngObject[i][4] = wrapi(file.get_u16(), -511, 65025) / 256.0
-#		tngObject[i][5] = wrapi(file.get_u16(), -511, 65025) / 256.0
 
 
 #

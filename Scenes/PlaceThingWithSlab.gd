@@ -8,12 +8,12 @@ onready var oSelector = Nodelist.list["oSelector"]
 
 onready var dir = oSlabPlacement.dir
 
-# The way things placed from slabs.tng works, is that we use the same coordinates (via bitmask and slabVariation) as what's in slabs.dat/clm (level 1000)
+# The way things placed from slabs.tng works, is that we use the same coordinates (via bitmask and fullVariationIndex) as what's in slabs.dat/clm (level 1000)
 # Except we change the positions based on some placement rules.
 # For example the Prison bars need extra rules for detecting nearby walls, but the original slab cubes did not need these rules.
-# So objects have their own placement rules, though we use the original bitmask/slabvariation (from oSlabPlacement) as a basis to work from.
+# So objects have their own placement rules, though we use the original bitmask/fullVariationIndex (from oSlabPlacement) as a basis to work from.
 
-func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner):
+func place_slab_objects(xSlab, ySlab, slabID, ownership, fullVariationIndex, bitmask, surrID, surrOwner):
 	oInstances.delete_attached_objects_on_slab(xSlab, ySlab)
 	
 	if slabID == Slabs.PRISON:
@@ -42,9 +42,9 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask,
 		var isMiddle = determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner)
 		if isMiddle == false:
 			constructedSlab = oSlabPlacement.slab_all
-	#print(slabVariation + constructedSlab[0])
+	#print(fullVariationIndex + constructedSlab[0])
 	for subtile in 9:
-		var idx = get_obj_idx(slabVariation + constructedSlab[subtile], subtile)
+		var idx = get_obj_idx(fullVariationIndex + constructedSlab[subtile], subtile)
 		if idx != -1:
 			oInstances.spawn(xSlab, ySlab, slabID, ownership, subtile, Slabset.tngObject[idx])
 
@@ -88,8 +88,8 @@ func get_obj_idx(newSlabVar, subtile):
 	
 	var idx = Slabset.tngIndex[newSlabVar]
 	if idx >= Slabset.numberOfThings: return -1
-	# "tngIndex" has one index per slabVariation.
-	# But there are actually multiple entries inside "tngObject" with the same slabVariation value. Their index is grouped up, that's why I do idx+=1.
+	# "tngIndex" has one index per fullVariationIndex.
+	# But there are actually multiple entries inside "tngObject" with the same fullVariationIndex value. Their index is grouped up, that's why I do idx+=1.
 	while true:
 		if subtile == Slabset.tngObject[idx][2]:
 			return idx

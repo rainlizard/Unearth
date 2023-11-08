@@ -91,14 +91,14 @@ func add_slabs():
 			match slabID:
 				Slabs.PORTAL:
 					for i in 9:
-						columnArray[i] = Slabset.fetch_slab(slabID, 8, i)
+						columnArray[i] = Slabset.fetch_column_index(slabID, 8, i)
 				Slabs.WALL_AUTOMATIC:
 					for i in 9:
-						columnArray[i] = Slabset.fetch_slab(Slabs.WALL_WITH_BANNER, slabVariation, i)
+						columnArray[i] = Slabset.fetch_column_index(Slabs.WALL_WITH_BANNER, slabVariation, i)
 				_:
 					if slabID < 1000:
 						for i in 9:
-							columnArray[i] = Slabset.fetch_slab(slabID, slabVariation, i)
+							columnArray[i] = Slabset.fetch_column_index(slabID, slabVariation, i)
 					else:
 						# Custom slab
 						pass

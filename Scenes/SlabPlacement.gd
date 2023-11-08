@@ -462,7 +462,7 @@ func calculate_torch_side(xSlab, ySlab):
 
 
 func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
-	var slabVariation = slabID*28
+	var fullVariationIndex = slabID * 28
 	
 	var bitmask
 	match bitmaskType:
@@ -470,10 +470,10 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 		Slabs.BITMASK_CLAIMED: bitmask = get_claimed_bitmask(slabID, ownership, surrID, surrOwner)
 		Slabs.BITMASK_TALL: bitmask = get_tall_bitmask(surrID)
 	
-	var asset3x3group = make_slab(slabID*28, bitmask)
-	asset3x3group = modify_for_liquid(asset3x3group, surrID, slabID)
+	var clmIndexGroup = make_slab(fullVariationIndex, bitmask)
+	clmIndexGroup = modify_for_liquid(clmIndexGroup, surrID, slabID)
 	
-	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
+	var fullSlabData = dkdat_position_to_column_data(clmIndexGroup)
 	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
 	var slabCubes = fullSlabData[0]
 	var slabFloor = fullSlabData[1]
@@ -519,13 +519,13 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, fullVariationIndex, bitmask, surrID, surrOwner)
 
 func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
-	var slabVariation = slabID * 28
+	var fullVariationIndex = slabID * 28
 	
 	var bitmask = get_wall_bitmask(xSlab, ySlab, surrID, ownership)
-	var asset3x3group = make_slab(slabID*28, bitmask)
+	var clmIndexGroup = make_slab(fullVariationIndex, bitmask)
 	
 	# Wall corners
 	# 0 1 2
@@ -536,17 +536,17 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 	var wallN = Slabs.data[ surrID[dir.n] ][Slabs.BITMASK_TYPE]
 	var wallE = Slabs.data[ surrID[dir.e] ][Slabs.BITMASK_TYPE]
 	if wallN == bitmaskType and wallE == bitmaskType and Slabs.data[ surrID[dir.ne] ][Slabs.IS_SOLID] == false:
-		asset3x3group[2] = ((slabVariation + dir.all) * 9) + 2
+		clmIndexGroup[2] = ((fullVariationIndex + dir.all) * 9) + 2
 	if wallN == bitmaskType and wallW == bitmaskType and Slabs.data[ surrID[dir.nw] ][Slabs.IS_SOLID] == false:
-		asset3x3group[0] = ((slabVariation + dir.all) * 9) + 0
+		clmIndexGroup[0] = ((fullVariationIndex + dir.all) * 9) + 0
 	if wallS == bitmaskType and wallE == bitmaskType and Slabs.data[ surrID[dir.se] ][Slabs.IS_SOLID] == false:
-		asset3x3group[8] = ((slabVariation + dir.all) * 9) + 8
+		clmIndexGroup[8] = ((fullVariationIndex + dir.all) * 9) + 8
 	if wallS == bitmaskType and wallW == bitmaskType and Slabs.data[ surrID[dir.sw] ][Slabs.IS_SOLID] == false:
-		asset3x3group[6] = ((slabVariation + dir.all) * 9) + 6
+		clmIndexGroup[6] = ((fullVariationIndex + dir.all) * 9) + 6
 	
-	asset3x3group = modify_wall_based_on_nearby_room_and_liquid(asset3x3group, surrID, slabID)
+	clmIndexGroup = modify_wall_based_on_nearby_room_and_liquid(clmIndexGroup, surrID, slabID)
 	
-	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
+	var fullSlabData = dkdat_position_to_column_data(clmIndexGroup)
 	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
 	var slabCubes = fullSlabData[0]
 	var slabFloor = fullSlabData[1]
@@ -559,11 +559,11 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 	slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab,slabID, ownership, slabVariation, bitmask, surrID, surrOwner)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, fullVariationIndex, bitmask, surrID, surrOwner)
 
 
 func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType): # These slabs only have 8 variations each, compared to the others which have 28 each.
-	var slabVariation = slabID * 28
+	var fullVariationIndex = slabID * 28
 	# Make sure door is facing the correct direction by changing its Slab based on surrounding slabs.
 	if slabID in [Slabs.WOODEN_DOOR_1, Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_1, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_1, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_1, Slabs.MAGIC_DOOR_2]:
 		if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == true and Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == true:
@@ -582,9 +582,9 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 			oDataSlab.set_cell(xSlab, ySlab, slabID)
 	
 	var bitmask = 1
-	var asset3x3group = make_slab(slabVariation, bitmask)
+	var clmIndexGroup = make_slab(fullVariationIndex, bitmask)
 	
-	var fullSlabData = dkdat_position_to_column_data(asset3x3group)
+	var fullSlabData = dkdat_position_to_column_data(clmIndexGroup)
 	fullSlabData = randomize_columns(fullSlabData, slabID, bitmaskType)
 	var slabCubes = fullSlabData[0]
 	var slabFloor = fullSlabData[1]
@@ -596,7 +596,7 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_DOOR_2, 0, slabID)
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabVariation, bitmask, null, null)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, fullVariationIndex, bitmask, null, null)
 
 #var localRandom = RandomNumberGenerator.new()
 const rngEarthPathUnderneath = [25,26,27,28,29]
@@ -746,16 +746,16 @@ func set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_TYPE, bitmask
 			slabCubes[5][4] = Cube.ownedCube[Cube.BANNER_RIGHT][ownership]
 	return slabCubes
 
-func dkdat_position_to_column_data(asset3x3group):
+func dkdat_position_to_column_data(clmIndexGroup):
 	var slabCubes = []
 	var slabFloor = []
-	#print(asset3x3group)
+	#print(clmIndexGroup)
 	
 	for subtile in 9:
-		var index = asset3x3group[subtile] / 9
-		var variation = index % 28
+		var index = clmIndexGroup[subtile] / 9
 		var slabID = index / 28
-		var dkClmIndex = Slabset.fetch_slab(slabID, variation, subtile)
+		var variation = index % 28
+		var dkClmIndex = Slabset.fetch_column_index(slabID, variation, subtile)
 		
 		# Get the cube data from oDkClm
 		slabCubes.append(Columnset.cubes[dkClmIndex])
@@ -765,15 +765,15 @@ func dkdat_position_to_column_data(asset3x3group):
 
 #	var clmIndexArray = [0,0,0, 0,0,0, 0,0,0]
 #	for i in 9:
-#		var slabVariation = asset3x3group[i] / 9
-#		var newSubtile = asset3x3group[i] - (slabVariation*9)
+#		var fullVariationIndex = clmIndexGroup[i] / 9
+#		var newSubtile = clmIndexGroup[i] - (fullVariationIndex*9)
 #
 #		# Prevent crash if I do something dumb, just show a purple tile
-#		if slabVariation >= oSlabPalette.slabPal.size():
+#		if fullVariationIndex >= oSlabPalette.slabPal.size():
 #			clmIndexArray[i] = oSlabPalette.slabPal[1303][0] # Show purple
 #			continue
 #
-#		clmIndexArray[i] = oSlabPalette.slabPal[slabVariation][newSubtile] # slab variation - subtile of that variation
+#		clmIndexArray[i] = oSlabPalette.slabPal[fullVariationIndex][newSubtile] # slab variation - subtile of that variation
 #	return clmIndexArray
 
 #var positionsArray3x3 = [
@@ -891,7 +891,7 @@ func adjust_torch_cubes(slabCubes, torchSideToKeep):
 		side += 1
 	return slabCubes
 
-func modify_wall_based_on_nearby_room_and_liquid(asset3x3group, surrID, slabID):
+func modify_wall_based_on_nearby_room_and_liquid(clmIndexGroup, surrID, slabID):
 	# Combined modify_room_face() and modify_for_liquid() so that there won't be a conflict.
 	# This function should opnly be used by Walls.
 	
@@ -967,23 +967,24 @@ func modify_wall_based_on_nearby_room_and_liquid(asset3x3group, surrID, slabID):
 		modify5 = 18*9
 		modify8 = 18*9
 	
-	asset3x3group[0] += modify0
-	asset3x3group[1] += modify1
-	asset3x3group[2] += modify2
-	asset3x3group[3] += modify3
-	asset3x3group[4] += modify4
-	asset3x3group[5] += modify5
-	asset3x3group[6] += modify6
-	asset3x3group[7] += modify7
-	asset3x3group[8] += modify8
+	clmIndexGroup[0] += modify0
+	clmIndexGroup[1] += modify1
+	clmIndexGroup[2] += modify2
+	clmIndexGroup[3] += modify3
+	clmIndexGroup[4] += modify4
+	clmIndexGroup[5] += modify5
+	clmIndexGroup[6] += modify6
+	clmIndexGroup[7] += modify7
+	clmIndexGroup[8] += modify8
 	
-	return asset3x3group
+	return clmIndexGroup
 
-func modify_for_liquid(asset3x3group, surrID, slabID):
+
+func modify_for_liquid(clmIndexGroup, surrID, slabID):
 	
 	# Don't modify slab if slab is liquid
 	if slabID == Slabs.WATER or slabID == Slabs.LAVA:
-		return asset3x3group
+		return clmIndexGroup
 	
 	var modify0 = 0; var modify1 = 0; var modify2 = 0; var modify3 = 0; var modify4 = 0; var modify5 = 0; var modify6 = 0; var modify7 = 0; var modify8 = 0
 	if surrID[dir.s] == Slabs.LAVA:
@@ -1022,22 +1023,22 @@ func modify_for_liquid(asset3x3group, surrID, slabID):
 		modify5 = 18*9
 		modify8 = 18*9
 	
-	asset3x3group[0] += modify0
-	asset3x3group[1] += modify1
-	asset3x3group[2] += modify2
-	asset3x3group[3] += modify3
-	asset3x3group[4] += modify4
-	asset3x3group[5] += modify5
-	asset3x3group[6] += modify6
-	asset3x3group[7] += modify7
-	asset3x3group[8] += modify8
+	clmIndexGroup[0] += modify0
+	clmIndexGroup[1] += modify1
+	clmIndexGroup[2] += modify2
+	clmIndexGroup[3] += modify3
+	clmIndexGroup[4] += modify4
+	clmIndexGroup[5] += modify5
+	clmIndexGroup[6] += modify6
+	clmIndexGroup[7] += modify7
+	clmIndexGroup[8] += modify8
 	
-	return asset3x3group
+	return clmIndexGroup
 
-func make_slab(slabVariation, bitmask):
+func make_slab(fullVariationIndex, bitmask):
 	var constructedSlab = bitmaskToSlab[bitmask].duplicate()
 	for subtile in 9:
-		constructedSlab[subtile] = ((slabVariation+constructedSlab[subtile]) * 9) + subtile
+		constructedSlab[subtile] = ((fullVariationIndex+constructedSlab[subtile]) * 9) + subtile
 	return constructedSlab
 
 var bitmaskToSlab = {
@@ -1443,12 +1444,12 @@ func frail_fill_corner(slabID, index, slabCubes, slabFloor):
 #	Slabs.LAVA,
 #]
 
-#asset3x3group = frail_solo_slab(asset3x3group, surrID, bitmask, slabID)
-#func frail_solo_slab(asset3x3group, surrID, bitmask, slabID):
+#clmIndexGroup = frail_solo_slab(clmIndexGroup, surrID, bitmask, slabID)
+#func frail_solo_slab(clmIndexGroup, surrID, bitmask, slabID):
 #	if oFrailSoloSlabsCheckbox.pressed == false:
-#		return asset3x3group
+#		return clmIndexGroup
 #	if bitmask != 15: # must be a solo slab
-#		return asset3x3group
+#		return clmIndexGroup
 #
 #	# Can be any slab ID
 #	var cornerTopLeft = null
@@ -1503,12 +1504,12 @@ func frail_fill_corner(slabID, index, slabCubes, slabFloor):
 #		if Random.chance_int(50): cornerBottomRight = null
 #
 #	if cornerTopLeft != null:
-#		asset3x3group[0] = cornerTopLeft * 28 * 9
+#		clmIndexGroup[0] = cornerTopLeft * 28 * 9
 #	if cornerTopRight != null:
-#		asset3x3group[2] = cornerTopRight * 28 * 9
+#		clmIndexGroup[2] = cornerTopRight * 28 * 9
 #	if cornerBottomLeft != null:
-#		asset3x3group[6] = cornerBottomLeft * 28 * 9
+#		clmIndexGroup[6] = cornerBottomLeft * 28 * 9
 #	if cornerBottomRight != null:
-#		asset3x3group[8] = cornerBottomRight * 28 * 9
+#		clmIndexGroup[8] = cornerBottomRight * 28 * 9
 #
-#	return asset3x3group
+#	return clmIndexGroup
