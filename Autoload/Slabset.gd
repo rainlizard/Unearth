@@ -62,6 +62,16 @@ func load_slabset():
 	
 	print('Created Slabset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
+		# IsLight [0-1]
+		# Variation
+		# Subtile [0-9]
+		# RelativeX
+		# RelativeY
+		# RelativeZ
+		# Thing type
+		# Thing subtype
+		# Effect range
+
 func create_object_list(tng_buffer):
 	tng_buffer.seek(0)
 	numberOfThings = tng_buffer.get_u16() # It says 359, however there are actually 362 entries in the file.

@@ -126,6 +126,7 @@ func variation_changed(variation):
 		constructString += "Near water"
 	
 	oVariationInfoLabel.text = constructString
+	update_slabthings()
 
 #enum dir {
 #	s = 0
@@ -184,7 +185,7 @@ func _on_SlabsetHelpButton_pressed():
 	var helptxt = ""
 	helptxt += "Slabset is loaded from /data/slabs.dat \n"
 	helptxt += "Columnset is loaded from /data/slabs.clm \n"
-	helptxt += "Objectset is loaded from /data/slabs.tng \n"
+	helptxt += "The attached objects are loaded from /data/slabs.tng \n"
 	helptxt += "These sets determine the slab's appearance when placed. \n"
 	helptxt += "To mod the slabs that are placed in-game you'll need to export .cfg files and use them in a mappack/campaign."
 	
@@ -274,6 +275,42 @@ func _on_ExportSlabsetClmDialog_file_selected(filePath):
 	else:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
+		# [0] IsLight [0-1]
+		# [1] Variation
+		# [2] Subtile [0-9]
+		# [3] RelativeX
+		# [4] RelativeY
+		# [5] RelativeZ
+		# [6] Thing type
+		# [7] Thing subtype
+		# [8] Effect range
+
+func update_slabthings():
+	var slabID = int(oSlabsetIDSpinBox.value)
+	var variation = (slabID * 28) + int(oVariationNumberSpinBox.value)
+	if variation >= Slabset.tng.size():
+		print("Hide the section")
+		return
+	var listOfObjectsOnThisVariation = Slabset.tng[variation]
+	if listOfObjectsOnThisVariation.size() == 0:
+		print("Hide the section")
+		return
+	print("-------------------")
+	print(slabID)
+	print(listOfObjectsOnThisVariation)
+	var obj = listOfObjectsOnThisVariation[0] # Get first object on variation
+	
+	oObjObjectIndexSpinBox.value = 0
+	#oObjAddButton.value = 0
+	#oObjDeleteButton.value = 0
+	oObjThingTypeSpinBox.value = obj[6]
+	oObjSubtypeSpinBox.value = obj[7]
+	oObjIsLightSpinBox.value = obj[0]
+	oObjEffectRangeSpinBox.value = obj[8]
+	oObjSubtileSpinBox.value = obj[2]
+	oObjRelativeXSpinBox.value = obj[3]
+	oObjRelativeYSpinBox.value = obj[4]
+	oObjRelativeZSpinBox.value = obj[5]
 
 func _on_ObjAddButton_pressed():
 	pass # Replace with function body.
