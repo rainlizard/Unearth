@@ -11,6 +11,8 @@ onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oSelector = Nodelist.list["oSelector"]
+onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
+
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
 var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
@@ -137,6 +139,12 @@ func mirror_deletion_of_instance(instanceBeingDeleted):
 					if getNodeAtMirroredPosition.thingType == instanceBeingDeleted.thingType:
 						getNodeAtMirroredPosition.queue_free()
 
+func placement_is_obstructed(thingType, placeSubtile):
+	var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(placeSubtile.x,placeSubtile.y)]
+	if oPlaceThingsAnywhere.pressed == false and detectTerrainHeight >= 5 and thingType != Things.TYPE.EXTRA: # Lights and Action Points can always be placed anywhere
+		return true
+	return false
+
 func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirrorType):
 	var actions = []
 	match oMirrorOptions.splitType:
@@ -156,7 +164,8 @@ func mirror_instance_placement(newThingType, newSubtype, fromPos, newOwner, mirr
 		var toPos = oMirrorOptions.mirror_calculation(performAction, flip, fromPos, fieldX, fieldY)
 		
 		toPos = Vector3(toPos.x, toPos.y, fromPosZ)
-		
+		if placement_is_obstructed(newThingType, Vector2(toPos.x,toPos.y)) == true:
+			continue
 		# Prevent overlapping placements along the center line
 		if oMirrorOptions.splitType == 0: # Don't use 'match', 'continue' doesn't work correctly there.
 			if toPos == fromPos:
