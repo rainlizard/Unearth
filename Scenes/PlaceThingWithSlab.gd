@@ -86,9 +86,10 @@ func determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner):
 	return false
 
 func get_object(slabVar, subtile):
-	for objectStuff in Slabset.tng[slabVar]:
-		if subtile == objectStuff[2]:
-			return objectStuff
+	if slabVar < Slabset.tng.size():
+		for objectStuff in Slabset.tng[slabVar]:
+			if subtile == objectStuff[2]:
+				return objectStuff
 	return []
 #	if slabVar >= Slabset.tng.size(): return -1 # Out of bounds, causes crash
 #
@@ -114,14 +115,16 @@ func prison_bar_bitmask(slabID, surrID):
 	return bitmask
 
 func torch_object_bitmask(xSlab, ySlab, surrID):
-	var torchSide = oSlabPlacement.calculate_torch_side(xSlab, ySlab)
+	var torchSide = oSlabPlacement.pick_torch_side(xSlab, ySlab, surrID)
+	
+	print(torchSide)
 	
 	if Slabs.data[ surrID[torchSide] ][Slabs.IS_SOLID] == true:
 		torchSide = -1
 	
-	if torchSide == 0: return 01 #s
-	elif torchSide == 1: return 02 #w
-	elif torchSide == 2: return 04 #n
-	elif torchSide == 3: return 08 #e
-	elif torchSide == -1: return 0 #center
+	if torchSide == 0: return 01 # south torch
+	elif torchSide == 1: return 02 # west torch
+	elif torchSide == 2: return 04 # north torch
+	elif torchSide == 3: return 08 # east torch
+	elif torchSide == -1: return 0 # no torch
 

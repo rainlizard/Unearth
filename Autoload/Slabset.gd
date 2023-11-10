@@ -24,7 +24,7 @@ enum dir {
 func load_slabset():
 	tng = []
 	dat = []
-	var CODETIME_START = OS.get_ticks_msec()
+	CODETIME_START = OS.get_ticks_msec()
 	var oGame = Nodelist.list["oGame"]
 	var oMessage = Nodelist.list["oMessage"]
 	
