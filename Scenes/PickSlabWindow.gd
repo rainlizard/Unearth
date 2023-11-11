@@ -83,7 +83,7 @@ func add_slabs():
 	for slabID in allSlabIDs:
 		var putIntoTab = Slabs.data[slabID][Slabs.EDITOR_TAB]
 		if putIntoTab != Slabs.TAB_NONE:
-			var scene = load("res://Scenes/SlabDisplay.tscn")
+			var scene = preload("res://Scenes/SlabDisplay.tscn")
 			var id = scene.instance()
 			var slabVariation
 			

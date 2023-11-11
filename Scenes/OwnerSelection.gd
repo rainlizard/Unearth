@@ -23,12 +23,12 @@ func _ready():
 		
 		var setText = ""
 		match i:
-			0: id.texture_normal = load("res://edited_images/plyrsym_32/symbol_player_red_std.png")
-			1: id.texture_normal = load("res://edited_images/plyrsym_32/symbol_player_blue_std.png")
-			2: id.texture_normal = load("res://edited_images/plyrsym_32/symbol_player_green_std.png")
-			3: id.texture_normal = load("res://edited_images/plyrsym_32/symbol_player_yellow_std.png")
-			4: id.texture_normal = load("res://edited_images/plyrsym_32/symbol_player_white_2.png")
-			5: id.texture_normal = load("res://edited_images/plyrsym_32/symbol_player_any_dis.png")
+			0: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_red_std.png")
+			1: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_blue_std.png")
+			2: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_green_std.png")
+			3: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_yellow_std.png")
+			4: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_white_2.png")
+			5: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_any_dis.png")
 		setText = Constants.ownershipNames[i]
 
 		add_child_to_grid(id, setText)

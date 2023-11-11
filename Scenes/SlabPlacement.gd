@@ -33,6 +33,7 @@ onready var oRoundRockNearLiquid = Nodelist.list["oRoundRockNearLiquid"]
 onready var oRoundGoldNearPath = Nodelist.list["oRoundGoldNearPath"]
 onready var oRoundGoldNearLiquid = Nodelist.list["oRoundGoldNearLiquid"]
 onready var oRoundWaterNearLava = Nodelist.list["oRoundWaterNearLava"]
+onready var oAutomaticTorchSlabsCheckbox = Nodelist.list["oAutomaticTorchSlabsCheckbox"]
 
 enum dir {
 	s = 0
@@ -224,7 +225,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 				else:
 					# Skip the corners if the NSEW direction isn't a reinforced wall
 					if i == 0:
-						if Slabs.auto_wall_updates_these.has(surrSlab) == false:
+						if Slabs.auto_wall_updates_these.has(surrSlab) == false and surrSlab != Slabs.WALL_AUTOMATIC:
 							break
 	
 	# Any removals to the shape
@@ -303,13 +304,20 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
 
 func do_update_auto_walls(slabID):
+	# Do not automatically update walls if you're manually placing a wall. (Slabs.WALL_AUTOMATIC is excluded from this check)
+	if Slabs.auto_wall_updates_these.has(oSelection.paintSlab):
+		return false
+	if Slabs.auto_wall_updates_these.has(slabID): # Automatically update walls
+		return true
+	return false # Is not a wall
+	
 	# Only update nearby walls when placing automatic walls
-	if Slabs.auto_wall_updates_these.has(slabID) == true:
-		if oSelection.paintSlab == Slabs.WALL_AUTOMATIC:
-			return true
-		if oFortifyCheckBox.pressed == true:
-			return true
-	return false
+#	if Slabs.auto_wall_updates_these.has(slabID) == true:
+#		if oSelection.paintSlab == Slabs.WALL_AUTOMATIC:
+#			return true
+#		if oFortifyCheckBox.pressed == true:
+#			return true
+#	return false
 
 func do_slab(xSlab, ySlab, slabID, ownership):
 	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
@@ -318,7 +326,7 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 	if slabID == Slabs.WALL_AUTOMATIC or do_update_auto_walls(slabID) == true:
 		slabID = auto_wall(xSlab, ySlab, slabID, surrID)
 	elif slabID == Slabs.EARTH:
-		slabID = auto_torch_slab(xSlab, ySlab, slabID, surrID)
+		slabID = auto_earth(xSlab, ySlab, slabID, surrID)
 	
 	if slabID >= 1000: # Custom Slab IDs
 		if oCustomSlabSystem.data.has(slabID):
@@ -376,6 +384,11 @@ func _on_ConfirmAutoGen_confirmed():
 			shapePositionArray.append(Vector2(xSlab,ySlab))
 	generate_slabs_based_on_id(shapePositionArray, updateNearby)
 
+func auto_earth(xSlab:int, ySlab:int, slabID, surrID):
+	slabID = auto_torch_slab(xSlab, ySlab, slabID, surrID)
+	oDataSlab.set_cell(xSlab, ySlab, slabID)
+	return slabID
+
 func auto_wall(xSlab:int, ySlab:int, slabID, surrID):
 	match oAutoWallArtButton.text:
 		"Grouped":
@@ -393,19 +406,29 @@ func auto_wall(xSlab:int, ySlab:int, slabID, surrID):
 	
 	# Torch wall takes priority
 	slabID = auto_torch_slab(xSlab, ySlab, slabID, surrID)
-	
 	oDataSlab.set_cell(xSlab, ySlab, slabID)
 	return slabID
 
 func auto_torch_slab(xSlab:int, ySlab:int, currentSlabID, surrID):
+	if oAutomaticTorchSlabsCheckbox.pressed == false:
+		return currentSlabID
+	
 	var claimed_ground_near = false
 	# Check adjacent slabs for claimed ground if we are at every 5th slab along the x-axis or y-axis
 	if xSlab % 5 == 0:
-		if surrID[dir.s] == Slabs.CLAIMED_GROUND or surrID[dir.n] == Slabs.CLAIMED_GROUND:
-			claimed_ground_near = true
+		if (xSlab + ySlab) % 2 == 1: # Is odd
+			if surrID[dir.s] == Slabs.CLAIMED_GROUND:
+				claimed_ground_near = true
+		else:
+			if surrID[dir.n] == Slabs.CLAIMED_GROUND:
+				claimed_ground_near = true
 	if ySlab % 5 == 0:
-		if surrID[dir.e] == Slabs.CLAIMED_GROUND or surrID[dir.w] == Slabs.CLAIMED_GROUND:
-			claimed_ground_near = true
+		if (xSlab + ySlab) % 2 == 1: # Is odd
+			if surrID[dir.e] == Slabs.CLAIMED_GROUND:
+				claimed_ground_near = true
+		else:
+			if surrID[dir.w] == Slabs.CLAIMED_GROUND:
+				claimed_ground_near = true
 	
 	# If there's claimed ground near, change the slabID to the corresponding torch slab
 	if claimed_ground_near == true:
@@ -417,251 +440,35 @@ func auto_torch_slab(xSlab:int, ySlab:int, currentSlabID, surrID):
 	return currentSlabID
 
 func pick_torch_side(xSlab:int, ySlab:int, surrID):
+	var side = -1
+	
 	if xSlab % 5 == 0:
-		if surrID[dir.s] == Slabs.CLAIMED_GROUND or surrID[dir.n] == Slabs.CLAIMED_GROUND:
-			if (xSlab + ySlab) % 2 == 1: # Is odd
+		if (xSlab + ySlab) % 2 == 1: # Is odd
+			if surrID[dir.s] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]:
 				return dir.s
-			else:
+		else:
+			if surrID[dir.n] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]:
 				return dir.n
 	if ySlab % 5 == 0:
-		if surrID[dir.e] == Slabs.CLAIMED_GROUND or surrID[dir.w] == Slabs.CLAIMED_GROUND:
-			if (xSlab + ySlab) % 2 == 1: # Is odd
+		if (xSlab + ySlab) % 2 == 1: # Is odd
+			if surrID[dir.e] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]:
 				return dir.e
-			else:
+		else:
+			if surrID[dir.w] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]:
 				return dir.w
-	# Everything above was for automatic wall torch slabs.
-	# Everything below is for slabs that have been manually placed somewhere strange:
-	# Just pick any free direction. (dont use Randomize though, there are multiple references to this function)
-	# S=0 W=1 N=2 E=3
-	# Calculate the preference based on coordinates
-	var preference = (xSlab + ySlab) % 4
-	# Prioritize directions based on the preference
-	if preference == 0 and not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]:
-		return dir.s
-	elif preference == 1 and not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]:
-		return dir.w
-	elif preference == 2 and not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]:
-		return dir.n
-	elif preference == 3 and not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]:
-		return dir.e
-	# If the preferred direction is solid, check the next available direction
-	if not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]:
-		return dir.s
-	elif not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]:
-		return dir.w
-	elif not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]:
-		return dir.n
-	elif not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]:
-		return dir.e
-	# If all directions are solid, return -1
-	return -1
-
-#func auto_torch_slab(xSlab:int, ySlab:int, currentSlabID):
 	
-#	var calcTorchSide = -1
-#	var sideNS = -1
-#	var sideEW = -1
-#
-#	if xSlab % 5 == 0:
-#		if xSlab % 10 == 0: # Every 10th row is reversed
-#			if ySlab % 2 == 0: # Every 2nd tile flips the other way
-#				sideNS = dir.s
-#			else:
-#				sideNS = dir.n
-#		else:
-#			if ySlab % 2 == 0: # Every 2nd tile flips the other way
-#				sideNS = dir.n
-#			else:
-#				sideNS = dir.s
-#
-#	if ySlab % 5 == 0:
-#		if ySlab % 10 == 0: # Every 10th row is reversed
-#			if xSlab % 2 == 0: # Every 2nd tile flips the other way
-#				sideEW = dir.e
-#			else:
-#				sideEW = dir.w
-#		else:
-#			if xSlab % 2 == 0: # Every 2nd tile flips the other way
-#				sideEW = dir.w
-#			else:
-#				sideEW = dir.e
-#
-#	if sideNS != -1 and sideEW != -1:
-#		# Some torch postions (every 5x5 point) are dynamically chosen
-#		if oDataSlab.get_cell(xSlab+1, ySlab) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab-1, ySlab) == Slabs.CLAIMED_GROUND:
-#				calcTorchSide = sideEW
-#		if oDataSlab.get_cell(xSlab, ySlab+1) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab, ySlab-1) == Slabs.CLAIMED_GROUND:
-#				calcTorchSide = sideNS
-#	else:
-#		if sideEW != -1: calcTorchSide = sideEW
-#		if sideNS != -1: calcTorchSide = sideNS
-	
-	
-#	var torch_flags = 0
-#
-#	if xSlab % 5 == 0:
-#		if ySlab % 2 == 0: # Every 2nd tile flips the other way
-#			torch_flags = 1
-#		else:
-#			torch_flags = 1
-#
-#	if ySlab % 5 == 0:
-#		if xSlab % 2 == 0: # Every 2nd tile flips the other way
-#			torch_flags = 2
-#		else:
-#			torch_flags = 2
-#
-#	var supa = 0
-#	if torch_flags == 1:
-#		if oDataSlab.get_cell(xSlab, ySlab + 1) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab, ySlab - 1) == Slabs.CLAIMED_GROUND:
-#				supa += 1
-#	if torch_flags == 2:
-#		if oDataSlab.get_cell(xSlab + 1, ySlab) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab - 1, ySlab) == Slabs.CLAIMED_GROUND:
-#				supa += 1
-	
-#	if xSlab % 5 == 0:
-#		if oDataSlab.get_cell(xSlab, ySlab + 1) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab, ySlab - 1) == Slabs.CLAIMED_GROUND:
-#				torch_flags += 1
-#	if ySlab % 5 == 0:
-#		if oDataSlab.get_cell(xSlab + 1, ySlab) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab - 1, ySlab) == Slabs.CLAIMED_GROUND:
-#				torch_flags += 1
-	
-#	if blah:
-#		if currentSlabID == Slabs.EARTH:
-#			return Slabs.EARTH_WITH_TORCH
-#		else:
-#			return Slabs.ROCK#WALL_WITH_TORCH
-#	else:
-#		return currentSlabID
-
-
-	
-	# First, determine if we're dealing with an x-aligned or y-aligned wall.
-	# This could be determined by checking the surrounding slabs for walls.
-	# For simplicity, let's assume that if there's a wall slab to the north or south,
-	# it's a horizontal wall (x-aligned), and if there's a wall slab to the east or west,
-	# it's a vertical wall (y-aligned).
-#	var is_horizontal_wall = oDataSlab.get_cell(xSlab, ySlab - 1) == Slabs.WALL or \
-#	oDataSlab.get_cell(xSlab, ySlab + 1) == Slabs.WALL
-#	var is_vertical_wall = oDataSlab.get_cell(xSlab - 1, ySlab) == Slabs.WALL or \
-#		oDataSlab.get_cell(xSlab + 1, ySlab) == Slabs.WALL
-#
-#    # If both or neither are true, it's a corner or an isolated pillar, so no torches.
-#	if is_horizontal_wall == is_vertical_wall:
-#		return -1
-#
-#    # For a horizontal wall, alternate the torch between north and south sides.
-#	if is_horizontal_wall:
-#		return dir.s if ySlab % 2 == 0 else dir.n
-#
-#    # For a vertical wall, alternate the torch between east and west sides.
-#	if is_vertical_wall:
-#		return dir.e if xSlab % 2 == 0 else dir.w
-
-
-#func torch_flags_for_slab(xSlab, ySlab):
-#	var tflag = 0
-#	if xSlab % 5 == 0:
-#		if oDataSlab.get_cell(xSlab, ySlab + 1) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab, ySlab - 1) == Slabs.CLAIMED_GROUND:
-#				tflag |= 0x01
-#	if ySlab % 5 == 0:
-#		if oDataSlab.get_cell(xSlab + 1, ySlab) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab - 1, ySlab) == Slabs.CLAIMED_GROUND:
-#				tflag |= 0x02
-#	return tflag
-
-
-
-#func torch_flags_for_slab(xSlab, ySlab):
-#	var tflag = torch_flag.no_free
-#	if oDataSlab.get_cell(xSlab, ySlab + 1) == Slabs.CLAIMED_GROUND:
-#		tflag |= torch_flag.south_is_free
-#	if oDataSlab.get_cell(xSlab, ySlab - 1) == Slabs.CLAIMED_GROUND:
-#		tflag |= torch_flag.north_is_free
-#	if oDataSlab.get_cell(xSlab + 1, ySlab) == Slabs.CLAIMED_GROUND:
-#		tflag |= torch_flag.east_is_free
-#	if oDataSlab.get_cell(xSlab - 1, ySlab) == Slabs.CLAIMED_GROUND:
-#		tflag |= torch_flag.west_is_free
-#	return tflag
-
-#func torch_flags_for_slab(xSlab, ySlab):
-#	var tflag = 0
-#	if xSlab % 5 == 0:
-#		if oDataSlab.get_cell(xSlab, ySlab + 1) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab, ySlab - 1) == Slabs.CLAIMED_GROUND:
-#				tflag |= 0x01
-#	if ySlab % 5 == 0:
-#		if oDataSlab.get_cell(xSlab + 1, ySlab) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab - 1, ySlab) == Slabs.CLAIMED_GROUND:
-#				tflag |= 0x02
-#	return tflag
-
-#func pick_torch_side(xSlab:int, ySlab:int):
-#	var calcTorchSide = -1
-#
-#	if xSlab % 2 == 0: # Every 2nd tile flips the other way
-#		calcTorchSide = dir.s
-#	else:
-#		calcTorchSide = dir.n
-#
-#	if ySlab % 2 == 0: # Every 2nd tile flips the other way
-#		calcTorchSide = dir.e
-#	else:
-#		calcTorchSide = dir.w
-#
-#	return calcTorchSide
-
-#func pick_torch_side(xSlab:int, ySlab:int):
-#	var calcTorchSide = -1
-#	var sideNS = -1
-#	var sideEW = -1
-#
-#	if xSlab % 5 == 0:
-#		if xSlab % 10 == 0: # Every 10th row is reversed
-#			if ySlab % 2 == 0: # Every 2nd tile flips the other way
-#				sideNS = dir.s
-#			else:
-#				sideNS = dir.n
-#		else:
-#			if ySlab % 2 == 0: # Every 2nd tile flips the other way
-#				sideNS = dir.n
-#			else:
-#				sideNS = dir.s
-#
-#	if ySlab % 5 == 0:
-#		if ySlab % 10 == 0: # Every 10th row is reversed
-#			if xSlab % 2 == 0: # Every 2nd tile flips the other way
-#				sideEW = dir.e
-#			else:
-#				sideEW = dir.w
-#		else:
-#			if xSlab % 2 == 0: # Every 2nd tile flips the other way
-#				sideEW = dir.w
-#			else:
-#				sideEW = dir.e
-#
-#	if sideNS != -1 and sideEW != -1:
-#		# Some torch postions (every 5x5 point) are dynamically chosen
-#		if oDataSlab.get_cell(xSlab+1, ySlab) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab-1, ySlab) == Slabs.CLAIMED_GROUND:
-#				calcTorchSide = sideEW
-#		if oDataSlab.get_cell(xSlab, ySlab+1) == Slabs.CLAIMED_GROUND or \
-#			oDataSlab.get_cell(xSlab, ySlab-1) == Slabs.CLAIMED_GROUND:
-#				calcTorchSide = sideNS
-#	else:
-#		if sideEW != -1: calcTorchSide = sideEW
-#		if sideNS != -1: calcTorchSide = sideNS
-#
-#	return calcTorchSide
-
-
+	# If the direction fails, then pick any direction
+	var preference = (xSlab + ySlab) % 4 # Prioritize directions based on the coordinate (basically it's random)
+	if preference == 0 and not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]: return dir.s
+	elif preference == 1 and not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]: return dir.w
+	elif preference == 2 and not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]: return dir.n
+	elif preference == 3 and not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]: return dir.e
+	# Check the next available direction
+	if not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]: return dir.s
+	elif not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]: return dir.w
+	elif not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]: return dir.n
+	elif not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]: return dir.e
+	return -1 # If all directions are solid, return -1 for no torch placement
 
 func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
 	var fullVariationIndex = slabID * 28

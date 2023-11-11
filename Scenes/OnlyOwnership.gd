@@ -26,12 +26,12 @@ func initialize_grid_items():
 		
 		var keeperColourIconPic = id.get_node("TextureRect")
 		match i:
-			0: keeperColourIconPic.texture = load("res://edited_images/plyrsym_32/symbol_player_red_std.png")
-			1: keeperColourIconPic.texture = load("res://edited_images/plyrsym_32/symbol_player_blue_std.png")
-			2: keeperColourIconPic.texture = load("res://edited_images/plyrsym_32/symbol_player_green_std.png")
-			3: keeperColourIconPic.texture = load("res://edited_images/plyrsym_32/symbol_player_yellow_std.png")
-			4: keeperColourIconPic.texture = load("res://edited_images/plyrsym_32/symbol_player_white_2.png")
-			5: keeperColourIconPic.texture = load("res://edited_images/plyrsym_32/symbol_player_any_dis.png")
+			0: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_red_std.png")
+			1: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_blue_std.png")
+			2: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_green_std.png")
+			3: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_yellow_std.png")
+			4: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_white_2.png")
+			5: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_any_dis.png")
 		
 		oGridContainer.add_child(id)
 

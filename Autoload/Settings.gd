@@ -75,6 +75,7 @@ var listOfSettings = [
 	"chance_effect_lava",
 	"auto_open_map_settings",
 	"fortify",
+	"automatic_torch_slabs",
 	# These four are read inside Viewport script
 #	"editor_window_position",
 #	"editor_window_size",
@@ -358,6 +359,10 @@ func game_setting(doWhat,string,value):
 			var oPlaceThingsAnywhere = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/PlaceThingsAnywhere'
 			if doWhat == SET: oPlaceThingsAnywhere.pressed = value
 			if doWhat == GET: return oPlaceThingsAnywhere.pressed
+		"automatic_torch_slabs":
+			var oAutomaticTorchSlabsCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/AutomaticTorchSlabsCheckbox'
+			if doWhat == SET: oAutomaticTorchSlabsCheckbox.pressed = value
+			if doWhat == GET: return oAutomaticTorchSlabsCheckbox.pressed
 		"wallauto_art":
 			var oAutoWallArtButton = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer/AutoWallArtButton'
 			if doWhat == SET: oAutoWallArtButton.text = value

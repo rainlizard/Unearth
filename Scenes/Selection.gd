@@ -29,6 +29,7 @@ onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
+onready var oSlabSideViewer = Nodelist.list["oSlabSideViewer"]
 
 enum {
 	CONSTRUCT_BRUSH
@@ -52,8 +53,7 @@ var paintSubtype = null setget newPaintSubtype
 var paintOwnership = 0 setget newOwnership
 
 func _process(delta):
-	get_slab_under_cursor()
-	
+	update_under_cursor()
 	clean_up_cursor_array()
 	
 	if oSelector.mode == oSelector.MODE_SUBTILE:
@@ -92,9 +92,10 @@ func newPaintSlab(value):
 	oPickThingWindow.set_selection(null, null)  # Deselect anything in thing window
 	paintSlab = value
 
-func get_slab_under_cursor():
+func update_under_cursor():
 	cursorOverSlab = oSelector.get_slabID_at_pos(oSelector.cursorTile)
 	cursorOverSlabOwner = oDataOwnership.get_cellv(oSelector.cursorTile)
+	oSlabSideViewer.update_side()
 
 func update_paint():
 	match oSelector.mode:

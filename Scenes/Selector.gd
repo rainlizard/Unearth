@@ -35,7 +35,7 @@ onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
-
+onready var oSlabSideViewer = Nodelist.list["oSlabSideViewer"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -135,8 +135,6 @@ func mouse_button_on_field():
 							oInspector.inspect_something(oSelection.cursorOnInstancesArray[0])
 					else:
 						oInspector.deselect()
-		
-
 	
 	# Holding down button
 	if Input.is_action_pressed("mouse_left"):
