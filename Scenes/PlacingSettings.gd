@@ -81,7 +81,7 @@ func update_placing_tab():
 				availableFields.append(FIELDS.INITIAL_HEALTH)
 				availableFields.append(FIELDS.CREATURE_GOLD)
 				availableFields.append(FIELDS.CREATURE_NAME)
-				availableFields.append(FIELDS.ORIENTATION)
+				#availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.EFFECTGEN:
 			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.EFFECT_RANGE, FIELDS.ORIENTATION]
 			if oCurrentFormat.selected != 0: # Classic format

@@ -283,7 +283,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			id.creatureName = oPlacingSettings.creatureName
 			id.creatureGold = oPlacingSettings.creatureGold
 			id.creatureInitialHealth = oPlacingSettings.creatureInitialHealth
-			id.orientation = oPlacingSettings.orientation
+			#id.orientation = oPlacingSettings.orientation
 			id.index = get_free_index_number()
 		Things.TYPE.EFFECTGEN:
 			id.effectRange = oPlacingSettings.effectRange

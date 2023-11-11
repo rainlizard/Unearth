@@ -101,8 +101,8 @@ func load_default_kfx_values():
 				creatureInitialHealth = 100
 			if creatureGold == null or creatureGold == -1:
 				creatureGold = 0
-			if orientation == null or orientation == -1:
-				orientation = 0
+#			if orientation == null or orientation == -1:
+#				orientation = 0
 		Things.TYPE.EFFECTGEN:
 			if orientation == null or orientation == -1:
 				orientation = 0

@@ -468,7 +468,7 @@ func read_tngfx(buffer):
 					id.creatureName = c.get_value(section, "CreatureName", "")
 					id.creatureGold = c.get_value(section, "CreatureGold", -1)
 					id.creatureInitialHealth = c.get_value(section, "CreatureInitialHealth", -1)
-					id.orientation = c.get_value(section, "Orientation", -1)
+					#id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.EFFECTGEN:
 					id.effectRange = c.get_value(section, "EffectRange")[0] + (c.get_value(section, "EffectRange")[1] / 256.0)
 					id.sensitiveTile = c.get_value(section, "ParentTile")
