@@ -2705,6 +2705,15 @@ margin_right = 532.0
 margin_bottom = 406.0
 settingText = "Ownership alpha"
 
+[node name="WallSideAlpha" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 375.0
+margin_right = 532.0
+margin_bottom = 406.0
+settingText = "Wall side alpha"
+
 [node name="CheckBoxHideUnknown" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer"]
 margin_top = 410.0
 margin_right = 532.0

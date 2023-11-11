@@ -1,6 +1,7 @@
 extends Control
 onready var oSelection = Nodelist.list["oSelection"]
 
+var WALLSIDE_ALPHA = 0.0
 var sd
 
 func _ready():
@@ -10,12 +11,14 @@ func _ready():
 	add_child(sd)
 
 func update_side():
+	if Slabset.dat.empty() == true: return
+	
 	var slabID = oSelection.cursorOverSlab
 	if Slabs.data[slabID][Slabs.IS_SOLID] == false:
 		sd.modulate.a = 0
 		return
 	
-	sd.modulate.a = 0.75
+	sd.modulate.a = WALLSIDE_ALPHA
 	
 	var slabVariation = slabID*28
 	var columnArray = [0,0,0, 0,0,0, 0,0,0]

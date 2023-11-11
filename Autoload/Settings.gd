@@ -29,6 +29,7 @@ var listOfSettings = [
 	"smooth_pan_enabled",
 	"smoothing_rate",
 	"graphics_ownership_alpha",
+	"hover_wall_side_alpha",
 	"display_fps",
 	"mouse_sensitivity",
 	"fov",
@@ -214,6 +215,10 @@ func game_setting(doWhat,string,value):
 			var oOverheadOwnership = $'../Main/Game2D/OverheadOwnership'
 			if doWhat == SET: oOverheadOwnership.OWNERSHIP_ALPHA = value
 			if doWhat == GET: return oOverheadOwnership.OWNERSHIP_ALPHA
+		"hover_wall_side_alpha":
+			var oSlabSideViewer = $'../Main/Game2D/Selector/TileSelector/SlabSideViewer'
+			if doWhat == SET: oSlabSideViewer.WALLSIDE_ALPHA = value
+			if doWhat == GET: return oSlabSideViewer.WALLSIDE_ALPHA
 		"display_fps":
 			var oFPScounter = $'../Main/Ui/UiMessages/FPScounter'
 			if doWhat == SET: oFPScounter.visible = value
