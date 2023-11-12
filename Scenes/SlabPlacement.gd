@@ -527,7 +527,7 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_PORTAL, bitmask, slabID)
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, fullVariationIndex, bitmask, surrID, surrOwner)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, surrOwner)
 
 func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
 	var fullVariationIndex = slabID * 28
@@ -565,7 +565,7 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 	slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_WALL, bitmask, slabID)
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, fullVariationIndex, bitmask, surrID, surrOwner)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, surrOwner)
 
 
 func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType): # These slabs only have 8 variations each, compared to the others which have 28 each.
@@ -602,7 +602,7 @@ func place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType
 			slabCubes = set_ownership_graphic(slabCubes, ownership, OWNERSHIP_GRAPHIC_DOOR_2, 0, slabID)
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, fullVariationIndex, bitmask, null, null)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, null, null)
 
 #var localRandom = RandomNumberGenerator.new()
 const rngEarthPathUnderneath = [25,26,27,28,29]

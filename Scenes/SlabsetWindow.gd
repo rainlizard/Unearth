@@ -335,7 +335,7 @@ func update_obj_name():
 	if oObjIsLightCheckBox.pressed == true:
 		oObjNameLabel.text = "Light"
 	else:
-		var dataStruct = Things.data_structure(oObjThingTypeSpinBox.value)
+		var dataStruct = Things.data_structure(int(oObjThingTypeSpinBox.value))
 		var subtype = int(oObjSubtypeSpinBox.value)
 		if dataStruct.has(subtype):
 			var newName = dataStruct[subtype][Things.NAME]
@@ -351,12 +351,14 @@ func _on_ObjAddButton_pressed():
 
 func add_new_object_to_variation(variation):
 	#update_object_property(Slabset.obj.VARIATION, variation)
-	var new_object = [0,variation,4, 0,0,0, 1,1,0]
+	var randomSubtype = Random.randi_range(1,135)
+	var new_object = [0,variation,4, 0,0,0, 1,randomSubtype,0]
 	get_variation_objects(variation).append(new_object)
 	var lastEntryIndex = Slabset.tng[variation].size()-1
 	oObjObjectIndexSpinBox.value = lastEntryIndex
 	update_object_fields(lastEntryIndex)
 	update_obj_name()
+	oMessage.quick("Added new object")
 
 func _on_ObjDeleteButton_pressed():
 	var variation = get_current_variation()
@@ -370,20 +372,22 @@ func _on_ObjDeleteButton_pressed():
 	listOfObjectsOnThisVariation.remove(objectIndex)
 	
 	update_slabthings()
+	oMessage.quick("Deleted object")
 
-func _on_ObjThingTypeSpinBox_value_changed(value):
+func _on_ObjThingTypeSpinBox_value_changed(value:int):
 	oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name(value)
 	#yield(get_tree(),'idle_frame')
 	update_obj_name()
 	update_object_property(Slabset.obj.THING_TYPE, value)
 
-func _on_ObjSubtypeSpinBox_value_changed(value):
+func _on_ObjSubtypeSpinBox_value_changed(value:int):
+	value = int(value)
 	#yield(get_tree(),'idle_frame')
 	update_obj_name()
 	update_object_property(Slabset.obj.THING_SUBTYPE, value)
 
-func _on_ObjIsLightCheckBox_toggled(button_pressed):
-	if button_pressed == true:
+func _on_ObjIsLightCheckBox_toggled(button_pressed:int):
+	if button_pressed == 1:
 		oObjSubtypeLabel.text = "Intensity"
 		oObjThingTypeLabel.modulate.a = 0
 		oObjThingTypeSpinBox.modulate.a = 0
@@ -392,18 +396,18 @@ func _on_ObjIsLightCheckBox_toggled(button_pressed):
 		oObjThingTypeLabel.modulate.a = 1
 		oObjThingTypeSpinBox.modulate.a = 1
 	update_obj_name()
-	update_object_property(Slabset.obj.IS_LIGHT, int(button_pressed))
+	update_object_property(Slabset.obj.IS_LIGHT, button_pressed)
 
 
-func _on_ObjEffectRangeSpinBox_value_changed(value):
+func _on_ObjEffectRangeSpinBox_value_changed(value:int):
 	update_object_property(Slabset.obj.EFFECT_RANGE, value)
-func _on_ObjSubtileSpinBox_value_changed(value):
+func _on_ObjSubtileSpinBox_value_changed(value:int):
 	update_object_property(Slabset.obj.SUBTILE, value)
-func _on_ObjRelativeXSpinBox_value_changed(value):
+func _on_ObjRelativeXSpinBox_value_changed(value:float):
 	update_object_property(Slabset.obj.RELATIVE_X, value)
-func _on_ObjRelativeYSpinBox_value_changed(value):
+func _on_ObjRelativeYSpinBox_value_changed(value:float):
 	update_object_property(Slabset.obj.RELATIVE_Y, value)
-func _on_ObjRelativeZSpinBox_value_changed(value):
+func _on_ObjRelativeZSpinBox_value_changed(value:float):
 	update_object_property(Slabset.obj.RELATIVE_Z, value)
 
 # Helper method to update the object in Slabset.tng

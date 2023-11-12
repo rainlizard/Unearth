@@ -12,6 +12,7 @@ var locationY = null setget set_location_y
 var locationZ = null setget set_location_z
 var lightRange = null setget set_lightrange
 var lightIntensity = null
+var parentTile = null setget set_parentTile
 
 var data3 = null
 var data4 = null
@@ -22,8 +23,15 @@ var data8 = null
 var data9 = null
 var data16 = null
 var data17 = null
-var data18 = null
-var data19 = null
+var data18_19 = null
+
+func set_parentTile(setval):
+	data18_19 = null
+	parentTile = setval
+
+func _enter_tree():
+	if parentTile != null:
+		add_to_group('attachedtotile_'+str(parentTile))
 
 func set_location_x(setVal):
 	if locationX != null and locationY != null:

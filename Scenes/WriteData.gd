@@ -119,8 +119,8 @@ func write_tng(buffer):
 			buffer.put_8(thingNode.data9) # 9
 			buffer.put_8(thingNode.data10) # 10
 		
-		if thingNode.sensitiveTile != null:
-			buffer.put_16(thingNode.sensitiveTile) # 11-12
+		if thingNode.parentTile != null:
+			buffer.put_16(thingNode.parentTile) # 11-12
 		elif thingNode.index != null:
 			buffer.put_16(thingNode.index) # 11-12
 		else:
@@ -145,8 +145,7 @@ func write_tng(buffer):
 		buffer.put_8(thingNode.data15) # 15
 		buffer.put_8(thingNode.data16) # 16
 		buffer.put_8(thingNode.data17) # 17
-		buffer.put_8(thingNode.data18) # 18
-		buffer.put_8(thingNode.data19) # 19
+		buffer.put_16(thingNode.data18_19) # 18-19
 		buffer.put_8(thingNode.data20) # 20
 
 
@@ -201,8 +200,8 @@ func write_tngfx(buffer):
 				var setRangeInner = str(fmod(thingNode.effectRange,1.0) * 256)
 				t += "EffectRange = [" + setRange + ", " + setRangeInner + "]" + "\n"
 			
-			if thingNode.sensitiveTile != null:
-				t += "ParentTile = " +str(thingNode.sensitiveTile) + "\n"
+			if thingNode.parentTile != null:
+				t += "ParentTile = " +str(thingNode.parentTile) + "\n"
 			elif thingNode.index != null:
 				t += "Index = " +str(thingNode.index) + "\n"
 			
@@ -313,8 +312,7 @@ func write_lgt(buffer):
 		buffer.put_8(int(lightNode.locationZ)) # 15
 		buffer.put_8(lightNode.data16) # 16
 		buffer.put_8(lightNode.data17) # 17
-		buffer.put_8(lightNode.data18) # 18
-		buffer.put_8(lightNode.data19) # 19
+		buffer.put_16(lightNode.parentTile) # 18-19
 
 func write_lgtfx(buffer):
 	var t = ""
@@ -334,6 +332,9 @@ func write_lgtfx(buffer):
 			var setRange = str(int(lightNode.lightRange))
 			var setRangeInner = str(fmod(lightNode.lightRange,1.0) * 256)
 			t += "LightRange = [" + setRange + ", " + setRangeInner + "]" + "\n"
+		
+		if lightNode.parentTile != null:
+			t += "ParentTile = " +str(lightNode.parentTile) + "\n"
 		
 		var x = str(int(lightNode.locationX))
 		var xInner = str(fmod(lightNode.locationX,1.0) * 256)

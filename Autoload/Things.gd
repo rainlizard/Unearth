@@ -75,8 +75,8 @@ func _init():
 	default_data["DATA_CREATURE"] = DATA_CREATURE.duplicate(true)
 	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
 
-func data_structure(thingType:int):
-	match int(thingType):
+func data_structure(thingType):
+	match thingType:
 		Things.TYPE.OBJECT: return DATA_OBJECT
 		Things.TYPE.CREATURE: return DATA_CREATURE
 		Things.TYPE.EFFECTGEN: return DATA_EFFECTGEN
@@ -86,8 +86,8 @@ func data_structure(thingType:int):
 	print("This should never happen.")
 	return {}
 
-func data_structure_name(thingType:int):
-	match int(thingType):
+func data_structure_name(thingType):
+	match thingType:
 		Things.TYPE.OBJECT: return "Object"
 		Things.TYPE.CREATURE: return "Creature"
 		Things.TYPE.EFFECTGEN: return "Effectgen"
@@ -848,8 +848,8 @@ func get_png_filenames_in_dir(path):
 #			pass
 #		TYPE.ITEM:
 #			# Item/decoration
-#			#array[11] = node.sensitiveTile
-#			#array[12] = node.sensitiveTile
+#			#array[11] = node.parentTile
+#			#array[12] = node.parentTile
 #			pass
 #		TYPE.CREATURE:
 #			array[14] = node.data[CREATURE_LEVEL]
@@ -881,8 +881,8 @@ func get_png_filenames_in_dir(path):
 #	# Depends on type:
 #	THING_RANGE_WITHIN = 9
 #	THING_RANGE = 10
-#	SENSITIVE_TILE1 = 11
-#	SENSITIVE_TILE2 = 12
+#	PARENT_TILE1 = 11
+#	PARENT_TILE2 = 12
 #	DOOR_ORIENTATION = 13
 #	CREATURE_LEVEL = 14
 #	DOOR_LOCKED = 14

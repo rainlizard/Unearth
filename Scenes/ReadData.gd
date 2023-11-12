@@ -308,9 +308,7 @@ func read_lgt(buffer):
 		id.data16 = buffer.get_u8() # Unknown 16
 		id.data17 = buffer.get_u8() # Unknown 17
 		
-		# Is 18 and 19 required?
-		id.data18 = buffer.get_u8() # 18
-		id.data19 = buffer.get_u8() # 19
+		id.parentTile = buffer.get_u16() # 18-19
 		
 		oInstances.add_child(id)
 func new_lgt():
@@ -340,6 +338,8 @@ func read_lgtfx(buffer):
 			
 			id.lightIntensity = c.get_value(section, "LIGHTINTENSITY")
 			id.lightRange = c.get_value(section, "LIGHTRANGE")[0] + (c.get_value(section, "LIGHTRANGE")[1] / 256.0)
+			
+			id.parentTile = c.get_value(section, "PARENTTILE", 65535) # Default to manually placed
 			id.data3 = 0
 			id.data4 = 0
 			id.data5 = 0
@@ -349,8 +349,6 @@ func read_lgtfx(buffer):
 			id.data9 = 0
 			id.data16 = 0
 			id.data17 = 0
-			id.data18 = 0
-			id.data19 = 0
 			oInstances.add_child(id)
 	else:
 		oMessage.big(".lgtfx unparsable", "The map did not load correctly! Because the .lgtfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .lgtfx file.")
@@ -385,13 +383,12 @@ func read_tng(buffer):
 		id.data15 = buffer.get_u8() # 15
 		id.data16 = buffer.get_u8() # 16
 		id.data17 = buffer.get_u8() # 17
-		id.data18 = buffer.get_u8() # 18
-		id.data19 = buffer.get_u8() # 19
+		id.data18_19 = buffer.get_u16() # 18-19
 		id.data20 = buffer.get_u8() # 20
 		
 		match id.thingType:
 			Things.TYPE.OBJECT:
-				id.sensitiveTile = id.data11_12
+				id.parentTile = id.data11_12
 				if id.subtype == 49: # Hero Gate
 					id.herogateNumber = id.data14
 				elif id.subtype == 133: # Mysterious Box
@@ -401,7 +398,7 @@ func read_tng(buffer):
 				id.creatureLevel = id.data14 + 1 # 14
 			Things.TYPE.EFFECTGEN:
 				id.effectRange = (id.data9 / 256.0) + id.data10 # 9-10
-				id.sensitiveTile = id.data11_12
+				id.parentTile = id.data11_12
 			Things.TYPE.TRAP:
 				id.index = id.data11_12
 				pass
@@ -454,7 +451,7 @@ func read_tngfx(buffer):
 			
 			match id.thingType:
 				Things.TYPE.OBJECT:
-					id.sensitiveTile = c.get_value(section, "ParentTile")
+					id.parentTile = c.get_value(section, "ParentTile")
 					if id.subtype == 49: # Hero Gate
 						id.herogateNumber = c.get_value(section, "HerogateNumber")
 					elif id.subtype == 133: # Mysterious Box
@@ -471,7 +468,7 @@ func read_tngfx(buffer):
 					#id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.EFFECTGEN:
 					id.effectRange = c.get_value(section, "EffectRange")[0] + (c.get_value(section, "EffectRange")[1] / 256.0)
-					id.sensitiveTile = c.get_value(section, "ParentTile")
+					id.parentTile = c.get_value(section, "ParentTile")
 					id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.TRAP:
 					id.index = c.get_value(section, "Index")
@@ -488,8 +485,7 @@ func read_tngfx(buffer):
 			id.data15 = 0
 			id.data16 = 0
 			id.data17 = 0
-			id.data18 = 0
-			id.data19 = 0
+			id.data18_19 = 0
 			id.data20 = 0
 			oInstances.add_child(id)
 	else:

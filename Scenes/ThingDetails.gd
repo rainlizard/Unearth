@@ -70,8 +70,7 @@ var data8 = null
 var data9 = null
 var data16 = null
 var data17 = null
-var data18 = null
-var data19 = null
+var data18_19 = null
 
 func light_details(id):
 	for i in 15:
@@ -91,48 +90,54 @@ func light_details(id):
 				description = "Intensity" # 9-10
 				value = id.lightIntensity
 			4:
+				description = "Attached to" # 18-19
+				if id.parentTile != null:
+					var parentY = int(id.parentTile/M.ySize)
+					var parentX = id.parentTile - (parentY*M.xSize)
+					value = Slabs.data[oDataSlab.get_cell(parentX,parentY)][Slabs.NAME]
+					if parentX == 0 and parentY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
+					value += ' (' + str(parentX) + ','+str(parentY) + ')'
+				if id.parentTile == 65535:
+					value = "Manually placed"
+			5:
 				description = "Unknown 3"
 				value = id.data3
 				if HIDE_UNKNOWN_DATA == true: value = null
-			5:
+			6:
 				description = "Unknown 4"
 				value = id.data4
 				if HIDE_UNKNOWN_DATA == true: value = null
-			6:
+			7:
 				description = "Unknown 5"
 				value = id.data5
 				if HIDE_UNKNOWN_DATA == true: value = null
-			7:
+			8:
 				description = "Unknown 6"
 				value = id.data6
 				if HIDE_UNKNOWN_DATA == true: value = null
-			8:
+			9:
 				description = "Unknown 7"
 				value = id.data7
 				if HIDE_UNKNOWN_DATA == true: value = null
-			9:
+			10:
 				description = "Unknown 8"
 				value = id.data8
 				if HIDE_UNKNOWN_DATA == true: value = null
-			10:
+			11:
 				description = "Unknown 9"
 				value = id.data9
 				if HIDE_UNKNOWN_DATA == true: value = null
-			11:
+			12:
 				description = "Unknown 16"
 				value = id.data16
 				if HIDE_UNKNOWN_DATA == true: value = null
-			12:
+			13:
 				description = "Unknown 17"
 				value = id.data17
 				if HIDE_UNKNOWN_DATA == true: value = null
-			13:
-				description = "Unknown 18"
-				value = id.data18
-				if HIDE_UNKNOWN_DATA == true: value = null
 			14:
-				description = "Unknown 19"
-				value = id.data19
+				description = "Unknown 18_19"
+				value = id.data18_19
 				if HIDE_UNKNOWN_DATA == true: value = null
 			
 		if value != null:
@@ -140,7 +145,7 @@ func light_details(id):
 
 
 func thing_details(id):
-	for i in 28:
+	for i in 27:
 		var description = null
 		var value = null
 		match i:
@@ -169,13 +174,13 @@ func thing_details(id):
 				if HIDE_UNKNOWN_DATA == true: value = null
 			7:
 				description = "Attached to" # 11-12
-				if id.sensitiveTile != null:
-					var sensY = int(id.sensitiveTile/M.ySize)
-					var sensX = id.sensitiveTile - (sensY*M.xSize)
-					value = Slabs.data[oDataSlab.get_cell(sensX,sensY)][Slabs.NAME]
-					if sensX == 0 and sensY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
-					value += ' (' + str(sensX) + ','+str(sensY) + ')'
-				if id.sensitiveTile == 65535:
+				if id.parentTile != null:
+					var parentY = int(id.parentTile/M.ySize)
+					var parentX = id.parentTile - (parentY*M.xSize)
+					value = Slabs.data[oDataSlab.get_cell(parentX,parentY)][Slabs.NAME]
+					if parentX == 0 and parentY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
+					value += ' (' + str(parentX) + ','+str(parentY) + ')'
+				if id.parentTile == 65535:
 					value = "Manually placed"
 			8:
 				#description = "Index" # 11-12
@@ -225,35 +230,31 @@ func thing_details(id):
 				value = id.data17
 				if HIDE_UNKNOWN_DATA == true: value = null
 			20:
-				description = "Unknown 18"
-				value = id.data18
+				description = "Unknown 18_19"
+				value = id.data18_19
 				if HIDE_UNKNOWN_DATA == true: value = null
 			21:
-				description = "Unknown 19"
-				value = id.data19
-				if HIDE_UNKNOWN_DATA == true: value = null
-			22:
 				description = "Unknown 20"
 				value = id.data20
 				if HIDE_UNKNOWN_DATA == true: value = null
 			# FX extended fields
-			23:
+			22:
 				description = "Health %"
 				value = id.creatureInitialHealth
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			24:
+			23:
 				description = "Gold held"
 				value = id.creatureGold
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			25:
+			24:
 				description = "Name" # Creature name
 				value = id.creatureName
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			26:
+			25:
 				description = "Gold value"
 				value = id.goldValue
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			27:
+			26:
 				description = "Orientation"
 				value = id.orientation
 				if oCurrentFormat.selected == 0: value = null # Classic format

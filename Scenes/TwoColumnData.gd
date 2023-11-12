@@ -254,12 +254,9 @@ func update_property_value(callingNode, leftString):
 		"Unknown 17":
 			property_name = "data17"
 			value = clamp(int(value), 0, 255)
-		"Unknown 18":
-			property_name = "data18"
-			value = clamp(int(value), 0, 255)
-		"Unknown 19":
-			property_name = "data19"
-			value = clamp(int(value), 0, 255)
+		"Unknown 18-19":
+			property_name = "data18_19"
+			value = clamp(int(value), 0, 1000000000)
 		"Unknown 20":
 			property_name = "data20"
 			value = clamp(int(value), 0, 255)

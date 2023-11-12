@@ -26,6 +26,7 @@ func place_new_light(newThingType, newSubtype, newPosition, newOwnership):
 	id.locationZ = newPosition.z
 	id.lightRange = oPlacingSettings.lightRange
 	id.lightIntensity = oPlacingSettings.lightIntensity
+	id.parentTile = 65535 # "None"
 	id.data3 = 0
 	id.data4 = 0
 	id.data5 = 0
@@ -35,8 +36,7 @@ func place_new_light(newThingType, newSubtype, newPosition, newOwnership):
 	id.data9 = 0
 	id.data16 = 0
 	id.data17 = 0
-	id.data18 = 255
-	id.data19 = 255
+	id.data18_19 = 0
 	add_child(id)
 
 func place_new_action_point(newThingType, newSubtype, newPosition, newOwnership):
@@ -237,8 +237,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 	id.data15 = 0
 	id.data16 = 0
 	id.data17 = 0
-	id.data18 = 0
-	id.data19 = 0
+	id.data18_19 = 0
 	id.data20 = 0
 	
 	id.locationX = newPosition.x
@@ -250,7 +249,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 	
 	match id.thingType:
 		Things.TYPE.OBJECT:
-			id.sensitiveTile = 65535 # "None"
+			id.parentTile = 65535 # "None"
 			id.orientation = oPlacingSettings.orientation
 			
 			if id.subtype == 49: # Hero Gate
@@ -260,16 +259,16 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			elif id.subtype in [2,7]: # Torch and Unlit Torch
 				if Slabs.data[oDataSlab.get_cell(xSlab+1,ySlab)][Slabs.IS_SOLID] == true:
 					id.locationX += 0.25
-					id.sensitiveTile = (xSlab+1) + ((ySlab) * M.xSize) # Should this be M.ySize ???
+					id.parentTile = (xSlab+1) + ((ySlab) * M.xSize) # Should this be M.ySize ???
 				if Slabs.data[oDataSlab.get_cell(xSlab-1,ySlab)][Slabs.IS_SOLID] == true:
 					id.locationX -= 0.25
-					id.sensitiveTile = (xSlab-1) + ((ySlab) * M.xSize) # Should this be M.ySize ???
+					id.parentTile = (xSlab-1) + ((ySlab) * M.xSize) # Should this be M.ySize ???
 				if Slabs.data[oDataSlab.get_cell(xSlab,ySlab+1)][Slabs.IS_SOLID] == true:
 					id.locationY += 0.25
-					id.sensitiveTile = (xSlab) + ((ySlab+1) * M.xSize) # Should this be M.ySize ???
+					id.parentTile = (xSlab) + ((ySlab+1) * M.xSize) # Should this be M.ySize ???
 				if Slabs.data[oDataSlab.get_cell(xSlab,ySlab-1)][Slabs.IS_SOLID] == true:
 					id.locationY -= 0.25
-					id.sensitiveTile = (xSlab) + ((ySlab-1) * M.xSize) # Should this be M.ySize ???
+					id.parentTile = (xSlab) + ((ySlab-1) * M.xSize) # Should this be M.ySize ???
 				update_stray_torch_height(id)
 			elif id.subtype in Things.LIST_OF_GOLDPILES:
 				match id.subtype:
@@ -287,7 +286,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			id.index = get_free_index_number()
 		Things.TYPE.EFFECTGEN:
 			id.effectRange = oPlacingSettings.effectRange
-			id.sensitiveTile = (floor(newPosition.y/3) * M.xSize) + floor(newPosition.x/3) # Should this be M.ySize ???
+			id.parentTile = (floor(newPosition.y/3) * M.xSize) + floor(newPosition.x/3) # Should this be M.ySize ???
 			id.orientation = oPlacingSettings.orientation
 		Things.TYPE.TRAP:
 			id.index = get_free_index_number()
@@ -358,33 +357,48 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 #Slabset.obj.THING_SUBTYPE,# [7] Thing subtype
 #Slabset.obj.EFFECT_RANGE  # [8] Effect range
 
-func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng file
+func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng file
 	var id
 	if tngObj[Slabset.obj.IS_LIGHT] == 1:
 		id = lightScn.instance()
+		id.data3 = 0
+		id.data4 = 0
+		id.data5 = 0
+		id.data6 = 0
+		id.data7 = 0
+		id.data8 = 0
+		id.data9 = 0
+		id.data16 = 0
+		id.data17 = 0
+		id.data18_19 = 0
+		id.lightRange = tngObj[Slabset.obj.EFFECT_RANGE]
+		id.lightIntensity = tngObj[Slabset.obj.THING_SUBTYPE] # The intensity is stored in the subtype of tngObj
+		# ThingType and subtype must be handled in LightInstance.gd
 	else:
 		id = thingScn.instance()
+		id.data9 = 0
+		id.data10 = 0
+		id.data11_12 = 0
+		id.data13 = 0
+		id.data14 = 0
+		id.data15 = 0
+		id.data16 = 0
+		id.data17 = 0
+		id.data18_19 = 0
+		id.data20 = 0
+		id.thingType = tngObj[Slabset.obj.THING_TYPE]
+		id.subtype = tngObj[Slabset.obj.THING_SUBTYPE]
 	
-	id.data9 = 0
-	id.data10 = 0
-	id.data11_12 = 0
-	id.data13 = 0
-	id.data14 = 0
-	id.data15 = 0
-	id.data16 = 0
-	id.data17 = 0
-	id.data18 = 0
-	id.data19 = 0
-	id.data20 = 0
+	id.parentTile = (ySlab * M.xSize) + xSlab
 	
 	var subtileY = subtile/3
 	var subtileX = subtile-(subtileY*3)
 	id.locationX = ((xSlab*3) + subtileX) + tngObj[Slabset.obj.RELATIVE_X]
 	id.locationY = ((ySlab*3) + subtileY) + tngObj[Slabset.obj.RELATIVE_Y]
 	id.locationZ = tngObj[Slabset.obj.RELATIVE_Z]
-	id.sensitiveTile = (ySlab * M.xSize) + xSlab # Should this be M.ySize ???
-	id.thingType = tngObj[Slabset.obj.THING_TYPE]
-	id.subtype = tngObj[Slabset.obj.THING_SUBTYPE]
+	
+	
+	
 	id.ownership = ownership
 	
 	if id.thingType == Things.TYPE.EFFECTGEN:
@@ -409,6 +423,8 @@ func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng 
 				4: id.queue_free() # White
 				5: id.queue_free() # None
 	
+	
+	print("Child added!")
 	add_child(id)
 	
 #	if slabID == Slabs.WALL_WITH_TORCH or slabID == Slabs.EARTH_WITH_TORCH:
@@ -447,12 +463,14 @@ func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 
 func get_all_nodes_on_slab(xSlab, ySlab, arrayOfGroups):
 	var array = []
-	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
+	var checkSlabLocationGroup = "slab_location_group_" + str(xSlab) + '_' + str(ySlab)
 	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
-		for nodeGroup in arrayOfGroups:
-			if id.is_queued_for_deletion() == false:
-				array.append(id)
+		if id.is_queued_for_deletion() == false:
+			for nodeGroup in arrayOfGroups:
+				if id.is_in_group(nodeGroup):
+					array.append(id)
 	return array
+
 
 func get_node_on_subtile(xSubtile, ySubtile, nodeGroup):
 	var checkSlabLocationGroup = "slab_location_group_"+str(floor(xSubtile/3))+'_'+str(floor(ySubtile/3))
@@ -471,7 +489,7 @@ func get_all_instances_on_subtile(xSubtile, ySubtile):
 
 func on_slab_update_thing_height(id): # Update heights of any manually placed objects
 	if id.is_in_group("Thing"):
-		if id.sensitiveTile == 65535: # None. Not attached to any slab.
+		if id.parentTile == 65535: # None. Not attached to any slab.
 			var xSubtile = floor(id.locationX)
 			var ySubtile = floor(id.locationY)
 			var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(xSubtile,ySubtile)]
@@ -524,21 +542,12 @@ func on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership):
 #		if i["collider"].get_parent().is_in_group("Thing"):
 #			i.queue_free()
 
-func delete_attached_objects_on_slab(xSlab, ySlab):
-	
-	# Figure out how to make this faster
-	# Objects like torches are placed off the slab, their sensitiveTile needs to be checked.
-	
+func delete_attached_instances_on_slab(xSlab, ySlab):
+	# Objects like torches are placed off the slab, so we use groups not coordinates
 	var groupName = 'attachedtotile_'+str((ySlab*M.xSize)+xSlab)
 	if groupName == "attachedtotile_0": return # This fixes an edge case issue with Spinning Keys being destroyed if you click the top left corner
 	for id in get_tree().get_nodes_in_group(groupName):
-		#id.position = Vector2(-32767,-32767)
-		#id.remove_child()
 		id.queue_free()
-
-#			if Slabset.tngObject[idx][8] != 0:
-#				var id = Slabset.tngObject[idx][7]
-#				print(Things.DATA_OBJECT[id][Things.NAME] + ". Unknown value: " + str(Slabset.tngObject[idx][8]))
 
 func get_free_index_number():
 	var listOfThingNumbers = []

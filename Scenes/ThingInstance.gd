@@ -17,7 +17,7 @@ var subtype = null
 var ownership = null setget set_ownership
 
 var effectRange = null setget set_effectRange
-var sensitiveTile = null setget set_sensitiveTile
+var parentTile = null setget set_parentTile
 var doorOrientation = null setget set_doorOrientation
 var creatureLevel = null setget set_creatureLevel
 var doorLocked = null setget set_doorLocked
@@ -33,8 +33,7 @@ var data14 = null
 var data15 = null
 var data16 = null
 var data17 = null
-var data18 = null
-var data19 = null
+var data18_19 = null
 var data20 = null
 
 var baseZindex = 0
@@ -50,8 +49,8 @@ func _enter_tree():
 	set_texture_based_on_thingtype()
 	set_grow_direction()
 	
-	if sensitiveTile != null:
-		add_to_group('attachedtotile_'+str(sensitiveTile))
+	if parentTile != null:
+		add_to_group('attachedtotile_'+str(parentTile))
 	
 	load_default_kfx_values()
 	
@@ -78,7 +77,6 @@ func _enter_tree():
 			_on_zoom_level_changed(oCamera2D.zoom)
 		Things.TYPE.EFFECTGEN:
 			add_to_group("EffectGen")
-
 
 func load_default_kfx_values():
 	match thingType:
@@ -178,9 +176,9 @@ func set_index(setval):
 	data11_12 = null
 	index = setval
 
-func set_sensitiveTile(setval):
+func set_parentTile(setval):
 	data11_12 = null
-	sensitiveTile = setval
+	parentTile = setval
 func set_doorOrientation(setval):
 	data13 = null
 	doorOrientation = setval
@@ -340,8 +338,7 @@ func _on_VisibilityNotifier2D_screen_exited():
 #	print("data15 : " + str(data15))
 #	print("data16 : " + str(data16))
 #	print("data17 : " + str(data17))
-#	print("data18 : " + str(data18))
-#	print("data19 : " + str(data19))
+#	print("data18_19 : " + str(data18_19))
 #	print("data20 : " + str(data20))
 #	print("locationX : " + str(locationX))
 #	print("locationY : " + str(locationY))
@@ -350,7 +347,7 @@ func _on_VisibilityNotifier2D_screen_exited():
 #	print("subtype : " + str(subtype))
 #	print("ownership : " + str(ownership))
 #	print("effectRange : " + str(effectRange))
-#	print("sensitiveTile : " + str(sensitiveTile))
+#	print("parentTile : " + str(parentTile))
 #	print("doorOrientation : " + str(doorOrientation))
 #	print("creatureLevel : " + str(creatureLevel))
 #	print("doorLocked : " + str(doorLocked))

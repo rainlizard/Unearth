@@ -5340,8 +5340,6 @@ margin_bottom = 31.0
 mouse_filter = 1
 size_flags_horizontal = 10
 max_value = 255.0
-rounded = true
-align = 1
 script = ExtResource( 81 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -5364,8 +5362,6 @@ margin_bottom = 66.0
 mouse_filter = 1
 size_flags_horizontal = 10
 max_value = 27.0
-rounded = true
-align = 1
 script = ExtResource( 81 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -5457,7 +5453,6 @@ margin_bottom = 31.0
 size_flags_horizontal = 10
 min_value = -1.0
 max_value = 1e+06
-rounded = true
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetObjectSection/VBoxContainer"]
 margin_top = 53.0
@@ -5478,7 +5473,6 @@ margin_right = 220.0
 margin_bottom = 31.0
 size_flags_horizontal = 10
 max_value = 1e+06
-rounded = true
 
 [node name="ObjSubtypeLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer"]
 margin_top = 40.0
@@ -5493,7 +5487,6 @@ margin_right = 220.0
 margin_bottom = 66.0
 size_flags_horizontal = 10
 max_value = 1e+06
-rounded = true
 
 [node name="Label8" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer"]
 margin_top = 75.0
@@ -5508,7 +5501,6 @@ margin_right = 220.0
 margin_bottom = 101.0
 size_flags_horizontal = 10
 max_value = 1e+06
-rounded = true
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer"]
 margin_top = 110.0
@@ -5523,7 +5515,6 @@ margin_right = 220.0
 margin_bottom = 136.0
 size_flags_horizontal = 10
 max_value = 8.0
-rounded = true
 
 [node name="Label3" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer"]
 margin_top = 145.0
