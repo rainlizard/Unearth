@@ -76,16 +76,6 @@ func load_slabset():
 	
 	print('Created Slabset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-		# IsLight [0-1]
-		# Variation
-		# Subtile [0-9]
-		# RelativeX
-		# RelativeY
-		# RelativeZ
-		# Thing type
-		# Thing subtype
-		# Effect range
-
 func create_object_list(tng_buffer):
 	tng_buffer.seek(0)
 	numberOfThings = tng_buffer.get_u16() # It says 359, however there are actually 362 entries in the file.
@@ -98,22 +88,23 @@ func create_object_list(tng_buffer):
 	for i in object_info.size():
 		object_info[i] = []
 		object_info[i].resize(9) #(this is coincidentally size 9, it has nothing to do with subtiles)
-		object_info[i][0] = tng_buffer.get_u8() # 0 = object/effectgen, 1 = light
+		object_info[i][obj.IS_LIGHT] = tng_buffer.get_u8() # 0 = object/effectgen, 1 = light
 		
 		var variation = tng_buffer.get_u16() # Extract the old slab variation index
 		if variation >= 1176: # If the variation index is from the short slabs in the original structure, calculate its new index in the uniform 58*28 structure.
 			variation = 1176 + ((variation - 1176) / 8) * 28 + (variation % 8)
-		object_info[i][1] = variation # Set the new slab variation index
+		object_info[i][obj.VARIATION] = variation # Set the new slab variation index
 		
-		object_info[i][2] = tng_buffer.get_u8() # subtile (between 0 and 8)
+		object_info[i][obj.SUBTILE] = tng_buffer.get_u8() # subtile (between 0 and 8)
 		
-		for xxx in [3,4,5]: # Location values can look like 255.75, this is supposed to be -0.25
-			var datnum = tng_buffer.get_u16() / 256.0
-			if datnum > 255: datnum -= 256
-			object_info[i][xxx] = datnum
+		object_info[i][obj.RELATIVE_X] = Things.convert_relative_256_to_float(tng_buffer.get_u16())
+		object_info[i][obj.RELATIVE_Y] = Things.convert_relative_256_to_float(tng_buffer.get_u16())
+		object_info[i][obj.RELATIVE_Z] = Things.convert_relative_256_to_float(tng_buffer.get_u16())
 		
-		for xxx in [6,7,8]: # Thing type, # Thing subtype, # Effect range
-			object_info[i][xxx] = tng_buffer.get_u8() 
+		# Thing type, # Thing subtype, # Effect range
+		object_info[i][obj.THING_TYPE] = tng_buffer.get_u8()
+		object_info[i][obj.THING_SUBTYPE] = tng_buffer.get_u8()
+		object_info[i][obj.EFFECT_RANGE] = tng_buffer.get_u8()
 	
 	return object_info
 

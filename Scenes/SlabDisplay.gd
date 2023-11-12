@@ -7,7 +7,7 @@ var dataTexture = ImageTexture.new()
 #var columns = [0,0,0, 0,0,0, 0,0,0]
 var panelView = Slabs.PANEL_TOP_VIEW
 func _ready():
-	add_to_group("SlabDisplay") #Import for when changing texture pack
+	add_to_group("SlabDisplay") #Important for when changing texture pack
 	var iconSize = 0.35
 	$AspectRatioContainer.anchor_top -= iconSize
 	$AspectRatioContainer.anchor_bottom += iconSize

@@ -95,7 +95,7 @@ func newPaintSlab(value):
 func update_under_cursor():
 	cursorOverSlab = oSelector.get_slabID_at_pos(oSelector.cursorTile)
 	cursorOverSlabOwner = oDataOwnership.get_cellv(oSelector.cursorTile)
-	oSlabSideViewer.update_side()
+	#oSlabSideViewer.update_side()
 
 func update_paint():
 	match oSelector.mode:

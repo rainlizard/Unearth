@@ -548,6 +548,7 @@ centered = false
 script = ExtResource( 18 )
 
 [node name="SlabSideViewer" type="Control" parent="Game2D/Selector/TileSelector"]
+visible = false
 show_behind_parent = true
 margin_right = 40.0
 margin_bottom = 40.0
@@ -2706,6 +2707,7 @@ margin_bottom = 406.0
 settingText = "Ownership alpha"
 
 [node name="WallSideAlpha" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer" instance=ExtResource( 16 )]
+visible = false
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
