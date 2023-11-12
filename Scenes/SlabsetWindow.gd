@@ -289,47 +289,45 @@ func _on_ExportSlabsetClmDialog_file_selected(filePath):
 		# [7] Thing subtype
 		# [8] Effect range
 
-func update_slabthings():
-	var variation = (int(oSlabsetIDSpinBox.value) * 28) + int(oVariationNumberSpinBox.value)
+func get_variation_objects(variation):
 	if variation >= Slabset.tng.size():
-		oSlabsetObjectSection.visible = false
-		return
-	var listOfObjectsOnThisVariation = Slabset.tng[variation]
-	if listOfObjectsOnThisVariation.size() == 0:
-		oSlabsetObjectSection.visible = false
-		return
+		Slabset.tng.resize(variation+1)
+		if Slabset.tng[variation] == null:
+			Slabset.tng[variation] = []
+	return Slabset.tng[variation]
+
+func get_current_variation():
+	return (int(oSlabsetIDSpinBox.value) * 28) + int(oVariationNumberSpinBox.value)
+
+func update_slabthings():
+	var variation = get_current_variation()
+	var listOfObjectsOnThisVariation = get_variation_objects(variation)
+	var hasObjects = listOfObjectsOnThisVariation.size() > 0
+	oSlabsetObjectSection.visible = hasObjects
+	if not hasObjects: return
+	oObjObjectIndexSpinBox.visible = listOfObjectsOnThisVariation.size() > 1 # Hide ability to switch object index if there's only one object on this variation
 	
-	# Object settings available because there's at least one object here
-	oSlabsetObjectSection.visible = true
+	if oObjObjectIndexSpinBox.value >= listOfObjectsOnThisVariation.size():
+		oObjObjectIndexSpinBox.value = max(0, listOfObjectsOnThisVariation.size() - 1)
 	
-	# Hide ability to switch object index if there's only one object on this variation
-	if listOfObjectsOnThisVariation.size() == 1:
-		oObjObjectIndexSpinBox.visible = false
-	else:
-		oObjObjectIndexSpinBox.visible = true
-	
-	oObjObjectIndexSpinBox.value = 0 # Triggers update
 	go_to_object(oObjObjectIndexSpinBox.value)
 
 func _on_ObjObjectIndexSpinBox_value_changed(value):
-	go_to_object(value)
+	var listOfObjectsOnThisVariation = get_variation_objects(get_current_variation())
+	var maxIndex = listOfObjectsOnThisVariation.size() - 1
 
-func go_to_object(index):
-	var variation = (int(oSlabsetIDSpinBox.value) * 28) + int(oVariationNumberSpinBox.value)
-	if variation >= Slabset.tng.size():
-		return
-	
-	var listOfObjectsOnThisVariation = Slabset.tng[variation]
-	if index >= listOfObjectsOnThisVariation.size():
+	if value < 0 and listOfObjectsOnThisVariation.size() > 0:
+		oObjObjectIndexSpinBox.value = maxIndex
+		go_to_object(maxIndex)
+	elif value > maxIndex:
 		oObjObjectIndexSpinBox.value = 0
 		go_to_object(0)
-		return
-	elif index <= -1:
-		var lastEntryIndex = listOfObjectsOnThisVariation.size()-1
-		oObjObjectIndexSpinBox.value = lastEntryIndex
-		go_to_object(lastEntryIndex)
-		return
-	
+	else:
+		go_to_object(value)
+
+func go_to_object(index):
+	var variation = get_current_variation()
+	var listOfObjectsOnThisVariation = get_variation_objects(variation)
 	var obj = listOfObjectsOnThisVariation[index] # Get first object on variation
 	oObjThingTypeSpinBox.value = obj[6]
 	oObjSubtypeSpinBox.value = obj[7]
@@ -344,7 +342,6 @@ func update_obj_name():
 	if oObjIsLightCheckBox.pressed == true:
 		oObjNameLabel.text = "Light"
 	else:
-		print(oObjThingTypeSpinBox.value)
 		var dataStruct = Things.data_structure(oObjThingTypeSpinBox.value)
 		var subtype = int(oObjSubtypeSpinBox.value)
 		if dataStruct.has(subtype):
@@ -357,17 +354,47 @@ func update_obj_name():
 			#oMessage.quick("Error: Somehow subtype is missing from thing structure")
 
 func _on_ObjAddButton_pressed():
-	pass # Replace with function body.
+	var variation = get_current_variation()
+	add_new_object_to_variation(variation)
+	update_slabthings()
+
+func add_new_object_to_variation(variation):
+	# IsLight [0-1]
+	# Variation
+	# Subtile [0-9]
+	# RelativeX
+	# RelativeY
+	# RelativeZ
+	# Thing type
+	# Thing subtype
+	# Effect range
+	var new_object = [0,variation,4, 0,0,0, 1,1,0]
+	get_variation_objects(variation).append(new_object)
+	var lastEntryIndex = Slabset.tng[variation].size()-1
+	oObjObjectIndexSpinBox.value = lastEntryIndex
+	go_to_object(lastEntryIndex)
+	update_obj_name()
+
 func _on_ObjDeleteButton_pressed():
-	pass # Replace with function body.
+	var variation = get_current_variation()
+	var listOfObjectsOnThisVariation = get_variation_objects(variation)
+	var objectIndex = oObjObjectIndexSpinBox.value
+	
+	if objectIndex < 0 or objectIndex >= listOfObjectsOnThisVariation.size():
+		oMessage.quick("No object to remove")
+		return
+	
+	listOfObjectsOnThisVariation.remove(objectIndex)
+	
+	update_slabthings()
 
 func _on_ObjThingTypeSpinBox_value_changed(value):
 	oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name(value)
-	yield(get_tree(),'idle_frame')
+	#yield(get_tree(),'idle_frame')
 	update_obj_name()
-	
+
 func _on_ObjSubtypeSpinBox_value_changed(value):
-	yield(get_tree(),'idle_frame')
+	#yield(get_tree(),'idle_frame')
 	update_obj_name()
 
 func _on_ObjIsLightCheckBox_toggled(button_pressed):

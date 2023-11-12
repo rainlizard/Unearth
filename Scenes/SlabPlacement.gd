@@ -440,7 +440,6 @@ func auto_torch_slab(xSlab:int, ySlab:int, currentSlabID, surrID):
 	return currentSlabID
 
 func pick_torch_side(xSlab:int, ySlab:int, surrID):
-	var side = -1
 	
 	if xSlab % 5 == 0:
 		if (xSlab + ySlab) % 2 == 1: # Is odd
