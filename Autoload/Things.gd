@@ -75,6 +75,27 @@ func _init():
 	default_data["DATA_CREATURE"] = DATA_CREATURE.duplicate(true)
 	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
 
+func data_structure(thingType:int):
+	match int(thingType):
+		Things.TYPE.OBJECT: return DATA_OBJECT
+		Things.TYPE.CREATURE: return DATA_CREATURE
+		Things.TYPE.EFFECTGEN: return DATA_EFFECTGEN
+		Things.TYPE.TRAP: return DATA_TRAP
+		Things.TYPE.DOOR: return DATA_DOOR
+		Things.TYPE.EXTRA: return DATA_EXTRA
+	print("This should never happen.")
+	return {}
+
+func data_structure_name(thingType:int):
+	match int(thingType):
+		Things.TYPE.OBJECT: return "Object"
+		Things.TYPE.CREATURE: return "Creature"
+		Things.TYPE.EFFECTGEN: return "Effectgen"
+		Things.TYPE.TRAP: return "Trap"
+		Things.TYPE.DOOR: return "Door"
+		Things.TYPE.EXTRA: return "Extra"
+	return "Name not found"
+
 var DATA_EXTRA = {
 0 : [null, null, null, null, null, null],
 1 : ["Action Point", null, null,  preload("res://Art/ActionPoint.png"), null, TAB_ACTION],

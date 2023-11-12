@@ -47,7 +47,7 @@ var cursorOverSlab = 0
 var cursorOverSlabOwner = 5
 var cursorOnInstancesArray = []
 
-var paintSlab = 0 setget newPaintSlab
+var paintSlab = null setget newPaintSlab
 var paintThingType = null setget newPaintThingType
 var paintSubtype = null setget newPaintSubtype
 var paintOwnership = 0 setget newOwnership
@@ -131,6 +131,8 @@ func update_paint():
 
 
 func construct_shape_for_placement(constructType):
+	if paintSlab == null: return
+	
 	oEditor.mapHasBeenEdited = true
 	var shapePositionArray = []
 	match constructType:

@@ -23,12 +23,16 @@ onready var oObjAddButton = Nodelist.list["oObjAddButton"]
 onready var oObjDeleteButton = Nodelist.list["oObjDeleteButton"]
 onready var oObjThingTypeSpinBox = Nodelist.list["oObjThingTypeSpinBox"]
 onready var oObjSubtypeSpinBox = Nodelist.list["oObjSubtypeSpinBox"]
-onready var oObjIsLightSpinBox = Nodelist.list["oObjIsLightSpinBox"]
+onready var oObjIsLightCheckBox = Nodelist.list["oObjIsLightCheckBox"]
 onready var oObjEffectRangeSpinBox = Nodelist.list["oObjEffectRangeSpinBox"]
 onready var oObjSubtileSpinBox = Nodelist.list["oObjSubtileSpinBox"]
 onready var oObjRelativeXSpinBox = Nodelist.list["oObjRelativeXSpinBox"]
 onready var oObjRelativeYSpinBox = Nodelist.list["oObjRelativeYSpinBox"]
 onready var oObjRelativeZSpinBox = Nodelist.list["oObjRelativeZSpinBox"]
+onready var oSlabsetObjectSection = Nodelist.list["oSlabsetObjectSection"]
+onready var oObjSubtypeLabel = Nodelist.list["oObjSubtypeLabel"]
+onready var oObjThingTypeLabel = Nodelist.list["oObjThingTypeLabel"]
+onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
 
 
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
@@ -286,67 +290,104 @@ func _on_ExportSlabsetClmDialog_file_selected(filePath):
 		# [8] Effect range
 
 func update_slabthings():
-	var slabID = int(oSlabsetIDSpinBox.value)
-	var variation = (slabID * 28) + int(oVariationNumberSpinBox.value)
+	var variation = (int(oSlabsetIDSpinBox.value) * 28) + int(oVariationNumberSpinBox.value)
 	if variation >= Slabset.tng.size():
-		print("Hide the section")
+		oSlabsetObjectSection.visible = false
 		return
 	var listOfObjectsOnThisVariation = Slabset.tng[variation]
 	if listOfObjectsOnThisVariation.size() == 0:
-		print("Hide the section")
+		oSlabsetObjectSection.visible = false
 		return
-	print("-------------------")
-	print(slabID)
-	print(listOfObjectsOnThisVariation)
-	var obj = listOfObjectsOnThisVariation[0] # Get first object on variation
 	
-	oObjObjectIndexSpinBox.value = 0
-	#oObjAddButton.value = 0
-	#oObjDeleteButton.value = 0
+	# Object settings available because there's at least one object here
+	oSlabsetObjectSection.visible = true
+	
+	# Hide ability to switch object index if there's only one object on this variation
+	if listOfObjectsOnThisVariation.size() == 1:
+		oObjObjectIndexSpinBox.visible = false
+	else:
+		oObjObjectIndexSpinBox.visible = true
+	
+	oObjObjectIndexSpinBox.value = 0 # Triggers update
+	go_to_object(oObjObjectIndexSpinBox.value)
+
+func _on_ObjObjectIndexSpinBox_value_changed(value):
+	go_to_object(value)
+
+func go_to_object(index):
+	var variation = (int(oSlabsetIDSpinBox.value) * 28) + int(oVariationNumberSpinBox.value)
+	if variation >= Slabset.tng.size():
+		return
+	
+	var listOfObjectsOnThisVariation = Slabset.tng[variation]
+	if index >= listOfObjectsOnThisVariation.size():
+		oObjObjectIndexSpinBox.value = 0
+		go_to_object(0)
+		return
+	elif index <= -1:
+		var lastEntryIndex = listOfObjectsOnThisVariation.size()-1
+		oObjObjectIndexSpinBox.value = lastEntryIndex
+		go_to_object(lastEntryIndex)
+		return
+	
+	var obj = listOfObjectsOnThisVariation[index] # Get first object on variation
 	oObjThingTypeSpinBox.value = obj[6]
 	oObjSubtypeSpinBox.value = obj[7]
-	oObjIsLightSpinBox.value = obj[0]
+	oObjIsLightCheckBox.pressed = bool(obj[0])
 	oObjEffectRangeSpinBox.value = obj[8]
 	oObjSubtileSpinBox.value = obj[2]
 	oObjRelativeXSpinBox.value = obj[3]
 	oObjRelativeYSpinBox.value = obj[4]
 	oObjRelativeZSpinBox.value = obj[5]
 
+func update_obj_name():
+	if oObjIsLightCheckBox.pressed == true:
+		oObjNameLabel.text = "Light"
+	else:
+		print(oObjThingTypeSpinBox.value)
+		var dataStruct = Things.data_structure(oObjThingTypeSpinBox.value)
+		var subtype = int(oObjSubtypeSpinBox.value)
+		if dataStruct.has(subtype):
+			var newName = dataStruct[subtype][Things.NAME]
+			if newName is String:
+				oObjNameLabel.text = newName
+		else:
+			oObjNameLabel.text = "Name not found"
+			#print("Error: Somehow subtype is missing from thing structure")
+			#oMessage.quick("Error: Somehow subtype is missing from thing structure")
+
 func _on_ObjAddButton_pressed():
 	pass # Replace with function body.
-
-
 func _on_ObjDeleteButton_pressed():
 	pass # Replace with function body.
 
-
 func _on_ObjThingTypeSpinBox_value_changed(value):
-	pass # Replace with function body.
-
-
+	oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name(value)
+	yield(get_tree(),'idle_frame')
+	update_obj_name()
+	
 func _on_ObjSubtypeSpinBox_value_changed(value):
-	pass # Replace with function body.
+	yield(get_tree(),'idle_frame')
+	update_obj_name()
 
-
-func _on_ObjIsLightSpinBox_value_changed(value):
-	pass # Replace with function body.
-
+func _on_ObjIsLightCheckBox_toggled(button_pressed):
+	if button_pressed == true:
+		oObjSubtypeLabel.text = "Intensity"
+		oObjThingTypeLabel.modulate.a = 0
+		oObjThingTypeSpinBox.modulate.a = 0
+	else:
+		oObjSubtypeLabel.text = "Subtype"
+		oObjThingTypeLabel.modulate.a = 1
+		oObjThingTypeSpinBox.modulate.a = 1
+	update_obj_name()
 
 func _on_ObjEffectRangeSpinBox_value_changed(value):
 	pass # Replace with function body.
-
-
 func _on_ObjSubtileSpinBox_value_changed(value):
 	pass # Replace with function body.
-
-
 func _on_ObjRelativeXSpinBox_value_changed(value):
 	pass # Replace with function body.
-
-
 func _on_ObjRelativeYSpinBox_value_changed(value):
 	pass # Replace with function body.
-
-
 func _on_ObjRelativeZSpinBox_value_changed(value):
 	pass # Replace with function body.
