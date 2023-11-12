@@ -348,8 +348,23 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			id.locationY = locY
 	return id
 
+#Slabset.obj.IS_LIGHT,     # [0] IsLight [0-1]
+#Slabset.obj.VARIATION,    # [1] Variation
+#Slabset.obj.SUBTILE,      # [2] Subtile [0-9]
+#Slabset.obj.RELATIVE_X,   # [3] RelativeX
+#Slabset.obj.RELATIVE_Y,   # [4] RelativeY
+#Slabset.obj.RELATIVE_Z,   # [5] RelativeZ
+#Slabset.obj.THING_TYPE,   # [6] Thing type
+#Slabset.obj.THING_SUBTYPE,# [7] Thing subtype
+#Slabset.obj.EFFECT_RANGE  # [8] Effect range
+
 func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng file
-	var id = thingScn.instance()
+	var id
+	if tngObj[Slabset.obj.IS_LIGHT] == 1:
+		id = lightScn.instance()
+	else:
+		id = thingScn.instance()
+	
 	id.data9 = 0
 	id.data10 = 0
 	id.data11_12 = 0
@@ -364,19 +379,19 @@ func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng 
 	
 	var subtileY = subtile/3
 	var subtileX = subtile-(subtileY*3)
-	id.locationX = ((xSlab*3) + subtileX) + tngObj[3]
-	id.locationY = ((ySlab*3) + subtileY) + tngObj[4]
-	id.locationZ = tngObj[5]
+	id.locationX = ((xSlab*3) + subtileX) + tngObj[Slabset.obj.RELATIVE_X]
+	id.locationY = ((ySlab*3) + subtileY) + tngObj[Slabset.obj.RELATIVE_Y]
+	id.locationZ = tngObj[Slabset.obj.RELATIVE_Z]
 	id.sensitiveTile = (ySlab * M.xSize) + xSlab # Should this be M.ySize ???
-	id.thingType = tngObj[6]
-	id.subtype = tngObj[7]
+	id.thingType = tngObj[Slabset.obj.THING_TYPE]
+	id.subtype = tngObj[Slabset.obj.THING_SUBTYPE]
 	id.ownership = ownership
 	
 	if id.thingType == Things.TYPE.EFFECTGEN:
-		id.effectRange = tngObj[8]
+		id.effectRange = tngObj[Slabset.obj.EFFECT_RANGE]
 	
 	if slabID == Slabs.GUARD_POST:
-		if tngObj[7] == 115: # Guard Flag (Red)
+		if tngObj[Slabset.obj.THING_SUBTYPE] == 115: # Guard Flag (Red)
 			match ownership:
 				0: pass # Red
 				1: id.subtype = 116 # Blue
@@ -385,7 +400,7 @@ func spawn(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng 
 				4: id.queue_free() # White
 				5: id.subtype = 119 # None
 	elif slabID == Slabs.DUNGEON_HEART:
-		if tngObj[7] == 111: # Heart Flame (Red)
+		if tngObj[Slabset.obj.THING_SUBTYPE] == 111: # Heart Flame (Red)
 			match ownership:
 				0: pass # Red
 				1: id.subtype = 120 # Blue

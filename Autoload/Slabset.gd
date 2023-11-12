@@ -1,5 +1,7 @@
 extends Node
 
+
+
 var tng = []
 var numberOfThings = 0
 
@@ -7,6 +9,18 @@ var numberOfThings = 0
 var dat = []
 var blank_dat_entry = []
 var CODETIME_START
+
+enum obj {
+	IS_LIGHT,     # [0] IsLight [0-1]
+	VARIATION,    # [1] Variation
+	SUBTILE,      # [2] Subtile [0-9]
+	RELATIVE_X,   # [3] RelativeX
+	RELATIVE_Y,   # [4] RelativeY
+	RELATIVE_Z,   # [5] RelativeZ
+	THING_TYPE,   # [6] Thing type
+	THING_SUBTYPE,# [7] Thing subtype
+	EFFECT_RANGE  # [8] Effect range
+}
 
 enum dir {
 	s = 0

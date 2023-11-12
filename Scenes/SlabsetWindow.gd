@@ -279,16 +279,6 @@ func _on_ExportSlabsetClmDialog_file_selected(filePath):
 	else:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
-		# [0] IsLight [0-1]
-		# [1] Variation
-		# [2] Subtile [0-9]
-		# [3] RelativeX
-		# [4] RelativeY
-		# [5] RelativeZ
-		# [6] Thing type
-		# [7] Thing subtype
-		# [8] Effect range
-
 func get_variation_objects(variation):
 	if variation >= Slabset.tng.size():
 		Slabset.tng.resize(variation+1)
@@ -301,34 +291,23 @@ func get_current_variation():
 
 func update_slabthings():
 	var variation = get_current_variation()
-	var listOfObjectsOnThisVariation = get_variation_objects(variation)
-	var hasObjects = listOfObjectsOnThisVariation.size() > 0
-	oSlabsetObjectSection.visible = hasObjects
-	if not hasObjects: return
-	oObjObjectIndexSpinBox.visible = listOfObjectsOnThisVariation.size() > 1 # Hide ability to switch object index if there's only one object on this variation
+	var listOfObjects = get_variation_objects(variation)
+	oSlabsetObjectSection.visible = !listOfObjects.empty()
 	
-	if oObjObjectIndexSpinBox.value >= listOfObjectsOnThisVariation.size():
-		oObjObjectIndexSpinBox.value = max(0, listOfObjectsOnThisVariation.size() - 1)
+	if listOfObjects.empty(): return
 	
-	go_to_object(oObjObjectIndexSpinBox.value)
+	oObjObjectIndexSpinBox.visible = listOfObjects.size() > 1 # Hide ability to switch object index if there's only one object on this variation
+	oObjObjectIndexSpinBox.value = clamp(oObjObjectIndexSpinBox.value, 0, listOfObjects.size() - 1)
+	
+	update_object_fields(oObjObjectIndexSpinBox.value)
 
-func _on_ObjObjectIndexSpinBox_value_changed(value):
-	var listOfObjectsOnThisVariation = get_variation_objects(get_current_variation())
-	var maxIndex = listOfObjectsOnThisVariation.size() - 1
 
-	if value < 0 and listOfObjectsOnThisVariation.size() > 0:
-		oObjObjectIndexSpinBox.value = maxIndex
-		go_to_object(maxIndex)
-	elif value > maxIndex:
-		oObjObjectIndexSpinBox.value = 0
-		go_to_object(0)
-	else:
-		go_to_object(value)
-
-func go_to_object(index):
+func update_object_fields(index):
 	var variation = get_current_variation()
-	var listOfObjectsOnThisVariation = get_variation_objects(variation)
-	var obj = listOfObjectsOnThisVariation[index] # Get first object on variation
+	var listOfObjects = get_variation_objects(variation)
+	if index >= listOfObjects.size(): return
+	
+	var obj = listOfObjects[index] # Get first object on variation
 	oObjThingTypeSpinBox.value = obj[6]
 	oObjSubtypeSpinBox.value = obj[7]
 	oObjIsLightCheckBox.pressed = bool(obj[0])
@@ -337,6 +316,20 @@ func go_to_object(index):
 	oObjRelativeXSpinBox.value = obj[3]
 	oObjRelativeYSpinBox.value = obj[4]
 	oObjRelativeZSpinBox.value = obj[5]
+
+func _on_ObjObjectIndexSpinBox_value_changed(value):
+	var listOfObjects = get_variation_objects(get_current_variation())
+	var maxIndex = listOfObjects.size() - 1
+
+	if value < 0 and listOfObjects.size() > 0:
+		oObjObjectIndexSpinBox.value = maxIndex
+		update_object_fields(maxIndex)
+	elif value > maxIndex:
+		oObjObjectIndexSpinBox.value = 0
+		update_object_fields(0)
+	else:
+		update_object_fields(value)
+
 
 func update_obj_name():
 	if oObjIsLightCheckBox.pressed == true:
@@ -350,8 +343,6 @@ func update_obj_name():
 				oObjNameLabel.text = newName
 		else:
 			oObjNameLabel.text = "Name not found"
-			#print("Error: Somehow subtype is missing from thing structure")
-			#oMessage.quick("Error: Somehow subtype is missing from thing structure")
 
 func _on_ObjAddButton_pressed():
 	var variation = get_current_variation()
@@ -359,20 +350,12 @@ func _on_ObjAddButton_pressed():
 	update_slabthings()
 
 func add_new_object_to_variation(variation):
-	# IsLight [0-1]
-	# Variation
-	# Subtile [0-9]
-	# RelativeX
-	# RelativeY
-	# RelativeZ
-	# Thing type
-	# Thing subtype
-	# Effect range
+	#update_object_property(Slabset.obj.VARIATION, variation)
 	var new_object = [0,variation,4, 0,0,0, 1,1,0]
 	get_variation_objects(variation).append(new_object)
 	var lastEntryIndex = Slabset.tng[variation].size()-1
 	oObjObjectIndexSpinBox.value = lastEntryIndex
-	go_to_object(lastEntryIndex)
+	update_object_fields(lastEntryIndex)
 	update_obj_name()
 
 func _on_ObjDeleteButton_pressed():
@@ -392,10 +375,12 @@ func _on_ObjThingTypeSpinBox_value_changed(value):
 	oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name(value)
 	#yield(get_tree(),'idle_frame')
 	update_obj_name()
+	update_object_property(Slabset.obj.THING_TYPE, value)
 
 func _on_ObjSubtypeSpinBox_value_changed(value):
 	#yield(get_tree(),'idle_frame')
 	update_obj_name()
+	update_object_property(Slabset.obj.THING_SUBTYPE, value)
 
 func _on_ObjIsLightCheckBox_toggled(button_pressed):
 	if button_pressed == true:
@@ -407,14 +392,25 @@ func _on_ObjIsLightCheckBox_toggled(button_pressed):
 		oObjThingTypeLabel.modulate.a = 1
 		oObjThingTypeSpinBox.modulate.a = 1
 	update_obj_name()
+	update_object_property(Slabset.obj.IS_LIGHT, int(button_pressed))
+
 
 func _on_ObjEffectRangeSpinBox_value_changed(value):
-	pass # Replace with function body.
+	update_object_property(Slabset.obj.EFFECT_RANGE, value)
 func _on_ObjSubtileSpinBox_value_changed(value):
-	pass # Replace with function body.
+	update_object_property(Slabset.obj.SUBTILE, value)
 func _on_ObjRelativeXSpinBox_value_changed(value):
-	pass # Replace with function body.
+	update_object_property(Slabset.obj.RELATIVE_X, value)
 func _on_ObjRelativeYSpinBox_value_changed(value):
-	pass # Replace with function body.
+	update_object_property(Slabset.obj.RELATIVE_Y, value)
 func _on_ObjRelativeZSpinBox_value_changed(value):
-	pass # Replace with function body.
+	update_object_property(Slabset.obj.RELATIVE_Z, value)
+
+# Helper method to update the object in Slabset.tng
+func update_object_property(the_property, new_value):
+	var variation = get_current_variation()
+	var listOfObjects = get_variation_objects(variation)
+	var object_index = oObjObjectIndexSpinBox.value
+	if object_index < 0 or object_index >= listOfObjects.size():
+		return # Invalid index, nothing to update
+	listOfObjects[object_index][the_property] = new_value
