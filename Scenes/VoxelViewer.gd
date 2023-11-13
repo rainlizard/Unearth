@@ -273,3 +273,4 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 	skip3x3function = true
 	yield(get_tree(),'idle_frame')
 	skip3x3function = false
+

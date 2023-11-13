@@ -111,3 +111,4 @@ func get_column_indexes_on_tile(cursorTile):
 			var newIndex = oDataClmPos.get_cell((cursorTile.x*3)+xSubtile, (cursorTile.y*3)+ySubtile)
 			var i = (ySubtile*3) + xSubtile
 			customSlabArrayOfSpinbox[i].value = newIndex
+
