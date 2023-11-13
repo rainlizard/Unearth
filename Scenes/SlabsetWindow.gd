@@ -375,7 +375,7 @@ func _on_ObjDeleteButton_pressed():
 	oMessage.quick("Deleted object")
 
 func _on_ObjThingTypeSpinBox_value_changed(value:int):
-	oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name(value)
+	oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name.get(value, "?")
 	#yield(get_tree(),'idle_frame')
 	update_obj_name()
 	update_object_property(Slabset.obj.THING_TYPE, value)

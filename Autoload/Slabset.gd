@@ -1,14 +1,7 @@
 extends Node
-
-
-
 var tng = []
-var numberOfThings = 0
-
-# dat[slabID][variation][subtile]
 var dat = []
-var blank_dat_entry = []
-var CODETIME_START
+var default_data = {}
 
 enum obj {
 	IS_LIGHT,     # [0] IsLight [0-1]
@@ -38,7 +31,7 @@ enum dir {
 func load_slabset():
 	tng = []
 	dat = []
-	CODETIME_START = OS.get_ticks_msec()
+	var CODETIME_START = OS.get_ticks_msec()
 	var oGame = Nodelist.list["oGame"]
 	var oMessage = Nodelist.list["oMessage"]
 	
@@ -75,10 +68,15 @@ func load_slabset():
 				getObjectIndex += 1
 	
 	print('Created Slabset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	store_default_data()
+
+func store_default_data():
+	default_data["dat"] = dat.duplicate(true)
+	default_data["tng"] = tng.duplicate(true)
 
 func create_object_list(tng_buffer):
 	tng_buffer.seek(0)
-	numberOfThings = tng_buffer.get_u16() # It says 359, however there are actually 362 entries in the file.
+	var numberOfThings = tng_buffer.get_u16() # It says 359, however there are actually 362 entries in the file.
 	print('Number of Things: '+str(numberOfThings))
 	
 	tng_buffer.seek(2 + (1304*2))
@@ -115,71 +113,58 @@ func fetch_column_index(variation, subtile):
 		return 0
 
 
-#func create_cfg_slabset(filePath): #"res://slabset.cfg"
-#	var oMessage = Nodelist.list["oMessage"]
-#	var textFile = File.new()
-#	if textFile.open(filePath, File.WRITE) == OK:
-#		var slabSection = 0
-#
-#		for slabID in 58:
-#			#textFile.store_line('[[slab' + str(slabSection) + '.columns]]')
-#
-#			var variationStart = (slabID * 28)
-#			if slabID >= 42:
-#				variationStart = (42 * 28) + (8 * (slabID - 42))
-#
-#			var variationCount = 28
-#			if slabID >= 42:
-#				variationCount = 8
-#
-#			textFile.store_line('[slab' + str(slabID) + ']')
-#
-#			for variationNumber in variationCount:
-#				if variationStart + variationNumber < Slabset.dat.size():
-#					#var beginLine = get_dir_text(variationNumber) + ' = '
-#					textFile.store_line('[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + ']')
-#					textFile.store_line('columns = ' + String(Slabset.dat[variationStart + variationNumber])) #.replace(',','').replace('[','').replace(']','')
-#
-#				#var objectNumber = 0
-#				var hasObjects = false
-#				for i in tngObject.size():
-#					if tngObject[i][1] == variationStart + variationNumber: #VariationIndex
-#						textFile.store_line("\r")
-#						hasObjects = true
-#						textFile.store_line('[[slab' + str(slabSection) + '.' + get_dir_text(variationNumber) + '_objects' + ']]')
-#						for z in 9:
-#							var val = tngObject[i][z]
-#							var beginLine = ''
-#							match z:
-#								0: beginLine = 'IsLight'
-#								1: beginLine = 'VariationIndex'
-#								2: beginLine = 'Subtile'
-#								3: beginLine = 'RelativeX'
-#								4: beginLine = 'RelativeY'
-#								5: beginLine = 'RelativeZ'
-#								6: beginLine = 'ThingType'
-#								7: beginLine = 'Subtype'
-#								8: beginLine = 'EffectRange'
-#							if z == 1: continue # skip "VariationIndex"
-#
-#							beginLine += ' = '
-#
-#							textFile.store_line(beginLine + String(val))
-#						#objectNumber += 1
-#
-#				if hasObjects == false:
-#					textFile.store_line('objects = []')
-#
-#				textFile.store_line("\r")
-#
-#			textFile.store_line("\r")
-#
-#			slabSection += 1
-#
-#		textFile.close()
-#		oMessage.quick("aaaaa Saved: " + filePath)
-#	else:
-#		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
+func create_cfg_slabset(filePath): #"res://slabset.cfg"
+	var CODETIME_START = OS.get_ticks_msec()
+	var oMessage = Nodelist.list["oMessage"]
+	var textFile = File.new()
+	if textFile.open(filePath, File.WRITE) != OK:
+		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
+		return
+	
+	for variation in dat.size():
+		var slabID = int(variation / 28)
+		var variationNumber = variation % 28
+		var dirText = get_dir_text(variationNumber)
+		
+		if variationNumber == 0:
+			textFile.store_line("[slab" + str(slabID) + "]")
+		textFile.store_line("[slab" + str(slabID) + "." + dirText + "]")
+		textFile.store_line("columns = " + str(dat[variation]))
+		
+		for object in tng[variation]:
+			textFile.store_line("\r")
+			textFile.store_line("[[slab" + str(slabID) + "." + dirText + "_objects" + "]]")
+			for z in 9:
+				var val = object[z]
+				var beginLine = get_property_name(z) # Implement this method based on your match statement.
+				if beginLine:
+					beginLine += " = "
+					if z == obj.THING_TYPE: # Use string as value instead of an integer
+						if object[obj.IS_LIGHT] == 1:
+							val = '"Unused"' # Lights don't use ThingType field
+						else:
+							val = '"'+Things.data_structure_name.get(val, "?")+'"'
+					textFile.store_line(beginLine + str(val))
+		if tng[variation].size() == 0:
+			textFile.store_line("objects = []")
+		textFile.store_line("\r")
+	
+	textFile.close()
+	oMessage.quick("Saved: " + filePath)
+	
+	print('Exported in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+func get_property_name(i):
+	match i:
+		obj.IS_LIGHT: return 'IsLight'
+		obj.SUBTILE: return 'Subtile'
+		obj.RELATIVE_X: return 'RelativeX'
+		obj.RELATIVE_Y: return 'RelativeY'
+		obj.RELATIVE_Z: return 'RelativeZ'
+		obj.THING_TYPE: return 'ThingType'
+		obj.THING_SUBTYPE: return 'Subtype'
+		obj.EFFECT_RANGE: return 'EffectRange'
+		_: return ''
 
 func get_dir_text(variationNumber):
 	match variationNumber:

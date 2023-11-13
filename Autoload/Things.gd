@@ -8,20 +8,39 @@ const LIGHT_LIMIT = -1
 enum TYPE {
 	NONE = 0
 	OBJECT = 1
-	#TCls_Shot = 2
-	#TCls_EffectElem = 3
-	#TCls_DeadCreature = 4
+	SHOT = 2
+	EFFECTELEM = 3
+	DEADCREATURE = 4
 	CREATURE = 5
-	#TCls_Effect = 6
+	EFFECT = 6
 	EFFECTGEN = 7
 	TRAP = 8
 	DOOR = 9
-	#TCls_Unkn10 = 10
-	#TCls_Unkn11 = 11
-	#TCls_AmbientSnd = 12
-	#TCls_CaveIn = 13
+	UNKN10 = 10
+	UNKN11 = 11
+	AMBIENTSND = 12
+	CAVEIN = 13
 	EXTRA = 696969
 }
+
+var data_structure_name = {
+	TYPE.NONE: "Empty",
+	TYPE.OBJECT: "Object",
+	TYPE.SHOT: "Shot",
+	TYPE.EFFECTELEM: "EffectElem",
+	TYPE.DEADCREATURE: "DeadCreature",
+	TYPE.CREATURE: "Creature",
+	TYPE.EFFECT: "Effect",
+	TYPE.EFFECTGEN: "EffectGen",
+	TYPE.TRAP: "Trap",
+	TYPE.DOOR: "Door",
+	TYPE.UNKN10: "Unkn10",
+	TYPE.UNKN11: "Unkn11",
+	TYPE.AMBIENTSND: "AmbientSnd",
+	TYPE.CAVEIN: "CaveIn",
+	TYPE.EXTRA: "Extra"
+}
+
 enum {
 	NAME = 0
 	KEEPERFX_NAME = 1
@@ -85,16 +104,6 @@ func data_structure(thingType):
 		Things.TYPE.EXTRA: return DATA_EXTRA
 	print("This should never happen.")
 	return {}
-
-func data_structure_name(thingType):
-	match thingType:
-		Things.TYPE.OBJECT: return "Object"
-		Things.TYPE.CREATURE: return "Creature"
-		Things.TYPE.EFFECTGEN: return "Effectgen"
-		Things.TYPE.TRAP: return "Trap"
-		Things.TYPE.DOOR: return "Door"
-		Things.TYPE.EXTRA: return "Extra"
-	return "Name not found"
 
 var DATA_EXTRA = {
 0 : [null, null, null, null, null, null],

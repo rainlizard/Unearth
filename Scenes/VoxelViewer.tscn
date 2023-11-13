@@ -15,7 +15,7 @@ environment = SubResource( 19 )
 [sub_resource type="SpatialMaterial" id=21]
 flags_transparent = true
 vertex_color_use_as_albedo = true
-albedo_color = Color( 0.752941, 0.752941, 1, 0.188235 )
+albedo_color = Color( 1, 1, 1, 0.188235 )
 
 [node name="VoxelObjectView" type="ViewportContainer" groups=["VoxelViewer"]]
 margin_right = 1236.0
@@ -24,6 +24,12 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
 script = ExtResource( 4 )
+
+[node name="ColorRectBack" type="ColorRect" parent="."]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.152941, 0.145098, 0.172549, 1 )
 
 [node name="VoxelViewport" type="Viewport" parent="."]
 size = Vector2( 1236, 620 )
