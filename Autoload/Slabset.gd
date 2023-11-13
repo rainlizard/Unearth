@@ -122,13 +122,12 @@ func create_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 	var CODETIME_START = OS.get_ticks_msec()
 	var oMessage = Nodelist.list["oMessage"]
 	
-	
 	# Find differences if not a full export
 	var dat_diffs = []
 	var tng_diffs = []
 	if fullExport == false:
-		dat_diffs = find_differences(dat, default_data["dat"])
-		tng_diffs = find_differences(tng, default_data["tng"])
+		dat_diffs = find_all_dat_differences()
+		tng_diffs = find_all_tng_differences()
 		if tng_diffs.size() == 0 and dat_diffs.size() == 0:
 			oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved.")
 			return
@@ -195,17 +194,44 @@ func create_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 	print('Exported in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 
-func find_differences(current, default):
+func find_all_dat_differences():
 	var diff_indices = []
-	for i in current.size():
-		if current[i].empty(): # If the current element is an empty array, skip it
-			continue
-		if current[i] == [0,0,0, 0,0,0, 0,0,0]: # If it's got nothing on it, then skip it
-			continue
-		if i >= default.size() or current[i] != default[i]: # If 'default' is shorter, or the current and default elements differ
-			diff_indices.append(i)
+	for variation in dat.size():
+		if is_dat_variation_different(variation) == true:
+			diff_indices.append(variation)
 	return diff_indices
 
+func find_all_tng_differences():
+	var diff_indices = []
+	for variation in tng.size():
+		if is_tng_variation_different(variation) == true:
+			diff_indices.append(variation)
+	return diff_indices
+
+func is_dat_variation_different(variation):
+	if variation >= dat.size() or dat[variation].empty(): # This function should not have been called
+		return false
+	if dat[variation] == [0,0,0, 0,0,0, 0,0,0]: # If it's got nothing on it, then skip it
+		return false
+	if variation >= default_data["dat"].size() or dat[variation] != default_data["dat"][variation]: # If 'default' is shorter, or the current and default elements differ
+		return true
+	return false
+
+func is_dat_column_different(variation, subtile):
+	if variation >= dat.size() or dat[variation].empty():
+		return false
+	if variation >= default_data["dat"].size() or default_data["dat"][variation].empty():
+		return dat[variation][subtile] != 0
+	return dat[variation][subtile] != default_data["dat"][variation][subtile]
+
+func is_tng_variation_different(variation):
+	if variation >= tng.size() or tng[variation].empty(): # This function should not have been called
+		return false
+	if tng[variation] == [0,0,0, 0,0,0, 0,0,0]: # If it's got nothing on it, then skip it
+		return false
+	if variation >= default_data["tng"].size() or tng[variation] != default_data["tng"][variation]: # If 'default' is shorter, or the current and default elements differ
+		return true
+	return false
 
 func get_property_name(i):
 	match i:

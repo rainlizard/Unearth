@@ -146,7 +146,6 @@ func variation_changed(localVariation):
 #	center = 27
 #}
 
-
 func _on_SlabsetIDSpinBox_value_changed(value):
 	var slabName = "Unknown"
 	value = int(value)
@@ -169,6 +168,7 @@ func update_columns_ui():
 		spinbox.value = clmIndex
 		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
+
 func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 	var variation = get_current_variation()
 	for y in 3:
@@ -181,6 +181,7 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 			ensure_dat_array_has_space(variation)
 			Slabset.dat[variation][i] = int(clmIndex)
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
+	adjust_color_if_different(variation)
 
 func ensure_dat_array_has_space(variation):
 	while variation >= Slabset.dat.size():
@@ -295,8 +296,23 @@ func get_list_of_objects(variation):
 	else:
 		return []
 
+func adjust_color_if_different(variation):
+	for subtile in 9:
+		var id = columnSettersArray[subtile]
+		var spinbox = id.get_node("CustomSpinBox")
+		var shortcut = id.get_node("ButtonShortcut")
+		if Slabset.is_dat_column_different(variation, subtile) == true:
+			spinbox.modulate = Color(1.8,1.8,1.9)
+			shortcut.modulate = Color(1.4,1.4,1.5)
+		else:
+			spinbox.modulate = Color(1,1,1)
+			shortcut.modulate = Color(1,1,1)
+
 func update_slabthings():
 	var variation = get_current_variation()
+	
+	adjust_color_if_different(variation)
+	
 	var listOfObjects = get_list_of_objects(variation)
 	oSlabsetObjectSection.visible = !listOfObjects.empty()
 	
