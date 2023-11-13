@@ -97,17 +97,18 @@ func _on_SlabsetTabs_tab_changed(tab):
 			oColumnsetVoxelView.initialize()
 
 
-func variation_changed(variation):
-	variation = int(variation)
+func variation_changed(localVariation):
+	localVariation = int(localVariation)
+	
 	#var slabID = oSlabsetIDSpinBox.value
 	#variation
 	var constructString = ""
-	#var byte = (slabID * 28) + variation
+	#var byte = (slabID * 28) + localVariation
 	#constructString += "Byte " + str(byte) + ' - ' + str(byte)
 	#constructString += '\n'
 	
-	if variation != 27:
-		match variation % 9:
+	if localVariation != 27:
+		match localVariation % 9:
 			0: constructString += "South"
 			1: constructString += "West"
 			2: constructString += "North"
@@ -122,11 +123,11 @@ func variation_changed(variation):
 	
 	constructString += '\n'
 	
-	if variation < 9:
+	if localVariation < 9:
 		constructString += ""
-	elif variation < 18:
+	elif localVariation < 18:
 		constructString += "Near lava"
-	elif variation < 27:
+	elif localVariation < 27:
 		constructString += "Near water"
 	
 	oVariationInfoLabel.text = constructString
@@ -159,8 +160,7 @@ func _on_VariationNumberSpinBox_value_changed(value):
 	update_columns_ui()
 
 func update_columns_ui():
-	var slabID = int(oSlabsetIDSpinBox.value)
-	var variation = (slabID * 28) + int(oVariationNumberSpinBox.value)
+	var variation = get_current_variation()
 	
 	for subtile in columnSettersArray.size():
 		var spinbox = columnSettersArray[subtile].get_node("CustomSpinBox")
@@ -170,9 +170,7 @@ func update_columns_ui():
 		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
 func _on_Slabset3x3ColumnSpinBox_value_changed(value):
-	var slabID = int(oSlabsetIDSpinBox.value)
-	var variation = (slabID * 28) + int(oVariationNumberSpinBox.value)
-	
+	var variation = get_current_variation()
 	for y in 3:
 		for x in 3:
 			var i = (y*3) + x
@@ -180,10 +178,17 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 			var spinbox = id.get_node("CustomSpinBox")
 			var clmIndex = spinbox.value
 			
+			ensure_dat_array_has_space(variation)
 			Slabset.dat[variation][i] = int(clmIndex)
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
 
+func ensure_dat_array_has_space(variation):
+	while variation >= Slabset.dat.size():
+		Slabset.dat.append([0,0,0, 0,0,0, 0,0,0])
 
+func ensure_tng_array_has_space(variation):
+	while variation >= Slabset.tng.size():
+		Slabset.tng.append([])
 
 func _on_SlabsetHelpButton_pressed():
 	var helptxt = ""
@@ -281,17 +286,18 @@ func _on_ExportSlabsetClmDialog_file_selected(filePath):
 	else:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
-func get_variation_objects(variation):
-	while variation >= Slabset.tng.size():
-		Slabset.tng.append([])
-	return Slabset.tng[variation]
-
 func get_current_variation():
 	return (int(oSlabsetIDSpinBox.value) * 28) + int(oVariationNumberSpinBox.value)
 
+func get_list_of_objects(variation):
+	if variation < Slabset.tng.size():
+		return Slabset.tng[variation]
+	else:
+		return []
+
 func update_slabthings():
 	var variation = get_current_variation()
-	var listOfObjects = get_variation_objects(variation)
+	var listOfObjects = get_list_of_objects(variation)
 	oSlabsetObjectSection.visible = !listOfObjects.empty()
 	
 	if listOfObjects.empty(): return
@@ -304,7 +310,7 @@ func update_slabthings():
 
 func update_object_fields(index):
 	var variation = get_current_variation()
-	var listOfObjects = get_variation_objects(variation)
+	var listOfObjects = get_list_of_objects(variation)
 	if index >= listOfObjects.size(): return
 	
 	var obj = listOfObjects[index] # Get first object on variation
@@ -318,7 +324,8 @@ func update_object_fields(index):
 	oObjRelativeZSpinBox.value = obj[5]
 
 func _on_ObjObjectIndexSpinBox_value_changed(value):
-	var listOfObjects = get_variation_objects(get_current_variation())
+	var variation = get_current_variation()
+	var listOfObjects = get_list_of_objects(variation)
 	var maxIndex = listOfObjects.size() - 1
 
 	if value < 0 and listOfObjects.size() > 0:
@@ -353,7 +360,9 @@ func add_new_object_to_variation(variation):
 	#update_object_property(Slabset.obj.VARIATION, variation)
 	var randomSubtype = Random.randi_range(1,135)
 	var new_object = [0,variation,4, 0,0,0, 1,randomSubtype,0]
-	get_variation_objects(variation).append(new_object)
+	
+	ensure_tng_array_has_space(variation)
+	Slabset.tng[variation].append(new_object)
 	var lastEntryIndex = Slabset.tng[variation].size()-1
 	oObjObjectIndexSpinBox.value = lastEntryIndex
 	update_object_fields(lastEntryIndex)
@@ -362,14 +371,14 @@ func add_new_object_to_variation(variation):
 
 func _on_ObjDeleteButton_pressed():
 	var variation = get_current_variation()
-	var listOfObjectsOnThisVariation = get_variation_objects(variation)
+	var listOfObjects = get_list_of_objects(variation)
 	var objectIndex = oObjObjectIndexSpinBox.value
 	
-	if objectIndex < 0 or objectIndex >= listOfObjectsOnThisVariation.size():
+	if objectIndex < 0 or objectIndex >= listOfObjects.size():
 		oMessage.quick("No object to remove")
 		return
 	
-	listOfObjectsOnThisVariation.remove(objectIndex)
+	listOfObjects.remove(objectIndex)
 	
 	update_slabthings()
 	oMessage.quick("Deleted object")
@@ -413,7 +422,7 @@ func _on_ObjRelativeZSpinBox_value_changed(value:float):
 # Helper method to update the object in Slabset.tng
 func update_object_property(the_property, new_value):
 	var variation = get_current_variation()
-	var listOfObjects = get_variation_objects(variation)
+	var listOfObjects = get_list_of_objects(variation)
 	var object_index = oObjObjectIndexSpinBox.value
 	if object_index < 0 or object_index >= listOfObjects.size():
 		return # Invalid index, nothing to update

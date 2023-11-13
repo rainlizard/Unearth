@@ -147,7 +147,8 @@ func create_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 		return
 	
-	for variation in dat.size():
+	var biggest_array = max(dat.size(), tng.size())
+	for variation in biggest_array:
 		var skip = SKIP_NONE
 		if fullExport == false:
 			if dat_diffs.has(variation) == false:
@@ -198,6 +199,8 @@ func find_differences(current, default):
 	var diff_indices = []
 	for i in current.size():
 		if current[i].empty(): # If the current element is an empty array, skip it
+			continue
+		if current[i] == [0,0,0, 0,0,0, 0,0,0]: # If it's got nothing on it, then skip it
 			continue
 		if i >= default.size() or current[i] != default[i]: # If 'default' is shorter, or the current and default elements differ
 			diff_indices.append(i)
