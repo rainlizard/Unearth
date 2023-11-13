@@ -17,7 +17,7 @@ onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
 onready var oExportSlabsetClmDialog = Nodelist.list["oExportSlabsetClmDialog"]
-
+onready var oExportSlabsFullCheckBox = Nodelist.list["oExportSlabsFullCheckBox"]
 onready var oObjObjectIndexSpinBox = Nodelist.list["oObjObjectIndexSpinBox"]
 onready var oObjAddButton = Nodelist.list["oObjAddButton"]
 onready var oObjDeleteButton = Nodelist.list["oObjDeleteButton"]
@@ -180,7 +180,7 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 			var spinbox = id.get_node("CustomSpinBox")
 			var clmIndex = spinbox.value
 			
-			Slabset.dat[variation][i] = clmIndex
+			Slabset.dat[variation][i] = int(clmIndex)
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
 
 
@@ -228,7 +228,9 @@ func _on_ExportColumnsCfg_pressed():
 	oExportColumnCfgDialog.current_file = "columns.cfg"
 
 func _on_ExportSlabsetCfgDialog_file_selected(filePath):
-	Slabset.create_cfg_slabset(filePath)
+	var fullExport = oExportSlabsFullCheckBox.pressed
+	Slabset.create_cfg_slabset(filePath, fullExport)
+
 func _on_ExportColumnCfgDialog_file_selected(filePath):
 	Columnset.create_cfg_columns(filePath)
 
@@ -280,10 +282,8 @@ func _on_ExportSlabsetClmDialog_file_selected(filePath):
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
 func get_variation_objects(variation):
-	if variation >= Slabset.tng.size():
-		Slabset.tng.resize(variation+1)
-		if Slabset.tng[variation] == null:
-			Slabset.tng[variation] = []
+	while variation >= Slabset.tng.size():
+		Slabset.tng.append([])
 	return Slabset.tng[variation]
 
 func get_current_variation():

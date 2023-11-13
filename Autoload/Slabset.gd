@@ -112,16 +112,51 @@ func fetch_column_index(variation, subtile):
 	else:
 		return 0
 
+enum { # BitFlags
+	SKIP_NONE = 0,
+	SKIP_COLUMNS = 1,
+	SKIP_OBJECTS = 2,
+}
 
-func create_cfg_slabset(filePath): #"res://slabset.cfg"
+func create_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 	var CODETIME_START = OS.get_ticks_msec()
 	var oMessage = Nodelist.list["oMessage"]
+	
+	
+	# Find differences if not a full export
+	var dat_diffs = []
+	var tng_diffs = []
+	if fullExport == false:
+		dat_diffs = find_differences(dat, default_data["dat"])
+		tng_diffs = find_differences(tng, default_data["tng"])
+		if tng_diffs.size() == 0 and dat_diffs.size() == 0:
+			oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved.")
+			return
+	
+	# Print differences for debugging
+	for i in tng_diffs:
+		print("---------Differences---------")
+		print("Current: ", tng[i])
+		if i < default_data["tng"].size():
+			print("Default: ",default_data["tng"][i])
+		else:
+			print("Default: Beyond array size")
+	
 	var textFile = File.new()
 	if textFile.open(filePath, File.WRITE) != OK:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 		return
 	
 	for variation in dat.size():
+		var skip = SKIP_NONE
+		if fullExport == false:
+			if dat_diffs.has(variation) == false:
+				skip += SKIP_COLUMNS
+			if tng_diffs.has(variation) == false:
+				skip += SKIP_OBJECTS
+			if skip == SKIP_COLUMNS + SKIP_OBJECTS:
+				continue # skip both
+		
 		var slabID = int(variation / 28)
 		var variationNumber = variation % 28
 		var dirText = get_dir_text(variationNumber)
@@ -129,30 +164,45 @@ func create_cfg_slabset(filePath): #"res://slabset.cfg"
 		if variationNumber == 0:
 			textFile.store_line("[slab" + str(slabID) + "]")
 		textFile.store_line("[slab" + str(slabID) + "." + dirText + "]")
-		textFile.store_line("columns = " + str(dat[variation]))
 		
-		for object in tng[variation]:
-			textFile.store_line("\r")
-			textFile.store_line("[[slab" + str(slabID) + "." + dirText + "_objects" + "]]")
-			for z in 9:
-				var val = object[z]
-				var beginLine = get_property_name(z) # Implement this method based on your match statement.
-				if beginLine:
-					beginLine += " = "
-					if z == obj.THING_TYPE: # Use string as value instead of an integer
-						if object[obj.IS_LIGHT] == 1:
-							val = '"Unused"' # Lights don't use ThingType field
-						else:
-							val = '"'+Things.data_structure_name.get(val, "?")+'"'
-					textFile.store_line(beginLine + str(val))
-		if tng[variation].size() == 0:
-			textFile.store_line("objects = []")
+		if skip != SKIP_COLUMNS:
+			textFile.store_line("columns = " + str(dat[variation]))
+		
+		if skip != SKIP_OBJECTS:
+			for object in tng[variation]:
+				textFile.store_line("\r")
+				textFile.store_line("[[slab" + str(slabID) + "." + dirText + "_objects" + "]]")
+				for z in 9:
+					var val = object[z]
+					var beginLine = get_property_name(z) # Implement this method based on your match statement.
+					if beginLine:
+						beginLine += " = "
+						if z == obj.THING_TYPE: # Use string as value instead of an integer
+							if object[obj.IS_LIGHT] == 1:
+								val = '"Unused"' # Lights don't use ThingType field
+							else:
+								val = '"'+Things.data_structure_name.get(val, "?")+'"'
+						textFile.store_line(beginLine + str(val))
+			if tng[variation].size() == 0:
+				textFile.store_line("objects = []")
+		
 		textFile.store_line("\r")
 	
 	textFile.close()
 	oMessage.quick("Saved: " + filePath)
 	
 	print('Exported in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+
+func find_differences(current, default):
+	var diff_indices = []
+	for i in current.size():
+		if current[i].empty(): # If the current element is an empty array, skip it
+			continue
+		if i >= default.size() or current[i] != default[i]: # If 'default' is shorter, or the current and default elements differ
+			diff_indices.append(i)
+	return diff_indices
+
 
 func get_property_name(i):
 	match i:
