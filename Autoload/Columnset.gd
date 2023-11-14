@@ -14,7 +14,7 @@ var floorTexture = []
 # map0000x.clm : 49,160 bytes. first 4 bytes contains 2048, second 4 bytes are ???, then comes the column data.
 # slabs.clm : 49,156 bytes. first 4 bytes contains 2048, then comes the column data.
 
-func load_columnset():
+func load_default_columnset():
 	var CODETIME_START = OS.get_ticks_msec()
 	clear_all_column_data() # Important, for reloading/refreshing slabs.clm
 	

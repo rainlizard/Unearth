@@ -28,7 +28,7 @@ enum dir {
 	center = 27
 }
 
-func load_slabset():
+func load_default_slabset():
 	tng = []
 	dat = []
 	var CODETIME_START = OS.get_ticks_msec()
@@ -217,13 +217,6 @@ func is_dat_variation_different(variation):
 		return true
 	return false
 
-func is_dat_column_different(variation, subtile):
-	if variation >= dat.size() or dat[variation].empty():
-		return false
-	if variation >= default_data["dat"].size() or default_data["dat"][variation].empty():
-		return dat[variation][subtile] != 0
-	return dat[variation][subtile] != default_data["dat"][variation][subtile]
-
 func is_tng_variation_different(variation):
 	if variation >= tng.size() or tng[variation].empty(): # This function should not have been called
 		return false
@@ -232,6 +225,27 @@ func is_tng_variation_different(variation):
 	if variation >= default_data["tng"].size() or tng[variation] != default_data["tng"][variation]: # If 'default' is shorter, or the current and default elements differ
 		return true
 	return false
+
+func is_dat_column_different(variation, subtile):
+	if variation >= dat.size() or dat[variation].empty():
+		return false
+	if variation >= default_data["dat"].size() or default_data["dat"][variation].empty():
+		return dat[variation][subtile] != 0
+	return dat[variation][subtile] != default_data["dat"][variation][subtile]
+
+
+func is_tng_object_different(variation, objectIndex, objectProperty):
+	# Check if the variation index is out of bounds for either array.
+	if variation >= tng.size() or variation >= default_data["tng"].size():
+		return false
+
+	# Check if the objectIndex is out of bounds for either array.
+	if objectIndex >= tng[variation].size() or objectIndex >= default_data["tng"][variation].size():
+		return true
+	# Compare the property values of the current and default objects.
+	return tng[variation][objectIndex][objectProperty] != default_data["tng"][variation][objectIndex][objectProperty]
+
+
 
 func get_property_name(i):
 	match i:

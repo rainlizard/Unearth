@@ -17,7 +17,7 @@ onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
 onready var oExportSlabsetClmDialog = Nodelist.list["oExportSlabsetClmDialog"]
-onready var oExportSlabsFullCheckBox = Nodelist.list["oExportSlabsFullCheckBox"]
+onready var oExportImportSlabsFullCheckBox = Nodelist.list["oExportImportSlabsFullCheckBox"]
 onready var oObjObjectIndexSpinBox = Nodelist.list["oObjObjectIndexSpinBox"]
 onready var oObjAddButton = Nodelist.list["oObjAddButton"]
 onready var oObjDeleteButton = Nodelist.list["oObjDeleteButton"]
@@ -33,7 +33,19 @@ onready var oSlabsetObjectSection = Nodelist.list["oSlabsetObjectSection"]
 onready var oObjSubtypeLabel = Nodelist.list["oObjSubtypeLabel"]
 onready var oObjThingTypeLabel = Nodelist.list["oObjThingTypeLabel"]
 onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
+onready var oImportSlabsetCfgDialog = Nodelist.list["oImportSlabsetCfgDialog"]
 
+onready var object_field_nodes = [
+	oObjIsLightCheckBox,	# [0] IsLight
+	null,					# [1] Variation
+	oObjSubtileSpinBox,		# [2] Subtile [0-9]
+	oObjRelativeXSpinBox,   # [3] RelativeX
+	oObjRelativeYSpinBox,	# [4] RelativeY
+	oObjRelativeZSpinBox,	# [5] RelativeZ
+	oObjThingTypeSpinBox,	# [6] Thing type
+	oObjSubtypeSpinBox,		# [7] Thing subtype
+	oObjEffectRangeSpinBox,	# [8] Effect range
+]
 
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
 
@@ -152,7 +164,6 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 	if Slabs.data.has(value):
 		slabName = Slabs.data[value][Slabs.NAME]
 	oSlabsetIDLabel.text = slabName
-	
 	update_columns_ui()
 
 func _on_VariationNumberSpinBox_value_changed(value):
@@ -181,7 +192,7 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 			ensure_dat_array_has_space(variation)
 			Slabset.dat[variation][i] = int(clmIndex)
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
-	adjust_color_if_different(variation)
+	adjust_column_color_if_different(variation)
 
 func ensure_dat_array_has_space(variation):
 	while variation >= Slabset.dat.size():
@@ -232,10 +243,19 @@ func _on_ExportColumnsCfg_pressed():
 	#oExportColumnCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
 	#oExportColumnCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oExportColumnCfgDialog.current_file = "columns.cfg"
+func _on_ImportSlabsCfg_pressed():
+	Utils.popup_centered(oImportSlabsetCfgDialog)
+	#oExportSlabsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	#oExportSlabsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oImportSlabsetCfgDialog.current_file = "slabset.cfg"
 
 func _on_ExportSlabsetCfgDialog_file_selected(filePath):
-	var fullExport = oExportSlabsFullCheckBox.pressed
+	var fullExport = oExportImportSlabsFullCheckBox.pressed
 	Slabset.create_cfg_slabset(filePath, fullExport)
+
+func _on_ImportSlabsetCfgDialog_file_selected(filePath):
+	var fullImport = oExportImportSlabsFullCheckBox.pressed
+	Slabset.load_cfg_slabset(filePath, fullImport)
 
 func _on_ExportColumnCfgDialog_file_selected(filePath):
 	Columnset.create_cfg_columns(filePath)
@@ -296,7 +316,18 @@ func get_list_of_objects(variation):
 	else:
 		return []
 
-func adjust_color_if_different(variation):
+func adjust_object_color_if_different(variation):
+	var objectIndex = oObjObjectIndexSpinBox.value
+	for property in 9:
+		var id = object_field_nodes[property]
+		if id == null: continue
+		if id.modulate.a != 0: # ThingType can be zero alpha if Light is checked
+			if Slabset.is_tng_object_different(variation, objectIndex, property):
+				id.modulate = Color(1.8,1.8,1.9)
+			else:
+				id.modulate = Color(1, 1, 1) # White color for unedited fields
+
+func adjust_column_color_if_different(variation):
 	for subtile in 9:
 		var id = columnSettersArray[subtile]
 		var spinbox = id.get_node("CustomSpinBox")
@@ -311,7 +342,8 @@ func adjust_color_if_different(variation):
 func update_slabthings():
 	var variation = get_current_variation()
 	
-	adjust_color_if_different(variation)
+	adjust_column_color_if_different(variation)
+	adjust_object_color_if_different(variation)
 	
 	var listOfObjects = get_list_of_objects(variation)
 	oSlabsetObjectSection.visible = !listOfObjects.empty()
@@ -364,6 +396,8 @@ func update_obj_name():
 			var newName = dataStruct[subtype][Things.NAME]
 			if newName is String:
 				oObjNameLabel.text = newName
+			else:
+				oObjNameLabel.text = "Name not found"
 		else:
 			oObjNameLabel.text = "Name not found"
 
@@ -374,7 +408,7 @@ func _on_ObjAddButton_pressed():
 
 func add_new_object_to_variation(variation):
 	#update_object_property(Slabset.obj.VARIATION, variation)
-	var randomSubtype = Random.randi_range(1,135)
+	var randomSubtype = 1 # Barrel #Random.randi_range(1,135)
 	var new_object = [0,variation,4, 0,0,0, 1,randomSubtype,0]
 	
 	ensure_tng_array_has_space(variation)
@@ -443,3 +477,47 @@ func update_object_property(the_property, new_value):
 	if object_index < 0 or object_index >= listOfObjects.size():
 		return # Invalid index, nothing to update
 	listOfObjects[object_index][the_property] = new_value
+	adjust_object_color_if_different(variation)
+
+
+func _on_VarDuplicateButton_pressed():
+	# Find the next free variation space
+	var current_variation = get_current_variation()
+	var next_free_variation = find_next_free_variation(current_variation)
+
+	if next_free_variation == -1:
+		oMessage.quick("No free variation spaces available.")
+		return
+
+	# Duplicate the 'dat' for the current variation
+	ensure_dat_array_has_space(next_free_variation)
+	Slabset.dat[next_free_variation] = Slabset.dat[current_variation].duplicate()
+
+	# Duplicate the 'tng' for the current variation
+	ensure_tng_array_has_space(next_free_variation)
+	Slabset.tng[next_free_variation] = Slabset.tng[current_variation].duplicate(true) # true for deep copy if needed
+
+	# Update UI to reflect the new duplicated variation
+	update_columns_ui()  # Assuming this updates the UI with new column data
+	update_slabthings()  # Assuming this updates the UI with new things/objects
+	oMessage.quick("Variation duplicated into SlabID: " + str(next_free_variation/28) + ", Variation: " + str(next_free_variation % 28))
+	
+	oSlabsetIDSpinBox.value = next_free_variation/28
+	oVariationNumberSpinBox.value = next_free_variation % 28
+	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
+
+func find_next_free_variation(current_variation):
+	for i in range(current_variation+1, 255*28):
+		if (i >= Slabset.dat.size() or Slabset.dat[i].empty() or Slabset.dat[i] == [0,0,0, 0,0,0, 0,0,0]) and (i >= Slabset.tng.size() or Slabset.tng[i].empty()):
+			return i
+#		if Slabset.dat[i] == [0,0,0, 0,0,0, 0,0,0] and Slabset.tng[i].empty():
+#			return i
+	return -1  # Return -1 if no free space is found
+
+
+func _on_VarRotateButton_pressed():
+	pass # Replace with function body.
+func _on_VarRevertButton_pressed():
+	pass # Replace with function body.
+func _on_VarDeleteButton_pressed():
+	pass # Replace with function body.

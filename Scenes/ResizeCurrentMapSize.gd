@@ -13,6 +13,8 @@ onready var oResizeMapApplyBorderCheckbox = Nodelist.list["oResizeMapApplyBorder
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 
 func _on_ResizeCurrentMapSizeButton_pressed():
 	Utils.popup_centered(self)
@@ -20,6 +22,7 @@ func _on_ResizeCurrentMapSizeButton_pressed():
 func _on_ResizeCurrentMapSize_about_to_show():
 	oSettingsXSizeLine.text = str(M.xSize)
 	oSettingsYSizeLine.text = str(M.ySize)
+	oMapSettingsWindow.visible = false
 
 # Function to handle updating the map size
 func set_new_map_size(newWidth, newHeight):
@@ -86,6 +89,10 @@ func update_editor_appearance():
 
 # The main function that calls all the helper functions
 func _on_ResizeApplyButton_pressed():
+	if oCurrentFormat.selected == 0: # Classic format
+		oMessage.big("Error", "Cannot resize your map, because is in Classic format. Switch to KFX format first.")
+		return
+	
 	var newWidth = int(oSettingsXSizeLine.text)
 	var newHeight = int(oSettingsYSizeLine.text)
 	var previousWidth = M.xSize
