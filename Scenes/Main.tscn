@@ -415,7 +415,7 @@ script = ExtResource( 117 )
 [node name="DataLof" type="Node" parent="CurrentMap"]
 script = ExtResource( 141 )
 
-[node name="DataCustomSlab" type="TileMap" parent="CurrentMap"]
+[node name="DataFakeSlab" type="TileMap" parent="CurrentMap"]
 format = 1
 
 [node name="OpenMap" type="Node" parent="."]
@@ -2154,13 +2154,10 @@ margin_right = 1216.0
 margin_bottom = -76.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
-window_title = "Confirm delete"
-dialog_text = "Delete this custom slab?"
+window_title = "Confirm remove"
+dialog_text = "Remove this Custom Slab?"
 dialog_autowrap = true
 script = ExtResource( 61 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ConfirmSaveBeforeQuit" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -5388,33 +5385,33 @@ margin_right = 218.0
 margin_bottom = 128.0
 columns = 2
 
-[node name="VarDuplicateButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
+[node name="VarCopyButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
 margin_right = 107.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
-text = "Duplicate"
+text = "Copy"
 
-[node name="VarRotateButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
+[node name="VarPasteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
 margin_left = 111.0
 margin_right = 218.0
 margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Paste"
+
+[node name="VarRotateButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
+margin_top = 31.0
+margin_right = 107.0
+margin_bottom = 58.0
 size_flags_horizontal = 3
 text = "Rotate"
 
 [node name="VarRevertButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
-margin_top = 31.0
-margin_right = 107.0
-margin_bottom = 58.0
-size_flags_horizontal = 3
-text = "Revert"
-
-[node name="VarDeleteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
 margin_left = 111.0
 margin_top = 31.0
 margin_right = 218.0
 margin_bottom = 58.0
 size_flags_horizontal = 3
-text = "Delete"
+text = "Revert"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 150.0
@@ -6294,7 +6291,7 @@ margin_top = 198.0
 margin_right = 242.0
 margin_bottom = 227.0
 group = ExtResource( 155 )
-text = "Custom Slabs (.une)"
+text = "Fake Slabs (.une)"
 
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
@@ -6902,10 +6899,10 @@ script = SubResource( 20 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/DkSlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/DkSlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/VarDuplicateButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarDuplicateButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/VarCopyButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarCopyButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/VarPasteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarPasteButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/VarRotateButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarRotateButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/VarRevertButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarRevertButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/VarDeleteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarDeleteButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer/ObjAddButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjAddButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer/ObjDeleteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjDeleteButton_pressed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/PanelContainer/GridContainer2/ObjObjectIndexSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjObjectIndexSpinBox_value_changed"]

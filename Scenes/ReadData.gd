@@ -11,7 +11,7 @@ onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oDataScript = Nodelist.list["oDataScript"]
-onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMessage = Nodelist.list["oMessage"]
 
@@ -124,11 +124,11 @@ func read_une(buffer):
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
 			value = buffer.get_u16()
-			oDataCustomSlab.set_cell(xSlab,ySlab,value)
+			oDataFakeSlab.set_cell(xSlab,ySlab,value)
 func new_une():
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
-			oDataCustomSlab.set_cell(xSlab,ySlab,0)
+			oDataFakeSlab.set_cell(xSlab,ySlab,0)
 
 func read_wlb(buffer):
 	buffer.seek(0)

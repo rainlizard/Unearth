@@ -5,7 +5,7 @@ onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oDataOwnership = Nodelist.list["oDataOwnership"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
-onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oGridDataCheckBox1 = Nodelist.list["oGridDataCheckBox1"]
 onready var oGridDataCheckBox2 = Nodelist.list["oGridDataCheckBox2"]
@@ -23,7 +23,7 @@ onready var tilemap_data = {
 	"Slab":             {"extension": ".slb", "grid_type": "TILE",    "node": oDataSlab},
 	"Ownership":        {"extension": ".own", "grid_type": "TILE",    "node": oDataOwnership},
 	"Column Positions": {"extension": ".dat", "grid_type": "SUBTILE", "node": oDataClmPos},
-	"Custom Slabs":     {"extension": ".une", "grid_type": "TILE",    "node": oDataCustomSlab},
+	"Fake Slabs":       {"extension": ".une", "grid_type": "TILE",    "node": oDataFakeSlab},
 	"Style":            {"extension": ".slx", "grid_type": "TILE",    "node": oDataSlx}
 }
 
@@ -42,7 +42,7 @@ func _ready():
 	oGridDataCheckBox4.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox4,"Wibble"])
 	oGridDataCheckBox5.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox5,"Liquid"])
 	oGridDataCheckBox6.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox6,"Style"])
-	oGridDataCheckBox7.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox7,"Custom Slabs"])
+	oGridDataCheckBox7.connect("pressed", self, "_on_checkbox", [oGridDataCheckBox7,"Fake Slabs"])
 
 func _on_checkbox(checkboxNodeThatWasPressed, pressedString):
 	for i in [oGridDataCheckBox1, oGridDataCheckBox2, oGridDataCheckBox3, oGridDataCheckBox4, oGridDataCheckBox5, oGridDataCheckBox6, oGridDataCheckBox7]:

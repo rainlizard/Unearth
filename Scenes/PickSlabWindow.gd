@@ -104,7 +104,7 @@ func add_slabs():
 						for i in 9:
 							columnArray[i] = Slabset.fetch_column_index(slabVariation, i)
 					else:
-						# Custom slab
+						# Fake Slab
 						pass
 			id.set_meta("ID_of_slab", slabID)
 			id.panelView = Slabs.data[slabID][Slabs.PANEL_VIEW]
@@ -140,7 +140,7 @@ func custom_slab_add_new_button():
 
 func _on_pressed_add_new_custom_slab():
 	Utils.popup_centered(oColumnEditor)
-	oColumnEditorTabs.current_tab = 1 # Select tab containing Custom Slab Editor
+	oColumnEditorTabs.current_tab = 1 # Select tab containing Fake Slab Editor
 
 func pressed(id):
 	var setValue = id.get_meta("ID_of_slab")

@@ -24,7 +24,7 @@ onready var oEditingTools = Nodelist.list["oEditingTools"]
 onready var oRectangleSelection = Nodelist.list["oRectangleSelection"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
-onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
@@ -204,7 +204,7 @@ func mouse_button_on_field():
 	if Input.is_action_pressed("mouse_right"):
 		if visible == true:
 			if oColumnEditor.visible == true and oColumnEditorTabs.current_tab == 1:
-				#oMessage.quick("Sent column indexes to Custom Slab window")
+				#oMessage.quick("Sent column indexes to Fake Slab window")
 				oTabCustomSlabs.get_column_indexes_on_tile(cursorTile)
 				
 	
@@ -354,7 +354,7 @@ func position_meeting(checkPos, checkGroup):
 	return false
 
 func get_slabID_at_pos(pos):
-	var customSlabID = oDataCustomSlab.get_cellv(pos)
+	var customSlabID = oDataFakeSlab.get_cellv(pos)
 	if customSlabID > 0:
 		return customSlabID
 	else:

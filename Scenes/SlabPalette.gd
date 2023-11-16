@@ -542,4 +542,4 @@ func start():
 #			# Put that column index inside the slabPal.
 #			Slabset.dat[i][subtile] = newClmIndex
 #
-#	# Add extra sets here for custom slabs
+#	# Add extra sets here for Fake Slabs

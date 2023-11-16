@@ -50,8 +50,8 @@ func _on_SlabRecognizedAs_value_changed(value):
 
 
 func _on_AddCustomSlabButton_pressed():
-	var newID = 1000 # We'll say custom slabs are ID 1000 and up
-	while true: # Find an unused ID within the custom data dictionary
+	var newID = 1000 # We'll say fake slabs are ID 1000 and up
+	while true: # Find an unused ID within the fake data dictionary
 		if oCustomSlabSystem.data.has(newID) == false:
 			break
 		else:
@@ -79,11 +79,11 @@ func _on_AddCustomSlabButton_pressed():
 
 func _on_HelpCustomSlabsButton_pressed():
 	var helptext = ""
-	helptext += "With a few exceptions, most custom slabs will reset their appearance in-game when placing or claiming an adjacent slab. To avoid this, set 'Recognized as' to one of the following: Slab 50, Impenetrable Rock, Gold, Bridge, Gems, Guard post, Doors (without door object). Needs further testing."
+	helptext += "With a few exceptions, most Fake Slabs will reset their appearance in-game when placing or claiming an adjacent slab. To avoid this, set 'Recognized as' to one of the following: Slab 50, Impenetrable Rock, Gold, Bridge, Gems, Guard post, Doors (without door object). Needs further testing."
 	helptext += "\n\n"
-	helptext += "After adding one, right click on its portrait within the slab selection window to remove custom slabs from the editor."
+	helptext += "After adding one, right click on its portrait within the slab selection window to remove Fake Slabs from the editor."
 	helptext += "\n\n"
-	helptext += "Right click on the map while the custom slab menu is open to copy column index numbers into the window."
+	helptext += "Right click on the map while the Fake Slab menu is open to copy column index numbers into the window."
 	oMessage.big("Help",helptext)
 
 

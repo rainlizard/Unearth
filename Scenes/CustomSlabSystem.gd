@@ -61,7 +61,7 @@ func load_file():
 		
 		add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData)
 
-# The purpose of this function is so I don't have to index the columns into clm for simply displaying within the slab window. Only index when PLACING the custom slab.
+# The purpose of this function is so I don't have to index the columns into clm for simply displaying within the slab window. Only index when PLACING the Fake Slab.
 func get_top_cube_face(indexIn3x3, slabID):
 	var cubesArray = data[slabID][CUBE_DATA][indexIn3x3]
 	var get_height = oDataClm.get_real_height(cubesArray)
@@ -74,9 +74,9 @@ func get_top_cube_face(indexIn3x3, slabID):
 		return Cube.tex[cubeID][Cube.SIDE_TOP]
 
 func remove_custom_slab(slabID):
-	if slabID < 1000: return # means it's not a custom slab
+	if slabID < 1000: return # means it's not a Fake Slab
 	
-	print('Attempting to remove custom slab:' + str(slabID))
+	print('Attempting to remove Custom Slab:' + str(slabID))
 	oPickSlabWindow.set_selection(null)
 	
 	if data.has(slabID):

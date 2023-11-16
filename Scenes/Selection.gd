@@ -22,7 +22,7 @@ onready var oRectangleSelection = Nodelist.list["oRectangleSelection"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oCustomSlabsTab = Nodelist.list["oCustomSlabsTab"]
-onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oEditingTools = Nodelist.list["oEditingTools"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
@@ -227,7 +227,7 @@ func construct_shape_for_placement(constructType):
 		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
 
 func some_manual_placements_dont_update_nearby():
-	# Custom slabs don't update the surroundings
+	# Fake Slabs don't update the surroundings
 	if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
 		return false
 	elif Slabs.doors.has(paintSlab): # Doors don't update the surroundings

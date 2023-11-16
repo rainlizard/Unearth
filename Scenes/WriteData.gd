@@ -11,7 +11,7 @@ onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataScript = Nodelist.list["oDataScript"]
-onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
@@ -64,7 +64,7 @@ func write_txt(buffer):
 func write_une(buffer):
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
-			value = oDataCustomSlab.get_cell(xSlab,ySlab)
+			value = oDataFakeSlab.get_cell(xSlab,ySlab)
 			buffer.put_16(value)
 
 func write_wlb(buffer):

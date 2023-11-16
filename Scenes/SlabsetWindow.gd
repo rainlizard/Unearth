@@ -35,6 +35,11 @@ onready var oObjThingTypeLabel = Nodelist.list["oObjThingTypeLabel"]
 onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
 onready var oImportSlabsetCfgDialog = Nodelist.list["oImportSlabsetCfgDialog"]
 
+var clipboard = {
+	"dat": [],
+	"tng": []
+}
+
 onready var object_field_nodes = [
 	oObjIsLightCheckBox,	# [0] IsLight
 	null,					# [1] Variation
@@ -143,7 +148,7 @@ func variation_changed(localVariation):
 		constructString += "Near water"
 	
 	oVariationInfoLabel.text = constructString
-	update_slabthings()
+	update_objects_ui()
 
 #enum dir {
 #	s = 0
@@ -323,7 +328,7 @@ func adjust_object_color_if_different(variation):
 		if id == null: continue
 		if id.modulate.a != 0: # ThingType can be zero alpha if Light is checked
 			if Slabset.is_tng_object_different(variation, objectIndex, property):
-				id.modulate = Color(1.8,1.8,1.9)
+				id.modulate = Color(1.4,1.4,1.7)
 			else:
 				id.modulate = Color(1, 1, 1) # White color for unedited fields
 
@@ -333,13 +338,13 @@ func adjust_column_color_if_different(variation):
 		var spinbox = id.get_node("CustomSpinBox")
 		var shortcut = id.get_node("ButtonShortcut")
 		if Slabset.is_dat_column_different(variation, subtile) == true:
-			spinbox.modulate = Color(1.8,1.8,1.9)
+			spinbox.modulate = Color(1.4,1.4,1.7)
 			shortcut.modulate = Color(1.4,1.4,1.5)
 		else:
 			spinbox.modulate = Color(1,1,1)
 			shortcut.modulate = Color(1,1,1)
 
-func update_slabthings():
+func update_objects_ui():
 	var variation = get_current_variation()
 	
 	adjust_column_color_if_different(variation)
@@ -404,7 +409,7 @@ func update_obj_name():
 func _on_ObjAddButton_pressed():
 	var variation = get_current_variation()
 	add_new_object_to_variation(variation)
-	update_slabthings()
+	update_objects_ui()
 
 func add_new_object_to_variation(variation):
 	#update_object_property(Slabset.obj.VARIATION, variation)
@@ -430,7 +435,7 @@ func _on_ObjDeleteButton_pressed():
 	
 	listOfObjects.remove(objectIndex)
 	
-	update_slabthings()
+	update_objects_ui()
 	oMessage.quick("Deleted object")
 
 func _on_ObjThingTypeSpinBox_value_changed(value:int):
@@ -479,45 +484,119 @@ func update_object_property(the_property, new_value):
 	listOfObjects[object_index][the_property] = new_value
 	adjust_object_color_if_different(variation)
 
+func _on_VarCopyButton_pressed():
+	var variation = get_current_variation()
+	clipboard["dat"] = Slabset.dat[variation].duplicate(true)
+	clipboard["tng"] = Slabset.tng[variation].duplicate(true)
+	var slabID = variation / 28
+	var localVariation = variation % 28
+	oMessage.quick("Copied variation to clipboard")
 
-func _on_VarDuplicateButton_pressed():
-	# Find the next free variation space
-	var current_variation = get_current_variation()
-	var next_free_variation = find_next_free_variation(current_variation)
-
-	if next_free_variation == -1:
-		oMessage.quick("No free variation spaces available.")
+func _on_VarPasteButton_pressed():
+	if clipboard["dat"].empty() and clipboard["tng"].empty():
+		oMessage.quick("Clipboard is empty.")
 		return
 
-	# Duplicate the 'dat' for the current variation
-	ensure_dat_array_has_space(next_free_variation)
-	Slabset.dat[next_free_variation] = Slabset.dat[current_variation].duplicate()
-
-	# Duplicate the 'tng' for the current variation
-	ensure_tng_array_has_space(next_free_variation)
-	Slabset.tng[next_free_variation] = Slabset.tng[current_variation].duplicate(true) # true for deep copy if needed
-
-	# Update UI to reflect the new duplicated variation
-	update_columns_ui()  # Assuming this updates the UI with new column data
-	update_slabthings()  # Assuming this updates the UI with new things/objects
-	oMessage.quick("Variation duplicated into SlabID: " + str(next_free_variation/28) + ", Variation: " + str(next_free_variation % 28))
+	var variation = get_current_variation()
+	ensure_dat_array_has_space(variation)
+	ensure_tng_array_has_space(variation)
 	
-	oSlabsetIDSpinBox.value = next_free_variation/28
-	oVariationNumberSpinBox.value = next_free_variation % 28
+	Slabset.dat[variation] = clipboard["dat"].duplicate(true)
+	Slabset.tng[variation] = clipboard["tng"].duplicate(true)
+	
+	update_columns_ui()
+	update_objects_ui()
 	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
+	oMessage.quick("Pasted variation")
 
-func find_next_free_variation(current_variation):
-	for i in range(current_variation+1, 255*28):
-		if (i >= Slabset.dat.size() or Slabset.dat[i].empty() or Slabset.dat[i] == [0,0,0, 0,0,0, 0,0,0]) and (i >= Slabset.tng.size() or Slabset.tng[i].empty()):
-			return i
-#		if Slabset.dat[i] == [0,0,0, 0,0,0, 0,0,0] and Slabset.tng[i].empty():
-#			return i
-	return -1  # Return -1 if no free space is found
+const ROTATION_POSITIONS = [ # New positions for subtiles after rotation
+	6, 3, 0,
+	7, 4, 1,
+	8, 5, 2,
+]
 
+const ROTATION_MAP = {
+	0: 6, 1: 3, 2: 0,
+	3: 7, 4: 4, 5: 1,
+	6: 8, 7: 5, 8: 2
+}
 
 func _on_VarRotateButton_pressed():
-	pass # Replace with function body.
+	var variation = get_current_variation()
+	ensure_dat_array_has_space(variation)
+	
+	# Rotate the 'dat' array by reassigning using the ROTATION_MAP
+	var new_dat = []
+	for i in range(9):
+		new_dat.append(Slabset.dat[variation][ROTATION_MAP[i]])
+	Slabset.dat[variation] = new_dat
+	
+	# Rotate the object positions within the slab
+	for obj in Slabset.tng[variation]:
+		var new_x = obj[Slabset.obj.RELATIVE_Y]
+		var new_y = -obj[Slabset.obj.RELATIVE_X]
+		obj[Slabset.obj.RELATIVE_X] = new_x
+		obj[Slabset.obj.RELATIVE_Y] = new_y
+		obj[Slabset.obj.SUBTILE] = ROTATION_MAP[obj[Slabset.obj.SUBTILE]]
+	
+	# Update the UI
+	update_columns_ui()
+	update_objects_ui()
+	oMessage.quick("Rotated variation")
+
 func _on_VarRevertButton_pressed():
-	pass # Replace with function body.
-func _on_VarDeleteButton_pressed():
-	pass # Replace with function body.
+	var variation = get_current_variation()
+	
+	# Revert the 'dat' array for the variation if default data is available
+	if variation < Slabset.default_data["dat"].size():
+		Slabset.dat[variation] = Slabset.default_data["dat"][variation].duplicate()
+	else:
+		if variation < Slabset.dat.size():
+			Slabset.dat.remove(variation)
+	
+	# Revert the 'tng' array for the variation if default data is available
+	if variation < Slabset.default_data["tng"].size():
+		Slabset.tng[variation] = Slabset.default_data["tng"][variation].duplicate(true)  # deep copy if it contains objects
+	else:
+		if variation < Slabset.tng.size():
+			Slabset.tng.remove(variation)
+	
+	update_columns_ui()  # Update UI for columns
+	update_objects_ui()  # Update UI for objects
+	oMessage.quick("Variation reverted")
+
+
+
+#func _on_VarDuplicateButton_pressed():
+#	# Find the next free variation space
+#	var current_variation = get_current_variation()
+#	var next_free_variation = find_next_free_variation(current_variation)
+#
+#	if next_free_variation == -1:
+#		oMessage.quick("No free variation spaces available.")
+#		return
+#
+#	# Duplicate the 'dat' for the current variation
+#	ensure_dat_array_has_space(next_free_variation)
+#	Slabset.dat[next_free_variation] = Slabset.dat[current_variation].duplicate()
+#
+#	# Duplicate the 'tng' for the current variation
+#	ensure_tng_array_has_space(next_free_variation)
+#	Slabset.tng[next_free_variation] = Slabset.tng[current_variation].duplicate(true) # true for deep copy if needed
+#
+#	# Update UI to reflect the new duplicated variation
+#	update_columns_ui()  # Assuming this updates the UI with new column data
+#	update_objects_ui()  # Assuming this updates the UI with new things/objects
+#	oMessage.quick("Variation duplicated into SlabID: " + str(next_free_variation/28) + ", Variation: " + str(next_free_variation % 28))
+#
+#	oSlabsetIDSpinBox.value = next_free_variation/28
+#	oVariationNumberSpinBox.value = next_free_variation % 28
+#	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
+#
+#func find_next_free_variation(current_variation):
+#	for i in range(current_variation+1, 255*28):
+#		if (i >= Slabset.dat.size() or Slabset.dat[i].empty() or Slabset.dat[i] == [0,0,0, 0,0,0, 0,0,0]) and (i >= Slabset.tng.size() or Slabset.tng[i].empty()):
+#			return i
+##		if Slabset.dat[i] == [0,0,0, 0,0,0, 0,0,0] and Slabset.tng[i].empty():
+##			return i
+#	return -1  # Return -1 if no free space is found

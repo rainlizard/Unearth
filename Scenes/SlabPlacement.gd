@@ -18,7 +18,7 @@ onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oOwnableNaturalTerrain = Nodelist.list["oOwnableNaturalTerrain"]
 onready var oBridgesOnlyOnLiquidCheckbox = Nodelist.list["oBridgesOnlyOnLiquidCheckbox"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
-onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
@@ -102,9 +102,9 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 					calculateOwner = true
 					oDataSlab.set_cellv(toPos, slabID)
 					if slabID < 1000:
-						oDataCustomSlab.set_cellv(toPos, 0)
+						oDataFakeSlab.set_cellv(toPos, 0)
 					else:
-						oDataCustomSlab.set_cellv(toPos, slabID)
+						oDataFakeSlab.set_cellv(toPos, slabID)
 				MIRROR_STYLE:
 					pass
 				MIRROR_ONLY_OWNERSHIP:
@@ -170,9 +170,9 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 		oDataOwnership.set_cellv(pos, ownership)
 		
 		if slabID < 1000:
-			oDataCustomSlab.set_cellv(pos, 0)
+			oDataFakeSlab.set_cellv(pos, 0)
 		else:
-			oDataCustomSlab.set_cellv(pos, slabID)
+			oDataFakeSlab.set_cellv(pos, slabID)
 		
 		match slabID:
 			Slabs.BRIDGE:
@@ -328,13 +328,13 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 	elif slabID == Slabs.EARTH:
 		slabID = auto_earth(xSlab, ySlab, slabID, surrID)
 	
-	if slabID >= 1000: # Custom Slab IDs
+	if slabID >= 1000: # Fake Slab IDs
 		if oCustomSlabSystem.data.has(slabID):
 			slab_place_custom(xSlab, ySlab, slabID, ownership, surrID)
 		return
 	
-	# Do not update custom slabs
-	if oDataCustomSlab.get_cell(xSlab, ySlab) > 0:
+	# Do not update Fake Slabs
+	if oDataFakeSlab.get_cell(xSlab, ySlab) > 0:
 		return
 	
 	# WIB (wibble)
@@ -1262,7 +1262,7 @@ const slab_temple_odd = [
 ]
 
 func update_wibble(xSlab, ySlab, slabID, includeNearby):
-	# I'm using surrounding wibble to update this slab's wibble, instead of using surrounding slabID, this is for the sake of custom slabs
+	# I'm using surrounding wibble to update this slab's wibble, instead of using surrounding slabID, this is for the sake of Fake Slabs
 	
 	var myWibble = Slabs.data[slabID][Slabs.WIBBLE_TYPE]
 	

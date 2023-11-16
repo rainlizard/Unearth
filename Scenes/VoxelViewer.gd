@@ -130,7 +130,7 @@ func do_all():
 	
 	
 	
-	if displayingType == DK_SLABSET: # This is not for custom slab, this is for dynamic slabs
+	if displayingType == DK_SLABSET: # This is not for fake slab, this is for slabset slabs
 		var slabID = oSlabsetIDSpinBox.value
 		var separation = 0
 		var variationStart = slabID * 28
@@ -184,7 +184,7 @@ func do_one():
 		oSelectedPivotPoint.translation.z = (viewObject * 2)
 		oSelectedPivotPoint.translation.x = (viewObject * 2)
 	
-	if displayingType == DK_SLABSET: # This is not for custom slab, this is for dynamic slabs
+	if displayingType == DK_SLABSET: # This is not for fake slab, this is for slabset slabs
 		
 #		var slabID = oSlabsetIDSpinBox.value
 #		var variationStart = (slabID * 28)

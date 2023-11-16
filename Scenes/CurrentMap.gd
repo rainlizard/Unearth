@@ -19,7 +19,7 @@ onready var oMain = Nodelist.list["oMain"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
-onready var oDataCustomSlab = Nodelist.list["oDataCustomSlab"]
+onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oDataLof = Nodelist.list["oDataLof"]
@@ -94,7 +94,7 @@ func clear_map():
 	#"TXT"
 	oDataScript.data = ""
 	# "UNE"
-	oDataCustomSlab.clear()
+	oDataFakeSlab.clear()
 	
 	oScriptHelpers.clear()
 	

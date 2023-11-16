@@ -10,6 +10,8 @@ var height = []
 var cubes = []
 var floorTexture = []
 
+var default_data = {}
+
 # Strangely, slabs.clm is missing the second 4 bytes.
 # map0000x.clm : 49,160 bytes. first 4 bytes contains 2048, second 4 bytes are ???, then comes the column data.
 # slabs.clm : 49,156 bytes. first 4 bytes contains 2048, then comes the column data.
@@ -17,7 +19,6 @@ var floorTexture = []
 func load_default_columnset():
 	var CODETIME_START = OS.get_ticks_msec()
 	clear_all_column_data() # Important, for reloading/refreshing slabs.clm
-	
 	
 	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.CLM")
 	var buffer = Filetypes.file_path_to_buffer(filePath)
@@ -48,7 +49,17 @@ func load_default_columnset():
 			cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
 	
 	print('Created Columnset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	store_default_data()
 
+func store_default_data():
+	default_data["utilized"] = utilized.duplicate(true)
+	default_data["orientation"] = orientation.duplicate(true)
+	default_data["solidMask"] = solidMask.duplicate(true)
+	default_data["permanent"] = permanent.duplicate(true)
+	default_data["lintel"] = lintel.duplicate(true)
+	default_data["height"] = height.duplicate(true)
+	default_data["cubes"] = cubes.duplicate(true)
+	default_data["floorTexture"] = floorTexture.duplicate(true)
 
 func create_cfg_columns(filePath): #"res://columns.cfg"
 	var oMessage = Nodelist.list["oMessage"]

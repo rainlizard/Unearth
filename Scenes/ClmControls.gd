@@ -138,6 +138,7 @@ func _on_ColumnIndexSpinBox_value_changed(value):
 			nodeID.set_block_signals(false)
 	
 	oCustomTooltip.visible = false # Tooltip becomes incorrect when changing column index so just turn it off until you hover your mouse over it again
+	adjust_ui_color_if_different()
 
 func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
 	if nodeClm == oDataClm:
@@ -150,6 +151,7 @@ func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
 	oSolidMaskSpinBox.value = nodeClm.calculate_solid_mask(nodeClm.cubes[clmIndex])
 	
 	_on_cube_mouse_entered(cubeNumber) # Update tooltip
+	adjust_ui_color_if_different()
 
 func _on_FloorTextureSpinBox_value_changed(value):
 	if nodeClm == oDataClm:
@@ -157,8 +159,8 @@ func _on_FloorTextureSpinBox_value_changed(value):
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.floorTexture[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
-	
 	_on_floortexture_mouse_entered() # Update tooltip
+	adjust_ui_color_if_different()
 
 func _on_LintelSpinBox_value_changed(value):
 	if nodeClm == oDataClm:
@@ -166,6 +168,7 @@ func _on_LintelSpinBox_value_changed(value):
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.lintel[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
+	adjust_ui_color_if_different()
 
 func _on_PermanentSpinBox_value_changed(value):
 	if nodeClm == oDataClm:
@@ -173,7 +176,7 @@ func _on_PermanentSpinBox_value_changed(value):
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.permanent[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
-
+	adjust_ui_color_if_different()
 
 func _on_OrientationSpinBox_value_changed(value):
 	if nodeClm == oDataClm:
@@ -181,6 +184,7 @@ func _on_OrientationSpinBox_value_changed(value):
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.orientation[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
+	adjust_ui_color_if_different()
 
 func _on_HeightSpinBox_value_changed(value):
 	if nodeClm == oDataClm:
@@ -188,6 +192,7 @@ func _on_HeightSpinBox_value_changed(value):
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.height[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
+	adjust_ui_color_if_different()
 
 func _on_SolidMaskSpinBox_value_changed(value):
 	if nodeClm == oDataClm:
@@ -195,7 +200,7 @@ func _on_SolidMaskSpinBox_value_changed(value):
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.solidMask[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
-
+	adjust_ui_color_if_different()
 
 func _on_UtilizedSpinBox_value_changed(value):
 	if nodeClm == oDataClm:
@@ -203,6 +208,7 @@ func _on_UtilizedSpinBox_value_changed(value):
 	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.utilized[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
+	adjust_ui_color_if_different()
 
 func _on_ColumnFirstUnusedButton_pressed():
 	var findUnusedIndex = nodeClm.find_cubearray_index([0,0,0,0, 0,0,0,0], 0)
@@ -229,3 +235,33 @@ func _on_ColumnViewDeleteButton_pressed():
 
 func _on_CheckboxShowAll_toggled(checkboxValue):
 	oGridAdvancedValues.visible = checkboxValue
+
+# Main function to adjust the color of UI elements for a specific column index
+func adjust_ui_color_if_different():
+	if name != "ColumnsetControls": return
+	
+	var column_index = int(oColumnIndexSpinBox.value)
+	adjust_spinbox_color(oUtilizedSpinBox, is_property_different("utilized", column_index))
+	adjust_spinbox_color(oOrientationSpinBox, is_property_different("orientation", column_index))
+	adjust_spinbox_color(oSolidMaskSpinBox, is_property_different("solidMask", column_index))
+	adjust_spinbox_color(oPermanentSpinBox, is_property_different("permanent", column_index))
+	adjust_spinbox_color(oLintelSpinBox, is_property_different("lintel", column_index))
+	adjust_spinbox_color(oHeightSpinBox, is_property_different("height", column_index))
+	adjust_spinbox_color(oFloorTextureSpinBox, is_property_different("floorTexture", column_index))
+	
+	# Adjust the color for each cube SpinBox
+	for i in range(8):
+		var cube_spinbox = cubeSpinBoxArray[i]
+		var cube_is_different = nodeClm["cubes"][column_index][i] != Columnset.default_data["cubes"][column_index][i]
+		adjust_spinbox_color(cube_spinbox, cube_is_different)
+
+# Function to check if a property is different from its default value
+func is_property_different(property_name, column_index):
+	return nodeClm[property_name][column_index] != Columnset.default_data[property_name][column_index]
+
+# Function to adjust the color of a SpinBox based on property differences
+func adjust_spinbox_color(spinbox, is_different):
+	if is_different == true:
+		spinbox.modulate = Color(1.4,1.4,1.7)
+	else:
+		spinbox.modulate = Color(1,1,1)

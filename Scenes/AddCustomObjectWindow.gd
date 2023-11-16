@@ -144,7 +144,7 @@ func _on_CustomObjectHelpButton_pressed():
 	helptext += "\n\n"
 	helptext += "After adding one, right click on its portrait within the thing selection window to remove custom things from the editor."
 	#helptext += "\n\n"
-	#helptext += "For now, placing a custom slab on a new/different map than the one you created it on, will not carry over the exact same column data."
+	#helptext += "For now, placing a Fake Slab on a new/different map than the one you created it on, will not carry over the exact same column data."
 	oMessage.big("Help",helptext)
 
 

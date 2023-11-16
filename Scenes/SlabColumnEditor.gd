@@ -13,7 +13,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 
 func _ready():
 	oColumnEditorTabs.set_tab_title(0, "Name is set below")
-	oColumnEditorTabs.set_tab_title(1, "Add custom slab")
+	oColumnEditorTabs.set_tab_title(1, "Add fake slab")
 
 # When re-opening window or opening for first time
 func _on_ColumnEditor_visibility_changed():
