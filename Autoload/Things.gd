@@ -23,6 +23,7 @@ enum TYPE {
 	EXTRA = 696969
 }
 
+
 var data_structure_name = {
 	TYPE.NONE: "Empty",
 	TYPE.OBJECT: "Object",
@@ -40,6 +41,25 @@ var data_structure_name = {
 	TYPE.CAVEIN: "CaveIn",
 	TYPE.EXTRA: "Extra"
 }
+var reverse_data_structure_name = {
+	"Empty": TYPE.NONE,
+	"Object":TYPE.OBJECT,
+	"Shot":TYPE.SHOT,
+	"EffectElem":TYPE.EFFECTELEM,
+	"DeadCreature":TYPE.DEADCREATURE,
+	"Creature":TYPE.CREATURE,
+	"Effect":TYPE.EFFECT,
+	"EffectGen":TYPE.EFFECTGEN,
+	"Trap":TYPE.TRAP,
+	"Door":TYPE.DOOR,
+	"Unkn10":TYPE.UNKN10,
+	"Unkn11":TYPE.UNKN11,
+	"AmbientSnd":TYPE.AMBIENTSND,
+	"CaveIn":TYPE.CAVEIN,
+	"Extra":TYPE.EXTRA,
+}
+
+
 
 enum {
 	NAME = 0

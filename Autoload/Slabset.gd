@@ -28,6 +28,114 @@ enum dir {
 	center = 27
 }
 
+func _ready():
+	var CODETIME_START = OS.get_ticks_msec()
+	import_cfg_slabset("D:/AI/slabset.cfg", true)
+	print('AAAAACodetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	pass
+
+func import_cfg_slabset(filePath, fullImport):
+	var processed_string = preprocess_cfg_file(filePath)
+	var cfg = ConfigFile.new()
+	var err = cfg.parse(processed_string)
+	if err != OK:
+		print("Failed to parse config file")
+		return
+	
+	dat.clear()
+	tng.clear()
+	
+	for section in cfg.get_sections():
+		var parts = section.split(".")
+		if parts.size() <= 1:
+			continue
+		
+		var slabID = int(parts[0])
+		var localVariation = int(dir_numbers[parts[1]]) # ["slab34", "CENTER"]
+		var variation = (slabID * 28) + localVariation
+		
+		while variation >= dat.size():
+			dat.append([])
+		while variation >= tng.size():
+			tng.append([])
+		
+		var objectIndex
+		if parts.size() >= 3: # ["slab34", "CENTER", "objects0"]
+			objectIndex = int(parts[2].lstrip("objects"))
+			for addObject in range(objectIndex + 1):
+				tng[variation].append([0,variation,0, 0,0,0, 0,0,0])
+		
+		var keyList = cfg.get_section_keys(section)
+		for key in keyList:
+			var value = cfg.get_value(section, key)
+			match key:
+				"columns": dat[variation] = value
+				"objects": tng[variation] = value
+				"IsLight": tng[variation][objectIndex][obj.IS_LIGHT] = value
+				"Subtile": tng[variation][objectIndex][obj.SUBTILE] = value
+				"RelativeX": tng[variation][objectIndex][obj.RELATIVE_X] = value
+				"RelativeY": tng[variation][objectIndex][obj.RELATIVE_Y] = value
+				"RelativeZ": tng[variation][objectIndex][obj.RELATIVE_Z] = value
+				"ThingType": tng[variation][objectIndex][obj.THING_TYPE] = Things.reverse_data_structure_name.get(value, 0)
+				"Subtype": tng[variation][objectIndex][obj.THING_SUBTYPE] = value
+				"EffectRange": tng[variation][objectIndex][obj.EFFECT_RANGE] = value
+
+func parse_columns(columns_string):
+	# Convert the string array to integers using a loop
+	var columns_array = columns_string.strip("[]").split(", ")
+	var columns_int_array = []
+	for item in columns_array:
+		columns_int_array.append(int(item))
+	return columns_int_array
+
+func parse_objects(objects_array):
+	var objects = []
+	for obj_dict in objects_array:
+		var obj = []
+		for key in obj.values():
+			obj.append(obj_dict.get(key, 0))
+		objects.append(obj)
+	return objects
+
+
+func preprocess_cfg_file(filePath): # 7ms
+	var file = File.new()
+	if file.open(filePath, File.READ) != OK:
+		print("Failed to open file: ", filePath)
+		return
+
+	# [[slab20.NW_WATER_objects]]
+	# [[slab20.NW_WATER_objects]]
+	# [[slab20.NW_WATER_objects]]
+	# Turns into:
+	# [[slab20.NW_WATER.objects0]]
+	# [[slab20.NW_WATER.objects1]]
+	# [[slab20.NW_WATER.objects2]]
+
+	# Replace all instances of [[ with [ in the entire file text first, important for parsing to be correct
+	var fileText = file.get_as_text().replace("[[", "[").replace("]]", "]")
+	var arrayOfLines = fileText.split("\n")
+	var calculateObjectIndex = 0
+	var rememberLine = ""
+	for i in range(arrayOfLines.size()):
+		var line = arrayOfLines[i]
+		if "_objects" in line:
+			if rememberLine != line:
+				calculateObjectIndex = 0
+			rememberLine = line
+			arrayOfLines[i] = line.replace("_objects", ".objects" + str(calculateObjectIndex))
+			calculateObjectIndex += 1
+	var processed_string = "\n".join(arrayOfLines)
+	return processed_string
+
+#print(processed_string)
+# test
+#	var textFile = File.new()
+#	if textFile.open("D:/AI/debug_slabset.cfg", File.WRITE) != OK:
+#		return
+#	textFile.store_string(processed_string)
+#	textFile.close()
+
 func load_default_slabset():
 	tng = []
 	dat = []
@@ -118,7 +226,7 @@ enum { # BitFlags
 	SKIP_OBJECTS = 2,
 }
 
-func create_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
+func export_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 	var CODETIME_START = OS.get_ticks_msec()
 	var oMessage = Nodelist.list["oMessage"]
 	
@@ -159,7 +267,7 @@ func create_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 		
 		var slabID = int(variation / 28)
 		var variationNumber = variation % 28
-		var dirText = get_dir_text(variationNumber)
+		var dirText = dir_texts[variationNumber]
 		
 		if variationNumber == 0:
 			textFile.store_line("[slab" + str(slabID) + "]")
@@ -259,37 +367,67 @@ func get_property_name(i):
 		obj.EFFECT_RANGE: return 'EffectRange'
 		_: return ''
 
-func get_dir_text(variationNumber):
-	match variationNumber:
-		00: return 'S'
-		01: return 'W'
-		02: return 'N'
-		03: return 'E'
-		04: return 'SW'
-		05: return 'NW'
-		06: return 'NE'
-		07: return 'SE'
-		08: return 'ALL' #SWNE
-		09: return 'S_LAVA'
-		10: return 'W_LAVA'
-		11: return 'N_LAVA'
-		12: return 'E_LAVA'
-		13: return 'SW_LAVA'
-		14: return 'NW_LAVA'
-		15: return 'NE_LAVA'
-		16: return 'SE_LAVA'
-		17: return 'ALL_LAVA' #SWNE_LAVA
-		18: return 'S_WATER'
-		19: return 'W_WATER'
-		20: return 'N_WATER'
-		21: return 'E_WATER'
-		22: return 'SW_WATER'
-		23: return 'NW_WATER'
-		24: return 'NE_WATER'
-		25: return 'SE_WATER'
-		26: return 'ALL_WATER' #SWNE_WATER
-		27: return 'CENTER'
+var dir_texts = {
+	0: 'S',
+	1: 'W',
+	2: 'N',
+	3: 'E',
+	4: 'SW',
+	5: 'NW',
+	6: 'NE',
+	7: 'SE',
+	8: 'ALL',
+	9: 'S_LAVA',
+	10: 'W_LAVA',
+	11: 'N_LAVA',
+	12: 'E_LAVA',
+	13: 'SW_LAVA',
+	14: 'NW_LAVA',
+	15: 'NE_LAVA',
+	16: 'SE_LAVA',
+	17: 'ALL_LAVA',
+	18: 'S_WATER',
+	19: 'W_WATER',
+	20: 'N_WATER',
+	21: 'E_WATER',
+	22: 'SW_WATER',
+	23: 'NW_WATER',
+	24: 'NE_WATER',
+	25: 'SE_WATER',
+	26: 'ALL_WATER',
+	27: 'CENTER'
+}
 
+var dir_numbers = {
+	'S': 0,
+	'W': 1,
+	'N': 2,
+	'E': 3,
+	'SW': 4,
+	'NW': 5,
+	'NE': 6,
+	'SE': 7,
+	'ALL': 8,
+	'S_LAVA': 9,
+	'W_LAVA': 10,
+	'N_LAVA': 11,
+	'E_LAVA': 12,
+	'SW_LAVA': 13,
+	'NW_LAVA': 14,
+	'NE_LAVA': 15,
+	'SE_LAVA': 16,
+	'ALL_LAVA': 17,
+	'S_WATER': 18,
+	'W_WATER': 19,
+	'N_WATER': 20,
+	'E_WATER': 21,
+	'SW_WATER': 22,
+	'NW_WATER': 23,
+	'NE_WATER': 24,
+	'SE_WATER': 25,
+	'ALL_WATER': 26,
+	'CENTER': 27
+}
 
 
 #

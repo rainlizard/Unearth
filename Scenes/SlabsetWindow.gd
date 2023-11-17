@@ -256,11 +256,11 @@ func _on_ImportSlabsCfg_pressed():
 
 func _on_ExportSlabsetCfgDialog_file_selected(filePath):
 	var fullExport = oExportImportSlabsFullCheckBox.pressed
-	Slabset.create_cfg_slabset(filePath, fullExport)
+	Slabset.export_cfg_slabset(filePath, fullExport)
 
 func _on_ImportSlabsetCfgDialog_file_selected(filePath):
 	var fullImport = oExportImportSlabsFullCheckBox.pressed
-	Slabset.load_cfg_slabset(filePath, fullImport)
+	Slabset.import_cfg_slabset(filePath, fullImport)
 
 func _on_ExportColumnCfgDialog_file_selected(filePath):
 	Columnset.create_cfg_columns(filePath)
