@@ -5249,7 +5249,7 @@ visible = true
 margin_left = -2945.0
 margin_top = -1513.0
 margin_right = -1665.0
-margin_bottom = -633.0
+margin_bottom = -623.0
 window_title = "Slabset"
 resizable = true
 script = ExtResource( 132 )
@@ -5276,7 +5276,7 @@ size_flags_vertical = 3
 
 [node name="DkSlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset" instance=ExtResource( 19 )]
 margin_right = 996.0
-margin_bottom = 805.0
+margin_bottom = 815.0
 displayingType = 2
 
 [node name="Control" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/DkSlabsetVoxelView"]
@@ -5307,17 +5307,17 @@ align = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset"]
 margin_left = 1000.0
 margin_right = 1236.0
-margin_bottom = 805.0
+margin_bottom = 815.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer"]
 margin_right = 236.0
-margin_bottom = 693.0
+margin_bottom = 703.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer"]
 margin_right = 236.0
-margin_bottom = 693.0
+margin_bottom = 703.0
 size_flags_vertical = 3
 
 [node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer"]
@@ -5444,7 +5444,7 @@ columns = 3
 [node name="PanelContainer3" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 197.0
 margin_right = 236.0
-margin_bottom = 693.0
+margin_bottom = 703.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -5452,7 +5452,7 @@ size_flags_vertical = 3
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 227.0
-margin_bottom = 487.0
+margin_bottom = 497.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_right = 218.0
@@ -5482,13 +5482,13 @@ text = "Delete"
 [node name="SlabsetObjectSection" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_top = 56.0
 margin_right = 218.0
-margin_bottom = 478.0
+margin_bottom = 488.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection"]
 margin_right = 218.0
-margin_bottom = 422.0
+margin_bottom = 432.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -5563,7 +5563,8 @@ margin_top = 70.0
 margin_right = 218.0
 margin_bottom = 101.0
 size_flags_horizontal = 10
-min_value = -255.0
+min_value = -1e+06
+max_value = 1e+06
 step = 0.001
 
 [node name="Label4" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer"]
@@ -5578,7 +5579,8 @@ margin_top = 105.0
 margin_right = 218.0
 margin_bottom = 136.0
 size_flags_horizontal = 10
-min_value = -255.0
+min_value = -1e+06
+max_value = 1e+06
 step = 0.001
 
 [node name="Label5" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer"]
@@ -5593,7 +5595,8 @@ margin_top = 140.0
 margin_right = 218.0
 margin_bottom = 171.0
 size_flags_horizontal = 10
-min_value = -255.0
+min_value = -1e+06
+max_value = 1e+06
 step = 0.001
 
 [node name="Label8" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer"]
@@ -5660,9 +5663,9 @@ size_flags_horizontal = 9
 text = "Export slabs.dat"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer"]
-margin_top = 697.0
+margin_top = 707.0
 margin_right = 236.0
-margin_bottom = 805.0
+margin_bottom = 815.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer"]
 margin_left = 9.0

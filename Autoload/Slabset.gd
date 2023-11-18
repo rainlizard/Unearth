@@ -28,22 +28,26 @@ enum dir {
 	center = 27
 }
 
-func _ready():
-	var CODETIME_START = OS.get_ticks_msec()
-	import_cfg_slabset("D:/AI/slabset.cfg", true)
-	print('AAAAACodetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-	pass
+#func _ready():
+#	yield(get_tree(),'idle_frame') # Needed for this test, so that default_data is established first
+#	var CODETIME_START = OS.get_ticks_msec()
+#	import_cfg_slabset("D:/AI/slabset.cfg", true)
+#	print('Import Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
 
 func import_cfg_slabset(filePath, fullImport):
+	var oMessage = Nodelist.list["oMessage"]
 	var processed_string = preprocess_cfg_file(filePath)
+	if processed_string == null:
+		oMessage.quick("Failed to open file: " + str(filePath))
+		return
 	var cfg = ConfigFile.new()
 	var err = cfg.parse(processed_string)
 	if err != OK:
-		print("Failed to parse config file")
+		oMessage.quick("Failed to parse config file")
 		return
 	
-	dat.clear()
-	tng.clear()
+	resize_dat_and_tng_based_on_cfg(cfg)
 	
 	for section in cfg.get_sections():
 		var parts = section.split(".")
@@ -53,56 +57,54 @@ func import_cfg_slabset(filePath, fullImport):
 		var slabID = int(parts[0])
 		var localVariation = int(dir_numbers[parts[1]]) # ["slab34", "CENTER"]
 		var variation = (slabID * 28) + localVariation
-		
-		while variation >= dat.size():
-			dat.append([])
-		while variation >= tng.size():
-			tng.append([])
-		
+
 		var objectIndex
+		var getObject
 		if parts.size() >= 3: # ["slab34", "CENTER", "objects0"]
-			objectIndex = int(parts[2].lstrip("objects"))
-			for addObject in range(objectIndex + 1):
+			objectIndex = int(parts[2])
+			while objectIndex >= tng[variation].size():
 				tng[variation].append([0,variation,0, 0,0,0, 0,0,0])
-		
+			getObject = tng[variation][objectIndex]
+
 		var keyList = cfg.get_section_keys(section)
 		for key in keyList:
 			var value = cfg.get_value(section, key)
 			match key:
 				"columns": dat[variation] = value
 				"objects": tng[variation] = value
-				"IsLight": tng[variation][objectIndex][obj.IS_LIGHT] = value
-				"Subtile": tng[variation][objectIndex][obj.SUBTILE] = value
-				"RelativeX": tng[variation][objectIndex][obj.RELATIVE_X] = value
-				"RelativeY": tng[variation][objectIndex][obj.RELATIVE_Y] = value
-				"RelativeZ": tng[variation][objectIndex][obj.RELATIVE_Z] = value
-				"ThingType": tng[variation][objectIndex][obj.THING_TYPE] = Things.reverse_data_structure_name.get(value, 0)
-				"Subtype": tng[variation][objectIndex][obj.THING_SUBTYPE] = value
-				"EffectRange": tng[variation][objectIndex][obj.EFFECT_RANGE] = value
+				"IsLight": getObject[obj.IS_LIGHT] = int(value)
+				"Subtile": getObject[obj.SUBTILE] = int(value)
+				"RelativePosition":
+					getObject[obj.RELATIVE_X] = int(value[0])
+					getObject[obj.RELATIVE_Y] = int(value[1])
+					getObject[obj.RELATIVE_Z] = int(value[2])
+				"ThingType": getObject[obj.THING_TYPE] = int(value) #int(Things.reverse_data_structure_name.get(value, 0))
+				"Subtype": getObject[obj.THING_SUBTYPE] = int(value)
+				"EffectRange": getObject[obj.EFFECT_RANGE] = int(value)
+	oMessage.quick("Slabset merged with: " + str(filePath))
 
-func parse_columns(columns_string):
-	# Convert the string array to integers using a loop
-	var columns_array = columns_string.strip("[]").split(", ")
-	var columns_int_array = []
-	for item in columns_array:
-		columns_int_array.append(int(item))
-	return columns_int_array
+func resize_dat_and_tng_based_on_cfg(cfg):
+	# Determine maximum needed size for dat and tng arrays
+	var max_variation = 0
+	for section in cfg.get_sections():
+		var parts = section.split(".")
+		if parts.size() >= 1:
+			var slabID = int(parts[0])
+			var variation = (slabID+1) * 28
+			max_variation = max(max_variation, variation)
+	
+	# This is necessary rather than using fill([]), because we need to keep the original data there
+	while max_variation >= dat.size():
+		dat.append(EMPTY_SLAB)
+	while max_variation >= tng.size():
+		tng.append([])
 
-func parse_objects(objects_array):
-	var objects = []
-	for obj_dict in objects_array:
-		var obj = []
-		for key in obj.values():
-			obj.append(obj_dict.get(key, 0))
-		objects.append(obj)
-	return objects
-
+const EMPTY_SLAB = [0,0,0, 0,0,0, 0,0,0]
 
 func preprocess_cfg_file(filePath): # 7ms
 	var file = File.new()
 	if file.open(filePath, File.READ) != OK:
-		print("Failed to open file: ", filePath)
-		return
+		return null
 
 	# [[slab20.NW_WATER_objects]]
 	# [[slab20.NW_WATER_objects]]
@@ -203,9 +205,10 @@ func create_object_list(tng_buffer):
 		
 		object_info[i][obj.SUBTILE] = tng_buffer.get_u8() # subtile (between 0 and 8)
 		
-		object_info[i][obj.RELATIVE_X] = Things.convert_relative_256_to_float(tng_buffer.get_u16())
-		object_info[i][obj.RELATIVE_Y] = Things.convert_relative_256_to_float(tng_buffer.get_u16())
-		object_info[i][obj.RELATIVE_Z] = Things.convert_relative_256_to_float(tng_buffer.get_u16())
+		# Note: using get_16() instead of get_u16()
+		object_info[i][obj.RELATIVE_X] = tng_buffer.get_16()
+		object_info[i][obj.RELATIVE_Y] = tng_buffer.get_16()
+		object_info[i][obj.RELATIVE_Z] = tng_buffer.get_16()
 		
 		# Thing type, # Thing subtype, # Effect range
 		object_info[i][obj.THING_TYPE] = tng_buffer.get_u8()
@@ -242,10 +245,19 @@ func export_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 	
 	# Print differences for debugging
 	for i in tng_diffs:
-		print("---------Differences---------")
+		print("---------TNG differences---------")
 		print("Current: ", tng[i])
 		if i < default_data["tng"].size():
-			print("Default: ",default_data["tng"][i])
+			print("Default: ", default_data["tng"][i])
+		else:
+			print("Default: Beyond array size")
+	
+	# Print differences for debugging
+	for i in dat_diffs:
+		print("---------DAT differences---------")
+		print("Current: ", dat[i])
+		if i < default_data["dat"].size():
+			print("Default: ", default_data["dat"][i])
 		else:
 			print("Default: Beyond array size")
 	
@@ -256,6 +268,11 @@ func export_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 	
 	var biggest_array = max(dat.size(), tng.size())
 	for variation in biggest_array:
+		# If both are empty then skip writing this slab
+		if (variation >= dat.size() or dat[variation] == [0,0,0, 0,0,0, 0,0,0]) and (variation >= tng.size() or tng[variation] == []):
+			continue
+		
+		# Skip differences
 		var skip = SKIP_NONE
 		if fullExport == false:
 			if dat_diffs.has(variation) == false:
@@ -281,16 +298,30 @@ func export_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 				textFile.store_line("\r")
 				textFile.store_line("[[slab" + str(slabID) + "." + dirText + "_objects" + "]]")
 				for z in 9:
-					var val = object[z]
-					var beginLine = get_property_name(z) # Implement this method based on your match statement.
-					if beginLine:
-						beginLine += " = "
-						if z == obj.THING_TYPE: # Use string as value instead of an integer
-							if object[obj.IS_LIGHT] == 1:
-								val = '"Unused"' # Lights don't use ThingType field
-							else:
-								val = '"'+Things.data_structure_name.get(val, "?")+'"'
-						textFile.store_line(beginLine + str(val))
+					var propertyName
+					var value
+					# 1 = Variation, 4 = RelativeY, 5 = RelativeZ
+					match z:
+						0:
+							propertyName = "IsLight"
+							value = object[z]
+						2:
+							propertyName = "Subtile"
+							value = object[z]
+						3:
+							propertyName = "RelativePosition"
+							value = [ object[3], object[4], object[5] ]
+						6:
+							propertyName = "ThingType"
+							value = object[z]
+						7:
+							propertyName = "Subtype"
+							value = object[z]
+						8:
+							propertyName = "EffectRange"
+							value = object[z]
+					if propertyName:
+						textFile.store_line(propertyName + " = " + str(value))
 			if tng[variation].size() == 0:
 				textFile.store_line("objects = []")
 		
@@ -302,6 +333,7 @@ func export_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 	print('Exported in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 
+
 func find_all_dat_differences():
 	var diff_indices = []
 	for variation in dat.size():
@@ -309,12 +341,14 @@ func find_all_dat_differences():
 			diff_indices.append(variation)
 	return diff_indices
 
+
 func find_all_tng_differences():
 	var diff_indices = []
 	for variation in tng.size():
 		if is_tng_variation_different(variation) == true:
 			diff_indices.append(variation)
 	return diff_indices
+
 
 func is_dat_variation_different(variation):
 	if variation >= dat.size() or dat[variation].empty(): # This function should not have been called
@@ -325,6 +359,7 @@ func is_dat_variation_different(variation):
 		return true
 	return false
 
+
 func is_tng_variation_different(variation):
 	if variation >= tng.size() or tng[variation].empty(): # This function should not have been called
 		return false
@@ -333,6 +368,7 @@ func is_tng_variation_different(variation):
 	if variation >= default_data["tng"].size() or tng[variation] != default_data["tng"][variation]: # If 'default' is shorter, or the current and default elements differ
 		return true
 	return false
+
 
 func is_dat_column_different(variation, subtile):
 	if variation >= dat.size() or dat[variation].empty():
@@ -353,19 +389,6 @@ func is_tng_object_different(variation, objectIndex, objectProperty):
 	# Compare the property values of the current and default objects.
 	return tng[variation][objectIndex][objectProperty] != default_data["tng"][variation][objectIndex][objectProperty]
 
-
-
-func get_property_name(i):
-	match i:
-		obj.IS_LIGHT: return 'IsLight'
-		obj.SUBTILE: return 'Subtile'
-		obj.RELATIVE_X: return 'RelativeX'
-		obj.RELATIVE_Y: return 'RelativeY'
-		obj.RELATIVE_Z: return 'RelativeZ'
-		obj.THING_TYPE: return 'ThingType'
-		obj.THING_SUBTYPE: return 'Subtype'
-		obj.EFFECT_RANGE: return 'EffectRange'
-		_: return ''
 
 var dir_texts = {
 	0: 'S',

@@ -2,7 +2,8 @@ extends SpinBox
 class_name SpinBoxPropertiesValue
 
 func _ready():
-	get_line_edit().expand_to_text_length = true
+	get_line_edit().expand_to_text_length = true # This makes it difficult to click the button when there's long floats, why do I need it?
+	get_line_edit().show_behind_parent=true
 
 func _input(event):
 	if is_instance_valid(get_focus_owner()) == false: return

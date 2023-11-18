@@ -261,6 +261,8 @@ func _on_ExportSlabsetCfgDialog_file_selected(filePath):
 func _on_ImportSlabsetCfgDialog_file_selected(filePath):
 	var fullImport = oExportImportSlabsFullCheckBox.pressed
 	Slabset.import_cfg_slabset(filePath, fullImport)
+	update_columns_ui()
+	update_objects_ui()
 
 func _on_ExportColumnCfgDialog_file_selected(filePath):
 	Columnset.create_cfg_columns(filePath)
@@ -372,9 +374,9 @@ func update_object_fields(index):
 	oObjIsLightCheckBox.pressed = bool(obj[0])
 	oObjEffectRangeSpinBox.value = obj[8]
 	oObjSubtileSpinBox.value = obj[2]
-	oObjRelativeXSpinBox.value = obj[3]
-	oObjRelativeYSpinBox.value = obj[4]
-	oObjRelativeZSpinBox.value = obj[5]
+	oObjRelativeXSpinBox.value = obj[3] / 256.0
+	oObjRelativeYSpinBox.value = obj[4] / 256.0
+	oObjRelativeZSpinBox.value = obj[5] / 256.0
 
 func _on_ObjObjectIndexSpinBox_value_changed(value):
 	var variation = get_current_variation()
@@ -465,14 +467,44 @@ func _on_ObjIsLightCheckBox_toggled(button_pressed:int):
 
 func _on_ObjEffectRangeSpinBox_value_changed(value:int):
 	update_object_property(Slabset.obj.EFFECT_RANGE, value)
+
 func _on_ObjSubtileSpinBox_value_changed(value:int):
 	update_object_property(Slabset.obj.SUBTILE, value)
-func _on_ObjRelativeXSpinBox_value_changed(value:float):
-	update_object_property(Slabset.obj.RELATIVE_X, value)
-func _on_ObjRelativeYSpinBox_value_changed(value:float):
-	update_object_property(Slabset.obj.RELATIVE_Y, value)
-func _on_ObjRelativeZSpinBox_value_changed(value:float):
-	update_object_property(Slabset.obj.RELATIVE_Z, value)
+
+func round_float_to_256(f): # Calculate the nearest multiple of 1.0/256.0
+	return round(f * 256.0) / 256.0
+func ceil_float_to_256(f): # Calculate the nearest multiple of 1.0/256.0
+	return ceil(f * 256.0) / 256.0
+func floor_float_to_256(f): # Calculate the nearest multiple of 1.0/256.0
+	return floor(f * 256.0) / 256.0
+
+# Generic function to snap and update the SpinBox value
+func snap_and_update_spinbox_value(spinbox: SpinBox, property: int, float_value: float, method_name: String):
+	var nearest_value = round_float_to_256(float_value)
+	var new_value = nearest_value
+	if float_value > nearest_value:
+		new_value = ceil_float_to_256(float_value)
+	elif float_value < nearest_value:
+		new_value = floor_float_to_256(float_value)
+
+	spinbox.disconnect("value_changed", self, method_name)
+	spinbox.value = new_value
+	spinbox.connect("value_changed", self, method_name)
+
+	var int_value = round(new_value * 256)
+	spinbox.hint_tooltip = str("Real: " + str(int_value))
+	update_object_property(property, int_value)
+
+# SpinBox value changed handlers
+func _on_ObjRelativeXSpinBox_value_changed(float_value: float):
+	snap_and_update_spinbox_value(oObjRelativeXSpinBox, Slabset.obj.RELATIVE_X, float_value, "_on_ObjRelativeXSpinBox_value_changed")
+
+func _on_ObjRelativeYSpinBox_value_changed(float_value: float):
+	snap_and_update_spinbox_value(oObjRelativeYSpinBox, Slabset.obj.RELATIVE_Y, float_value, "_on_ObjRelativeYSpinBox_value_changed")
+
+func _on_ObjRelativeZSpinBox_value_changed(float_value: float):
+	snap_and_update_spinbox_value(oObjRelativeZSpinBox, Slabset.obj.RELATIVE_Z, float_value, "_on_ObjRelativeZSpinBox_value_changed")
+
 
 # Helper method to update the object in Slabset.tng
 func update_object_property(the_property, new_value):

@@ -740,11 +740,6 @@ func get_png_filenames_in_dir(path):
 		print("An error occurred when trying to access the path.")
 	return dictionary
 
-func convert_relative_256_to_float(datnum):
-	if datnum >= 32768: # If the sign bit is set (indicating a negative value)
-		datnum -= 65536 # Convert to signed by subtracting 2^16
-	return datnum / 256.0 # Scale it to floating-point
-
 #func load_custom_images_into_array(DATA_ARRAY, thingtypeImageFolder):
 #	print("Loading /thing-images/" + thingtypeImageFolder + " directory ...")
 #	var arrayOfFilenames = get_png_files_in_dir(Settings.unearthdata.plus_file("thing-images").plus_file(thingtypeImageFolder))
