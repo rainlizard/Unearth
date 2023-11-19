@@ -218,7 +218,6 @@ func _on_CheckboxShowAll_toggled(checkboxValue):
 
 # Main function to adjust the color of UI elements for a specific column index
 func adjust_ui_color_if_different():
-	if name != "ColumnsetControls": return
 	
 	var column_index = int(oColumnIndexSpinBox.value)
 	adjust_spinbox_color(oUtilizedSpinBox, is_property_different("utilized", column_index))
@@ -232,12 +231,12 @@ func adjust_ui_color_if_different():
 	# Adjust the color for each cube SpinBox
 	for i in range(8):
 		var cube_spinbox = cubeSpinBoxArray[i]
-		var cube_is_different = nodeClm["cubes"][column_index][i] != Columnset.default_data["cubes"][column_index][i]
+		var cube_is_different = nodeClm["cubes"][column_index][i] != nodeClm.default_data["cubes"][column_index][i]
 		adjust_spinbox_color(cube_spinbox, cube_is_different)
 
 # Function to check if a property is different from its default value
 func is_property_different(property_name, column_index):
-	return nodeClm[property_name][column_index] != Columnset.default_data[property_name][column_index]
+	return nodeClm[property_name][column_index] != nodeClm.default_data[property_name][column_index]
 
 # Function to adjust the color of a SpinBox based on property differences
 func adjust_spinbox_color(spinbox, is_different):

@@ -9,6 +9,7 @@ onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oDataClm = Nodelist.list["oDataClm"]
 
 var queueExit = false
 
@@ -63,6 +64,7 @@ func save_map(filePath): # auto opens other files
 		oCurrentMap.set_path_and_title(filePath)
 		oEditor.mapHasBeenEdited = false
 		oScriptEditor.set_script_as_edited(false)
+		oDataClm.store_default_data() # This makes it so the map Column Editor's default columns are now reflected as "what's saved"
 		oMapSettingsWindow.visible = false
 		# This goes last. Queued from when doing "save before quitting" and "save as" before quitting.
 		if queueExit == true:

@@ -15,7 +15,17 @@ var height = []
 var cubes = []
 var floorTexture = []
 
+var default_data = {}
 
+func store_default_data():
+	default_data["utilized"] = utilized.duplicate(true)
+	default_data["orientation"] = orientation.duplicate(true)
+	default_data["solidMask"] = solidMask.duplicate(true)
+	default_data["permanent"] = permanent.duplicate(true)
+	default_data["lintel"] = lintel.duplicate(true)
+	default_data["height"] = height.duplicate(true)
+	default_data["cubes"] = cubes.duplicate(true)
+	default_data["floorTexture"] = floorTexture.duplicate(true)
 
 #var testingSpecialByte = []
 

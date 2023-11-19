@@ -231,6 +231,8 @@ func finish_opening_map(map):
 		oEditor.mapHasBeenEdited = true
 		oMessage.quick("Fixed column index 0, re-save your map.")
 	
+	oDataClm.store_default_data()
+	
 	if oGame.running_keeperfx() == true:
 		if oCurrentFormat.selected == 1: # KFX format
 			if oGame.KEEPERFX_VERSION_INT != 500: # Skip worrying about the compiled versions (0.5.0.0)
