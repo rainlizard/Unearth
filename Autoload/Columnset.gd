@@ -61,7 +61,10 @@ func store_default_data():
 	default_data["cubes"] = cubes.duplicate(true)
 	default_data["floorTexture"] = floorTexture.duplicate(true)
 
-func create_cfg_columns(filePath): #"res://columns.cfg"
+func import_cfg_columns(filePath, fullExport):
+	pass
+
+func export_cfg_columns(filePath, fullExport): #"res://columns.cfg"
 	var oMessage = Nodelist.list["oMessage"]
 	var textFile = File.new()
 	if textFile.open(filePath, File.WRITE) == OK:

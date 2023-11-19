@@ -191,7 +191,12 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 				oDataSlab.set_cellv(pos, slabID)
 		
 		if oFortifyCheckBox.pressed == true:
-			if ownership != 5 and slabID != Slabs.WALL_AUTOMATIC and Slabs.auto_wall_updates_these.has(slabID) == false:
+			# The "ownership != 5" ensures that we don't accidentally spread those difficult-to-see neutral fortified walls
+			if ownership != 5 and \
+			Slabs.data.has(slabID) and \
+			Slabs.data[slabID][Slabs.IS_OWNABLE] == true and \
+			slabID != Slabs.WALL_AUTOMATIC and \
+			Slabs.auto_wall_updates_these.has(slabID) == false:
 				surroundingPositions[Vector2(pos.x - 1, pos.y)] = 1
 				surroundingPositions[Vector2(pos.x + 1, pos.y)] = 1
 				surroundingPositions[Vector2(pos.x, pos.y - 1)] = 2

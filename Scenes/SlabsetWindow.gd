@@ -10,14 +10,17 @@ onready var oSlabPalette = Nodelist.list["oSlabPalette"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oExportSlabsetDatDialog = Nodelist.list["oExportSlabsetDatDialog"]
 onready var oGame = Nodelist.list["oGame"]
-onready var oExportColumnCfgDialog = Nodelist.list["oExportColumnCfgDialog"]
+onready var oExportColumnsetCfgDialog = Nodelist.list["oExportColumnsetCfgDialog"]
+onready var oImportColumnsetCfgDialog = Nodelist.list["oImportColumnsetCfgDialog"]
 onready var oExportSlabsetCfgDialog = Nodelist.list["oExportSlabsetCfgDialog"]
+onready var oImportSlabsetCfgDialog = Nodelist.list["oImportSlabsetCfgDialog"]
 onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
 onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
 onready var oExportSlabsetClmDialog = Nodelist.list["oExportSlabsetClmDialog"]
 onready var oExportImportSlabsFullCheckBox = Nodelist.list["oExportImportSlabsFullCheckBox"]
+onready var oExportImportColumnsFullCheckBox = Nodelist.list["oExportImportColumnsFullCheckBox"]
 onready var oObjObjectIndexSpinBox = Nodelist.list["oObjObjectIndexSpinBox"]
 onready var oObjAddButton = Nodelist.list["oObjAddButton"]
 onready var oObjDeleteButton = Nodelist.list["oObjDeleteButton"]
@@ -33,7 +36,6 @@ onready var oSlabsetObjectSection = Nodelist.list["oSlabsetObjectSection"]
 onready var oObjSubtypeLabel = Nodelist.list["oObjSubtypeLabel"]
 onready var oObjThingTypeLabel = Nodelist.list["oObjThingTypeLabel"]
 onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
-onready var oImportSlabsetCfgDialog = Nodelist.list["oImportSlabsetCfgDialog"]
 
 var clipboard = {
 	"dat": [],
@@ -207,19 +209,6 @@ func ensure_tng_array_has_space(variation):
 	while variation >= Slabset.tng.size():
 		Slabset.tng.append([])
 
-func _on_SlabsetHelpButton_pressed():
-	var helptxt = ""
-	helptxt += "Slabset is loaded from /data/slabs.dat \n"
-	helptxt += "Columnset is loaded from /data/slabs.clm \n"
-	helptxt += "The attached objects are loaded from /data/slabs.tng \n"
-	helptxt += "These sets determine the slab's appearance when placed. \n"
-	helptxt += "To mod the slabs that are placed in-game you'll need to export .cfg files and use them in a mappack/campaign."
-	
-	#helptxt += '\n'
-	#helptxt += '\n'
-	#helptxt += ""
-	oMessage.big("Help",helptxt)
-
 
 func _on_SlabsetCopyValues_pressed():
 	oTabCustomSlabs.copy_values_from_slabset_and_index_them()
@@ -238,21 +227,29 @@ func _on_ExportSlabsClm_pressed():
 	oExportSlabsetClmDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oExportSlabsetClmDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oExportSlabsetClmDialog.current_file = "slabs.clm"
+
 func _on_ExportSlabsCfg_pressed():
 	Utils.popup_centered(oExportSlabsetCfgDialog)
 	#oExportSlabsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
 	#oExportSlabsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oExportSlabsetCfgDialog.current_file = "slabset.cfg"
-func _on_ExportColumnsCfg_pressed():
-	Utils.popup_centered(oExportColumnCfgDialog)
-	#oExportColumnCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	#oExportColumnCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportColumnCfgDialog.current_file = "columns.cfg"
 func _on_ImportSlabsCfg_pressed():
 	Utils.popup_centered(oImportSlabsetCfgDialog)
 	#oExportSlabsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
 	#oExportSlabsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oImportSlabsetCfgDialog.current_file = "slabset.cfg"
+
+func _on_ExportColumnsCfg_pressed():
+	Utils.popup_centered(oExportColumnsetCfgDialog)
+	#oExportColumnsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	#oExportColumnsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportColumnsetCfgDialog.current_file = "columnset.cfg"
+func _on_ImportColumnsCfg_pressed():
+	Utils.popup_centered(oImportColumnsetCfgDialog)
+	#oExportSlabsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
+	#oExportSlabsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oImportColumnsetCfgDialog.current_file = "columnset.cfg"
+
 
 func _on_ExportSlabsetCfgDialog_file_selected(filePath):
 	var fullExport = oExportImportSlabsFullCheckBox.pressed
@@ -264,8 +261,15 @@ func _on_ImportSlabsetCfgDialog_file_selected(filePath):
 	update_columns_ui()
 	update_objects_ui()
 
-func _on_ExportColumnCfgDialog_file_selected(filePath):
-	Columnset.create_cfg_columns(filePath)
+func _on_ExportColumnsetCfgDialog_file_selected(filePath):
+	var fullExport = oExportImportColumnsFullCheckBox.pressed
+	Columnset.export_cfg_columns(filePath, fullExport)
+
+func _on_ImportColumnsetCfgDialog_file_selected(filePath):
+	var fullImport = oExportImportColumnsFullCheckBox.pressed
+	Columnset.import_cfg_slabset(filePath, fullImport)
+	# Update columnset visuals here
+
 
 func _on_ExportSlabsetDatDialog_file_selected(filePath):
 	var buffer = StreamPeerBuffer.new()
@@ -632,3 +636,20 @@ func _on_VarRevertButton_pressed():
 ##		if Slabset.dat[i] == [0,0,0, 0,0,0, 0,0,0] and Slabset.tng[i].empty():
 ##			return i
 #	return -1  # Return -1 if no free space is found
+
+func _on_SlabsetHelpButton_pressed():
+	var helptxt = ""
+	helptxt += "Slabset is loaded from /data/slabs.dat \n"
+	helptxt += "Columnset is loaded from /data/slabs.clm \n"
+	helptxt += "The attached objects are loaded from /data/slabs.tng \n"
+	helptxt += "These sets determine the slab's appearance when placed. \n"
+	helptxt += "To mod the slabs that are placed in-game you'll need to export .cfg files and use them in a mappack/campaign."
+	oMessage.big("Help",helptxt)
+
+func _on_ColumnsetHelpButton_pressed():
+	var helptxt = ""
+	helptxt += "Be wary not to confuse the Columnset with the Map Columns (accessed in Edit->Columns) \n"
+	helptxt += "Map Columns are read from the map's local file such as map00001.clm \n"
+	helptxt += "Columnset is loaded from /data/slabs.clm, it's more of a global file. \n"
+	helptxt += "However you can use your own columnset.cfg instead of the default one in a mappack/campaign which will be global to it."
+	oMessage.big("Help",helptxt)

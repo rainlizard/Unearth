@@ -5265,6 +5265,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TabSlabset" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -5316,7 +5317,7 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer"]
-margin_right = 236.0
+margin_right = 18.0
 margin_bottom = 703.0
 size_flags_vertical = 3
 
@@ -5722,7 +5723,6 @@ expand = true
 stretch_mode = 4
 
 [node name="TabColumnset" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -5744,24 +5744,67 @@ margin_bottom = 815.0
 
 [node name="ColumnsetControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer" instance=ExtResource( 137 )]
 margin_right = 226.0
-margin_bottom = 784.0
+margin_bottom = 703.0
 size_flags_horizontal = 1
 
-[node name="ExportSlabsClm" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer"]
-visible = false
-margin_left = 32.0
-margin_top = 556.0
-margin_right = 220.0
-margin_bottom = 583.0
-size_flags_horizontal = 9
-text = "Export slabs.clm"
-
-[node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer"]
-margin_top = 788.0
+[node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer"]
+margin_top = 707.0
 margin_right = 226.0
 margin_bottom = 815.0
-size_flags_horizontal = 9
-text = "Export columns.cfg"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 217.0
+margin_bottom = 99.0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer"]
+margin_right = 208.0
+margin_bottom = 21.0
+text = "Columnset"
+align = 1
+
+[node name="HBoxContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer"]
+margin_top = 25.0
+margin_right = 208.0
+margin_bottom = 90.0
+columns = 2
+
+[node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
+margin_right = 139.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Export"
+
+[node name="ExportImportColumnsFullCheckBox" type="CheckBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
+margin_left = 143.0
+margin_right = 208.0
+margin_bottom = 29.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Full"
+
+[node name="ImportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
+margin_top = 33.0
+margin_right = 139.0
+margin_bottom = 60.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Import"
+
+[node name="ColumnsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
+margin_left = 176.0
+margin_top = 33.0
+margin_right = 208.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 32, 32 )
+size_flags_horizontal = 8
+texture_normal = ExtResource( 156 )
+texture_pressed = ExtResource( 66 )
+texture_hover = ExtResource( 128 )
+expand = true
+stretch_mode = 4
 
 [node name="NewMapWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -6010,7 +6053,19 @@ mode = 0
 access = 2
 show_hidden_files = true
 
-[node name="ExportColumnCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
+[node name="ImportColumnsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -2797.0
+margin_top = 3062.0
+margin_right = -2117.0
+margin_bottom = 3622.0
+rect_min_size = Vector2( 250, 87.5 )
+window_title = "Open a File"
+mode = 0
+access = 2
+show_hidden_files = true
+
+[node name="ExportColumnsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -2834.0
 margin_top = 2262.0
@@ -6923,8 +6978,9 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/ExportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsCfg_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/ImportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportSlabsCfg_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/ExportSlabsClm" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsClm_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ImportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportColumnsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ColumnsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetHelpButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/SetNewFormat" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapFormat_item_selected"]
 [connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_focus_exited"]
@@ -6944,7 +7000,8 @@ script = SubResource( 20 )
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetClmDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetClmDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetCfgDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ImportSlabsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportSlabsetCfgDialog_file_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/ExportColumnCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnCfgDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ImportColumnsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportColumnsetCfgDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ExportColumnsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsetCfgDialog_file_selected"]
 [connection signal="about_to_show" from="Ui/UiSystem/ResizeCurrentMapSize" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeCurrentMapSize_about_to_show"]
 [connection signal="focus_exited" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer/SettingsXSizeLine" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_SettingsXSizeLine_focus_exited"]
 [connection signal="focus_exited" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer/SettingsYSizeLine" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_SettingsYSizeLine_focus_exited"]
