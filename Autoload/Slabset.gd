@@ -70,8 +70,8 @@ func import_cfg_slabset(filePath, fullImport):
 		for key in keyList:
 			var value = cfg.get_value(section, key)
 			match key:
-				"columns": dat[variation] = value
-				"objects": tng[variation] = value
+				"Columns": dat[variation] = value
+				"Objects": tng[variation] = value
 				"IsLight": getObject[obj.IS_LIGHT] = int(value)
 				"Subtile": getObject[obj.SUBTILE] = int(value)
 				"RelativePosition":
@@ -240,7 +240,7 @@ func export_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 		dat_diffs = find_all_dat_differences()
 		tng_diffs = find_all_tng_differences()
 		if tng_diffs.size() == 0 and dat_diffs.size() == 0:
-			oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved.")
+			oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved. Did you mean to enable 'Full'?")
 			return
 	
 	# Print differences for debugging
@@ -291,7 +291,7 @@ func export_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 		textFile.store_line("[slab" + str(slabID) + "." + dirText + "]")
 		
 		if skip != SKIP_COLUMNS:
-			textFile.store_line("columns = " + str(dat[variation]))
+			textFile.store_line("Columns = " + str(dat[variation]))
 		
 		if skip != SKIP_OBJECTS:
 			for object in tng[variation]:
@@ -323,7 +323,7 @@ func export_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 					if propertyName:
 						textFile.store_line(propertyName + " = " + str(value))
 			if tng[variation].size() == 0:
-				textFile.store_line("objects = []")
+				textFile.store_line("Objects = []")
 		
 		textFile.store_line("\r")
 	

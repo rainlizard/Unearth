@@ -7,27 +7,30 @@ onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 
-onready var oHeightSpinBox = $"ScrollContainer/VBoxContainer/GridAdvancedValues/HeightSpinBox"
-onready var oSolidMaskSpinBox = $"ScrollContainer/VBoxContainer/GridAdvancedValues/SolidMaskSpinBox"
-onready var oPermanentSpinBox = $"ScrollContainer/VBoxContainer/GridAdvancedValues/PermanentSpinBox"
-onready var oOrientationSpinBox = $"ScrollContainer/VBoxContainer/GridAdvancedValues/OrientationSpinBox"
-onready var oLintelSpinBox = $"ScrollContainer/VBoxContainer/GridAdvancedValues/LintelSpinBox"
-onready var oGridAdvancedValues = $"ScrollContainer/VBoxContainer/GridAdvancedValues"
-onready var oGridSimpleValues = $"ScrollContainer/VBoxContainer/GridSimpleValues"
-onready var oColumnIndexSpinBox = $"ScrollContainer/VBoxContainer/HBoxContainer/ColumnIndexSpinBox"
-onready var oColumnFirstUnusedButton = $"ScrollContainer/VBoxContainer/ColumnFirstUnusedButton"
-onready var oColumnViewDeleteButton = $"ScrollContainer/VBoxContainer/ColumnViewDeleteButton"
-onready var oFloorTextureSpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/FloorTextureSpinBox"
+onready var oColumnIndexSpinBox = $"%ColumnIndexSpinBox"
+onready var oGridAdvancedValues = $"%GridAdvancedValues"
 
-onready var oUtilizedSpinBox = $"ScrollContainer/VBoxContainer/HBoxContainer2/UtilizedSpinBox"
-onready var oCube8SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube8SpinBox"
-onready var oCube7SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube7SpinBox"
-onready var oCube6SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube6SpinBox"
-onready var oCube5SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube5SpinBox"
-onready var oCube4SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube4SpinBox"
-onready var oCube3SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube3SpinBox"
-onready var oCube2SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube2SpinBox"
-onready var oCube1SpinBox = $"ScrollContainer/VBoxContainer/GridSimpleValues/Cube1SpinBox"
+onready var oHeightSpinBox = $"%HeightSpinBox"
+onready var oSolidMaskSpinBox = $"%SolidMaskSpinBox"
+onready var oPermanentSpinBox = $"%PermanentSpinBox"
+onready var oOrientationSpinBox = $"%OrientationSpinBox"
+onready var oLintelSpinBox = $"%LintelSpinBox"
+onready var oFloorTextureSpinBox = $"%FloorTextureSpinBox"
+onready var oUtilizedSpinBox = $"%UtilizedSpinBox"
+
+onready var oColumnFirstUnusedButton = $"%ColumnFirstUnusedButton"
+onready var oColumnRevertButton = $"%ColumnRevertButton"
+onready var oColumnCopyButton = $"%ColumnCopyButton"
+onready var oColumnPasteButton = $"%ColumnPasteButton"
+
+onready var oCube8SpinBox = $"%Cube8SpinBox"
+onready var oCube7SpinBox = $"%Cube7SpinBox"
+onready var oCube6SpinBox = $"%Cube6SpinBox"
+onready var oCube5SpinBox = $"%Cube5SpinBox"
+onready var oCube4SpinBox = $"%Cube4SpinBox"
+onready var oCube3SpinBox = $"%Cube3SpinBox"
+onready var oCube2SpinBox = $"%Cube2SpinBox"
+onready var oCube1SpinBox = $"%Cube1SpinBox"
 
 onready var cubeSpinBoxArray = [
 	oCube1SpinBox,
@@ -42,6 +45,18 @@ onready var cubeSpinBoxArray = [
 
 var nodeClm
 var nodeVoxelView
+
+# Clipboard for column data
+var clipboard = {
+	"height": 0,
+	"solidMask": 0,
+	"permanent": 0,
+	"orientation": 0,
+	"lintel": 0,
+	"floorTexture": 0,
+	"utilized": 0,
+	"cubes": []
+}
 
 func _ready():
 	match name:
@@ -86,26 +101,6 @@ func _on_cube_mouse_exited(cubeNumber):
 	oCustomTooltip.set_text("")
 
 
-func _on_ColumnDuplicateButton_pressed():
-	var clmIndex = int(oColumnIndexSpinBox.value)
-	
-	var findUnusedIndex = nodeClm.find_cubearray_index([0,0,0,0, 0,0,0,0], 0)
-	
-	if findUnusedIndex != -1:
-		if nodeClm == oDataClm:
-			oEditor.mapHasBeenEdited = true
-			oDataClm.count_filled_clm_entries() # Refresh "Clm entries" in Properties window
-		nodeClm.copy_column(clmIndex, findUnusedIndex)
-		oMessage.quick('Copied ' + str(clmIndex) + ' --> ' + str(findUnusedIndex))
-		
-		nodeVoxelView.do_all()
-		nodeVoxelView.do_one()
-		nodeVoxelView.oAllVoxelObjects.visible = true
-		nodeVoxelView.oSelectedVoxelObject.visible = false
-		
-		oColumnIndexSpinBox.value = findUnusedIndex
-	else:
-		oMessage.quick("There are no empty columns to copy to")
 
 
 func _on_ColumnIndexSpinBox_value_changed(value):
@@ -218,21 +213,6 @@ func _on_ColumnFirstUnusedButton_pressed():
 	else:
 		oMessage.quick("There are no empty columns")
 
-func _on_ColumnViewDeleteButton_pressed():
-	if nodeClm == oDataClm:
-		oEditor.mapHasBeenEdited = true
-		oDataClm.count_filled_clm_entries() # Refresh "Clm entries" in Properties window
-	
-	var clmIndex = int(oColumnIndexSpinBox.value)
-	nodeClm.delete_column(clmIndex)
-	oColumnDetails.update_details()
-	_on_ColumnIndexSpinBox_value_changed(clmIndex) # Update controls to show "0"
-	
-	nodeVoxelView.do_all()
-	nodeVoxelView.do_one()
-	nodeVoxelView.oAllVoxelObjects.visible = true
-	nodeVoxelView.oSelectedVoxelObject.visible = false
-
 func _on_CheckboxShowAll_toggled(checkboxValue):
 	oGridAdvancedValues.visible = checkboxValue
 
@@ -265,3 +245,63 @@ func adjust_spinbox_color(spinbox, is_different):
 		spinbox.modulate = Color(1.4,1.4,1.7)
 	else:
 		spinbox.modulate = Color(1,1,1)
+
+
+func _on_ColumnCopyButton_pressed():
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	clipboard = {
+		"height": nodeClm.height[clmIndex],
+		"solidMask": nodeClm.solidMask[clmIndex],
+		"permanent": nodeClm.permanent[clmIndex],
+		"orientation": nodeClm.orientation[clmIndex],
+		"lintel": nodeClm.lintel[clmIndex],
+		"floorTexture": nodeClm.floorTexture[clmIndex],
+		"utilized": nodeClm.utilized[clmIndex],
+		"cubes": nodeClm.cubes[clmIndex].duplicate(true)
+	}
+	oMessage.quick("Column copied to clipboard")
+
+func _on_ColumnPasteButton_pressed():
+	if clipboard["cubes"].empty():
+		oMessage.quick("Clipboard is empty. Copy a column first.")
+		return
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
+	
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	
+	nodeClm.height[clmIndex] = clipboard["height"]
+	nodeClm.solidMask[clmIndex] = clipboard["solidMask"]
+	nodeClm.permanent[clmIndex] = clipboard["permanent"]
+	nodeClm.orientation[clmIndex] = clipboard["orientation"]
+	nodeClm.lintel[clmIndex] = clipboard["lintel"]
+	nodeClm.floorTexture[clmIndex] = clipboard["floorTexture"]
+	nodeClm.utilized[clmIndex] = clipboard["utilized"]
+	nodeClm.cubes[clmIndex] = clipboard["cubes"].duplicate(true)
+	
+	_on_ColumnIndexSpinBox_value_changed(clmIndex) # Update the UI to reflect the pasted values
+	oMessage.quick("Pasted column from clipboard")
+	update_3d_visual()
+
+func update_3d_visual():
+	nodeVoxelView.do_all()
+	nodeVoxelView.do_one()
+	nodeVoxelView.oAllVoxelObjects.visible = true
+	nodeVoxelView.oSelectedVoxelObject.visible = false
+
+func _on_ColumnRevertButton_pressed():
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	nodeClm.height[clmIndex] = nodeClm.default_data["height"][clmIndex]
+	nodeClm.solidMask[clmIndex] = nodeClm.default_data["solidMask"][clmIndex]
+	nodeClm.permanent[clmIndex] = nodeClm.default_data["permanent"][clmIndex]
+	nodeClm.orientation[clmIndex] = nodeClm.default_data["orientation"][clmIndex]
+	nodeClm.lintel[clmIndex] = nodeClm.default_data["lintel"][clmIndex]
+	nodeClm.floorTexture[clmIndex] = nodeClm.default_data["floorTexture"][clmIndex]
+	nodeClm.utilized[clmIndex] = nodeClm.default_data["utilized"][clmIndex]
+	nodeClm.cubes[clmIndex] = nodeClm.default_data["cubes"][clmIndex].duplicate(true)
+	
+	_on_ColumnIndexSpinBox_value_changed(clmIndex)  # Refresh UI
+	oMessage.quick("Reverted column to default")
+	update_3d_visual()

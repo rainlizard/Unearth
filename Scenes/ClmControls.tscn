@@ -46,6 +46,7 @@ __meta__ = {
 }
 
 [node name="ColumnIndexSpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 margin_left = 96.0
 margin_right = 170.0
 margin_bottom = 24.0
@@ -53,32 +54,47 @@ max_value = 2047.0
 rounded = true
 script = ExtResource( 1 )
 
-[node name="ColumnFirstUnusedButton" type="Button" parent="ScrollContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
 margin_top = 28.0
 margin_right = 206.0
-margin_bottom = 48.0
+margin_bottom = 72.0
+columns = 2
+
+[node name="ColumnCopyButton" type="Button" parent="ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+margin_right = 101.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Copy"
+
+[node name="ColumnPasteButton" type="Button" parent="ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+margin_left = 105.0
+margin_right = 206.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Paste"
+
+[node name="ColumnFirstUnusedButton" type="Button" parent="ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+margin_top = 24.0
+margin_right = 101.0
+margin_bottom = 44.0
 text = "Go to unused"
 
-[node name="ColumnViewDeleteButton" type="Button" parent="ScrollContainer/VBoxContainer"]
-margin_top = 52.0
+[node name="ColumnRevertButton" type="Button" parent="ScrollContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+margin_left = 105.0
+margin_top = 24.0
 margin_right = 206.0
-margin_bottom = 72.0
-hint_tooltip = "Set all data of the column at this index to 0"
+margin_bottom = 44.0
 size_flags_horizontal = 3
-text = "Delete column"
-
-[node name="ColumnDuplicateButton" type="Button" parent="ScrollContainer/VBoxContainer"]
-margin_top = 76.0
-margin_right = 206.0
-margin_bottom = 96.0
-hint_tooltip = "Copy the data of this column to the next blank space."
-size_flags_horizontal = 3
-text = "Duplicate column"
+text = "Revert"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
-margin_top = 100.0
+margin_top = 76.0
 margin_right = 206.0
-margin_bottom = 124.0
+margin_bottom = 100.0
 
 [node name="Label16" type="Label" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
 margin_top = 5.0
@@ -90,6 +106,7 @@ __meta__ = {
 }
 
 [node name="UtilizedSpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_right = 206.0
 margin_bottom = 24.0
@@ -100,15 +117,15 @@ editable = false
 script = ExtResource( 1 )
 
 [node name="Spacing" type="Control" parent="ScrollContainer/VBoxContainer"]
-margin_top = 128.0
+margin_top = 104.0
 margin_right = 206.0
-margin_bottom = 152.0
+margin_bottom = 128.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="GridSimpleValues" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
-margin_top = 156.0
+margin_top = 132.0
 margin_right = 206.0
-margin_bottom = 404.0
+margin_bottom = 380.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -124,6 +141,7 @@ __meta__ = {
 }
 
 [node name="Cube8SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridSimpleValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_right = 206.0
 margin_bottom = 24.0
@@ -141,6 +159,7 @@ __meta__ = {
 }
 
 [node name="Cube7SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridSimpleValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 28.0
 margin_right = 206.0
@@ -159,6 +178,7 @@ __meta__ = {
 }
 
 [node name="Cube6SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridSimpleValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 56.0
 margin_right = 206.0
@@ -177,6 +197,7 @@ __meta__ = {
 }
 
 [node name="Cube5SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridSimpleValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 84.0
 margin_right = 206.0
@@ -195,6 +216,7 @@ __meta__ = {
 }
 
 [node name="Cube4SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridSimpleValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 112.0
 margin_right = 206.0
@@ -213,6 +235,7 @@ __meta__ = {
 }
 
 [node name="Cube3SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridSimpleValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 140.0
 margin_right = 206.0
@@ -231,6 +254,7 @@ __meta__ = {
 }
 
 [node name="Cube2SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridSimpleValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 168.0
 margin_right = 206.0
@@ -249,6 +273,7 @@ __meta__ = {
 }
 
 [node name="Cube1SpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridSimpleValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 196.0
 margin_right = 206.0
@@ -267,6 +292,7 @@ __meta__ = {
 }
 
 [node name="FloorTextureSpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridSimpleValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 224.0
 margin_right = 206.0
@@ -276,16 +302,17 @@ max_value = 1e+09
 script = ExtResource( 1 )
 
 [node name="CheckboxShowAll" type="CheckBox" parent="ScrollContainer/VBoxContainer"]
-margin_top = 408.0
+margin_top = 384.0
 margin_right = 206.0
-margin_bottom = 432.0
+margin_bottom = 408.0
 rect_min_size = Vector2( 24, 24 )
 text = "Show all"
 
 [node name="GridAdvancedValues" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
-margin_top = 436.0
+unique_name_in_owner = true
+margin_top = 412.0
 margin_right = 206.0
-margin_bottom = 572.0
+margin_bottom = 548.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -301,6 +328,7 @@ __meta__ = {
 }
 
 [node name="HeightSpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_right = 206.0
 margin_bottom = 24.0
@@ -318,6 +346,7 @@ __meta__ = {
 }
 
 [node name="SolidMaskSpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 28.0
 margin_right = 206.0
@@ -336,6 +365,7 @@ __meta__ = {
 }
 
 [node name="PermanentSpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 56.0
 margin_right = 206.0
@@ -354,6 +384,7 @@ __meta__ = {
 }
 
 [node name="OrientationSpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 84.0
 margin_right = 206.0
@@ -372,6 +403,7 @@ __meta__ = {
 }
 
 [node name="LintelSpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
+unique_name_in_owner = true
 margin_left = 132.0
 margin_top = 112.0
 margin_right = 206.0
@@ -381,9 +413,10 @@ max_value = 99999.0
 script = ExtResource( 1 )
 
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/HBoxContainer/ColumnIndexSpinBox" to="." method="_on_ColumnIndexSpinBox_value_changed"]
-[connection signal="pressed" from="ScrollContainer/VBoxContainer/ColumnFirstUnusedButton" to="." method="_on_ColumnFirstUnusedButton_pressed"]
-[connection signal="pressed" from="ScrollContainer/VBoxContainer/ColumnViewDeleteButton" to="." method="_on_ColumnViewDeleteButton_pressed"]
-[connection signal="pressed" from="ScrollContainer/VBoxContainer/ColumnDuplicateButton" to="." method="_on_ColumnDuplicateButton_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/GridContainer/ColumnCopyButton" to="." method="_on_ColumnCopyButton_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/GridContainer/ColumnPasteButton" to="." method="_on_ColumnPasteButton_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/GridContainer/ColumnFirstUnusedButton" to="." method="_on_ColumnFirstUnusedButton_pressed"]
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/GridContainer/ColumnRevertButton" to="." method="_on_ColumnRevertButton_pressed"]
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/HBoxContainer2/UtilizedSpinBox" to="." method="_on_UtilizedSpinBox_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/GridSimpleValues/FloorTextureSpinBox" to="." method="_on_FloorTextureSpinBox_value_changed"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/CheckboxShowAll" to="." method="_on_CheckboxShowAll_toggled"]
