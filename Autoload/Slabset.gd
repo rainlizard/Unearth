@@ -81,7 +81,7 @@ func import_cfg_slabset(filePath, fullImport):
 				"ThingType": getObject[obj.THING_TYPE] = int(value) #int(Things.reverse_data_structure_name.get(value, 0))
 				"Subtype": getObject[obj.THING_SUBTYPE] = int(value)
 				"EffectRange": getObject[obj.EFFECT_RANGE] = int(value)
-	oMessage.quick("Slabset merged with: " + str(filePath))
+	oMessage.quick("Merged: " + str(filePath))
 
 func resize_dat_and_tng_based_on_cfg(cfg):
 	# Determine maximum needed size for dat and tng arrays

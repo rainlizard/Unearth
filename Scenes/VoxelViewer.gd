@@ -274,3 +274,8 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 	yield(get_tree(),'idle_frame')
 	skip3x3function = false
 
+func refresh_entire_view():
+	do_all()
+	do_one()
+	oAllVoxelObjects.visible = true
+	oSelectedVoxelObject.visible = false

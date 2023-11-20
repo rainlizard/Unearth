@@ -61,10 +61,7 @@ func _on_ConfirmClmClearUnused_confirmed():
 	oDataClm.clear_unused_entries()
 	
 	# Refresh voxel view
-	oColumnEditorVoxelView.do_all()
-	oColumnEditorVoxelView.do_one()
-	oColumnEditorVoxelView.oAllVoxelObjects.visible = true
-	oColumnEditorVoxelView.oSelectedVoxelObject.visible = false
+	oColumnEditorVoxelView.refresh_entire_view()
 	# Refresh controls
 	oColumnEditorControls._on_ColumnIndexSpinBox_value_changed(oColumnEditorControls.oColumnIndexSpinBox.value)
 	
@@ -76,9 +73,6 @@ func _on_ColumnEditorSortButton_pressed():
 	oDataClm.sort_columns_by_utilized()
 	
 	# Refresh voxel view
-	oColumnEditorVoxelView.do_all()
-	oColumnEditorVoxelView.do_one()
-	oColumnEditorVoxelView.oAllVoxelObjects.visible = true
-	oColumnEditorVoxelView.oSelectedVoxelObject.visible = false
+	oColumnEditorVoxelView.refresh_entire_view()
 	# Refresh controls
 	oColumnEditorControls._on_ColumnIndexSpinBox_value_changed(oColumnEditorControls.oColumnIndexSpinBox.value)

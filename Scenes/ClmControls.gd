@@ -280,13 +280,7 @@ func _on_ColumnPasteButton_pressed():
 	
 	_on_ColumnIndexSpinBox_value_changed(clmIndex) # Update the UI to reflect the pasted values
 	oMessage.quick("Pasted column from clipboard")
-	update_3d_visual()
-
-func update_3d_visual():
-	nodeVoxelView.do_all()
-	nodeVoxelView.do_one()
-	nodeVoxelView.oAllVoxelObjects.visible = true
-	nodeVoxelView.oSelectedVoxelObject.visible = false
+	nodeVoxelView.refresh_entire_view()
 
 func _on_ColumnRevertButton_pressed():
 	if nodeClm == oDataClm:
@@ -303,4 +297,4 @@ func _on_ColumnRevertButton_pressed():
 	
 	_on_ColumnIndexSpinBox_value_changed(clmIndex)  # Refresh UI
 	oMessage.quick("Reverted column to default")
-	update_3d_visual()
+	nodeVoxelView.refresh_entire_view()

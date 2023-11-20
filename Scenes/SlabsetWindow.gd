@@ -263,12 +263,13 @@ func _on_ImportSlabsetCfgDialog_file_selected(filePath):
 
 func _on_ExportColumnsetCfgDialog_file_selected(filePath):
 	var fullExport = oExportImportColumnsFullCheckBox.pressed
-	Columnset.export_cfg_columns(filePath, fullExport)
+	Columnset.export_cfg_columnset(filePath, fullExport)
 
 func _on_ImportColumnsetCfgDialog_file_selected(filePath):
 	var fullImport = oExportImportColumnsFullCheckBox.pressed
-	Columnset.import_cfg_slabset(filePath, fullImport)
+	Columnset.import_cfg_columnset(filePath, fullImport)
 	# Update columnset visuals here
+	oColumnsetVoxelView.refresh_entire_view()
 
 
 func _on_ExportSlabsetDatDialog_file_selected(filePath):

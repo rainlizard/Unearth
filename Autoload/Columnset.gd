@@ -61,29 +61,93 @@ func store_default_data():
 	default_data["cubes"] = cubes.duplicate(true)
 	default_data["floorTexture"] = floorTexture.duplicate(true)
 
-func import_cfg_columns(filePath, fullExport):
-	pass
 
-func export_cfg_columns(filePath, fullExport): #"res://columns.cfg"
+func import_cfg_columnset(filePath, fullExport):
 	var oMessage = Nodelist.list["oMessage"]
-	var textFile = File.new()
-	if textFile.open(filePath, File.WRITE) == OK:
+	var cfg = ConfigFile.new()
+	var err = cfg.load(filePath)
 	
-		textFile.store_line('[common]')
-		textFile.store_line('ColumnsCount = 2048')
-		textFile.store_line('\r')
-		
-		for i in Columnset.utilized.size():
-			textFile.store_line('[column' + str(i) +']')
-			textFile.store_line('Utilized = ' + str(Columnset.utilized[i])) #(0-1)
-			textFile.store_line('Permanent = ' + str(Columnset.permanent[i])) #(2)
-			textFile.store_line('Lintel = ' + str(Columnset.lintel[i])) #(2)
-			textFile.store_line('Height = ' + str(Columnset.height[i])) #(2)
-			textFile.store_line('SolidMask = ' + str(Columnset.solidMask[i])) #(3-4)
-			textFile.store_line('FloorTexture = ' + str(Columnset.floorTexture[i])) #(5-6)
-			textFile.store_line('Orientation = ' + str(Columnset.orientation[i])) #(7)
-			textFile.store_line('Cubes = ' + str(Columnset.cubes[i])) #(8-23)
-			textFile.store_line('\r')
-		oMessage.quick("Saved: " + filePath)
-	else:
+	if err != OK:
+		oMessage.quick("Failed to load config file: " + str(filePath))
+		return
+	
+	for section in cfg.get_sections():
+		if section.begins_with("column"):
+			var columnIndex = int(section)
+			utilized[columnIndex] = cfg.get_value(section, "Utilized", 0)
+			permanent[columnIndex] = cfg.get_value(section, "Permanent", 0)
+			lintel[columnIndex] = cfg.get_value(section, "Lintel", 0)
+			height[columnIndex] = cfg.get_value(section, "Height", 0)
+			solidMask[columnIndex] = cfg.get_value(section, "SolidMask", 0)
+			floorTexture[columnIndex] = cfg.get_value(section, "FloorTexture", 0)
+			orientation[columnIndex] = cfg.get_value(section, "Orientation", 0)
+			cubes[columnIndex] = cfg.get_value(section, "Cubes", [0,0,0,0, 0,0,0,0])
+	
+	oMessage.quick("Merged: " + str(filePath))
+
+
+
+func export_cfg_columnset(filePath, fullExport): #"res://columns.cfg"
+	var oMessage = Nodelist.list["oMessage"]
+	
+	# Find differences if not a full export
+	var column_diffs = []
+	if fullExport == false:
+		column_diffs = find_all_different_columns()
+		if column_diffs.size() == 0:
+			oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved. Did you mean to enable 'Full'?")
+			return
+	
+	var textFile = File.new()
+	if textFile.open(filePath, File.WRITE) != OK:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
+		return
+	
+	textFile.store_line('[common]')
+	textFile.store_line('ColumnsCount = 2048')
+	textFile.store_line('\r')
+	
+	for i in 2048:
+		# If this is a partial export, then skip this column if it is the same as default.
+		if fullExport == false and column_diffs.has(i) == false:
+			continue
+		
+		textFile.store_line('[column' + str(i) +']')
+		textFile.store_line('Utilized = ' + str(Columnset.utilized[i])) #(0-1)
+		textFile.store_line('Permanent = ' + str(Columnset.permanent[i])) #(2)
+		textFile.store_line('Lintel = ' + str(Columnset.lintel[i])) #(2)
+		textFile.store_line('Height = ' + str(Columnset.height[i])) #(2)
+		textFile.store_line('SolidMask = ' + str(Columnset.solidMask[i])) #(3-4)
+		textFile.store_line('FloorTexture = ' + str(Columnset.floorTexture[i])) #(5-6)
+		textFile.store_line('Orientation = ' + str(Columnset.orientation[i])) #(7)
+		textFile.store_line('Cubes = ' + str(Columnset.cubes[i])) #(8-23)
+		textFile.store_line('\r')
+	
+	oMessage.quick("Saved: " + filePath)
+	textFile.close()
+
+func find_all_different_columns():
+	var diff_indices = []
+	for i in 2048:
+		if is_column_different(i):
+			diff_indices.append(i)
+	return diff_indices
+
+func is_column_different(index):
+	if utilized[index] != default_data["utilized"][index]:
+		return true
+	if permanent[index] != default_data["permanent"][index]:
+		return true
+	if lintel[index] != default_data["lintel"][index]:
+		return true
+	if height[index] != default_data["height"][index]:
+		return true
+	if solidMask[index] != default_data["solidMask"][index]:
+		return true
+	if floorTexture[index] != default_data["floorTexture"][index]:
+		return true
+	if orientation[index] != default_data["orientation"][index]:
+		return true
+	if cubes[index] != default_data["cubes"][index]:
+		return true
+	return false
