@@ -393,11 +393,9 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 	
 	var subtileY = subtile/3
 	var subtileX = subtile-(subtileY*3)
-	id.locationX = ((xSlab*3) + subtileX) + tngObj[Slabset.obj.RELATIVE_X]
-	id.locationY = ((ySlab*3) + subtileY) + tngObj[Slabset.obj.RELATIVE_Y]
-	id.locationZ = tngObj[Slabset.obj.RELATIVE_Z]
-	
-	
+	id.locationX = ((xSlab*3) + subtileX) + Things.convert_relative_256_to_float(tngObj[Slabset.obj.RELATIVE_X])
+	id.locationY = ((ySlab*3) + subtileY) + Things.convert_relative_256_to_float(tngObj[Slabset.obj.RELATIVE_Y])
+	id.locationZ = Things.convert_relative_256_to_float(tngObj[Slabset.obj.RELATIVE_Z])
 	
 	id.ownership = ownership
 	
