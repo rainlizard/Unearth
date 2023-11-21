@@ -1,4 +1,5 @@
 extends WindowDialog
+onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oDkSlabsetVoxelView = Nodelist.list["oDkSlabsetVoxelView"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oVariationInfoLabel = Nodelist.list["oVariationInfoLabel"]
@@ -17,7 +18,6 @@ onready var oImportSlabsetCfgDialog = Nodelist.list["oImportSlabsetCfgDialog"]
 onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
 onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
-onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
 onready var oExportSlabsetClmDialog = Nodelist.list["oExportSlabsetClmDialog"]
 onready var oExportImportSlabsFullCheckBox = Nodelist.list["oExportImportSlabsFullCheckBox"]
 onready var oExportImportColumnsFullCheckBox = Nodelist.list["oExportImportColumnsFullCheckBox"]
@@ -211,7 +211,7 @@ func ensure_tng_array_has_space(variation):
 
 
 func _on_SlabsetCopyValues_pressed():
-	oTabCustomSlabs.copy_values_from_slabset_and_index_them()
+	oAddCustomObjectWindow.copy_values_from_slabset_and_index_them()
 	
 	visible = false
 	oPickSlabWindow._on_pressed_add_new_custom_slab()
@@ -649,8 +649,8 @@ func _on_SlabsetHelpButton_pressed():
 
 func _on_ColumnsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "Be wary not to confuse the Columnset with the Map Columns (accessed in Edit->Columns) \n"
+	helptxt += "Be wary not to confuse the Columnset with the Map Columns \n"
 	helptxt += "Map Columns are read from the map's local file such as map00001.clm \n"
-	helptxt += "Columnset is loaded from /data/slabs.clm, it's more of a global file. \n"
-	helptxt += "However you can use your own columnset.cfg instead of the default one in a mappack/campaign which will be global to it."
+	helptxt += "Columnset is loaded from /data/slabs.clm, which is a global file. \n"
+	helptxt += "However you can create a columnset.cfg instead of the default one to use for your own mappack/campaign."
 	oMessage.big("Help",helptxt)

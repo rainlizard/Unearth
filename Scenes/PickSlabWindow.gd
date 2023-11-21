@@ -12,9 +12,9 @@ onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
-onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 onready var oConfirmDeleteCustomSlab = Nodelist.list["oConfirmDeleteCustomSlab"]
+onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 
 
 
@@ -139,8 +139,7 @@ func custom_slab_add_new_button():
 	oGridFunctions._on_GridWindow_resized(self)
 
 func _on_pressed_add_new_custom_slab():
-	Utils.popup_centered(oColumnEditor)
-	oColumnEditorTabs.current_tab = 1 # Select tab containing Fake Slab Editor
+	Utils.popup_centered(oAddCustomSlabWindow)
 
 func pressed(id):
 	var setValue = id.get_meta("ID_of_slab")

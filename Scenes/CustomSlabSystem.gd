@@ -1,9 +1,10 @@
 extends Node
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 var data = {}
-var slabsFile = ConfigFile.new()
+var cfg = ConfigFile.new()
 
 enum {
 	RECOGNIZED_AS
@@ -15,7 +16,40 @@ enum {
 func _ready():
 	load_file()
 
+
+func load_file():
+	var filePath = Settings.unearthdata.plus_file("custom_slabs.cfg")
+	
+	var file = File.new()
+	if file.open(filePath, File.READ) != OK:
+		# No custom_slabs.cfg file found
+		return
+	
+	var fileText = file.get_as_text().to_lower()
+	var err = cfg.parse(fileText)
+	if err != OK:
+		oMessage.big("Error", "Failed to parse custom_slabs.cfg file")
+		return
+	
+	for section in cfg.get_sections():
+		var newID = int(section.trim_prefix("slab"))
+		var slabName = cfg.get_value(section, "name")
+		var recognizedAs = cfg.get_value(section, "recognized_as")
+		var liquidType = cfg.get_value(section, "liquid_type")
+		var wibbleType = cfg.get_value(section, "wibble_type")
+		var wibbleEdges = cfg.get_value(section, "wibble_edges")
+		
+		var slabCubeData = []
+		var slabFloorData = []
+		for i in 9:
+			slabCubeData.append( cfg.get_value(section, "cubes"+str(i)) )
+			slabFloorData.append( cfg.get_value(section, "floor"+str(i)) )
+		
+		add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData)
+
+
 func add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData):
+	
 	Slabs.data[newID] = [
 		slabName,
 		Slabs.BLOCK_SLAB,
@@ -29,37 +63,19 @@ func add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibb
 	]
 	
 	data[newID] = [recognizedAs, wibbleEdges, slabCubeData, slabFloorData]
-	
-	slabsFile.set_value('SLAB'+str(newID),"NAME", slabName)
-	slabsFile.set_value('SLAB'+str(newID),"RECOGNIZED_AS",int(recognizedAs))
-	slabsFile.set_value('SLAB'+str(newID),"LIQUID_TYPE", liquidType)
-	slabsFile.set_value('SLAB'+str(newID),"WIBBLE_TYPE", wibbleType)
-	slabsFile.set_value('SLAB'+str(newID),"WIBBLE_EDGES", wibbleEdges)
+	var section = 'slab'+str(newID)
+	cfg.set_value(section,"name", slabName)
+	cfg.set_value(section,"recognized_as",int(recognizedAs))
+	cfg.set_value(section,"liquid_type", liquidType)
+	cfg.set_value(section,"wibble_type", wibbleType)
+	cfg.set_value(section,"wibble_edges", wibbleEdges)
 	
 	for i in 9:
-		slabsFile.set_value('SLAB'+str(newID),"CUBES"+str(i),slabCubeData[i])
-		slabsFile.set_value('SLAB'+str(newID),"FLOOR"+str(i),slabFloorData[i])
+		cfg.set_value(section,"cubes"+str(i),slabCubeData[i])
+		cfg.set_value(section,"floor"+str(i),slabFloorData[i])
 	
-	slabsFile.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
+	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
 
-func load_file():
-	slabsFile.load(Settings.unearthdata.plus_file("custom_slabs.cfg"))
-	
-	for sectionName in slabsFile.get_sections():
-		var newID = int(sectionName.trim_prefix("SLAB"))
-		var slabName = slabsFile.get_value(sectionName, "NAME")
-		var recognizedAs = slabsFile.get_value(sectionName, "RECOGNIZED_AS")
-		var liquidType = slabsFile.get_value(sectionName, "LIQUID_TYPE")
-		var wibbleType = slabsFile.get_value(sectionName, "WIBBLE_TYPE")
-		var wibbleEdges = slabsFile.get_value(sectionName, "WIBBLE_EDGES")
-		
-		var slabCubeData = []
-		var slabFloorData = []
-		for i in 9:
-			slabCubeData.append( slabsFile.get_value(sectionName, "CUBES"+str(i)) )
-			slabFloorData.append( slabsFile.get_value(sectionName, "FLOOR"+str(i)) )
-		
-		add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData)
 
 # The purpose of this function is so I don't have to index the columns into clm for simply displaying within the slab window. Only index when PLACING the Fake Slab.
 func get_top_cube_face(indexIn3x3, slabID):
@@ -82,8 +98,8 @@ func remove_custom_slab(slabID):
 	if data.has(slabID):
 		data.erase(slabID)
 	
-	var section = 'SLAB'+str(slabID)
-	if slabsFile.has_section(section):
-		slabsFile.erase_section(section)
+	var section = 'slab'+str(slabID)
+	if cfg.has_section(section):
+		cfg.erase_section(section)
 	
-	slabsFile.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
+	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))

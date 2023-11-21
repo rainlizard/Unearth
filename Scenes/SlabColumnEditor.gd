@@ -1,6 +1,5 @@
 extends WindowDialog
 onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
-onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oMessage = Nodelist.list["oMessage"]
@@ -10,10 +9,7 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
 onready var oConfirmClmClearUnused = Nodelist.list["oConfirmClmClearUnused"]
 onready var oEditor = Nodelist.list["oEditor"]
-
-func _ready():
-	oColumnEditorTabs.set_tab_title(0, "Name is set below")
-	oColumnEditorTabs.set_tab_title(1, "Add fake slab")
+onready var oMapClmFilenameLabel = Nodelist.list["oMapClmFilenameLabel"]
 
 # When re-opening window or opening for first time
 func _on_ColumnEditor_visibility_changed():
@@ -21,27 +17,17 @@ func _on_ColumnEditor_visibility_changed():
 	
 	if visible == true:
 		oDataClm.update_all_utilized() # Run this before _on_ColumnEditorTabs_tab_changed()
+		oColumnEditorVoxelView.initialize()
+		oPropertiesTabs.set_current_tab(2)
 		
-		oColumnEditorTabs.set_tab_title(0, oCurrentMap.path.get_file().get_basename() + ".clm")
-		_on_ColumnEditorTabs_tab_changed(oColumnEditorTabs.current_tab)
+		oMapClmFilenameLabel.text = oCurrentMap.path.get_file().get_basename() + ".clm"
+		
 		# Refresh controls
 		oColumnEditorControls._on_ColumnIndexSpinBox_value_changed(oColumnEditorControls.oColumnIndexSpinBox.value)
 	else:
 		# Update "Clm entries" in properties window
 		yield(get_tree(),'idle_frame')
 		oDataClm.count_filled_clm_entries()
-
-func _on_ColumnEditorTabs_tab_changed(tab):
-	match tab:
-		0:
-			oCustomSlabVoxelView.visible = false
-			oColumnEditorVoxelView.visible = true
-			oColumnEditorVoxelView.initialize()
-			oPropertiesTabs.set_current_tab(2)
-		1:
-			oColumnEditorVoxelView.visible = false
-			oCustomSlabVoxelView.visible = true
-			oCustomSlabVoxelView.initialize()
 
 func _on_ColumnEditorHelpButton_pressed():
 	var helptxt = ""

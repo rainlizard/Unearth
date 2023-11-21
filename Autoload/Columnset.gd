@@ -74,8 +74,8 @@ func import_cfg_columnset(filePath, fullExport):
 	for section in cfg.get_sections():
 		if section.begins_with("column"):
 			var columnIndex = int(section)
-			utilized[columnIndex] = cfg.get_value(section, "Utilized", 0)
-			permanent[columnIndex] = cfg.get_value(section, "Permanent", 0)
+			utilized[columnIndex] = 0 #cfg.get_value(section, "Utilized", 0)
+			permanent[columnIndex] = 1 #cfg.get_value(section, "Permanent", 0)
 			lintel[columnIndex] = cfg.get_value(section, "Lintel", 0)
 			height[columnIndex] = cfg.get_value(section, "Height", 0)
 			solidMask[columnIndex] = cfg.get_value(section, "SolidMask", 0)
@@ -113,8 +113,8 @@ func export_cfg_columnset(filePath, fullExport): #"res://columns.cfg"
 			continue
 		
 		textFile.store_line('[column' + str(i) +']')
-		textFile.store_line('Utilized = ' + str(Columnset.utilized[i])) #(0-1)
-		textFile.store_line('Permanent = ' + str(Columnset.permanent[i])) #(2)
+#		textFile.store_line('Utilized = ' + str(Columnset.utilized[i])) #(0-1)
+#		textFile.store_line('Permanent = ' + str(Columnset.permanent[i])) #(2)
 		textFile.store_line('Lintel = ' + str(Columnset.lintel[i])) #(2)
 		textFile.store_line('Height = ' + str(Columnset.height[i])) #(2)
 		textFile.store_line('SolidMask = ' + str(Columnset.solidMask[i])) #(3-4)
@@ -134,10 +134,10 @@ func find_all_different_columns():
 	return diff_indices
 
 func is_column_different(index):
-	if utilized[index] != default_data["utilized"][index]:
-		return true
-	if permanent[index] != default_data["permanent"][index]:
-		return true
+#	if utilized[index] != default_data["utilized"][index]:
+#		return true
+#	if permanent[index] != default_data["permanent"][index]:
+#		return true
 	if lintel[index] != default_data["lintel"][index]:
 		return true
 	if height[index] != default_data["height"][index]:

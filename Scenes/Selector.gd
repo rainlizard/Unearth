@@ -1,5 +1,5 @@
 extends Node2D
-
+onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
@@ -27,15 +27,14 @@ onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
-onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oTabCustomSlabs = Nodelist.list["oTabCustomSlabs"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oSlabSideViewer = Nodelist.list["oSlabSideViewer"]
+onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -203,10 +202,9 @@ func mouse_button_on_field():
 	
 	if Input.is_action_pressed("mouse_right"):
 		if visible == true:
-			if oColumnEditor.visible == true and oColumnEditorTabs.current_tab == 1:
+			if oAddCustomSlabWindow.visible == true:
 				#oMessage.quick("Sent column indexes to Fake Slab window")
-				oTabCustomSlabs.get_column_indexes_on_tile(cursorTile)
-				
+				oAddCustomObjectWindow.get_column_indexes_on_tile(cursorTile)
 	
 	# Lose inspection when right clicking
 	if Input.is_action_just_released("mouse_right"):

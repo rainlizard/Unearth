@@ -1,9 +1,9 @@
-extends HBoxContainer
-onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
+extends WindowDialog
+onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
+onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
 onready var oSlabRecognizedAs = Nodelist.list["oSlabRecognizedAs"]
 onready var oSlabRecognizedAsName = Nodelist.list["oSlabRecognizedAsName"]
-onready var oCustomSlabsTab = Nodelist.list["oCustomSlabsTab"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oNewSlabName = Nodelist.list["oNewSlabName"]
@@ -14,10 +14,10 @@ onready var oSlabWibbleOptionButton = Nodelist.list["oSlabWibbleOptionButton"]
 onready var oSlabLiquidOptionButton = Nodelist.list["oSlabLiquidOptionButton"]
 onready var oWibbleEdgesCheckBox = Nodelist.list["oWibbleEdgesCheckBox"]
 onready var oWibbleEdgesSpacing = Nodelist.list["oWibbleEdgesSpacing"]
-onready var oColumnEditorTabs = Nodelist.list["oColumnEditorTabs"]
 onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
+onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
 var customSlabArrayOfSpinbox = []
@@ -35,10 +35,15 @@ func _ready():
 	
 	_on_SlabRecognizedAs_value_changed(oSlabRecognizedAs.value)
 
+func _on_AddCustomSlabWindow_visibility_changed():
+	if visible == true:
+		oCustomSlabVoxelView.initialize()
+
 func shortcut_pressed(id):
 	var spinbox = id.get_node("CustomSpinBox")
 	var clmIndex = spinbox.value
-	oColumnEditorTabs.set_current_tab(0)
+	
+	Utils.popup_centered(oColumnEditor)
 	oColumnEditorControls.oColumnIndexSpinBox.value = clmIndex
 
 func _on_SlabRecognizedAs_value_changed(value):
@@ -77,14 +82,6 @@ func _on_AddCustomSlabButton_pressed():
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
 	oPickSlabWindow.set_selection(newID)
 
-func _on_HelpCustomSlabsButton_pressed():
-	var helptext = ""
-	helptext += "With a few exceptions, most Fake Slabs will reset their appearance in-game when placing or claiming an adjacent slab. To avoid this, set 'Recognized as' to one of the following: Slab 50, Impenetrable Rock, Gold, Bridge, Gems, Guard post, Doors (without door object). Needs further testing."
-	helptext += "\n\n"
-	helptext += "After adding one, right click on its portrait within the slab selection window to remove Fake Slabs from the editor."
-	helptext += "\n\n"
-	helptext += "Right click on the map while the Fake Slab menu is open to copy column index numbers into the window."
-	oMessage.big("Help",helptext)
 
 
 func _on_SlabWibbleOptionButton_item_selected(index):
@@ -112,3 +109,24 @@ func get_column_indexes_on_tile(cursorTile):
 			var i = (ySubtile*3) + xSubtile
 			customSlabArrayOfSpinbox[i].value = newIndex
 
+
+
+
+func _on_FakeSlabHelpButton_pressed():
+	var helptext = ""
+	helptext += "Fake slabs will work in any solo map.\n"
+	helptext += "They typically reset their appearance when placing or claiming an adjacent slab.\n"
+	helptext += "Set 'Slab ID' to Slab 50 to prevent the appearance from changing.\n"
+	helptext += "There's a few other IDs you can use which may not reset: Impenetrable Rock, Gold, Bridge, Gems, Guard post. But this needs further testing.\n\n"
+	helptext += "Right click on the map while the Fake slab menu is open to copy column index numbers into the window."
+	oMessage.big("Help",helptext)
+
+func _on_SlabsetSlabHelpButton_pressed():
+	var helptext = ""
+	helptext += "Slabset slabs will only work in a campaign/mappack. It requires the slabset.cfg and columnset.cfg files to be in the correct place."
+	oMessage.big("Help",helptext)
+
+func _on_HelpCustomSlabsButton_pressed():
+	var helptext = ""
+	helptext += "After adding a custom slab, right click on its portrait within the slab selection window to remove it from the editor."
+	oMessage.big("Help",helptext)
