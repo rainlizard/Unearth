@@ -5063,26 +5063,26 @@ margin_right = 1332.0
 margin_bottom = 823.0
 
 [node name="CustomSlabVoxelView" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 1036.0
+margin_right = 971.0
 margin_bottom = 813.0
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer"]
-margin_left = 1040.0
+margin_left = 975.0
 margin_right = 1322.0
 margin_bottom = 813.0
 
 [node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_right = 282.0
+margin_right = 347.0
 margin_bottom = 86.0
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 273.0
+margin_right = 338.0
 margin_bottom = 77.0
 columns = 2
 
-[node name="CheckBox" type="CheckBox" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer"]
+[node name="SlabsetSlabCheckBox" type="CheckBox" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer"]
 margin_right = 137.0
 margin_bottom = 32.0
 pressed = true
@@ -5090,8 +5090,8 @@ group = ExtResource( 47 )
 text = "Slabset slab"
 
 [node name="SlabsetSlabHelpButton" type="TextureButton" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer"]
-margin_left = 232.0
-margin_right = 264.0
+margin_left = 297.0
+margin_right = 329.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 10
@@ -5102,7 +5102,7 @@ texture_hover = ExtResource( 128 )
 expand = true
 stretch_mode = 4
 
-[node name="CheckBox2" type="CheckBox" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer"]
+[node name="FakeSlabCheckBox" type="CheckBox" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer"]
 margin_top = 36.0
 margin_right = 137.0
 margin_bottom = 68.0
@@ -5110,9 +5110,9 @@ group = ExtResource( 47 )
 text = "Fake slab"
 
 [node name="FakeSlabHelpButton" type="TextureButton" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer"]
-margin_left = 232.0
+margin_left = 297.0
 margin_top = 36.0
-margin_right = 264.0
+margin_right = 329.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 10
@@ -5125,28 +5125,19 @@ stretch_mode = 4
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2"]
 margin_top = 90.0
-margin_right = 282.0
-margin_bottom = 759.0
+margin_right = 347.0
+margin_bottom = 261.0
 size_flags_horizontal = 3
-size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 273.0
-margin_bottom = 660.0
+margin_right = 338.0
+margin_bottom = 162.0
 size_flags_horizontal = 3
-size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer"]
-margin_right = 264.0
-margin_bottom = 651.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer"]
-margin_right = 264.0
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer"]
+margin_right = 329.0
 margin_bottom = 153.0
 size_flags_horizontal = 3
 columns = 2
@@ -5154,18 +5145,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label3" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label3" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
 margin_top = 5.0
-margin_right = 110.0
+margin_right = 175.0
 margin_bottom = 26.0
+rect_min_size = Vector2( 175, 0 )
 text = "Editor name"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NewSlabName" type="LineEdit" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
-margin_left = 114.0
-margin_right = 264.0
+[node name="NewSlabName" type="LineEdit" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 179.0
+margin_right = 329.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 150, 0 )
 hint_tooltip = "The name to display inside slab picker window."
@@ -5174,19 +5166,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
 margin_top = 35.0
-margin_right = 110.0
+margin_right = 175.0
 margin_bottom = 56.0
-hint_tooltip = "SLB value"
+hint_tooltip = ".slb value"
 mouse_filter = 1
 size_flags_vertical = 0
 text = "Slab ID"
 
-[node name="SlabRecognizedAs" type="SpinBox" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
-margin_left = 190.0
+[node name="CustomSlabID" type="SpinBox" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 255.0
 margin_top = 35.0
-margin_right = 264.0
+margin_right = 329.0
 margin_bottom = 66.0
 mouse_filter = 1
 size_flags_horizontal = 8
@@ -5198,33 +5190,34 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="EmptySpace" type="Control" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="EmptySpace" type="Control" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
 margin_top = 70.0
-margin_right = 110.0
+margin_right = 175.0
 margin_bottom = 91.0
 
-[node name="SlabRecognizedAsName" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
-margin_left = 114.0
+[node name="CustomSlabNameLabel" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 179.0
 margin_top = 70.0
-margin_right = 264.0
+margin_right = 329.0
 margin_bottom = 91.0
 text = "Test"
 align = 2
 autowrap = true
 
-[node name="Label4" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label4" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
 margin_top = 98.0
-margin_right = 110.0
+margin_right = 175.0
 margin_bottom = 119.0
+hint_tooltip = ".wlb value"
 text = "Liquid"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SlabLiquidOptionButton" type="OptionButton" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
-margin_left = 114.0
+[node name="SlabLiquidOptionButton" type="OptionButton" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 179.0
 margin_top = 95.0
-margin_right = 264.0
+margin_right = 329.0
 margin_bottom = 122.0
 rect_min_size = Vector2( 150, 0 )
 hint_tooltip = "If a bridge is placed on this slab, this indicates what's underneath the bridge."
@@ -5233,19 +5226,20 @@ text = "0 : No"
 items = [ "0 : No", null, false, 0, null, "1 : Lava", null, false, 1, null, "2 : Water", null, false, 2, null ]
 selected = 0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Label" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
 margin_top = 129.0
-margin_right = 110.0
+margin_right = 175.0
 margin_bottom = 150.0
+hint_tooltip = ".wib value"
 text = "Wibble"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SlabWibbleOptionButton" type="OptionButton" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
-margin_left = 114.0
+[node name="SlabWibbleOptionButton" type="OptionButton" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 179.0
 margin_top = 126.0
-margin_right = 264.0
+margin_right = 329.0
 margin_bottom = 153.0
 rect_min_size = Vector2( 150, 0 )
 hint_tooltip = "Sets whether the slab will have a clean appearance, a deformed appearance, or a wavy appearance."
@@ -5254,7 +5248,7 @@ text = "1 : On"
 items = [ "0 : Off", null, false, 0, null, "1 : On", null, false, 1, null, "2 : Animated", null, false, 2, null ]
 selected = 1
 
-[node name="WibbleEdgesSpacing" type="Control" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="WibbleEdgesSpacing" type="Control" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
 visible = false
 margin_top = 157.0
 margin_right = 128.0
@@ -5263,7 +5257,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WibbleEdgesCheckBox" type="CheckBox" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="WibbleEdgesCheckBox" type="CheckBox" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
 visible = false
 margin_top = 157.0
 margin_right = 148.0
@@ -5274,57 +5268,43 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer"]
-margin_top = 157.0
-margin_right = 264.0
-margin_bottom = 177.0
-rect_min_size = Vector2( 20, 20 )
+[node name="FakeCustomColumnsPanelContainer" type="PanelContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 265.0
+margin_right = 347.0
+margin_bottom = 308.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer"]
-margin_left = 72.0
-margin_top = 181.0
-margin_right = 191.0
-margin_bottom = 202.0
-size_flags_horizontal = 4
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/FakeCustomColumnsPanelContainer"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 338.0
+margin_bottom = 34.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
-margin_right = 119.0
+[node name="Label" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/FakeCustomColumnsPanelContainer/VBoxContainer"]
+margin_left = 105.0
+margin_right = 224.0
 margin_bottom = 21.0
 size_flags_horizontal = 4
 text = "Map columns"
 align = 1
 
-[node name="UnusedDotDotDotButton" type="Button" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
-visible = false
-margin_left = 85.0
-margin_right = 109.0
-margin_bottom = 27.0
-text = "..."
-
-[node name="GridContainerCustomColumns3x3" type="GridContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer"]
-margin_left = 132.0
-margin_top = 206.0
-margin_right = 132.0
-margin_bottom = 206.0
+[node name="GridContainerCustomColumns3x3" type="GridContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/FakeCustomColumnsPanelContainer/VBoxContainer"]
+margin_left = 164.0
+margin_top = 25.0
+margin_right = 164.0
+margin_bottom = 25.0
 size_flags_horizontal = 6
 size_flags_vertical = 4
 columns = 3
 
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer"]
-margin_top = 210.0
-margin_right = 264.0
-margin_bottom = 230.0
-rect_min_size = Vector2( 20, 20 )
-
 [node name="PanelContainer3" type="PanelContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 763.0
-margin_right = 282.0
-margin_bottom = 813.0
+margin_top = 312.0
+margin_right = 347.0
+margin_bottom = 362.0
 
 [node name="AddCustomSlabButton" type="Button" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer3"]
-margin_left = 117.0
+margin_left = 150.0
 margin_top = 14.0
-margin_right = 164.0
+margin_right = 197.0
 margin_bottom = 41.0
 size_flags_horizontal = 6
 size_flags_vertical = 8
@@ -5334,9 +5314,9 @@ __meta__ = {
 }
 
 [node name="HelpCustomSlabsButton" type="TextureButton" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer3"]
-margin_left = 241.0
+margin_left = 306.0
 margin_top = 9.0
-margin_right = 273.0
+margin_right = 338.0
 margin_bottom = 41.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 8
@@ -7051,10 +7031,12 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorSortButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorSortButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorHelpButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorHelpButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/AddCustomSlabWindow" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_AddCustomSlabWindow_visibility_changed"]
+[connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer/SlabsetSlabCheckBox" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabsetSlabCheckBox_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer/SlabsetSlabHelpButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabsetSlabHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer/FakeSlabCheckBox" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_FakeSlabCheckBox_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer/FakeSlabHelpButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_FakeSlabHelpButton_pressed"]
-[connection signal="value_changed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer/SlabRecognizedAs" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabRecognizedAs_value_changed"]
-[connection signal="item_selected" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/ScrollContainer/VBoxContainer/GridContainer/SlabWibbleOptionButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabWibbleOptionButton_item_selected"]
+[connection signal="value_changed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/CustomSlabID" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_CustomSlabID_value_changed"]
+[connection signal="item_selected" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/SlabWibbleOptionButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabWibbleOptionButton_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer3/AddCustomSlabButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_AddCustomSlabButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer3/HelpCustomSlabsButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_HelpCustomSlabsButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/SlabsetWindow" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetWindow_visibility_changed"]

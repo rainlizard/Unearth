@@ -2,8 +2,8 @@ extends WindowDialog
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
-onready var oSlabRecognizedAs = Nodelist.list["oSlabRecognizedAs"]
-onready var oSlabRecognizedAsName = Nodelist.list["oSlabRecognizedAsName"]
+onready var oCustomSlabID = Nodelist.list["oCustomSlabID"]
+onready var oCustomSlabNameLabel = Nodelist.list["oCustomSlabNameLabel"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oNewSlabName = Nodelist.list["oNewSlabName"]
@@ -18,9 +18,12 @@ onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
+onready var oFakeSlabCheckBox = Nodelist.list["oFakeSlabCheckBox"]
+onready var oFakeCustomColumnsPanelContainer = Nodelist.list["oFakeCustomColumnsPanelContainer"]
 
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
 var customSlabArrayOfSpinbox = []
+
 
 func _ready():
 	for number in 9:
@@ -33,10 +36,12 @@ func _ready():
 		customSlabArrayOfSpinbox.append(spinbox)
 		oGridContainerCustomColumns3x3.add_child(id)
 	
-	_on_SlabRecognizedAs_value_changed(oSlabRecognizedAs.value)
+	_on_CustomSlabID_value_changed(oCustomSlabID.value)
+
 
 func _on_AddCustomSlabWindow_visibility_changed():
 	if visible == true:
+		update_type()
 		oCustomSlabVoxelView.initialize()
 
 func shortcut_pressed(id):
@@ -46,15 +51,40 @@ func shortcut_pressed(id):
 	Utils.popup_centered(oColumnEditor)
 	oColumnEditorControls.oColumnIndexSpinBox.value = clmIndex
 
-func _on_SlabRecognizedAs_value_changed(value):
+
+func _on_CustomSlabID_value_changed(value):
 	var slabName = "Unknown"
 	value = int(value)
 	if Slabs.data.has(value):
 		slabName = Slabs.data[value][Slabs.NAME]
-	oSlabRecognizedAsName.text = slabName
+	oCustomSlabNameLabel.text = slabName
 
 
 func _on_AddCustomSlabButton_pressed():
+	if oFakeSlabCheckBox.pressed == true:
+		add_fake_slab()
+	else:
+		add_slabset_slab()
+
+
+func add_slabset_slab():
+	var newID = oCustomSlabID.value # We'll say fake slabs are ID 1000 and up
+	#if oCustomSlabSystem.data.has(newID) == true:
+	
+	var slabName = oNewSlabName.text
+	var recognizedAs = oCustomSlabID.value
+	var liquidType = oSlabLiquidOptionButton.get_selected_id()
+	var wibbleType = oSlabWibbleOptionButton.get_selected_id() #Slabs.WIBBLE_ON
+	var wibbleEdges = oWibbleEdgesCheckBox.pressed
+	
+	oCustomSlabSystem.add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, [], [])
+	
+	oPickSlabWindow.add_slabs()
+	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
+	oPickSlabWindow.set_selection(newID)
+
+
+func add_fake_slab():
 	var newID = 1000 # We'll say fake slabs are ID 1000 and up
 	while true: # Find an unused ID within the fake data dictionary
 		if oCustomSlabSystem.data.has(newID) == false:
@@ -63,7 +93,7 @@ func _on_AddCustomSlabButton_pressed():
 			newID += 1
 	
 	var slabName = oNewSlabName.text
-	var recognizedAs = oSlabRecognizedAs.value
+	var recognizedAs = oCustomSlabID.value
 	var liquidType = oSlabLiquidOptionButton.get_selected_id()
 	var wibbleType = oSlabWibbleOptionButton.get_selected_id() #Slabs.WIBBLE_ON
 	var wibbleEdges = oWibbleEdgesCheckBox.pressed
@@ -81,7 +111,6 @@ func _on_AddCustomSlabButton_pressed():
 	oPickSlabWindow.add_slabs()
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
 	oPickSlabWindow.set_selection(newID)
-
 
 
 func _on_SlabWibbleOptionButton_item_selected(index):
@@ -110,6 +139,21 @@ func get_column_indexes_on_tile(cursorTile):
 			customSlabArrayOfSpinbox[i].value = newIndex
 
 
+
+func update_type():
+	if oFakeSlabCheckBox.pressed == true:
+		oFakeCustomColumnsPanelContainer.visible = true
+		oCustomSlabVoxelView.modulate.a = 1
+	else:
+		oFakeCustomColumnsPanelContainer.visible = false
+		oCustomSlabVoxelView.modulate.a = 0
+
+
+func _on_SlabsetSlabCheckBox_pressed():
+	update_type()
+
+func _on_FakeSlabCheckBox_pressed():
+	update_type()
 
 
 func _on_FakeSlabHelpButton_pressed():

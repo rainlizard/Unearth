@@ -42,8 +42,8 @@ func load_file():
 		var slabCubeData = []
 		var slabFloorData = []
 		for i in 9:
-			slabCubeData.append( cfg.get_value(section, "cubes"+str(i)) )
-			slabFloorData.append( cfg.get_value(section, "floor"+str(i)) )
+			slabCubeData.append( cfg.get_value(section, "cubes"+str(i), []))
+			slabFloorData.append( cfg.get_value(section, "floor"+str(i), []))
 		
 		add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData)
 
@@ -71,8 +71,10 @@ func add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibb
 	cfg.set_value(section,"wibble_edges", wibbleEdges)
 	
 	for i in 9:
-		cfg.set_value(section,"cubes"+str(i),slabCubeData[i])
-		cfg.set_value(section,"floor"+str(i),slabFloorData[i])
+		if slabCubeData.size() > 0:
+			cfg.set_value(section,"cubes"+str(i),slabCubeData[i])
+		if slabFloorData.size() > 0:
+			cfg.set_value(section,"floor"+str(i),slabFloorData[i])
 	
 	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
 
