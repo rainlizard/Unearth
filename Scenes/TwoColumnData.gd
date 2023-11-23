@@ -154,9 +154,9 @@ func _on_property_value_focus_exited(callingNode, leftString):
 	match leftString:
 		"Position":
 			callingNode.oLineEditX.text = str(clamp(float(callingNode.oLineEditX.text), 0.0, M.xSize*3))
-			callingNode.oLineEditY.text = str(clamp(float(callingNode.oLineEditY.text), 0.0, M.xSize*3))
+			callingNode.oLineEditY.text = str(clamp(float(callingNode.oLineEditY.text), 0.0, M.ySize*3))
 			if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
-				callingNode.oLineEditZ.text = str(clamp(float(callingNode.oLineEditZ.text), 0.0, M.xSize*3))
+				callingNode.oLineEditZ.text = str(clamp(float(callingNode.oLineEditZ.text), 0.0, 255.0))
 #	if callingNode is SpinBox:
 #		callingNode.value = float(callingNode.value)
 	update_property_value(callingNode, leftString)

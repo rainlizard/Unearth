@@ -237,7 +237,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	for i in removeFromShape:
 		shapePositionArray.erase(i)
 	
-	print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	#print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 
@@ -304,7 +304,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	
 	oLoadingBar.visible = false
 	
-	print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	#print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
 
@@ -405,8 +405,8 @@ func auto_wall(xSlab:int, ySlab:int, slabID, surrID):
 	
 	# Checkerboard
 	if (int(xSlab) % 2 == 0 and int(ySlab) % 2 == 0) or (int(xSlab) % 2 == 1 and int(ySlab) % 2 == 1):
-		for dir in [Vector2(0,1),Vector2(-1,0),Vector2(0,-1),Vector2(1,0)]:
-			if oDataSlab.get_cell(xSlab+dir.x, ySlab+dir.y) == Slabs.CLAIMED_GROUND:
+		for i in [Vector2(0,1),Vector2(-1,0),Vector2(0,-1),Vector2(1,0)]:
+			if oDataSlab.get_cell(xSlab+i.x, ySlab+i.y) == Slabs.CLAIMED_GROUND:
 				slabID = Slabs.WALL_WITH_BANNER
 	
 	# Torch wall takes priority
@@ -845,19 +845,17 @@ func get_claimed_bitmask(slabID, ownership, surrID, surrOwner):
 	return bitmask
 
 func get_general_bitmask(slabID, ownership, surrID, surrOwner):
-	var bitmask = 0
+	var bitmask = 0 # Center
 	if slabID != surrID[dir.s] or ownership != surrOwner[dir.s]: bitmask += 1
 	if slabID != surrID[dir.w] or ownership != surrOwner[dir.w]: bitmask += 2
 	if slabID != surrID[dir.n] or ownership != surrOwner[dir.n]: bitmask += 4
 	if slabID != surrID[dir.e] or ownership != surrOwner[dir.e]: bitmask += 8
 	
-	# Middle slab
+	# There's two kinds of 'constructed' middle slabs. slab_center and slab_partial_center
 	if bitmask == 0:
-		if Slabs.rooms_with_middle_slab.has(slabID):
-			if slabID != surrID[dir.se] or slabID != surrID[dir.sw] or slabID != surrID[dir.ne] or slabID != surrID[dir.nw] or ownership != surrOwner[dir.se] or ownership != surrOwner[dir.sw] or ownership != surrOwner[dir.ne] or ownership != surrOwner[dir.nw]:
-				bitmask = 15
-				if slabID == Slabs.TEMPLE: # Temple is just odd
-					bitmask = 1000
+		if slabID != surrID[dir.se] or slabID != surrID[dir.sw] or slabID != surrID[dir.ne] or slabID != surrID[dir.nw] or ownership != surrOwner[dir.se] or ownership != surrOwner[dir.sw] or ownership != surrOwner[dir.ne] or ownership != surrOwner[dir.nw]:
+			bitmask = 500 # partial_center
+	
 	return bitmask
 
 
@@ -1053,218 +1051,24 @@ func make_slab(fullVariationIndex, bitmask):
 	return constructedSlab
 
 var bitmaskToSlab = {
-	00:slab_center,
-	01:slab_s,
-	02:slab_w,
-	04:slab_n,
-	08:slab_e,
-	03:slab_sw,
-	06:slab_nw,
-	12:slab_ne,
-	09:slab_se,
-	15:slab_all,
-	05:slab_sn,
-	10:slab_ew,
-	07:slab_swn,
-	11:slab_swe,
-	13:slab_sen,
-	14:slab_wne,
-	1000:slab_temple_odd,
+	00: VariationConstructs.slab_center,
+	500: VariationConstructs.slab_partial_center,
+	01: VariationConstructs.slab_s,
+	02: VariationConstructs.slab_w,
+	04: VariationConstructs.slab_n,
+	08: VariationConstructs.slab_e,
+	03: VariationConstructs.slab_sw,
+	06: VariationConstructs.slab_nw,
+	12: VariationConstructs.slab_ne,
+	09: VariationConstructs.slab_se,
+	15: VariationConstructs.slab_solo,
+	05: VariationConstructs.slab_sn,
+	10: VariationConstructs.slab_ew,
+	07: VariationConstructs.slab_swn,
+	11: VariationConstructs.slab_swe,
+	13: VariationConstructs.slab_sen,
+	14: VariationConstructs.slab_wne,
 }
-
-const slab_center = [
-	dir.center, # subtile 0
-	dir.center, # subtile 1
-	dir.center, # subtile 2
-	dir.center, # subtile 3
-	dir.center, # subtile 4
-	dir.center, # subtile 5
-	dir.center, # subtile 6
-	dir.center, # subtile 7
-	dir.center, # subtile 8
-]
-const slab_s = [
-	dir.s, # subtile 0
-	dir.s, # subtile 1
-	dir.s, # subtile 2
-	dir.s, # subtile 3
-	dir.s, # subtile 4
-	dir.s, # subtile 5
-	dir.s, # subtile 6
-	dir.s, # subtile 7
-	dir.s, # subtile 8
-]
-const slab_w = [
-	dir.w, # subtile 0
-	dir.w, # subtile 1
-	dir.w, # subtile 2
-	dir.w, # subtile 3
-	dir.w, # subtile 4
-	dir.w, # subtile 5
-	dir.w, # subtile 6
-	dir.w, # subtile 7
-	dir.w, # subtile 8
-]
-const slab_n = [
-	dir.n, # subtile 0
-	dir.n, # subtile 1
-	dir.n, # subtile 2
-	dir.n, # subtile 3
-	dir.n, # subtile 4
-	dir.n, # subtile 5
-	dir.n, # subtile 6
-	dir.n, # subtile 7
-	dir.n, # subtile 8
-]
-const slab_e = [
-	dir.e, # subtile 0
-	dir.e, # subtile 1
-	dir.e, # subtile 2
-	dir.e, # subtile 3
-	dir.e, # subtile 4
-	dir.e, # subtile 5
-	dir.e, # subtile 6
-	dir.e, # subtile 7
-	dir.e, # subtile 8
-]
-const slab_sw = [
-	dir.sw, # subtile 0
-	dir.sw, # subtile 1
-	dir.sw, # subtile 2
-	dir.sw, # subtile 3
-	dir.sw, # subtile 4
-	dir.sw, # subtile 5
-	dir.sw, # subtile 6
-	dir.sw, # subtile 7
-	dir.sw, # subtile 8
-]
-const slab_nw = [
-	dir.nw, # subtile 0
-	dir.nw, # subtile 1
-	dir.nw, # subtile 2
-	dir.nw, # subtile 3
-	dir.nw, # subtile 4
-	dir.nw, # subtile 5
-	dir.nw, # subtile 6
-	dir.nw, # subtile 7
-	dir.nw, # subtile 8
-]
-const slab_ne = [
-	dir.ne, # subtile 0
-	dir.ne, # subtile 1
-	dir.ne, # subtile 2
-	dir.ne, # subtile 3
-	dir.ne, # subtile 4
-	dir.ne, # subtile 5
-	dir.ne, # subtile 6
-	dir.ne, # subtile 7
-	dir.ne, # subtile 8
-]
-const slab_se = [
-	dir.se, # subtile 0
-	dir.se, # subtile 1
-	dir.se, # subtile 2
-	dir.se, # subtile 3
-	dir.se, # subtile 4
-	dir.se, # subtile 5
-	dir.se, # subtile 6
-	dir.se, # subtile 7
-	dir.se, # subtile 8
-]
-const slab_all = [
-	dir.all, # subtile 0
-	dir.all, # subtile 1
-	dir.all, # subtile 2
-	dir.all, # subtile 3
-	dir.all, # subtile 4
-	dir.all, # subtile 5
-	dir.all, # subtile 6
-	dir.all, # subtile 7
-	dir.all, # subtile 8
-]
-const slab_sn = [
-	dir.n, # subtile 0
-	dir.n, # subtile 1
-	dir.n, # subtile 2
-	dir.s, # subtile 3
-	dir.all, # subtile 4
-	dir.s, # subtile 5
-	dir.s, # subtile 6
-	dir.s, # subtile 7
-	dir.s, # subtile 8
-]
-
-const slab_ew = [
-	dir.w, # subtile 0
-	dir.w, # subtile 1
-	dir.e, # subtile 2
-	dir.w, # subtile 3
-	dir.all, # subtile 4
-	dir.e, # subtile 5
-	dir.w, # subtile 6
-	dir.w, # subtile 7
-	dir.e, # subtile 8
-]
-
-const slab_sen = [
-	dir.ne, # subtile 0
-	dir.ne, # subtile 1
-	dir.ne, # subtile 2
-	dir.se, # subtile 3
-	dir.all, # subtile 4
-	dir.all, # subtile 5
-	dir.se, # subtile 6
-	dir.se, # subtile 7
-	dir.se, # subtile 8
-]
-
-const slab_swe = [
-	dir.sw, # subtile 0
-	dir.sw, # subtile 1
-	dir.se, # subtile 2
-	dir.sw, # subtile 3
-	dir.all, # subtile 4
-	dir.se, # subtile 5
-	dir.sw, # subtile 6
-	dir.all, # subtile 7
-	dir.se, # subtile 8
-]
-
-const slab_swn = [
-	dir.nw, # subtile 0
-	dir.nw, # subtile 1
-	dir.nw, # subtile 2
-	dir.all, # subtile 3
-	dir.all, # subtile 4
-	dir.sw, # subtile 5
-	dir.sw, # subtile 6
-	dir.sw, # subtile 7
-	dir.sw, # subtile 8
-]
-
-const slab_wne = [
-	dir.nw, # subtile 0
-	dir.all, # subtile 1
-	dir.ne, # subtile 2
-	dir.nw, # subtile 3
-	dir.all, # subtile 4
-	dir.ne, # subtile 5
-	dir.nw, # subtile 6
-	dir.nw, # subtile 7
-	dir.ne, # subtile 8
-]
-
-const slab_temple_odd = [
-	dir.s, # subtile 0
-	dir.s, # subtile 1
-	dir.s, # subtile 2
-	dir.e, # subtile 3
-	dir.all, # subtile 4
-	dir.w, # subtile 5
-	dir.n, # subtile 6
-	dir.n, # subtile 7
-	dir.n, # subtile 8
-]
 
 func update_wibble(xSlab, ySlab, slabID, includeNearby):
 	# I'm using surrounding wibble to update this slab's wibble, instead of using surrounding slabID, this is for the sake of Fake Slabs

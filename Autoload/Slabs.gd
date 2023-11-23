@@ -23,34 +23,6 @@ enum {
 	REMEMBER_TYPE
 	IS_OWNABLE
 }
-enum {
-	REMEMBER_PATH
-	REMEMBER_LAVA
-	REMEMBER_WATER
-}
-enum {
-	WIBBLE_OFF
-	WIBBLE_ON
-	WIBBLE_ANIMATED
-}
-enum {
-	TAB_MAINSLAB
-	TAB_OTHER
-	TAB_CUSTOM
-	TAB_STYLE
-	TAB_OWNER
-	TAB_NONE
-}
-const OWNABLE = true
-const NOT_OWNABLE = false
-const BLOCK_SLAB = true
-const FLOOR_SLAB = false
-
-enum {
-	PANEL_TOP_VIEW
-	PANEL_SIDE_VIEW
-	PANEL_DOOR_VIEW
-}
 
 var auto_wall_updates_these = {
 	WALL_WITH_BANNER:null,
@@ -59,19 +31,6 @@ var auto_wall_updates_these = {
 	WALL_WITH_WOMAN:null,
 	WALL_WITH_PAIR:null,
 	WALL_DAMAGED:null,
-}
-
-var rooms_with_middle_slab = {
-	LIBRARY:null,
-	TEMPLE:null,
-	BARRACKS:null,
-	DUNGEON_HEART:null,
-}
-var rooms_with_middle_object = {
-	SCAVENGER_ROOM:null,
-	WORKSHOP:null,
-	TRAINING_ROOM:null,
-	TORTURE_CHAMBER:null,
 }
 
 enum {
@@ -151,6 +110,35 @@ func _init():
 		if data.has(i) == false:
 			data[i] = data[-1]
 	#print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+
+########################################################################
+# These are just to make it easier to read
+const OWNABLE = true
+const NOT_OWNABLE = false
+const BLOCK_SLAB = true
+const FLOOR_SLAB = false
+enum {
+	REMEMBER_PATH
+	REMEMBER_LAVA
+	REMEMBER_WATER
+	
+	WIBBLE_OFF
+	WIBBLE_ON
+	WIBBLE_ANIMATED
+	
+	TAB_MAINSLAB
+	TAB_OTHER
+	TAB_CUSTOM
+	TAB_STYLE
+	TAB_OWNER
+	TAB_NONE
+	
+	PANEL_TOP_VIEW
+	PANEL_SIDE_VIEW
+	PANEL_DOOR_VIEW
+}
+########################################################################
 
 var data = {
 	-1:                  ["Unknown",               BLOCK_SLAB, BITMASK_TALL, PANEL_TOP_VIEW,  0, TAB_MAINSLAB, WIBBLE_ON,       REMEMBER_PATH,   OWNABLE], # -1

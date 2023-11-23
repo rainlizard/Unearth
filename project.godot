@@ -28,12 +28,18 @@ _global_script_classes=[ {
 "class": "SpinBoxPropertiesValue",
 "language": "GDScript",
 "path": "res://Scenes/SpinBoxPropertiesValue.gd"
+}, {
+"base": "Node",
+"class": "VariationConstructs",
+"language": "GDScript",
+"path": "res://Scenes/ConstructedVariations.gd"
 } ]
 _global_script_class_icons={
 "CustomSpinBox": "",
 "EditableLabel": "",
 "SpecialTabContainer": "",
-"SpinBoxPropertiesValue": ""
+"SpinBoxPropertiesValue": "",
+"VariationConstructs": ""
 }
 
 [application]

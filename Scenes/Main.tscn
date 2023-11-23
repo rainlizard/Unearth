@@ -1,4 +1,4 @@
-[gd_scene load_steps=179 format=2]
+[gd_scene load_steps=180 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -157,6 +157,7 @@
 [ext_resource path="res://Scenes/GridDataButtongroup.tres" type="ButtonGroup" id=155]
 [ext_resource path="res://Art/HelpIcon.png" type="Texture" id=156]
 [ext_resource path="res://Scenes/AddCustomSlabWindow.gd" type="Script" id=157]
+[ext_resource path="res://Scenes/ConstructedVariations.gd" type="Script" id=158]
 
 [sub_resource type="TileSet" id=1]
 0/name = "Wibble_0.png 0"
@@ -367,6 +368,9 @@ script = ExtResource( 75 )
 
 [node name="SlabPlacement" type="Node" parent="."]
 script = ExtResource( 2 )
+
+[node name="VariationConstructs" type="Node" parent="SlabPlacement"]
+script = ExtResource( 158 )
 
 [node name="PlaceThingWithSlab" type="Node" parent="SlabPlacement"]
 script = ExtResource( 80 )

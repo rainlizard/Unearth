@@ -253,7 +253,7 @@ func start():
 #				pal = Slabset.dat[slabVariation + dir.se]
 #				selection = [0,1,2,3,4,6]
 #			8:
-#				pal = Slabset.dat[slabVariation + dir.all]
+#				pal = Slabset.dat[slabVariation + dir.solo]
 #				selection = [1,3,4,5,7]
 #			9:
 #				pal = Slabset.dat[slabVariation + dir.s + 9]
@@ -306,7 +306,7 @@ func start():
 #				pal = Slabset.dat[slabVariation + dir.se + 18]
 #				selection = [2,4,5,6,7]
 #			8:
-#				pal = Slabset.dat[slabVariation + dir.all + 18]
+#				pal = Slabset.dat[slabVariation + dir.solo + 18]
 #				selection = [0,1,2,3,5,6,7,8]
 #		for i in selection:
 #			var dkClmIndex = pal[i]
@@ -348,7 +348,7 @@ func start():
 #				pal = Slabset.dat[slabVariation + dir.se + 9]
 #				selection = [2,4,5,6,7]
 #			8:
-#				pal = Slabset.dat[slabVariation + dir.all + 9]
+#				pal = Slabset.dat[slabVariation + dir.solo + 9]
 #				selection = [0,1,2,3,5,6,7,8]
 #		for i in selection:
 #			var dkClmIndex = pal[i]
@@ -434,10 +434,10 @@ func start():
 #				Slabset.dat[slabVariation + dir.se][6] = dmgWall1
 #				Slabset.dat[slabVariation + dir.se][7] = dmgWall3
 #			8:
-#				Slabset.dat[slabVariation + dir.all][1] = dmgWall2
-#				Slabset.dat[slabVariation + dir.all][3] = dmgWall2
-#				Slabset.dat[slabVariation + dir.all][5] = dmgWall2
-#				Slabset.dat[slabVariation + dir.all][7] = dmgWall2
+#				Slabset.dat[slabVariation + dir.solo][1] = dmgWall2
+#				Slabset.dat[slabVariation + dir.solo][3] = dmgWall2
+#				Slabset.dat[slabVariation + dir.solo][5] = dmgWall2
+#				Slabset.dat[slabVariation + dir.solo][7] = dmgWall2
 #
 #	var dmgWallLava1 = oDataClm.index_entry([118,72,123,120,77,0,0,0], 27)
 #	var dmgWallLava2 = oDataClm.index_entry([118,72,124,121,77,0,0,0], 27)
@@ -481,10 +481,10 @@ func start():
 #				Slabset.dat[slabVariation + dir.se + 9][6] = dmgWallLava1
 #				Slabset.dat[slabVariation + dir.se + 9][7] = dmgWallLava3
 #			8:
-#				Slabset.dat[slabVariation + dir.all + 9][1] = dmgWallLava2
-#				Slabset.dat[slabVariation + dir.all + 9][3] = dmgWallLava2
-#				Slabset.dat[slabVariation + dir.all + 9][5] = dmgWallLava2
-#				Slabset.dat[slabVariation + dir.all + 9][7] = dmgWallLava2
+#				Slabset.dat[slabVariation + dir.solo + 9][1] = dmgWallLava2
+#				Slabset.dat[slabVariation + dir.solo + 9][3] = dmgWallLava2
+#				Slabset.dat[slabVariation + dir.solo + 9][5] = dmgWallLava2
+#				Slabset.dat[slabVariation + dir.solo + 9][7] = dmgWallLava2
 
 
 #func blah():
