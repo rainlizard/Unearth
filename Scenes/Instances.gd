@@ -421,8 +421,6 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 				4: id.queue_free() # White
 				5: id.queue_free() # None
 	
-	
-	print("Child added!")
 	add_child(id)
 	
 #	if slabID == Slabs.WALL_WITH_TORCH or slabID == Slabs.EARTH_WITH_TORCH:

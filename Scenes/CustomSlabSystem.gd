@@ -8,7 +8,6 @@ var cfg = ConfigFile.new()
 func _ready():
 	load_file()
 
-
 func load_file():
 	var filePath = Settings.unearthdata.plus_file("custom_slabs.cfg")
 	
@@ -27,8 +26,13 @@ func load_file():
 		var slabCubeData = []
 		var slabFloorData = []
 		for i in 9:
-			slabCubeData.append( cfg.get_value(section, "cubes"+str(i), []))
-			slabFloorData.append( cfg.get_value(section, "floor"+str(i), []))
+			var cd = cfg.get_value(section, "cubes"+str(i), [])
+			if cd.size() > 0:
+				slabCubeData.append(cd)
+			
+			var fd = cfg.get_value(section, "floor"+str(i), -1)
+			if fd != -1:
+				slabFloorData.append(fd)
 		
 		var slab_dict = {
 			"header_id": int(section.trim_prefix("slab")),
@@ -59,8 +63,16 @@ func add_custom_slab(slab_dict):
 		Slabs.TAB_CUSTOM,
 		slab_dict.wibble_type,
 		slab_dict.liquid_type,
-		slab_dict.ownable
+		slab_dict.ownable,
 	]
+	if slab_dict.header_id >= 1000:
+		Slabs.fake_extra_data[slab_dict.header_id] = [
+			slab_dict.cube_data,
+			slab_dict.floor_data,
+			slab_dict.recognized_as,
+			slab_dict.wibble_edges,
+		]
+	
 	var section = 'slab'+str(slab_dict.header_id)
 	cfg.set_value(section,"name", slab_dict.name)
 	cfg.set_value(section,"recognized_as", slab_dict.recognized_as)
@@ -81,15 +93,26 @@ func add_custom_slab(slab_dict):
 
 func remove_custom_slab(header_id):
 	oPickSlabWindow.set_selection(null)
-	
 	var statusOfRemoval = Slabs.data.erase(header_id)
 	if statusOfRemoval == true:
 		oMessage.quick("Removed custom slab")
 	else:
 		oMessage.quick("Tried to remove a custom slab that wasn't present in the data")
+	Slabs.fake_extra_data.erase(header_id)
 	
 	var section = 'slab'+str(header_id)
 	if cfg.has_section(section):
 		cfg.erase_section(section)
 	
 	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
+
+func get_top_fake_cube_face(indexIn3x3, slabID):
+	var cubesArray = Slabs.fake_extra_data[slabID][Slabs.FAKE_CUBE_DATA][indexIn3x3]
+	var get_height = oDataClm.get_real_height(cubesArray)
+	if get_height == 0:
+		return Slabs.fake_extra_data[slabID][Slabs.FAKE_FLOOR_DATA][indexIn3x3]
+	else:
+		var cubeID = cubesArray[get_height-1]
+		if cubeID > Cube.CUBES_COUNT:
+			return 1
+		return Cube.tex[cubeID][Cube.SIDE_TOP]

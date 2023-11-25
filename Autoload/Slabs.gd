@@ -127,7 +127,15 @@ enum {
 	PANEL_DOOR_VIEW = 2
 }
 ########################################################################
-
+enum {
+	FAKE_CUBE_DATA,
+	FAKE_FLOOR_DATA,
+	FAKE_RECOGNIZED_AS,
+	FAKE_WIBBLE_EDGES,
+}
+var fake_extra_data = {
+	# 1000: [cube_data, floor_data, recognized_as, wibble_edges]
+}
 var data = {
 	ROCK:                ["Impenetrable Rock",     BLOCK_SLAB, BITMASK_BLOCK,         PANEL_TOP_VIEW,  0, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  NOT_OWNABLE], # 0
 	GOLD:                ["Gold Seam",             BLOCK_SLAB, BITMASK_BLOCK,         PANEL_TOP_VIEW,  0, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  NOT_OWNABLE], # 1

@@ -36,6 +36,7 @@ onready var oSlabsetObjectSection = Nodelist.list["oSlabsetObjectSection"]
 onready var oObjSubtypeLabel = Nodelist.list["oObjSubtypeLabel"]
 onready var oObjThingTypeLabel = Nodelist.list["oObjThingTypeLabel"]
 onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
+onready var oVarButtonsApplyToAllCheckBox = Nodelist.list["oVarButtonsApplyToAllCheckBox"]
 
 var clipboard = {
 	"dat": [],
@@ -522,27 +523,65 @@ func update_object_property(the_property, new_value):
 	adjust_object_color_if_different(variation)
 
 func _on_VarCopyButton_pressed():
-	var variation = get_current_variation()
-	clipboard["dat"] = Slabset.dat[variation].duplicate(true)
-	clipboard["tng"] = Slabset.tng[variation].duplicate(true)
-	oMessage.quick("Copied variation to clipboard")
+	# Clear previous clipboard data
+	clipboard["dat"].clear()
+	clipboard["tng"].clear()
+	
+	var message_text
+	var variationsToCopy = []
+	if oVarButtonsApplyToAllCheckBox.pressed == true:
+		oMessage.quick("Copied 28 variations to clipboard")
+		var slabBaseId = int(oSlabsetIDSpinBox.value) * 28
+		variationsToCopy.resize(28)
+		for i in 28:
+			variationsToCopy[i] = slabBaseId + i
+	else:
+		oMessage.quick("Copied current variation to clipboard")
+		var current_variation = get_current_variation()
+		variationsToCopy = [current_variation]
+	
+	for variation in variationsToCopy:
+		if variation < Slabset.dat.size():
+			clipboard["dat"].append(Slabset.dat[variation].duplicate(true))
+		if variation < Slabset.tng.size():
+			clipboard["tng"].append(Slabset.tng[variation].duplicate(true))
+
 
 func _on_VarPasteButton_pressed():
 	if clipboard["dat"].empty() and clipboard["tng"].empty():
 		oMessage.quick("Clipboard is empty.")
 		return
+	
+	var locationsToPasteTo = []
+	if oVarButtonsApplyToAllCheckBox.pressed:
+		oMessage.quick("Pasted 28 variations")
+		var slab_base_id = int(oSlabsetIDSpinBox.value) * 28
+		for i in 28:
+			locationsToPasteTo.append(slab_base_id + i)
+	else:
+		oMessage.quick("Pasted one variation")
+		var currentVariation = get_current_variation()
+		locationsToPasteTo.append(currentVariation)
 
-	var variation = get_current_variation()
-	ensure_dat_array_has_space(variation)
-	ensure_tng_array_has_space(variation)
+	# Assume clipboard["dat"] and clipboard["tng"] have the same size or clipboard["tng"] can be empty.
+	var data_size = clipboard["dat"].size()
+	var tng_size = clipboard["tng"].size()
 	
-	Slabset.dat[variation] = clipboard["dat"].duplicate(true)
-	Slabset.tng[variation] = clipboard["tng"].duplicate(true)
+	for i in locationsToPasteTo:
+		var clipboard_index = i % data_size  # Wrap around if there are fewer items in clipboard than locations
+		ensure_dat_array_has_space(i)
+		Slabset.dat[i] = clipboard["dat"][clipboard_index].duplicate(true)
+		
+		if clipboard_index < tng_size:  # Ensure we don't go out of bounds for 'tng'
+			ensure_tng_array_has_space(i)
+			Slabset.tng[i] = clipboard["tng"][clipboard_index].duplicate(true)
 	
+	# Update the UI after pasting
 	update_columns_ui()
 	update_objects_ui()
 	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
-	oMessage.quick("Pasted variation")
+
+
 
 const ROTATION_POSITIONS = [ # New positions for subtiles after rotation
 	6, 3, 0,
@@ -652,3 +691,10 @@ func _on_ColumnsetHelpButton_pressed():
 	helptxt += "Columnset is loaded from /data/slabs.clm, which is a global file. \n"
 	helptxt += "However you can create a columnset.cfg instead of the default one to use for your own mappack/campaign."
 	oMessage.big("Help",helptxt)
+
+
+func _on_VarButtonsApplyToAllCheckBox_toggled(button_pressed):
+	if button_pressed == true:
+		oMessage.quick("Copy and paste buttons will affect 28 variations")
+	else:
+		oMessage.quick("Copy and paste buttons will affect 1 variation")

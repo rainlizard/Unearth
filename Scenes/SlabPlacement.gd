@@ -333,9 +333,8 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 	elif slabID == Slabs.EARTH:
 		slabID = auto_earth(xSlab, ySlab, slabID, surrID)
 	
-	if slabID >= 1000: # Fake Slab IDs
-		if oCustomSlabSystem.data.has(slabID):
-			slab_place_custom(xSlab, ySlab, slabID, ownership, surrID)
+	if Slabs.fake_extra_data.has(slabID): # Fake Slab IDs
+		slab_place_fake(xSlab, ySlab, slabID, ownership, surrID)
 		return
 	
 	# Do not update Fake Slabs
@@ -357,11 +356,9 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 		_:
 			place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
 
-
-func slab_place_custom(xSlab, ySlab, slabID, ownership, surrID):
-	var recognizedAsID = oCustomSlabSystem.data[slabID][oCustomSlabSystem.RECOGNIZED_AS]
-	
-	var wibbleEdges = oCustomSlabSystem.data[slabID][oCustomSlabSystem.WIBBLE_EDGES]
+func slab_place_fake(xSlab, ySlab, slabID, ownership, surrID):
+	var recognizedAsID = Slabs.fake_extra_data[slabID][Slabs.FAKE_RECOGNIZED_AS]
+	var wibbleEdges = Slabs.fake_extra_data[slabID][Slabs.FAKE_WIBBLE_EDGES]
 	
 	# WIB (wibble)
 	update_wibble(xSlab, ySlab, slabID, wibbleEdges)
@@ -371,8 +368,8 @@ func slab_place_custom(xSlab, ySlab, slabID, ownership, surrID):
 		var liquidValue = Slabs.data[slabID][Slabs.REMEMBER_TYPE]
 		oDataLiquid.set_cell(xSlab, ySlab, liquidValue)
 	
-	var slabCubes = oCustomSlabSystem.data[slabID][oCustomSlabSystem.CUBE_DATA]
-	var slabFloor = oCustomSlabSystem.data[slabID][oCustomSlabSystem.FLOOR_DATA]
+	var slabCubes = Slabs.fake_extra_data[slabID][Slabs.FAKE_CUBE_DATA]
+	var slabFloor = Slabs.fake_extra_data[slabID][Slabs.FAKE_FLOOR_DATA]
 	
 	set_columns(xSlab, ySlab, slabCubes, slabFloor)
 	

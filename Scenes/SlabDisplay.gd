@@ -37,8 +37,15 @@ func set_visual(columnArray):
 	if panelView == Slabs.PANEL_TOP_VIEW:
 		for y in 3:
 			for x in 3:
-				var clmIndex = columnArray[(y*3) + x]
-				var cubeFace = Columnset.get_top_cube_face(clmIndex, slabID)
+				var cubeFace = 0
+				if slabID >= 1000:
+					# Fake slab
+					if Slabs.fake_extra_data.has(slabID) == true:
+						var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
+						cubeFace = oCustomSlabSystem.get_top_fake_cube_face((y*3) + x, slabID)
+				else:
+					# Slabset slab (normal slab)
+					cubeFace = Columnset.get_top_cube_face(columnArray[(y*3) + x], slabID)
 				
 				var valueInput = cubeFace
 				var r = clamp(valueInput, 0, 255)

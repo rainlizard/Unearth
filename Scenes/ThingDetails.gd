@@ -94,7 +94,11 @@ func light_details(id):
 				if id.parentTile != null:
 					var parentY = int(id.parentTile/M.ySize)
 					var parentX = id.parentTile - (parentY*M.xSize)
-					value = Slabs.data[oDataSlab.get_cell(parentX,parentY)][Slabs.NAME]
+					var hoveredCell = oDataSlab.get_cell(parentX,parentY)
+					if Slabs.data.has(hoveredCell):
+						value = Slabs.data[hoveredCell][Slabs.NAME]
+					else:
+						value = ""
 					if parentX == 0 and parentY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
 					value += ' (' + str(parentX) + ','+str(parentY) + ')'
 				if id.parentTile == 65535:
@@ -177,7 +181,11 @@ func thing_details(id):
 				if id.parentTile != null:
 					var parentY = int(id.parentTile/M.ySize)
 					var parentX = id.parentTile - (parentY*M.xSize)
-					value = Slabs.data[oDataSlab.get_cell(parentX,parentY)][Slabs.NAME]
+					var hoveredCell = oDataSlab.get_cell(parentX,parentY)
+					if Slabs.data.has(hoveredCell):
+						value = Slabs.data[hoveredCell][Slabs.NAME]
+					else:
+						value = ""
 					if parentX == 0 and parentY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
 					value += ' (' + str(parentX) + ','+str(parentY) + ')'
 				if id.parentTile == 65535:

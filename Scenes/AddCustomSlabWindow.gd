@@ -65,24 +65,18 @@ func _on_CustomSlabID_value_changed(value):
 
 
 func _on_AddCustomSlabButton_pressed():
-	var slabName = oNewSlabName.text
-	var recognizedAs = oCustomSlabID.value
-	var liquidType = oSlabLiquidOptionButton.get_selected_id()
-	var wibbleType = oSlabWibbleOptionButton.get_selected_id()
-	var wibbleEdges = oWibbleEdgesCheckBox.pressed
-	
 	var is_fake = oFakeSlabCheckBox.pressed
 	var newID
 	if is_fake:
 		newID = 1000 # We'll say fake slabs are ID 1000 and up
 		# Find an unused ID within the fake data dictionary
-		while oCustomSlabSystem.data.has(newID):
+		while Slabs.data.has(newID):
 			newID += 1
 	else:
-		newID = recognizedAs # For slabset, use the value from the UI
-		if oCustomSlabSystem.data.has(newID):
+		newID = int(oCustomSlabID.value) # For slabset, use the value from the UI
+		if Slabs.data.has(newID):
 			oMessage.big("Error", "For Slabset slabs you must use a unique ID. You may need to first delete the existing one.")
-			return	
+			return
 	
 	var slabCubeData = []
 	var slabFloorData = []
@@ -93,7 +87,21 @@ func _on_AddCustomSlabButton_pressed():
 			slabCubeData.append(oDataClm.cubes[clmIndex])
 			slabFloorData.append(oDataClm.floorTexture[clmIndex])
 	
-	oCustomSlabSystem.add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData)
+	var slab_dict = {
+		"header_id": newID,
+		"name": oNewSlabName.text,
+		"recognized_as": int(oCustomSlabID.value),
+		"liquid_type": oSlabLiquidOptionButton.get_selected_id(),
+		"wibble_type": oSlabWibbleOptionButton.get_selected_id(),
+		"wibble_edges": oWibbleEdgesCheckBox.pressed,
+		"cube_data": slabCubeData,
+		"floor_data": slabFloorData,
+		"bitmask": oSlabBitmaskOptionButton.get_selected_id(),
+		"is_solid": bool(oSlabIsSolidOptionButton.get_selected_id()),
+		"ownable": bool(oSlabOwnableOptionButton.get_selected_id()),
+	}
+	oCustomSlabSystem.add_custom_slab(slab_dict)
+	
 	oPickSlabWindow.add_slabs()
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
 	oPickSlabWindow.set_selection(newID)
