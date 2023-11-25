@@ -15,7 +15,7 @@ onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 onready var oConfirmDeleteCustomSlab = Nodelist.list["oConfirmDeleteCustomSlab"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
-
+onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 
 
 onready var oSelectedRect = $Clippy/SelectedRect
@@ -254,3 +254,4 @@ func _on_ConfirmDeleteCustomSlab_confirmed():
 		if child.has_meta("ID_of_slab") and child.get_meta("ID_of_slab") == slabID:
 			child.queue_free()
 	oCustomSlabSystem.remove_custom_slab(slabID)
+

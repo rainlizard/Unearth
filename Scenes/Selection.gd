@@ -227,10 +227,10 @@ func construct_shape_for_placement(constructType):
 		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
 
 func some_manual_placements_dont_update_nearby():
-	# Fake Slabs don't update the surroundings
-	if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
-		return false
-	elif Slabs.doors.has(paintSlab): # Doors don't update the surroundings
+	# Fake Slabs don't update the surroundings (! HAD TO COMMENT THIS OUT BECAUSE IT BREAKS CUSTOM SLABSET SLABS)
+#	if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
+#		return false
+	if Slabs.doors.has(paintSlab): # Doors don't update the surroundings
 		return false
 	return true
 

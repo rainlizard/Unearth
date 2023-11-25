@@ -37,6 +37,7 @@ onready var oObjSubtypeLabel = Nodelist.list["oObjSubtypeLabel"]
 onready var oObjThingTypeLabel = Nodelist.list["oObjThingTypeLabel"]
 onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
 onready var oVarButtonsApplyToAllCheckBox = Nodelist.list["oVarButtonsApplyToAllCheckBox"]
+onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 
 var clipboard = {
 	"dat": [],
@@ -104,6 +105,10 @@ func _on_SlabsetWindow_visibility_changed():
 		
 		yield(get_tree(),'idle_frame')
 		oDkSlabsetVoxelView.oAllVoxelObjects.visible = true
+	elif visible == false:
+		if is_instance_valid(oPickSlabWindow):
+			oPickSlabWindow.add_slabs()
+
 
 func _on_SlabsetTabs_tab_changed(tab):
 	match tab:
