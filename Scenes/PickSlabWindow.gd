@@ -78,7 +78,11 @@ func add_slabs():
 	
 	var allSlabIDs = []
 	allSlabIDs.append_array(Slabs.slabOrder)
-	allSlabIDs.append_array(oCustomSlabSystem.data.keys())
+	
+	# The rest of them are added in any order (custom slabs)
+	for slabID in Slabs.data.keys():
+		if Slabs.slabOrder.has(slabID) == false:
+			allSlabIDs.append(slabID)
 	
 	for slabID in allSlabIDs:
 		var putIntoTab = Slabs.data[slabID][Slabs.EDITOR_TAB]
@@ -226,20 +230,27 @@ func _on_SlabTabs_tab_changed(tab):
 	# When you change to or from tab 2, need to update grid to hide or show numbers
 	oDisplaySlxNumbers.update_grid()
 
-func _on_slab_portrait_gui_input(event, id):
-	if event.is_action_pressed("mouse_right"):
-		var slabID = id.get_meta("ID_of_slab")
-		if slabID >= 1000:
-			Utils.popup_centered(oConfirmDeleteCustomSlab)
-			oConfirmDeleteCustomSlab.set_meta("ID_TO_DELETE", slabID)
-			_on_hovered_none()
 
 func rect_changed_start_timer():
 	rectChangedTimer.start(0.2)
 
+
+
+func _on_slab_portrait_gui_input(event, id):
+	# Attempt to remove custom slab by right clicking on it
+	if event.is_action_pressed("mouse_right"):
+		var oGridContainer = current_grid_container()
+		if oGridContainer != tabs[Slabs.TAB_CUSTOM][GRIDCON_PATH]:
+			return
+		Utils.popup_centered(oConfirmDeleteCustomSlab)
+		var slabID = id.get_meta("ID_of_slab")
+		oConfirmDeleteCustomSlab.set_meta("ID_TO_DELETE", slabID)
+		_on_hovered_none()
+
 func _on_ConfirmDeleteCustomSlab_confirmed():
 	var slabID = oConfirmDeleteCustomSlab.get_meta("ID_TO_DELETE")
-	for child in tabs[Slabs.TAB_CUSTOM][GRIDCON_PATH].get_children():
+	var gridContainer = tabs[Slabs.TAB_CUSTOM][GRIDCON_PATH]
+	for child in gridContainer.get_children():
 		if child.has_meta("ID_of_slab") and child.get_meta("ID_of_slab") == slabID:
 			child.queue_free()
 	oCustomSlabSystem.remove_custom_slab(slabID)

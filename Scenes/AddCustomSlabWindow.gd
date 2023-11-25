@@ -20,6 +20,10 @@ onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oFakeSlabCheckBox = Nodelist.list["oFakeSlabCheckBox"]
 onready var oFakeCustomColumnsPanelContainer = Nodelist.list["oFakeCustomColumnsPanelContainer"]
+onready var oSlabBitmaskOptionButton = Nodelist.list["oSlabBitmaskOptionButton"]
+onready var oSlabIsSolidOptionButton = Nodelist.list["oSlabIsSolidOptionButton"]
+onready var oSlabOwnableOptionButton = Nodelist.list["oSlabOwnableOptionButton"]
+
 
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
 var customSlabArrayOfSpinbox = []
@@ -61,53 +65,35 @@ func _on_CustomSlabID_value_changed(value):
 
 
 func _on_AddCustomSlabButton_pressed():
-	if oFakeSlabCheckBox.pressed == true:
-		add_fake_slab()
-	else:
-		add_slabset_slab()
-
-
-func add_slabset_slab():
-	var newID = oCustomSlabID.value # We'll say fake slabs are ID 1000 and up
-	#if oCustomSlabSystem.data.has(newID) == true:
-	
 	var slabName = oNewSlabName.text
 	var recognizedAs = oCustomSlabID.value
 	var liquidType = oSlabLiquidOptionButton.get_selected_id()
-	var wibbleType = oSlabWibbleOptionButton.get_selected_id() #Slabs.WIBBLE_ON
+	var wibbleType = oSlabWibbleOptionButton.get_selected_id()
 	var wibbleEdges = oWibbleEdgesCheckBox.pressed
 	
-	oCustomSlabSystem.add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, [], [])
-	
-	oPickSlabWindow.add_slabs()
-	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
-	oPickSlabWindow.set_selection(newID)
-
-
-func add_fake_slab():
-	var newID = 1000 # We'll say fake slabs are ID 1000 and up
-	while true: # Find an unused ID within the fake data dictionary
-		if oCustomSlabSystem.data.has(newID) == false:
-			break
-		else:
+	var is_fake = oFakeSlabCheckBox.pressed
+	var newID
+	if is_fake:
+		newID = 1000 # We'll say fake slabs are ID 1000 and up
+		# Find an unused ID within the fake data dictionary
+		while oCustomSlabSystem.data.has(newID):
 			newID += 1
-	
-	var slabName = oNewSlabName.text
-	var recognizedAs = oCustomSlabID.value
-	var liquidType = oSlabLiquidOptionButton.get_selected_id()
-	var wibbleType = oSlabWibbleOptionButton.get_selected_id() #Slabs.WIBBLE_ON
-	var wibbleEdges = oWibbleEdgesCheckBox.pressed
+	else:
+		newID = recognizedAs # For slabset, use the value from the UI
+		if oCustomSlabSystem.data.has(newID):
+			oMessage.big("Error", "For Slabset slabs you must use a unique ID. You may need to first delete the existing one.")
+			return	
 	
 	var slabCubeData = []
 	var slabFloorData = []
-	for id in oGridContainerCustomColumns3x3.get_children():
-		var spinbox = id.get_node("CustomSpinBox")
-		var clmIndex = spinbox.value
-		slabCubeData.append(oDataClm.cubes[clmIndex])
-		slabFloorData.append(oDataClm.floorTexture[clmIndex])
+	if is_fake: # For fake slabs, gather cube and floor data from the UI elements
+		for id in oGridContainerCustomColumns3x3.get_children():
+			var spinbox = id.get_node("CustomSpinBox")
+			var clmIndex = spinbox.value
+			slabCubeData.append(oDataClm.cubes[clmIndex])
+			slabFloorData.append(oDataClm.floorTexture[clmIndex])
 	
 	oCustomSlabSystem.add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData)
-	
 	oPickSlabWindow.add_slabs()
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
 	oPickSlabWindow.set_selection(newID)
@@ -174,3 +160,13 @@ func _on_HelpCustomSlabsButton_pressed():
 	var helptext = ""
 	helptext += "After adding a custom slab, right click on its portrait within the slab selection window to remove it from the editor."
 	oMessage.big("Help",helptext)
+
+
+func _on_SlabIsSolidOptionButton_item_selected(index):
+	pass # Replace with function body.
+
+func _on_SlabOwnableOptionButton_item_selected(index):
+	pass # Replace with function body.
+
+func _on_SlabBitmaskOptionButton_item_selected(index):
+	pass # Replace with function body.

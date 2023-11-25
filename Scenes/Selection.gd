@@ -107,7 +107,7 @@ func update_paint():
 				oOnlyOwnership.select_appropriate_button()
 			else:
 				if Slabs.data.has(cursorOverSlab) == true and cursorOverSlab < 1000:
-					if Slabs.data[cursorOverSlab][Slabs.BITMASK_TYPE] == Slabs.BITMASK_WALL:
+					if Slabs.data[cursorOverSlab][Slabs.BITMASK_TYPE] == Slabs.BITMASK_REINFORCED:
 						# When you right click on a wall, select "Wall (Automatic)"
 						cursorOverSlab = Slabs.WALL_AUTOMATIC
 					if cursorOverSlab == Slabs.EARTH_WITH_TORCH:

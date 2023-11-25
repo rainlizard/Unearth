@@ -505,7 +505,6 @@ func on_slab_delete_stray_door_thing_and_key(id, slabID):
 		if id.is_in_group("Door") or id.is_in_group("Key"):
 			if Slabs.doors.has(slabID) == false:
 				id.queue_free()
-				
 
 func on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership):
 	if slabID == Slabs.TREASURE_ROOM and id.thingType == Things.TYPE.OBJECT and id.subtype in [52,53,54,55,56,3,6,43,136]:

@@ -3,15 +3,7 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oMessage = Nodelist.list["oMessage"]
 
-var data = {}
 var cfg = ConfigFile.new()
-
-enum {
-	RECOGNIZED_AS
-	WIBBLE_EDGES
-	CUBE_DATA
-	FLOOR_DATA
-}
 
 func _ready():
 	load_file()
@@ -32,75 +24,71 @@ func load_file():
 		return
 	
 	for section in cfg.get_sections():
-		var newID = int(section.trim_prefix("slab"))
-		var slabName = cfg.get_value(section, "name")
-		var recognizedAs = cfg.get_value(section, "recognized_as")
-		var liquidType = cfg.get_value(section, "liquid_type")
-		var wibbleType = cfg.get_value(section, "wibble_type")
-		var wibbleEdges = cfg.get_value(section, "wibble_edges")
-		
 		var slabCubeData = []
 		var slabFloorData = []
 		for i in 9:
 			slabCubeData.append( cfg.get_value(section, "cubes"+str(i), []))
 			slabFloorData.append( cfg.get_value(section, "floor"+str(i), []))
 		
-		add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData)
+		var slab_dict = {
+			"header_id": int(section.trim_prefix("slab")),
+			"name": cfg.get_value(section, "name", "Unknown"),
+			"recognized_as": cfg.get_value(section, "recognized_as", Slabs.ROCK),
+			"liquid_type": cfg.get_value(section, "liquid_type", Slabs.REMEMBER_PATH),
+			"wibble_type": cfg.get_value(section, "wibble_type", Slabs.WIBBLE_ON),
+			"wibble_edges": cfg.get_value(section, "wibble_edges", false),
+			"cube_data": slabCubeData,
+			"floor_data": slabFloorData,
+			"bitmask": cfg.get_value(section, "bitmask", Slabs.BITMASK_FLOOR),
+			"is_solid": cfg.get_value(section, "is_solid", Slabs.FLOOR_SLAB),
+			"ownable": cfg.get_value(section, "ownable", Slabs.OWNABLE)
+		}
+		
+		add_custom_slab(slab_dict)
 
 
-func add_custom_slab(newID, slabName, recognizedAs, liquidType, wibbleType, wibbleEdges, slabCubeData, slabFloorData):
-	
-	Slabs.data[newID] = [
-		slabName,
-		Slabs.BLOCK_SLAB,
-		Slabs.BITMASK_TALL,
+func add_custom_slab(slab_dict):
+	#var newID = slab_dict.id
+	#var section = 'slab'+str(newID)
+	Slabs.data[slab_dict.header_id] = [
+		slab_dict.name,
+		slab_dict.is_solid,
+		slab_dict.bitmask,
 		Slabs.PANEL_TOP_VIEW,
-		0,
+		0, # SIDE_VIEW_Z_OFFSET
 		Slabs.TAB_CUSTOM,
-		wibbleType,
-		liquidType,
-		Slabs.NOT_OWNABLE
+		slab_dict.wibble_type,
+		slab_dict.liquid_type,
+		slab_dict.ownable
 	]
-	
-	data[newID] = [recognizedAs, wibbleEdges, slabCubeData, slabFloorData]
-	var section = 'slab'+str(newID)
-	cfg.set_value(section,"name", slabName)
-	cfg.set_value(section,"recognized_as",int(recognizedAs))
-	cfg.set_value(section,"liquid_type", liquidType)
-	cfg.set_value(section,"wibble_type", wibbleType)
-	cfg.set_value(section,"wibble_edges", wibbleEdges)
+	var section = 'slab'+str(slab_dict.header_id)
+	cfg.set_value(section,"name", slab_dict.name)
+	cfg.set_value(section,"recognized_as", slab_dict.recognized_as)
+	cfg.set_value(section,"liquid_type", slab_dict.liquid_type)
+	cfg.set_value(section,"wibble_type", slab_dict.wibble_type)
+	cfg.set_value(section,"wibble_edges", slab_dict.wibble_edges)
+	cfg.set_value(section,"bitmask", slab_dict.bitmask)
+	cfg.set_value(section,"is_solid", slab_dict.is_solid)
+	cfg.set_value(section,"ownable", slab_dict.ownable)
 	
 	for i in 9:
-		if slabCubeData.size() > 0:
-			cfg.set_value(section,"cubes"+str(i),slabCubeData[i])
-		if slabFloorData.size() > 0:
-			cfg.set_value(section,"floor"+str(i),slabFloorData[i])
+		if slab_dict.cube_data.size() > 0:
+			cfg.set_value(section,"cubes"+str(i),slab_dict.cube_data[i])
+		if slab_dict.floor_data.size() > 0:
+			cfg.set_value(section,"floor"+str(i),slab_dict.floor_data[i])
 	
 	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
 
-
-# The purpose of this function is so I don't have to index the columns into clm for simply displaying within the slab window. Only index when PLACING the Fake Slab.
-func get_top_cube_face(indexIn3x3, slabID):
-	var cubesArray = data[slabID][CUBE_DATA][indexIn3x3]
-	var get_height = oDataClm.get_real_height(cubesArray)
-	if get_height == 0:
-		return data[slabID][FLOOR_DATA][indexIn3x3]
-	else:
-		var cubeID = cubesArray[get_height-1]
-		if cubeID > Cube.CUBES_COUNT:
-			return 1
-		return Cube.tex[cubeID][Cube.SIDE_TOP]
-
-func remove_custom_slab(slabID):
-	if slabID < 1000: return # means it's not a Fake Slab
-	
-	print('Attempting to remove Custom Slab:' + str(slabID))
+func remove_custom_slab(header_id):
 	oPickSlabWindow.set_selection(null)
 	
-	if data.has(slabID):
-		data.erase(slabID)
+	var statusOfRemoval = Slabs.data.erase(header_id)
+	if statusOfRemoval == true:
+		oMessage.quick("Removed custom slab")
+	else:
+		oMessage.quick("Tried to remove a custom slab that wasn't present in the data")
 	
-	var section = 'slab'+str(slabID)
+	var section = 'slab'+str(header_id)
 	if cfg.has_section(section):
 		cfg.erase_section(section)
 	

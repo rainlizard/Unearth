@@ -37,15 +37,6 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask,
 			var createAtPos = Vector3(xSubtile, ySubtile, zSubtile)
 			oInstances.place_new_thing(Things.TYPE.EFFECTGEN, 1, createAtPos, ownership)
 	
-#	var constructedSlab = oSlabPlacement.bitmaskToSlab[bitmask]
-#	if bitmask == 0 and Slabs.rooms_with_middle_object.has(slabID):
-#		var isMiddle = determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner)
-#		if isMiddle == false:
-#			constructedSlab = oSlabPlacement.slab_solo
-	#print(slabVar + constructedSlab[0])
-	#print(slabVar)
-	
-	# HELP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	for i in range(9): # iterate over the range of 0-8, assuming 9 subtiles per variation
 		var variation = int(clmIndexGroup[i] / 9) # Convert to int for safety, as division of ints in GDScript results in float
 		var convertedSubtile = clmIndexGroup[i] % 9

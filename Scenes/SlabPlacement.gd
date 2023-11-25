@@ -165,7 +165,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	var surroundingPositions = {}
 	var removeFromShape = []
 	
-	var CODETIME_START = OS.get_ticks_msec()
+	#var CODETIME_START = OS.get_ticks_msec()
 	for pos in shapePositionArray:
 		oDataOwnership.set_cellv(pos, ownership)
 		
@@ -243,7 +243,7 @@ onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 
 func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	oOverheadOwnership.update_ownership_image_based_on_shape(shapePositionArray)
-	var CODETIME_START = OS.get_ticks_msec()
+	#var CODETIME_START = OS.get_ticks_msec()
 	
 	oEditor.mapHasBeenEdited = true
 	if updateNearby == true:
@@ -350,7 +350,7 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 	
 	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
 	match bitmaskType:
-		Slabs.BITMASK_WALL:
+		Slabs.BITMASK_REINFORCED:
 			place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
 		Slabs.BITMASK_OTHER:
 			place_other(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
@@ -479,9 +479,9 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	
 	var bitmask
 	match bitmaskType:
-		Slabs.BITMASK_GENERAL: bitmask = get_general_bitmask(slabID, ownership, surrID, surrOwner)
+		Slabs.BITMASK_FLOOR: bitmask = get_general_bitmask(slabID, ownership, surrID, surrOwner)
 		Slabs.BITMASK_CLAIMED: bitmask = get_claimed_bitmask(slabID, ownership, surrID, surrOwner)
-		Slabs.BITMASK_TALL: bitmask = get_tall_bitmask(surrID)
+		Slabs.BITMASK_BLOCK: bitmask = get_tall_bitmask(surrID)
 	
 	var clmIndexGroup = make_slab(fullVariationIndex, bitmask)
 	clmIndexGroup = modify_for_liquid(clmIndexGroup, surrID, slabID)
@@ -627,7 +627,7 @@ func randomize_columns(fullSlabData, slabID, bitmaskType):
 	var slabCubes = fullSlabData[0]
 	var slabFloor = fullSlabData[1]
 	
-	if bitmaskType == Slabs.BITMASK_WALL:
+	if bitmaskType == Slabs.BITMASK_REINFORCED:
 		for i in 9:
 			if slabCubes[i][0] in rngEarthPathUnderneath:
 				slabCubes[i][0] = 25 # No need to randomize the path cube, it's not visible and the game overwrites it anyway.
@@ -906,7 +906,7 @@ func modify_wall_based_on_nearby_room_and_liquid(clmIndexGroup, surrID, slabID):
 	
 	var modify0 = 0; var modify1 = 0; var modify2 = 0; var modify3 = 0; var modify4 = 0; var modify5 = 0; var modify6 = 0; var modify7 = 0; var modify8 = 0
 	
-	if Slabs.rooms.has(surrID[dir.s]):
+	if Slabs.rooms_that_have_walls.has(surrID[dir.s]):
 		var roomFace = surrID[dir.s] + 1
 		var offset = ((roomFace-slabID)*28)*9
 		if surrID[dir.se] == surrID[dir.s] and surrID[dir.sw] == surrID[dir.s]:
@@ -915,7 +915,7 @@ func modify_wall_based_on_nearby_room_and_liquid(clmIndexGroup, surrID, slabID):
 		modify7 = offset
 		modify8 = offset
 	
-	if Slabs.rooms.has(surrID[dir.w]):
+	if Slabs.rooms_that_have_walls.has(surrID[dir.w]):
 		var roomFace = surrID[dir.w] + 1
 		var offset = ((roomFace-slabID)*28)*9
 		if surrID[dir.sw] == surrID[dir.w] and surrID[dir.nw] == surrID[dir.w]:
@@ -923,7 +923,7 @@ func modify_wall_based_on_nearby_room_and_liquid(clmIndexGroup, surrID, slabID):
 		modify0 = offset
 		modify3 = offset
 		modify6 = offset
-	if Slabs.rooms.has(surrID[dir.n]):
+	if Slabs.rooms_that_have_walls.has(surrID[dir.n]):
 		var roomFace = surrID[dir.n] + 1
 		var offset = ((roomFace-slabID)*28)*9
 		if surrID[dir.ne] == surrID[dir.n] and surrID[dir.nw] == surrID[dir.n]:
@@ -931,7 +931,7 @@ func modify_wall_based_on_nearby_room_and_liquid(clmIndexGroup, surrID, slabID):
 		modify0 = offset
 		modify1 = offset
 		modify2 = offset
-	if Slabs.rooms.has(surrID[dir.e]):
+	if Slabs.rooms_that_have_walls.has(surrID[dir.e]):
 		var roomFace = surrID[dir.e] + 1
 		var offset = ((roomFace-slabID)*28)*9
 		if surrID[dir.se] == surrID[dir.e] and surrID[dir.ne] == surrID[dir.e]:

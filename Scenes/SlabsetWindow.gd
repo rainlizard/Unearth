@@ -525,8 +525,6 @@ func _on_VarCopyButton_pressed():
 	var variation = get_current_variation()
 	clipboard["dat"] = Slabset.dat[variation].duplicate(true)
 	clipboard["tng"] = Slabset.tng[variation].duplicate(true)
-	var slabID = variation / 28
-	var localVariation = variation % 28
 	oMessage.quick("Copied variation to clipboard")
 
 func _on_VarPasteButton_pressed():

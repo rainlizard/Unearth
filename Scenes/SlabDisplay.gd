@@ -35,34 +35,18 @@ func set_visual(columnArray):
 	
 	dataImage.lock()
 	if panelView == Slabs.PANEL_TOP_VIEW:
-		if slabID < 1000:
-			for y in 3:
-				for x in 3:
-					var clmIndex = columnArray[(y*3) + x]
-					var cubeFace = Columnset.get_top_cube_face(clmIndex, slabID)
-					var valueInput = cubeFace
-					var r = clamp(valueInput, 0, 255)
-					valueInput -= 255
-					var g = clamp(valueInput, 0, 255)
-					valueInput -= 255
-					var b = clamp(valueInput, 0, 255)
-					dataImage.set_pixel(x, y, Color8(r,g,b))
-		else:
-			var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
-			for y in 3:
-				for x in 3:
-					var cubeFace = 0
-					if oCustomSlabSystem.data.has(slabID):
-						var indexIn3x3 = (y*3) + x
-						cubeFace = oCustomSlabSystem.get_top_cube_face(indexIn3x3, slabID)
-					
-					var valueInput = cubeFace
-					var r = clamp(valueInput, 0, 255)
-					valueInput -= 255
-					var g = clamp(valueInput, 0, 255)
-					valueInput -= 255
-					var b = clamp(valueInput, 0, 255)
-					dataImage.set_pixel(x, y, Color8(r,g,b))
+		for y in 3:
+			for x in 3:
+				var clmIndex = columnArray[(y*3) + x]
+				var cubeFace = Columnset.get_top_cube_face(clmIndex, slabID)
+				
+				var valueInput = cubeFace
+				var r = clamp(valueInput, 0, 255)
+				valueInput -= 255
+				var g = clamp(valueInput, 0, 255)
+				valueInput -= 255
+				var b = clamp(valueInput, 0, 255)
+				dataImage.set_pixel(x, y, Color8(r,g,b))
 	
 	if panelView == Slabs.PANEL_SIDE_VIEW or panelView == Slabs.PANEL_DOOR_VIEW:
 		var y = 2
