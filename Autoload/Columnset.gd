@@ -16,10 +16,25 @@ var default_data = {}
 # map0000x.clm : 49,160 bytes. first 4 bytes contains 2048, second 4 bytes are ???, then comes the column data.
 # slabs.clm : 49,156 bytes. first 4 bytes contains 2048, then comes the column data.
 
+
 func load_default_columnset():
 	var CODETIME_START = OS.get_ticks_msec()
 	clear_all_column_data() # Important, for reloading/refreshing slabs.clm
 	
+	# Decide which one to load
+	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "COLUMNSET.CFG")
+	if filePath != "":
+		# Load columnset.cfg file
+		import_cfg_columnset(filePath, true)
+	else:
+		# Load slabs.clm file
+		load_default_original_columnset()
+	
+	store_default_data()
+	print('Created Columnset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+
+
+func load_default_original_columnset():
 	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.CLM")
 	var buffer = Filetypes.file_path_to_buffer(filePath)
 	
@@ -47,9 +62,7 @@ func load_default_columnset():
 		cubes[entry].resize(8)
 		for cubeNumber in 8:
 			cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
-	
-	print('Created Columnset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-	store_default_data()
+
 
 func store_default_data():
 	default_data["utilized"] = utilized.duplicate(true)

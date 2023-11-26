@@ -1,4 +1,4 @@
-[gd_scene load_steps=180 format=2]
+[gd_scene load_steps=179 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -64,7 +64,6 @@
 [ext_resource path="res://Scenes/SettingsWindow.gd" type="Script" id=62]
 [ext_resource path="res://Scenes/OptionButtonMSAA.gd" type="Script" id=63]
 [ext_resource path="res://Scenes/OverheadGraphics.gd" type="Script" id=64]
-[ext_resource path="res://Scenes/SlabPalette.gd" type="Script" id=65]
 [ext_resource path="res://Art/HelpIconPressed.png" type="Texture" id=66]
 [ext_resource path="res://Scenes/ChooseDkExe.gd" type="Script" id=67]
 [ext_resource path="res://Scenes/PickSlabWindow.gd" type="Script" id=68]
@@ -374,9 +373,6 @@ script = ExtResource( 158 )
 
 [node name="PlaceThingWithSlab" type="Node" parent="SlabPlacement"]
 script = ExtResource( 80 )
-
-[node name="SlabPalette" type="Node" parent="."]
-script = ExtResource( 65 )
 
 [node name="CurrentMap" type="Node" parent="."]
 script = ExtResource( 100 )
@@ -5297,7 +5293,7 @@ __meta__ = {
 margin_top = 191.0
 margin_right = 175.0
 margin_bottom = 212.0
-text = "Type"
+text = "Solidity"
 
 [node name="SlabIsSolidOptionButton" type="OptionButton" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
 margin_left = 179.0
@@ -5307,9 +5303,9 @@ margin_bottom = 215.0
 rect_min_size = Vector2( 150, 0 )
 hint_tooltip = "Editor placement rules"
 size_flags_horizontal = 10
-text = "Block"
-items = [ "Floor", null, false, 0, null, "Block", null, false, 1, null ]
-selected = 1
+text = "Empty"
+items = [ "Empty", null, false, 0, null, "Block", null, false, 1, null ]
+selected = 0
 
 [node name="Label7" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
 margin_top = 222.0
@@ -7104,9 +7100,6 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer2/GridContainer/FakeSlabHelpButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_FakeSlabHelpButton_pressed"]
 [connection signal="value_changed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/CustomSlabID" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_CustomSlabID_value_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/SlabWibbleOptionButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabWibbleOptionButton_item_selected"]
-[connection signal="item_selected" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/SlabBitmaskOptionButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabBitmaskOptionButton_item_selected"]
-[connection signal="item_selected" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/SlabIsSolidOptionButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabIsSolidOptionButton_item_selected"]
-[connection signal="item_selected" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/SlabOwnableOptionButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabOwnableOptionButton_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer3/AddCustomSlabButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_AddCustomSlabButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer3/HelpCustomSlabsButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_HelpCustomSlabsButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/SlabsetWindow" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetWindow_visibility_changed"]

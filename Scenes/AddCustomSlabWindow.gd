@@ -168,13 +168,3 @@ func _on_HelpCustomSlabsButton_pressed():
 	var helptext = ""
 	helptext += "After adding a custom slab, right click on its portrait within the slab selection window to remove it from the editor."
 	oMessage.big("Help",helptext)
-
-
-func _on_SlabIsSolidOptionButton_item_selected(index):
-	pass # Replace with function body.
-
-func _on_SlabOwnableOptionButton_item_selected(index):
-	pass # Replace with function body.
-
-func _on_SlabBitmaskOptionButton_item_selected(index):
-	pass # Replace with function body.

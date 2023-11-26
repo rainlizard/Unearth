@@ -11,7 +11,6 @@ onready var oGame = Nodelist.list["oGame"]
 onready var oOverheadOwnership = Nodelist.list["oOverheadOwnership"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
-onready var oSlabPalette = Nodelist.list["oSlabPalette"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oUiTools = Nodelist.list["oUiTools"]
@@ -206,7 +205,8 @@ func finish_opening_map(map):
 	oScriptHelpers.start()
 	oCamera2D.reset_camera(M.xSize, M.ySize)
 	
-	oSlabPalette.start()
+	if Slabset.dat.empty() == true: Slabset.load_default_slabset()
+	if Columnset.cubes.empty() == true: Columnset.load_default_columnset()
 	
 	oOverheadGraphics.update_map_overhead_2d_textures()
 	oPickSlabWindow.add_slabs()

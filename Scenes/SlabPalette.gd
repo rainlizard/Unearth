@@ -1,9 +1,8 @@
 extends Node
 
-func start():
+#func start():
 	# Do this only once.
-	if Slabset.dat.empty() == true: Slabset.load_default_slabset()
-	if Columnset.cubes.empty() == true: Columnset.load_default_columnset()
+
 
 #func test_write_to_file(data):
 #	print('WRITING TO CLM.TXT')

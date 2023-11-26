@@ -44,7 +44,7 @@ func load_file():
 			"cube_data": slabCubeData,
 			"floor_data": slabFloorData,
 			"bitmask": cfg.get_value(section, "bitmask", Slabs.BITMASK_FLOOR),
-			"is_solid": cfg.get_value(section, "is_solid", Slabs.FLOOR_SLAB),
+			"is_solid": cfg.get_value(section, "is_solid", Slabs.EMPTY_SLAB),
 			"ownable": cfg.get_value(section, "ownable", Slabs.OWNABLE)
 		}
 		

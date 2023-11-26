@@ -1,4 +1,7 @@
 extends Node
+onready var oGame = Nodelist.list["oGame"]
+onready var oMessage = Nodelist.list["oMessage"]
+
 var tng = []
 var dat = []
 var default_data = {}
@@ -34,9 +37,66 @@ enum dir {
 #	import_cfg_slabset("D:/AI/slabset.cfg", true)
 #	print('Import Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
+func load_default_slabset():
+	var CODETIME_START = OS.get_ticks_msec()
+	tng = []
+	dat = []
+	
+	# Decide which one to load
+	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "SLABSET.CFG")
+	if filePath != "":
+		# Load slabset.cfg file
+		import_cfg_slabset(filePath, true)
+	else:
+		# Load slabs.dat and slabs.tng files
+		load_default_original_slabset()
+	
+	print('Created Slabset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	store_default_data()
+
+
+func load_default_original_slabset():
+	
+	var dat_buffer = Filetypes.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.DAT"))
+	var tng_buffer = Filetypes.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG"))
+	
+	var object_info = create_object_list(tng_buffer)
+	if object_info.size() == 0:
+		oMessage.quick("Failed to load objects")
+		return
+	
+	var totalSlabs = 42 + 16
+	var totalVariations = totalSlabs * 28
+	tng.resize(totalVariations)
+	dat.resize(totalVariations)
+	tng_buffer.seek(2)
+	dat_buffer.seek(2)
+	
+	for variation in dat.size():
+		tng[variation] = []
+		dat[variation] = [0,0,0, 0,0,0, 0,0,0]
+		if variation < 42*28 or (variation % 28) < 8: # Handle the longslabs and the shortslabs
+			
+			for subtile in 9:
+				dat[variation][subtile] = 65536 - dat_buffer.get_u16()
+			
+			var getObjectIndex = tng_buffer.get_u16()
+			
+			while getObjectIndex < object_info.size(): # Continue until "break"
+				var objectStuff = object_info[getObjectIndex]
+				if objectStuff[1] != variation:
+					break
+				tng[variation].append(objectStuff)
+				getObjectIndex += 1
+	
+
+
+func store_default_data():
+	default_data["dat"] = dat.duplicate(true)
+	default_data["tng"] = tng.duplicate(true)
+
 
 func import_cfg_slabset(filePath, fullImport):
-	var oMessage = Nodelist.list["oMessage"]
 	var processed_string = preprocess_cfg_file(filePath)
 	if processed_string == null:
 		oMessage.quick("Failed to open file: " + str(filePath))
@@ -137,52 +197,6 @@ func preprocess_cfg_file(filePath): # 7ms
 #		return
 #	textFile.store_string(processed_string)
 #	textFile.close()
-
-func load_default_slabset():
-	tng = []
-	dat = []
-	var CODETIME_START = OS.get_ticks_msec()
-	var oGame = Nodelist.list["oGame"]
-	var oMessage = Nodelist.list["oMessage"]
-	
-	var dat_buffer = Filetypes.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.DAT"))
-	var tng_buffer = Filetypes.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG"))
-	
-	var object_info = create_object_list(tng_buffer)
-	if object_info.size() == 0:
-		oMessage.quick("Failed to load objects")
-		return
-	
-	var totalSlabs = 42 + 16
-	var totalVariations = totalSlabs * 28
-	tng.resize(totalVariations)
-	dat.resize(totalVariations)
-	tng_buffer.seek(2)
-	dat_buffer.seek(2)
-	
-	for variation in dat.size():
-		tng[variation] = []
-		dat[variation] = [0,0,0, 0,0,0, 0,0,0]
-		if variation < 42*28 or (variation % 28) < 8: # Handle the longslabs and the shortslabs
-			
-			for subtile in 9:
-				dat[variation][subtile] = 65536 - dat_buffer.get_u16()
-			
-			var getObjectIndex = tng_buffer.get_u16()
-			
-			while getObjectIndex < object_info.size(): # Continue until "break"
-				var objectStuff = object_info[getObjectIndex]
-				if objectStuff[1] != variation:
-					break
-				tng[variation].append(objectStuff)
-				getObjectIndex += 1
-	
-	print('Created Slabset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-	store_default_data()
-
-func store_default_data():
-	default_data["dat"] = dat.duplicate(true)
-	default_data["tng"] = tng.duplicate(true)
 
 func create_object_list(tng_buffer):
 	tng_buffer.seek(0)
