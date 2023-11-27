@@ -18,6 +18,7 @@ onready var oMapBrowserTabPlay = Nodelist.list["oMapBrowserTabPlay"]
 onready var oMapBrowserTabContainer = Nodelist.list["oMapBrowserTabContainer"]
 onready var oRandomMapContainer = Nodelist.list["oRandomMapContainer"]
 onready var oMenu = Nodelist.list["oMenu"]
+onready var oInspector = Nodelist.list["oInspector"]
 
 
 func _ready():
@@ -41,6 +42,7 @@ func _on_MapBrowser_about_to_show():
 	oDynamicMapTree.update_dynamic_tree()
 	
 	oLineEditFilter.grab_focus()
+	oInspector.deselect()
 
 func _on_DynamicMapTree_item_activated():
 	var selectedTreeItem = oDynamicMapTree.get_selected()

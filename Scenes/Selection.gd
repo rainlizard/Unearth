@@ -131,8 +131,6 @@ func update_paint():
 
 
 func construct_shape_for_placement(constructType):
-	if paintSlab == null: return
-	
 	oEditor.mapHasBeenEdited = true
 	var shapePositionArray = []
 	match constructType:
@@ -215,16 +213,17 @@ func construct_shape_for_placement(constructType):
 		var updateNearby = some_manual_placements_dont_update_nearby()
 		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
 	else:
-		# Slab placement
-		var useOwner = paintOwnership
-		
-		oSlabPlacement.place_shape_of_slab_id(shapePositionArray, paintSlab, useOwner)
-		
-		if oMirrorPlacementCheckBox.pressed == true:
-			oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_SLAB_AND_OWNER)
-		
-		var updateNearby = some_manual_placements_dont_update_nearby()
-		oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
+		if paintSlab != null:
+			# Slab placement
+			var useOwner = paintOwnership
+			
+			oSlabPlacement.place_shape_of_slab_id(shapePositionArray, paintSlab, useOwner)
+			
+			if oMirrorPlacementCheckBox.pressed == true:
+				oSlabPlacement.mirror_placement(shapePositionArray, oSlabPlacement.MIRROR_SLAB_AND_OWNER)
+			
+			var updateNearby = some_manual_placements_dont_update_nearby()
+			oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
 
 func some_manual_placements_dont_update_nearby():
 	# Fake Slabs don't update the surroundings (! HAD TO COMMENT THIS OUT BECAUSE IT BREAKS CUSTOM SLABSET SLABS)

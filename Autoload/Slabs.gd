@@ -286,11 +286,7 @@ PURPLE_PATH,
 ]
 
 func is_door(slabID):
-	if data.has(slabID) == false:
-		var oMessage = Nodelist.list["oMessage"]
-		oMessage.quick("Door ID missing from structure")
-		return false
-	
-	if data[slabID][BITMASK_TYPE] == BITMASK_DOOR1 or data[slabID][BITMASK_TYPE] == BITMASK_DOOR2:
-		return true
+	if data.has(slabID) == true:
+		if data[slabID][BITMASK_TYPE] == BITMASK_DOOR1 or data[slabID][BITMASK_TYPE] == BITMASK_DOOR2:
+			return true
 	return false

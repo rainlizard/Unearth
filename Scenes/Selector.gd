@@ -35,6 +35,7 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oSlabSideViewer = Nodelist.list["oSlabSideViewer"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
+onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -258,7 +259,7 @@ func adjust_range(instance, property_name, increment, message_prefix):
 	var newRange = clamp(instance.get(property_name) + increment, 0, 32767)
 	instance.set(property_name, newRange)
 	oThingDetails.update_details()
-	oMessage.quick(message_prefix + str(newRange))
+	#oMessage.quick(message_prefix + str(newRange))
 	get_tree().set_input_as_handled()
 	var originalPosition = Vector2(instance.locationX, instance.locationY)
 	oInstances.mirror_adjusted_value(instance, property_name, originalPosition)
@@ -322,6 +323,7 @@ func change_mode(changeModeTo):
 			oEditingTools.switched_to_slab_mode()
 			oInspector.deselect()
 			oBrushPreview.update_img()
+			oDisplaySlxNumbers.update_grid()
 		MODE_SUBTILE:
 			position = cursorSubtile * SUBTILE_SIZE
 			$SubtileSelector.visible = true
@@ -330,6 +332,7 @@ func change_mode(changeModeTo):
 			oEditingTools.switched_to_thing_mode()
 			oEditingMode.switch_mode("Thing")
 			oBrushPreview.update_img()
+			oDisplaySlxNumbers.update_grid()
 
 func world2tile(pos):
 	return Vector2(floor(pos.x/TILE_SIZE),floor(pos.y/TILE_SIZE))

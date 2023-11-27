@@ -1,6 +1,7 @@
 extends Node2D
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oSlabStyle = Nodelist.list["oSlabStyle"]
+onready var oSelector = Nodelist.list["oSelector"]
 
 var tileDrawDist = 96
 var draw_grid = false
@@ -15,6 +16,7 @@ func update_grid():
 
 func _draw():
 	if oSlabStyle.visible == false: return
+	if oSelector.mode != oSelector.MODE_TILE: return
 	
 	oDataSlx.slxImgData.lock()
 	for x in M.xSize:
