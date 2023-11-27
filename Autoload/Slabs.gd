@@ -89,7 +89,6 @@ enum {
 }
 
 var rooms_that_have_walls = {14:null,16:null,18:null,20:null,22:null,24:null,26:null,28:null,30:null,32:null,34:null,36:null,38:null,40:null}
-var doors = {42:null,43:null,44:null,45:null,46:null,47:null,48:null,49:null}
 ########################################################################
 # These are just to make it easier to read
 const NOT_OWNABLE = false
@@ -285,3 +284,13 @@ PURPLE_PATH,
 # IRON_DOOR_1
 # MAGIC_DOOR_1
 ]
+
+func is_door(slabID):
+	if data.has(slabID) == false:
+		var oMessage = Nodelist.list["oMessage"]
+		oMessage.quick("Door ID missing from structure")
+		return false
+	
+	if data[slabID][BITMASK_TYPE] == BITMASK_DOOR1 or data[slabID][BITMASK_TYPE] == BITMASK_DOOR2:
+		return true
+	return false

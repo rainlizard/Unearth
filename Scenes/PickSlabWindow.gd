@@ -210,8 +210,7 @@ func set_selection(setID):
 				oSelection.paintSlab = setID
 				
 				oSlabTabs.set_current_tab(tabIndex)
-	
-	if Slabs.doors.has(oSelection.paintSlab):
+	if Slabs.is_door(oSelection.paintSlab):
 		oPlaceLockedCheckBox.visible = true
 	else:
 		oPlaceLockedCheckBox.visible = false

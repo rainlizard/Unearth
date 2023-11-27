@@ -102,6 +102,14 @@ func _on_AddCustomSlabButton_pressed():
 	}
 	oCustomSlabSystem.add_custom_slab(slab_dict)
 	
+	if oSlabBitmaskOptionButton.get_selected_id() == Slabs.BITMASK_DOOR1:
+		var second_slab_dict = slab_dict.duplicate(true)
+		var IdOfDoor2 = int(oCustomSlabID.value+1)
+		second_slab_dict.header_id = newID+1
+		second_slab_dict.recognized_as = IdOfDoor2
+		oCustomSlabSystem.add_custom_slab(second_slab_dict)
+		oMessage.big("Note", "ID: " + str(IdOfDoor2) + " was also added, it's assumed to be the other door direction.")
+	
 	oPickSlabWindow.add_slabs()
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
 	oPickSlabWindow.set_selection(newID)

@@ -230,7 +230,7 @@ func some_manual_placements_dont_update_nearby():
 	# Fake Slabs don't update the surroundings (! HAD TO COMMENT THIS OUT BECAUSE IT BREAKS CUSTOM SLABSET SLABS)
 #	if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
 #		return false
-	if Slabs.doors.has(paintSlab): # Doors don't update the surroundings
+	if Slabs.is_door(paintSlab): # Doors don't update the surroundings
 		return false
 	return true
 

@@ -280,10 +280,12 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	
 	for pos in shapePositionArray:
 		var slabID = oDataSlab.get_cell(pos.x, pos.y)
-		var ownership = oDataOwnership.get_cell(pos.x, pos.y)
-		do_slab(pos.x, pos.y, slabID, ownership)
 		
-		oInstances.manage_things_on_slab(pos.x, pos.y, slabID, ownership)
+		var ownership = oDataOwnership.get_cell(pos.x, pos.y)
+		
+		if Slabs.data.has(slabID):
+			do_slab(pos.x, pos.y, slabID, ownership)
+			oInstances.manage_things_on_slab(pos.x, pos.y, slabID, ownership)
 		
 		currentLoad += 1
 		
@@ -524,6 +526,9 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	
 	if slabID == Slabs.EARTH_WITH_TORCH:
 		adjust_torch_cubes(xSlab, ySlab, constructedColumns, surrID)
+	elif slabID == Slabs.LAVA: # Just hardcode the random FloorTexture for lava. I think it only looks different in the editor.
+		for i in constructedFloor.size():
+			constructedFloor[i] = Random.choose([546,547])
 	
 	set_columns(xSlab, ySlab, constructedColumns, constructedFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, surrOwner)
@@ -769,10 +774,10 @@ func get_wall_bitmask(xSlab, ySlab, surrID, ownership):
 
 func get_claimed_bitmask(slabID, ownership, surrID, surrOwner):
 	var bitmask = 0
-	if (slabID != surrID[dir.s] and Slabs.doors.has(surrID[dir.s]) == false) or ownership != surrOwner[dir.s]: bitmask += 1
-	if (slabID != surrID[dir.w] and Slabs.doors.has(surrID[dir.w]) == false) or ownership != surrOwner[dir.w]: bitmask += 2
-	if (slabID != surrID[dir.n] and Slabs.doors.has(surrID[dir.n]) == false) or ownership != surrOwner[dir.n]: bitmask += 4
-	if (slabID != surrID[dir.e] and Slabs.doors.has(surrID[dir.e]) == false) or ownership != surrOwner[dir.e]: bitmask += 8
+	if (slabID != surrID[dir.s] and Slabs.is_door(surrID[dir.s]) == false) or ownership != surrOwner[dir.s]: bitmask += 1
+	if (slabID != surrID[dir.w] and Slabs.is_door(surrID[dir.w]) == false) or ownership != surrOwner[dir.w]: bitmask += 2
+	if (slabID != surrID[dir.n] and Slabs.is_door(surrID[dir.n]) == false) or ownership != surrOwner[dir.n]: bitmask += 4
+	if (slabID != surrID[dir.e] and Slabs.is_door(surrID[dir.e]) == false) or ownership != surrOwner[dir.e]: bitmask += 8
 	return bitmask
 
 func get_general_bitmask(slabID, ownership, surrID, surrOwner):

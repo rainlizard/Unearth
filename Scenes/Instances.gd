@@ -501,7 +501,7 @@ func on_slab_delete_stray_door_thing_and_key(id, slabID):
 	if id.is_in_group("Thing"):
 		# Kill doors and keys that aren't on door slabIDs
 		if id.is_in_group("Door") or id.is_in_group("Key"):
-			if Slabs.doors.has(slabID) == false:
+			if Slabs.is_door(slabID) == false:
 				id.queue_free()
 
 func on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership):

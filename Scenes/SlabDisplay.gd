@@ -21,7 +21,7 @@ func set_visual(columnArray):
 	$AspectRatioContainer/Icon.texture = null
 	if Slabs.icons.has(slabID):
 		$AspectRatioContainer/Icon.texture = Slabs.icons[slabID]
-		if Slabs.doors.has(slabID) == false:
+		if Slabs.is_door(slabID) == false:
 			$AspectRatioContainer.anchor_top -= 0.05
 			$AspectRatioContainer.anchor_bottom -= 0.05
 			$AspectRatioContainer.anchor_left += 0.01
