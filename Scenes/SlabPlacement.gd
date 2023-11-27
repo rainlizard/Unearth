@@ -531,7 +531,7 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 			constructedFloor[i] = Random.choose([546,547])
 	
 	set_columns(xSlab, ySlab, constructedColumns, constructedFloor)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, surrOwner)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, bitmaskType)
 
 
 func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
@@ -570,7 +570,7 @@ func place_fortified_wall(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bi
 		adjust_torch_cubes(xSlab, ySlab, constructedColumns, surrID)
 	
 	set_columns(xSlab, ySlab, constructedColumns, constructedFloor)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, surrOwner)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, bitmaskType)
 
 func randomize_columns(dkClmIndexList, constructedColumns):
 	# For each subtile

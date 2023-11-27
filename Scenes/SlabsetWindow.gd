@@ -533,7 +533,6 @@ func _on_VarCopyButton_pressed():
 	clipboard["dat"].clear()
 	clipboard["tng"].clear()
 	
-	var message_text
 	var variationsToCopy = []
 	if oVarButtonsApplyToAllCheckBox.pressed == true:
 		oMessage.quick("Copied 28 variations to clipboard")

@@ -245,7 +245,6 @@ enum { # BitFlags
 
 func export_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
 	var CODETIME_START = OS.get_ticks_msec()
-	var oMessage = Nodelist.list["oMessage"]
 	
 	# Find differences if not a full export
 	var dat_diffs = []

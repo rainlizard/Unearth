@@ -13,15 +13,13 @@ onready var dir = oSlabPlacement.dir
 # For example the Prison bars need extra rules for detecting nearby walls, but the original slab cubes did not need these rules.
 # So objects have their own placement rules, though we use the original bitmask/fullVariationIndex (from oSlabPlacement) as a basis to work from.
 
-func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, surrOwner):
+func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, bitmaskType):
 	oInstances.delete_attached_instances_on_slab(xSlab, ySlab)
 	
 	if slabID == Slabs.PRISON:
 		bitmask = prison_bar_bitmask(slabID, surrID)
 	elif slabID == Slabs.WALL_WITH_TORCH or slabID == Slabs.EARTH_WITH_TORCH:
 		bitmask = torch_object_bitmask(xSlab, ySlab, surrID)
-	elif slabID in [Slabs.WOODEN_DOOR_1, Slabs.WOODEN_DOOR_2, Slabs.BRACED_DOOR_1, Slabs.BRACED_DOOR_2, Slabs.IRON_DOOR_1, Slabs.IRON_DOOR_2, Slabs.MAGIC_DOOR_1, Slabs.MAGIC_DOOR_2]:
-		create_door_thing(xSlab, ySlab, ownership)
 	elif slabID == Slabs.WATER:
 		if Random.rng.randf_range(0.0, 100.0) < oWaterEffectPercent.value:
 			var xSubtile = (xSlab*3) + Random.randi_range(0,2) + 0.5
@@ -37,6 +35,9 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask,
 			var createAtPos = Vector3(xSubtile, ySubtile, zSubtile)
 			oInstances.place_new_thing(Things.TYPE.EFFECTGEN, 1, createAtPos, ownership)
 	
+	if Slabs.is_door(slabID):
+		create_door_thing(xSlab, ySlab, ownership)
+	
 	for i in range(9): # iterate over the range of 0-8, assuming 9 subtiles per variation
 		var variation = int(clmIndexGroup[i] / 9) # Convert to int for safety, as division of ints in GDScript results in float
 		var convertedSubtile = clmIndexGroup[i] % 9
@@ -50,35 +51,6 @@ func get_object(variation, subtile):
 			if subtile == objectStuff[Slabset.obj.SUBTILE]: # Assuming the third element in objectStuff array is the subtile number
 				return objectStuff
 	return [] # Return an empty array if no objectStuff is found or if slabVar is out of range
-
-	#for subtile in 9:
-		#var objectStuff = get_object(slabVar + constructedSlab[subtile], subtile)
-		#if objectStuff.size() > 0:
-		#	oInstances.spawn(xSlab, ySlab, slabID, ownership, subtile, objectStuff)
-
-
-
-
-#func get_object(slabVar, subtile):
-#	if slabVar < Slabset.tng.size():
-#		for objectStuff in Slabset.tng[slabVar]:
-#			if subtile == objectStuff[2]:
-#				return objectStuff
-#	return []
-#	if slabVar >= Slabset.tng.size(): return -1 # Out of bounds, causes crash
-#
-#	var idx = Slabset.tng[slabVar]
-#	if idx >= Slabset.numberOfThings: return -1
-#	# "tng" has one index per fullVariationIndex.
-#	# But there are actually multiple entries inside "tngObject" with the same fullVariationIndex value. Their index is grouped up, that's why I do idx+=1.
-#	while true:
-#		if subtile == Slabset.tngObject[idx][2]:
-#			return idx
-#
-#		idx += 1
-#		if idx >= Slabset.numberOfThings: return -1
-#		if Slabset.tngObject[idx][1] != slabVar:
-#			return -1
 
 
 func create_door_thing(xSlab, ySlab, ownership):
@@ -110,12 +82,6 @@ func create_door_thing(xSlab, ySlab, ownership):
 	
 	id.update_spinning_key()
 
-func determine_if_middle(slabID, ownership, bitmask, surrID, surrOwner):
-	if bitmask == 0:
-		if slabID == surrID[dir.se] and slabID == surrID[dir.sw] and slabID == surrID[dir.ne] and slabID == surrID[dir.nw] and ownership == surrOwner[dir.se] and ownership == surrOwner[dir.sw] and ownership == surrOwner[dir.ne] and ownership == surrOwner[dir.nw]:
-			return true
-	return false
-
 func prison_bar_bitmask(slabID, surrID):
 	var bitmask = 0
 	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.s]: bitmask += 1
@@ -135,4 +101,3 @@ func torch_object_bitmask(xSlab, ySlab, surrID):
 	elif torchSide == 2: return 04 # north torch
 	elif torchSide == 3: return 08 # east torch
 	elif torchSide == -1: return 0 # no torch
-
