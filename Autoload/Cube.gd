@@ -14,26 +14,31 @@ enum {
 	WHITE = 4
 	NONE = 5
 }
-const ownedCube = [
-	[192,193,194,195,199,198], # FLOOR_MARKER
-	[67,68,69,70,71,4], # WALL_MARKER
-	[382,422,423,424,426,425], # PORTAL_MARKER
-	[382,422,423,424,426,425], # HEART_MARKER
-	[393,427,428,429,431,430], # BARRACKS_FLAG
-	[160,410,413,416,419,77], # BANNER_LEFT
-	[161,411,414,417,420,77], # BANNER_MIDDLE
-	[162,412,415,418,421,77], # BANNER_RIGHT
-]
-enum {
-	FLOOR_MARKER = 0
-	WALL_MARKER = 1
-	PORTAL_MARKER = 2
-	HEART_MARKER = 3
-	BARRACKS_FLAG = 4
-	BANNER_LEFT = 5
-	BANNER_MIDDLE = 6
-	BANNER_RIGHT = 7
+const ownedCube = {
+	"FloorMarker" : [192,193,194,195,199,198],
+	"WallMarker" : [67,68,69,70,71,4],
+	"PortalMarker" : [382,422,423,424,426,425],
+	"HeartMarker" : [382,422,423,424,426,425],
+	"BarracksFlag" : [393,427,428,429,431,430],
+	"BannerLeft" : [160,410,413,416,419,77],
+	"BannerMiddle" : [161,411,414,417,420,77],
+	"BannerRight" : [162,412,415,418,421,77],
 }
+
+const rngCube = {
+	"Earth" : [1,2,3],
+	"ClaimedGround" : [126,127,128],
+	"Gold" : [49,50,51],
+	"GoldNearLava" : [52,53,54],
+	"PathClean" : [25,26,27],
+	"PathWithStones" : [28,29],
+	"Library" : [174,175],
+	"Gems" : [441,442,443,444],
+	"Wall" : [72,73,74],
+	#"EarthPathUnderneath" : [25,26,27,28,29], # This is apparently unnecessary, it'll just flood the column indexes
+}
+#	"Lava" : [546,547], # This one is a FloorTexture (find out if it even needs to be randomized)
+const stoneRatio = 0.15
 
 enum {
 	SIDE_NORTH = 0,

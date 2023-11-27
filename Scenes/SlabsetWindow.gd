@@ -107,6 +107,8 @@ func _on_SlabsetWindow_visibility_changed():
 	elif visible == false:
 		if is_instance_valid(oPickSlabWindow):
 			oPickSlabWindow.add_slabs()
+			Columnset.update_list_of_columns_that_contain_owned_cubes()
+			Columnset.update_list_of_columns_that_contain_rng_cubes()
 
 
 func _on_SlabsetTabs_tab_changed(tab):

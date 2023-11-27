@@ -223,7 +223,7 @@ func calculate_mirrored_ownership(toPos, fromPos, fieldX, fieldY, mainPaint):
 	return finalOwner
 
 func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Placed by hand
-	var CODETIME_START = OS.get_ticks_msec()
+	#var CODETIME_START = OS.get_ticks_msec()
 	var xSlab = floor(newPosition.x / 3)
 	var ySlab = floor(newPosition.y / 3)
 	var slabID = oDataSlab.get_cell(xSlab, ySlab)
@@ -322,7 +322,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 					id.doorOrientation = 0
 	
 	add_child(id)
-	print('Thing placed in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	#print('Thing placed in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	# Warnings
 	if id.thingType == Things.TYPE.OBJECT:

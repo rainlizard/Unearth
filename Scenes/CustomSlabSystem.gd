@@ -90,6 +90,7 @@ func add_custom_slab(slab_dict):
 			cfg.set_value(section,"floor"+str(i),slab_dict.floor_data[i])
 	
 	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
+	print(Slabs.data)
 
 func remove_custom_slab(header_id):
 	oPickSlabWindow.set_selection(null)

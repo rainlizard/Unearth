@@ -12,10 +12,12 @@ var floorTexture = []
 
 var default_data = {}
 
+var columnsContainingOwnedCubes = {}
+var columnsContainingRngCubes = {}
+
 # Strangely, slabs.clm is missing the second 4 bytes.
 # map0000x.clm : 49,160 bytes. first 4 bytes contains 2048, second 4 bytes are ???, then comes the column data.
 # slabs.clm : 49,156 bytes. first 4 bytes contains 2048, then comes the column data.
-
 
 func load_default_columnset():
 	var CODETIME_START = OS.get_ticks_msec()
@@ -32,7 +34,8 @@ func load_default_columnset():
 	
 	store_default_data()
 	print('Created Columnset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-
+	update_list_of_columns_that_contain_owned_cubes()
+	update_list_of_columns_that_contain_rng_cubes()
 
 func load_default_original_columnset():
 	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.CLM")
@@ -164,3 +167,48 @@ func is_column_different(index):
 	if cubes[index] != default_data["cubes"][index]:
 		return true
 	return false
+
+
+func update_list_of_columns_that_contain_rng_cubes():
+	var CODETIME_START = OS.get_ticks_msec()
+	columnsContainingRngCubes.clear()
+	
+	var reverseRngCubeLookup = {}
+	for key in Cube.rngCube.keys():
+		for cubeID in Cube.rngCube[key]:
+			reverseRngCubeLookup[cubeID] = key
+	
+	for clmIndex in 2048:
+		var rngCubeTypesInColumn = {}
+		
+		for cubeID in cubes[clmIndex]:
+			if reverseRngCubeLookup.has(cubeID):
+				var stringNameOfRngType = reverseRngCubeLookup[cubeID]
+				rngCubeTypesInColumn[stringNameOfRngType] = true
+		
+		if rngCubeTypesInColumn:
+			columnsContainingRngCubes[clmIndex] = rngCubeTypesInColumn.keys()
+	
+	print('update_list_of_columns_that_contain_rng_cubes: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+func update_list_of_columns_that_contain_owned_cubes():
+	var CODETIME_START = OS.get_ticks_msec()
+	columnsContainingOwnedCubes.clear()
+	
+	var reverseOwnedCubeLookup = {}
+	for key in Cube.ownedCube.keys():
+		for cubeID in Cube.ownedCube[key]:
+			reverseOwnedCubeLookup[cubeID] = key
+	
+	for clmIndex in 2048:  # assuming there are 2048 columns to iterate through
+		var ownedCubeTypesInColumn = {}
+		
+		for cubeID in cubes[clmIndex]:
+			if reverseOwnedCubeLookup.has(cubeID):
+				var stringNameOfOwnedType = reverseOwnedCubeLookup[cubeID]
+				ownedCubeTypesInColumn[stringNameOfOwnedType] = true
+		
+		if ownedCubeTypesInColumn:
+			columnsContainingOwnedCubes[clmIndex] = ownedCubeTypesInColumn.keys()
+	
+	print('update_list_of_columns_that_contain_owned_cubes: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
