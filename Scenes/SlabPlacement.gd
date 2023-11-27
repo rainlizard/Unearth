@@ -592,19 +592,20 @@ func randomize_columns(dkClmIndexList, constructedColumns):
 	return constructedColumns
 
 func adjust_ownership_graphic(dkClmIndexList, constructedColumns, ownership):
-	# Adjust ownership cubes
 	for subtile in 9:
 		var dkClmIndex = dkClmIndexList[subtile]
 		if Columnset.columnsContainingOwnedCubes.has(dkClmIndex):
-			# Get the types of owned cubes present in the column
-			var ownedTypesInColumn = Columnset.columnsContainingOwnedCubes[dkClmIndex]
+			var listOfStrings = Columnset.columnsContainingOwnedCubes[dkClmIndex]
 			for cubeIndex in 8:
 				var cubeID = constructedColumns[subtile][cubeIndex]
-				# Check each owned cube type in the column
-				for ownedType in ownedTypesInColumn:
-					if Cube.ownedCube[ownedType].has(cubeID):
-						# Replace the cube ID with the corresponding one based on ownership
-						var setFinalCube = Cube.ownedCube[ownedType][ownership]
+				for stringType in listOfStrings:
+					if Cube.ownedCube[stringType].has(cubeID):
+						
+						# If the cube is a neutral cube, then don't change it to a player cube (because this can be a normal wall)
+						if cubeID == Cube.ownedCube[stringType][5]:
+							continue
+						
+						var setFinalCube = Cube.ownedCube[stringType][ownership]
 						constructedColumns[subtile][cubeIndex] = setFinalCube
 						break  # Once matched, no need to check further
 
