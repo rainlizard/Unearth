@@ -47,6 +47,12 @@ func _on_AddCustomSlabWindow_visibility_changed():
 	if visible == true:
 		update_type()
 		oCustomSlabVoxelView.initialize()
+		
+		# Due to a strange bug I don't understand, the oCustomSlabVoxelView is skewed until I resize the window. This fixes that.
+		rect_size += Vector2(1,1)
+		yield(get_tree(),'idle_frame')
+		rect_size -= Vector2(1,1)
+		
 
 func shortcut_pressed(id):
 	var spinbox = id.get_node("CustomSpinBox")

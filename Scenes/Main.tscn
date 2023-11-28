@@ -4997,9 +4997,9 @@ __meta__ = {
 
 [node name="ColumnEditor" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -1326.0
+margin_left = -4310.0
 margin_top = -1481.0
-margin_right = -46.0
+margin_right = -3030.0
 margin_bottom = -728.0
 window_title = "Map columns"
 resizable = true
@@ -5082,10 +5082,10 @@ stretch_mode = 4
 
 [node name="AddCustomSlabWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -1358.0
+margin_left = -1595.0
 margin_top = -2377.0
-margin_right = -16.0
-margin_bottom = -1544.0
+margin_right = -890.0
+margin_bottom = -1799.0
 window_title = "Add custom slab"
 resizable = true
 script = ExtResource( 157 )
@@ -5101,17 +5101,17 @@ custom_constants/margin_bottom = 10
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 1332.0
-margin_bottom = 823.0
+margin_right = 695.0
+margin_bottom = 568.0
 
 [node name="CustomSlabVoxelView" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 971.0
-margin_bottom = 813.0
+margin_right = 334.0
+margin_bottom = 558.0
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer"]
-margin_left = 975.0
-margin_right = 1322.0
-margin_bottom = 813.0
+margin_left = 338.0
+margin_right = 685.0
+margin_bottom = 558.0
 
 [node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2"]
 margin_right = 347.0

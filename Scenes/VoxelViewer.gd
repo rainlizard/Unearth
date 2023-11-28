@@ -42,6 +42,9 @@ func initialize():
 	if displayingType == DK_SLABSET:
 		do_all()
 	
+	if displayingType == MAP_CUSTOM_SLAB:
+		oVoxelCamera.size = 10
+	
 	do_one()
 	
 	print('Columns generated in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
