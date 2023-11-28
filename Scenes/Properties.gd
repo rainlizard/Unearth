@@ -6,7 +6,6 @@ onready var oDungeonStyleList = Nodelist.list["oDungeonStyleList"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oAdvancedMapPropertiesCheckBox = Nodelist.list["oAdvancedMapPropertiesCheckBox"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oAdvancedMapProperties = Nodelist.list["oAdvancedMapProperties"]
@@ -25,22 +24,27 @@ onready var oDescriptionLineEdit = Nodelist.list["oDescriptionLineEdit"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oKindOptionButton = Nodelist.list["oKindOptionButton"]
 
-const kind_options = [
-	"SINGLE",
-	"MULTI",
-	"BONUS",
-	"EXTRA",
-	"FREE",
-]
+const kind_options = {
+	"Solo" : "FREE",
+	"Campaign" : "SINGLE",
+	"Multiplayer" : "MULTI",
+	"Secret" : "BONUS",
+	"Moon" : "EXTRA",
+}
 
 func _ready():
+	var tooltip_text = ""
+	for key in kind_options.keys():
+		tooltip_text += key + " = " + kind_options[key] + "\n"
+	oKindOptionButton.hint_tooltip = tooltip_text.strip_edges(true)
+	
 	# Default to hiding ONCE, when you start the editor.
 	oAdvancedMapProperties.visible = false
 	
 	
 	# Construct oKindOptionButton
-	for i in kind_options.size():
-		oKindOptionButton.add_item(kind_options[i])
+	for stringKind in kind_options.keys():
+		oKindOptionButton.add_item(stringKind)
 		oKindOptionButton.selected = 0
 
 func _on_MapProperties_visibility_changed():
@@ -78,11 +82,9 @@ func _on_MapFormatSetting_item_selected(index):
 func set_format_selection(setFormat):
 	match setFormat:
 		0: # Classic format
-			oAdvancedMapPropertiesCheckBox.disabled = true
-			oAdvancedMapPropertiesCheckBox.pressed = false
 			oAdvancedMapProperties.visible = false
 		1: # KFX format
-			oAdvancedMapPropertiesCheckBox.disabled = false
+			oAdvancedMapProperties.visible = true
 	
 	# When you change format, the object settings that are available also change
 	oPlacingSettings.update_placing_tab()
@@ -130,10 +132,6 @@ func _on_DungeonStyleList_item_selected(value):
 	oTextureCache.set_current_texture_pack()
 	oMessage.quick("Loaded : ".plus_file("unearthdata").plus_file("tmapa" + str(value).pad_zeros(3) + ".png"))
 
-func _on_AdvancedMapPropertiesCheckBox_pressed():
-	oAdvancedMapProperties.visible = oAdvancedMapPropertiesCheckBox.pressed
-
-
 func _on_MapNameLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataMapName.set_map_name(new_text)
@@ -172,11 +170,20 @@ func _on_LandViewLineEdit_text_changed(new_text):
 #	oDataLof.KIND = new_text
 
 func _on_KindOptionButton_item_selected(index):
-	oDataLof.KIND = kind_options[index]
+	oDataLof.KIND = kind_options[oKindOptionButton.text]
 	oEditor.mapHasBeenEdited = true
 
 func kind_text_to_button_id():
-	for i in kind_options.size():
-		if oDataLof.KIND == kind_options[i]:
-			return i
-	return 4 # FREE
+	var kind_value = oDataLof.KIND
+	var button_id = -1
+
+	for i in range(oKindOptionButton.get_item_count()):
+		if kind_options[oKindOptionButton.get_item_text(i)] == kind_value:
+			button_id = i
+			break
+
+	if button_id == -1:
+		button_id = 0  # Default to 0 or another suitable default index
+
+	return button_id
+
