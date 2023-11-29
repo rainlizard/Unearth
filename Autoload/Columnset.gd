@@ -27,7 +27,7 @@ func load_default_columnset():
 	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "COLUMNSET.CFG")
 	if filePath != "":
 		# Load columnset.cfg file
-		import_cfg_columnset(filePath, true)
+		import_cfg_columnset(filePath, true, false)
 	else:
 		# Load slabs.clm file
 		load_default_original_columnset()
@@ -78,13 +78,13 @@ func store_default_data():
 	default_data["floorTexture"] = floorTexture.duplicate(true)
 
 
-func import_cfg_columnset(filePath, fullExport):
+func import_cfg_columnset(filePath, fullExport, showMessages):
 	var oMessage = Nodelist.list["oMessage"]
 	var cfg = ConfigFile.new()
 	var err = cfg.load(filePath)
 	
 	if err != OK:
-		oMessage.quick("Failed to load config file: " + str(filePath))
+		if showMessages == true: oMessage.quick("Failed to load config file: " + str(filePath))
 		return
 	
 	for section in cfg.get_sections():
@@ -99,7 +99,7 @@ func import_cfg_columnset(filePath, fullExport):
 			orientation[columnIndex] = cfg.get_value(section, "Orientation", 0)
 			cubes[columnIndex] = cfg.get_value(section, "Cubes", [0,0,0,0, 0,0,0,0])
 	
-	oMessage.quick("Merged: " + str(filePath))
+	if showMessages == true: oMessage.quick("Merged: " + str(filePath))
 
 
 

@@ -46,7 +46,7 @@ func load_default_slabset():
 	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "SLABSET.CFG")
 	if filePath != "":
 		# Load slabset.cfg file
-		import_cfg_slabset(filePath, true)
+		import_cfg_slabset(filePath, true, false)
 	else:
 		# Load slabs.dat and slabs.tng files
 		load_default_original_slabset()
@@ -96,15 +96,15 @@ func store_default_data():
 	default_data["tng"] = tng.duplicate(true)
 
 
-func import_cfg_slabset(filePath, fullImport):
+func import_cfg_slabset(filePath, fullImport, showMessages):
 	var processed_string = preprocess_cfg_file(filePath)
 	if processed_string == null:
-		oMessage.quick("Failed to open file: " + str(filePath))
+		if showMessages == true: oMessage.quick("Failed to open file: " + str(filePath))
 		return
 	var cfg = ConfigFile.new()
 	var err = cfg.parse(processed_string)
 	if err != OK:
-		oMessage.quick("Failed to parse config file")
+		if showMessages == true: oMessage.quick("Failed to parse config file")
 		return
 	
 	resize_dat_and_tng_based_on_cfg(cfg)
@@ -141,7 +141,7 @@ func import_cfg_slabset(filePath, fullImport):
 				"ThingType": getObject[obj.THING_TYPE] = int(value) #int(Things.reverse_data_structure_name.get(value, 0))
 				"Subtype": getObject[obj.THING_SUBTYPE] = int(value)
 				"EffectRange": getObject[obj.EFFECT_RANGE] = int(value)
-	oMessage.quick("Merged: " + str(filePath))
+	if showMessages == true: oMessage.quick("Merged: " + str(filePath))
 
 func resize_dat_and_tng_based_on_cfg(cfg):
 	# Determine maximum needed size for dat and tng arrays
