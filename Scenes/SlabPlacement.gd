@@ -435,23 +435,37 @@ func try_upgrade_to_torch_slab(xSlab:int, ySlab:int, currentSlabID, surrID):
 # Torch sides: S:0, W:1, N:2, E:3, None:-1
 # Torch subtiles: S:7, W:3, N:1, E:5, None:-1
 const torchSubtileToKeepMap = {0:7, 1:3, 2:1, 3:5, -1:-1}
-func set_torch_side(xSlab, ySlab, slabID, slabsetIndexGroup, bitmask, surrID):
+func set_torch_side(xSlab, ySlab, slabID, slabsetIndexGroup, constructedColumns, bitmask, surrID):
 	var torchDirection = calculate_torch_side(xSlab, ySlab, surrID)
 	var torchSubtileToKeep = torchSubtileToKeepMap[torchDirection]
-
-	var undecoratedID
+	
+	#Slabs.WALL_WITH_TORCH = 5
+	#Slabs.WALL_DAMAGED = 9
+	#Slabs.EARTH_WITH_TORCH = 3
+	#Slabs.EARTH = 2
+	var IdDiff
 	if slabID == Slabs.WALL_WITH_TORCH:
-		undecoratedID = Slabs.WALL_DAMAGED
+		IdDiff = Slabs.WALL_WITH_TORCH - Slabs.WALL_DAMAGED
 	elif slabID == Slabs.EARTH_WITH_TORCH:
-		undecoratedID = Slabs.EARTH
+		IdDiff = Slabs.EARTH_WITH_TORCH - Slabs.EARTH
 	else:
 		return
-
-	var undecoratedGroup = make_slab(undecoratedID*28, bitmask)
-
+	
+	var variDiff = IdDiff * 28 * 9
+	var undecoratedGroup = []
+	undecoratedGroup.resize(9)
+	for i in 9:
+		undecoratedGroup[i] = slabsetIndexGroup[i] - variDiff
+	
 	for subtile in [7, 3, 1, 5]:  # S W N E
 		if torchSubtileToKeep != subtile:
-			slabsetIndexGroup[subtile] = undecoratedGroup[subtile]
+			# Wall Torch Cube: 119
+			# Earth Torch Cube: 24
+			if constructedColumns[subtile][3] == 119 or constructedColumns[subtile][3] == 24:
+				# For the torch cube
+				constructedColumns[subtile][3] = constructedColumns[subtile][2] # Replace using the wall cube below it
+				# For the torch objects
+				slabsetIndexGroup[subtile] = undecoratedGroup[subtile]
 
 
 func calculate_torch_side(xSlab:int, ySlab:int, surrID):
@@ -533,8 +547,6 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	# SlabID is adjusted by determine_door_direction(), so make_slab() needs to occur right after
 	var slabsetIndexGroup = make_slab(slabID*28, bitmask)
 	
-	if slabID == Slabs.WALL_WITH_TORCH or slabID == Slabs.EARTH_WITH_TORCH:
-		set_torch_side(xSlab, ySlab, slabID, slabsetIndexGroup, bitmask, surrID)
 	
 	if bitmaskType == Slabs.BITMASK_REINFORCED:
 		fill_reinforced_wall_corners(slabID, slabsetIndexGroup, surrID, bitmaskType)
@@ -543,10 +555,15 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 		if modifyForLiquid == true:
 			modify_for_liquid(slabsetIndexGroup, surrID, slabID)
 	
+	
 	var columnsetIndexList = slabset_position_to_column_data(slabsetIndexGroup, ownership)
 	var constructedSlabData = get_constructed_slab_data(columnsetIndexList)
 	var constructedColumns = constructedSlabData[0]
 	var constructedFloor = constructedSlabData[1]
+	
+	if slabID == Slabs.WALL_WITH_TORCH or slabID == Slabs.EARTH_WITH_TORCH:
+		set_torch_side(xSlab, ySlab, slabID, slabsetIndexGroup, constructedColumns, bitmask, surrID)
+	
 	adjust_ownership_graphic(columnsetIndexList, constructedColumns, ownership)
 	randomize_columns(columnsetIndexList, constructedColumns)
 	make_frail(constructedSlabData, slabID, surrID)
@@ -557,6 +574,7 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	
 	set_columns(xSlab, ySlab, constructedColumns, constructedFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabsetIndexGroup, bitmask, surrID, bitmaskType)
+
 
 func get_constructed_slab_data(columnsetIndexList):
 	var constructedColumns = []
@@ -770,8 +788,8 @@ func modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slab
 	var modify0 = 0; var modify1 = 0; var modify2 = 0; var modify3 = 0; var modify4 = 0; var modify5 = 0; var modify6 = 0; var modify7 = 0; var modify8 = 0
 	
 	if Slabs.rooms_that_have_walls.has(surrID[dir.s]):
-		var roomFace = surrID[dir.s] + 1
-		var offset = ((roomFace-slabID)*28)*9
+		var wallFaceForRoom = surrID[dir.s] + 1
+		var offset = ((wallFaceForRoom-slabID)*28)*9
 		if surrID[dir.se] == surrID[dir.s] and surrID[dir.sw] == surrID[dir.s]:
 			offset += 9*9
 		modify6 = offset
@@ -779,24 +797,24 @@ func modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slab
 		modify8 = offset
 	
 	if Slabs.rooms_that_have_walls.has(surrID[dir.w]):
-		var roomFace = surrID[dir.w] + 1
-		var offset = ((roomFace-slabID)*28)*9
+		var wallFaceForRoom = surrID[dir.w] + 1
+		var offset = ((wallFaceForRoom-slabID)*28)*9
 		if surrID[dir.sw] == surrID[dir.w] and surrID[dir.nw] == surrID[dir.w]:
 			offset += 9*9
 		modify0 = offset
 		modify3 = offset
 		modify6 = offset
 	if Slabs.rooms_that_have_walls.has(surrID[dir.n]):
-		var roomFace = surrID[dir.n] + 1
-		var offset = ((roomFace-slabID)*28)*9
+		var wallFaceForRoom = surrID[dir.n] + 1
+		var offset = ((wallFaceForRoom-slabID)*28)*9
 		if surrID[dir.ne] == surrID[dir.n] and surrID[dir.nw] == surrID[dir.n]:
 			offset += 9*9
 		modify0 = offset
 		modify1 = offset
 		modify2 = offset
 	if Slabs.rooms_that_have_walls.has(surrID[dir.e]):
-		var roomFace = surrID[dir.e] + 1
-		var offset = ((roomFace-slabID)*28)*9
+		var wallFaceForRoom = surrID[dir.e] + 1
+		var offset = ((wallFaceForRoom-slabID)*28)*9
 		if surrID[dir.se] == surrID[dir.e] and surrID[dir.ne] == surrID[dir.e]:
 			offset += 9*9
 		modify2 = offset
