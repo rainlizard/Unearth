@@ -24,7 +24,7 @@ jobs:
         MAJOR_MINOR=$(grep "var major_minor" Autoload/Version.gd | awk -F\" '{print $2}')
         PATCH=$(git rev-list --count HEAD)
         FULL_VERSION="$MAJOR_MINOR.$PATCH"
-        echo "FULL_VERSION=$FULL_VERSION" >>$GITHUB_OUTPUT
+        echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_OUTPUT
         echo "PATCH=$PATCH" >> $GITHUB_ENV
 
     - name: Update Version in Godot Script
@@ -52,9 +52,19 @@ jobs:
     - name: Export Godot Game (Windows)
       run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" ./bin/ExportWindows/Unearth/Unearth.exe
 
-    - name: Replace Icon in Windows Export
-      run: ./Godot_v3.5.3-stable_linux_headless.64 -s Art/ReplaceIcon.gd Art/UnearthIcon.ico ./bin/ExportWindows/Unearth/Unearth.exe
-    
+    - name: Install Wine
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wine64
+
+    - name: Download rcedit
+      run: |
+        wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
+
+    - name: Replace Icon in Windows Export with rcedit
+      run: |
+        wine64 rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe --set-icon Art/UnearthIcon.ico
+
     - name: Upload Linux Artifacts
       uses: actions/upload-artifact@v3
       with:
