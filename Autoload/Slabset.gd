@@ -231,7 +231,7 @@ func create_object_list(tng_buffer):
 	
 	return object_info
 
-func fetch_column_index(variation, subtile):
+func fetch_columnset_index(variation, subtile):
 	if variation < dat.size():
 		return dat[variation][subtile]
 	else:

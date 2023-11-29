@@ -18,8 +18,6 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask,
 	
 	if slabID == Slabs.PRISON:
 		bitmask = prison_bar_bitmask(slabID, surrID)
-	elif slabID == Slabs.WALL_WITH_TORCH or slabID == Slabs.EARTH_WITH_TORCH:
-		bitmask = torch_object_bitmask(xSlab, ySlab, surrID)
 	elif slabID == Slabs.WATER:
 		if Random.rng.randf_range(0.0, 100.0) < oWaterEffectPercent.value:
 			var xSubtile = (xSlab*3) + Random.randi_range(0,2) + 0.5
@@ -89,15 +87,3 @@ func prison_bar_bitmask(slabID, surrID):
 	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.n]: bitmask += 4
 	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.e]: bitmask += 8
 	return bitmask
-
-func torch_object_bitmask(xSlab, ySlab, surrID):
-	var torchSide = oSlabPlacement.pick_torch_side(xSlab, ySlab, surrID)
-	
-	if Slabs.data[ surrID[torchSide] ][Slabs.IS_SOLID] == true:
-		torchSide = -1
-	
-	if torchSide == 0: return 01 # south torch
-	elif torchSide == 1: return 02 # west torch
-	elif torchSide == 2: return 04 # north torch
-	elif torchSide == 3: return 08 # east torch
-	elif torchSide == -1: return 0 # no torch

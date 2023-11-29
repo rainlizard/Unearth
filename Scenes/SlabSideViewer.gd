@@ -23,7 +23,7 @@ var WALLSIDE_ALPHA = 0.0
 #	var slabVariation = slabID*28
 #	var columnArray = [0,0,0, 0,0,0, 0,0,0]
 #	for i in 9:
-#		columnArray[i] = Slabset.fetch_column_index(slabVariation, i)
+#		columnArray[i] = Slabset.fetch_columnset_index(slabVariation, i)
 #	sd.set_meta("ID_of_slab", slabID)
 #	sd.panelView = Slabs.data[slabID][Slabs.PANEL_VIEW]
 #	sd.set_visual(columnArray)

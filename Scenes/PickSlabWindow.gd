@@ -95,17 +95,17 @@ func add_slabs():
 				Slabs.PORTAL:
 					slabVariation = (Slabs.PORTAL*28) + 8
 					for i in 9:
-						columnArray[i] = Slabset.fetch_column_index(slabVariation, i)
+						columnArray[i] = Slabset.fetch_columnset_index(slabVariation, i)
 				Slabs.WALL_AUTOMATIC:
 					slabVariation = Slabs.WALL_WITH_BANNER*28
 					for i in 9:
-						columnArray[i] = Slabset.fetch_column_index(slabVariation, i)
+						columnArray[i] = Slabset.fetch_columnset_index(slabVariation, i)
 				_:
 					if slabID < 1000:
 						# Normal slab
 						slabVariation = slabID*28
 						for i in 9:
-							columnArray[i] = Slabset.fetch_column_index(slabVariation, i)
+							columnArray[i] = Slabset.fetch_columnset_index(slabVariation, i)
 					else:
 						# Fake Slab
 						pass

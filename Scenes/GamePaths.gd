@@ -15,9 +15,9 @@ var DK_DATA_DIRECTORY = ""
 var DK_FXDATA_DIRECTORY = ""
 var DK_LEVELS_DIRECTORY = ""
 var DK_CAMPGNS_DIRECTORY = ""
-var KEEPERFX_VERSION_INT = 0 # This is set in set_paths() when EXECUTABLE_PATH is set.
+#var KEEPERFX_VERSION_INT = 0 # This is set in set_paths() when EXECUTABLE_PATH is set.
 var KEEPERFX_VERSION_STRING = "0"
-const KEEPERFX_VERSION_REQUIRED_INT = 0503372
+#const KEEPERFX_VERSION_REQUIRED_INT = 0503372 #0.5.0.3372
 #var nosound = true
 #var cheats = true
 #var gameSpeed = 25
@@ -192,10 +192,10 @@ func set_keeperfx_version():
 	var _exit_code = OS.execute(getVer, [EXECUTABLE_PATH], true, output)
 	if output.size() == 1:
 		KEEPERFX_VERSION_STRING = output[0].strip_edges()
-		KEEPERFX_VERSION_INT = int(KEEPERFX_VERSION_STRING.replace(".",""))
+		#KEEPERFX_VERSION_INT = int(KEEPERFX_VERSION_STRING.replace(".",""))
 	else:
 		KEEPERFX_VERSION_STRING = "Undetected"
-		KEEPERFX_VERSION_INT = 0
+		#KEEPERFX_VERSION_INT = 0
 
 #func load_command_line_from_settings(COMMAND_LINE):
 #	COMMAND_LINE = COMMAND_LINE.replace("%DIR%", GAME_DIRECTORY)
