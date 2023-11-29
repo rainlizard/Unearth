@@ -47,8 +47,7 @@ _global_script_class_icons={
 config/name="Unearth"
 run/main_scene="res://Scenes/Main.tscn"
 boot_splash/image="Skip-loading-screen"
-config/icon="res://Art/UnearthIcon.png"
-config/windows_native_icon="res://Art/UnearthIcon.ico"
+config/icon="res://Art/UnearthIconBig.png"
 
 [autoload]
 
