@@ -21,10 +21,14 @@ jobs:
     - name: Extract Version & Determine Patch
       id: version_info
       run: |
-        MAJOR_MINOR=$(grep "const VERSION" Autoload/Constants.gd | awk -F\" '{print $2}')
+        MAJOR_MINOR=$(grep "var major_minor" Autoload/Version.gd | awk -F\" '{print $2}')
         PATCH=$(git rev-list --count HEAD)
         FULL_VERSION="$MAJOR_MINOR.$PATCH"
         echo "FULL_VERSION=$FULL_VERSION" >>$GITHUB_OUTPUT
+
+    - name: Update Version in Godot Script
+      run: |
+        sed -i "s/var patch = .*/var patch = \"$PATCH\"/" Autoload/Version.gd
 
     - name: Setup Godot and Export Templates
       run: |
