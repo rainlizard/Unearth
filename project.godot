@@ -64,6 +64,7 @@ Filetypes="*res://Autoload/Filetypes.gd"
 M="*res://Autoload/M.gd"
 Slabset="*res://Autoload/Slabset.gd"
 Columnset="*res://Autoload/Columnset.gd"
+Version="*res://Autoload/Version.gd"
 
 [debug]
 

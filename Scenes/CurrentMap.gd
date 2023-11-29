@@ -34,17 +34,17 @@ enum {
 }
 
 func _init():
-	OS.set_window_title('Unearth v'+Constants.VERSION)
+	OS.set_window_title('Unearth v'+Version.full)
 
 func _on_ButtonNewMap_pressed():
 	oOpenMap.open_map("") # This means "blank" map
 
 func set_path_and_title(newpath):
 	if newpath != "":
-		OS.set_window_title(newpath + ' - Unearth v'+Constants.VERSION)
+		OS.set_window_title(newpath + ' - Unearth v'+Version.full)
 		oMenu.add_recent(newpath) # Add saved maps to the recent menu
 	else:
-		OS.set_window_title('Unearth v'+Constants.VERSION)
+		OS.set_window_title('Unearth v'+Version.full)
 	path = newpath
 	
 	oGame.reconstruct_command_line() # Always update command line whenever the path changes

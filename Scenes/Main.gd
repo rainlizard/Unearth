@@ -3,7 +3,7 @@ onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 
 func _enter_tree():
-	print("Unearth v"+Constants.VERSION)
+	print("Unearth v"+Version.full)
 	Nodelist.start(self)
 
 func _ready():

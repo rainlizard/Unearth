@@ -20,7 +20,7 @@ var value # just so I don't have to initialize the var in every function
 func write_keeperfx_lof(buffer):
 	var newString = ""
 	newString += "; KeeperFX Level Overview File (LOF)" + "\n"
-	newString += "MAP_FORMAT_VERSION = " + str(Constants.unearth_map_format_version).pad_decimals(2) + "\n"
+	newString += "MAP_FORMAT_VERSION = " + str(Version.unearth_map_format_version).pad_decimals(2) + "\n"
 	newString += "NAME_TEXT = " + str(oDataLof.NAME_TEXT) + "\n"
 	newString += "NAME_ID = " + str(oDataLof.NAME_ID) + "\n"
 	newString += "KIND = " + str(oDataLof.KIND) + "\n"

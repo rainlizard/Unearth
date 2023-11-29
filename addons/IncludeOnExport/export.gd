@@ -17,7 +17,7 @@ func _export_begin(features, is_debug, export_path, flags):
 		_export_file_our_way(i)
 
 func _export_end():
-	print("Unearth v" + Constants.VERSION)
+	print("Unearth v" + Version.full)
 	
 #	if OS.get_name() == "Windows":
 #		zip_it_up(output_root_dir)
@@ -80,9 +80,9 @@ func dir_contents(path):
 #func zip_it_up(folder_to_zip_up):
 #	var createFileName
 #	if theExportFeatures.has("Windows") == true: # On 3.5, it's capitalized "Windows", on 4.0 it's lowercase "windows"
-#		createFileName = "Unearth v" + Constants.VERSION + ".zip"
+#		createFileName = "Unearth v" + Version.full + ".zip"
 #	else:
-#		createFileName = "UnearthLinux v" + Constants.VERSION + ".zip"
+#		createFileName = "UnearthLinux v" + Version.full + ".zip"
 #
 #	var output_zip_filepath = folder_to_zip_up.get_base_dir().plus_file(createFileName)
 #

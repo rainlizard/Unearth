@@ -15,5 +15,5 @@ func on_link_clicked(id):
 func _on_AboutWindow_about_to_show():
 	#if is_instance_valid(oMain) == false: return
 	#oUnearthVerLabel.text = 
-	window_title = 'Unearth v'+Constants.VERSION
+	window_title = 'Unearth v'+Version.full
 
