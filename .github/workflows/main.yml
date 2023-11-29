@@ -29,6 +29,7 @@ jobs:
     - name: Update Version in Godot Script
       run: |
         sed -i "s/var patch = .*/var patch = \"$PATCH\"/" Autoload/Version.gd
+        cat Autoload/Version.gd # For debugging
 
     - name: Setup Godot and Export Templates
       run: |
