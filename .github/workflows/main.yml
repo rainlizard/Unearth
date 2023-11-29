@@ -25,11 +25,11 @@ jobs:
         PATCH=$(git rev-list --count HEAD)
         FULL_VERSION="$MAJOR_MINOR.$PATCH"
         echo "FULL_VERSION=$FULL_VERSION" >>$GITHUB_OUTPUT
+        echo "PATCH=$PATCH" >> $GITHUB_ENV
 
     - name: Update Version in Godot Script
       run: |
         sed -i "s/var patch = .*/var patch = \"$PATCH\"/" Autoload/Version.gd
-        cat Autoload/Version.gd # For debugging
 
     - name: Setup Godot and Export Templates
       run: |
