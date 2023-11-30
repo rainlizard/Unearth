@@ -575,8 +575,6 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	elif slabID == Slabs.PATH:
 		randomize_path_cubes(constructedColumns)
 	
-	
-	
 	set_columns(xSlab, ySlab, constructedColumns, constructedFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabsetIndexGroup, bitmask, surrID, bitmaskType)
 
