@@ -55,9 +55,9 @@ size_flags_vertical = 3
 texture = SubResource( 4 )
 stretch_mode = 6
 
-[node name="CreatureLevel" type="AnimatedSprite" parent="ThingTexture"]
+[node name="CreatureLevel" type="AnimatedSprite" parent="."]
 visible = false
-position = Vector2( 15, 2 )
+position = Vector2( -1, -21 )
 z_index = 10
 frames = SubResource( 3 )
 

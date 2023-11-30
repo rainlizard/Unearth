@@ -148,11 +148,11 @@ func _on_zoom_level_changed(zoom):
 	inventScale.x = clamp(zoom.x, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
 	inventScale.y = clamp(zoom.y, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
 	if zoom.x > oUi.FONT_SIZE_CR_LVL_MAX or oQuickMapPreview.visible == true:
-		$ThingTexture/CreatureLevel.self_modulate = Color(0,0,0,0)
+		$CreatureLevel.self_modulate = Color(0,0,0,0)
 	else:
-		$ThingTexture/CreatureLevel.self_modulate = Color(1,1,1,1)
+		$CreatureLevel.self_modulate = Color(1,1,1,1)
 	
-	$ThingTexture/CreatureLevel.scale = inventScale * oUi.FONT_SIZE_CR_LVL_BASE
+	$CreatureLevel.scale = inventScale * oUi.FONT_SIZE_CR_LVL_BASE * 1.5
 
 func set_ownership(setval):
 	ownership = setval
@@ -185,8 +185,8 @@ func set_doorOrientation(setval):
 func set_creatureLevel(setval):
 	data14 = null
 	creatureLevel = setval
-	$ThingTexture/CreatureLevel.frame = creatureLevel-1
-	$ThingTexture/CreatureLevel.visible = true
+	$CreatureLevel.frame = creatureLevel-1
+	$CreatureLevel.visible = true
 
 func set_boxNumber(setval):
 	data14 = null
@@ -267,8 +267,6 @@ func set_texture_based_on_thingtype():
 			$TextNameLabel.grow_vertical = Control.GROW_DIRECTION_BOTH
 		else:
 			$TextNameLabel.grow_vertical = Control.GROW_DIRECTION_END
-
-
 
 func set_grow_direction():
 	# Change Grow Direction so the art pokes out from the base.
