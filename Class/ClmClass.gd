@@ -45,14 +45,24 @@ func copy_column(indexSrc, indexDest):
 	self.floorTexture[indexDest] = self.floorTexture[indexSrc]
 
 func clear_all_column_data():
-	self.utilized.clear()
-	self.orientation.clear()
-	self.solidMask.clear()
-	self.permanent.clear()
-	self.lintel.clear()
-	self.height.clear()
-	self.cubes.clear()
-	self.floorTexture.clear()
+	self.utilized.resize(2048)
+	self.utilized.fill(0)
+	self.orientation.resize(2048)
+	self.orientation.fill(0)
+	self.solidMask.resize(2048)
+	self.solidMask.fill(0)
+	self.permanent.resize(2048)
+	self.permanent.fill(0)
+	self.lintel.resize(2048)
+	self.lintel.fill(0)
+	self.height.resize(2048)
+	self.height.fill(0)
+	self.floorTexture.resize(2048)
+	self.floorTexture.fill(0)
+	self.cubes.resize(2048)
+	for i in 2048:
+		self.cubes[i] = [0,0,0,0, 0,0,0,0] # Don't use fill(), that doesn't work
+	
 
 func find_cubearray_index(cubeArray, floorID):
 	var compareFloorTexture = false

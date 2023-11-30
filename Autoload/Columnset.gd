@@ -21,8 +21,6 @@ var columnsContainingRngCubes = {}
 
 func load_default_columnset():
 	var CODETIME_START = OS.get_ticks_msec()
-	clear_all_column_data() # Important, for reloading/refreshing slabs.clm
-	
 	# Decide which one to load
 	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "COLUMNSET.CFG")
 	if filePath != "":
@@ -41,31 +39,30 @@ func load_default_original_columnset():
 	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.CLM")
 	var buffer = Filetypes.file_path_to_buffer(filePath)
 	
+	clear_all_column_data()
+	
 	buffer.seek(0)
 	var numberOfClmEntries = buffer.get_u16()
 	
 	buffer.seek(4) # For reading slabs.clm. (THIS IS DIFFERENT TO READING MAPS)
 	for entry in numberOfClmEntries:
-		utilized.append(buffer.get_u16()) # 0-1
+		utilized[entry] = buffer.get_u16() # 0-1
 		
 		var specialByte = buffer.get_u8() # 2
 		
 		var get_permanent = specialByte & 1
 		var get_lintel = (specialByte >> 1) & 7
 		var get_height = (specialByte >> 4) & 15
-		permanent.append(get_permanent)
-		lintel.append(get_lintel)
-		height.append(get_height)
+		permanent[entry] = get_permanent
+		lintel[entry] = get_lintel
+		height[entry] = get_height
 		
-		solidMask.append(buffer.get_u16()) # 3-4
-		floorTexture.append(buffer.get_u16()) # 5-6
-		orientation.append(buffer.get_u8()) # 7
+		solidMask[entry] = buffer.get_u16() # 3-4
+		floorTexture[entry] = buffer.get_u16() # 5-6
+		orientation[entry] = buffer.get_u8() # 7
 		
-		cubes.append([])
-		cubes[entry].resize(8)
 		for cubeNumber in 8:
 			cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
-
 
 func store_default_data():
 	default_data["utilized"] = utilized.duplicate(true)
@@ -86,6 +83,8 @@ func import_cfg_columnset(filePath, fullExport, showMessages):
 	if err != OK:
 		if showMessages == true: oMessage.quick("Failed to load config file: " + str(filePath))
 		return
+	
+	clear_all_column_data()
 	
 	for section in cfg.get_sections():
 		if section.begins_with("column"):

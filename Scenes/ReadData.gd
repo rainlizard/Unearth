@@ -208,6 +208,8 @@ func new_dat():
 			oDataClmPos.set_cell(xSubtile,ySubtile,0)
 
 func read_clm(buffer):
+	oDataClm.clear_all_column_data()
+	
 	buffer.seek(0)
 	var numberOfClmEntries = buffer.get_u16()
 	buffer.seek(4)
@@ -216,15 +218,15 @@ func read_clm(buffer):
 	buffer.seek(8) # For reading maps
 	for entry in numberOfClmEntries:
 		
-		oDataClm.utilized.append(buffer.get_u16()) # 0-1
+		oDataClm.utilized[entry] = buffer.get_u16() # 0-1
 		
 		var specialByte = buffer.get_u8() # 2
 		var get_permanent = specialByte & 1
 		var get_lintel = (specialByte >> 1) & 7
 		var get_height = (specialByte >> 4) & 15
-		oDataClm.permanent.append(get_permanent)
-		oDataClm.lintel.append(get_lintel)
-		oDataClm.height.append(get_height)
+		oDataClm.permanent[entry] = get_permanent
+		oDataClm.lintel[entry] = get_lintel
+		oDataClm.height[entry] = get_height
 		
 #		var get_height = specialByte / 16
 #		oDataClm.height.append(get_height)
@@ -235,27 +237,27 @@ func read_clm(buffer):
 #		var get_permanent = specialByte
 #		oDataClm.permanent.append(get_permanent)
 		
-		oDataClm.solidMask.append(buffer.get_u16()) # 3-4
-		oDataClm.floorTexture.append(buffer.get_u16()) # 5-6
-		oDataClm.orientation.append(buffer.get_u8()) # 7
+		oDataClm.solidMask[entry] = buffer.get_u16() # 3-4
+		oDataClm.floorTexture[entry] = buffer.get_u16() # 5-6
+		oDataClm.orientation[entry] = buffer.get_u8() # 7
 		
-		oDataClm.cubes.append([])
-		oDataClm.cubes[entry].resize(8)
 		for cubeNumber in 8:
 			oDataClm.cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
+	print(oDataClm.cubes)
+
 func new_clm():
+	oDataClm.clear_all_column_data()
+	
 	var numberOfClmEntries = 2048
 	oDataClm.unknownData = 0
 	for entry in numberOfClmEntries:
-		oDataClm.utilized.append(0)
-		oDataClm.permanent.append(0)
-		oDataClm.lintel.append(0)
-		oDataClm.height.append(0)
-		oDataClm.solidMask.append(0)
-		oDataClm.floorTexture.append(0)
-		oDataClm.orientation.append(0)
-		oDataClm.cubes.append([])
-		oDataClm.cubes[entry].resize(8)
+		oDataClm.utilized[entry] = 0
+		oDataClm.permanent[entry] = 0
+		oDataClm.lintel[entry] = 0
+		oDataClm.height[entry] = 0
+		oDataClm.solidMask[entry] = 0
+		oDataClm.floorTexture[entry] = 0
+		oDataClm.orientation[entry] = 0
 		for cubeNumber in 8:
 			oDataClm.cubes[entry][cubeNumber] = 0
 
