@@ -20,11 +20,13 @@ var columnsContainingRngCubes = {}
 # slabs.clm : 49,156 bytes. first 4 bytes contains 2048, then comes the column data.
 
 func load_default_columnset():
+	clear_all_column_data() # This goes here and not inside import_cfg_columnset, because that function is also used for merging columnsets
+	
 	var CODETIME_START = OS.get_ticks_msec()
 	# Decide which one to load
 	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "COLUMNSET.CFG")
 	if filePath != "":
-		# Load columnset.cfg file
+		# Load /fxdata/ columnset.cfg file
 		import_cfg_columnset(filePath, true, false)
 	else:
 		# Load slabs.clm file
@@ -38,8 +40,6 @@ func load_default_columnset():
 func load_default_original_columnset():
 	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.CLM")
 	var buffer = Filetypes.file_path_to_buffer(filePath)
-	
-	clear_all_column_data()
 	
 	buffer.seek(0)
 	var numberOfClmEntries = buffer.get_u16()
@@ -83,8 +83,6 @@ func import_cfg_columnset(filePath, fullExport, showMessages):
 	if err != OK:
 		if showMessages == true: oMessage.quick("Failed to load config file: " + str(filePath))
 		return
-	
-	clear_all_column_data()
 	
 	for section in cfg.get_sections():
 		if section.begins_with("column"):
