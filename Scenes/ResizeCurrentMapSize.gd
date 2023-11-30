@@ -112,7 +112,7 @@ func _on_ResizeApplyButton_pressed():
 	
 	update_editor_appearance()
 	
-	oSlabPlacement.generate_slabs_based_on_id(positionsToUpdate.keys(), false)
+	oSlabPlacement.generate_slabs_based_on_id(positionsToUpdate.keys(), true) # Important to update surrounding slabs too. For example, rooms that get cut off.
 
 func set_various_grid_data(newWidth, newHeight, previousWidth, previousHeight):
 	var newWidthInSubtiles = newWidth * 3
