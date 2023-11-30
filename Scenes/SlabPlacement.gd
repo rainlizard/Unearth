@@ -33,6 +33,7 @@ onready var oRoundGoldNearPath = Nodelist.list["oRoundGoldNearPath"]
 onready var oRoundGoldNearLiquid = Nodelist.list["oRoundGoldNearLiquid"]
 onready var oRoundWaterNearLava = Nodelist.list["oRoundWaterNearLava"]
 onready var oAutomaticTorchSlabsCheckbox = Nodelist.list["oAutomaticTorchSlabsCheckbox"]
+onready var oPathStonePercent = Nodelist.list["oPathStonePercent"]
 
 enum dir {
 	s = 0
@@ -571,10 +572,24 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	if slabID == Slabs.LAVA: # Just hardcode the random FloorTexture for lava. I think it only looks different in the editor.
 		for i in constructedFloor.size():
 			constructedFloor[i] = Random.choose([546,547])
+	elif slabID == Slabs.PATH:
+		randomize_path_cubes(constructedColumns)
+	
+	
 	
 	set_columns(xSlab, ySlab, constructedColumns, constructedFloor)
 	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabsetIndexGroup, bitmask, surrID, bitmaskType)
 
+func randomize_path_cubes(constructedColumns):
+	var pthClean = Cube.rngCube["PathClean"]
+	var pthStones = Cube.rngCube["PathWithStones"]
+	for i in 9:
+		var cubeID = constructedColumns[i][0]
+		if cubeID in pthClean or cubeID in pthStones:
+			if Random.rng.randf_range(0.0, 100.0) < oPathStonePercent.value:
+				constructedColumns[i][0] = Random.choose(pthStones)
+			else:
+				constructedColumns[i][0] = Random.choose(pthClean)
 
 func get_constructed_slab_data(columnsetIndexList):
 	var constructedColumns = []

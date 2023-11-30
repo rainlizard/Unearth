@@ -74,6 +74,7 @@ var listOfSettings = [
 	"placing_tutorial",
 	"chance_effect_water",
 	"chance_effect_lava",
+	"chance_path_stone",
 	"auto_open_map_settings",
 	"fortify",
 	"automatic_torch_slabs",
@@ -400,6 +401,10 @@ func game_setting(doWhat,string,value):
 			var oLavaEffectPercent = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent'
 			if doWhat == SET: oLavaEffectPercent.value = value
 			if doWhat == GET: return oLavaEffectPercent.value
+		"chance_path_stone":
+			var oPathStonePercent = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer3/PathStonePercent'
+			if doWhat == SET: oPathStonePercent.value = value
+			if doWhat == GET: return oPathStonePercent.value
 		"auto_open_map_settings":
 			var oCheckBoxNewMapAutoOpensMapSettings = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/CheckBoxNewMapAutoOpensMapSettings'
 			if doWhat == SET: oCheckBoxNewMapAutoOpensMapSettings.pressed = value

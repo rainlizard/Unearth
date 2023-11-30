@@ -54,9 +54,15 @@ func _on_LavaEffectPercent_value_changed(value):
 func _on_WaterEffectPercent_value_changed(value):
 	Settings.set_setting("chance_effect_water", value)
 
+
+func _on_PathStonePercent_value_changed(value):
+	Settings.set_setting("chance_path_stone", value)
+
+
 func _on_PlaceThingsAnywhere_toggled(value):
 	Settings.set_setting("place_things_anywhere", value)
 
 
 func _on_AutomaticTorchSlabsCheckbox_toggled(value):
 	Settings.set_setting("automatic_torch_slabs", value)
+

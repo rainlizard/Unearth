@@ -38,8 +38,6 @@ const rngCube = {
 	#"EarthPathUnderneath" : [25,26,27,28,29], # This is apparently unnecessary, it'll just flood the column indexes
 }
 
-const stoneRatio = 0.15
-
 enum {
 	SIDE_NORTH = 0,
 	SIDE_EAST = 1,
