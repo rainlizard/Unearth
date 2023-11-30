@@ -224,37 +224,37 @@ func _on_SlabsetCopyValues_pressed():
 	oPickSlabWindow._on_pressed_add_new_custom_slab()
 
 
-func _on_ExportSlabsDat_pressed():
-	Utils.popup_centered(oExportSlabsetDatDialog)
-	oExportSlabsetDatDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportSlabsetDatDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportSlabsetDatDialog.current_file = "slabs.dat"
-func _on_ExportSlabsClm_pressed():
-	Utils.popup_centered(oExportSlabsetClmDialog)
-	oExportSlabsetClmDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportSlabsetClmDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportSlabsetClmDialog.current_file = "slabs.clm"
+#func _on_ExportSlabsDat_pressed():
+#	Utils.popup_centered(oExportSlabsetDatDialog)
+#	oExportSlabsetDatDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
+#	oExportSlabsetDatDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
+#	oExportSlabsetDatDialog.current_file = "slabs.dat"
+#func _on_ExportSlabsClm_pressed():
+#	Utils.popup_centered(oExportSlabsetClmDialog)
+#	oExportSlabsetClmDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
+#	oExportSlabsetClmDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
+#	oExportSlabsetClmDialog.current_file = "slabs.clm"
 
 func _on_ExportSlabsCfg_pressed():
 	Utils.popup_centered(oExportSlabsetCfgDialog)
-	#oExportSlabsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	#oExportSlabsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportSlabsetCfgDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
+	oExportSlabsetCfgDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
 	oExportSlabsetCfgDialog.current_file = "slabset.cfg"
 func _on_ImportSlabsCfg_pressed():
 	Utils.popup_centered(oImportSlabsetCfgDialog)
-	#oExportSlabsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	#oExportSlabsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oImportSlabsetCfgDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
+	oImportSlabsetCfgDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
 	oImportSlabsetCfgDialog.current_file = "slabset.cfg"
 
 func _on_ExportColumnsCfg_pressed():
 	Utils.popup_centered(oExportColumnsetCfgDialog)
-	#oExportColumnsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	#oExportColumnsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oExportColumnsetCfgDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
+	oExportColumnsetCfgDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
 	oExportColumnsetCfgDialog.current_file = "columnset.cfg"
 func _on_ImportColumnsCfg_pressed():
 	Utils.popup_centered(oImportColumnsetCfgDialog)
-	#oExportSlabsetCfgDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
-	#oExportSlabsetCfgDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
+	oImportColumnsetCfgDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
+	oImportColumnsetCfgDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
 	oImportColumnsetCfgDialog.current_file = "columnset.cfg"
 
 
@@ -297,34 +297,34 @@ func _on_ExportSlabsetDatDialog_file_selected(filePath):
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
 
-func _on_ExportSlabsetClmDialog_file_selected(filePath):
-	var buffer = StreamPeerBuffer.new()
-	
-	var numberOfClmEntries = 2048
-	buffer.put_16(numberOfClmEntries)
-	buffer.put_16(0)
+#func _on_ExportSlabsetClmDialog_file_selected(filePath):
+#	var buffer = StreamPeerBuffer.new()
+#
+#	var numberOfClmEntries = 2048
 #	buffer.put_16(numberOfClmEntries)
-#	buffer.put_data([0,0])
 #	buffer.put_16(0)
-#	buffer.put_data([0,0])
-	
-	for entry in numberOfClmEntries:
-		buffer.put_16(Columnset.utilized[entry]) # 0-1
-		buffer.put_8((Columnset.permanent[entry] & 1) + ((Columnset.lintel[entry] & 7) << 1) + ((Columnset.height[entry] & 15) << 4))
-		buffer.put_16(Columnset.solidMask[entry]) # 3-4
-		buffer.put_16(Columnset.floorTexture[entry]) # 5-6
-		buffer.put_8(Columnset.orientation[entry]) # 7
-		
-		for cubeNumber in 8:
-			buffer.put_16(Columnset.cubes[entry][cubeNumber]) # 8-23
-	
-	var file = File.new()
-	if file.open(filePath,File.WRITE) == OK:
-		file.store_buffer(buffer.data_array)
-		file.close()
-		oMessage.quick("Saved: " + filePath)
-	else:
-		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
+##	buffer.put_16(numberOfClmEntries)
+##	buffer.put_data([0,0])
+##	buffer.put_16(0)
+##	buffer.put_data([0,0])
+#
+#	for entry in numberOfClmEntries:
+#		buffer.put_16(Columnset.utilized[entry]) # 0-1
+#		buffer.put_8((Columnset.permanent[entry] & 1) + ((Columnset.lintel[entry] & 7) << 1) + ((Columnset.height[entry] & 15) << 4))
+#		buffer.put_16(Columnset.solidMask[entry]) # 3-4
+#		buffer.put_16(Columnset.floorTexture[entry]) # 5-6
+#		buffer.put_8(Columnset.orientation[entry]) # 7
+#
+#		for cubeNumber in 8:
+#			buffer.put_16(Columnset.cubes[entry][cubeNumber]) # 8-23
+#
+#	var file = File.new()
+#	if file.open(filePath,File.WRITE) == OK:
+#		file.store_buffer(buffer.data_array)
+#		file.close()
+#		oMessage.quick("Saved: " + filePath)
+#	else:
+#		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 
 func get_current_variation():
 	return (int(oSlabsetIDSpinBox.value) * 28) + int(oVariationNumberSpinBox.value)
