@@ -243,7 +243,6 @@ func read_clm(buffer):
 		
 		for cubeNumber in 8:
 			oDataClm.cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
-	print(oDataClm.cubes)
 
 func new_clm():
 	oDataClm.clear_all_column_data()

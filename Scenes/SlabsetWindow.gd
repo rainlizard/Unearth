@@ -513,12 +513,12 @@ func snap_and_update_spinbox_value(spinbox: SpinBox, property: int, float_value:
 	spinbox.value = new_value
 	spinbox.connect("value_changed", self, method_name)
 
-	var int_value = round(new_value * 256)
+	var int_value:int = round(new_value * 256)
 	#spinbox.hint_tooltip = str("Real: " + str(int_value))
-	update_object_property(property, int_value)
+	update_object_property(property, int(int_value))
 
 # SpinBox value changed handlers
-func _on_ObjRelativeXSpinBox_value_changed(float_value: float):
+func _on_ObjRelativeXSpinBox_value_changed(float_value: float): # Spinbox uses floats, it's converted to int later, inside snap_and_update_spinbox_value
 	snap_and_update_spinbox_value(oObjRelativeXSpinBox, Slabset.obj.RELATIVE_X, float_value, "_on_ObjRelativeXSpinBox_value_changed")
 
 func _on_ObjRelativeYSpinBox_value_changed(float_value: float):
