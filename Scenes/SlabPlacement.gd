@@ -318,12 +318,13 @@ func do_update_auto_walls(slabID):
 #	return false
 
 func do_slab(xSlab, ySlab, slabID, ownership):
+	print(slabID)
 	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
 	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
 	
 	if slabID == Slabs.WALL_AUTOMATIC or do_update_auto_walls(slabID) == true:
 		slabID = auto_wall(xSlab, ySlab, slabID, surrID)
-	elif slabID == Slabs.EARTH:
+	elif slabID == Slabs.EARTH or slabID == Slabs.EARTH_WITH_TORCH:
 		slabID = auto_earth(xSlab, ySlab, slabID, surrID)
 	
 	if Slabs.fake_extra_data.has(slabID): # Fake Slab IDs

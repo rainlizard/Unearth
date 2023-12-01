@@ -229,8 +229,8 @@ func some_manual_placements_dont_update_nearby():
 	# Fake Slabs don't update the surroundings (! HAD TO COMMENT THIS OUT BECAUSE IT BREAKS CUSTOM SLABSET SLABS)
 #	if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
 #		return false
-	if Slabs.is_door(paintSlab): # Doors don't update the surroundings
-		return false
+#	if Slabs.is_door(paintSlab): # Commented this out because Doors DO need to update the surroundings, such as when you place next to a Wall Torch Slab. Why did I ever think Doors shouldn't update surroundings?
+#		return false
 	return true
 
 func place_subtile(placeSubtile):
