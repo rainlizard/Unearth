@@ -6228,6 +6228,7 @@ margin_right = -3051.0
 margin_bottom = 2846.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
+filters = PoolStringArray( "*.dat" )
 show_hidden_files = true
 
 [node name="ExportSlabsetClmDialog" type="FileDialog" parent="Ui/UiSystem"]
@@ -6238,6 +6239,7 @@ margin_right = -3044.0
 margin_bottom = 3465.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
+filters = PoolStringArray( "*.clm" )
 show_hidden_files = true
 
 [node name="ExportSlabsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
@@ -6248,6 +6250,7 @@ margin_right = -2117.0
 margin_bottom = 3622.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
+filters = PoolStringArray( "*.cfg" )
 show_hidden_files = true
 
 [node name="ImportSlabsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
@@ -6260,6 +6263,7 @@ rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 mode = 0
 access = 2
+filters = PoolStringArray( "*.cfg" )
 show_hidden_files = true
 
 [node name="ImportColumnsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
@@ -6272,6 +6276,7 @@ rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 mode = 0
 access = 2
+filters = PoolStringArray( "*.cfg" )
 show_hidden_files = true
 
 [node name="ExportColumnsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
@@ -6282,6 +6287,7 @@ margin_right = -2154.0
 margin_bottom = 2822.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
+filters = PoolStringArray( "*.cfg" )
 show_hidden_files = true
 
 [node name="ResizeCurrentMapSize" type="WindowDialog" parent="Ui/UiSystem"]

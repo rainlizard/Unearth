@@ -428,10 +428,20 @@ func _on_ObjAddButton_pressed():
 func add_new_object_to_variation(variation):
 	#update_object_property(Slabset.obj.VARIATION, variation)
 	var randomSubtype = 1 # Barrel #Random.randi_range(1,135)
-	var new_object = [0,variation,4, 0,0,0, 1,randomSubtype,0]
+	var new_object_defaults = [
+		0,             # [0] IsLight
+		variation,     # [1] Variation
+		4,             # [2] Subtile [0-9]
+		128,           # [3] RelativeX
+		128,           # [4] RelativeY
+		256,           # [5] RelativeZ
+		1,             # [6] Thing type
+		randomSubtype, # [7] Thing subtype
+		0,             # [8] Effect range
+	]
 	
 	ensure_tng_array_has_space(variation)
-	Slabset.tng[variation].append(new_object)
+	Slabset.tng[variation].append(new_object_defaults)
 	var lastEntryIndex = Slabset.tng[variation].size()-1
 	oObjObjectIndexSpinBox.value = lastEntryIndex
 	update_object_fields(lastEntryIndex)
@@ -453,7 +463,7 @@ func _on_ObjDeleteButton_pressed():
 	oMessage.quick("Deleted object")
 
 func _on_ObjThingTypeSpinBox_value_changed(value:int):
-	oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name.get(value, "?")
+	#oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name.get(value, "?")
 	#yield(get_tree(),'idle_frame')
 	update_obj_name()
 	update_object_property(Slabset.obj.THING_TYPE, value)
@@ -504,7 +514,7 @@ func snap_and_update_spinbox_value(spinbox: SpinBox, property: int, float_value:
 	spinbox.connect("value_changed", self, method_name)
 
 	var int_value = round(new_value * 256)
-	spinbox.hint_tooltip = str("Real: " + str(int_value))
+	#spinbox.hint_tooltip = str("Real: " + str(int_value))
 	update_object_property(property, int_value)
 
 # SpinBox value changed handlers
@@ -682,19 +692,18 @@ func _on_VarRevertButton_pressed():
 
 func _on_SlabsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "Slabset is loaded from /data/slabs.dat \n"
-	helptxt += "Columnset is loaded from /data/slabs.clm \n"
-	helptxt += "The attached objects are loaded from /data/slabs.tng \n"
+	helptxt += "Slabset is loaded from /fxdata/slabset.cfg  \n"
+	helptxt += "Columnset is loaded from /fxdata/columnset.cfg \n"
 	helptxt += "These sets determine the slab's appearance when placed. \n"
-	helptxt += "To mod the slabs that are placed in-game you'll need to export .cfg files and use them in a mappack/campaign."
+	helptxt += "To mod the slabs that are placed in-game you'll need to export .cfg files and load them in your mappack/campaign."
 	oMessage.big("Help",helptxt)
 
 func _on_ColumnsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "Be wary not to confuse the Columnset with the Map Columns \n"
+	helptxt += "Be wary not to confuse the Columnset with the Map Columns. \n"
 	helptxt += "Map Columns are read from the map's local file such as map00001.clm \n"
-	helptxt += "Columnset is loaded from /data/slabs.clm, which is a global file. \n"
-	helptxt += "However you can create a columnset.cfg instead of the default one to use for your own mappack/campaign."
+	helptxt += "Whereas Columnset is a global file loaded from /fxdata/columnset.cfg \n"
+	helptxt += "However you can export a columnset.cfg file to use for your own mappack/campaign."
 	oMessage.big("Help",helptxt)
 
 
