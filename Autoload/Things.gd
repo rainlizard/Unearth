@@ -649,6 +649,9 @@ func get_proper_creature_name(nm):
 	return nm
 
 func set_image_based_on_animation_id(thingType, objectID, thingAnimationID):
+	if int(thingAnimationID) == 0:
+		return # This is important, if ANIMATIONID is 0 then it shouldn't be set. It should be a grey diamond.
+	
 	if animation_id_to_image.has(thingAnimationID):
 		match thingType:
 			Things.TYPE.OBJECT: DATA_OBJECT[objectID][TEXTURE] = animation_id_to_image[thingAnimationID]
