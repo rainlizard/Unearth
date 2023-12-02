@@ -294,32 +294,11 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 		Things.TYPE.DOOR:
 			id.index = get_free_index_number()
 			id.doorLocked = oPlacingSettings.doorLocked
-			if newSubtype == 0: id.subtype = 1 #Depending on whether it was placed via autoslab or a hand placed Thing object.
-			match slabID:
-				Slabs.WOODEN_DOOR_1:
-					id.subtype = 1
-					id.doorOrientation = 1
-				Slabs.WOODEN_DOOR_2:
-					id.subtype = 1
-					id.doorOrientation = 0
-				Slabs.BRACED_DOOR_1:
-					id.subtype = 2
-					id.doorOrientation = 1
-				Slabs.BRACED_DOOR_2:
-					id.subtype = 2
-					id.doorOrientation = 0
-				Slabs.IRON_DOOR_1:
-					id.subtype = 3
-					id.doorOrientation = 1
-				Slabs.IRON_DOOR_2:
-					id.subtype = 3
-					id.doorOrientation = 0
-				Slabs.MAGIC_DOOR_1:
-					id.subtype = 4
-					id.doorOrientation = 1
-				Slabs.MAGIC_DOOR_2:
-					id.subtype = 4
-					id.doorOrientation = 0
+			if newSubtype == 0:
+				id.subtype = 1 #Depending on whether it was placed via autoslab or a hand placed Thing object.
+			if Slabs.door_data.has(slabID):
+				id.subtype = Slabs.door_data[slabID][Slabs.DOORSLAB_THING]
+				id.doorOrientation = Slabs.door_data[slabID][Slabs.DOORSLAB_ORIENTATION]
 	
 	add_child(id)
 	#print('Thing placed in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')

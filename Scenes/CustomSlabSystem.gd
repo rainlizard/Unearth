@@ -45,51 +45,64 @@ func load_file():
 			"floor_data": slabFloorData,
 			"bitmask": cfg.get_value(section, "bitmask", Slabs.BITMASK_FLOOR),
 			"is_solid": cfg.get_value(section, "is_solid", Slabs.FLOOR_SLAB),
-			"ownable": cfg.get_value(section, "ownable", Slabs.OWNABLE)
+			"ownable": cfg.get_value(section, "ownable", Slabs.OWNABLE),
 		}
+		
+		var retrieve_value
+		retrieve_value = cfg.get_value(section, "door_thing", null) # Default = null
+		if retrieve_value != null: slab_dict["door_thing"] = retrieve_value
+		retrieve_value = cfg.get_value(section, "door_orientation", null)
+		if retrieve_value != null: slab_dict["door_orientation"] = retrieve_value
 		
 		add_custom_slab(slab_dict)
 
 
 func add_custom_slab(slab_dict):
-	#var newID = slab_dict.id
-	#var section = 'slab'+str(newID)
-	Slabs.data[slab_dict.header_id] = [
-		slab_dict.name,
-		slab_dict.is_solid,
-		slab_dict.bitmask,
+	var head_id = slab_dict["header_id"]
+	var section = 'slab'+str(head_id)
+	if head_id >= 1000:
+		Slabs.fake_extra_data[head_id] = [
+			slab_dict["cube_data"],
+			slab_dict["floor_data"],
+			slab_dict["recognized_as"],
+			slab_dict["wibble_edges"],
+		]
+	Slabs.data[head_id] = [
+		slab_dict["name"],
+		slab_dict["is_solid"],
+		slab_dict["bitmask"],
 		Slabs.PANEL_TOP_VIEW,
 		0, # SIDE_VIEW_Z_OFFSET
 		Slabs.TAB_CUSTOM,
-		slab_dict.wibble_type,
-		slab_dict.liquid_type,
-		slab_dict.ownable,
+		slab_dict["wibble_type"],
+		slab_dict["liquid_type"],
+		slab_dict["ownable"],
 	]
-	if slab_dict.header_id >= 1000:
-		Slabs.fake_extra_data[slab_dict.header_id] = [
-			slab_dict.cube_data,
-			slab_dict.floor_data,
-			slab_dict.recognized_as,
-			slab_dict.wibble_edges,
+	cfg.set_value(section,"name", slab_dict["name"])
+	cfg.set_value(section,"recognized_as", slab_dict["recognized_as"])
+	cfg.set_value(section,"liquid_type", slab_dict["liquid_type"])
+	cfg.set_value(section,"wibble_type", slab_dict["wibble_type"])
+	cfg.set_value(section,"wibble_edges", slab_dict["wibble_edges"])
+	cfg.set_value(section,"bitmask", slab_dict["bitmask"])
+	cfg.set_value(section,"is_solid", slab_dict["is_solid"])
+	cfg.set_value(section,"ownable", slab_dict["ownable"])
+	
+	if slab_dict.has("door_thing") and slab_dict.has("door_orientation"):
+		cfg.set_value(section,"door_thing", slab_dict["door_thing"])
+		cfg.set_value(section,"door_orientation", slab_dict["door_orientation"])
+		Slabs.door_data[head_id] = [
+			slab_dict["door_thing"],
+			slab_dict["door_orientation"],
 		]
 	
-	var section = 'slab'+str(slab_dict.header_id)
-	cfg.set_value(section,"name", slab_dict.name)
-	cfg.set_value(section,"recognized_as", slab_dict.recognized_as)
-	cfg.set_value(section,"liquid_type", slab_dict.liquid_type)
-	cfg.set_value(section,"wibble_type", slab_dict.wibble_type)
-	cfg.set_value(section,"wibble_edges", slab_dict.wibble_edges)
-	cfg.set_value(section,"bitmask", slab_dict.bitmask)
-	cfg.set_value(section,"is_solid", slab_dict.is_solid)
-	cfg.set_value(section,"ownable", slab_dict.ownable)
-	
 	for i in 9:
-		if slab_dict.cube_data.size() > 0:
-			cfg.set_value(section,"cubes"+str(i),slab_dict.cube_data[i])
-		if slab_dict.floor_data.size() > 0:
-			cfg.set_value(section,"floor"+str(i),slab_dict.floor_data[i])
+		if slab_dict["cube_data"].size() > 0:
+			cfg.set_value(section,"cubes"+str(i),slab_dict["cube_data"][i])
+		if slab_dict["floor_data"].size() > 0:
+			cfg.set_value(section,"floor"+str(i),slab_dict["floor_data"][i])
 	
 	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
+
 
 func remove_custom_slab(header_id):
 	oPickSlabWindow.set_selection(null)

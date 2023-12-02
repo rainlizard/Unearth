@@ -23,7 +23,12 @@ onready var oFakeCustomColumnsPanelContainer = Nodelist.list["oFakeCustomColumns
 onready var oSlabBitmaskOptionButton = Nodelist.list["oSlabBitmaskOptionButton"]
 onready var oSlabIsSolidOptionButton = Nodelist.list["oSlabIsSolidOptionButton"]
 onready var oSlabOwnableOptionButton = Nodelist.list["oSlabOwnableOptionButton"]
+onready var oPassageLabel = Nodelist.list["oPassageLabel"]
 
+onready var oCustomDoorThingLabel = Nodelist.list["oCustomDoorThingLabel"]
+onready var oCustomDoorThing = Nodelist.list["oCustomDoorThing"]
+onready var oCustomDoorThingEmptySpace = Nodelist.list["oCustomDoorThingEmptySpace"]
+onready var oCustomDoorThingIDNameLabel = Nodelist.list["oCustomDoorThingIDNameLabel"]
 
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
 var customSlabArrayOfSpinbox = []
@@ -41,7 +46,7 @@ func _ready():
 		oGridContainerCustomColumns3x3.add_child(id)
 	
 	_on_CustomSlabID_value_changed(oCustomSlabID.value)
-
+	_on_SlabBitmaskOptionButton_item_selected(0)
 
 func _on_AddCustomSlabWindow_visibility_changed():
 	if visible == true:
@@ -106,15 +111,22 @@ func _on_AddCustomSlabButton_pressed():
 		"is_solid": bool(oSlabIsSolidOptionButton.get_selected_id()),
 		"ownable": bool(oSlabOwnableOptionButton.get_selected_id()),
 	}
+	if oSlabBitmaskOptionButton.get_selected_id() == Slabs.BITMASK_DOOR1:
+		slab_dict["door_thing"] = int(oCustomDoorThing.value)
+		slab_dict["door_orientation"] = 1
+	
 	oCustomSlabSystem.add_custom_slab(slab_dict)
 	
+	# Add DOOR 2 automatically
 	if oSlabBitmaskOptionButton.get_selected_id() == Slabs.BITMASK_DOOR1:
 		var second_slab_dict = slab_dict.duplicate(true)
 		var IdOfDoor2 = int(oCustomSlabID.value+1)
-		second_slab_dict.header_id = newID+1
-		second_slab_dict.recognized_as = IdOfDoor2
+		second_slab_dict["header_id"] = newID+1
+		second_slab_dict["recognized_as"] = IdOfDoor2
+		second_slab_dict["door_orientation"] = 0
+		second_slab_dict["bitmask"] = Slabs.BITMASK_DOOR2
 		oCustomSlabSystem.add_custom_slab(second_slab_dict)
-		oMessage.big("Note", "ID: " + str(IdOfDoor2) + " was also added, it's assumed to be the other door direction.")
+		oMessage.big("Note", "Slab ID: " + str(IdOfDoor2) + " was also added, it's assumed to be the other door direction.")
 	
 	oPickSlabWindow.add_slabs()
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
@@ -182,3 +194,32 @@ func _on_HelpCustomSlabsButton_pressed():
 	var helptext = ""
 	helptext += "After adding a custom slab, right click on its portrait within the slab selection window to remove it from the editor."
 	oMessage.big("Help",helptext)
+
+
+
+func _on_SlabBitmaskOptionButton_item_selected(index):
+	if index == Slabs.BITMASK_DOOR1:
+		oSlabIsSolidOptionButton.selected = 0 # Empty
+		
+		oSlabIsSolidOptionButton.visible = false
+		oPassageLabel.visible = false
+		
+		oCustomDoorThingLabel.visible = true
+		oCustomDoorThing.visible = true
+		oCustomDoorThingEmptySpace.visible = true
+		oCustomDoorThingIDNameLabel.visible = true
+	else:
+		oSlabIsSolidOptionButton.visible = true
+		oPassageLabel.visible = true
+		
+		oCustomDoorThingLabel.visible = false
+		oCustomDoorThing.visible = false
+		oCustomDoorThingEmptySpace.visible = false
+		oCustomDoorThingIDNameLabel.visible = false
+
+func _on_CustomDoorThing_value_changed(value):
+	var doorIDName = "Unknown"
+	value = int(value)
+	if Things.DATA_DOOR.has(value):
+		doorIDName = Things.DATA_DOOR[value][Slabs.NAME]
+	oCustomDoorThingIDNameLabel.text = doorIDName

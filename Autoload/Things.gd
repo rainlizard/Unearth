@@ -131,8 +131,7 @@ var DATA_EXTRA = {
 1 : ["Action Point", null, null,  preload("res://Art/ActionPoint.png"), null, TAB_ACTION],
 2 : ["Light", null, null, preload("res://edited_images/GUIEDIT-1/PIC26.png"), null, TAB_EFFECTGEN],
 }
-
-var DATA_DOOR = {
+var DATA_DOOR = { #
 0 : [null, null, null, null, null, null],
 1 : ["Wooden Door", null, null, preload("res://dk_images/trapdoor_64/door_pers_wood_std.png"), null, TAB_MISC],
 2 : ["Braced Door", null, null, preload("res://dk_images/trapdoor_64/door_pers_braced_std.png"), null, TAB_MISC],

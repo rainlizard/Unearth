@@ -134,6 +134,22 @@ enum {
 	FAKE_RECOGNIZED_AS,
 	FAKE_WIBBLE_EDGES,
 }
+enum {
+	DOORSLAB_THING = 0,
+	DOORSLAB_ORIENTATION = 1,
+}
+#Slabs.door_data[slabID][DOORSLAB_THING]
+#Slabs.door_data[slabID][DOORSLAB_ORIENTATION]
+var door_data = { # Refer to Things.DATA_DOOR for door subtypes
+	WOODEN_DOOR_1 : [1,1],
+	WOODEN_DOOR_2 : [1,0],
+	BRACED_DOOR_1 : [2,1],
+	BRACED_DOOR_2 : [2,0],
+	IRON_DOOR_1 : [3,1],
+	IRON_DOOR_2 : [3,0],
+	MAGIC_DOOR_1 : [4,1],
+	MAGIC_DOOR_2 : [4,0],
+}
 var fake_extra_data = {
 	# 1000: [cube_data, floor_data, recognized_as, wibble_edges]
 }
