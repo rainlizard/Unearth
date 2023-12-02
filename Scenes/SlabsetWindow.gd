@@ -513,7 +513,7 @@ func snap_and_update_spinbox_value(spinbox: SpinBox, property: int, float_value:
 	spinbox.value = new_value
 	spinbox.connect("value_changed", self, method_name)
 
-	var int_value:int = round(new_value * 256)
+	var int_value = round(new_value * 256)
 	#spinbox.hint_tooltip = str("Real: " + str(int_value))
 	update_object_property(property, int(int_value))
 

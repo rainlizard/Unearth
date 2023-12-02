@@ -110,7 +110,7 @@ func import_cfg_slabset(filePath, fullImport, showMessages):
 	resize_dat_and_tng_based_on_cfg(cfg)
 	
 	if cfg.has_section("slab0.S"):
-		if cfg.get_value("slab0.S", "columns"): # Lowercase "Columns" means it's an out of date slabset.cfg file
+		if cfg.has_section_key("slab0.S", "columns"): # Lowercase "Columns" means it's an out of date slabset.cfg file
 			oMessage.big("Failed loading Slabset", "Old /fxdata/slabset.cfg file, please install the latest KeeperFX alpha patch")
 	
 	

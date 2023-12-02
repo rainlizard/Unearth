@@ -1,0 +1,21 @@
+[gd_resource type="AnimatedTexture" load_steps=6 format=2]
+
+[ext_resource path="res://addons/animated_texture_but_better/animated_texture_but_better.gd" type="Script" id=1]
+[ext_resource path="res://edited_images/lair/creature_warlock/anim0146/r1frame01.png" type="Texture" id=2]
+[ext_resource path="res://edited_images/lair/creature_warlock/anim0146/r1frame04.png" type="Texture" id=3]
+[ext_resource path="res://edited_images/lair/creature_warlock/anim0146/r1frame02.png" type="Texture" id=4]
+[ext_resource path="res://edited_images/lair/creature_warlock/anim0146/r1frame03.png" type="Texture" id=5]
+
+[resource]
+flags = 9
+frames = 4
+fps = 10.0
+frame_0/texture = ExtResource( 2 )
+frame_1/texture = ExtResource( 4 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 5 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 3 )
+frame_3/delay_sec = 0.0
+script = ExtResource( 1 )
+sprites_dir = "res://edited_images/lair/creature_warlock/anim0146/"
