@@ -81,6 +81,9 @@ func add_slabs():
 	# The rest of them are added in any order (custom slabs)
 	for slabID in Slabs.data.keys():
 		if Slabs.slabOrder.has(slabID) == false:
+			if Slabs.door_data.has(slabID) == true:
+				if Slabs.door_data[slabID][Slabs.DOORSLAB_ORIENTATION] == 0:
+					continue
 			allSlabIDs.append(slabID)
 	
 	for slabID in allSlabIDs:
@@ -251,5 +254,5 @@ func _on_ConfirmDeleteCustomSlab_confirmed():
 	for child in gridContainer.get_children():
 		if child.has_meta("ID_of_slab") and child.get_meta("ID_of_slab") == slabID:
 			child.queue_free()
-	oCustomSlabSystem.remove_custom_slab(slabID)
+	oCustomSlabSystem.attempt_to_remove_custom_slab(slabID)
 

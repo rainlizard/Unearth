@@ -126,7 +126,7 @@ func _on_AddCustomSlabButton_pressed():
 		second_slab_dict["door_orientation"] = 0
 		second_slab_dict["bitmask"] = Slabs.BITMASK_DOOR2
 		oCustomSlabSystem.add_custom_slab(second_slab_dict)
-		oMessage.big("Note", "Slab ID: " + str(IdOfDoor2) + " was also added, it's assumed to be the other door direction.")
+		oMessage.big("Note", "Slab ID: " + str(IdOfDoor2) + " was also added internally, it's assumed to be the other door direction.")
 	
 	oPickSlabWindow.add_slabs()
 	oSlabTabs.current_tab = Slabs.TAB_CUSTOM
@@ -187,7 +187,9 @@ func _on_FakeSlabHelpButton_pressed():
 
 func _on_SlabsetSlabHelpButton_pressed():
 	var helptext = ""
-	helptext += "Slabset slabs will only work in a campaign/mappack. It requires the slabset.cfg and columnset.cfg files to be in the correct place."
+	helptext += "Go to Edit->Slabset to define what this Slabset slab looks like and then select the same ID. \n"
+	helptext += "Slabset Slabs require the slabset.cfg (or columnset.cfg) file to be saved to the correct directory for the game to recognize it. \n"
+	helptext += "A mappack/campaign can be set up to have its own personal cfg files."
 	oMessage.big("Help",helptext)
 
 func _on_HelpCustomSlabsButton_pressed():

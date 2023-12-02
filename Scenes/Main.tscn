@@ -5286,7 +5286,7 @@ rect_min_size = Vector2( 150, 0 )
 hint_tooltip = "Editor placement rules"
 size_flags_horizontal = 10
 text = "Floor"
-items = [ "Floor", null, false, 0, null, "Block", null, false, 1, null, "Simple", null, false, 2, null, "Reinforced", null, false, 3, null, "Claimed", null, false, 4, null, "Door EW", null, false, 5, null, "Door NS", null, true, 6, null ]
+items = [ "Floor", null, false, 0, null, "Block", null, false, 1, null, "Simple", null, false, 2, null, "Reinforced", null, false, 3, null, "Claimed", null, false, 4, null, "Door N/S", null, false, 5, null, "Door E/W", null, true, 6, null ]
 selected = 0
 
 [node name="CustomDoorThingLabel" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]

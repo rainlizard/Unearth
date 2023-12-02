@@ -104,13 +104,26 @@ func add_custom_slab(slab_dict):
 	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
 
 
-func remove_custom_slab(header_id):
+func attempt_to_remove_custom_slab(header_id):
 	oPickSlabWindow.set_selection(null)
-	var statusOfRemoval = Slabs.data.erase(header_id)
-	if statusOfRemoval == true:
-		oMessage.quick("Removed custom slab")
-	else:
+	
+	# If it's a door then it'll have "door_data", so remove the other one too
+	if Slabs.door_data.has(header_id) == true:
+		Slabs.door_data.erase(header_id)
+		var door2_id = header_id+1
+		if Slabs.door_data.has(door2_id) == true:
+			if Slabs.door_data[door2_id][Slabs.DOORSLAB_ORIENTATION] == 0: # Second direction always has orientation of 0
+				Slabs.door_data.erase(door2_id)
+				remove_custom_slab(door2_id)
+	
+	remove_custom_slab(header_id)
+
+func remove_custom_slab(header_id):
+	if Slabs.data.has(header_id) == false:
 		oMessage.quick("Tried to remove a custom slab that wasn't present in the data")
+		return
+	
+	Slabs.data.erase(header_id)
 	Slabs.fake_extra_data.erase(header_id)
 	
 	var section = 'slab'+str(header_id)
@@ -118,6 +131,8 @@ func remove_custom_slab(header_id):
 		cfg.erase_section(section)
 	
 	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
+	
+	oMessage.quick("Removed custom slab: " + str(header_id))
 
 func get_top_fake_cube_face(indexIn3x3, slabID):
 	var cubesArray = Slabs.fake_extra_data[slabID][Slabs.FAKE_CUBE_DATA][indexIn3x3]
