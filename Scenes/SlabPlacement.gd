@@ -318,7 +318,6 @@ func do_update_auto_walls(slabID):
 #	return false
 
 func do_slab(xSlab, ySlab, slabID, ownership):
-	print(slabID)
 	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
 	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
 	
@@ -378,7 +377,12 @@ func _on_ConfirmAutoGen_confirmed():
 	print('Auto-generated all slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func auto_earth(xSlab:int, ySlab:int, slabID, surrID):
-	slabID = try_upgrade_to_torch_slab(xSlab, ySlab, slabID, surrID)
+	if oSelection.paintSlab == Slabs.EARTH_WITH_TORCH:
+		return slabID
+	
+	if slabID == Slabs.EARTH or slabID == Slabs.EARTH_WITH_TORCH:
+		slabID = try_upgrade_to_torch_slab(xSlab, ySlab, slabID, surrID)
+	
 	oDataSlab.set_cell(xSlab, ySlab, slabID)
 	return slabID
 
@@ -406,30 +410,29 @@ func try_upgrade_to_torch_slab(xSlab:int, ySlab:int, currentSlabID, surrID):
 	if oAutomaticTorchSlabsCheckbox.pressed == false:
 		return currentSlabID
 	
-	var claimed_ground_near = false
 	# Check adjacent slabs for claimed ground if we are at every 5th slab along the x-axis or y-axis
+	var sporadic_conditions = false
+	var isOdd = (xSlab + ySlab) % 2 == 1
 	if xSlab % 5 == 0:
-		if (xSlab + ySlab) % 2 == 1: # Is odd
-			if surrID[dir.s] == Slabs.CLAIMED_GROUND:
-				claimed_ground_near = true
-		else:
-			if surrID[dir.n] == Slabs.CLAIMED_GROUND:
-				claimed_ground_near = true
+		if isOdd and surrID[dir.s] == Slabs.CLAIMED_GROUND:
+			sporadic_conditions = true
+		elif !isOdd and surrID[dir.n] == Slabs.CLAIMED_GROUND:
+			sporadic_conditions = true
 	if ySlab % 5 == 0:
-		if (xSlab + ySlab) % 2 == 1: # Is odd
-			if surrID[dir.e] == Slabs.CLAIMED_GROUND:
-				claimed_ground_near = true
-		else:
-			if surrID[dir.w] == Slabs.CLAIMED_GROUND:
-				claimed_ground_near = true
+		if isOdd and surrID[dir.e] == Slabs.CLAIMED_GROUND:
+			sporadic_conditions = true
+		elif !isOdd and surrID[dir.w] == Slabs.CLAIMED_GROUND:
+			sporadic_conditions = true
 	
 	# If there's claimed ground near, change the slabID to the corresponding torch slab
-	if claimed_ground_near == true:
-		if currentSlabID == Slabs.EARTH:
+	if sporadic_conditions:
+		if currentSlabID == Slabs.EARTH or currentSlabID == Slabs.EARTH_WITH_TORCH:
 			return Slabs.EARTH_WITH_TORCH
 		else:
 			return Slabs.WALL_WITH_TORCH
-	
+	else:
+		if currentSlabID == Slabs.EARTH_WITH_TORCH:
+			return Slabs.EARTH
 	return currentSlabID
 
 
@@ -472,20 +475,20 @@ func set_torch_side(xSlab, ySlab, slabID, slabsetIndexGroup, constructedColumns,
 
 func calculate_torch_side(xSlab:int, ySlab:int, surrID):
 	
+	var isOdd = (xSlab + ySlab) % 2 == 1
+	
 	if xSlab % 5 == 0:
-		if (xSlab + ySlab) % 2 == 1: # Is odd
+		if isOdd:
 			if surrID[dir.s] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]:
 				return dir.s
-		else:
-			if surrID[dir.n] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]:
-				return dir.n
+		elif surrID[dir.n] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]:
+			return dir.n
 	if ySlab % 5 == 0:
-		if (xSlab + ySlab) % 2 == 1: # Is odd
+		if isOdd:
 			if surrID[dir.e] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]:
 				return dir.e
-		else:
-			if surrID[dir.w] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]:
-				return dir.w
+		elif surrID[dir.w] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]:
+			return dir.w
 	
 	# If the direction fails, then pick any direction. This is for manually placed torch slabs.
 	var preference = (xSlab + ySlab) % 4 # Prioritize directions based on the coordinate (basically it's random)

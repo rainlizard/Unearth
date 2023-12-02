@@ -19,7 +19,6 @@ enum {
 var auto_wall_updates_these = {
 	WALL_WITH_TORCH:null,
 	WALL_WITH_BANNER:null,
-	WALL_WITH_TORCH:null,
 	WALL_WITH_TWINS:null,
 	WALL_WITH_WOMAN:null,
 	WALL_WITH_PAIR:null,
