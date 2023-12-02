@@ -17,7 +17,7 @@
 [resource]
 flags = 9
 frames = 12
-fps = 15.0
+fps = 10.0
 frame_0/texture = ExtResource( 2 )
 frame_1/texture = ExtResource( 8 )
 frame_1/delay_sec = 0.0

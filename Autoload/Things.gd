@@ -113,28 +113,6 @@ func _init():
 	default_data["DATA_EFFECTGEN"] = DATA_EFFECTGEN.duplicate(true)
 	default_data["DATA_CREATURE"] = DATA_CREATURE.duplicate(true)
 	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
-	
-	adjust_animated_texture_fps()
-
-func adjust_animated_texture_fps():
-	# Calculate the new FPS based on the number of frames
-	
-	for key in DATA_OBJECT.keys():
-		var object_data = DATA_OBJECT[key]
-		var aniTextureID = object_data[TEXTURE]
-		if aniTextureID is AnimatedTexture:
-			var frameCount = aniTextureID.frames  # For example, you could just use the frame count as FPS
-			var newFPS
-			if frameCount < 12:
-				newFPS = 10
-			if frameCount >= 12:
-				newFPS = 20
-			aniTextureID.fps = newFPS
-	
-	# Dungeon Heart FPS
-	DATA_OBJECT[5][TEXTURE].fps = 10
-
-
 
 
 func data_structure(thingType):
