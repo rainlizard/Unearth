@@ -205,7 +205,7 @@ func mouse_button_on_field():
 		if visible == true:
 			if oAddCustomSlabWindow.visible == true:
 				#oMessage.quick("Sent column indexes to Fake Slab window")
-				oAddCustomObjectWindow.get_column_indexes_on_tile(cursorTile)
+				oAddCustomSlabWindow.get_column_indexes_on_tile(cursorTile)
 	
 	# Lose inspection when right clicking
 	if Input.is_action_just_released("mouse_right"):

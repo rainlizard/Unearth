@@ -222,7 +222,7 @@ var DATA_OBJECT = {
 022 : ["Protect Monster", null,null, preload("res://dk_images/keepower_64/armor_std.png"), null, TAB_SPELL],
 023 : ["Conceal Monster", null,null, preload("res://dk_images/keepower_64/conceal_std.png"), null, TAB_SPELL],
 024 : ["Cta Ensign", null,null, null, null, TAB_MISC],
-025 : ["Room Flag", null,null, null, null, TAB_MISC], #TAB_DECORATION
+025 : ["Room Flag", null,null, null, null, TAB_MISC],
 026 : ["Anvil", null,null, preload("res://dk_images/furniture/workshop_anvil_tp/r1frame01.png"), null, TAB_FURNITURE],
 027 : ["Prison Bar", null,null, preload("res://dk_images/other/anim0797/r1frame01.png"), null, TAB_FURNITURE],
 028 : ["Candlestick", null,null, preload("res://dk_images/furniture/anim0791/r1frame01.png"), null, TAB_DECORATION], #TAB_FURNITURE
