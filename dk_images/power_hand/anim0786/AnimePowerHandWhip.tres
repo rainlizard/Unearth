@@ -30,4 +30,3 @@ frame_6/delay_sec = 0.0
 frame_7/texture = ExtResource( 7 )
 frame_7/delay_sec = 0.0
 script = ExtResource( 1 )
-sprites_dir = "res://dk_images/power_hand/anim0786/"

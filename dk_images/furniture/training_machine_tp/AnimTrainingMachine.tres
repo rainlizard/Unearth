@@ -42,4 +42,3 @@ frame_10/delay_sec = 0.0
 frame_11/texture = ExtResource( 5 )
 frame_11/delay_sec = 0.0
 script = ExtResource( 1 )
-sprites_dir = "res://dk_images/furniture/training_machine_tp/"

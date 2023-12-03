@@ -54,4 +54,3 @@ frame_14/delay_sec = 0.0
 frame_15/texture = ExtResource( 7 )
 frame_15/delay_sec = 0.0
 script = ExtResource( 1 )
-sprites_dir = "res://dk_images/magic_fogs/anim0802/"

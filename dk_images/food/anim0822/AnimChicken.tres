@@ -96,4 +96,3 @@ frame_28/delay_sec = 0.0
 frame_29/texture = ExtResource( 10 )
 frame_29/delay_sec = 0.0
 script = ExtResource( 1 )
-sprites_dir = "res://dk_images/food/anim0822/"

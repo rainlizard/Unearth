@@ -24,4 +24,3 @@ frame_4/delay_sec = 0.0
 frame_5/texture = ExtResource( 2 )
 frame_5/delay_sec = 0.0
 script = ExtResource( 1 )
-sprites_dir = "res://dk_images/valuables/gold_pot_tp/"

@@ -18,4 +18,3 @@ frame_2/delay_sec = 0.0
 frame_3/texture = ExtResource( 4 )
 frame_3/delay_sec = 0.0
 script = ExtResource( 1 )
-sprites_dir = "res://dk_images/valuables/gold_hoard4_tp/"
