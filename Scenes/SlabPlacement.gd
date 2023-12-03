@@ -302,28 +302,43 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
 
 func do_update_auto_walls(slabID):
-	# Do not automatically update walls if you're manually placing a wall. (Slabs.WALL_AUTOMATIC is excluded from this check)
+	# If this ID has been set to WALL_AUTOMATIC, by whatever reason, then it must be updated. This doesn't mean you're placing a WALL_AUTOMATIC, just that this slab has been set to it.
+	if slabID == Slabs.WALL_AUTOMATIC:
+		return true
+	
+	# Automatic torch slabs being disabled means we don't remove existing torch slabs either.
+#	if oAutomaticTorchSlabsCheckbox.pressed == false and slabID == Slabs.WALL_WITH_TORCH:
+#		return false
+	
+	# Do not automatically update anything if you're manually placing a wall.
 	if Slabs.auto_wall_updates_these.has(oSelection.paintSlab):
 		return false
-	if Slabs.auto_wall_updates_these.has(slabID): # Automatically update walls
-		return true
-	return false # Is not a wall
 	
-	# Only update nearby walls when placing automatic walls
-#	if Slabs.auto_wall_updates_these.has(slabID) == true:
-#		if oSelection.paintSlab == Slabs.WALL_AUTOMATIC:
-#			return true
-#		if oFortifyCheckBox.pressed == true:
-#			return true
-#	return false
+	# If this ID is a wall
+	if Slabs.auto_wall_updates_these.has(slabID):
+		
+		# If you're placing automatic walls, then you must update the nearby wall patterns, otherwise the torches get duplicated too much
+		if oSelection.paintSlab == Slabs.WALL_AUTOMATIC:
+			return true
+		
+		# If you're fortifying nearby walls, then they must be automatically set too
+		if oFortifyCheckBox.pressed == true:
+			return true
+		
+		# Never update a wall unless you're modifying it with WALL_AUTOMATIC or Fortify.
+		return false
+	
+	return false # Is not a wall
+
 
 func do_slab(xSlab, ySlab, slabID, ownership):
 	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
 	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
 	
-	if slabID == Slabs.WALL_AUTOMATIC or do_update_auto_walls(slabID) == true:
+	if do_update_auto_walls(slabID) == true:
 		slabID = auto_wall(xSlab, ySlab, slabID, surrID)
-	elif slabID == Slabs.EARTH or slabID == Slabs.EARTH_WITH_TORCH:
+	
+	if slabID == Slabs.EARTH or slabID == Slabs.EARTH_WITH_TORCH:
 		slabID = auto_earth(xSlab, ySlab, slabID, surrID)
 	
 	if Slabs.fake_extra_data.has(slabID): # Fake Slab IDs
@@ -377,8 +392,6 @@ func _on_ConfirmAutoGen_confirmed():
 	print('Auto-generated all slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func auto_earth(xSlab:int, ySlab:int, slabID, surrID):
-	if oSelection.paintSlab == Slabs.EARTH_WITH_TORCH:
-		return slabID
 	
 	if slabID == Slabs.EARTH or slabID == Slabs.EARTH_WITH_TORCH:
 		slabID = try_upgrade_to_torch_slab(xSlab, ySlab, slabID, surrID)

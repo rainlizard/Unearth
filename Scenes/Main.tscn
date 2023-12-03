@@ -552,7 +552,6 @@ centered = false
 script = ExtResource( 18 )
 
 [node name="SlabSideViewer" type="Control" parent="Game2D/Selector/TileSelector"]
-visible = false
 show_behind_parent = true
 margin_right = 40.0
 margin_bottom = 40.0
