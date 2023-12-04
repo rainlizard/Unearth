@@ -27,7 +27,6 @@ onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oUiScale = Nodelist.list["oUiScale"]
 onready var oFramerateLimit = Nodelist.list["oFramerateLimit"]
 onready var oOwnerAlpha = Nodelist.list["oOwnerAlpha"]
-onready var oWallSideAlpha = Nodelist.list["oWallSideAlpha"]
 onready var oScriptEditorFontSize = Nodelist.list["oScriptEditorFontSize"]
 onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
@@ -79,7 +78,6 @@ func _on_SettingsWindow_about_to_show():
 	oThingWindowScale.update_appearance(Settings.get_setting("thing_window_scale"))
 	oCheckBoxHideUnknown.pressed = Settings.get_setting("hide_unknown_data")
 	oOwnerAlpha.update_appearance(Settings.get_setting("graphics_ownership_alpha"))
-	oWallSideAlpha.update_appearance(Settings.get_setting("hover_wall_side_alpha"))
 	oCreatureLevelFontSizeScale.update_appearance(Settings.get_setting("font_size_creature_level_scale"))
 	oCreatureLevelFontSizeMaxZoom.update_appearance(Settings.get_setting("font_size_creature_level_max"))
 	oSciptIconScale.update_appearance(Settings.get_setting("script_icon_scale"))
@@ -127,9 +125,6 @@ func edited_ZoomStep(new_text):
 
 func edited_SmoothingRate(new_text):
 	Settings.set_setting("smoothing_rate", float(new_text))
-
-func edited_WallSideAlpha(value):
-	Settings.set_setting("hover_wall_side_alpha", float(value))
 
 func edited_MouseSensitivity(new_text):
 	Settings.set_setting("mouse_sensitivity", float(new_text))

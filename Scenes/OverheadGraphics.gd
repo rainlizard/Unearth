@@ -104,9 +104,6 @@ func get_overhead_face_value(x, y, slabID):
 	
 	if clmIndex > 2048:
 		clmIndex = 0
-		#print(x)
-		#print(y)
-		#print('WHAT!!!!!!!!!!!!!!!!!!!!')
 	
 	# clmData is the 24 byte array.
 	var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)

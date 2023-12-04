@@ -248,6 +248,7 @@ func _on_slab_portrait_gui_input(event, id):
 		oConfirmDeleteCustomSlab.set_meta("ID_TO_DELETE", slabID)
 		_on_hovered_none()
 
+
 func _on_ConfirmDeleteCustomSlab_confirmed():
 	var slabID = oConfirmDeleteCustomSlab.get_meta("ID_TO_DELETE")
 	var gridContainer = tabs[Slabs.TAB_CUSTOM][GRIDCON_PATH]
