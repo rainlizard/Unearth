@@ -153,14 +153,13 @@ func get_main_subdirectories(path):
 	return array
 
 func test_write_permissions():
-	
 	# Test write permissions of DK directory
-	var testPath = EXECUTABLE_PATH.get_base_dir().plus_file('testing_write_permissions.test')
-	
-	print(testPath)
+	var testPath = EXECUTABLE_PATH.get_base_dir().plus_file('test.txt')
 	
 	var file = File.new()
 	var err = file.open(testPath, File.WRITE)
+	if err == OK:
+		file.store_string("Testing write permissions.")
 	file.close()
 	
 	var dir = Directory.new()

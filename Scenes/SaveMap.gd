@@ -35,19 +35,6 @@ func save_map(filePath): # auto opens other files
 		
 		var saveToFilePath = map + '.' + EXT.to_lower()
 		
-		# Skip saving over existing script file unless it has been edited
-		if EXT == "TXT":
-#			print('hi')
-			if File.new().file_exists(saveToFilePath) == true:
-#				print('file exists')
-				if oScriptEditor.scriptHasBeenEditedInUnearth == false:
-#					print('script has NOT been edited in unearth')
-#					print('skip saving')
-					continue
-			else:
-#				print("file doesn't exist")
-				pass
-		
 		var err = Filetypes.write(saveToFilePath, EXT.to_upper())
 		if err != OK:
 			writeFailure = true
@@ -77,13 +64,13 @@ func delete_existing_files(map):
 		# Important for Linux to delete all files otherwise duplicates can be created. (Lowercase files can be saved without replacing the uppercase files)
 		fileTypesToDelete = Filetypes.FILE_TYPES
 	else:
-		# Also important to delete files of the other format (TNG and TNGFX shouldn't exist at the same time), if switching formats.
+		# If switching formats, then it's important to delete files of the other format (TNG and TNGFX shouldn't exist at the same time)
 		if oCurrentFormat.selected == 0: # Classic format
 			# Do not delete LOF because Classic format can be used with LOF multiplayer levels
 			fileTypesToDelete = ["TNGFX", "APTFX", "LGTFX"]
 		elif oCurrentFormat.selected == 1: # KFX format
 			fileTypesToDelete = ["LIF", "TNG", "APT", "LGT"]
-		
+	
 	var baseDirectory = map.get_base_dir()
 	var MAP_NAME = map.get_basename().get_file().to_upper()
 	var dir = Directory.new()
