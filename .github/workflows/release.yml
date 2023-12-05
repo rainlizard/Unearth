@@ -13,7 +13,6 @@ jobs:
         fetch-depth: 0
 
     - name: Extract Version & Determine Patch
-      id: version_info
       run: |
         MAJOR_MINOR=$(grep "var major_minor" Autoload/Version.gd | awk -F\" '{print $2}')
         PATCH=$(git rev-list --count HEAD)
@@ -24,6 +23,7 @@ jobs:
       uses: dawidd6/action-download-artifact@v2
       with:
         workflow: main.yml
+        path: ./artifacts
 
     - name: Create Git Tag
       run: |
@@ -31,7 +31,6 @@ jobs:
         git push origin $FULL_VERSION
 
     - name: Create Release
-      id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -42,17 +41,9 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload Artifacts to Release
-      run: |
-        for file in *; do
-          if [[ -f "$file" ]]; then
-            echo "Uploading $file"
-            curl -X POST \
-              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Content-Type: application/octet-stream" \
-              --data-binary @"$file" \
-              "${{ steps.create_release.outputs.upload_url }}?name=$(basename $file)"
-          fi
-        done
-
-    # Add steps for publishing the game to itch.io
+    - name: Upload Release Artifacts
+      uses: Roang-zero1/github-upload-release-artifacts-action@v3.0.0
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        artifact_path: ./artifacts/*
+        token: ${{ secrets.GITHUB_TOKEN }}
