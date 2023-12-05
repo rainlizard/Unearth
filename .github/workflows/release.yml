@@ -42,8 +42,9 @@ jobs:
         prerelease: false
 
     - name: Upload Release Artifacts
-      uses: Roang-zero1/github-upload-release-artifacts-action@v3.0.0
+      uses: Roang-zero1/github-upload-release-artifacts-action@v2
       with:
-        upload_url: ${{ github.event.release.upload_url }}
-        artifact_path: ./artifacts/*
-        token: ${{ secrets.GITHUB_TOKEN }}
+        args: "./artifacts/*"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
