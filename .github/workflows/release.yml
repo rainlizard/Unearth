@@ -14,8 +14,14 @@ jobs:
       id: version_info
       run: |
         MAJOR_MINOR=$(grep "var major_minor" Autoload/Version.gd | awk -F\" '{print $2}')
+        echo "Extracted MAJOR_MINOR: $MAJOR_MINOR"
+        
         PATCH=$(git rev-list --count HEAD)
+        echo "Total commits (PATCH): $PATCH"
+        
         FULL_VERSION="$MAJOR_MINOR.$PATCH"
+        echo "Calculated FULL_VERSION: $FULL_VERSION"
+        
         echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
 
     - name: Download Artifacts from Build Workflow
