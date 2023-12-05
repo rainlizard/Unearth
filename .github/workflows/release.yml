@@ -9,6 +9,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Fetches all history for all branches and tags
 
     - name: Extract Version & Determine Patch
       id: version_info
