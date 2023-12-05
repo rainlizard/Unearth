@@ -56,6 +56,8 @@ func start():
 	
 	oTerrainMesh.mesh = oVoxelGen.complete_slx_mesh(arrayOfArrays)
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	
+	yield(get_tree(),'idle_frame') # Important to solve race condition
 	emit_signal("terrain_finished_generating")
 
 func loading_bar_start():
