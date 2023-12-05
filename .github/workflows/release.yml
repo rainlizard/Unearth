@@ -18,6 +18,16 @@ jobs:
         FULL_VERSION="$MAJOR_MINOR.$PATCH"
         echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
 
+    - name: Download Artifacts from Build Workflow
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        # Replace with your workflow file name, e.g., 'main.yml'
+        workflow: main.yml
+        # Optional: Specify the name of artifacts if you want to download specific ones
+        # name: the-artifact-name
+        # Optional: Specify the path where to store downloaded artifacts
+        # path: path-to-directory
+
     - name: Create Git Tag
       run: |
         git tag $FULL_VERSION
@@ -34,8 +44,6 @@ jobs:
         draft: false
         prerelease: false
 
-    # Add steps to download artifacts from the build workflow
-
-    # Add steps to upload build artifacts to GitHub Release
+    # Steps to upload build artifacts to GitHub Release
 
     # Add steps for publishing the game to itch.io
