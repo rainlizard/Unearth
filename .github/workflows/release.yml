@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # Reuse the logic for extracting version from your original workflow
+    - name: Extract Version & Determine Patch
+      id: version_info
+      run: |
+        MAJOR_MINOR=$(grep "var major_minor" Autoload/Version.gd | awk -F\" '{print $2}')
+        PATCH=$(git rev-list --count HEAD)
+        FULL_VERSION="$MAJOR_MINOR.$PATCH"
+        echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_OUTPUT
+
+    # Steps to create a GitHub release using the extracted version
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version_info.outputs.FULL_VERSION }}
+        release_name: Release ${{ steps.version_info.outputs.FULL_VERSION }}
+        body: 'Release description here'
+        draft: false
+        prerelease: false
+
+    # Add steps for uploading build artifacts to GitHub Release
+
+    # Add steps for uploading the game to itch.io
