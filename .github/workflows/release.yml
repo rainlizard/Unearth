@@ -1,7 +1,9 @@
 name: Release
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - '*'
 
 jobs:
   create_release:
@@ -25,11 +27,6 @@ jobs:
         workflow: main.yml
         path: ./artifacts
 
-    - name: Create Git Tag
-      run: |
-        git tag $FULL_VERSION
-        git push origin $FULL_VERSION
-
     - name: Create Release
       uses: actions/create-release@v1
       env:
@@ -47,4 +44,3 @@ jobs:
         args: "./artifacts/*"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
