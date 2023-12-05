@@ -30,8 +30,8 @@ onready var oPreviewRotZ = Nodelist.list["oPreviewRotZ"]
 #onready var oTerrainMesh = Nodelist.list["oTerrainMesh"]
 #onready var oPivotTerrainMesh = Nodelist.list["oPivotTerrainMesh"]
 
-var previewRotation = Vector3(-45, 45, 0)
-var zoomAdjust = 20
+var previewRotation = Vector3(270, 0, 0)
+var zoomAdjust = 0
 var remember_original_msaa
 
 func _ready():
@@ -48,6 +48,7 @@ func _on_ExportPreview_about_to_show():
 	modulate.a = 0
 	# Generate
 	oEditor.set_view_3d()
+	oGame3D.visible = false
 	oGenerateTerrain.start()
 	oPlayer.switch_camera_type(0)
 	oUiMessages.visible = false
@@ -56,6 +57,7 @@ func _on_ExportPreview_about_to_show():
 	oUi.hide_tools()
 	oUi3D.visible = false
 	yield(oGenerateTerrain, "terrain_finished_generating")
+	oGame3D.visible = true
 	modulate.a = 1.0
 	_on_SavePreviewMipmapsCheckbox_toggled(oSavePreviewMipmapsCheckbox.pressed)
 	_on_SavePreviewMsaaSlider_sliderChanged()
