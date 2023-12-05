@@ -10,31 +10,20 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0 # Fetches all history for all branches and tags
+        fetch-depth: 0
 
     - name: Extract Version & Determine Patch
       id: version_info
       run: |
         MAJOR_MINOR=$(grep "var major_minor" Autoload/Version.gd | awk -F\" '{print $2}')
-        echo "Extracted MAJOR_MINOR: $MAJOR_MINOR"
-        
         PATCH=$(git rev-list --count HEAD)
-        echo "Total commits (PATCH): $PATCH"
-        
         FULL_VERSION="$MAJOR_MINOR.$PATCH"
-        echo "Calculated FULL_VERSION: $FULL_VERSION"
-        
         echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
 
     - name: Download Artifacts from Build Workflow
       uses: dawidd6/action-download-artifact@v2
       with:
-        # Replace with your workflow file name, e.g., 'main.yml'
         workflow: main.yml
-        # Optional: Specify the name of artifacts if you want to download specific ones
-        # name: the-artifact-name
-        # Optional: Specify the path where to store downloaded artifacts
-        # path: path-to-directory
 
     - name: Create Git Tag
       run: |
@@ -42,6 +31,7 @@ jobs:
         git push origin $FULL_VERSION
 
     - name: Create Release
+      id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,6 +42,17 @@ jobs:
         draft: false
         prerelease: false
 
-    # Steps to upload build artifacts to GitHub Release
+    - name: Upload Artifacts to Release
+      run: |
+        for file in *; do
+          if [[ -f "$file" ]]; then
+            echo "Uploading $file"
+            curl -X POST \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Content-Type: application/octet-stream" \
+              --data-binary @"$file" \
+              "${{ steps.create_release.outputs.upload_url }}?name=$(basename $file)"
+          fi
+        done
 
     # Add steps for publishing the game to itch.io
