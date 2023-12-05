@@ -10,28 +10,32 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    # Reuse the logic for extracting version from your original workflow
     - name: Extract Version & Determine Patch
       id: version_info
       run: |
         MAJOR_MINOR=$(grep "var major_minor" Autoload/Version.gd | awk -F\" '{print $2}')
         PATCH=$(git rev-list --count HEAD)
         FULL_VERSION="$MAJOR_MINOR.$PATCH"
-        echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_OUTPUT
+        echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
 
-    # Steps to create a GitHub release using the extracted version
+    - name: Create Git Tag
+      run: |
+        git tag $FULL_VERSION
+        git push origin $FULL_VERSION
+
     - name: Create Release
-      id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.version_info.outputs.FULL_VERSION }}
-        release_name: Release ${{ steps.version_info.outputs.FULL_VERSION }}
+        tag_name: ${{ env.FULL_VERSION }}
+        release_name: Release ${{ env.FULL_VERSION }}
         body: 'Release description here'
         draft: false
         prerelease: false
 
-    # Add steps for uploading build artifacts to GitHub Release
+    # Add steps to download artifacts from the build workflow
 
-    # Add steps for uploading the game to itch.io
+    # Add steps to upload build artifacts to GitHub Release
+
+    # Add steps for publishing the game to itch.io
