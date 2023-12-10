@@ -100,7 +100,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.version_info.outputs.FULL_VERSION }}
-        release_name: Release ${{ steps.version_info.outputs.FULL_VERSION }}
+        release_name: ${{ steps.version_info.outputs.FULL_VERSION }}
         draft: false
         prerelease: false
 
