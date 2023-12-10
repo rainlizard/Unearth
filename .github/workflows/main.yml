@@ -112,7 +112,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
-        asset_name: Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
+        asset_name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
         asset_content_type: application/zip
 
     - name: Upload Zipped Windows Artifact to Release
@@ -123,6 +123,6 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
-        asset_name: Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
+        asset_name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
         asset_content_type: application/zip
 
