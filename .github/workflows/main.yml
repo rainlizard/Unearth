@@ -80,6 +80,11 @@ jobs:
 
     ############# Release with workflow_dispatch #############
 
+    - name: Read Changelog
+      id: changelog
+      run: |
+        echo "CHANGELOG=$(cat changelog_new.txt)" >> $GITHUB_ENV
+
     - name: Zip Linux Build for Release
       if: github.event_name == 'workflow_dispatch'
       run: |
@@ -101,6 +106,7 @@ jobs:
       with:
         tag_name: ${{ steps.version_info.outputs.FULL_VERSION }}
         release_name: ${{ steps.version_info.outputs.FULL_VERSION }}
+        body: ${{ env.CHANGELOG }}
         draft: false
         prerelease: false
 
