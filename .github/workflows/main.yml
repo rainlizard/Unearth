@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - '*'
+  workflow_dispatch:
 
 jobs:
   build_application:
@@ -76,3 +77,14 @@ jobs:
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
         path: ./bin/ExportWindows/
+
+    - name: Create Release
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version_info.outputs.FULL_VERSION }}
+        release_name: Release ${{ steps.version_info.outputs.FULL_VERSION }}
+        draft: false
+        prerelease: false
