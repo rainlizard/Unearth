@@ -80,10 +80,13 @@ jobs:
 
     ############# Release with workflow_dispatch #############
 
-    - name: Read Changelog
-      id: changelog
+    - name: Read and Escape Changelog
       run: |
-        echo "CHANGELOG=$(cat changelog_new.txt)" >> $GITHUB_ENV
+        # Check if the changelog file exists
+        if [ -f changelog_new.txt ]; then
+          # Read the file and escape necessary characters
+          ESCAPED_CHANGELOG=$(cat changelog_new.txt | sed 's/"/\\"/g' | sed "s/'/\\'/g" | awk '{printf "%s\\n", $0}')
+          echo "ESCAPED_CHANGELOG=$ESCAPED_CHANGELOG" >> $GITHUB_ENV
 
     - name: Zip Linux Build for Release
       if: github.event_name == 'workflow_dispatch'
@@ -106,7 +109,7 @@ jobs:
       with:
         tag_name: ${{ steps.version_info.outputs.FULL_VERSION }}
         release_name: ${{ steps.version_info.outputs.FULL_VERSION }}
-        body: ${{ env.CHANGELOG }}
+        body: ${{ env.ESCAPED_CHANGELOG }}
         draft: false
         prerelease: false
 
