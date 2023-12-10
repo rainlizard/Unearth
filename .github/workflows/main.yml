@@ -77,9 +77,22 @@ jobs:
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
         path: ./bin/ExportWindows/
+    
+    ############# Release with workflow_dispatch #############
+    
+    - name: Zip Linux Build for Release
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        zip -r ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ./bin/ExportLinux/
+
+    - name: Zip Windows Build for Release
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        zip -r ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ./bin/ExportWindows/
 
     - name: Create Release
       if: github.event_name == 'workflow_dispatch'
+      id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -88,3 +101,26 @@ jobs:
         release_name: Release ${{ steps.version_info.outputs.FULL_VERSION }}
         draft: false
         prerelease: false
+
+    - name: Upload Zipped Linux Artifact to Release
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
+        asset_name: Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
+        asset_content_type: application/zip
+
+    - name: Upload Zipped Windows Artifact to Release
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
+        asset_name: Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
+        asset_content_type: application/zip
+
