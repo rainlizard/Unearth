@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - '*'
+  workflow_dispatch:
 
 jobs:
   build_application:
@@ -76,3 +77,58 @@ jobs:
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
         path: ./bin/ExportWindows/
+
+    ############# Release with workflow_dispatch #############
+
+    - name: Read Changelog
+      id: changelog
+      run: |
+        echo "CHANGELOG=$(cat changelog_new.txt)" >> $GITHUB_ENV
+
+    - name: Zip Linux Build for Release
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        cd ./bin/ExportLinux/
+        zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ./
+
+    - name: Zip Windows Build for Release
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        cd ./bin/ExportWindows/
+        zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ./
+
+    - name: Create Release
+      if: github.event_name == 'workflow_dispatch'
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version_info.outputs.FULL_VERSION }}
+        release_name: ${{ steps.version_info.outputs.FULL_VERSION }}
+        body: ${{ env.CHANGELOG }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Zipped Linux Artifact to Release
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
+        asset_name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
+        asset_content_type: application/zip
+
+    - name: Upload Zipped Windows Artifact to Release
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
+        asset_name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
+        asset_content_type: application/zip
+
