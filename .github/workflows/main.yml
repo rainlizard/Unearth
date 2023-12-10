@@ -82,11 +82,9 @@ jobs:
 
     - name: Read and Escape Changelog
       run: |
-        # Check if the changelog file exists
-        if [ -f changelog_new.txt ]; then
-          # Read the file and escape necessary characters
-          ESCAPED_CHANGELOG=$(cat changelog_new.txt | sed 's/"/\\"/g' | sed "s/'/\\'/g" | awk '{printf "%s\\n", $0}')
-          echo "ESCAPED_CHANGELOG=$ESCAPED_CHANGELOG" >> $GITHUB_ENV
+        # Read the file and escape necessary characters
+        ESCAPED_CHANGELOG=$(cat changelog_new.txt | sed 's/"/\\"/g' | sed "s/'/\\'/g" | awk '{printf "%s\\n", $0}')
+        echo "ESCAPED_CHANGELOG=$ESCAPED_CHANGELOG" >> $GITHUB_ENV
 
     - name: Zip Linux Build for Release
       if: github.event_name == 'workflow_dispatch'
