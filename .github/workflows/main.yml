@@ -77,18 +77,8 @@ jobs:
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
         path: ./bin/ExportWindows/
-    
-    ############# Release with workflow_dispatch #############
-    
-    - name: Zip Linux Build for Release
-      if: github.event_name == 'workflow_dispatch'
-      run: |
-        zip -r ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ./bin/ExportLinux/
 
-    - name: Zip Windows Build for Release
-      if: github.event_name == 'workflow_dispatch'
-      run: |
-        zip -r ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ./bin/ExportWindows/
+    ############# Release with workflow_dispatch #############
 
     - name: Zip Linux Build for Release
       if: github.event_name == 'workflow_dispatch'
@@ -96,7 +86,6 @@ jobs:
         cd ./bin/ExportLinux/
         zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ./
 
-    
     - name: Zip Windows Build for Release
       if: github.event_name == 'workflow_dispatch'
       run: |
