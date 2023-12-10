@@ -101,8 +101,6 @@ jobs:
       with:
         tag_name: ${{ steps.version_info.outputs.FULL_VERSION }}
         release_name: ${{ steps.version_info.outputs.FULL_VERSION }}
-        body: |
-          $(cat changelog_new.txt)
         draft: false
         prerelease: false
 
