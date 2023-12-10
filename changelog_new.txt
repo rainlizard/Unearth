@@ -1,0 +1,2 @@
+- slabset.cfg renamed to slabset.toml and columnset.cfg renamed to columnset.toml
+If you've created these files, you'll need to rename them for the latest alpha patch of keeperfx to be able to recognize them.
