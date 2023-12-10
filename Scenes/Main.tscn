@@ -6290,7 +6290,7 @@ rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 mode = 0
 access = 2
-filters = PoolStringArray( "*.toml, *.cfg" )
+filters = PoolStringArray( "*.toml", "*.cfg" )
 show_hidden_files = true
 
 [node name="ImportColumnsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
@@ -6303,7 +6303,7 @@ rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 mode = 0
 access = 2
-filters = PoolStringArray( "*.toml, *.cfg" )
+filters = PoolStringArray( "*.toml", "*.cfg" )
 show_hidden_files = true
 
 [node name="ExportColumnsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
