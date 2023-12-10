@@ -20,14 +20,14 @@ var columnsContainingRngCubes = {}
 # slabs.clm : 49,156 bytes. first 4 bytes contains 2048, then comes the column data.
 
 func load_default_columnset():
-	clear_all_column_data() # This goes here and not inside import_cfg_columnset, because that function is also used for merging columnsets
+	clear_all_column_data() # This goes here and not inside import_toml_columnset, because that function is also used for merging columnsets
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	# Decide which one to load
-	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "COLUMNSET.CFG")
+	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "COLUMNSET.TOML")
 	if filePath != "":
-		# Load /fxdata/ columnset.cfg file
-		import_cfg_columnset(filePath, true, false)
+		# Load /fxdata/ columnset.toml file
+		import_toml_columnset(filePath, true, false)
 	else:
 		# Load slabs.clm file
 		load_default_original_columnset()
@@ -75,7 +75,7 @@ func store_default_data():
 	default_data["floorTexture"] = floorTexture.duplicate(true)
 
 
-func import_cfg_columnset(filePath, fullExport, showMessages):
+func import_toml_columnset(filePath, fullExport, showMessages):
 	var oMessage = Nodelist.list["oMessage"]
 	var cfg = ConfigFile.new()
 	var err = cfg.load(filePath)
@@ -100,7 +100,7 @@ func import_cfg_columnset(filePath, fullExport, showMessages):
 
 
 
-func export_cfg_columnset(filePath, fullExport): #"res://columns.cfg"
+func export_toml_columnset(filePath, fullExport): #"res://columnset.toml"
 	var oMessage = Nodelist.list["oMessage"]
 	
 	# Find differences if not a full export

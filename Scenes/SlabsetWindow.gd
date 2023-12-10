@@ -10,10 +10,10 @@ onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oExportSlabsetDatDialog = Nodelist.list["oExportSlabsetDatDialog"]
 onready var oGame = Nodelist.list["oGame"]
-onready var oExportColumnsetCfgDialog = Nodelist.list["oExportColumnsetCfgDialog"]
-onready var oImportColumnsetCfgDialog = Nodelist.list["oImportColumnsetCfgDialog"]
-onready var oExportSlabsetCfgDialog = Nodelist.list["oExportSlabsetCfgDialog"]
-onready var oImportSlabsetCfgDialog = Nodelist.list["oImportSlabsetCfgDialog"]
+onready var oExportColumnsetTomlDialog = Nodelist.list["oExportColumnsetTomlDialog"]
+onready var oImportColumnsetTomlDialog = Nodelist.list["oImportColumnsetTomlDialog"]
+onready var oExportSlabsetTomlDialog = Nodelist.list["oExportSlabsetTomlDialog"]
+onready var oImportSlabsetTomlDialog = Nodelist.list["oImportSlabsetTomlDialog"]
 onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
 onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
@@ -235,46 +235,46 @@ func _on_SlabsetCopyValues_pressed():
 #	oExportSlabsetClmDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
 #	oExportSlabsetClmDialog.current_file = "slabs.clm"
 
-func _on_ExportSlabsCfg_pressed():
-	Utils.popup_centered(oExportSlabsetCfgDialog)
-	oExportSlabsetCfgDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
-	oExportSlabsetCfgDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
-	oExportSlabsetCfgDialog.current_file = "slabset.cfg"
-func _on_ImportSlabsCfg_pressed():
-	Utils.popup_centered(oImportSlabsetCfgDialog)
-	oImportSlabsetCfgDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
-	oImportSlabsetCfgDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
-	oImportSlabsetCfgDialog.current_file = "slabset.cfg"
+func _on_ExportSlabsToml_pressed():
+	Utils.popup_centered(oExportSlabsetTomlDialog)
+	oExportSlabsetTomlDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
+	oExportSlabsetTomlDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
+	oExportSlabsetTomlDialog.current_file = "slabset.toml"
+func _on_ImportSlabsToml_pressed():
+	Utils.popup_centered(oImportSlabsetTomlDialog)
+	oImportSlabsetTomlDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
+	oImportSlabsetTomlDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
+	oImportSlabsetTomlDialog.current_file = "slabset.toml"
 
-func _on_ExportColumnsCfg_pressed():
-	Utils.popup_centered(oExportColumnsetCfgDialog)
-	oExportColumnsetCfgDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
-	oExportColumnsetCfgDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
-	oExportColumnsetCfgDialog.current_file = "columnset.cfg"
-func _on_ImportColumnsCfg_pressed():
-	Utils.popup_centered(oImportColumnsetCfgDialog)
-	oImportColumnsetCfgDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
-	oImportColumnsetCfgDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
-	oImportColumnsetCfgDialog.current_file = "columnset.cfg"
+func _on_ExportColumnsToml_pressed():
+	Utils.popup_centered(oExportColumnsetTomlDialog)
+	oExportColumnsetTomlDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
+	oExportColumnsetTomlDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
+	oExportColumnsetTomlDialog.current_file = "columnset.toml"
+func _on_ImportColumnsToml_pressed():
+	Utils.popup_centered(oImportColumnsetTomlDialog)
+	oImportColumnsetTomlDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
+	oImportColumnsetTomlDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
+	oImportColumnsetTomlDialog.current_file = "columnset.toml"
 
 
-func _on_ExportSlabsetCfgDialog_file_selected(filePath):
+func _on_ExportSlabsetTomlDialog_file_selected(filePath):
 	var fullExport = oExportImportSlabsFullCheckBox.pressed
-	Slabset.export_cfg_slabset(filePath, fullExport)
+	Slabset.export_toml_slabset(filePath, fullExport)
 
-func _on_ImportSlabsetCfgDialog_file_selected(filePath):
+func _on_ImportSlabsetTomlDialog_file_selected(filePath):
 	var fullImport = oExportImportSlabsFullCheckBox.pressed
-	Slabset.import_cfg_slabset(filePath, fullImport, true)
+	Slabset.import_toml_slabset(filePath, fullImport, true)
 	update_columns_ui()
 	update_objects_ui()
 
-func _on_ExportColumnsetCfgDialog_file_selected(filePath):
+func _on_ExportColumnsetTomlDialog_file_selected(filePath):
 	var fullExport = oExportImportColumnsFullCheckBox.pressed
-	Columnset.export_cfg_columnset(filePath, fullExport)
+	Columnset.export_toml_columnset(filePath, fullExport)
 
-func _on_ImportColumnsetCfgDialog_file_selected(filePath):
+func _on_ImportColumnsetTomlDialog_file_selected(filePath):
 	var fullImport = oExportImportColumnsFullCheckBox.pressed
-	Columnset.import_cfg_columnset(filePath, fullImport, true)
+	Columnset.import_toml_columnset(filePath, fullImport, true)
 	# Update columnset visuals here
 	oColumnsetVoxelView.refresh_entire_view()
 
@@ -692,18 +692,18 @@ func _on_VarRevertButton_pressed():
 
 func _on_SlabsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "Slabset is loaded from /fxdata/slabset.cfg  \n"
-	helptxt += "Columnset is loaded from /fxdata/columnset.cfg \n"
+	helptxt += "Slabset is loaded from /fxdata/slabset.toml  \n"
+	helptxt += "Columnset is loaded from /fxdata/columnset.toml \n"
 	helptxt += "These sets determine the slab's appearance when placed. \n"
-	helptxt += "To mod the slabs that are placed in-game you'll need to export .cfg files and load them in your mappack/campaign."
+	helptxt += "To mod the slabs that are placed in-game you'll need to export these files and then load them in your mappack/campaign."
 	oMessage.big("Help",helptxt)
 
 func _on_ColumnsetHelpButton_pressed():
 	var helptxt = ""
 	helptxt += "Be wary not to confuse the Columnset with the Map Columns. \n"
 	helptxt += "Map Columns are read from the map's local file such as map00001.clm \n"
-	helptxt += "Whereas Columnset is a global file loaded from /fxdata/columnset.cfg \n"
-	helptxt += "However you can export a columnset.cfg file to use for your own mappack/campaign."
+	helptxt += "Whereas Columnset is a global file loaded from /fxdata/columnset.toml \n"
+	helptxt += "However you can export a columnset.toml file to use for your own mappack/campaign."
 	oMessage.big("Help",helptxt)
 
 

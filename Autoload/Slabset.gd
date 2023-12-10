@@ -34,7 +34,7 @@ enum dir {
 #func _ready():
 #	yield(get_tree(),'idle_frame') # Needed for this test, so that default_data is established first
 #	var CODETIME_START = OS.get_ticks_msec()
-#	import_cfg_slabset("D:/AI/slabset.cfg", true)
+#	import_toml_slabset("D:/AI/slabset.toml", true)
 #	print('Import Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func load_default_slabset():
@@ -43,10 +43,10 @@ func load_default_slabset():
 	dat = []
 	
 	# Decide which one to load
-	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "SLABSET.CFG")
+	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "SLABSET.TOML")
 	if filePath != "":
-		# Load slabset.cfg file
-		import_cfg_slabset(filePath, true, false)
+		# Load slabset.toml file
+		import_toml_slabset(filePath, true, false)
 	else:
 		# Load slabs.dat and slabs.tng files
 		load_default_original_slabset()
@@ -96,8 +96,8 @@ func store_default_data():
 	default_data["tng"] = tng.duplicate(true)
 
 
-func import_cfg_slabset(filePath, fullImport, showMessages):
-	var processed_string = preprocess_cfg_file(filePath)
+func import_toml_slabset(filePath, fullImport, showMessages):
+	var processed_string = preprocess_toml_file(filePath)
 	if processed_string == null:
 		if showMessages == true: oMessage.quick("Failed to open file: " + str(filePath))
 		return
@@ -107,11 +107,11 @@ func import_cfg_slabset(filePath, fullImport, showMessages):
 		if showMessages == true: oMessage.quick("Failed to parse config file")
 		return
 	
-	resize_dat_and_tng_based_on_cfg(cfg)
+	resize_dat_and_tng_based_on_file(cfg)
 	
 	if cfg.has_section("slab0.S"):
-		if cfg.has_section_key("slab0.S", "columns"): # Lowercase "Columns" means it's an out of date slabset.cfg file
-			oMessage.big("Failed loading Slabset", "Old /fxdata/slabset.cfg file, please install the latest KeeperFX alpha patch")
+		if cfg.has_section_key("slab0.S", "columns"): # Lowercase "Columns" means it's an out of date slabset.toml file
+			oMessage.big("Failed loading Slabset", "Old /fxdata/slabset.toml file, please install the latest KeeperFX alpha patch")
 	
 	
 	for section in cfg.get_sections():
@@ -148,7 +148,7 @@ func import_cfg_slabset(filePath, fullImport, showMessages):
 				"EffectRange": getObject[obj.EFFECT_RANGE] = int(value)
 	if showMessages == true: oMessage.quick("Merged: " + str(filePath))
 
-func resize_dat_and_tng_based_on_cfg(cfg):
+func resize_dat_and_tng_based_on_file(cfg):
 	# Determine maximum needed size for dat and tng arrays
 	var max_variation = 0
 	for section in cfg.get_sections():
@@ -166,7 +166,7 @@ func resize_dat_and_tng_based_on_cfg(cfg):
 
 const EMPTY_SLAB = [0,0,0, 0,0,0, 0,0,0]
 
-func preprocess_cfg_file(filePath): # 7ms
+func preprocess_toml_file(filePath): # 7ms
 	var file = File.new()
 	if file.open(filePath, File.READ) != OK:
 		return null
@@ -198,7 +198,7 @@ func preprocess_cfg_file(filePath): # 7ms
 #print(processed_string)
 # test
 #	var textFile = File.new()
-#	if textFile.open("D:/AI/debug_slabset.cfg", File.WRITE) != OK:
+#	if textFile.open("D:/AI/debug_slabset.toml", File.WRITE) != OK:
 #		return
 #	textFile.store_string(processed_string)
 #	textFile.close()
@@ -248,7 +248,7 @@ enum { # BitFlags
 	SKIP_OBJECTS = 2,
 }
 
-func export_cfg_slabset(filePath, fullExport): #"res://slabset.cfg"
+func export_toml_slabset(filePath, fullExport): #"res://slabset.toml"
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	# Find differences if not a full export

@@ -5921,7 +5921,7 @@ margin_right = 218.0
 margin_bottom = 90.0
 columns = 2
 
-[node name="ExportSlabsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="ExportSlabsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 margin_right = 149.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
@@ -5936,7 +5936,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Full"
 
-[node name="ImportSlabsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="ImportSlabsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
 margin_top = 33.0
 margin_right = 149.0
 margin_bottom = 60.0
@@ -6006,7 +6006,7 @@ margin_right = 208.0
 margin_bottom = 90.0
 columns = 2
 
-[node name="ExportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
+[node name="ExportColumnsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
 margin_right = 139.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
@@ -6021,7 +6021,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Full"
 
-[node name="ImportColumnsCfg" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
+[node name="ImportColumnsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
 margin_top = 33.0
 margin_right = 139.0
 margin_bottom = 60.0
@@ -6269,7 +6269,7 @@ access = 2
 filters = PoolStringArray( "*.clm" )
 show_hidden_files = true
 
-[node name="ExportSlabsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
+[node name="ExportSlabsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -2797.0
 margin_top = 3062.0
@@ -6277,23 +6277,10 @@ margin_right = -2117.0
 margin_bottom = 3622.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
-filters = PoolStringArray( "*.cfg" )
+filters = PoolStringArray( "*.toml" )
 show_hidden_files = true
 
-[node name="ImportSlabsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = -2797.0
-margin_top = 3062.0
-margin_right = -2117.0
-margin_bottom = 3622.0
-rect_min_size = Vector2( 250, 87.5 )
-window_title = "Open a File"
-mode = 0
-access = 2
-filters = PoolStringArray( "*.cfg" )
-show_hidden_files = true
-
-[node name="ImportColumnsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
+[node name="ImportSlabsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -2797.0
 margin_top = 3062.0
@@ -6303,10 +6290,23 @@ rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 mode = 0
 access = 2
-filters = PoolStringArray( "*.cfg" )
+filters = PoolStringArray( "*.toml, *.cfg" )
 show_hidden_files = true
 
-[node name="ExportColumnsetCfgDialog" type="FileDialog" parent="Ui/UiSystem"]
+[node name="ImportColumnsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -2797.0
+margin_top = 3062.0
+margin_right = -2117.0
+margin_bottom = 3622.0
+rect_min_size = Vector2( 250, 87.5 )
+window_title = "Open a File"
+mode = 0
+access = 2
+filters = PoolStringArray( "*.toml, *.cfg" )
+show_hidden_files = true
+
+[node name="ExportColumnsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -2834.0
 margin_top = 2262.0
@@ -6314,7 +6314,7 @@ margin_right = -2154.0
 margin_bottom = 2822.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
-filters = PoolStringArray( "*.cfg" )
+filters = PoolStringArray( "*.toml" )
 show_hidden_files = true
 
 [node name="ResizeCurrentMapSize" type="WindowDialog" parent="Ui/UiSystem"]
@@ -7223,11 +7223,11 @@ script = SubResource( 20 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjThingTypeSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjThingTypeSpinBox_value_changed"]
 [connection signal="toggled" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjIsLightCheckBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjIsLightCheckBox_toggled"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetCopyValues" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetCopyValues_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/ExportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsCfg_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/ImportSlabsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportSlabsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/ExportSlabsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsToml_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/ImportSlabsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportSlabsToml_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ExportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsCfg_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ImportColumnsCfg" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportColumnsCfg_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ExportColumnsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsToml_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ImportColumnsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportColumnsToml_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ColumnsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetHelpButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/SetNewFormat" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapFormat_item_selected"]
@@ -7244,10 +7244,10 @@ script = SubResource( 20 )
 [connection signal="timeout" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions/NoiseUpdateTimer" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseUpdateTimer_timeout"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/ButtonNewMapOK" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonNewMapOK_pressed"]
 [connection signal="gui_input" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/QuickNoisePreview" to="Ui/UiSystem/NewMapWindow" method="_on_QuickNoisePreview_gui_input"]
-[connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetCfgDialog_file_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/ImportSlabsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportSlabsetCfgDialog_file_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/ImportColumnsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportColumnsetCfgDialog_file_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/ExportColumnsetCfgDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsetCfgDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetTomlDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetTomlDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ImportSlabsetTomlDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportSlabsetTomlDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ImportColumnsetTomlDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportColumnsetTomlDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ExportColumnsetTomlDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsetTomlDialog_file_selected"]
 [connection signal="about_to_show" from="Ui/UiSystem/ResizeCurrentMapSize" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeCurrentMapSize_about_to_show"]
 [connection signal="focus_exited" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer/SettingsXSizeLine" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_SettingsXSizeLine_focus_exited"]
 [connection signal="focus_exited" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer/SettingsYSizeLine" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_SettingsYSizeLine_focus_exited"]

@@ -188,8 +188,8 @@ func _on_FakeSlabHelpButton_pressed():
 func _on_SlabsetSlabHelpButton_pressed():
 	var helptext = ""
 	helptext += "Go to Edit->Slabset to define what this Slabset slab looks like and then select the same ID. \n"
-	helptext += "Slabset Slabs require the slabset.cfg (or columnset.cfg) file to be saved to the correct directory for the game to recognize it. \n"
-	helptext += "A mappack/campaign can be set up to have its own personal cfg files."
+	helptext += "Slabset Slabs require the slabset.toml (or columnset.toml) file to be saved to the correct directory for the game to recognize it. \n"
+	helptext += "A mappack/campaign can be set up to have its own personal config files."
 	oMessage.big("Help",helptext)
 
 func _on_HelpCustomSlabsButton_pressed():
