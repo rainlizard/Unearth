@@ -90,6 +90,19 @@ jobs:
       run: |
         zip -r ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ./bin/ExportWindows/
 
+    - name: Zip Linux Build for Release
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        cd ./bin/ExportLinux/
+        zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ./
+
+    
+    - name: Zip Windows Build for Release
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        cd ./bin/ExportWindows/
+        zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ./
+
     - name: Create Release
       if: github.event_name == 'workflow_dispatch'
       id: create_release
