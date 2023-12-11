@@ -185,9 +185,9 @@ func update_property_value(callingNode, leftString):
 			if is_instance_valid(inst):
 				var originalLocation = Vector2(inst.locationX,inst.locationY)
 				inst.locationX = clamp(float(callingNode.oLineEditX.text), 0.0, M.xSize*3)
-				inst.locationY = clamp(float(callingNode.oLineEditY.text), 0.0, M.xSize*3)
+				inst.locationY = clamp(float(callingNode.oLineEditY.text), 0.0, M.ySize*3)
 				if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
-					inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0, M.xSize*3)
+					inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0, 255.0)
 				oInstances.mirror_adjusted_value(inst, "locationXYZ", originalLocation)
 				oInspector.set_inspector_subtile(Vector2(inst.locationX,inst.locationY))
 			return # Exit after handling "Position"
