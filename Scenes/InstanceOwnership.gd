@@ -9,6 +9,9 @@ var materialInstanceOwnership = [
 	a.duplicate(), # 3
 	a.duplicate(), # 4 
 	a.duplicate(), # 5
+	a.duplicate(), # 6
+	a.duplicate(), # 7
+	a.duplicate(), # 8
 ]
 
 func _ready():
