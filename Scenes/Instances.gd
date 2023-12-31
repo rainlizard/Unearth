@@ -388,8 +388,11 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 				1: id.subtype = 116 # Blue
 				2: id.subtype = 117 # Green
 				3: id.subtype = 118 # Yellow
-				4: id.queue_free() # White
-				5: id.subtype = 119 # None
+				4: id.subtype = 161 # White
+				5: id.queue_free() # None
+				6: id.subtype = 164 # Purple
+				7: id.subtype = 166 # Black
+				8: id.subtype = 168 # Orange
 	elif slabID == Slabs.DUNGEON_HEART:
 		if tngObj[Slabset.obj.THING_SUBTYPE] == 111: # Heart Flame (Red)
 			match ownership:
@@ -399,6 +402,9 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 				3: id.subtype = 122 # Yellow
 				4: id.queue_free() # White
 				5: id.queue_free() # None
+				6: id.subtype = 165 # Purple
+				7: id.subtype = 167 # Black
+				8: id.subtype = 169 # Orange
 	
 	add_child(id)
 	
