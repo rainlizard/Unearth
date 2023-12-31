@@ -29,9 +29,9 @@ func _ready():
 			3: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_yellow_std.png")
 			4: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_white_std.png")
 			5: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_any_dis.png")
-			5: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_purple_std.png")
-			5: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_black_std.png")
-			5: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_orange_std.png")
+			6: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_purple_std.png")
+			7: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_black_std.png")
+			8: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_orange_std.png")
 		setText = Constants.ownershipNames[i]
 
 		add_child_to_grid(id, setText)
