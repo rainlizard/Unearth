@@ -16,12 +16,12 @@ var materialInstanceOwnership = [
 
 func _ready():
 	#print(materialInstanceOwnership)
-	for i in 6:
+	for i in Constants.PLAYERS_COUNT:
 		materialInstanceOwnership[i].set_shader_param("ownerCol", Constants.ownerRoomCol[i])
 		materialInstanceOwnership[i].set_shader_param("alphaFilled", 0.5)
 
 func _process(delta):
-	for i in 6: # 0 to 5
+	for i in Constants.PLAYERS_COUNT: # 0 to 8
 		materialInstanceOwnership[i].set_shader_param("fadeAlpha", 1.0-oOverheadOwnership.alphaFadeColor[i])
 		if i == 5:
 			materialInstanceOwnership[i].set_shader_param("ownerCol", Constants.ownerRoomCol[Random.choose([0,1,2,3])])

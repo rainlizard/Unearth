@@ -8,7 +8,7 @@ onready var oSelectedRect = get_node("../../../Clippy/SelectedRect")
 func initialize_grid_items():
 	var oGridContainer = current_grid_container()
 #	# Add children
-	for i in 6: # +1 is for "Default"
+	for i in Constants.PLAYERS_COUNT: # +1 is for "Default"
 		var id = scnOwnerButton.instance()
 		id.connect("pressed", self, "_on_OwnerButtonPressed", [id])
 		
