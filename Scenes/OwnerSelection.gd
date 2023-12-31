@@ -13,7 +13,7 @@ onready var oCenteredLabel = $Control/CenteredLabel
 #export var grid_item_size : Vector2
 #export var grid_window_scale : float setget update_scale
 #
-var owner_order = [0,1,2,3,4,5]
+var owner_order = [0,1,2,3,4,5,6,7,8]
 
 func _ready():
 	for i in owner_order:
@@ -27,8 +27,11 @@ func _ready():
 			1: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_blue_std.png")
 			2: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_green_std.png")
 			3: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_yellow_std.png")
-			4: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_white_2.png")
+			4: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_white_std.png")
 			5: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_any_dis.png")
+			5: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_purple_std.png")
+			5: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_black_std.png")
+			5: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_orange_std.png")
 		setText = Constants.ownershipNames[i]
 
 		add_child_to_grid(id, setText)

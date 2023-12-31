@@ -30,8 +30,11 @@ func initialize_grid_items():
 			1: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_blue_std.png")
 			2: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_green_std.png")
 			3: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_yellow_std.png")
-			4: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_white_2.png")
+			4: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_white_std.png")
 			5: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_any_dis.png")
+			6: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_purple_std.png")
+			7: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_black_std.png")
+			8: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_orange_std.png")
 		
 		oGridContainer.add_child(id)
 
