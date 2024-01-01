@@ -34,15 +34,19 @@ int getAnimationFrame(int frame, int index){
 	return int(value.r+value.g+value.b);
 }
 
+int getIndex(vec2 uv2) {
+	// This is a bit of a hack, but allows us to store the texture index within the mesh as UV2.
+	// Adding 0.5 so the int() floor will be correct.
+	return (int(uv2.x + 0.5) << 16) | int(uv2.y + 0.5);
+}
+
 void vertex() {
 	worldPos = WORLD_MATRIX * vec4(VERTEX, 1.0); //required when using skip_vertex_transform
 	VERTEX = (INV_CAMERA_MATRIX * worldPos).xyz; //required when using skip_vertex_transform
 }
 
 void fragment() {
-	// This is a bit of a hack, but allows us to store the texture index within the mesh as UV2.
-	// Adding 0.5 so the int() floor will be correct.
-	int index = int(UV2.x+0.5);
+	int index = getIndex(UV2);
 	
 	if (index >= 544) { // 544 is the index where the TexAnims start (544 - 585)
 		int frame = int(mod(TIME * TEXTURE_ANIMATION_SPEED, 8));
