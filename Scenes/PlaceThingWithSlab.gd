@@ -16,9 +16,7 @@ onready var dir = oSlabPlacement.dir
 func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, bitmaskType):
 	oInstances.delete_attached_instances_on_slab(xSlab, ySlab)
 	
-	if slabID == Slabs.PRISON:
-		bitmask = prison_bar_bitmask(slabID, surrID)
-	elif slabID == Slabs.WATER:
+	if slabID == Slabs.WATER:
 		if Random.rng.randf_range(0.0, 100.0) < oWaterEffectPercent.value:
 			var xSubtile = (xSlab*3) + Random.randi_range(0,2) + 0.5
 			var ySubtile = (ySlab*3) + Random.randi_range(0,2) + 0.5
@@ -36,12 +34,25 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask,
 	if Slabs.is_door(slabID):
 		create_door_thing(xSlab, ySlab, ownership)
 	
-	for i in range(9): # iterate over the range of 0-8, assuming 9 subtiles per variation
-		var variation = int(clmIndexGroup[i] / 9) # Convert to int for safety, as division of ints in GDScript results in float
-		var convertedSubtile = clmIndexGroup[i] % 9
-		var objectStuff = get_object(variation, convertedSubtile) # Pass slabVar and datSubtile to the get_object function
-		if objectStuff.size() > 0:
-			oInstances.spawn_attached(xSlab, ySlab, slabID, ownership, i, objectStuff)
+	if slabID == Slabs.PRISON:
+		var subtiles_with_bars = prison_bar_bitmask(slabID, surrID)
+
+		for i in range(9):
+			var variation = int(clmIndexGroup[i] / 9)
+			var convertedSubtile = clmIndexGroup[i] % 9
+			var objectStuff = get_object(variation, convertedSubtile)
+
+			if objectStuff.size() > 0 and subtiles_with_bars.has(i):
+				oInstances.spawn_attached(xSlab, ySlab, slabID, ownership, i, objectStuff)
+		
+	else:
+	
+		for i in range(9): # iterate over the range of 0-8, assuming 9 subtiles per variation
+			var variation = int(clmIndexGroup[i] / 9) # Convert to int for safety, as division of ints in GDScript results in float
+			var convertedSubtile = clmIndexGroup[i] % 9
+			var objectStuff = get_object(variation, convertedSubtile) # Pass slabVar and datSubtile to the get_object function
+			if objectStuff.size() > 0:
+				oInstances.spawn_attached(xSlab, ySlab, slabID, ownership, i, objectStuff)
 
 func get_object(variation, subtile):
 	if variation < Slabset.tng.size():
@@ -81,9 +92,13 @@ func create_door_thing(xSlab, ySlab, ownership):
 	id.update_spinning_key()
 
 func prison_bar_bitmask(slabID, surrID):
-	var bitmask = 0
-	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.s]: bitmask += 1
-	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.w]: bitmask += 2
-	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.n]: bitmask += 4
-	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.e]: bitmask += 8
-	return bitmask
+	var subtiles_with_bars = []
+	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.s]:
+		subtiles_with_bars.append_array([6, 7, 8])
+	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.w]:
+		subtiles_with_bars.append_array([0, 3, 6])
+	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.n]:
+		subtiles_with_bars.append_array([0, 1, 2])
+	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false and slabID != surrID[dir.e]:
+		subtiles_with_bars.append_array([2, 5, 8])
+	return subtiles_with_bars
