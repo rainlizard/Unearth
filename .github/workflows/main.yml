@@ -4,18 +4,14 @@ on:
   push:
     branches:
       - main
-    tags:
-      - '*'
   pull_request:
     branches:
       - '*'
+  workflow_dispatch:
 
 jobs:
-  build:
+  build_application:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform: [linux, windows]
 
     steps:
     - name: Checkout
@@ -23,39 +19,100 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Extract Version from Tag
+    - name: Extract Version & Determine Patch
       id: version_info
       run: |
-        TAG_VERSION=$(echo ${{ github.ref }} | cut -d'/' -f3)
-        echo "FULL_VERSION=${TAG_VERSION}" >> $GITHUB_OUTPUT
-
-    - name: Setup Godot
-      uses: abarichello/godot-ci@4.2.1-stable
-      with:
-        version: "3.5.3"
-        export-templates: "true"
-
-    - name: Export Godot Game
+        MAJOR_MINOR=$(grep "var major_minor" Autoload/Version.gd | awk -F\" '{print $2}')
+        PATCH=$(git rev-list --count HEAD)
+        FULL_VERSION="$MAJOR_MINOR.$PATCH"
+        echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_OUTPUT
+        echo "PATCH=$PATCH" >> $GITHUB_ENV
+    - name: Update Version in Godot Script
       run: |
-        mkdir -p ./bin/Export${{ matrix.platform }}/Unearth
-        godot-ci/godot --export "${{ matrix.platform == 'linux' && 'Linux/X11' || 'Windows Desktop' }}" ./bin/Export${{ matrix.platform }}/Unearth/Unearth${{ matrix.platform == 'linux' && '.x86_64' || '.exe' }}
+        sed -i "s/var patch = .*/var patch = \"$PATCH\"/" Autoload/Version.gd
+    - name: Setup Godot and Export Templates
+      run: |
+        wget -q https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_linux_headless.64.zip
+        wget -q https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_export_templates.tpz
+        unzip -q Godot_v3.5.3-stable_linux_headless.64.zip
+        unzip -q Godot_v3.5.3-stable_export_templates.tpz
+        mkdir -p ~/.local/share/godot/templates/3.5.3.stable/
+        mv templates/* ~/.local/share/godot/templates/3.5.3.stable/
+        chmod +x Godot_v3.5.3-stable_linux_headless.64
+    - name: Prepare Directories
+      run: |
+        rm -rf ./bin
+        mkdir -p ./bin/ExportLinux/Unearth ./bin/ExportWindows/Unearth
+    - name: Export Godot Game (Linux)
+      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" ./bin/ExportLinux/Unearth/Unearth.x86_64
 
-    - name: Replace Icon in Windows Export with rcedit
-      if: matrix.platform == 'windows'
+    - name: Export Godot Game (Windows)
+      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" ./bin/ExportWindows/Unearth/Unearth.exe
+
+    - name: Install Wine
       run: |
         sudo apt-get update
         sudo apt-get install -y wine64
-        wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
-        wine64 rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe --set-icon Art/UnearthIcon.ico
-
-    - name: Zip Exported Game
+    - name: Download rcedit
       run: |
-        cd ./bin/Export${{ matrix.platform }}/
-        zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-${{ matrix.platform }}.zip ./
-
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
+        wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
+    - name: Replace Icon in Windows Export with rcedit
+      run: |
+        wine64 rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe --set-icon Art/UnearthIcon.ico
+    - name: Upload Linux Artifacts
+      uses: actions/upload-artifact@v3
       with:
-        tag_name: ${{ github.ref }}
-        files: |
-          ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-*.zip
+        name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux
+        path: ./bin/ExportLinux/
+
+    - name: Upload Windows Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
+        path: ./bin/ExportWindows/
+
+    ############# Release with workflow_dispatch #############
+
+    - name: Zip Linux Build for Release
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        cd ./bin/ExportLinux/
+        zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ./
+    - name: Zip Windows Build for Release
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        cd ./bin/ExportWindows/
+        zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ./
+    - name: Create Release
+      if: github.event_name == 'workflow_dispatch'
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version_info.outputs.FULL_VERSION }}
+        release_name: ${{ steps.version_info.outputs.FULL_VERSION }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Zipped Linux Artifact to Release
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
+        asset_name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
+        asset_content_type: application/zip
+
+    - name: Upload Zipped Windows Artifact to Release
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
+        asset_name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
+        asset_content_type: application/zip
