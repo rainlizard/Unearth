@@ -10,7 +10,6 @@ on:
     branches:
       - '*'
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,7 +38,7 @@ jobs:
     - name: Export Godot Game
       run: |
         mkdir -p ./bin/Export${{ matrix.platform }}/Unearth
-        godot --export "${{ matrix.platform == 'linux' && 'Linux/X11' || 'Windows Desktop' }}" ./bin/Export${{ matrix.platform }}/Unearth/Unearth${{ matrix.platform == 'linux' && '.x86_64' || '.exe' }}
+        godot-ci/godot --export "${{ matrix.platform == 'linux' && 'Linux/X11' || 'Windows Desktop' }}" ./bin/Export${{ matrix.platform }}/Unearth/Unearth${{ matrix.platform == 'linux' && '.x86_64' || '.exe' }}
 
     - name: Replace Icon in Windows Export with rcedit
       if: matrix.platform == 'windows'
