@@ -10,6 +10,7 @@ on:
     branches:
       - '*'
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,9 +31,10 @@ jobs:
         echo "FULL_VERSION=${TAG_VERSION}" >> $GITHUB_OUTPUT
 
     - name: Setup Godot
-      uses: fantom-technologies-inc/godot-ci@v2
+      uses: abarichello/godot-ci@4.2.1-stable
       with:
-        version: 3.5.3
+        version: "3.5.3"
+        export-templates: "true"
 
     - name: Export Godot Game
       run: |
@@ -42,7 +44,6 @@ jobs:
     - name: Replace Icon in Windows Export with rcedit
       if: matrix.platform == 'windows'
       run: |
-        sudo dpkg --add-architecture i386
         sudo apt-get update
         sudo apt-get install -y wine64
         wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
