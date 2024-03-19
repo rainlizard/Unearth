@@ -64,13 +64,13 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux
-        path: ./bin/ExportLinux/
+        path: ./bin/ExportLinux/Unearth/
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
-        path: ./bin/ExportWindows/
+        path: ./bin/ExportWindows/Unearth/
 
     - name: Install Butler
       if: startsWith(github.ref, 'refs/tags/')
@@ -83,14 +83,14 @@ jobs:
     - name: Zip Linux Build for Release
       if: startsWith(github.ref, 'refs/tags/')
       run: |
-        cd ./bin/
-        zip -r unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ExportLinux/Unearth/
+        cd ./bin/ExportLinux/
+        zip -r ../unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip Unearth/
 
     - name: Zip Windows Build for Release
       if: startsWith(github.ref, 'refs/tags/')
       run: |
-        cd ./bin/
-        zip -r unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ExportWindows/Unearth/
+        cd ./bin/ExportWindows/
+        zip -r ../unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip Unearth/
 
     - name: Upload to itch.io
       if: startsWith(github.ref, 'refs/tags/')
