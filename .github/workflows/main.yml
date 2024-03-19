@@ -84,13 +84,13 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       run: |
         cd ./bin/
-        zip -r unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ExportLinux/
+        zip -r unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ExportLinux/Unearth/
 
     - name: Zip Windows Build for Release
       if: startsWith(github.ref, 'refs/tags/')
       run: |
         cd ./bin/
-        zip -r unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ExportWindows/
+        zip -r unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ExportWindows/Unearth/
 
     - name: Upload to itch.io
       if: startsWith(github.ref, 'refs/tags/')
