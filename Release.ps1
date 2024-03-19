@@ -16,4 +16,11 @@ git tag -a "$fullVersion" -m "Release $fullVersion"
 # Push the tag to the remote repository
 git push origin "$fullVersion"
 
+# Display the message
+Write-Host "GitHub Actions are now running. Please wait 5 minutes, and a release will be created on GitHub and itch.io."
+
+# Pause the script execution
+Write-Host "Press any key to continue..."
+$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
 # NOTE: in github desktop click "Pull origin" before running this, in order to be sure the commits count is correct.
