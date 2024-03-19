@@ -92,8 +92,11 @@ jobs:
         # Get the list of existing releases
         releases=$(curl -s -H "Authorization: Bearer $BUTLER_API_KEY" https://itch.io/api/1/my-games/rainlizard/unearth/uploads)
     
+        echo "API response:"
+        echo "$releases"
+    
         # Extract the upload IDs of the releases
-        upload_ids=$(echo "$releases" | jq -r '.[].id')
+        upload_ids=$(echo "$releases" | jq -r '.uploads[].id')
     
         # Delete each release
         for id in $upload_ids; do
