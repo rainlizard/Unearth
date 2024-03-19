@@ -183,12 +183,11 @@ func read_own(buffer):
 	var dataWidth = (M.xSize * 3) + 1
 	var totalSubtiles = ((M.ySize * 3) + 1) * dataWidth
 	var data = buffer.get_data(totalSubtiles)
-	print(data)
-#	for i in totalSubtiles:
-#		var ySubtile = i / dataWidth
-#		var xSubtile = i % dataWidth
-#		var value = data.get(i)  # Convert byte to integer
-#		oDataOwnership.set_cell(xSubtile / 3, ySubtile / 3, value)
+	for i in totalSubtiles:
+		var ySubtile = i / dataWidth
+		var xSubtile = i % dataWidth
+		var value = data[i]
+		oDataOwnership.set_cell(xSubtile / 3, ySubtile / 3, value)
 func new_own():
 	pass
 
@@ -581,7 +580,7 @@ func read_lif(buffer):
 func new_lif():
 	pass
 
-# These get their own functions because it's also used for Viewing Map Files before you open them
+
 func lif_buffer_to_array(buffer):
 	var stringFile = buffer.get_string(buffer.get_size())
 	# Divide string into lines
