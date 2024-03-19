@@ -180,14 +180,12 @@ func new_slb():
 
 func read_own(buffer):
 	buffer.seek(0)
-	var dataWidth = (M.xSize * 3) + 1
-	var totalSubtiles = ((M.ySize * 3) + 1) * dataWidth
-	var data = buffer.get_data(totalSubtiles)
-	for i in totalSubtiles:
-		var ySubtile = i / dataWidth
-		var xSubtile = i % dataWidth
-		var value = data[i]
-		oDataOwnership.set_cell(xSubtile / 3, ySubtile / 3, value)
+	var dataHeight = (M.ySize*3)+1
+	var dataWidth = (M.xSize*3)+1
+	for ySubtile in dataHeight:
+		for xSubtile in dataWidth:
+			value = buffer.get_u8()
+			oDataOwnership.set_cell(xSubtile/3,ySubtile/3,value)
 func new_own():
 	pass
 
