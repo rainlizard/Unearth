@@ -92,19 +92,13 @@ jobs:
         cd ./bin/ExportWindows/
         zip -r ../unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip Unearth/
 
-    - name: Set Release Filenames
-      if: startsWith(github.ref, 'refs/tags/')
-      run: |
-        echo "LINUX_FILENAME=unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip" >> $GITHUB_ENV
-        echo "WINDOWS_FILENAME=unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip" >> $GITHUB_ENV
-
     - name: Upload to itch.io
       if: startsWith(github.ref, 'refs/tags/')
       env:
         BUTLER_API_KEY: ${{ secrets.ITCHIO_API_KEY }}
       run: |
-        ./butler push ./bin/${{ env.LINUX_FILENAME }} rainlizard/unearth:linux --userversion ${{ steps.version_info.outputs.FULL_VERSION }}
-        ./butler push ./bin/${{ env.WINDOWS_FILENAME }} rainlizard/unearth:windows --userversion ${{ steps.version_info.outputs.FULL_VERSION }}
+        ./butler push ./bin/unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip rainlizard/unearth:linux --userversion ${{ steps.version_info.outputs.FULL_VERSION }}
+        ./butler push ./bin/unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip rainlizard/unearth:windows --userversion ${{ steps.version_info.outputs.FULL_VERSION }}
 
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/')
