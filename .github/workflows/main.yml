@@ -65,13 +65,13 @@ jobs:
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux
         path: ./bin/ExportLinux/
-    
+
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
         path: ./bin/ExportWindows/
-    
+
     - name: Install Butler
       if: startsWith(github.ref, 'refs/tags/')
       run: |
@@ -79,31 +79,7 @@ jobs:
         unzip butler.zip
         chmod +x butler
         ./butler -V
-    
-    - name: Install jq
-      if: startsWith(github.ref, 'refs/tags/')
-      run: sudo apt-get install -y jq
-    
-    - name: Delete Old Releases on itch.io
-      if: startsWith(github.ref, 'refs/tags/')
-      env:
-        BUTLER_API_KEY: ${{ secrets.ITCHIO_API_KEY }}
-        GAME_ID: 1018685
-      run: |
-        # Get the list of existing releases
-        releases=$(curl -s -H "Authorization: Bearer $BUTLER_API_KEY" "https://itch.io/api/1/$BUTLER_API_KEY/my-games/$GAME_ID/uploads")
-    
-        echo "API response:"
-        echo "$releases"
-    
-        # Extract the upload IDs of the releases
-        upload_ids=$(echo "$releases" | jq -r '.[].id')
-    
-        # Delete each release
-        for id in $upload_ids; do
-          curl -s -X DELETE -H "Authorization: Bearer $BUTLER_API_KEY" "https://itch.io/api/1/$BUTLER_API_KEY/uploads/$id"
-        done
-    
+
     - name: Upload to itch.io
       if: startsWith(github.ref, 'refs/tags/')
       env:
@@ -111,19 +87,19 @@ jobs:
       run: |
         ./butler push ./bin/ExportLinux/Unearth rainlizard/unearth:linux --userversion ${{ steps.version_info.outputs.FULL_VERSION }}
         ./butler push ./bin/ExportWindows/Unearth rainlizard/unearth:windows --userversion ${{ steps.version_info.outputs.FULL_VERSION }}
-    
+
     - name: Zip Linux Build for Release
       if: startsWith(github.ref, 'refs/tags/')
       run: |
         cd ./bin/ExportLinux/
         zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ./
-    
+
     - name: Zip Windows Build for Release
       if: startsWith(github.ref, 'refs/tags/')
       run: |
         cd ./bin/ExportWindows/
         zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ./
-    
+
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/')
       id: create_release
