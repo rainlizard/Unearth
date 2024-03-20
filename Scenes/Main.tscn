@@ -1716,7 +1716,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Help"
 align = 0
-items = [ "KeeperFX script commands", null, 0, false, false, 0, 0, null, "", false, "Creating a new campaign", null, 0, false, false, 1, 0, null, "", false, "Old script commands", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Controls", null, 0, false, false, 3, 0, null, "", false, "About", null, 0, false, false, 4, 0, null, "", false ]
+items = [ "KeeperFX script commands", null, 0, false, false, 0, 0, null, "", false, "Old script commands", null, 0, false, false, 1, 0, null, "", false, "Creating a new campaign", null, 0, false, false, 2, 0, null, "", false, "KeeperFX file format reference", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Controls", null, 0, false, false, 4, 0, null, "", false, "About", null, 0, false, false, 5, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -6074,22 +6074,22 @@ margin_bottom = 445.0
 custom_constants/separation = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 425.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 27.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
 margin_top = 3.0
-margin_right = 139.0
+margin_right = 101.0
 margin_bottom = 24.0
-text = "Map file format"
+text = "File format"
 
 [node name="SetNewFormat" type="OptionButton" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
-margin_left = 143.0
-margin_right = 343.0
+margin_left = 105.0
+margin_right = 305.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 200, 0 )
 hint_tooltip = "KFX format has more features but will produce maps that are incompatible with non-KeeperFX installations and old editors."
@@ -6101,18 +6101,18 @@ selected = 0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 31.0
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 62.0
 
 [node name="Label" type="Label" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
 margin_top = 5.0
-margin_right = 76.0
+margin_right = 37.0
 margin_bottom = 26.0
-text = "Map size"
+text = "Size"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 208.0
-margin_right = 343.0
+margin_left = 170.0
+margin_right = 305.0
 margin_bottom = 31.0
 size_flags_horizontal = 10
 
@@ -6139,9 +6139,9 @@ size_flags_horizontal = 0
 text = "85"
 
 [node name="CheckBoxNewMapBorder" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
-margin_left = 171.0
+margin_left = 133.0
 margin_top = 66.0
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 95.0
 size_flags_horizontal = 10
 pressed = true
@@ -6149,19 +6149,19 @@ text = "Generate border"
 
 [node name="Control" type="Control" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 99.0
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 138.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="NewMapNoiseOptions" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 142.0
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 382.0
 
 [node name="NewMapSymmetricalBorder" type="OptionButton" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions"]
-margin_left = 143.0
-margin_right = 343.0
+margin_left = 105.0
+margin_right = 305.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 10
@@ -6172,7 +6172,7 @@ selected = 0
 
 [node name="NoiseDistance" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 31.0
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 72.0
 label_setting = "Distance"
 max_value = 5.0
@@ -6181,7 +6181,7 @@ value = 1.05
 
 [node name="NoisePeriod" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 76.0
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 117.0
 label_setting = "Detail"
 min_value = 0.01
@@ -6191,7 +6191,7 @@ value = 0.1
 
 [node name="NoisePersistence" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 121.0
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 162.0
 label_setting = "Tunnels"
 max_value = 1.0
@@ -6200,7 +6200,7 @@ value = 1.0
 
 [node name="NoiseLacunarity" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 166.0
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 207.0
 label_setting = "Roughness"
 max_value = 1.0
@@ -6219,9 +6219,9 @@ step = 1.0
 value = 9.0
 
 [node name="NoiseAlgTypeCheckBox" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/NewMapNoiseOptions"]
-margin_left = 243.0
+margin_left = 205.0
 margin_top = 211.0
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 240.0
 size_flags_horizontal = 10
 pressed = true
@@ -6232,13 +6232,13 @@ one_shot = true
 
 [node name="ButtonNewMapOK" type="Button" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 398.0
-margin_right = 343.0
+margin_right = 305.0
 margin_bottom = 425.0
 size_flags_vertical = 10
 text = "OK"
 
 [node name="QuickNoisePreview" type="TextureRect" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
-margin_left = 363.0
+margin_left = 325.0
 margin_right = 735.0
 margin_bottom = 425.0
 hint_tooltip = "Click to randomize seed"

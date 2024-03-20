@@ -198,25 +198,25 @@ func _on_slab_style_window_close_button_clicked():
 
 func _on_MenuButtonHelp_about_to_show():
 	if oGame.running_keeperfx() == true:
-		oMenuButtonHelp.get_popup().set_item_disabled(0, false)
-		oMenuButtonHelp.get_popup().set_item_disabled(1, false)
-		oMenuButtonHelp.get_popup().set_item_disabled(2, true)
+		oMenuButtonHelp.get_popup().set_item_disabled(0, false) # New script commands
+		oMenuButtonHelp.get_popup().set_item_disabled(1, true) # Old Script commands
 	else:
-		oMenuButtonHelp.get_popup().set_item_disabled(0, true)
-		oMenuButtonHelp.get_popup().set_item_disabled(1, true)
-		oMenuButtonHelp.get_popup().set_item_disabled(2, false)
+		oMenuButtonHelp.get_popup().set_item_disabled(0, true) # New script commands
+		oMenuButtonHelp.get_popup().set_item_disabled(1, false) # Old Script commands
 
 func _on_HelpSubmenu_Pressed(pressedID):
 	match pressedID:
 		0:
 			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/New-and-Modified-Level-Script-Commands")
 		1:
-			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Creating-a-new-campaign")
-		2:
 			OS.shell_open("https://lubiki.keeperklan.com/dk1_docs/dk_scripting_ref.htm")
+		2:
+			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Creating-a-new-campaign")
 		3:
-			Utils.popup_centered(oControlsWindow)
+			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/KeeperFx-Map-files-format-reference")
 		4:
+			Utils.popup_centered(oControlsWindow)
+		5:
 			Utils.popup_centered(oAboutWindow)
 
 func _on_ViewSubmenu_Pressed(pressedID):
