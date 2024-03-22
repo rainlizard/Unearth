@@ -155,17 +155,17 @@ func _on_NoiseAlgTypeCheckBox_toggled(button_pressed):
 	oNoiseUpdateTimer.start(0.01)
 
 func _on_YSizeLine_focus_exited():
-	if oCheckBoxNewMapBorder.pressed == false: return
 	if oYSizeLine.text.to_int() > 170:
 		oYSizeLine.text = "170"
-	reinit_noise_preview()
-	update_border_image_with_noise()
+	if oCheckBoxNewMapBorder.pressed == true:
+		reinit_noise_preview()
+		update_border_image_with_noise()
 func _on_XSizeLine_focus_exited():
-	if oCheckBoxNewMapBorder.pressed == false: return
 	if oXSizeLine.text.to_int() > 170:
 		oXSizeLine.text = "170"
-	reinit_noise_preview()
-	update_border_image_with_noise()
+	if oCheckBoxNewMapBorder.pressed == true:
+		reinit_noise_preview()
+		update_border_image_with_noise()
 
 
 func _on_NoiseUpdateTimer_timeout():

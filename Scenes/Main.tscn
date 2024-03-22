@@ -2582,6 +2582,39 @@ margin_top = 279.0
 margin_right = 532.0
 margin_bottom = 280.0
 
+[node name="RoundRockNearLiquid" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 383.0
+margin_right = 532.0
+margin_bottom = 412.0
+pressed = true
+text = "Rock near liquid"
+
+[node name="RoundEarthNearLiquid" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 416.0
+margin_right = 532.0
+margin_bottom = 445.0
+pressed = true
+text = "Earth near liquid (solo block)"
+
+[node name="RoundGoldNearLiquid" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 449.0
+margin_right = 532.0
+margin_bottom = 478.0
+pressed = true
+text = "Gold near liquid (solo block)"
+
+[node name="RoundPathNearLiquid" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 482.0
+margin_right = 532.0
+margin_bottom = 511.0
+text = "Path near liquid"
+
+[node name="RoundWaterNearLava" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
+margin_top = 515.0
+margin_right = 532.0
+margin_bottom = 544.0
+text = "Water near lava"
+
 [node name="RoundRockNearPath" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
 margin_top = 284.0
 margin_right = 532.0
@@ -2599,36 +2632,6 @@ margin_top = 350.0
 margin_right = 532.0
 margin_bottom = 379.0
 text = "Gold near path"
-
-[node name="RoundRockNearLiquid" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
-margin_top = 383.0
-margin_right = 532.0
-margin_bottom = 412.0
-text = "Rock near liquid"
-
-[node name="RoundEarthNearLiquid" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
-margin_top = 416.0
-margin_right = 532.0
-margin_bottom = 445.0
-text = "Earth near liquid (solo block)"
-
-[node name="RoundGoldNearLiquid" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
-margin_top = 449.0
-margin_right = 532.0
-margin_bottom = 478.0
-text = "Gold near liquid (solo block)"
-
-[node name="RoundPathNearLiquid" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
-margin_top = 482.0
-margin_right = 532.0
-margin_bottom = 511.0
-text = "Path near liquid"
-
-[node name="RoundWaterNearLava" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
-margin_top = 515.0
-margin_right = 532.0
-margin_bottom = 544.0
-text = "Water near lava"
 
 [node name="WarningAboutRoundedCorners" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
 self_modulate = Color( 1, 1, 1, 0.25098 )
