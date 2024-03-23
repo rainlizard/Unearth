@@ -7,7 +7,7 @@ onready var oKeeperFXDetection = Nodelist.list["oKeeperFXDetection"]
 func _on_ChooseDkExe_file_selected(path):
 	Settings.set_setting("executable_path", path) # Do this first so running_keeperfx() works
 	if oGame.running_keeperfx() == false:
-		oMessage.big("Warning", "It seems you didn't select keeperfx.exe, it is recommended that you install and use KeeperFX to take advantage of new features.")
+		oMessage.big("Warning", "It seems you didn't select the keeperfx executable, it is recommended that you install and use KeeperFX to take advantage of new features.")
 	
 	var err = oGame.test_write_permissions()
 	if err == OK:

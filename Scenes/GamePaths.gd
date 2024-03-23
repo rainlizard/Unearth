@@ -28,7 +28,8 @@ var COMMAND_LINE_CONSOLE_ARG = ""
 var DK_COMMANDS = "-nointro -alex -nocd"
 
 func running_keeperfx():
-	if EXECUTABLE_PATH.get_file().to_lower() == "keeperfx.exe":
+	var path = EXECUTABLE_PATH.get_file().to_lower()
+	if path == "keeperfx.exe" or path == "keeperfx_hvlog.exe":
 		return true
 	else:
 		return false

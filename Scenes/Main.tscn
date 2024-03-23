@@ -5011,7 +5011,7 @@ visible = true
 margin_left = -4310.0
 margin_top = -1481.0
 margin_right = -3030.0
-margin_bottom = -728.0
+margin_bottom = -719.0
 window_title = "Map columns"
 resizable = true
 script = ExtResource( 28 )
@@ -5028,39 +5028,39 @@ custom_constants/margin_bottom = 10
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 1270.0
-margin_bottom = 743.0
+margin_bottom = 752.0
 
 [node name="ColumnEditorVoxelView" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 1018.0
-margin_bottom = 733.0
+margin_right = 1030.0
+margin_bottom = 742.0
 displayingType = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer"]
-margin_left = 1022.0
+margin_left = 1034.0
 margin_right = 1260.0
-margin_bottom = 733.0
+margin_bottom = 742.0
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_right = 238.0
+margin_right = 226.0
 margin_bottom = 39.0
 
 [node name="MapClmFilenameLabel" type="Label" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 229.0
+margin_right = 217.0
 margin_bottom = 30.0
 text = "map00001.clm"
 align = 1
 
 [node name="ColumnEditorControls" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2" instance=ExtResource( 137 )]
 margin_top = 43.0
-margin_right = 238.0
-margin_bottom = 697.0
+margin_right = 226.0
+margin_bottom = 706.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 701.0
-margin_right = 238.0
-margin_bottom = 733.0
+margin_top = 710.0
+margin_right = 226.0
+margin_bottom = 742.0
 size_flags_horizontal = 3
 
 [node name="ColumnEditorClearUnusedButton" type="Button" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
@@ -5072,15 +5072,15 @@ text = "Clear unused"
 
 [node name="ColumnEditorSortButton" type="Button" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
 margin_left = 134.0
-margin_right = 202.0
+margin_right = 190.0
 margin_bottom = 27.0
 size_flags_horizontal = 11
 size_flags_vertical = 0
 text = "Sort"
 
 [node name="ColumnEditorHelpButton" type="TextureButton" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
-margin_left = 206.0
-margin_right = 238.0
+margin_left = 194.0
+margin_right = 226.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 4
