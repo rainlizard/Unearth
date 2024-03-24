@@ -5,6 +5,8 @@ onready var oDataOwnership = Nodelist.list["oDataOwnership"]
 onready var oColorRectSlabOwner = Nodelist.list["oColorRectSlabOwner"]
 onready var oInstanceOwnership = Nodelist.list["oInstanceOwnership"]
 onready var oInstances = Nodelist.list["oInstances"]
+onready var oDataSlab = Nodelist.list["oDataSlab"]
+onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 
 onready var oMain = Nodelist.list["oMain"]
 var OWNERSHIP_ALPHA = 0.5 setget set_ownership_alpha_graphics
@@ -65,8 +67,10 @@ func ownership_paint_shape(shapePositionArray, ownership):
 	
 	slabOwnershipImage.lock()
 	for pos in shapePositionArray:
-		oDataOwnership.set_cellv(pos, ownership) # Set cell data
-		slabOwnershipImage.set_pixelv(pos, setColour)  # Set image data
+		var slabID = oDataSlab.get_cell(pos.x, pos.y)
+		if oSlabPlacement.slabID_is_ownable(slabID) == true:
+			oDataOwnership.set_cellv(pos, ownership) # Set cell data
+			slabOwnershipImage.set_pixelv(pos, setColour)  # Set image data
 	slabOwnershipImage.unlock()
 	
 	slabOwnershipTexture.set_data(slabOwnershipImage)
