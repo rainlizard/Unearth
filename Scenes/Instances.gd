@@ -324,6 +324,9 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 				goldID.queue_free()
 			id.locationX = locX
 			id.locationY = locY
+	elif id.thingType == Things.TYPE.DOOR:
+		if Slabs.door_data.has(slabID) == false:
+			oMessage.big("Warning","You placed a Door Thing without a Door Slab. Switch to Slab Mode and place a Door Slab for proper functionality.")
 	return id
 
 #Slabset.obj.IS_LIGHT,     # [0] IsLight [0-1]
