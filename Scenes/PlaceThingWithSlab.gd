@@ -61,7 +61,7 @@ func create_door_thing(xSlab, ySlab, ownership):
 	var id = oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership)
 	id.doorLocked = rememberLockedState
 	
-	if oPlaceLockedCheckBox.visible:
+	if oPlaceLockedCheckBox.visible and oSelector.cursorTile == Vector2(xSlab, ySlab):
 		id.doorLocked = 1 if oPlaceLockedCheckBox.pressed else 0
 	
 	id.update_spinning_key()
