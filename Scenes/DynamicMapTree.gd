@@ -10,7 +10,7 @@ var searchResultTreeItemDirs = [] # Just used for killing items with no children
 
 func _ready():
 	set_column_expand(0,false)
-	set_column_min_width(0,135)
+	set_column_min_width(0,180)
 
 
 func update_dynamic_tree():
@@ -54,7 +54,10 @@ func get_tree_items_recursively(fromItem, toItem, searchText, collapseResults):
 				if fromItem.get_metadata(0).to_upper() in currentSlbPath.to_upper():
 					newTreeItem.set_collapsed(false)
 				else:
-					newTreeItem.set_collapsed(collapseResults)
+					if toItem == get_root():
+						newTreeItem.set_collapsed(false)  # Do not collapse folders one level deep
+					else:
+						newTreeItem.set_collapsed(collapseResults)
 				
 				searchResultTreeItemDirs.append(newTreeItem)
 				get_tree_items_recursively(fromItem, newTreeItem, searchText, collapseResults)
