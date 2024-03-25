@@ -61,13 +61,13 @@ func _notification(what):
 		Settings.write_cfg("editor_window_fullscreen_state", OS.window_fullscreen)
 		Settings.write_cfg("editor_window_size", OS.window_size)
 		
-		if OS.has_feature("standalone") == true:
-			if mapHasBeenEdited == true:
-				Utils.popup_centered(oConfirmSaveBeforeQuit)
-			else:
-				Utils.popup_centered(oConfirmQuit)
+		#if OS.has_feature("standalone") == true:
+		if mapHasBeenEdited == true:
+			Utils.popup_centered(oConfirmSaveBeforeQuit)
 		else:
 			get_tree().quit()
+#		else:
+#			get_tree().quit()
 #	elif what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
 #		Engine.target_fps = 0
 #	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:

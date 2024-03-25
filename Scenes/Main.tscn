@@ -1823,6 +1823,10 @@ tab_align = 0
 [node name="MapBrowserTabEdit" type="Control" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 43.0
+margin_right = -12.0
+margin_bottom = -12.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit"]
 anchor_right = 1.0
@@ -1832,7 +1836,7 @@ size_flags_vertical = 3
 custom_constants/separation = 0
 
 [node name="LineEditFilter" type="LineEdit" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer"]
-margin_right = 334.0
+margin_right = 310.0
 margin_bottom = 42.0
 focus_mode = 1
 mouse_filter = 1
@@ -1850,7 +1854,7 @@ __meta__ = {
 
 [node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer"]
 margin_top = 42.0
-margin_right = 334.0
+margin_right = 310.0
 margin_bottom = 50.0
 mouse_filter = 1
 custom_constants/separation = 8
@@ -1861,8 +1865,8 @@ __meta__ = {
 
 [node name="DynamicMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer"]
 margin_top = 50.0
-margin_right = 334.0
-margin_bottom = 802.0
+margin_right = 310.0
+margin_bottom = 747.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1894,12 +1898,12 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer"]
-margin_top = 802.0
-margin_right = 334.0
-margin_bottom = 839.0
+margin_top = 747.0
+margin_right = 310.0
+margin_bottom = 784.0
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer/VBoxContainer"]
-margin_right = 334.0
+margin_right = 310.0
 margin_bottom = 37.0
 custom_constants/margin_right = 5
 custom_constants/margin_top = 5
@@ -1909,7 +1913,7 @@ custom_constants/margin_bottom = 5
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer/VBoxContainer/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 329.0
+margin_right = 305.0
 margin_bottom = 32.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1947,7 +1951,7 @@ __meta__ = {
 
 [node name="BrowserFilename" type="Label" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 28.0
-margin_right = 271.0
+margin_right = 247.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1959,8 +1963,8 @@ __meta__ = {
 }
 
 [node name="BrowseButton" type="Button" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
-margin_left = 275.0
-margin_right = 324.0
+margin_left = 251.0
+margin_right = 300.0
 margin_bottom = 27.0
 text = "Edit"
 
@@ -2125,9 +2129,6 @@ window_title = "Confirm exit"
 dialog_text = "Are you sure you want to exit?"
 dialog_autowrap = true
 script = ExtResource( 61 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ConfirmDeleteCustomSlab" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true
@@ -2146,14 +2147,11 @@ script = ExtResource( 61 )
 visible = true
 margin_left = 944.0
 margin_top = -421.0
-margin_right = 1220.0
+margin_right = 1306.0
 margin_bottom = -322.0
 window_title = "Confirm exit and save"
 resizable = true
 script = ExtResource( 121 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ConfirmSaveBeforeQuit"]
 anchor_right = 1.0
@@ -2162,12 +2160,9 @@ margin_left = 10.0
 margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer"]
-margin_right = 257.0
+margin_right = 342.0
 margin_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -2179,7 +2174,7 @@ __meta__ = {
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer"]
 margin_top = 52.0
-margin_right = 257.0
+margin_right = 342.0
 margin_bottom = 79.0
 alignment = 1
 __meta__ = {
@@ -2187,21 +2182,27 @@ __meta__ = {
 }
 
 [node name="ButtonConfirmExitSave" type="Button" parent="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer"]
-margin_left = 6.0
-margin_right = 61.0
+unique_name_in_owner = true
+margin_left = 3.0
+margin_right = 112.0
 margin_bottom = 27.0
+rect_min_size = Vector2( 109, 0 )
 text = "Save"
 
 [node name="ButtonConfirmExitDontSave" type="Button" parent="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer"]
-margin_left = 65.0
-margin_right = 174.0
+unique_name_in_owner = true
+margin_left = 116.0
+margin_right = 225.0
 margin_bottom = 27.0
+rect_min_size = Vector2( 109, 0 )
 text = "Don't Save"
 
 [node name="ButtonConfirmExitCancel" type="Button" parent="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer"]
-margin_left = 178.0
-margin_right = 251.0
+unique_name_in_owner = true
+margin_left = 229.0
+margin_right = 338.0
 margin_bottom = 27.0
+rect_min_size = Vector2( 109, 0 )
 text = "Cancel"
 
 [node name="PreferencesWindow" type="WindowDialog" parent="Ui/UiSystem"]
