@@ -168,8 +168,11 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 		match slabID:
 			Slabs.BRIDGE:
 				if oBridgesOnlyOnLiquidCheckbox.pressed == true:
-					if oDataSlab.get_cellv(pos) != Slabs.WATER and oDataSlab.get_cellv(pos) != Slabs.LAVA:
-						removeFromShape.append(pos) # This prevents ownership from changing if placing a bridge on something that's not liquid
+					match oDataSlab.get_cellv(pos):
+						Slabs.WATER, Slabs.LAVA, Slabs.BRIDGE:
+							pass
+						_:
+							removeFromShape.append(pos) # This prevents ownership from changing if placing a bridge on something that's not liquid (or another bridge)
 				if removeFromShape.has(pos) == false:
 					oDataSlab.set_cellv(pos, slabID)
 #			Slabs.EARTH:
