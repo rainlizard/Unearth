@@ -85,8 +85,9 @@ func _process(delta):
 	
 	if OS.is_window_focused() == true and mouseInWindow == true:
 		if MOUSE_EDGE_PANNING == true and oUi.mouseOnUi == false and middleMousePanning == false: #and mouseIsMoving == true
-			mouse_edge_pan()
-			#mouseIsMoving = false
+			if Input.is_action_pressed("mouse_left") == false:
+				mouse_edge_pan()
+				#mouseIsMoving = false
 	else:
 		#Do not allow mouse window edge panning if window is unfocused
 		panDirectionMouse = Vector2(0,0)
