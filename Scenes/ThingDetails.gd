@@ -218,9 +218,7 @@ func thing_details(id):
 				value = id.boxNumber
 			15:
 				description = "Door locked" # 14
-				match id.doorLocked:
-					0: value = "False"
-					1: value = "True"
+				value = id.doorLocked
 			16:
 				description = "Unknown 14"
 				value = id.data14
