@@ -207,7 +207,7 @@ func _on_MenuButtonHelp_about_to_show():
 func _on_HelpSubmenu_Pressed(pressedID):
 	match pressedID:
 		0:
-			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/New-and-Modified-Level-Script-Commands")
+			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Level-Script-commands")
 		1:
 			OS.shell_open("https://lubiki.keeperklan.com/dk1_docs/dk_scripting_ref.htm")
 		2:
