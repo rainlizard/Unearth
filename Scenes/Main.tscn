@@ -236,12 +236,18 @@ shader_param/alphaFadeColor2 = 1.0
 shader_param/alphaFadeColor3 = 1.0
 shader_param/alphaFadeColor4 = 1.0
 shader_param/alphaFadeColor5 = 1.0
+shader_param/alphaFadeColor6 = 1.0
+shader_param/alphaFadeColor7 = 1.0
+shader_param/alphaFadeColor8 = 1.0
 shader_param/color0 = null
 shader_param/color1 = null
 shader_param/color2 = null
 shader_param/color3 = null
 shader_param/color4 = null
 shader_param/color5 = null
+shader_param/color6 = null
+shader_param/color7 = null
+shader_param/color8 = null
 
 [sub_resource type="ShaderMaterial" id=23]
 shader = ExtResource( 150 )

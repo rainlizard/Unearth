@@ -108,13 +108,7 @@ func get_overhead_face_value(x, y, slabID):
 	# clmData is the 24 byte array.
 	var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
 	
-	var valueInput = cubeFace
-	var r = clamp(valueInput, 0, 255)
-	valueInput -= 255
-	var g = clamp(valueInput, 0, 255)
-	valueInput -= 255
-	var b = clamp(valueInput, 0, 255)
-	return Color8(r,g,b)
+	return Color8(cubeFace >> 16 & 255, cubeFace >> 8 & 255, cubeFace & 255)
 
 func clear_img():
 	if overheadImgData.is_empty() == false:

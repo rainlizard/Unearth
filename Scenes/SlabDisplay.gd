@@ -47,13 +47,7 @@ func set_visual(columnArray):
 					# Slabset slab (normal slab)
 					cubeFace = Columnset.get_top_cube_face(columnArray[(y*3) + x], slabID)
 				
-				var valueInput = cubeFace
-				var r = clamp(valueInput, 0, 255)
-				valueInput -= 255
-				var g = clamp(valueInput, 0, 255)
-				valueInput -= 255
-				var b = clamp(valueInput, 0, 255)
-				dataImage.set_pixel(x, y, Color8(r,g,b))
+				dataImage.set_pixel(x, y, Color8(cubeFace >> 16 & 255, cubeFace >> 8 & 255, cubeFace & 255))
 	
 	if panelView == Slabs.PANEL_SIDE_VIEW or panelView == Slabs.PANEL_DOOR_VIEW:
 		var y = 2
@@ -68,13 +62,7 @@ func set_visual(columnArray):
 				var cubeID = Columnset.cubes[clmIndex][sideViewZoffset-z]
 				var cubeFace = Cube.tex[cubeID][Cube.SIDE_SOUTH]
 				
-				var valueInput = cubeFace
-				var r = clamp(valueInput, 0, 255)
-				valueInput -= 255
-				var g = clamp(valueInput, 0, 255)
-				valueInput -= 255
-				var b = clamp(valueInput, 0, 255)
-				dataImage.set_pixel(x, z, Color8(r,g,b))
+				dataImage.set_pixel(x, z, Color8(cubeFace >> 16 & 255, cubeFace >> 8 & 255, cubeFace & 255))
 	
 	dataImage.unlock()
 	

@@ -12,12 +12,18 @@ uniform float alphaFadeColor2 = 1.00;
 uniform float alphaFadeColor3 = 1.00;
 uniform float alphaFadeColor4 = 1.00;
 uniform float alphaFadeColor5 = 1.00;
+uniform float alphaFadeColor6 = 1.00;
+uniform float alphaFadeColor7 = 1.00;
+uniform float alphaFadeColor8 = 1.00;
 uniform vec4 color0;
 uniform vec4 color1;
 uniform vec4 color2;
 uniform vec4 color3;
 uniform vec4 color4;
 uniform vec4 color5;
+uniform vec4 color6;
+uniform vec4 color7;
+uniform vec4 color8;
 
 void fragment() {
 	vec4 baseCol = texture(territoryTexture,UV);
@@ -47,6 +53,9 @@ void fragment() {
 	if (baseCol == color3) {fadeAlpha = alphaFadeColor3;}
 	if (baseCol == color4) {fadeAlpha = alphaFadeColor4;}
 	if (baseCol == color5) {fadeAlpha = alphaFadeColor5;}
+	if (baseCol == color6) {fadeAlpha = alphaFadeColor6;}
+	if (baseCol == color7) {fadeAlpha = alphaFadeColor7;}
+	if (baseCol == color8) {fadeAlpha = alphaFadeColor8;}
 	
 	modifiedCol.a = alphaFilled;
 	

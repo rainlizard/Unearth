@@ -39,13 +39,7 @@ func set_floortexture(floorTextureValue):
 	dataTexture.create_from_image(dataImage, 0)
 
 	dataImage.lock()
-	var valueInput = floorTextureValue
-	var r = clamp(valueInput, 0, 255)
-	valueInput -= 255
-	var g = clamp(valueInput, 0, 255)
-	valueInput -= 255
-	var b = clamp(valueInput, 0, 255)
-	dataImage.set_pixel(0, 0, Color8(r,g,b))
+	dataImage.set_pixel(0, 0, Color8(floorTextureValue >> 16 & 255, floorTextureValue >> 8 & 255, floorTextureValue & 255))
 	dataImage.unlock()
 	dataTexture.set_data(dataImage)
 	

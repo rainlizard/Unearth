@@ -53,6 +53,9 @@ func add_item(leftString, rightString):
 			nodeRightColumn.add_item("Yellow")
 			nodeRightColumn.add_item("White")
 			nodeRightColumn.add_item("None")
+			nodeRightColumn.add_item("Purple")
+			nodeRightColumn.add_item("Black")
+			nodeRightColumn.add_item("Orange")
 			
 #			print(nodeRightColumn.get_popup().mouse_filter)
 			

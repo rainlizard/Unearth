@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/symbol_player_white_1.png-c8af607a659a47fd79c9e9301eccfd9f.stex"
+path="res://.import/symbol_player_orange_std.png-c3dfbc364bce55557fac7910ac08b1c8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://edited_images/plyrsym_32/symbol_player_white_1.png"
-dest_files=[ "res://.import/symbol_player_white_1.png-c8af607a659a47fd79c9e9301eccfd9f.stex" ]
+source_file="res://edited_images/plyrsym_32/symbol_player_orange_std.png"
+dest_files=[ "res://.import/symbol_player_orange_std.png-c3dfbc364bce55557fac7910ac08b1c8.stex" ]
 
 [params]
 
