@@ -260,7 +260,7 @@ func _on_FileDialogOpen_file_selected(path):
 
 func get_accompanying_files(map):
 	var baseDir = map.get_base_dir()
-	var mapName = map.get_file()
+	var mapName = map.get_file().get_basename() # Get the map name without the extension
 	
 	var dict = {}
 	var dir = Directory.new()
@@ -270,7 +270,8 @@ func get_accompanying_files(map):
 		var fileName = dir.get_next()
 		while fileName != "":
 			if dir.current_is_dir() == false:
-				if fileName.to_upper().begins_with(mapName.to_upper()): # Get file regardless of case (case insensitive)
+				var fileBaseName = fileName.get_basename() # Get the file name without the extension
+				if fileBaseName.to_upper() == mapName.to_upper():
 					var EXT = fileName.get_extension().to_upper()
 					if Filetypes.FILE_TYPES.has(EXT):
 						var fullPath = baseDir.plus_file(fileName)
@@ -278,6 +279,8 @@ func get_accompanying_files(map):
 						dict[EXT] = [fullPath, getModifiedTime]
 			fileName = dir.get_next()
 	return dict
+
+
 
 
 
