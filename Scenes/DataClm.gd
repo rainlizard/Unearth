@@ -65,8 +65,7 @@ func index_entry(cubeArray, setFloorID):
 		oTimerUpdateColumnEntries.start()
 		return index
 
-	oMessage.quick("Error: Cannot add clm entry, ran out of blank clm entries.")
-	print("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
+	oMessage.big("Error", "Clm entries are full. Try the 'Clear Unused' button in the Map Columns window.")
 	return 0
 
 func update_all_utilized():
