@@ -58,7 +58,7 @@ func index_entry(cubeArray, setFloorID):
 		solidMask[index] = calculate_solid_mask(cubeArray)
 		permanent[index] = 1 # Does this affect whether columns get reset?
 		lintel[index] = 0
-		height[index] = get_real_height(cubeArray)
+		height[index] = get_height_from_bottom(cubeArray)
 		cubes[index] = cubeArray
 		floorTexture[index] = setFloorID
 		

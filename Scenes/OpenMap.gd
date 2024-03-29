@@ -203,7 +203,7 @@ func finish_opening_map(map):
 	oScriptEditor.initialize_for_new_map()
 	oOverheadOwnership.start()
 	oScriptHelpers.start()
-	oCamera2D.reset_camera(M.xSize, M.ySize)
+	
 	
 	if Slabset.dat.empty() == true: Slabset.load_default_slabset()
 	if Columnset.cubes.empty() == true: Columnset.load_default_columnset()
@@ -232,6 +232,11 @@ func finish_opening_map(map):
 		oMessage.quick("Fixed column index 0, re-save your map.")
 	
 	oDataClm.store_default_data()
+	
+	if oCamera2D.skip_camera_reset == false:
+		oCamera2D.reset_camera(M.xSize, M.ySize)
+	else:
+		oCamera2D.skip_camera_reset = false
 	
 #	if oGame.running_keeperfx() == true:
 #		if oCurrentFormat.selected == 1: # KFX format

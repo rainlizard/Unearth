@@ -38,6 +38,7 @@ onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
 onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 onready var oGridDataWindow = Nodelist.list["oGridDataWindow"]
+onready var oCamera2D = Nodelist.list["oCamera2D"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -280,4 +281,5 @@ func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in comb
 	oMenuPlayButton.connect("pressed",self,"_on_PlayButton_pressed")
 
 func _on_ConfirmDiscardChanges_confirmed():
+	oCamera2D.skip_camera_reset = true
 	oOpenMap.open_map(oCurrentMap.path)

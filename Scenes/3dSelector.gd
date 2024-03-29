@@ -64,7 +64,7 @@ extends Spatial
 #		clmIndex = oGenerateTerrain.get_clm_index(translation.x,translation.z)
 #
 #	if clmIndex != null:
-#		newSize = oDataClm.get_real_height(clmIndex)
+#		newSize = oDataClm.get_height_from_bottom(clmIndex)
 #	else:
 #		newSize = 0
 #

@@ -136,7 +136,7 @@ func remove_custom_slab(header_id):
 
 func get_top_fake_cube_face(indexIn3x3, slabID):
 	var cubesArray = Slabs.fake_extra_data[slabID][Slabs.FAKE_CUBE_DATA][indexIn3x3]
-	var get_height = oDataClm.get_real_height(cubesArray)
+	var get_height = oDataClm.get_highest_cube_height(cubesArray)
 	if get_height == 0:
 		return Slabs.fake_extra_data[slabID][Slabs.FAKE_FLOOR_DATA][indexIn3x3]
 	else:
