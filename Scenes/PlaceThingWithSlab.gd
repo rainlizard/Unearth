@@ -18,16 +18,17 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask,
 		Slabs.LAVA:
 			if Random.rng.randf_range(0.0, 100.0) < oLavaEffectPercent.value:
 				create_effect(xSlab, ySlab, ownership, Things.TYPE.EFFECTGEN, 1)
-		Slabs.PRISON:
-			var subtiles_with_bars = prison_bar_bitmask(slabID, surrID)
-			for i in range(9):
-				spawn_object(xSlab, ySlab, slabID, ownership, i, clmIndexGroup[i], subtiles_with_bars.has(i))
 		_:
 			if Slabs.is_door(slabID):
 				create_door_thing(xSlab, ySlab, ownership)
-			else:
-				for i in range(9):
-					spawn_object(xSlab, ySlab, slabID, ownership, i, clmIndexGroup[i], true)
+	
+	if slabID == Slabs.PRISON:
+		var subtiles_with_bars = prison_bar_bitmask(slabID, surrID)
+		for i in range(9):
+			spawn_object(xSlab, ySlab, slabID, ownership, i, clmIndexGroup[i], subtiles_with_bars.has(i))
+	else:
+		for i in range(9):
+			spawn_object(xSlab, ySlab, slabID, ownership, i, clmIndexGroup[i], true)
 
 func create_effect(xSlab, ySlab, ownership, effectType, effectSubtype):
 	var xSubtile = (xSlab*3) + Random.randi_range(0,2) + 0.5
@@ -38,16 +39,18 @@ func create_effect(xSlab, ySlab, ownership, effectType, effectSubtype):
 func spawn_object(xSlab, ySlab, slabID, ownership, subtile, clmIndex, shouldSpawn):
 	var variation = int(clmIndex / 9)
 	var convertedSubtile = clmIndex % 9
-	var objectStuff = get_object(variation, convertedSubtile)
-	if objectStuff.size() > 0 and shouldSpawn:
-		oInstances.spawn_attached(xSlab, ySlab, slabID, ownership, subtile, objectStuff)
+	var objectStuffArray = get_object(variation, convertedSubtile)
+	if objectStuffArray.size() > 0 and shouldSpawn:
+		for objectStuff in objectStuffArray:
+			oInstances.spawn_attached(xSlab, ySlab, slabID, ownership, subtile, objectStuff)
 
 func get_object(variation, subtile):
+	var objectStuffArray = []
 	if variation < Slabset.tng.size():
 		for objectStuff in Slabset.tng[variation]:
 			if subtile == objectStuff[Slabset.obj.SUBTILE]:
-				return objectStuff
-	return []
+				objectStuffArray.append(objectStuff)
+	return objectStuffArray
 
 func create_door_thing(xSlab, ySlab, ownership):
 	var createAtPos = Vector3((xSlab*3)+1.5, (ySlab*3)+1.5, 5)
