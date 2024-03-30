@@ -34,6 +34,7 @@ onready var oRoundGoldNearLiquid = Nodelist.list["oRoundGoldNearLiquid"]
 onready var oRoundWaterNearLava = Nodelist.list["oRoundWaterNearLava"]
 onready var oAutomaticTorchSlabsCheckbox = Nodelist.list["oAutomaticTorchSlabsCheckbox"]
 onready var oPathStonePercent = Nodelist.list["oPathStonePercent"]
+onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 
 enum dir {
 	s = 0
@@ -53,6 +54,8 @@ enum {
 	MIRROR_STYLE
 	MIRROR_ONLY_OWNERSHIP
 }
+
+var autogen_was_called = false
 
 func mirror_placement(shapePositionArray, mirrorWhat):
 	var mirroredPositionArray = []
@@ -139,6 +142,7 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 			oOverheadOwnership.update_ownership_image_based_on_shape(mirroredPositionArray)
 	
 	var updateNearby = oSelection.some_manual_placements_dont_update_nearby()
+	var autogen_was_called = true
 	generate_slabs_based_on_id(mirroredPositionArray, updateNearby) # Always necessary when updating ownership
 
 
@@ -240,6 +244,15 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	#var CODETIME_START = OS.get_ticks_msec()
 	
 	oEditor.mapHasBeenEdited = true
+	
+	# When adjusting "only ownership", do not affect the ownership of things on surrounding slabs (but we do need to adjust those slabs so we can't just set updateNearby to false)
+	if oOnlyOwnership.visible == true and autogen_was_called == false:
+		for pos in shapePositionArray:
+			var slabID = oDataSlab.get_cell(pos.x, pos.y)
+			var ownership = oDataOwnership.get_cell(pos.x, pos.y)
+			if Slabs.data.has(slabID):
+				oInstances.manage_thing_ownership_on_slab(pos.x, pos.y, ownership)
+	
 	if updateNearby == true:
 		# Include surrounding. This only takes 14ms to 'Update all slabs'
 		var surroundingShape = {}
@@ -303,6 +316,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	#print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
+
 
 func do_update_auto_walls(slabID):
 	# If this ID has been set to WALL_AUTOMATIC, by whatever reason, then it must be updated. This doesn't mean you're placing a WALL_AUTOMATIC, just that this slab has been set to it.
@@ -390,7 +404,10 @@ func _on_ConfirmAutoGen_confirmed():
 	for ySlab in range(0, M.ySize):
 		for xSlab in range(0, M.xSize):
 			shapePositionArray.append(Vector2(xSlab,ySlab))
+	
+	autogen_was_called = true
 	generate_slabs_based_on_id(shapePositionArray, updateNearby)
+	autogen_was_called = false
 	
 	print('Auto-generated all slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 

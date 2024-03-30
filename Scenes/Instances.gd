@@ -12,6 +12,7 @@ onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
+onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
@@ -431,6 +432,12 @@ func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 			on_slab_update_thing_height(id)
 			on_slab_delete_stray_door_thing_and_key(id, slabID)
 			on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership)
+
+func manage_thing_ownership_on_slab(xSlab, ySlab, ownership):
+	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
+	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
+		id.ownership = ownership
+
 
 #func delete_all_on_slab(xSlab, ySlab, arrayOfGroupNameStrings):
 #	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
