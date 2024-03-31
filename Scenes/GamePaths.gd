@@ -195,10 +195,15 @@ func set_keeperfx_version():
 			OS.execute("powershell.exe", ["-Command", powershell_script], true, output, true)
 		"X11":
 			var script = ""
-			script += "version=$(exiftool -ProductVersion -n \"%s\" | awk -F ': ' '{print $2}')\n" % EXECUTABLE_PATH
-			script += "[ -z \"$version\" ] && version=\"Undetected\"\n"
-			script += "echo \"$version\"\n"
-			OS.execute("bash", ["-c", script], true, output, true)
+			script += "cd " + EXECUTABLE_PATH.get_base_dir() + ";"
+			script += "exiftool -ProductVersion -n keeperfx.exe | awk -F ': ' '{print $2}'"
+			var exit_code = OS.execute("bash", ["-c", script], true, output, true)
+			#print("Exit code: ", exit_code)
+			#print("Output: ", output)
+			#print(script)
+			if output.size() >= 1:
+				output[0] = output[0].replace("Product Version", "")
+				output[0] = output[0].replace(":", "")
 
 	if output.size() >= 1:
 		KEEPERFX_VERSION_STRING = output[0].strip_edges()
