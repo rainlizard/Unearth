@@ -188,14 +188,21 @@ func get_precise_filepath(lookInDirectory, lookForFileName):
 
 func set_keeperfx_version():
 	var output = []
-	var getVer = Settings.unearthdata.plus_file("GetVersion.cmd")
-	var _exit_code = OS.execute(getVer, [EXECUTABLE_PATH], true, output)
+	match OS.get_name():
+		"Windows":
+			var powershell_script = "[System.Diagnostics.FileVersionInfo]::GetVersionInfo('%s').FileVersion" % EXECUTABLE_PATH
+			OS.execute("powershell.exe", ["-Command", powershell_script], true, output)
+		"X11":
+			var script = ""
+			script += "executablePath='" + EXECUTABLE_PATH + "'\n"
+			script += "versionInfo=$(stat -c %v \"$executablePath\")\n"
+			script += "echo \"$versionInfo\"\n"
+			OS.execute("bash", ["-c", script], true, output)
+	
 	if output.size() == 1:
 		KEEPERFX_VERSION_STRING = output[0].strip_edges()
-		#KEEPERFX_VERSION_INT = int(KEEPERFX_VERSION_STRING.replace(".",""))
 	else:
 		KEEPERFX_VERSION_STRING = "Undetected"
-		#KEEPERFX_VERSION_INT = 0
 
 #func load_command_line_from_settings(COMMAND_LINE):
 #	COMMAND_LINE = COMMAND_LINE.replace("%DIR%", GAME_DIRECTORY)
