@@ -188,16 +188,19 @@ func get_precise_filepath(lookInDirectory, lookForFileName):
 
 func set_keeperfx_version():
 	var output = []
+
 	match OS.get_name():
 		"Windows":
 			var powershell_script = "[System.Diagnostics.FileVersionInfo]::GetVersionInfo('%s').FileVersion" % EXECUTABLE_PATH
-			OS.execute("powershell.exe", ["-Command", powershell_script], true, output)
+			OS.execute("powershell.exe", ["-Command", powershell_script], true, output, true)
 		"X11":
 			var script = ""
-			script += "version=$(exiftool -ProductVersion -n \"" + EXECUTABLE_PATH + "\" | awk -F ': ' '{print $2}')\n"
+			script += "version=$(exiftool -ProductVersion -n \"%s\" | awk -F ': ' '{print $2}')\n" % EXECUTABLE_PATH
+			script += "[ -z \"$version\" ] && version=\"Undetected\"\n"
 			script += "echo \"$version\"\n"
-			OS.execute("bash", ["-c", script], true, output)
-	if output.size() == 1:
+			OS.execute("bash", ["-c", script], true, output, true)
+
+	if output.size() >= 1:
 		KEEPERFX_VERSION_STRING = output[0].strip_edges()
 	else:
 		KEEPERFX_VERSION_STRING = "Undetected"
