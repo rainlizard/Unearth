@@ -1,4 +1,4 @@
-[gd_scene load_steps=179 format=2]
+[gd_scene load_steps=180 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -64,6 +64,7 @@
 [ext_resource path="res://Scenes/SettingsWindow.gd" type="Script" id=62]
 [ext_resource path="res://Scenes/OptionButtonMSAA.gd" type="Script" id=63]
 [ext_resource path="res://Scenes/OverheadGraphics.gd" type="Script" id=64]
+[ext_resource path="res://Scenes/ActionPointList.gd" type="Script" id=65]
 [ext_resource path="res://Art/HelpIconPressed.png" type="Texture" id=66]
 [ext_resource path="res://Scenes/ChooseDkExe.gd" type="Script" id=67]
 [ext_resource path="res://Scenes/PickSlabWindow.gd" type="Script" id=68]
@@ -673,17 +674,25 @@ window_title = "Slab"
 resizable = true
 script = ExtResource( 68 )
 
-[node name="SlabTabs" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SlabTabs" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer"]
+margin_right = 321.0
+margin_bottom = 658.0
 rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 120 )
 
-[node name="TopTabsSection" parent="Ui/UiTools/PickSlabWindow/SlabTabs" instance=ExtResource( 105 )]
+[node name="TopTabsSection" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs" instance=ExtResource( 105 )]
 margin_right = 321.0
 margin_bottom = 31.0
 
-[node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs"]
+[node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs"]
 margin_top = 35.0
 margin_right = 321.0
 margin_bottom = 658.0
@@ -691,13 +700,13 @@ mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MainSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
+[node name="MainSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 margin_right = 321.0
 margin_bottom = 623.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/MainSlabs"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 312.0
@@ -705,7 +714,7 @@ margin_bottom = 614.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/MainSlabs/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/MainSlabs/ScrollContainer"]
 margin_left = 151.0
 margin_top = 302.0
 margin_right = 151.0
@@ -713,20 +722,20 @@ margin_bottom = 302.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="WallSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
+[node name="WallSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/WallSlabs"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/WallSlabs"]
 margin_right = 929.0
 margin_bottom = 171.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/WallSlabs/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/WallSlabs/ScrollContainer"]
 margin_left = 464.0
 margin_top = 85.0
 margin_right = 464.0
@@ -734,7 +743,7 @@ margin_bottom = 85.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="CustomSlabsTab" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
+[node name="CustomSlabsTab" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -742,13 +751,13 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 86 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/CustomSlabsTab"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/CustomSlabsTab"]
 margin_right = 929.0
 margin_bottom = 171.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/CustomSlabsTab/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/CustomSlabsTab/ScrollContainer"]
 margin_left = 464.0
 margin_top = 85.0
 margin_right = 464.0
@@ -756,7 +765,7 @@ margin_bottom = 85.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="SlabStyle" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
+[node name="SlabStyle" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -764,7 +773,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/SlabStyle"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/SlabStyle"]
 margin_right = 122.0
 margin_bottom = 164.0
 size_flags_horizontal = 3
@@ -773,7 +782,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/SlabStyle/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/SlabStyle/ScrollContainer"]
 margin_left = 61.0
 margin_top = 82.0
 margin_right = 61.0
@@ -781,7 +790,7 @@ margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="OnlyOwnership" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder"]
+[node name="OnlyOwnership" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -789,7 +798,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 115 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/OnlyOwnership"]
 margin_right = 122.0
 margin_bottom = 164.0
 size_flags_horizontal = 3
@@ -798,7 +807,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/OnlyOwnership/ScrollContainer"]
 margin_left = 61.0
 margin_top = 82.0
 margin_right = 61.0
@@ -811,9 +820,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 rect_clip_content = true
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="SelectedRect" type="TextureRect" parent="Ui/UiTools/PickSlabWindow/Clippy"]
 material = SubResource( 9 )
@@ -854,63 +860,68 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="ThingTabs" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_clip_content = true
-script = ExtResource( 120 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="TopTabsSection" parent="Ui/UiTools/PickThingWindow/ThingTabs" instance=ExtResource( 105 )]
+[node name="ThingTabs" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer"]
+margin_right = 650.0
+margin_bottom = 213.0
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 120 )
+
+[node name="TopTabsSection" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs" instance=ExtResource( 105 )]
 margin_right = 650.0
 margin_bottom = 31.0
 
-[node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs"]
+[node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs"]
 margin_top = 35.0
 margin_right = 650.0
-margin_bottom = 217.0
+margin_bottom = 213.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Creature" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Creature" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 margin_right = 650.0
-margin_bottom = 182.0
+margin_bottom = 178.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Creature"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Creature"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 641.0
-margin_bottom = 173.0
+margin_bottom = 169.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Creature/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Creature/ScrollContainer"]
 margin_left = 316.0
-margin_top = 82.0
+margin_top = 80.0
 margin_right = 316.0
-margin_bottom = 82.0
+margin_bottom = 80.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Spell" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Spell" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Spell"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Spell"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Spell/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Spell/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -918,20 +929,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Trap" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Trap" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Trap"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Trap"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Trap/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Trap/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -939,20 +950,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Box" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Box" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Box"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Box"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Box/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Box/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -960,20 +971,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Special" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Special" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Special"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Special"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Special/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Special/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -981,20 +992,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Gold" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Gold" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Gold"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Gold"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Gold/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Gold/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -1002,20 +1013,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Decoration" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Decoration" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Decoration"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Decoration"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Decoration/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Decoration/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -1023,20 +1034,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Action" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Action" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Action"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Action"]
 margin_right = 1130.0
 margin_bottom = 108.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Action/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Action/ScrollContainer"]
 margin_left = 565.0
 margin_top = 54.0
 margin_right = 565.0
@@ -1044,20 +1055,20 @@ margin_bottom = 54.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Effect" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Effect" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Effect"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Effect"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Effect/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Effect/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -1065,20 +1076,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Furniture" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Furniture" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Furniture"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Furniture"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Furniture/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Furniture/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -1086,20 +1097,20 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Lair" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Lair" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Lair"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Lair"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Lair/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Lair/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
@@ -1107,35 +1118,67 @@ margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="Misc" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder"]
+[node name="Misc" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Misc"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Misc"]
 margin_right = 1252.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/ThingTabs/TabFolder/Misc/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Misc/ScrollContainer"]
 margin_left = 626.0
 margin_top = 90.0
 margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+
+[node name="Control2" type="Control" parent="Ui/UiTools/PickThingWindow/VBoxContainer"]
+margin_top = 217.0
+margin_right = 650.0
+margin_bottom = 217.0
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/Control2"]
+self_modulate = Color( 1, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ActionPointList" type="ItemList" parent="Ui/UiTools/PickThingWindow/VBoxContainer/Control2/ScrollContainer"]
+margin_right = 638.0
+margin_bottom = 84.0
+rect_clip_content = false
+size_flags_horizontal = 3
+size_flags_vertical = 3
+items = [ "Item 0", null, false, "Item 1", null, false, "Item 2", null, false ]
+allow_reselect = true
+auto_height = true
+script = ExtResource( 65 )
+
+[node name="Control" type="Control" parent="Ui/UiTools/PickThingWindow/VBoxContainer/Control2"]
+anchor_left = 1.0
+anchor_right = 1.0
+
+[node name="ShowHideAPButton" type="Button" parent="Ui/UiTools/PickThingWindow/VBoxContainer/Control2/Control"]
+margin_right = -15.0
+grow_horizontal = 0
+hint_tooltip = "Display a scrollable list of all the Action Points on the map. Select an item on the list to view that point."
+size_flags_horizontal = 10
+text = "AP"
 
 [node name="Clippy" type="Control" parent="Ui/UiTools/PickThingWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_clip_content = true
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="SelectedRect" type="TextureRect" parent="Ui/UiTools/PickThingWindow/Clippy"]
 material = SubResource( 9 )
@@ -7042,7 +7085,8 @@ align = 1
 script = SubResource( 20 )
 
 [connection signal="visibility_changed" from="Game2D/Selector" to="Game2D/Selector" method="_on_Selector_visibility_changed"]
-[connection signal="visibility_changed" from="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership" to="Ui/UiTools/PickSlabWindow/SlabTabs/TabFolder/OnlyOwnership" method="_on_OnlyOwnership_visibility_changed"]
+[connection signal="visibility_changed" from="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/OnlyOwnership" to="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/OnlyOwnership" method="_on_OnlyOwnership_visibility_changed"]
+[connection signal="pressed" from="Ui/UiTools/PickThingWindow/VBoxContainer/Control2/Control/ShowHideAPButton" to="Ui/UiTools/PickThingWindow/VBoxContainer/Control2/ScrollContainer/ActionPointList" method="_on_ShowHideAPButton_pressed"]
 [connection signal="timeout" from="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/TimerUpdateColumnEntries" to="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails" method="_on_TimerUpdateColumnEntries_timeout"]
 [connection signal="item_rect_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs" to="Ui/UiTools/PropertiesWindow" method="_on_PropertiesTabs_item_rect_changed"]
 [connection signal="mouse_entered" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer/SelectionStatusButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails" method="_on_SelectionStatusButton_mouse_entered"]

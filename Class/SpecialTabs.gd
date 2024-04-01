@@ -56,12 +56,13 @@ func initialize(tabNameArray):
 	set_current_tab(0)
 
 func set_icons():
+	var windowNode = get_parent().get_parent()
+	var values = windowNode.tabs.values()
 	
-	var values = get_parent().tabs.values()
 	for tabIndex in get_tab_count():
 		
 		var img = Image.new()
-		var iconPath = values[tabIndex][get_parent().ICON_PATH]
+		var iconPath = values[tabIndex][windowNode.ICON_PATH]
 		
 		if iconPath == "": iconPath = 'res://Art/Thing.png'
 		img = load(iconPath).get_data()
@@ -97,8 +98,11 @@ func set_current_tab(tab):
 		yield(get_tree(),'idle_frame')
 		tabSystem.ensure_tab_visible(tab)
 
+
 func _on_Tabs_reposition_active_tab_request(idx_to):
 	move_child(tabFolder.get_child(tabSystem.current_tab), idx_to)
+
+
 
 
 func _on_Tabs_tab_changed(tab):

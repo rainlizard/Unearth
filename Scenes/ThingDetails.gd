@@ -15,7 +15,7 @@ var HIDE_UNKNOWN_DATA = true
 #var rememberInstance = null
 
 func _ready():
-	get_parent().set_tab_title(0, "Inspect")
+	oPropertiesTabs.set_tab_title(0, "Inspect")
 
 func update_details():
 	oThingListData.clear()

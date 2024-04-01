@@ -184,3 +184,6 @@ func _notification(blah):
 			mouseInWindow = false
 		NOTIFICATION_WM_MOUSE_ENTER:
 			mouseInWindow = true
+
+func center_camera_on_point(point: Vector2):
+	desired_offset = point

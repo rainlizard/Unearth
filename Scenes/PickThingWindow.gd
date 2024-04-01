@@ -16,18 +16,18 @@ enum {
 }
 
 onready var tabs = {
-	Things.TAB_CREATURE: [$ThingTabs/TabFolder/Creature,"res://edited_images/icon_creature.png"],
-	Things.TAB_SPELL: [$ThingTabs/TabFolder/Spell,"res://edited_images/icon_book.png"],
-	Things.TAB_TRAP: [$ThingTabs/TabFolder/Trap,"res://dk_images/traps_doors/anim0845/r1frame04.png"],
-	Things.TAB_BOX: [$ThingTabs/TabFolder/Box,"res://dk_images/traps_doors/anim0116/r1frame12.png"],
-	Things.TAB_SPECIAL: [$ThingTabs/TabFolder/Special,"res://dk_images/trapdoor_64/bonus_box_std.png"],
-	Things.TAB_GOLD: [$ThingTabs/TabFolder/Gold,"res://dk_images/symbols_64/creatr_stat_gold_std.png"], #"res://dk_images/valuables/gold_hoard1_fp/r1frame03.png" #"res://dk_images/valuables/gold_hoard2_fp/r1frame02.png" #"res://dk_images/valuables/gold_hoard4_fp/r1frame01.png"
-	Things.TAB_DECORATION: [$ThingTabs/TabFolder/Decoration,"res://dk_images/statues/anim0906/r1frame01.png"],
-	Things.TAB_ACTION: [$ThingTabs/TabFolder/Action,"res://dk_images/guisymbols_64/sym_fight.png"], #"res://Art/ActionPoint.png"
-	Things.TAB_EFFECTGEN: [$ThingTabs/TabFolder/Effect,"res://edited_images/icon_effect.png"],
-	Things.TAB_FURNITURE: [$ThingTabs/TabFolder/Furniture,"res://dk_images/furniture/workshop_machine_fp/r1frame01.png"], #"res://dk_images/furniture/training_machine_fp/r1frame09.png"
-	Things.TAB_LAIR: [$ThingTabs/TabFolder/Lair,"res://dk_images/room_64/lair_std.png"],
-	Things.TAB_MISC: [$ThingTabs/TabFolder/Misc,"res://dk_images/rpanel_64/tab_crtr_wandr_std.png"],
+	Things.TAB_CREATURE: [oThingTabs.get_node("TabFolder/Creature"),"res://edited_images/icon_creature.png"],
+	Things.TAB_SPELL: [oThingTabs.get_node("TabFolder/Spell"),"res://edited_images/icon_book.png"],
+	Things.TAB_TRAP: [oThingTabs.get_node("TabFolder/Trap"),"res://dk_images/traps_doors/anim0845/r1frame04.png"],
+	Things.TAB_BOX: [oThingTabs.get_node("TabFolder/Box"),"res://dk_images/traps_doors/anim0116/r1frame12.png"],
+	Things.TAB_SPECIAL: [oThingTabs.get_node("TabFolder/Special"),"res://dk_images/trapdoor_64/bonus_box_std.png"],
+	Things.TAB_GOLD: [oThingTabs.get_node("TabFolder/Gold"),"res://dk_images/symbols_64/creatr_stat_gold_std.png"], #"res://dk_images/valuables/gold_hoard1_fp/r1frame03.png" #"res://dk_images/valuables/gold_hoard2_fp/r1frame02.png" #"res://dk_images/valuables/gold_hoard4_fp/r1frame01.png"
+	Things.TAB_DECORATION: [oThingTabs.get_node("TabFolder/Decoration"),"res://dk_images/statues/anim0906/r1frame01.png"],
+	Things.TAB_ACTION: [oThingTabs.get_node("TabFolder/Action"),"res://dk_images/guisymbols_64/sym_fight.png"], #"res://Art/ActionPoint.png"
+	Things.TAB_EFFECTGEN: [oThingTabs.get_node("TabFolder/Effect"),"res://edited_images/icon_effect.png"],
+	Things.TAB_FURNITURE: [oThingTabs.get_node("TabFolder/Furniture"),"res://dk_images/furniture/workshop_machine_fp/r1frame01.png"], #"res://dk_images/furniture/training_machine_fp/r1frame09.png"
+	Things.TAB_LAIR: [oThingTabs.get_node("TabFolder/Lair"),"res://dk_images/room_64/lair_std.png"],
+	Things.TAB_MISC: [oThingTabs.get_node("TabFolder/Misc"),"res://dk_images/rpanel_64/tab_crtr_wandr_std.png"],
 }
 
 export var grid_item_size : Vector2
@@ -57,7 +57,7 @@ func _ready():
 	# Window's minimum size
 	rect_min_size = Vector2(80,80)#Vector2((grid_item_size.x*grid_window_scale)+11, (grid_item_size.y*grid_window_scale)+11)
 	
-	$ThingTabs.initialize([])
+	oThingTabs.initialize([])
 
 func initialize_thing_grid_items():
 	yield(get_tree(),'idle_frame') # Needed for loading animation IDs from call_deferred in Things singleton
@@ -101,7 +101,8 @@ func initialize_thing_grid_items():
 	print('Initialized Things window: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func add_to_category(tabNode, thingsData, type, subtype):
-	var gridcontainer = tabNode.get_node("ScrollContainer/GridContainer")
+	var gridcontainer = get_grid_container_node(tabNode)
+	
 	var id = scnGridItem.instance()
 	id.connect('mouse_entered',oThingDetails,"_on_thing_portrait_mouse_entered",[id])
 	id.connect('gui_input',self,"_on_thing_portrait_gui_input",[id])
@@ -227,7 +228,8 @@ func add_workshop_item_sprite_overlay(textureParent, subtype):
 	textureParent.add_child(workshopItemInTheBox)
 
 func current_grid_container():
-	return oThingTabs.get_current_tab_control().get_node("ScrollContainer/GridContainer")
+	
+	return get_grid_container_node(oThingTabs.get_current_tab_control())
 
 func pressed(id):
 	#oSelection.paintSlab = setValue # Set whatever this needs to be
@@ -257,8 +259,7 @@ func set_selection(setType, setSubtype):
 	for tabIndex in oThingTabs.get_tab_count():
 		var tabID = oThingTabs.get_tab_control(tabIndex)
 
-		var gc = tabID.get_node('ScrollContainer/GridContainer')
-		for id in gc.get_children():
+		for id in get_grid_container_node(tabID).get_children():
 			if id.get_meta("thingType") == setType and id.get_meta("thingSubtype") == setSubtype:
 				
 				oSelectedRect.visible = true
@@ -292,8 +293,7 @@ func remove_all_grid_items():
 	for tabIndex in oThingTabs.get_tab_count():
 		var tabID = oThingTabs.get_tab_control(tabIndex)
 		
-		var gc = tabID.get_node('ScrollContainer/GridContainer')
-		for id in gc.get_children():
+		for id in get_grid_container_node(tabID).get_children():
 			id.queue_free()
 
 func _on_thing_portrait_gui_input(event, id):
@@ -303,3 +303,9 @@ func _on_thing_portrait_gui_input(event, id):
 
 func rect_changed_start_timer():
 	rectChangedTimer.start(0.2)
+
+func get_grid_container_node(tabID):
+	var gc = tabID.get_node('ScrollContainer/GridContainer')
+	if gc == null:
+		gc = tabID.get_node('VBoxContainer/ScrollContainer/GridContainer')
+	return gc
