@@ -25,5 +25,8 @@ func big(windowTitle, dialogText):
 	id.rect_size.y = 0
 	id.window_title = windowTitle
 	id.dialog_text = dialogText
+	
+	id.get_label().margin_left = 20
+	
 	oUiMessages.add_child(id)
 	Utils.popup_centered(id)

@@ -42,7 +42,7 @@ func save_map(filePath): # auto opens other files
 		oCurrentMap.currentFilePaths[EXT] = [saveToFilePath, getModifiedTime]
 	
 	if writeFailure == true:
-		oMessage.big("Error","Failed saving, maybe try a different directory.")
+		oMessage.big("Error","Saving failed. Try saving to a different directory.")
 	else:
 		print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 		if oDataScript.data == "":
