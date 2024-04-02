@@ -16,17 +16,22 @@ func update_ap_list():
 	
 	clear()
 	
-	var items_added = 0
+	var count_ap = 0
 	
 	for id in get_tree().get_nodes_in_group("ActionPoint"):
 		if id.is_queued_for_deletion() == false:
 			add_item("Action Point " + str(id.pointNumber))
-			items_added += 1
+			count_ap += 1
 	
-	var lines = clamp(items_added, 1, lines_to_show)
+	var lines = clamp(count_ap, 1, lines_to_show)
 	
 	get_parent().get_parent().rect_min_size.y = 9 + (lines * item_height)
-
+	
+	if count_ap == 0:
+		get_parent().get_parent().visible = false
+	else:
+		get_parent().get_parent().visible = true
+	
 
 func _on_ShowHideAPButton_pressed():
 	view_ap_list = !view_ap_list
