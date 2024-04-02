@@ -3935,6 +3935,7 @@ margin_right = 302.0
 margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Map name"
@@ -3956,6 +3957,7 @@ margin_right = 302.0
 margin_bottom = 62.0
 grow_horizontal = 0
 grow_vertical = 0
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Tileset"
@@ -3974,6 +3976,7 @@ align = 1
 margin_top = 69.0
 margin_right = 302.0
 margin_bottom = 90.0
+mouse_filter = 1
 text = "Map file format"
 
 [node name="CurrentFormat" type="OptionButton" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/PanelContainer2/GridContainer"]
@@ -3991,6 +3994,8 @@ selected = 0
 margin_top = 106.0
 margin_right = 302.0
 margin_bottom = 127.0
+hint_tooltip = "MAPSIZE"
+mouse_filter = 1
 text = "Map size"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/PanelContainer2/GridContainer"]
@@ -4054,44 +4059,51 @@ rect_min_size = Vector2( 0, 10 )
 [node name="AdvancedMapProperties" type="PanelContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer"]
 margin_top = 172.0
 margin_right = 625.0
-margin_bottom = 571.0
+margin_bottom = 543.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 616.0
-margin_bottom = 390.0
+margin_bottom = 362.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
 margin_right = 607.0
-margin_bottom = 21.0
+margin_bottom = 31.0
+custom_constants/margin_top = 5
+custom_constants/margin_bottom = 5
+
+[node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/MarginContainer"]
+margin_top = 5.0
+margin_right = 607.0
+margin_bottom = 26.0
 text = "Level overview file (.lof)"
 align = 1
 
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
-margin_top = 25.0
+[node name="HSeparator3" type="HSeparator" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 35.0
 margin_right = 607.0
-margin_bottom = 35.0
-rect_min_size = Vector2( 0, 10 )
+margin_bottom = 36.0
 
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
-margin_top = 39.0
+[node name="HBoxAuthor" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 40.0
 margin_right = 607.0
-margin_bottom = 381.0
-columns = 2
+margin_bottom = 71.0
 
-[node name="Label5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_right = 302.0
+[node name="Label5" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxAuthor"]
+margin_right = 301.0
 margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
+hint_tooltip = "AUTHOR"
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Author"
 valign = 1
 
-[node name="AuthorLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_left = 306.0
+[node name="AuthorLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxAuthor"]
+margin_left = 305.0
 margin_right = 607.0
 margin_bottom = 31.0
 grow_horizontal = 2
@@ -4099,10 +4111,45 @@ grow_vertical = 2
 size_flags_horizontal = 7
 align = 1
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_top = 35.0
-margin_right = 302.0
-margin_bottom = 62.0
+[node name="HBoxDescription" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 75.0
+margin_right = 607.0
+margin_bottom = 106.0
+
+[node name="Label6" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxDescription"]
+margin_right = 301.0
+margin_bottom = 31.0
+grow_horizontal = 0
+grow_vertical = 0
+hint_tooltip = "DESCRIPTION"
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Description"
+valign = 1
+
+[node name="DescriptionLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxDescription"]
+margin_left = 305.0
+margin_right = 607.0
+margin_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+align = 1
+
+[node name="HSeparator2" type="HSeparator" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 110.0
+margin_right = 607.0
+margin_bottom = 111.0
+
+[node name="HBoxKind" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 115.0
+margin_right = 607.0
+margin_bottom = 142.0
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxKind"]
+margin_right = 301.0
+margin_bottom = 27.0
 grow_horizontal = 0
 grow_vertical = 0
 hint_tooltip = "KIND"
@@ -4112,185 +4159,200 @@ size_flags_vertical = 1
 text = "Map type"
 valign = 1
 
-[node name="KindOptionButton" type="OptionButton" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_left = 306.0
-margin_top = 35.0
+[node name="KindOptionButton" type="OptionButton" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxKind"]
+margin_left = 305.0
 margin_right = 607.0
-margin_bottom = 62.0
-align = 1
-
-[node name="Label6" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_top = 66.0
-margin_right = 302.0
-margin_bottom = 97.0
-grow_horizontal = 0
-grow_vertical = 0
+margin_bottom = 27.0
 size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "Description"
-valign = 1
-
-[node name="DescriptionLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_left = 306.0
-margin_top = 66.0
-margin_right = 607.0
-margin_bottom = 97.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 7
 align = 1
 
-[node name="KindLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-visible = false
-margin_top = 136.0
-margin_right = 311.0
-margin_bottom = 167.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 7
+[node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 146.0
+margin_right = 607.0
+margin_bottom = 147.0
 
-[node name="Label10" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_top = 101.0
-margin_right = 302.0
-margin_bottom = 132.0
+[node name="HBoxPlayers" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 151.0
+margin_right = 607.0
+margin_bottom = 182.0
+
+[node name="Label10" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxPlayers"]
+margin_right = 301.0
+margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
+hint_tooltip = "PLAYERS"
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Players"
 valign = 1
 
-[node name="PlayersLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_left = 306.0
-margin_top = 101.0
+[node name="PlayersSpinBox" type="SpinBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxPlayers"]
+margin_left = 305.0
 margin_right = 607.0
-margin_bottom = 132.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 7
-align = 1
-
-[node name="Label3" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_top = 136.0
-margin_right = 302.0
-margin_bottom = 167.0
-grow_horizontal = 0
-grow_vertical = 0
+margin_bottom = 31.0
 size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "Ensign position"
-valign = 1
-
-[node name="EnsignPositionLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_left = 306.0
-margin_top = 136.0
-margin_right = 607.0
-margin_bottom = 167.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 7
+min_value = 2.0
+max_value = 4.0
+value = 2.0
 align = 1
+script = ExtResource( 81 )
 
-[node name="Label9" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_top = 171.0
-margin_right = 302.0
-margin_bottom = 202.0
+[node name="HBoxSpeech" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 186.0
+margin_right = 607.0
+margin_bottom = 217.0
+
+[node name="Label11" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxSpeech"]
+margin_right = 301.0
+margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
-size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "Ensign zoom"
-valign = 1
-
-[node name="EnsignZoomLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_left = 306.0
-margin_top = 171.0
-margin_right = 607.0
-margin_bottom = 202.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 7
-align = 1
-
-[node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_top = 206.0
-margin_right = 302.0
-margin_bottom = 237.0
-grow_horizontal = 0
-grow_vertical = 0
-size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "Options"
-valign = 1
-
-[node name="OptionsLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_left = 306.0
-margin_top = 206.0
-margin_right = 607.0
-margin_bottom = 237.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 7
-align = 1
-
-[node name="Label11" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_top = 241.0
-margin_right = 302.0
-margin_bottom = 272.0
-grow_horizontal = 0
-grow_vertical = 0
+hint_tooltip = "SPEECH"
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Speech"
 valign = 1
 
-[node name="SpeechLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_left = 306.0
-margin_top = 241.0
+[node name="SpeechLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxSpeech"]
+margin_left = 305.0
 margin_right = 607.0
-margin_bottom = 272.0
+margin_bottom = 31.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 7
 align = 1
 
-[node name="Label12" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_top = 276.0
-margin_right = 302.0
-margin_bottom = 307.0
+[node name="HBoxLandView" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 221.0
+margin_right = 607.0
+margin_bottom = 252.0
+
+[node name="Label12" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxLandView"]
+margin_right = 301.0
+margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
+hint_tooltip = "LAND_VIEW"
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Land view"
 valign = 1
 
-[node name="LandViewLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_left = 306.0
-margin_top = 276.0
+[node name="LandViewLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxLandView"]
+margin_left = 305.0
 margin_right = 607.0
-margin_bottom = 307.0
+margin_bottom = 31.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 7
 align = 1
 
-[node name="Label8" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_top = 311.0
-margin_right = 302.0
-margin_bottom = 342.0
+[node name="HBoxEnsignPosition" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 256.0
+margin_right = 607.0
+margin_bottom = 287.0
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignPosition"]
+margin_right = 301.0
+margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
+hint_tooltip = "ENSIGN_POS and ENSIGN_ZOOM"
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Name ID"
+text = "Flag position"
 valign = 1
 
-[node name="NameIDLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer"]
-margin_left = 306.0
-margin_top = 311.0
+[node name="EnsignPositionLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignPosition"]
+margin_left = 305.0
 margin_right = 607.0
-margin_bottom = 342.0
+margin_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+align = 1
+
+[node name="HBoxEnsignZoom" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+visible = false
+margin_top = 291.0
+margin_right = 607.0
+margin_bottom = 322.0
+
+[node name="Label9" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignZoom"]
+visible = false
+margin_right = 301.0
+margin_bottom = 31.0
+grow_horizontal = 0
+grow_vertical = 0
+hint_tooltip = "ENSIGN_ZOOM"
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Ensign zoom"
+valign = 1
+
+[node name="EnsignZoomLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignZoom"]
+visible = false
+margin_left = 305.0
+margin_right = 607.0
+margin_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 7
+align = 1
+
+[node name="HBoxOptions" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 291.0
+margin_right = 607.0
+margin_bottom = 318.0
+
+[node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxOptions"]
+margin_right = 301.0
+margin_bottom = 27.0
+grow_horizontal = 0
+grow_vertical = 0
+hint_tooltip = "OPTIONS"
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Flag icon"
+valign = 1
+
+[node name="OptionsOptionButton" type="OptionButton" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxOptions"]
+margin_left = 305.0
+margin_right = 607.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Standard"
+align = 1
+items = [ "Standard", null, false, 0, null, "Tutorial", null, false, 1, null ]
+selected = 0
+
+[node name="HBoxNameID" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
+margin_top = 322.0
+margin_right = 607.0
+margin_bottom = 353.0
+
+[node name="Label8" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxNameID"]
+margin_right = 301.0
+margin_bottom = 31.0
+grow_horizontal = 0
+grow_vertical = 0
+hint_tooltip = "NAME_ID"
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Translation ID"
+valign = 1
+
+[node name="NameIDLineEdit" type="LineEdit" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxNameID"]
+margin_left = 305.0
+margin_right = 607.0
+margin_bottom = 31.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 7
@@ -7188,17 +7250,16 @@ script = SubResource( 20 )
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/PanelContainer2/GridContainer/MapNameLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapNameLineEdit_text_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/PanelContainer2/GridContainer/DungeonStyleList" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_DungeonStyleList_item_selected"]
 [connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/PanelContainer2/GridContainer/CurrentFormat" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_MapFormatSetting_item_selected"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/AuthorLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_AuthorLineEdit_text_changed"]
-[connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/KindOptionButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_KindOptionButton_item_selected"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/DescriptionLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_DescriptionLineEdit_text_changed"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/KindLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_KindLineEdit_text_changed"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/PlayersLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_PlayersLineEdit_text_changed"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/EnsignPositionLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_EnsignPositionLineEdit_text_changed"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/EnsignZoomLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_EnsignZoomLineEdit_text_changed"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/OptionsLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_OptionsLineEdit_text_changed"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/SpeechLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_SpeechLineEdit_text_changed"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/LandViewLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_LandViewLineEdit_text_changed"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/GridContainer/NameIDLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_NameIDLineEdit_text_changed"]
+[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxAuthor/AuthorLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_AuthorLineEdit_text_changed"]
+[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxDescription/DescriptionLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_DescriptionLineEdit_text_changed"]
+[connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxKind/KindOptionButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_KindOptionButton_item_selected"]
+[connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxPlayers/PlayersSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_PlayersSpinBox_value_changed"]
+[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxSpeech/SpeechLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_SpeechLineEdit_text_changed"]
+[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxLandView/LandViewLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_LandViewLineEdit_text_changed"]
+[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignPosition/EnsignPositionLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_EnsignPositionLineEdit_text_changed"]
+[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignZoom/EnsignZoomLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_EnsignZoomLineEdit_text_changed"]
+[connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxOptions/OptionsOptionButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_OptionsOptionButton_item_selected"]
+[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxNameID/NameIDLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties" method="_on_NameIDLineEdit_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/KeeperFXScriptCheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_KeeperFXScriptCheckBox_toggled"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer/PortalRateField" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_PortalRateField_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlueAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_BlueAICheckBox_toggled"]
