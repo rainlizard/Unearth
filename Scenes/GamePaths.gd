@@ -197,7 +197,7 @@ func set_keeperfx_version():
 			var script = ""
 			script += "cd " + EXECUTABLE_PATH.get_base_dir() + ";"
 			script += "exiftool -ProductVersion -n keeperfx.exe | awk -F ': ' '{print $2}'"
-			var exit_code = OS.execute("bash", ["-c", script], true, output, true)
+			var _exit_code = OS.execute("bash", ["-c", script], true, output, true)
 			#print("Exit code: ", exit_code)
 			#print("Output: ", output)
 			#print(script)

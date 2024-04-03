@@ -12,7 +12,6 @@ onready var oAdvancedMapProperties = Nodelist.list["oAdvancedMapProperties"]
 onready var oMapSizeTextLabel = Nodelist.list["oMapSizeTextLabel"]
 onready var oMapNameLineEdit = Nodelist.list["oMapNameLineEdit"]
 onready var oNameIDLineEdit = Nodelist.list["oNameIDLineEdit"]
-onready var oEnsignPositionLineEdit = Nodelist.list["oEnsignPositionLineEdit"]
 onready var oSpeechLineEdit = Nodelist.list["oSpeechLineEdit"]
 onready var oLandViewLineEdit = Nodelist.list["oLandViewLineEdit"]
 onready var oAuthorLineEdit = Nodelist.list["oAuthorLineEdit"]
@@ -21,6 +20,9 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oKindOptionButton = Nodelist.list["oKindOptionButton"]
 onready var oPlayersSpinBox = Nodelist.list["oPlayersSpinBox"]
 onready var oOptionsOptionButton = Nodelist.list["oOptionsOptionButton"]
+onready var oEnsignPositionX = Nodelist.list["oEnsignPositionX"]
+onready var oEnsignPositionY = Nodelist.list["oEnsignPositionY"]
+onready var oMapCoordinatesWindow = Nodelist.list["oMapCoordinatesWindow"]
 
 onready var oHBoxPlayers = Nodelist.list["oHBoxPlayers"]
 onready var oHBoxSpeech = Nodelist.list["oHBoxSpeech"]
@@ -66,7 +68,12 @@ func _on_MapProperties_visibility_changed():
 		oNameIDLineEdit.text = oDataLof.NAME_ID
 		oKindOptionButton.selected = kind_text_to_button_id()
 		oOptionsOptionButton.selected = options_text_to_button_id()
-		oEnsignPositionLineEdit.text = oDataLof.ENSIGN_POS
+		
+		var ENSIGN_XY = oDataLof.ENSIGN_POS.split(" ")
+		if ENSIGN_XY.size() >= 2:
+			oEnsignPositionX.text = ENSIGN_XY[0]
+			oEnsignPositionY.text = ENSIGN_XY[1]
+		
 		oPlayersSpinBox.value = int(oDataLof.PLAYERS)
 		oSpeechLineEdit.text = oDataLof.SPEECH
 		oLandViewLineEdit.text = oDataLof.LAND_VIEW
@@ -135,11 +142,6 @@ func _on_NameIDLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataLof.NAME_ID = new_text
 
-func _on_EnsignPositionLineEdit_text_changed(new_text):
-	oEditor.mapHasBeenEdited = true
-	oDataLof.ENSIGN_POS = new_text
-	oDataLof.ENSIGN_ZOOM = new_text
-
 func _on_OptionsLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataLof.OPTIONS = new_text
@@ -166,6 +168,27 @@ func _on_OptionsOptionButton_item_selected(index):
 	oDataLof.OPTIONS = options_options[oOptionsOptionButton.text]
 
 
+func _on_EnsignPositionX_focus_exited():
+	oEditor.mapHasBeenEdited = true
+	if int(oEnsignPositionX.text) > 1000000: # Change this if I need to set a cap
+		oEnsignPositionX.text = "1000000"
+	oDataLof.ENSIGN_POS = oEnsignPositionX.text + " " + oEnsignPositionY.text
+	oDataLof.ENSIGN_ZOOM = oDataLof.ENSIGN_POS
+
+func _on_EnsignPositionY_focus_exited():
+	oEditor.mapHasBeenEdited = true
+	if int(oEnsignPositionY.text) > 1000000:
+		oEnsignPositionY.text = "1000000"
+	oDataLof.ENSIGN_POS = oEnsignPositionX.text + " " + oEnsignPositionY.text
+	oDataLof.ENSIGN_ZOOM = oDataLof.ENSIGN_POS
+
+func set_flag_pos_by_landview_img(newPos):
+	oEnsignPositionX.text = str(newPos.x)
+	oEnsignPositionY.text = str(newPos.y)
+	_on_EnsignPositionX_focus_exited()
+	_on_EnsignPositionY_focus_exited()
+
+
 func options_text_to_button_id():
 	var button_id = 0
 	for i in range(oOptionsOptionButton.get_item_count()):
@@ -187,7 +210,6 @@ func update_section_visibility():
 	oHBoxPlayers.visible = false
 	oHBoxSpeech.visible = false
 	oHBoxEnsignPosition.visible = false
-	#oHBoxEnsignZoom.visible = false
 	oHBoxOptions.visible = false
 	oHBoxLandView.visible = false
 	oHBoxNameID.visible = false
@@ -196,17 +218,13 @@ func update_section_visibility():
 			pass
 		"Multiplayer":
 			oHBoxPlayers.visible = true
-			
 			oHBoxEnsignPosition.visible = true
-			#oHBoxEnsignZoom.visible = true
 			oHBoxOptions.visible = true
 			oHBoxLandView.visible = true
 			oHBoxNameID.visible = true
 		"Campaign", "Secret", "Moon":
 			oHBoxSpeech.visible = true
-			
 			oHBoxEnsignPosition.visible = true
-			#oHBoxEnsignZoom.visible = true
 			oHBoxOptions.visible = true
 			oHBoxLandView.visible = true
 			oHBoxNameID.visible = true
@@ -220,7 +238,8 @@ func update_section_visibility():
 		oDataLof.SPEECH = ""
 	
 	if oHBoxEnsignPosition.visible == false:
-		oEnsignPositionLineEdit.text = ""
+		oEnsignPositionX.text = ""
+		oEnsignPositionY.text = ""
 		oDataLof.ENSIGN_POS = ""
 		oDataLof.ENSIGN_ZOOM = ""
 	
@@ -235,3 +254,7 @@ func update_section_visibility():
 	if oHBoxNameID.visible == false:
 		oNameIDLineEdit.text = ""
 		oDataLof.NAME_ID = ""
+
+
+func _on_OpenMapCoordButton_pressed():
+	Utils.popup_centered(oMapCoordinatesWindow)
