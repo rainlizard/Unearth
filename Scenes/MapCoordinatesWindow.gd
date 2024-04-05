@@ -20,38 +20,37 @@ var normalized_flag_position = Vector2(0.5, 0.5) # Default to center
 
 func _ready():
 	update_image_resolution()
-	update_aspect_ratio()
-	update_flag_position()
-
+	update_landview_screen()
 
 func _on_LandviewImage_resized():
-	update_flag_size()
-	update_flag_position()
+	update_landview_screen()
+
+func update_landview_screen():
+	# Aspect Ratio
+	oLandviewAspectRatioContainer.ratio = image_resolution.x / image_resolution.y
+	
+	# Flag Size
+	var adjustScale = oLandviewImage.rect_size / image_resolution
+	oEnsignFlagImg.rect_scale = Vector2(adjustScale.x, adjustScale.x)
+	
+	# Flag Position
+	var flag_position = normalized_flag_position * oLandviewImage.rect_size
+	oEnsignFlagImg.rect_position = flag_position - oEnsignFlagImg.rect_pivot_offset
+	
+	var new_set_pos = get_coords()
+	oLandViewFlagPosLabel.text = "(" + str(new_set_pos.x) + ", " + str(new_set_pos.y) + ")"
+
+
+func get_coords():
+	var pos = image_resolution * normalized_flag_position
+	pos.x = int(pos.x)
+	pos.y = int(pos.y)
+	return pos
 
 
 func update_image_resolution():
 	image_resolution = oLandviewImage.texture.get_data().get_size()
 
-
-func update_aspect_ratio():
-	oLandviewAspectRatioContainer.ratio = image_resolution.x / image_resolution.y
-
-
-func update_flag_size():
-	var adjustScale = oLandviewImage.rect_size / image_resolution
-	oEnsignFlagImg.rect_scale = Vector2(adjustScale.x, adjustScale.x)
-
-
-func update_flag_position():
-	var flag_position = normalized_flag_position * oLandviewImage.rect_size
-	oEnsignFlagImg.rect_position = flag_position - oEnsignFlagImg.rect_pivot_offset
-	
-	var new_set_pos = image_resolution * normalized_flag_position
-	new_set_pos.x = int(new_set_pos.x)
-	new_set_pos.y = int(new_set_pos.y)
-	
-	oMapProperties.set_flag_pos_by_landview_img(new_set_pos)
-	oLandViewFlagPosLabel.text = "(" + str(new_set_pos.x) + ", " + str(new_set_pos.y) + ")"
 
 func _on_CloseMapCoordButton_pressed():
 	visible = false
@@ -73,7 +72,8 @@ func _on_LandviewImage_gui_input(event):
 			clamped_position.y = clamp(event.position.y, 0, oLandviewImage.rect_size.y)
 
 			normalized_flag_position = clamped_position / oLandviewImage.rect_size
-			update_flag_position()
+			update_landview_screen()
+			manually_set_new_coords()
 
 
 func _on_ChangeImageCoordButton_pressed():
@@ -86,7 +86,7 @@ func _on_MapCoordinatesWindow_visibility_changed():
 		var flag_position_y = int(oEnsignPositionY.text)
 		var flag_position = Vector2(flag_position_x, flag_position_y)
 		normalized_flag_position = flag_position / image_resolution
-		update_flag_position()
+		update_landview_screen()
 	else:
 		if oMessage == null: return
 
@@ -100,5 +100,8 @@ func _on_ChooseLandviewImageFileDialog_file_selected(path):
 	oLandviewImage.texture = textureData
 	
 	update_image_resolution()
-	update_aspect_ratio()
-	update_flag_position()
+	update_landview_screen()
+
+func manually_set_new_coords():
+	var new_set_pos = get_coords()
+	oMapProperties.set_flag_pos_by_landview_img(new_set_pos)

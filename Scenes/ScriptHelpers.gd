@@ -15,7 +15,7 @@ enum {
 	IS_LOCATION
 }
 
-# [Command Name] [Tile distance (96 = TILE, 32= SUBTILE)], [argument slot number]]
+# [Command Name] [argument slot number] [Tile distance (96 = TILE, 32= SUBTILE)]]
 var commandsWithPositions = [
 	["IF_SLAB_OWNER", 0, IS_TILE],
 	["CHANGE_SLAB_OWNER", 0, IS_TILE],
@@ -25,8 +25,8 @@ var commandsWithPositions = [
 	["CONCEAL_MAP_RECT", 1, IS_SUBTILE],
 	["CREATE_EFFECT_AT_POS", 1, IS_SUBTILE],
 	["USE_POWER_AT_POS", 1, IS_SUBTILE],
-	["QUICK_INFORMATION_WITH_POS", 0, IS_SUBTILE],
-	["QUICK_OBJECTIVE_WITH_POS", 0, IS_SUBTILE],
+	["QUICK_INFORMATION_WITH_POS", 2, IS_SUBTILE],
+	["QUICK_OBJECTIVE_WITH_POS", 2, IS_SUBTILE],
 	["DISPLAY_INFORMATION_WITH_POS", 1, IS_SUBTILE],
 	["DISPLAY_OBJECTIVE_WITH_POS", 1, IS_SUBTILE],
 	

@@ -309,9 +309,9 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 		if id.subtype == 10:
 			if slabID != Slabs.HATCHERY:
 				oMessage.big("Warning","Chicken won't appear unless placed inside a Hatchery. Place an Egg instead.")
-		if id.subtype in [52,53,54,55,56]: # Treasury Gold
+		if id.subtype in [52,53,54,55,56]: # Treasury Hoard
 			if slabID != Slabs.TREASURE_ROOM:
-				oMessage.big("Warning","Treasury Gold won't appear unless placed inside a Treasure Room.")
+				oMessage.big("Warning","Treasury Hoard should be placed inside a Treasure Room.")
 			
 			# Place on center of slab. Won't be functional otherwise.
 			var locX = (floor( floor(id.locationX) / 3 ) * 3) + 1.5
