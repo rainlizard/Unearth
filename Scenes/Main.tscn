@@ -1146,12 +1146,14 @@ size_flags_vertical = 6
 margin_top = 217.0
 margin_right = 650.0
 margin_bottom = 217.0
+mouse_filter = 1
 size_flags_horizontal = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/Control2"]
 self_modulate = Color( 1, 0, 0, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -1159,6 +1161,7 @@ size_flags_vertical = 3
 margin_right = 638.0
 margin_bottom = 84.0
 rect_clip_content = false
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
 items = [ "Item 0", null, false, "Item 1", null, false, "Item 2", null, false ]
@@ -4358,7 +4361,7 @@ hint_tooltip = "OPTIONS"
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Flag icon"
+text = "Options"
 valign = 1
 
 [node name="OptionsOptionButton" type="OptionButton" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxOptions"]
@@ -4366,10 +4369,7 @@ margin_left = 305.0
 margin_right = 607.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
-text = "Standard"
 align = 1
-items = [ "Standard", null, false, 0, null, "Tutorial", null, false, 1, null ]
-selected = 0
 
 [node name="HBoxNameID" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/MapProperties/VBoxContainer/AdvancedMapProperties/VBoxContainer"]
 margin_top = 322.0

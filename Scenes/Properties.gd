@@ -35,13 +35,13 @@ const kind_options = {
 	"Solo" : "FREE",
 	"Multiplayer" : "MULTI",
 	"Campaign" : "SINGLE",
-	"Secret" : "BONUS",
-	"Moon" : "EXTRA",
+	"Campaign Secret" : "BONUS",
+	"Campaign Moon" : "EXTRA",
 }
 
 const options_options = {
-	"Standard" : "",
-	"Tutorial" : "TUTORIAL",
+	"None" : "",
+	"Tutorial flag icon" : "TUTORIAL",
 }
 
 
@@ -59,6 +59,10 @@ func _ready():
 		oKindOptionButton.add_item(stringKind)
 		oKindOptionButton.selected = 0
 	
+	# Construct oOptionsOptionButton
+	for stringKind in options_options.keys():
+		oOptionsOptionButton.add_item(stringKind)
+		oOptionsOptionButton.selected = 0
 
 func _on_MapProperties_visibility_changed():
 	if is_instance_valid(oDungeonStyleList) == false: return
@@ -219,10 +223,10 @@ func update_section_visibility():
 		"Multiplayer":
 			oHBoxPlayers.visible = true
 			oHBoxEnsignPosition.visible = true
-			oHBoxOptions.visible = true
+			oHBoxOptions.visible = false
 			oHBoxLandView.visible = true
 			oHBoxNameID.visible = true
-		"Campaign", "Secret", "Moon":
+		"Campaign", "Campaign Secret", "Campaign Moon":
 			oHBoxSpeech.visible = true
 			oHBoxEnsignPosition.visible = true
 			oHBoxOptions.visible = true
