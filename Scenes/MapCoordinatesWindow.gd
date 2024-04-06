@@ -65,15 +65,14 @@ func _on_LandviewImage_gui_input(event):
 		else:
 			holding_left_click = false
 
-	if event is InputEventMouseMotion:
-		if holding_left_click == true:
-			var clamped_position = Vector2()
-			clamped_position.x = clamp(event.position.x, 0, oLandviewImage.rect_size.x)
-			clamped_position.y = clamp(event.position.y, 0, oLandviewImage.rect_size.y)
+	if holding_left_click == true:
+		var clamped_position = Vector2()
+		clamped_position.x = clamp(event.position.x, 0, oLandviewImage.rect_size.x)
+		clamped_position.y = clamp(event.position.y, 0, oLandviewImage.rect_size.y)
 
-			normalized_flag_position = clamped_position / oLandviewImage.rect_size
-			update_landview_screen()
-			manually_set_new_coords()
+		normalized_flag_position = clamped_position / oLandviewImage.rect_size
+		update_landview_screen()
+		manually_set_new_coords()
 
 
 func _on_ChangeImageCoordButton_pressed():
