@@ -47,7 +47,8 @@ func add_child_to_grid(id, set_text):
 func pressed(id):
 	var setValue = id.get_meta("grid_value")
 	if oUseSlabOwnerCheckBox.pressed == true and oUseSlabOwnerCheckBox.visible == true:
-		setValue = 5
+		#setValue = 5
+		oUseSlabOwnerCheckBox.pressed = false
 	oSelection.paintOwnership = setValue
 	set_selection(setValue)
 	oOnlyOwnership.select_appropriate_button()

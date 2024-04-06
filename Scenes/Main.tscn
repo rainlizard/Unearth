@@ -1378,6 +1378,7 @@ margin_right = 276.0
 margin_bottom = 38.0
 hint_tooltip = "The ownership of placed Things will be set to the ownership of the underlying slab"
 focus_mode = 0
+pressed = true
 text = "Use slab ownership"
 script = ExtResource( 93 )
 __meta__ = {
