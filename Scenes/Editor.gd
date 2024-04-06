@@ -41,9 +41,6 @@ func _unhandled_input(event):
 							if i.get_close_button().visible == true:
 								i.visible = false
 								foundDialogToClose = true
-				
-				if foundDialogToClose == false:
-					notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 			VIEW_3D:
 				if oExportPreview.visible == true:
 					oExportPreview.hide()
