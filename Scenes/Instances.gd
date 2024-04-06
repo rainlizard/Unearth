@@ -431,7 +431,22 @@ func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 		for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
 			on_slab_update_thing_height(id)
 			on_slab_delete_stray_door_thing_and_key(id, slabID)
-			on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership)
+			on_slab_set_belongings_ownership(id, slabID, ownership)
+
+var genre_belonging = {
+	Things.TAB_GOLD : Slabs.TREASURE_ROOM,
+	Things.TAB_SPELL : Slabs.LIBRARY,
+	Things.TAB_SPECIAL : Slabs.LIBRARY,
+	Things.TAB_BOX : Slabs.WORKSHOP,
+}
+func on_slab_set_belongings_ownership(id, slabID, ownership):
+	if id.thingType == Things.TYPE.OBJECT:
+		var genre = Things.DATA_OBJECT[id.subtype][Things.EDITOR_TAB]
+		if genre_belonging.has(genre):
+			if slabID == genre_belonging[genre]:
+				id.ownership = ownership
+			else:
+				id.ownership = 5
 
 func manage_thing_ownership_on_slab(xSlab, ySlab, ownership):
 	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
@@ -493,9 +508,7 @@ func on_slab_delete_stray_door_thing_and_key(id, slabID):
 			if Slabs.is_door(slabID) == false:
 				id.queue_free()
 
-func on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership):
-	if slabID == Slabs.TREASURE_ROOM and id.thingType == Things.TYPE.OBJECT and id.subtype in [52,53,54,55,56,3,6,43,136]:
-		id.ownership = ownership
+
 
 
 #	for groupName in arrayOfGroupNameStrings:
