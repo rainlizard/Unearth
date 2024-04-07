@@ -506,34 +506,38 @@ func set_torch_side(xSlab, ySlab, slabID, slabsetIndexGroup, constructedColumns,
 
 
 func calculate_torch_side(xSlab:int, ySlab:int, surrID):
-	
-	var isOdd = (xSlab + ySlab) % 2 == 1
-	
+	# Check if the slab is at a multiple of 5 position
+	var sporadicDir = null
 	if xSlab % 5 == 0:
-		if isOdd:
-			if surrID[dir.s] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]:
-				return dir.s
-		elif surrID[dir.n] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]:
-			return dir.n
+		if (xSlab + ySlab) % 2 == 1: # Is odd
+			sporadicDir = dir.s
+		else:
+			sporadicDir = dir.n
 	if ySlab % 5 == 0:
-		if isOdd:
-			if surrID[dir.e] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]:
-				return dir.e
-		elif surrID[dir.w] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]:
-			return dir.w
+		if (xSlab + ySlab) % 2 == 1: # Is odd
+			sporadicDir = dir.e
+		else:
+			sporadicDir = dir.w
+	if sporadicDir != null:
+		var slabAtDir = surrID[sporadicDir]
+		if slabAtDir == Slabs.CLAIMED_GROUND:
+			return sporadicDir
+		if Slabs.data[slabAtDir][Slabs.IS_SOLID] == false and Slabs.is_door(slabAtDir) == false:
+			return sporadicDir
 	
-	# If the direction fails, then pick any direction. This is for manually placed torch slabs.
-	var preference = (xSlab + ySlab) % 4 # Prioritize directions based on the coordinate (basically it's random)
-	if preference == 0 and not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]: return dir.s
-	elif preference == 1 and not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]: return dir.w
-	elif preference == 2 and not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]: return dir.n
-	elif preference == 3 and not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]: return dir.e
-	# Check the next available direction
-	if not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]: return dir.s
-	elif not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]: return dir.w
-	elif not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]: return dir.n
-	elif not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]: return dir.e
-	return -1 # If all directions are solid, return -1 for no torch placement
+	# Create the directions array with the preference direction first
+	var directions = []
+	match (xSlab + ySlab) % 4: # Prioritize directions based on the coordinate (basically it's random)
+		0: directions = [dir.s, dir.w, dir.n, dir.e]
+		1: directions = [dir.w, dir.n, dir.e, dir.s]
+		2: directions = [dir.n, dir.e, dir.s, dir.w]
+		3: directions = [dir.e, dir.s, dir.w, dir.n]
+	for direction in directions: # Check each direction in the array
+		var slabAtDir = surrID[direction]
+		if Slabs.data[slabAtDir][Slabs.IS_SOLID] == false and Slabs.is_door(slabAtDir) == false:
+			return direction
+	
+	return -1 # If all directions are solid or doors, return -1 for no torch placement
 
 
 func determine_door_direction(xSlab, ySlab, slabID, surrID, bitmaskType):
