@@ -23,7 +23,6 @@ enum TYPE {
 	EXTRA = 696969
 }
 
-
 var data_structure_name = {
 	TYPE.NONE: "Empty",
 	TYPE.OBJECT: "Object",
@@ -41,6 +40,7 @@ var data_structure_name = {
 	TYPE.CAVEIN: "CaveIn",
 	TYPE.EXTRA: "Extra"
 }
+
 var reverse_data_structure_name = {
 	"Empty": TYPE.NONE,
 	"Object":TYPE.OBJECT,
@@ -58,8 +58,6 @@ var reverse_data_structure_name = {
 	"CaveIn":TYPE.CAVEIN,
 	"Extra":TYPE.EXTRA,
 }
-
-
 
 enum {
 	NAME = 0
@@ -398,6 +396,13 @@ enum SPELLBOOK {
 	DISEASE = 45
 	ARMAGEDDON = 134
 	DESTROY_WALLS = 47
+}
+
+var genre_belonging = {
+	TAB_GOLD : Slabs.TREASURE_ROOM,
+	TAB_SPELL : Slabs.LIBRARY,
+	TAB_SPECIAL : Slabs.LIBRARY,
+	TAB_BOX : Slabs.WORKSHOP,
 }
 
 	#OBJECT = 1

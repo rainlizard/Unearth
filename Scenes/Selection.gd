@@ -81,6 +81,13 @@ func newPaintSubtype(value):
 		oSelector.change_mode(oSelector.MODE_SUBTILE)
 		oPickSlabWindow.set_selection(null) # Deselect anything in slab window
 	paintSubtype = value
+	
+	oOwnerSelection.collectible_ownership_mode(false)
+	if paintThingType == Things.TYPE.OBJECT:
+		var genre = Things.DATA_OBJECT[paintSubtype][Things.EDITOR_TAB]
+		if Things.genre_belonging.has(genre):
+			oOwnerSelection.collectible_ownership_mode(true)
+
 
 func newOwnership(value):
 	oUi.update_theme_colour(value)

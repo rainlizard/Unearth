@@ -433,17 +433,12 @@ func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 			on_slab_delete_stray_door_thing_and_key(id, slabID)
 			on_slab_set_belongings_ownership(id, slabID, ownership)
 
-var genre_belonging = {
-	Things.TAB_GOLD : Slabs.TREASURE_ROOM,
-	Things.TAB_SPELL : Slabs.LIBRARY,
-	Things.TAB_SPECIAL : Slabs.LIBRARY,
-	Things.TAB_BOX : Slabs.WORKSHOP,
-}
+
 func on_slab_set_belongings_ownership(id, slabID, ownership):
 	if id.thingType == Things.TYPE.OBJECT:
 		var genre = Things.DATA_OBJECT[id.subtype][Things.EDITOR_TAB]
-		if genre_belonging.has(genre):
-			if slabID == genre_belonging[genre]:
+		if Things.genre_belonging.has(genre):
+			if slabID == Things.genre_belonging[genre]:
 				id.ownership = ownership
 			else:
 				id.ownership = 5

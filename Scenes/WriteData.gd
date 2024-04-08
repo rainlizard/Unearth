@@ -89,13 +89,13 @@ func write_slb(buffer):
 			buffer.put_8(0)
 
 func write_own(buffer):
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for subtileY in dataHeight:
-		for subtileX in dataWidth:
-			buffer.seek(subtileX + (subtileY*dataWidth))
-			value = oDataOwnership.get_cell(subtileX/3,subtileY/3)
-			buffer.put_8(value)
+	var dataHeight = (M.ySize * 3) + 1
+	var dataWidth = (M.xSize * 3) + 1
+	var size = dataHeight * dataWidth
+	for i in size:
+		var subtileX = i % dataWidth
+		var subtileY = i / dataWidth
+		buffer.put_8(oDataOwnership.get_cell(subtileX / 3, subtileY / 3))
 
 func write_tng(buffer):
 	var numberOfTngEntries = get_tree().get_nodes_in_group("Thing").size()
