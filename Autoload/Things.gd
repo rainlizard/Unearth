@@ -398,7 +398,7 @@ enum SPELLBOOK {
 	DESTROY_WALLS = 47
 }
 
-var genre_belonging = {
+var collectible_belonging = {
 	TAB_GOLD : Slabs.TREASURE_ROOM,
 	TAB_SPELL : Slabs.LIBRARY,
 	TAB_SPECIAL : Slabs.LIBRARY,

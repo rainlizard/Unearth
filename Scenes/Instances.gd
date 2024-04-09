@@ -13,6 +13,7 @@ onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
+onready var oDataOwnership = Nodelist.list["oDataOwnership"]
 
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
@@ -248,6 +249,8 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 	id.subtype = newSubtype
 	id.ownership = newOwnership
 	
+	set_collectibles_ownership(id, slabID, oDataOwnership.get_cell(xSlab, ySlab))
+	
 	match id.thingType:
 		Things.TYPE.OBJECT:
 			id.parentTile = 65535 # "None"
@@ -431,15 +434,15 @@ func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 		for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
 			on_slab_update_thing_height(id)
 			on_slab_delete_stray_door_thing_and_key(id, slabID)
-			on_slab_set_belongings_ownership(id, slabID, ownership)
+			set_collectibles_ownership(id, slabID, ownership)
 
 
-func on_slab_set_belongings_ownership(id, slabID, ownership):
+func set_collectibles_ownership(id, slabID, slabOwnership):
 	if id.thingType == Things.TYPE.OBJECT:
 		var genre = Things.DATA_OBJECT[id.subtype][Things.EDITOR_TAB]
-		if Things.genre_belonging.has(genre):
-			if slabID == Things.genre_belonging[genre]:
-				id.ownership = ownership
+		if Things.collectible_belonging.has(genre):
+			if slabID == Things.collectible_belonging[genre]:
+				id.ownership = slabOwnership
 			else:
 				id.ownership = 5
 

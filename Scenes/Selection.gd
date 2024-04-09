@@ -85,7 +85,7 @@ func newPaintSubtype(value):
 	oOwnerSelection.collectible_ownership_mode(false)
 	if paintThingType == Things.TYPE.OBJECT:
 		var genre = Things.DATA_OBJECT[paintSubtype][Things.EDITOR_TAB]
-		if Things.genre_belonging.has(genre):
+		if Things.collectible_belonging.has(genre):
 			oOwnerSelection.collectible_ownership_mode(true)
 
 
