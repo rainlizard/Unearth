@@ -563,7 +563,7 @@ func get_free_index_number():
 func get_free_hero_gate_number():
 	var listOfHeroGateNumbers = []
 	for id in get_tree().get_nodes_in_group("Thing"):
-		if id.thingType == Things.TYPE.OBJECT and id.subtype == 49: # Hero gate
+		if id.is_in_group("HeroGate"):
 			listOfHeroGateNumbers.append(id.herogateNumber)
 	
 	var newNumber = 1
@@ -594,7 +594,7 @@ func return_dungeon_heart(ownership):
 
 func return_hero_gate(number):
 	for id in get_tree().get_nodes_in_group("Thing"):
-		if id.thingType == Things.TYPE.OBJECT and id.subtype == 49: # Hero gate
+		if id.is_in_group("HeroGate"):
 			if id.herogateNumber == number:
 				return id
 	return null

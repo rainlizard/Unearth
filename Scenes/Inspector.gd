@@ -29,7 +29,8 @@ func set_inspector_instance(setval):
 	if is_instance_valid(setval):
 		setval.instance_was_selected()
 		oPropertiesWindow.oPropertiesTabs.current_tab = 0
-		if setval.is_in_group("ActionPoint"):
+		
+		if setval.is_in_group("ActionPoint") or setval.is_in_group("HeroGate"):
 			pass
 		else:
 			oActionPointList.unselect_all()
