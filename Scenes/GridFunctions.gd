@@ -1,6 +1,5 @@
 extends Node
 
-
 func _on_GridWindow_visibility_changed(callingNode): # Initial load for correct grid arrangement
 	if callingNode.visible == true:
 		for i in 2:
@@ -47,12 +46,6 @@ func _on_GridWindow_resized(callingNode):
 			oGridContainer.set_columns(ceil(float(itemCount)/float(maxHeight)))
 
 func _on_tab_changed(newTab, callingNode):
-#	if callingNode.name == "PickThingWindow":
-#		var oActionPointList = Nodelist.list["oActionPointList"]
-#		oActionPointList.visible = false
-#	for i in 2:
-#		yield(get_tree(),'idle_frame')
-	
 	callingNode.update_scale(callingNode.grid_window_scale)
 	
 	# Make oSelectedRect visible if it's in the tab you switched to, otherwise make it invisible
@@ -63,9 +56,3 @@ func _on_tab_changed(newTab, callingNode):
 				callingNode.oSelectedRect.visible = true
 	
 	_on_GridWindow_resized(callingNode)
-	
-#	if callingNode.name == "PickThingWindow":
-#		var oActionPointList = Nodelist.list["oActionPointList"]
-#		var oThingTabs = Nodelist.list["oThingTabs"]
-#		if oThingTabs.get_tab_control(newTab).get_meta("tab_name") == "Action":
-#			oActionPointList.visible = true

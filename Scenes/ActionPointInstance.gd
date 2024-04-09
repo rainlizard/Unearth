@@ -69,7 +69,6 @@ func _on_VisibilityNotifier2D_screen_exited():
 	visible = false
 
 
-
 func _enter_tree():
 	yield(get_tree(),'idle_frame')
 	if oActionPointList:

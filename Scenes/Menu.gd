@@ -39,6 +39,8 @@ onready var oExportPreview = Nodelist.list["oExportPreview"]
 onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 onready var oGridDataWindow = Nodelist.list["oGridDataWindow"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
+onready var oActionPointListWindow = Nodelist.list["oActionPointListWindow"]
+
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -249,6 +251,8 @@ func _on_ViewSubmenu_Pressed(pressedID):
 				oGenerateTerrain.start()
 			oUi.switch_to_1st_person()
 		4:
+			Utils.popup_centered(oActionPointListWindow)
+		5:
 			Utils.popup_centered(oGridDataWindow)
 #		4:
 #			if oEditor.currentView == oEditor.VIEW_2D:

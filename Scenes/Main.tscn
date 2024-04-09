@@ -871,7 +871,7 @@ size_flags_vertical = 3
 
 [node name="ThingTabs" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer"]
 margin_right = 650.0
-margin_bottom = 213.0
+margin_bottom = 217.0
 rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -884,14 +884,14 @@ margin_bottom = 31.0
 [node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs"]
 margin_top = 35.0
 margin_right = 650.0
-margin_bottom = 213.0
+margin_bottom = 217.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Creature" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 margin_right = 650.0
-margin_bottom = 178.0
+margin_bottom = 182.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -899,15 +899,15 @@ size_flags_vertical = 3
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 641.0
-margin_bottom = 169.0
+margin_bottom = 173.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Creature/ScrollContainer"]
 margin_left = 316.0
-margin_top = 80.0
+margin_top = 82.0
 margin_right = 316.0
-margin_bottom = 80.0
+margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
@@ -1141,44 +1141,6 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
-
-[node name="Control2" type="Control" parent="Ui/UiTools/PickThingWindow/VBoxContainer"]
-margin_top = 217.0
-margin_right = 650.0
-margin_bottom = 217.0
-mouse_filter = 1
-size_flags_horizontal = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/Control2"]
-self_modulate = Color( 1, 0, 0, 1 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 1
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ActionPointList" type="ItemList" parent="Ui/UiTools/PickThingWindow/VBoxContainer/Control2/ScrollContainer"]
-margin_right = 638.0
-margin_bottom = 84.0
-rect_clip_content = false
-mouse_filter = 1
-size_flags_horizontal = 3
-size_flags_vertical = 3
-items = [ "Item 0", null, false, "Item 1", null, false, "Item 2", null, false ]
-allow_reselect = true
-auto_height = true
-script = ExtResource( 65 )
-
-[node name="Control" type="Control" parent="Ui/UiTools/PickThingWindow/VBoxContainer/Control2"]
-anchor_left = 1.0
-anchor_right = 1.0
-
-[node name="ShowHideAPButton" type="Button" parent="Ui/UiTools/PickThingWindow/VBoxContainer/Control2/Control"]
-margin_right = -15.0
-grow_horizontal = 0
-hint_tooltip = "Display a scrollable list of all the Action Points on the map. Select an item on the list to view that point."
-size_flags_horizontal = 10
-text = "AP"
 
 [node name="Clippy" type="Control" parent="Ui/UiTools/PickThingWindow"]
 anchor_right = 1.0
@@ -1733,7 +1695,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "View"
 align = 0
-items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Grid data", null, 0, false, false, 4, 0, null, "", false ]
+items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Action points", null, 0, false, false, 4, 0, null, "", false, "Grid data", null, 0, false, false, 5, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -6737,6 +6699,54 @@ margin_bottom = 227.0
 group = ExtResource( 155 )
 text = "Fake Slabs (.une)"
 
+[node name="ActionPointListWindow" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = 1704.0
+margin_top = -1832.0
+margin_right = 1985.0
+margin_bottom = -1536.0
+rect_min_size = Vector2( 281, 296 )
+mouse_filter = 1
+window_title = "Action Point list"
+resizable = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ActionPointListWindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 261.0
+margin_bottom = 276.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer"]
+self_modulate = Color( 1, 0, 0, 1 )
+margin_right = 241.0
+margin_bottom = 256.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ActionPointList" type="ItemList" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ScrollContainer"]
+margin_right = 241.0
+margin_bottom = 256.0
+rect_clip_content = false
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+items = [ "Item 0", null, false, "Item 1", null, false, "Item 2", null, false ]
+allow_reselect = true
+auto_height = true
+script = ExtResource( 65 )
+
 [node name="MapCoordinatesWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -1480.0
@@ -7290,7 +7300,6 @@ script = SubResource( 20 )
 
 [connection signal="visibility_changed" from="Game2D/Selector" to="Game2D/Selector" method="_on_Selector_visibility_changed"]
 [connection signal="visibility_changed" from="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/OnlyOwnership" to="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/OnlyOwnership" method="_on_OnlyOwnership_visibility_changed"]
-[connection signal="pressed" from="Ui/UiTools/PickThingWindow/VBoxContainer/Control2/Control/ShowHideAPButton" to="Ui/UiTools/PickThingWindow/VBoxContainer/Control2/ScrollContainer/ActionPointList" method="_on_ShowHideAPButton_pressed"]
 [connection signal="timeout" from="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/TimerUpdateColumnEntries" to="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails" method="_on_TimerUpdateColumnEntries_timeout"]
 [connection signal="item_rect_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs" to="Ui/UiTools/PropertiesWindow" method="_on_PropertiesTabs_item_rect_changed"]
 [connection signal="mouse_entered" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer/SelectionStatusButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails" method="_on_SelectionStatusButton_mouse_entered"]
@@ -7492,6 +7501,7 @@ script = SubResource( 20 )
 [connection signal="value_changed" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/ResizeFillWithID" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeFillWithID_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/ResizeApplyButton" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeApplyButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/GridDataWindow" to="Game2D/AnalyzeGrids" method="_on_GridDataWindow_visibility_changed"]
+[connection signal="visibility_changed" from="Ui/UiSystem/ActionPointListWindow" to="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ScrollContainer/ActionPointList" method="_on_ActionPointListWindow_visibility_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapCoordinatesWindow" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_MapCoordinatesWindow_visibility_changed"]
 [connection signal="gui_input" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_gui_input"]
 [connection signal="resized" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_resized"]

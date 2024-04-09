@@ -36,7 +36,6 @@ onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oSlabSideViewer = Nodelist.list["oSlabSideViewer"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
-onready var oActionPointList = Nodelist.list["oActionPointList"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
