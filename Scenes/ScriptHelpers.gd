@@ -18,6 +18,8 @@ enum {
 # [Command Name] [argument slot number] [Tile distance (96 = TILE, 32= SUBTILE)]]
 var commandsWithPositions = [
 	["IF_SLAB_OWNER", 0, IS_TILE],
+	["IF_SLAB_TYPE", 0, IS_TILE],
+	
 	["CHANGE_SLAB_OWNER", 0, IS_TILE],
 	["CHANGE_SLAB_TYPE", 0, IS_TILE],
 	
