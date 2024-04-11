@@ -101,7 +101,7 @@ func write_own(buffer):
 #	for i in size:
 #		var subtileX = i % dataWidth
 #		var subtileY = i / dataWidth
-#		buffer.put_8(oDataOwnership.get_cell(subtileX / 3, subtileY / 3))
+#		buffer.put_8(oDataOwnership.get_cell_ownership(subtileX / 3, subtileY / 3))
 	buffer.data_array = oDataOwnership.buffer.data_array
 
 func write_tng(buffer):

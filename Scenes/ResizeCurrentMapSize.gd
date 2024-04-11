@@ -123,7 +123,7 @@ func set_various_grid_data(newWidth, newHeight, previousWidth, previousHeight):
 	for x in prevWidthInSubtiles:
 		for y in prevHeightInSubtiles:
 			if x >= newWidthInSubtiles or y >= newHeightInSubtiles:
-				oDataClmPos.set_cell(x, y, 0)
+				oDataClmPos.set_cell_clmpos(x, y, 0)
 
 
 

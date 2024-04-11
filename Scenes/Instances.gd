@@ -249,7 +249,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 	id.subtype = newSubtype
 	id.ownership = newOwnership
 	
-	set_collectibles_ownership(id, slabID, oDataOwnership.get_cell(xSlab, ySlab))
+	set_collectibles_ownership(id, slabID, oDataOwnership.get_cell_ownership(xSlab, ySlab))
 	
 	match id.thingType:
 		Things.TYPE.OBJECT:

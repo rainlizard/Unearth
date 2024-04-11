@@ -206,7 +206,7 @@ func read_dat(buffer):
 #			#buffer.seek(2*(xSubtile + (ySubtile*dataWidth)))
 #			value = 65536 - buffer.get_u16()
 #			if value == 65536: value = 0
-#			oDataClmPos.set_cell(xSubtile,ySubtile,value)
+#			oDataClmPos.set_cell_clmpos(xSubtile,ySubtile,value)
 
 func new_dat():
 	oDataClmPos.initialize((M.xSize*3)+1, (M.ySize*3)+1, 0, Grid.U16)
@@ -214,7 +214,7 @@ func new_dat():
 #	var dataWidth = (M.xSize*3)+1
 #	for ySubtile in dataHeight:
 #		for xSubtile in dataWidth:
-#			oDataClmPos.set_cell(xSubtile,ySubtile,0)
+#			oDataClmPos.set_cell_clmpos(xSubtile,ySubtile,0)
 
 func read_clm(buffer):
 	oDataClm.clear_all_column_data()

@@ -50,7 +50,7 @@ func start():
 	slabOwnershipImage.lock()
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
-			var getOwner = oDataOwnership.get_cell(xSlab,ySlab)
+			var getOwner = oDataOwnership.get_cell_ownership(xSlab,ySlab)
 			if getOwner <= 5:
 				slabOwnershipImage.set_pixel(xSlab, ySlab, Constants.ownerRoomCol[getOwner])
 	slabOwnershipImage.unlock()
@@ -69,7 +69,7 @@ func ownership_paint_shape(shapePositionArray, ownership):
 	for pos in shapePositionArray:
 		var slabID = oDataSlab.get_cell(pos.x, pos.y)
 		if oSlabPlacement.slabID_is_ownable(slabID) == true:
-			oDataOwnership.set_cellv(pos, ownership) # Set cell data
+			oDataOwnership.set_cellv_ownership(pos, ownership) # Set cell data
 			slabOwnershipImage.set_pixelv(pos, setColour)  # Set image data
 	slabOwnershipImage.unlock()
 	
@@ -78,7 +78,7 @@ func ownership_paint_shape(shapePositionArray, ownership):
 func update_ownership_image_based_on_shape(shapePositionArray):
 	slabOwnershipImage.lock()
 	for pos in shapePositionArray:
-		var ownership = oDataOwnership.get_cellv(pos) # Get cell data
+		var ownership = oDataOwnership.get_cellv_ownership(pos) # Get cell data
 		var setColour = Constants.ownerRoomCol[ownership]
 		slabOwnershipImage.set_pixelv(pos, setColour)  # Set image data
 	slabOwnershipImage.unlock()

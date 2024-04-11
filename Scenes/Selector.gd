@@ -297,7 +297,7 @@ func moved_to_new_subtile():
 	if mode == MODE_SUBTILE:
 		canPlace = true
 		if oUseSlabOwnerCheckBox.pressed == true and visible == true:
-			oSelection.paintOwnership = oDataOwnership.get_cellv(cursorTile)
+			oSelection.paintOwnership = oDataOwnership.get_cellv_ownership(cursorTile)
 
 #func fadeOutWalls(delta):
 #	if Slabs.array[oSelection.cursorOverSlab][Slabs.SIDE_OF] == Slabs.SIDE_SLAB:

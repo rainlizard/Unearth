@@ -41,16 +41,15 @@ func overhead2d_update_rect(shapePositionArray):
 	var height = M.ySize * 3
 	pixelData.resize(width * height * 3)  # Assuming RGB8 format
 	
-	
 	for pos in shapePositionArray:
 		var basePosX = pos.x * 3
 		var basePosY = pos.y * 3
 		for i in range(9):  # 3x3 subtiles
 			var x = basePosX + (i % 3)
 			var y = basePosY + (i / 3)
-			
+
 			var clmIndex = oDataClmPos.get_cell_clmpos_fast(x,y)
-			
+
 			var col = oDataClm.topFace[clmIndex]
 			var pixelIndex = ((y * width) + x) * 3
 			pixelData[pixelIndex] = col.r8
@@ -59,6 +58,17 @@ func overhead2d_update_rect(shapePositionArray):
 	
 	overheadImgData.create_from_data(width, height, false, Image.FORMAT_RGB8, pixelData)
 	overheadTexData.set_data(overheadImgData)
+
+#	for i in (height*width):
+#		var x = i % width
+#		var y = i / width
+#		var clmIndex = oDataClmPos.get_cell_clmpos_fast(x, y)
+#		var col = oDataClm.topFace[clmIndex]
+#		var pixelIndex = i * 3
+#		pixelData[pixelIndex] = col.r8
+#		pixelData[pixelIndex + 1] = col.g8
+#		pixelData[pixelIndex + 2] = col.b8
+
 
 #func overhead2d_update_rect(shapePositionArray):
 #	overheadImgData.lock()
