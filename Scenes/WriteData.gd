@@ -325,14 +325,10 @@ func write_inf(buffer):
 	buffer.put_8(value)
 
 func write_slx(buffer):
-	oDataSlx.slxImgData.lock()
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			value = oDataSlx.slxImgData.get_pixel(xSlab,ySlab).r8
-			# This is unncessary as the lower 4 bits will be used anyway, if the number is in the range 0-15
-			var lower4bits = value & 0x0F
-			buffer.put_8(lower4bits)
-	oDataSlx.slxImgData.unlock()
+	var slx_data = oDataSlx.slxImgData.get_data()
+	for i in range(0, slx_data.size(), 3):
+		buffer.put_8(slx_data[i])
+
 
 func write_dat(buffer):
 	buffer.data_array = oDataClmPos.buffer.data_array
