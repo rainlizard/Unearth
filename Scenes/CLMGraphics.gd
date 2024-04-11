@@ -21,7 +21,7 @@ extends TileMap
 #			var cubeFace
 #
 #			# clmIndex is a position inside the 2048 column collection
-#			var clmIndex = oDataClmPos.get_cell(x,y)
+#			var clmIndex = oDataClmPos.get_cell_clmpos(x,y)
 #
 #			# clmData is the 24 byte array.
 #			var clmData = oDataClm.data[clmIndex]

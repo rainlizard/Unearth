@@ -252,7 +252,7 @@ func place_subtile(placeSubtile):
 	oEditor.mapHasBeenEdited = true
 	
 	if paintThingType != null:
-		var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(placeSubtile.x,placeSubtile.y)]
+		var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(placeSubtile.x, placeSubtile.y)]
 		var newPos:Vector3 = Vector3(placeSubtile.x + 0.5, placeSubtile.y + 0.5, detectTerrainHeight)
 		
 		match paintThingType:

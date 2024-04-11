@@ -177,7 +177,7 @@ func mouse_button_on_field():
 				
 				# Readjust the thing's height when dragging it from different heights
 				if holdClickOnInstance.locationZ != 2.875: # don't knock torches onto the ground if dragging them (accidental clicks would knock them down too)
-					var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cellv(snapToPos)]
+					var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(snapToPos.x,snapToPos.y)]
 					holdClickOnInstance.locationZ = detectTerrainHeight
 				
 				oInstances.mirror_adjusted_value(holdClickOnInstance, "locationXYZ", originalPosition)

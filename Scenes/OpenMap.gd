@@ -52,8 +52,6 @@ func start():
 	
 	if oGame.EXECUTABLE_PATH == "": return # Silently wait for user to set executable path. No need to show an error.
 	
-	
-	
 	if OS.get_cmdline_args():
 		# FILE ASSOCIATION
 		var cmdLine = OS.get_cmdline_args()
@@ -195,6 +193,7 @@ func load_cfg_stuff(map):
 
 
 func finish_opening_map(map):
+	
 	oPickThingWindow.initialize_thing_grid_items()
 	oCurrentMap.set_path_and_title(map)
 	oDynamicMapTree.highlight_current_map()
@@ -208,6 +207,7 @@ func finish_opening_map(map):
 	if Slabset.dat.empty() == true: Slabset.load_default_slabset()
 	if Columnset.cubes.empty() == true: Columnset.load_default_columnset()
 	
+	oDataClm.top_faces_for_editor()
 	oOverheadGraphics.update_map_overhead_2d_textures()
 	oPickSlabWindow.add_slabs()
 	oDataClm.count_filled_clm_entries()

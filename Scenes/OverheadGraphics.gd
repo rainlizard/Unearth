@@ -32,32 +32,69 @@ func update_map_overhead_2d_textures():
 	
 	print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
+#	for ySubtile in height:
+#		for xSubtile in width:
+
+var pixelData = PoolByteArray()
 func overhead2d_update_rect(shapePositionArray):
-	# Include surrounding
-	#rectStart -= Vector2(1,1)
-	#rectEnd += Vector2(1,1)
-	#rectStart = Vector2(clamp(rectStart.x, 0, M.xSize-1), clamp(rectStart.y, 0, M.ySize-1))
-	#rectEnd = Vector2(clamp(rectEnd.x, 0, M.xSize-1), clamp(rectEnd.y, 0, M.ySize-1))
-#	print('rectStart: '+str(rectStart))
-#	print('rectEnd: '+str(rectEnd))
+	var width = M.xSize * 3
+	var height = M.ySize * 3
+	pixelData.resize(width * height * 3)  # Assuming RGB8 format
 	
-	overheadImgData.lock()
-	#for ySlab in range(rectStart.y, rectEnd.y+1):
-	#	for xSlab in range(rectStart.x, rectEnd.x+1):
+	
 	for pos in shapePositionArray:
-#		print('xSlab: '+str(xSlab))
-#		print('ySlab: '+str(ySlab))
-		var slabID = oDataSlab.get_cell(pos.x, pos.y)
-		for ySubtile in 3:
-			for xSubtile in 3:
-				var x = (pos.x * 3) + xSubtile
-				var y = (pos.y * 3) + ySubtile
-				overheadImgData.set_pixel(x,y,get_overhead_face_value(x, y, slabID))
-	overheadImgData.unlock()
+		var basePosX = pos.x * 3
+		var basePosY = pos.y * 3
+		for i in range(9):  # 3x3 subtiles
+			var x = basePosX + (i % 3)
+			var y = basePosY + (i / 3)
+			
+			var clmIndex = oDataClmPos.get_cell_clmpos_fast(x,y)
+			
+			var col = oDataClm.topFace[clmIndex]
+			var pixelIndex = ((y * width) + x) * 3
+			pixelData[pixelIndex] = col.r8
+			pixelData[pixelIndex + 1] = col.g8
+			pixelData[pixelIndex + 2] = col.b8
 	
+	overheadImgData.create_from_data(width, height, false, Image.FORMAT_RGB8, pixelData)
 	overheadTexData.set_data(overheadImgData)
+
+#func overhead2d_update_rect(shapePositionArray):
+#	overheadImgData.lock()
+#	for pos in shapePositionArray:
+#		#var slabID = oDataSlab.get_cell(pos.x, pos.y)
+#		for ySubtile in 3:
+#			for xSubtile in 3:
+#				var x = (pos.x * 3) + xSubtile
+#				var y = (pos.y * 3) + ySubtile
+#				var clmIndex = oDataClmPos.get_cell(x, y)
+#				var col = oDataClm.topFace[clmIndex]
+#				overheadImgData.set_pixel(x,y,col) #get_overhead_face_value(x, y, slabID)
+#	overheadImgData.unlock()
+#	overheadTexData.set_data(overheadImgData)
 	
 	#overheadImgData.save_png("res://viewTextures.png")
+
+
+#func get_overhead_face_value(x, y, slabID):
+#	# clmIndex is a position inside the 2048 column collection
+#	var clmIndex = oDataClmPos.get_cell(x, y)
+#
+#	if clmIndex > 2048:
+#		clmIndex = 0
+#
+#	# clmData is the 24 byte array.
+#	var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
+#
+#	var valueInput = cubeFace
+#	var r = clamp(valueInput, 0, 255)
+#	valueInput -= 255
+#	var g = clamp(valueInput, 0, 255)
+#	valueInput -= 255
+#	var b = clamp(valueInput, 0, 255)
+#	return Color8(r,g,b)
+
 
 func initialize_display_fields():
 	arrayOfColorRects.clear() # just in case
@@ -97,24 +134,6 @@ func update_display_fields_size():
 	for displayField in arrayOfColorRects:
 		displayField.rect_size = Vector2(M.xSize * 96, M.ySize * 96)
 		displayField.material.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
-
-func get_overhead_face_value(x, y, slabID):
-	# clmIndex is a position inside the 2048 column collection
-	var clmIndex = oDataClmPos.get_cell(x, y)
-	
-	if clmIndex > 2048:
-		clmIndex = 0
-	
-	# clmData is the 24 byte array.
-	var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
-	
-	var valueInput = cubeFace
-	var r = clamp(valueInput, 0, 255)
-	valueInput -= 255
-	var g = clamp(valueInput, 0, 255)
-	valueInput -= 255
-	var b = clamp(valueInput, 0, 255)
-	return Color8(r,g,b)
 
 func clear_img():
 	if overheadImgData.is_empty() == false:

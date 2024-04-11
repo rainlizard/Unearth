@@ -31,6 +31,22 @@ func store_default_data():
 
 var unknownData #The second 4 bytes
 
+
+var topFace = []
+func top_faces_for_editor():
+	var CODETIME_START = OS.get_ticks_msec()
+	topFace.resize(2048)
+	for clmIndex in 2048:
+		var cubeFace = get_top_cube_face(clmIndex, 0)
+		var valueInput = cubeFace
+		var r = clamp(valueInput, 0, 255)
+		valueInput -= 255
+		var g = clamp(valueInput, 0, 255)
+		valueInput -= 255
+		var b = clamp(valueInput, 0, 255)
+		topFace[clmIndex] = Color8(r,g,b)
+	print('top_faces_for_editor: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
 func clm_data_exists():
 	if cubes.empty() == true:
 		return false # Nothing in arrays, so column data doesn't exist
@@ -74,7 +90,7 @@ func update_all_utilized():
 		utilized[clearIndex] = 0
 	for y in (M.ySize*3):
 		for x in (M.xSize*3):
-			var value = oDataClmPos.get_cell(x,y)
+			var value = oDataClmPos.get_cell_clmpos_fast(x,y)
 			utilized[value] += 1
 	
 	print('All CLM utilized updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
@@ -144,7 +160,7 @@ func sort_columns_by_utilized():
 	
 	for y in (M.ySize*3):
 		for x in (M.xSize*3):
-			var clmIndex = oDataClmPos.get_cell(x,y)
+			var clmIndex = oDataClmPos.get_cell_clmpos(x,y)
 			oDataClmPos.set_cell(x, y, dictSrcDest[clmIndex])
 	
 	var shapePositionArray = []

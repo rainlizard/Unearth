@@ -142,7 +142,7 @@ func mirror_deletion_of_instance(instanceBeingDeleted):
 						getNodeAtMirroredPosition.queue_free()
 
 func placement_is_obstructed(thingType, placeSubtile):
-	var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(placeSubtile.x,placeSubtile.y)]
+	var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(placeSubtile.x,placeSubtile.y)]
 	if oPlaceThingsAnywhere.pressed == false and detectTerrainHeight >= 5 and thingType != Things.TYPE.EXTRA: # Lights and Action Points can always be placed anywhere
 		return true
 	return false
@@ -490,7 +490,7 @@ func on_slab_update_thing_height(id): # Update heights of any manually placed ob
 		if id.parentTile == 65535: # None. Not attached to any slab.
 			var xSubtile = floor(id.locationX)
 			var ySubtile = floor(id.locationY)
-			var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(xSubtile,ySubtile)]
+			var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(xSubtile,ySubtile)]
 			id.locationZ = detectTerrainHeight
 			if id.subtype in [2,7]:
 				update_stray_torch_height(id)

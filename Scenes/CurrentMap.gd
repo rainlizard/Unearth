@@ -73,27 +73,15 @@ func clear_map():
 	oDataMapName.clear()
 	# "wib"
 	oDataSlx.clear_img()
-	# "wib" (Wibble)
-	oDataWibble.clear()
-	# "wlb" (Water Lava Block)
-	oDataLiquid.clear()
-	# "slb"
-	oDataSlab.clear()
-	# "own"
-	oDataOwnership.clear()
 	oOverheadOwnership.clear()
 	# "inf"
 	oDataLevelStyle.data = 0
-	# "dat"
-	oDataClmPos.clear()
 	# "clm"
 	oOverheadGraphics.clear_img()
 	# 3D
 	oGenerateTerrain.clear()
 	#"TXT"
 	oDataScript.data = ""
-	# "UNE"
-	oDataFakeSlab.clear()
 	
 	oScriptHelpers.clear()
 	

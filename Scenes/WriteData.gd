@@ -62,40 +62,47 @@ func write_txt(buffer):
 	buffer.put_data(scriptBytes)
 
 func write_une(buffer):
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			value = oDataFakeSlab.get_cell(xSlab,ySlab)
-			buffer.put_16(value)
+	buffer.data_array = oDataFakeSlab.buffer.data_array
+	
+#	for ySlab in M.ySize:
+#		for xSlab in M.xSize:
+#			value = oDataFakeSlab.get_cell(xSlab,ySlab)
+#			buffer.put_16(value)
 
 func write_wlb(buffer):
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			value = oDataLiquid.get_cell(xSlab,ySlab)
-			buffer.put_8(value)
+	buffer.data_array = oDataLiquid.buffer.data_array
+#	for ySlab in M.ySize:
+#		for xSlab in M.xSize:
+#			value = oDataLiquid.get_cell(xSlab,ySlab)
+#			buffer.put_8(value)
 
 func write_wib(buffer):
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for subtileY in dataHeight:
-		for subtileX in dataWidth:
-			buffer.put_8(oDataWibble.get_cell(subtileX,subtileY))
+	buffer.data_array = oDataWibble.buffer.data_array
+	
+#	var dataHeight = (M.ySize*3)+1
+#	var dataWidth = (M.xSize*3)+1
+#	for subtileY in dataHeight:
+#		for subtileX in dataWidth:
+#			buffer.put_8(oDataWibble.get_cell(subtileX,subtileY))
 
 func write_slb(buffer):
-	for y in M.ySize:
-		for x in M.xSize:
-			value = oDataSlab.get_cell(x,y)
-			#print('x:' + str(x) + " " + 'y:' + str(y))
-			buffer.put_8(value)
-			buffer.put_8(0)
+#	for y in M.ySize:
+#		for x in M.xSize:
+#			value = oDataSlab.get_cell(x,y)
+#			#print('x:' + str(x) + " " + 'y:' + str(y))
+#			buffer.put_8(value)
+#			buffer.put_8(0)
+	buffer.data_array = oDataSlab.buffer.data_array
 
 func write_own(buffer):
-	var dataHeight = (M.ySize * 3) + 1
-	var dataWidth = (M.xSize * 3) + 1
-	var size = dataHeight * dataWidth
-	for i in size:
-		var subtileX = i % dataWidth
-		var subtileY = i / dataWidth
-		buffer.put_8(oDataOwnership.get_cell(subtileX / 3, subtileY / 3))
+#	var dataHeight = (M.ySize * 3) + 1
+#	var dataWidth = (M.xSize * 3) + 1
+#	var size = dataHeight * dataWidth
+#	for i in size:
+#		var subtileX = i % dataWidth
+#		var subtileY = i / dataWidth
+#		buffer.put_8(oDataOwnership.get_cell(subtileX / 3, subtileY / 3))
+	buffer.data_array = oDataOwnership.buffer.data_array
 
 func write_tng(buffer):
 	var numberOfTngEntries = get_tree().get_nodes_in_group("Thing").size()
@@ -364,16 +371,18 @@ func write_slx(buffer):
 	oDataSlx.slxImgData.unlock()
 
 func write_dat(buffer):
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for subtileY in dataHeight:
-		for subtileX in dataWidth:
-			buffer.seek(2*(subtileX + (subtileY*dataWidth)))
-			
-			value = 65536 - oDataClmPos.get_cell(subtileX,subtileY)
-			if value == 65536: value = 0
-			
-			buffer.put_16(value)
+	buffer.data_array = oDataClmPos.buffer.data_array
+	
+#	var dataHeight = (M.ySize*3)+1
+#	var dataWidth = (M.xSize*3)+1
+#	for subtileY in dataHeight:
+#		for subtileX in dataWidth:
+#			buffer.seek(2*(subtileX + (subtileY*dataWidth)))
+#
+#			value = 65536 - oDataClmPos.get_cell(subtileX,subtileY)
+#			if value == 65536: value = 0
+#
+#			buffer.put_16(value)
 
 func write_clm(buffer):
 	oDataClm.update_all_utilized()

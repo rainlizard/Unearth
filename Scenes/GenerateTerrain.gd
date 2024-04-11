@@ -38,13 +38,13 @@ func start():
 					var x = (xSlab*3) + xSubtile
 					var z = (ySlab*3) + ySubtile
 					
-					var clmIndex = oDataClmPos.get_cell(x,z)
+					var clmIndex = oDataClmPos.get_cell_clmpos(x,z)
 					
 					var surrClmIndex = [
-						oDataClmPos.get_cell(x,z-1),
-						oDataClmPos.get_cell(x+1,z),
-						oDataClmPos.get_cell(x,z+1),
-						oDataClmPos.get_cell(x-1,z),
+						oDataClmPos.get_cell_clmpos(x,z-1),
+						oDataClmPos.get_cell_clmpos(x+1,z),
+						oDataClmPos.get_cell_clmpos(x,z+1),
+						oDataClmPos.get_cell_clmpos(x-1,z),
 					]
 					# Fix the edges
 					if x+1 >= (M.xSize*3): surrClmIndex[1] = TileMap.INVALID_CELL

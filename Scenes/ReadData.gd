@@ -120,35 +120,44 @@ func new_slx():
 	oDataSlx.slxTexData.create_from_image(oDataSlx.slxImgData, 0)
 
 func read_une(buffer):
-	buffer.seek(0)
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			value = buffer.get_u16()
-			oDataFakeSlab.set_cell(xSlab,ySlab,value)
+	oDataFakeSlab.initialize(M.xSize, M.ySize, 0, Grid.U8)
+	oDataFakeSlab.buffer.set_data_array(buffer.data_array)
+	
+#	buffer.seek(0)
+#	for ySlab in M.ySize:
+#		for xSlab in M.xSize:
+#			value = buffer.get_u16()
+#			oDataFakeSlab.set_cell(xSlab,ySlab,value)
 func new_une():
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			oDataFakeSlab.set_cell(xSlab,ySlab,0)
+	oDataFakeSlab.initialize(M.xSize, M.ySize, 0, Grid.U8)
+	
+#	for ySlab in M.ySize:
+#		for xSlab in M.xSize:
+#			oDataFakeSlab.set_cell(xSlab,ySlab,0)
 
 func read_wlb(buffer):
-	buffer.seek(0)
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			value = buffer.get_u8()
-			oDataLiquid.set_cell(xSlab,ySlab,value)
+	oDataLiquid.initialize(M.xSize, M.ySize, 0, Grid.U8)
+	oDataLiquid.buffer.set_data_array(buffer.data_array)
+#	buffer.seek(0)
+#	for ySlab in M.ySize:
+#		for xSlab in M.xSize:
+#			value = buffer.get_u8()
+#			oDataLiquid.set_cell(xSlab,ySlab,value)
 func new_wlb():
 	pass
 
 func read_wib(buffer):
-	buffer.seek(0)
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for subtileY in dataHeight:
-		for subtileX in dataWidth:
-			value = buffer.get_u8()
-			oDataWibble.set_cell(subtileX,subtileY,value)
+	oDataWibble.initialize((M.xSize * 3) + 1, (M.ySize * 3) + 1, 0, Grid.U8)
+	oDataWibble.buffer.set_data_array(buffer.data_array)
+#	buffer.seek(0)
+#	var dataHeight = (M.ySize*3)+1
+#	var dataWidth = (M.xSize*3)+1
+#	for subtileY in dataHeight:
+#		for subtileX in dataWidth:
+#			value = buffer.get_u8()
+#			oDataWibble.set_cell(subtileX,subtileY,value)
 func new_wib():
-	pass
+	oDataWibble.initialize((M.xSize*3)+1, (M.ySize*3)+1, 0, Grid.U8)
 
 func read_inf(buffer):
 	buffer.seek(0)
@@ -166,46 +175,46 @@ func new_txt():
 	pass
 
 func read_slb(buffer):
-	buffer.seek(0)
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			#print('x:' + str(xSlab) + " " + 'y:' + str(ySlab))
-			value = buffer.get_u8()
-			buffer.get_u8() # skip second byte
-			oDataSlab.set_cell(xSlab,ySlab,value)
+	oDataSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
+	oDataSlab.buffer.set_data_array(buffer.data_array)
+
 func new_slb():
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			oDataSlab.set_cell(xSlab,ySlab,0)
+	oDataSlab.initialize(M.xSize, M.ySize, 0, Grid.U8)
 
 func read_own(buffer):
-	buffer.seek(0)
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for ySubtile in dataHeight:
-		for xSubtile in dataWidth:
-			value = buffer.get_u8()
-			oDataOwnership.set_cell(xSubtile/3,ySubtile/3,value)
+	oDataOwnership.initialize((M.xSize*3)+1, (M.ySize*3)+1, 5, Grid.U8)
+	oDataOwnership.buffer.set_data_array(buffer.data_array)
+#	buffer.seek(0)
+#	var dataHeight = (M.ySize*3)+1
+#	var dataWidth = (M.xSize*3)+1
+#	for ySubtile in dataHeight:
+#		for xSubtile in dataWidth:
+#			value = buffer.get_u8()
+#			oDataOwnership.set_cell(xSubtile/3,ySubtile/3,value)
+
 func new_own():
-	pass
+	oDataOwnership.initialize((M.xSize*3)+1, (M.ySize*3)+1, 5, Grid.U8)
 
 func read_dat(buffer):
-	buffer.seek(0)
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for ySubtile in dataHeight:
-		for xSubtile in dataWidth:
-			#buffer.seek(2*(xSubtile + (ySubtile*dataWidth)))
-			value = 65536 - buffer.get_u16()
-			if value == 65536: value = 0
-			
-			oDataClmPos.set_cell(xSubtile,ySubtile,value)
+	oDataClmPos.initialize((M.xSize*3)+1, (M.ySize*3)+1, 0, Grid.U16)
+	oDataClmPos.buffer.set_data_array(buffer.data_array)
+#	buffer.seek(0)
+#	var dataHeight = (M.ySize*3)+1
+#	var dataWidth = (M.xSize*3)+1
+#	for ySubtile in dataHeight:
+#		for xSubtile in dataWidth:
+#			#buffer.seek(2*(xSubtile + (ySubtile*dataWidth)))
+#			value = 65536 - buffer.get_u16()
+#			if value == 65536: value = 0
+#			oDataClmPos.set_cell(xSubtile,ySubtile,value)
+
 func new_dat():
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for ySubtile in dataHeight:
-		for xSubtile in dataWidth:
-			oDataClmPos.set_cell(xSubtile,ySubtile,0)
+	oDataClmPos.initialize((M.xSize*3)+1, (M.ySize*3)+1, 0, Grid.U16)
+#	var dataHeight = (M.ySize*3)+1
+#	var dataWidth = (M.xSize*3)+1
+#	for ySubtile in dataHeight:
+#		for xSubtile in dataWidth:
+#			oDataClmPos.set_cell(xSubtile,ySubtile,0)
 
 func read_clm(buffer):
 	oDataClm.clear_all_column_data()

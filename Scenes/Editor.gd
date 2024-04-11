@@ -33,14 +33,11 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed('ui_cancel'):
 		match currentView:
 			VIEW_2D:
-				var foundDialogToClose = false
-				
 				for i in oUi.listOfWindowDialogs:
 					if is_instance_valid(i) == true:
 						if i.visible == true:
 							if i.get_close_button().visible == true:
 								i.visible = false
-								foundDialogToClose = true
 			VIEW_3D:
 				if oExportPreview.visible == true:
 					oExportPreview.hide()
