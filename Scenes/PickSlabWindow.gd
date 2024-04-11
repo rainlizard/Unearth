@@ -71,6 +71,7 @@ func update_selection_position():
 
 
 func add_slabs():
+	var CODETIME_START = OS.get_ticks_msec()
 	clear_grid()
 	oOnlyOwnership.initialize_grid_items()
 	oSlabStyle.initialize_grid_items()
@@ -121,6 +122,7 @@ func add_slabs():
 	
 	if visible == true:
 		set_selection(oSelection.paintSlab) # Default initial selection
+	print('add_slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func custom_slab_add_new_button():
 	var scene = preload('res://Scenes/GenericGridItem.tscn')

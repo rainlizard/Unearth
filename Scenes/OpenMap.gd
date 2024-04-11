@@ -176,6 +176,7 @@ func open_map(filePath):
 #		oMessage.quick("Error: Map files not found")
 
 func load_cfg_stuff(map):
+	var CODETIME_START = OS.get_ticks_msec()
 	Things.reset_thing_data_to_default()
 	if Cube.tex.empty() == true:
 		Cube.read_cubes_cfg()
@@ -189,7 +190,7 @@ func load_cfg_stuff(map):
 	var fullPathToMainCfg = oGame.get_precise_filepath(parentDirectory, mainCfgName)
 	if fullPathToMainCfg != "":
 		Things.get_cfgs_directory(fullPathToMainCfg)
-
+	print('load_cfg_stuff: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 
 func finish_opening_map(map):
@@ -264,6 +265,7 @@ func _on_FileDialogOpen_file_selected(path):
 	open_map(path)
 
 func get_accompanying_files(map):
+	var CODETIME_START = OS.get_ticks_msec()
 	var baseDir = map.get_base_dir()
 	var mapName = map.get_file().get_basename() # Get the map name without the extension
 	
@@ -283,6 +285,7 @@ func get_accompanying_files(map):
 						var getModifiedTime = File.new().get_modified_time(fullPath)
 						dict[EXT] = [fullPath, getModifiedTime]
 			fileName = dir.get_next()
+	print('get_accompanying_files: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return dict
 
 

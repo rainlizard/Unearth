@@ -57,11 +57,13 @@ func clm_data_exists():
 
 
 func count_filled_clm_entries():
+	var CODETIME_START = OS.get_ticks_msec()
 	var numberOfFilledEntries = 0
 	for entry in 2048:
 		if cubes[entry] != [0,0,0,0, 0,0,0,0]:
 			numberOfFilledEntries += 1
 	oUniversalDetails.clmEntryCount = numberOfFilledEntries
+	print('count_filled_clm_entries: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return numberOfFilledEntries
 
 func index_entry(cubeArray, setFloorID):
@@ -86,7 +88,12 @@ func index_entry(cubeArray, setFloorID):
 	oMessage.big("Error", "Clm entries are full. Try the 'Clear Unused' button in the Map Columns window.")
 	return 0
 
+var a_column_has_changed_since_last_updating_utilized = false
 func update_all_utilized():
+	if a_column_has_changed_since_last_updating_utilized == false:
+		return
+	a_column_has_changed_since_last_updating_utilized = false
+	
 	var CODETIME_START = OS.get_ticks_msec()
 	for clearIndex in 2048:
 		utilized[clearIndex] = 0

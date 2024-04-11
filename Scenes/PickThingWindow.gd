@@ -61,9 +61,10 @@ func _ready():
 
 func initialize_thing_grid_items():
 	yield(get_tree(),'idle_frame') # Needed for loading animation IDs from call_deferred in Things singleton
+	var CODETIME_START = OS.get_ticks_msec()
 	remove_all_grid_items()
 	
-	var CODETIME_START = OS.get_ticks_msec()
+	
 	
 	for thingCategory in [Things.TYPE.OBJECT, Things.TYPE.CREATURE, Things.TYPE.TRAP, Things.TYPE.DOOR, Things.TYPE.EFFECTGEN, Things.TYPE.EXTRA]:
 		match thingCategory:

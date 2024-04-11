@@ -45,6 +45,7 @@ func clear():
 		slabOwnershipTexture.create_from_image(slabOwnershipImage, 0)
 
 func start():
+	var CODETIME_START = OS.get_ticks_msec()
 	slabOwnershipImage.create(M.xSize,M.ySize,false,Image.FORMAT_RGBA8)
 	# Read ownership data as pixels
 	slabOwnershipImage.lock()
@@ -60,6 +61,7 @@ func start():
 	#yield(get_tree(),'idle_frame')
 	#print(oColorRectSlabOwner.rect_scale)
 	#oColorRectSlabOwner.rect_position = Vector2(96,96)
+	print('overhead ownership (start): ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func ownership_paint_shape(shapePositionArray, ownership):
 	

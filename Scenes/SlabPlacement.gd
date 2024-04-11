@@ -746,6 +746,7 @@ func slabset_position_to_column_data(slabsetIndexGroup, ownership):
 #		oDataClmPos.set_cell_clmpos((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
 
 func set_columns(xSlab, ySlab, constructedColumns, constructedFloor):
+	oDataClm.a_column_has_changed_since_last_updating_utilized = true
 	for i in 9:
 		var clmIndex = oDataClm.index_entry(constructedColumns[i], constructedFloor[i])
 		
