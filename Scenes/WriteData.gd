@@ -157,99 +157,63 @@ func write_tng(buffer):
 
 
 func write_tngfx(buffer):
-	var t = ""
-	var numberOfTngEntries = get_tree().get_nodes_in_group("Thing").size()
-	t += "[common]" + "\n"
-	t += "ThingsCount = " + str(numberOfTngEntries) + "\n"
+	var groupNames = {
+		Things.TYPE.OBJECT: "Object",
+		Things.TYPE.CREATURE: "Creature",
+		Things.TYPE.EFFECTGEN: "EffectGen",
+		Things.TYPE.TRAP: "Trap",
+		Things.TYPE.DOOR: "Door"
+	}
+
+	var lines = PoolStringArray()
+	lines.append("[common]")
+	lines.append("") # This gets changed at the end
 	
 	var entryNumber = 0
 	for thingType in [Things.TYPE.DOOR, Things.TYPE.OBJECT, Things.TYPE.CREATURE, Things.TYPE.EFFECTGEN, Things.TYPE.TRAP]:
-		var groupName = "UnknownThingType"
-		match thingType:
-			Things.TYPE.OBJECT: groupName = "Object"
-			Things.TYPE.CREATURE: groupName = "Creature"
-			Things.TYPE.EFFECTGEN: groupName = "EffectGen"
-			Things.TYPE.TRAP: groupName = "Trap"
-			Things.TYPE.DOOR: groupName = "Door"
+		var groupName = groupNames[thingType]
+		
 		for thingNode in get_tree().get_nodes_in_group(groupName):
-			t += "\n"
-			t += "[thing"+str(entryNumber)+"]" + "\n"
-			
-			t += "ThingType = \"" +groupName + "\"\n"
-			
-#			var setSubtype = "???"
-#			match thingType:
-#				Things.TYPE.OBJECT:
-#					if Things.DATA_OBJECT.has(thingNode.subtype):
-#						setSubtype = Things.DATA_OBJECT[thingNode.subtype][Things.KEEPERFX_NAME]
-#				Things.TYPE.CREATURE:
-#					if Things.DATA_CREATURE.has(thingNode.subtype):
-#						setSubtype = Things.DATA_CREATURE[thingNode.subtype][Things.KEEPERFX_NAME]
-#				Things.TYPE.EFFECTGEN:
-#					if Things.DATA_EFFECTGEN.has(thingNode.subtype):
-#						setSubtype = Things.DATA_EFFECTGEN[thingNode.subtype][Things.KEEPERFX_NAME]
-#				Things.TYPE.TRAP:
-#					if Things.DATA_TRAP.has(thingNode.subtype):
-#						setSubtype = Things.DATA_TRAP[thingNode.subtype][Things.KEEPERFX_NAME]
-#				Things.TYPE.DOOR:
-#					if Things.DATA_DOOR.has(thingNode.subtype):
-#						setSubtype = Things.DATA_DOOR[thingNode.subtype][Things.KEEPERFX_NAME]
-#			if setSubtype == null:
-#				setSubtype = "???"
-#			t += "Subtype = \"" + setSubtype + "\"\n"
-			
-			t += "Subtype = " + str(thingNode.subtype) + "\n"
-			
-			t += "Ownership = " +str(thingNode.ownership) + "\n"
-			
+			lines.append("")
+			lines.append("[thing" + str(entryNumber) + "]")
+			lines.append("ThingType = \"" + groupName + "\"")
+			lines.append("Subtype = " + str(thingNode.subtype))
+			lines.append("Ownership = " + str(thingNode.ownership))
+
 			if thingNode.effectRange != null:
-				var setRange = str(int(thingNode.effectRange))
-				var setRangeInner = str(fmod(thingNode.effectRange,1.0) * 256)
-				t += "EffectRange = [" + setRange + ", " + setRangeInner + "]" + "\n"
-			
+				lines.append("EffectRange = [" + str(int(thingNode.effectRange)) + ", " + str(int(fmod(thingNode.effectRange, 1.0) * 256)) + "]")
 			if thingNode.parentTile != null:
-				t += "ParentTile = " +str(thingNode.parentTile) + "\n"
-			elif thingNode.index != null:
-				t += "Index = " +str(thingNode.index) + "\n"
-			
+				lines.append("ParentTile = " + str(thingNode.parentTile))
+			if thingNode.index != null:
+				lines.append("Index = " + str(thingNode.index))
 			if thingNode.doorOrientation != null:
-				t += "DoorOrientation = " +str(thingNode.doorOrientation) + "\n"
-			
+				lines.append("DoorOrientation = " + str(thingNode.doorOrientation))
 			if thingNode.creatureLevel != null:
-				t += "CreatureLevel = " +str(thingNode.creatureLevel) + "\n"
-			elif thingNode.doorLocked != null:
-				t += "DoorLocked = " +str(thingNode.doorLocked) + "\n"
-			elif thingNode.herogateNumber != null:
-				t += "HerogateNumber = " +str(thingNode.herogateNumber) + "\n"
-			elif thingNode.boxNumber != null:
-				t += "CustomBox = " +str(thingNode.boxNumber) + "\n"
-			
-			# Extended KeeperFX variables
+				lines.append("CreatureLevel = " + str(thingNode.creatureLevel))
+			if thingNode.doorLocked != null:
+				lines.append("DoorLocked = " + str(thingNode.doorLocked))
+			if thingNode.herogateNumber != null:
+				lines.append("HerogateNumber = " + str(thingNode.herogateNumber))
+			if thingNode.boxNumber != null:
+				lines.append("CustomBox = " + str(thingNode.boxNumber))
 			if thingNode.creatureName != null and thingNode.creatureName != "":
-				t += "CreatureName = " + '"' + str(thingNode.creatureName) + '"' + "\n"
+				lines.append("CreatureName = \"" + thingNode.creatureName + "\"")
 			if thingNode.creatureGold != null:
-				t += "CreatureGold = " +str(thingNode.creatureGold) + "\n"
+				lines.append("CreatureGold = " + str(thingNode.creatureGold))
 			if thingNode.creatureInitialHealth != null:
-				t += "CreatureInitialHealth = " +str(thingNode.creatureInitialHealth) + "\n"
+				lines.append("CreatureInitialHealth = " + str(thingNode.creatureInitialHealth))
 			if thingNode.orientation != null:
-				t += "Orientation = " +str(thingNode.orientation) + "\n"
+				lines.append("Orientation = " + str(thingNode.orientation))
 			if thingNode.goldValue != null:
-				t += "GoldValue = " +str(thingNode.goldValue) + "\n"
-			
-			var x = str(int(thingNode.locationX))
-			var xInner = str(fmod(thingNode.locationX,1.0) * 256)
-			var y = str(int(thingNode.locationY))
-			var yInner = str(fmod(thingNode.locationY,1.0) * 256)
-			var z = str(int(thingNode.locationZ))
-			var zInner = str(fmod(thingNode.locationZ,1.0) * 256)
-			
-			t += "SubtileX = [" + x + ", " + xInner + "]" + "\n"
-			t += "SubtileY = [" + y + ", " + yInner + "]" + "\n"
-			t += "SubtileZ = [" + z + ", " + zInner + "]" + "\n"
-			
+				lines.append("GoldValue = " + str(thingNode.goldValue))
+
+			lines.append("SubtileX = [" + str(int(thingNode.locationX)) + ", " + str(int(fmod(thingNode.locationX, 1.0) * 256)) + "]")
+			lines.append("SubtileY = [" + str(int(thingNode.locationY)) + ", " + str(int(fmod(thingNode.locationY, 1.0) * 256)) + "]")
+			lines.append("SubtileZ = [" + str(int(thingNode.locationZ)) + ", " + str(int(fmod(thingNode.locationZ, 1.0) * 256)) + "]")
 			entryNumber += 1
 	
-	buffer.put_data(t.to_ascii())
+	lines.set(1, "ThingsCount = " + str(entryNumber))
+	buffer.put_data("\n".join(lines).to_ascii())
 
 
 func write_apt(buffer):
