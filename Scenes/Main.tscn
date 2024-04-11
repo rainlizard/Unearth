@@ -1,4 +1,4 @@
-[gd_scene load_steps=183 format=2]
+[gd_scene load_steps=188 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -14,7 +14,7 @@
 [ext_resource path="res://Global/FPScounter.gd" type="Script" id=12]
 [ext_resource path="res://Scenes/DataSlab.gd" type="Script" id=13]
 [ext_resource path="res://Scenes/OverheadOwnership.gd" type="Script" id=14]
-[ext_resource path="res://Art/Wibble_1.png" type="Texture" id=15]
+[ext_resource path="res://Scenes/DataLiquid.gd" type="Script" id=15]
 [ext_resource path="res://Scenes/SettingWithValue.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Theme/UnearthTheme.theme" type="Theme" id=17]
 [ext_resource path="res://Scenes/BoxSprite.gd" type="Script" id=18]
@@ -37,7 +37,7 @@
 [ext_resource path="res://Scenes/ConfirmDecompression.gd" type="Script" id=35]
 [ext_resource path="res://Shaders/FlashNeutralRooms.gdshader" type="Shader" id=36]
 [ext_resource path="res://Scenes/Editor.gd" type="Script" id=37]
-[ext_resource path="res://Art/Wibble_2.png" type="Texture" id=38]
+[ext_resource path="res://Scenes/DataClmPos.gd" type="Script" id=38]
 [ext_resource path="res://Scenes/DataClm.gd" type="Script" id=39]
 [ext_resource path="res://Scenes/ViewColumn.gd" type="Script" id=40]
 [ext_resource path="res://Scenes/LoadingBar.gd" type="Script" id=41]
@@ -96,7 +96,7 @@
 [ext_resource path="res://Scenes/Inspector.gd" type="Script" id=94]
 [ext_resource path="res://Shaders/cursorMat.tres" type="Material" id=95]
 [ext_resource path="res://Art/Cursor32x32Yellow.png" type="Texture" id=96]
-[ext_resource path="res://Art/Wibble_0.png" type="Texture" id=97]
+[ext_resource path="res://Scenes/DataFakeSlab.gd" type="Script" id=97]
 [ext_resource path="res://Scenes/TilemapDebug.gd" type="Script" id=98]
 [ext_resource path="res://Scenes/DataSlx.gd" type="Script" id=99]
 [ext_resource path="res://Scenes/CurrentMap.gd" type="Script" id=100]
@@ -161,50 +161,12 @@
 [ext_resource path="res://dk_images/landviews/rgmap00.png" type="Texture" id=159]
 [ext_resource path="res://Scenes/MapCoordinatesWindow.gd" type="Script" id=160]
 [ext_resource path="res://dk_images/landviews/ensign_lvl5.png" type="Texture" id=161]
-
-[sub_resource type="TileSet" id=1]
-0/name = "Wibble_0.png 0"
-0/texture = ExtResource( 97 )
-0/tex_offset = Vector2( 0, 0 )
-0/modulate = Color( 1, 1, 1, 1 )
-0/region = Rect2( 0, 0, 32, 32 )
-0/tile_mode = 0
-0/occluder_offset = Vector2( 0, 0 )
-0/navigation_offset = Vector2( 0, 0 )
-0/shape_offset = Vector2( 0, 0 )
-0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape_one_way = false
-0/shape_one_way_margin = 0.0
-0/shapes = [  ]
-0/z_index = 0
-1/name = "Wibble_1.png 1"
-1/texture = ExtResource( 15 )
-1/tex_offset = Vector2( 0, 0 )
-1/modulate = Color( 1, 1, 1, 1 )
-1/region = Rect2( 0, 0, 32, 32 )
-1/tile_mode = 0
-1/occluder_offset = Vector2( 0, 0 )
-1/navigation_offset = Vector2( 0, 0 )
-1/shape_offset = Vector2( 0, 0 )
-1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-1/shape_one_way = false
-1/shape_one_way_margin = 0.0
-1/shapes = [  ]
-1/z_index = 0
-2/name = "Wibble_2.png 2"
-2/texture = ExtResource( 38 )
-2/tex_offset = Vector2( 0, 0 )
-2/modulate = Color( 1, 1, 1, 1 )
-2/region = Rect2( 0, 0, 32, 32 )
-2/tile_mode = 0
-2/occluder_offset = Vector2( 0, 0 )
-2/navigation_offset = Vector2( 0, 0 )
-2/shape_offset = Vector2( 0, 0 )
-2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-2/shape_one_way = false
-2/shape_one_way_margin = 0.0
-2/shapes = [  ]
-2/z_index = 0
+[ext_resource path="res://Scenes/DataOwnership.gd" type="Script" id=162]
+[ext_resource path="res://Scenes/NodeTest.gd" type="Script" id=163]
+[ext_resource path="res://Scenes/DataWibble.gd" type="Script" id=164]
+[ext_resource path="res://Scenes/Buffers.gd" type="Script" id=165]
+[ext_resource path="res://Scenes/UndoStates.gd" type="Script" id=166]
+[ext_resource path="res://Scenes/ThreadedSaveUndo.gd" type="Script" id=167]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -384,29 +346,26 @@ script = ExtResource( 100 )
 [node name="DataSlx" type="Node" parent="CurrentMap"]
 script = ExtResource( 99 )
 
-[node name="DataWibble" type="TileMap" parent="CurrentMap"]
-visible = false
-modulate = Color( 1, 1, 1, 0.243137 )
-position = Vector2( -16, -16 )
-tile_set = SubResource( 1 )
-cell_size = Vector2( 32, 32 )
-format = 1
+[node name="DataWibble" type="Node" parent="CurrentMap"]
+script = ExtResource( 164 )
 
-[node name="DataLiquid" type="TileMap" parent="CurrentMap"]
-format = 1
+[node name="DataLiquid" type="Node" parent="CurrentMap"]
+script = ExtResource( 15 )
 
-[node name="DataSlab" type="TileMap" parent="CurrentMap"]
-format = 1
+[node name="DataSlab" type="Node" parent="CurrentMap"]
 script = ExtResource( 13 )
 
-[node name="DataOwnership" type="TileMap" parent="CurrentMap"]
-format = 1
+[node name="DataOwnership" type="Node" parent="CurrentMap"]
+script = ExtResource( 162 )
+
+[node name="NodeTest" type="Node" parent="CurrentMap"]
+script = ExtResource( 163 )
 
 [node name="DataLevelStyle" type="Node" parent="CurrentMap"]
 script = ExtResource( 11 )
 
-[node name="DataClmPos" type="TileMap" parent="CurrentMap"]
-format = 1
+[node name="DataClmPos" type="Node" parent="CurrentMap"]
+script = ExtResource( 38 )
 
 [node name="DataClm" type="Node2D" parent="CurrentMap"]
 script = ExtResource( 39 )
@@ -420,23 +379,32 @@ script = ExtResource( 117 )
 [node name="DataLof" type="Node" parent="CurrentMap"]
 script = ExtResource( 141 )
 
-[node name="DataFakeSlab" type="TileMap" parent="CurrentMap"]
-format = 1
+[node name="DataFakeSlab" type="Node" parent="CurrentMap"]
+script = ExtResource( 97 )
+
+[node name="UndoStates" type="Node" parent="."]
+script = ExtResource( 166 )
+
+[node name="ThreadedSaveUndo" type="Node" parent="UndoStates"]
+script = ExtResource( 167 )
+
+[node name="Buffers" type="Node" parent="."]
+script = ExtResource( 165 )
+
+[node name="ReadData" type="Node" parent="Buffers"]
+script = ExtResource( 20 )
+
+[node name="WriteData" type="Node" parent="Buffers"]
+script = ExtResource( 32 )
 
 [node name="OpenMap" type="Node" parent="."]
 script = ExtResource( 5 )
-
-[node name="ReadData" type="Node" parent="OpenMap"]
-script = ExtResource( 20 )
 
 [node name="RNC" type="Node" parent="OpenMap"]
 script = ExtResource( 53 )
 
 [node name="SaveMap" type="Node" parent="."]
 script = ExtResource( 31 )
-
-[node name="WriteData" type="Node" parent="SaveMap"]
-script = ExtResource( 32 )
 
 [node name="CustomObjectSystem" type="Node" parent="."]
 script = ExtResource( 92 )
@@ -1675,7 +1643,6 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Edit"
 align = 0
-items = [ "Map columns", null, 0, false, false, 0, 0, null, "", false, "Custom objects", null, 0, false, false, 1, 0, null, "", false, "Resize map", null, 0, false, false, 2, 0, null, "", false, "Update all slabs", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Make a tileset", null, 0, false, false, 4, 0, null, "", false, "Slabset", null, 0, false, false, 5, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false

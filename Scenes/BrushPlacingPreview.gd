@@ -78,7 +78,7 @@ func make_brush_shape(constructType):
 	var endPos = Vector2(oEditingTools.BRUSH_SIZE-1, oEditingTools.BRUSH_SIZE-1)
 	var brushSize = (beginPos-endPos).abs()
 	var center = Vector2(brushSize.x*0.5, brushSize.y*0.5)
-	print("brushSize: " + str(brushSize))
+	
 	for y in range(beginPos.y, endPos.y+1):
 		for x in range(beginPos.x, endPos.x+1):
 			if constructType == oSelection.CONSTRUCT_BRUSH:

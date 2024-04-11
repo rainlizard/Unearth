@@ -84,9 +84,10 @@ func newPaintSubtype(value):
 	
 	oOwnerSelection.collectible_ownership_mode(false)
 	if paintThingType == Things.TYPE.OBJECT:
-		var genre = Things.DATA_OBJECT[paintSubtype][Things.EDITOR_TAB]
-		if Things.collectible_belonging.has(genre):
-			oOwnerSelection.collectible_ownership_mode(true)
+		if Things.DATA_OBJECT.has(paintSubtype):
+			var genre = Things.DATA_OBJECT[paintSubtype][Things.EDITOR_TAB]
+			if Things.collectible_belonging.has(genre):
+				oOwnerSelection.collectible_ownership_mode(true)
 
 
 func newOwnership(value):
@@ -101,7 +102,7 @@ func newPaintSlab(value):
 
 func update_under_cursor():
 	cursorOverSlab = oSelector.get_slabID_at_pos(oSelector.cursorTile)
-	cursorOverSlabOwner = oDataOwnership.get_cellv(oSelector.cursorTile)
+	cursorOverSlabOwner = oDataOwnership.get_cellv_ownership(oSelector.cursorTile)
 	oSlabSideViewer.update_side()
 
 func update_paint():
@@ -252,7 +253,7 @@ func place_subtile(placeSubtile):
 	oEditor.mapHasBeenEdited = true
 	
 	if paintThingType != null:
-		var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(placeSubtile.x,placeSubtile.y)]
+		var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(placeSubtile.x, placeSubtile.y)]
 		var newPos:Vector3 = Vector3(placeSubtile.x + 0.5, placeSubtile.y + 0.5, detectTerrainHeight)
 		
 		match paintThingType:
@@ -292,7 +293,7 @@ func manually_delete_one_instance(inst):
 		if oMirrorPlacementCheckBox.pressed == true:
 			oInstances.mirror_deletion_of_instance(inst)
 		
-		inst.queue_free()
+		oInstances.kill_instance(inst)
 
 #func ui_hover():
 #	if oSelector.cursorIsOnGrid == true:

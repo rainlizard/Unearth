@@ -13,6 +13,7 @@ onready var oEditableBordersCheckbox = Nodelist.list["oEditableBordersCheckbox"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oConfirmSaveBeforeQuit = Nodelist.list["oConfirmSaveBeforeQuit"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
+onready var oUndoStates = Nodelist.list["oUndoStates"]
 
 enum {
 	VIEW_2D = 0
@@ -21,8 +22,12 @@ enum {
 
 var currentView = VIEW_2D
 var fieldBoundary = Rect2()
-var mapHasBeenEdited = false
+var mapHasBeenEdited = false setget set_map_has_been_edited
 
+func set_map_has_been_edited(setVal):
+	mapHasBeenEdited = setVal
+	if setVal == true:
+		oUndoStates.call_deferred("attempt_to_save_new_undo_state")
 
 func _ready():
 	get_tree().set_auto_accept_quit(false)
@@ -33,14 +38,11 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed('ui_cancel'):
 		match currentView:
 			VIEW_2D:
-				var foundDialogToClose = false
-				
 				for i in oUi.listOfWindowDialogs:
 					if is_instance_valid(i) == true:
 						if i.visible == true:
 							if i.get_close_button().visible == true:
 								i.visible = false
-								foundDialogToClose = true
 			VIEW_3D:
 				if oExportPreview.visible == true:
 					oExportPreview.hide()

@@ -1,4 +1,5 @@
 extends Node
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var MAP_FORMAT_VERSION = ""
 var NAME_TEXT = ""
@@ -38,7 +39,7 @@ func clear_all():
 	M.ySize = 85
 
 func lof_name_text(pathString):
-	var buffer = Filetypes.file_path_to_buffer(pathString)
+	var buffer = oBuffers.file_path_to_buffer(pathString)
 	
 	buffer.seek(0)
 	var value = buffer.get_string(buffer.get_size())

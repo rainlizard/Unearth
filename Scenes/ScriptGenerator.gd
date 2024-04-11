@@ -186,11 +186,12 @@ func initialize_researchables():
 		if what == IS_MAGIC:
 			for checkAll in listMagic:
 				if checkAll[0] == ID:
-					idItem.hint_tooltip = Things.DATA_OBJECT[ID][Things.NAME]
-					idItem.set_meta("variable",checkAll[1]) # function text
-					idItem.set_meta("ID", ID)
-					idItem.type = idItem.MAGIC
-					idItem.set_magic_texture(ID)
+					if Things.DATA_OBJECT.has(ID):
+						idItem.hint_tooltip = Things.DATA_OBJECT[ID][Things.NAME]
+						idItem.set_meta("variable",checkAll[1]) # function text
+						idItem.set_meta("ID", ID)
+						idItem.type = idItem.MAGIC
+						idItem.set_magic_texture(ID)
 					break
 		elif what == IS_ROOM:
 			for checkAll in listRoom:

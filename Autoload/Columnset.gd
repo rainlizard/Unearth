@@ -1,5 +1,6 @@
 extends 'res://Class/ClmClass.gd'
 onready var oGame = Nodelist.list["oGame"]
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var utilized = []
 var orientation = []
@@ -39,7 +40,7 @@ func load_default_columnset():
 
 func load_default_original_columnset():
 	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.CLM")
-	var buffer = Filetypes.file_path_to_buffer(filePath)
+	var buffer = oBuffers.file_path_to_buffer(filePath)
 	
 	buffer.seek(0)
 	var numberOfClmEntries = buffer.get_u16()

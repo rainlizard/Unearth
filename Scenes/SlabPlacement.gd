@@ -106,14 +106,14 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 			
 			if calculateOwner == true:
 				if oMirrorOptions.ui_quadrants_have_owner(mainPaint) == false:
-					oDataOwnership.set_cellv(toPos, mainPaint)
+					oDataOwnership.set_cellv_ownership(toPos, mainPaint)
 				else:
 					if mainPaint == quadrantDestinationOwner:
-						oDataOwnership.set_cellv(toPos, quadrantClickedOnOwner)
+						oDataOwnership.set_cellv_ownership(toPos, quadrantClickedOnOwner)
 					else:
 						match oMirrorOptions.splitType:
 							0,1:
-								oDataOwnership.set_cellv(toPos, quadrantDestinationOwner)
+								oDataOwnership.set_cellv_ownership(toPos, quadrantDestinationOwner)
 							2:
 								var otherTwoQuadrants = []
 								for i in 4:
@@ -123,11 +123,11 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 								
 								if otherTwoQuadrants.size() == 2:
 									if quadrantDestinationOwner == otherTwoQuadrants[0]:
-										oDataOwnership.set_cellv(toPos, otherTwoQuadrants[1])
+										oDataOwnership.set_cellv_ownership(toPos, otherTwoQuadrants[1])
 									else:
-										oDataOwnership.set_cellv(toPos, otherTwoQuadrants[0])
+										oDataOwnership.set_cellv_ownership(toPos, otherTwoQuadrants[0])
 								else:
-									oDataOwnership.set_cellv(toPos, quadrantDestinationOwner)
+									oDataOwnership.set_cellv_ownership(toPos, quadrantDestinationOwner)
 			
 			# Always add position to mirroredPositionArray, decide what to do with the positions after the loop is done.
 			mirroredPositionArray.append(toPos)
@@ -161,7 +161,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	
 	#var CODETIME_START = OS.get_ticks_msec()
 	for pos in shapePositionArray:
-		oDataOwnership.set_cellv(pos, ownership)
+		oDataOwnership.set_cellv_ownership(pos, ownership)
 		
 		if slabID < 1000:
 			oDataFakeSlab.set_cellv(pos, 0)
@@ -220,7 +220,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 				var surrSlab = oDataSlab.get_cellv(threePos)
 				# Only IDs that are EARTH or EARTH_WITH_TORCH will become fortified walls.
 				if surrSlab == Slabs.EARTH or surrSlab == Slabs.EARTH_WITH_TORCH:
-					oDataOwnership.set_cellv(threePos, ownership)
+					oDataOwnership.set_cellv_ownership(threePos, ownership)
 					#var autoWallID = auto_wall(threePos.x, threePos.y, slabID)
 					oDataSlab.set_cellv(threePos, Slabs.WALL_AUTOMATIC)
 					shapePositionArray.append(threePos)
@@ -248,7 +248,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	if oOnlyOwnership.visible == true and autogen_was_called == false:
 		for pos in shapePositionArray:
 			var slabID = oDataSlab.get_cell(pos.x, pos.y)
-			var ownership = oDataOwnership.get_cell(pos.x, pos.y)
+			var ownership = oDataOwnership.get_cell_ownership(pos.x, pos.y)
 			if Slabs.data.has(slabID):
 				oInstances.manage_thing_ownership_on_slab(pos.x, pos.y, ownership)
 	
@@ -297,7 +297,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	for pos in shapePositionArray:
 		var slabID = oDataSlab.get_cell(pos.x, pos.y)
 		
-		var ownership = oDataOwnership.get_cell(pos.x, pos.y)
+		var ownership = oDataOwnership.get_cell_ownership(pos.x, pos.y)
 		
 		if Slabs.data.has(slabID):
 			do_slab(pos.x, pos.y, slabID, ownership)
@@ -314,8 +314,8 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	
 	#print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
-	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
-
+	oOverheadGraphics.overhead2d_update_rect_single_threaded(shapePositionArray)
+	
 
 func do_update_auto_walls(slabID):
 	# If this ID has been set to WALL_AUTOMATIC, by whatever reason, then it must be updated. This doesn't mean you're placing a WALL_AUTOMATIC, just that this slab has been set to it.
@@ -405,7 +405,7 @@ func _on_ConfirmAutoGen_confirmed():
 			shapePositionArray.append(Vector2(xSlab,ySlab))
 	
 	autogen_was_called = true
-	generate_slabs_based_on_id(shapePositionArray, updateNearby)
+	yield(generate_slabs_based_on_id(shapePositionArray, updateNearby), "completed")
 	autogen_was_called = false
 	
 	print('Auto-generated all slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
@@ -743,15 +743,16 @@ func slabset_position_to_column_data(slabsetIndexGroup, ownership):
 #	for i in 9:
 #		var ySubtile = positionsArray3x3[i].y#i/3
 #		var xSubtile = positionsArray3x3[i].x#i - (ySubtile*3)
-#		oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
+#		oDataClmPos.set_cell_clmpos((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
 
 func set_columns(xSlab, ySlab, constructedColumns, constructedFloor):
+	oDataClm.a_column_has_changed_since_last_updating_utilized = true
 	for i in 9:
 		var clmIndex = oDataClm.index_entry(constructedColumns[i], constructedFloor[i])
 		
 		var ySubtile = i/3
 		var xSubtile = i - (ySubtile*3)
-		oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, clmIndex)
+		oDataClmPos.set_cell_clmpos((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, clmIndex)
 
 func get_tall_bitmask(surrID):
 	var bitmask = 0
@@ -762,10 +763,10 @@ func get_tall_bitmask(surrID):
 	return bitmask
 
 func get_wall_bitmask(xSlab, ySlab, surrID, ownership):
-	var ownerS = oDataOwnership.get_cell(xSlab, ySlab+1)
-	var ownerW = oDataOwnership.get_cell(xSlab-1, ySlab)
-	var ownerN = oDataOwnership.get_cell(xSlab, ySlab-1)
-	var ownerE = oDataOwnership.get_cell(xSlab+1, ySlab)
+	var ownerS = oDataOwnership.get_cell_ownership(xSlab, ySlab+1)
+	var ownerW = oDataOwnership.get_cell_ownership(xSlab-1, ySlab)
+	var ownerN = oDataOwnership.get_cell_ownership(xSlab, ySlab-1)
+	var ownerE = oDataOwnership.get_cell_ownership(xSlab+1, ySlab)
 	if ownerS == 5: ownerS = ownership # If next to a Player 5 wall, treat it as earth, don't put up a wall against it.
 	if ownerW == 5: ownerW = ownership
 	if ownerN == 5: ownerN = ownership
@@ -822,14 +823,14 @@ func get_surrounding_slabIDs(xSlab, ySlab):
 func get_surrounding_ownership(xSlab, ySlab):
 	var surrOwner = []
 	surrOwner.resize(8)
-	surrOwner[dir.n] = oDataOwnership.get_cell(xSlab, ySlab-1)
-	surrOwner[dir.s] = oDataOwnership.get_cell(xSlab, ySlab+1)
-	surrOwner[dir.e] = oDataOwnership.get_cell(xSlab+1, ySlab)
-	surrOwner[dir.w] = oDataOwnership.get_cell(xSlab-1, ySlab)
-	surrOwner[dir.ne] = oDataOwnership.get_cell(xSlab+1, ySlab-1)
-	surrOwner[dir.nw] = oDataOwnership.get_cell(xSlab-1, ySlab-1)
-	surrOwner[dir.se] = oDataOwnership.get_cell(xSlab+1, ySlab+1)
-	surrOwner[dir.sw] = oDataOwnership.get_cell(xSlab-1, ySlab+1)
+	surrOwner[dir.n] = oDataOwnership.get_cell_ownership(xSlab, ySlab-1)
+	surrOwner[dir.s] = oDataOwnership.get_cell_ownership(xSlab, ySlab+1)
+	surrOwner[dir.e] = oDataOwnership.get_cell_ownership(xSlab+1, ySlab)
+	surrOwner[dir.w] = oDataOwnership.get_cell_ownership(xSlab-1, ySlab)
+	surrOwner[dir.ne] = oDataOwnership.get_cell_ownership(xSlab+1, ySlab-1)
+	surrOwner[dir.nw] = oDataOwnership.get_cell_ownership(xSlab-1, ySlab-1)
+	surrOwner[dir.se] = oDataOwnership.get_cell_ownership(xSlab+1, ySlab+1)
+	surrOwner[dir.sw] = oDataOwnership.get_cell_ownership(xSlab-1, ySlab+1)
 	return surrOwner
 
 

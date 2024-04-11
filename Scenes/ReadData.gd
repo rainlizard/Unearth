@@ -15,21 +15,34 @@ onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMessage = Nodelist.list["oMessage"]
 
-onready var TILE_SIZE = Constants.TILE_SIZE
-onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
-
-#var tng_creation_order = []
-#var lgt_creation_order = []
-#var apt_creation_order = []
-
 var value # just so I don't have to initialize the var in every function
 
+func read_mapsize_from_lof(buffer):
+	buffer.seek(0)
+	value = buffer.get_string(buffer.get_size())
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
+	var array = value.split("\n")
+	for line in array:
+		if line.begins_with(";"):
+			continue
+		
+		var lineParts = line.split("=")
+		
+		if lineParts.size() == 2:
+			if lineParts[0].strip_edges() == "MAPSIZE":
+				var sizeString = lineParts[1].strip_edges().split(" ")
+				if sizeString.size() == 2:
+					var x = sizeString[0].to_int()
+					var y = sizeString[1].to_int()
+					return Vector2(x,y)
+	return Vector2(85,85)
+
 func read_lof(buffer):
+	buffer.seek(0)
 	# Be sure to default to 85x85 in case it can't be read.
 	oDataLof.use_size(85,85)
 	oDataLof.KIND = "FREE" # Default to free if it can't be read. Goes ABOVE the check.
 	
-	buffer.seek(0)
 	value = buffer.get_string(buffer.get_size())
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	var array = value.split("\n")
@@ -73,35 +86,15 @@ func read_lof(buffer):
 					var y = sizeString[1].to_int()
 					oDataLof.use_size(x,y)
 
-func new_keeperfx_lof():
+func new_lof():
 	oDataLof.KIND = "FREE"
 
-func read_mapsize_from_lof(buffer):
-	buffer.seek(0)
-	value = buffer.get_string(buffer.get_size())
-	value = value.replace(char(0x200B), "") # Remove zero width spaces
-	var array = value.split("\n")
-	for line in array:
-		if line.begins_with(";"):
-			continue
-		
-		var lineParts = line.split("=")
-		
-		if lineParts.size() == 2:
-			if lineParts[0].strip_edges() == "MAPSIZE":
-				var sizeString = lineParts[1].strip_edges().split(" ")
-				if sizeString.size() == 2:
-					var x = sizeString[0].to_int()
-					var y = sizeString[1].to_int()
-					return Vector2(x,y)
-	return Vector2(85,85)
-
 func read_slx(buffer):
+	buffer.seek(0)
 	# 0 = Use map's original
 	# 1 = Tileset 0
 	# 2 = Tileset 1
 	# 3 = Tileset 2, etc.
-	buffer.seek(0)
 	oDataSlx.slxImgData.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)
 	oDataSlx.slxTexData.create_from_image(oDataSlx.slxImgData, 0)
 	oDataSlx.slxImgData.lock()
@@ -120,35 +113,26 @@ func new_slx():
 	oDataSlx.slxTexData.create_from_image(oDataSlx.slxImgData, 0)
 
 func read_une(buffer):
-	buffer.seek(0)
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			value = buffer.get_u16()
-			oDataFakeSlab.set_cell(xSlab,ySlab,value)
+	oDataFakeSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
+	oDataFakeSlab.buffer.set_data_array(buffer.data_array)
+
 func new_une():
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			oDataFakeSlab.set_cell(xSlab,ySlab,0)
+	oDataFakeSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
+
 
 func read_wlb(buffer):
-	buffer.seek(0)
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			value = buffer.get_u8()
-			oDataLiquid.set_cell(xSlab,ySlab,value)
+	oDataLiquid.initialize(M.xSize, M.ySize, 0, Grid.U8)
+	oDataLiquid.buffer.set_data_array(buffer.data_array)
+
 func new_wlb():
-	pass
+	oDataLiquid.initialize(M.xSize, M.ySize, 0, Grid.U8)
 
 func read_wib(buffer):
-	buffer.seek(0)
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for subtileY in dataHeight:
-		for subtileX in dataWidth:
-			value = buffer.get_u8()
-			oDataWibble.set_cell(subtileX,subtileY,value)
+	oDataWibble.initialize((M.xSize * 3) + 1, (M.ySize * 3) + 1, 0, Grid.U8)
+	oDataWibble.buffer.set_data_array(buffer.data_array)
+
 func new_wib():
-	pass
+	oDataWibble.initialize((M.xSize * 3) + 1, (M.ySize * 3) + 1, 0, Grid.U8)
 
 func read_inf(buffer):
 	buffer.seek(0)
@@ -166,46 +150,25 @@ func new_txt():
 	pass
 
 func read_slb(buffer):
-	buffer.seek(0)
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			#print('x:' + str(xSlab) + " " + 'y:' + str(ySlab))
-			value = buffer.get_u8()
-			buffer.get_u8() # skip second byte
-			oDataSlab.set_cell(xSlab,ySlab,value)
+	oDataSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
+	oDataSlab.buffer.set_data_array(buffer.data_array)
+
 func new_slb():
-	for ySlab in M.ySize:
-		for xSlab in M.xSize:
-			oDataSlab.set_cell(xSlab,ySlab,0)
+	oDataSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
 
 func read_own(buffer):
-	buffer.seek(0)
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for ySubtile in dataHeight:
-		for xSubtile in dataWidth:
-			value = buffer.get_u8()
-			oDataOwnership.set_cell(xSubtile/3,ySubtile/3,value)
+	oDataOwnership.initialize((M.xSize*3)+1, (M.ySize*3)+1, 5, Grid.U8)
+	oDataOwnership.buffer.set_data_array(buffer.data_array)
+
 func new_own():
-	pass
+	oDataOwnership.initialize((M.xSize*3)+1, (M.ySize*3)+1, 5, Grid.U8)
 
 func read_dat(buffer):
-	buffer.seek(0)
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for ySubtile in dataHeight:
-		for xSubtile in dataWidth:
-			#buffer.seek(2*(xSubtile + (ySubtile*dataWidth)))
-			value = 65536 - buffer.get_u16()
-			if value == 65536: value = 0
-			
-			oDataClmPos.set_cell(xSubtile,ySubtile,value)
+	oDataClmPos.initialize((M.xSize*3)+1, (M.ySize*3)+1, 0, Grid.U16)
+	oDataClmPos.buffer.set_data_array(buffer.data_array)
+
 func new_dat():
-	var dataHeight = (M.ySize*3)+1
-	var dataWidth = (M.xSize*3)+1
-	for ySubtile in dataHeight:
-		for xSubtile in dataWidth:
-			oDataClmPos.set_cell(xSubtile,ySubtile,0)
+	oDataClmPos.initialize((M.xSize*3)+1, (M.ySize*3)+1, 0, Grid.U16)
 
 func read_clm(buffer):
 	oDataClm.clear_all_column_data()
@@ -227,15 +190,6 @@ func read_clm(buffer):
 		oDataClm.permanent[entry] = get_permanent
 		oDataClm.lintel[entry] = get_lintel
 		oDataClm.height[entry] = get_height
-		
-#		var get_height = specialByte / 16
-#		oDataClm.height.append(get_height)
-#		specialByte -= get_height * 16
-#		var get_lintel = specialByte / 2
-#		oDataClm.lintel.append(get_lintel)
-#		specialByte -= get_lintel * 2
-#		var get_permanent = specialByte
-#		oDataClm.permanent.append(get_permanent)
 		
 		oDataClm.solidMask[entry] = buffer.get_u16() # 3-4
 		oDataClm.floorTexture[entry] = buffer.get_u16() # 5-6
@@ -316,6 +270,7 @@ func new_lgt():
 	pass
 
 func read_lgtfx(buffer):
+	buffer.seek(0)
 	value = buffer.get_string(buffer.get_size())
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	
@@ -414,6 +369,7 @@ func new_tng():
 	pass
 
 func read_tngfx(buffer):
+	buffer.seek(0)
 	
 	value = buffer.get_string(buffer.get_size())
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
@@ -497,6 +453,8 @@ func new_tngfx():
 
 
 func read_aptfx(buffer):
+	buffer.seek(0)
+	
 	value = buffer.get_string(buffer.get_size())
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	
@@ -527,50 +485,8 @@ func read_aptfx(buffer):
 func new_aptfx():
 	pass
 
-#	var bufferPos = 0
-#	buffer.seek(bufferPos)
-#	# These are unused for now but they can be used for extending maximum TNG entries beyond 65,535
-#	var numberOfTngEntries = buffer.get_u32()
-#	var numberOfLgtEntries = buffer.get_u32()
-#	var numberOfAptEntries = buffer.get_u32()
-#	bufferPos += 12
-#
-#	for entry in tng_creation_order.size():
-#		bufferPos += (entry * 256)
-#		buffer.seek(bufferPos)
-#		var id = tng_creation_order[entry]
-#		id.locationX = buffer.get_u32() + (id.locationX - int(id.locationX)) # 0-3
-#		id.locationY = buffer.get_u32() + (id.locationY - int(id.locationY)) # 4-7
-#		id.locationZ = buffer.get_u32() + (id.locationZ - int(id.locationZ)) # 8-11
-#		# Unused : 12-255
-#
-#	for entry in lgt_creation_order.size():
-#		bufferPos += (entry * 256)
-#		buffer.seek(bufferPos)
-#		var id = lgt_creation_order[entry]
-#		id.locationX = buffer.get_u32() + (id.locationX - int(id.locationX)) # 0-3
-#		id.locationY = buffer.get_u32() + (id.locationY - int(id.locationY)) # 4-7
-#		id.locationZ = buffer.get_u32() + (id.locationZ - int(id.locationZ)) # 8-11
-#		# Unused : 12-255
-#
-#	for entry in apt_creation_order.size():
-#		bufferPos += (entry * 256)
-#		buffer.seek(bufferPos)
-#		var id = apt_creation_order[entry]
-#		id.locationX = buffer.get_u32() + (id.locationX - int(id.locationX)) # 0-3
-#		id.locationY = buffer.get_u32() + (id.locationY - int(id.locationY)) # 4-7
-#		# Unused : 12-255
-
-#func _ready(): #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#	var file = File.new()
-#	file.open("res://unearthdata/dklevels.lof",File.READ)
-#	var buffer = StreamPeerBuffer.new()
-#	buffer.data_array = file.get_buffer(file.get_len())
-#	file.close()
-#
-#	read_lif(buffer)
-
 func read_lif(buffer):
+	buffer.seek(0)
 	var array = lif_buffer_to_array(buffer)
 	var mapName = lif_array_to_map_name(array)
 	oDataMapName.set_map_name(mapName)
@@ -607,70 +523,3 @@ func lif_array_to_map_name(array):
 	
 	# Read map name normally
 	return array[0][1]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#func parse_lif_text(file):
-#	#I'm using get_csv_line() which means the lines MUST have commas separating the values.
-#	var array = []
-#	while true:
-#		var stringArray = file.get_csv_line()
-#		if stringArray.size() > 1:
-#			stringArray[0] = stringArray[0].strip_edges(true,true)
-#			stringArray[1] = stringArray[1].strip_edges(true,true)
-#
-#			# If second array has Translation ID (so it looks like #201 or something), then read the next line.
-#			if "#" in stringArray[1]:
-#				stringArray[1] = file.get_line().trim_prefix(';')
-#			array.append(stringArray)
-#		else:
-#			break
-#	# Array can look like this: [[80, Morkardar], [81, Korros Tor], [82, Kari-Mar], [83, Belbata], [84, Caddis Fell], [85, Pladitz], [86, Abbadon], [87, Svatona], [88, Kanasko], [91, Netzcaro], [93, Batezek], [94, Benetzaron], [95, Daka-Gorn], [97, Dixaroc], [92, Belial]]
-#	# Or like this if there's only one entry: [[80, Morkardar]]
-#	return array
-
-
-
-
-
-
-
-	# Move to the next character until a number isn't found
-	# Then strip spaces and commas from the beginning
-	
-#	var string = buffer.get_as_text()
-#	var newString = ""
-#	for i in string.length():
-#		if string.substr(i,1).is_valid_integer() == false:
-#
-#			# Get rid of comma if there's one
-#			if string.substr(i,1) == ",":
-#				i+=1
-#
-#			newString = string.right(i)
-#			break
-#	return newString.strip_edges(true,true)

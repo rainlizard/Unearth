@@ -22,6 +22,9 @@ onready var oNewMapSymmetricalBorder = Nodelist.list["oNewMapSymmetricalBorder"]
 onready var oNoiseDistance = Nodelist.list["oNoiseDistance"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
+onready var oUndoStates = Nodelist.list["oUndoStates"]
+
+var currently_creating_new_map = false
 
 var noise = OpenSimplexNoise.new()
 var imageData = Image.new()
@@ -84,11 +87,15 @@ func reinit_noise_preview():
 
 
 func _on_ButtonNewMapOK_pressed():
+	currently_creating_new_map = true
+	
 	if oGame.EXECUTABLE_PATH == "":
 		oMessage.quick("Error: Game executable is not set. Set in File -> Preferences")
 		return
 	
 	oCurrentMap._on_ButtonNewMap_pressed()
+	
+	yield(oOverheadGraphics, "graphics_thread_completed")
 	
 	if Slabset.dat.empty() == true:
 		oMessage.quick("Failed loading slabset, game executable might not be correct. Set in File -> Preferences")
@@ -111,13 +118,15 @@ func _on_ButtonNewMapOK_pressed():
 		# Blank
 		overwrite_map_with_blank_values()
 	
-	#Vector2(0,0), Vector2(M.xSize-1,M.ySize-1)
-	oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, false)
-	
 	visible = false # Close New Map window after pressing OK button
+	
+	# yield must be used here, because this function has yields inside of it.
+	yield(oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, false), "completed")
 	
 	if oCheckBoxNewMapAutoOpensMapSettings.pressed == true:
 		Utils.popup_centered(oMapSettingsWindow)
+	
+	currently_creating_new_map = false
 
 func overwrite_map_with_blank_values():
 	for y in range(1, M.ySize-1):

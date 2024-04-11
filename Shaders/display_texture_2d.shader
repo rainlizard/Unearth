@@ -44,9 +44,10 @@ int getAnimationFrame(int frame, int index) {
 	return int(value.r+value.g+value.b);
 }
 
+// Convert RGB values to one integer
 int getIndex(ivec2 coords) {
-	vec3 value = texelGet(viewTextures, coords, 0).rgb * vec3(255.0,255.0,255.0);
-	return int(value.r+value.g+value.b);
+	vec3 value = texelGet(viewTextures, coords, 0).rgb;
+	return (int(value.r * 255.0) << 16) | (int(value.g * 255.0) << 8) | int(value.b * 255.0);
 }
 
 void fragment() {

@@ -166,6 +166,7 @@ func mouse_button_on_field():
 	
 	# Release button
 	if Input.is_action_just_released("mouse_left"):
+		OS.move_window_to_foreground() # See if this helps any issues which cause Unearth minimize button to stop working.
 		if is_instance_valid(holdClickOnInstance):
 			if draggingInstance == true:
 				draggingInstance = false
@@ -177,7 +178,7 @@ func mouse_button_on_field():
 				
 				# Readjust the thing's height when dragging it from different heights
 				if holdClickOnInstance.locationZ != 2.875: # don't knock torches onto the ground if dragging them (accidental clicks would knock them down too)
-					var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cellv(snapToPos)]
+					var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(snapToPos.x,snapToPos.y)]
 					holdClickOnInstance.locationZ = detectTerrainHeight
 				
 				oInstances.mirror_adjusted_value(holdClickOnInstance, "locationXYZ", originalPosition)
@@ -233,7 +234,7 @@ func mouse_button_on_field():
 				for inst in nodesOnSlab:
 					if oMirrorPlacementCheckBox.pressed == true:
 						oInstances.mirror_deletion_of_instance(inst)
-					inst.queue_free()
+					oInstances.kill_instance(inst)
 		
 		oThingDetails.update_details()
 
@@ -297,7 +298,7 @@ func moved_to_new_subtile():
 	if mode == MODE_SUBTILE:
 		canPlace = true
 		if oUseSlabOwnerCheckBox.pressed == true and visible == true:
-			oSelection.paintOwnership = oDataOwnership.get_cellv(cursorTile)
+			oSelection.paintOwnership = oDataOwnership.get_cellv_ownership(cursorTile)
 
 #func fadeOutWalls(delta):
 #	if Slabs.array[oSelection.cursorOverSlab][Slabs.SIDE_OF] == Slabs.SIDE_SLAB:

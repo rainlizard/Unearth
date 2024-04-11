@@ -81,7 +81,7 @@ static func add_face(array, pos, side, textureID):
 	
 	array[Mesh.ARRAY_TEX_UV].append_array(uv[side])
 	
-	var appendData = Vector2(textureID, textureID)
+	var appendData = Vector2(float((textureID >> 16) & 65535), float(textureID & 65535))
 	array[Mesh.ARRAY_TEX_UV2].append_array([
 		appendData,
 		appendData,

@@ -1,4 +1,5 @@
 extends Node
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var dictionary = {} # Just two different ways to read the palette, for speed.
 
@@ -6,7 +7,7 @@ func read_palette(path):
 	var array = []
 	array.resize(256)
 	
-	var buffer = Filetypes.file_path_to_buffer(path)
+	var buffer = oBuffers.file_path_to_buffer(path)
 	if buffer.get_size() > 0:
 		for i in 256: # File has a size of 768 bytes but we get 3 values each loop
 			# Multiply by 4 because colors are 0-63 instead of 0-255

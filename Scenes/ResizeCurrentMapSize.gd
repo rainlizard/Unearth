@@ -15,6 +15,7 @@ onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
+onready var oInstances = Nodelist.list["oInstances"]
 
 func _on_ResizeCurrentMapSizeButton_pressed():
 	Utils.popup_centered(self)
@@ -77,7 +78,7 @@ func remove_outside_instances(newWidth, newHeight):
 	for instance in get_tree().get_nodes_in_group("Instance"):
 		if instance.locationX >= newWidthInSubtiles or instance.locationY >= newHeightInSubtiles:
 			deletedInstancesCount += 1
-			instance.queue_free()
+			oInstances.kill_instance(instance)
 	
 	if deletedInstancesCount > 0:
 		oMessage.quick("Deleted " + str(deletedInstancesCount) + " instances that were outside of the new map size.")
@@ -85,7 +86,7 @@ func remove_outside_instances(newWidth, newHeight):
 func update_editor_appearance():
 	oEditor.update_boundaries()
 	oOverheadOwnership.start()
-	oOverheadGraphics.update_map_overhead_2d_textures()
+	oOverheadGraphics.update_full_overhead_map()
 
 # The main function that calls all the helper functions
 func _on_ResizeApplyButton_pressed():
@@ -123,7 +124,7 @@ func set_various_grid_data(newWidth, newHeight, previousWidth, previousHeight):
 	for x in prevWidthInSubtiles:
 		for y in prevHeightInSubtiles:
 			if x >= newWidthInSubtiles or y >= newHeightInSubtiles:
-				oDataClmPos.set_cell(x, y, 0)
+				oDataClmPos.set_cell_clmpos(x, y, 0)
 
 
 
@@ -168,7 +169,7 @@ func _on_ResizeFillWithID_value_changed(value):
 #
 #	oEditor.update_boundaries()
 #	oOverheadOwnership.start()
-#	oOverheadGraphics.update_map_overhead_2d_textures()
+#	oOverheadGraphics.update_full_overhead_map()
 #
 #	# Apply changes for added positions
 #	oSlabPlacement.place_shape_of_slab_id(positionsToUpdate.keys(), Slabs.EARTH, 5)

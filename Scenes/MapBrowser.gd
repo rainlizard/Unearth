@@ -19,6 +19,8 @@ onready var oMapBrowserTabContainer = Nodelist.list["oMapBrowserTabContainer"]
 onready var oRandomMapContainer = Nodelist.list["oRandomMapContainer"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oInspector = Nodelist.list["oInspector"]
+onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
+onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 
 
 func _ready():
@@ -167,6 +169,9 @@ func _on_MapBrowser_visibility_changed():
 
 
 func toggle_map_preview(togglePreview):
+	if togglePreview == false and oMapBrowser.visible == true:
+		yield(oOverheadGraphics, "graphics_thread_completed")
+	
 	oQuickMapPreview.visible = togglePreview
 	
 	# Toggle to false if currently selecting the opened map
