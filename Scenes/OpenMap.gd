@@ -39,7 +39,7 @@ onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
-
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -118,7 +118,7 @@ func open_map(filePath):
 			print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
 		
 		var formatType = 0
-		for EXT in Filetypes.FILE_TYPES:
+		for EXT in oBuffers.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
 				
 				# Don't bother reading original formats if KFX format files have been found
@@ -136,10 +136,11 @@ func open_map(filePath):
 				if EXT == "APTFX": formatType = 1
 				if EXT == "LGTFX": formatType = 1
 				
-				Filetypes.read(oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING], EXT.to_upper())
+				var readPath = oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING]
+				oBuffers.read(readPath, EXT.to_upper())
 			else:
 				print("Missing " + EXT + " file, so create blank data for that one.")
-				Filetypes.new_blank(EXT.to_upper())
+				oBuffers.new_blank(EXT.to_upper())
 				
 				# Assign name data to any that's missing
 				if EXT == "LIF":
@@ -280,7 +281,7 @@ func get_accompanying_files(map):
 				var fileBaseName = fileName.get_basename() # Get the file name without the extension
 				if fileBaseName.to_upper() == mapName.to_upper():
 					var EXT = fileName.get_extension().to_upper()
-					if Filetypes.FILE_TYPES.has(EXT):
+					if oBuffers.FILE_TYPES.has(EXT):
 						var fullPath = baseDir.plus_file(fileName)
 						var getModifiedTime = File.new().get_modified_time(fullPath)
 						dict[EXT] = [fullPath, getModifiedTime]

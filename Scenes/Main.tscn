@@ -1,4 +1,4 @@
-[gd_scene load_steps=185 format=2]
+[gd_scene load_steps=187 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -164,6 +164,8 @@
 [ext_resource path="res://Scenes/DataOwnership.gd" type="Script" id=162]
 [ext_resource path="res://Scenes/NodeTest.gd" type="Script" id=163]
 [ext_resource path="res://Scenes/DataWibble.gd" type="Script" id=164]
+[ext_resource path="res://Scenes/Buffers.gd" type="Script" id=165]
+[ext_resource path="res://Scenes/UndoStates.gd" type="Script" id=166]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -379,20 +381,26 @@ script = ExtResource( 141 )
 [node name="DataFakeSlab" type="Node" parent="CurrentMap"]
 script = ExtResource( 97 )
 
+[node name="UndoStates" type="Node" parent="."]
+script = ExtResource( 166 )
+
+[node name="Buffers" type="Node" parent="."]
+script = ExtResource( 165 )
+
+[node name="ReadData" type="Node" parent="Buffers"]
+script = ExtResource( 20 )
+
+[node name="WriteData" type="Node" parent="Buffers"]
+script = ExtResource( 32 )
+
 [node name="OpenMap" type="Node" parent="."]
 script = ExtResource( 5 )
-
-[node name="ReadData" type="Node" parent="OpenMap"]
-script = ExtResource( 20 )
 
 [node name="RNC" type="Node" parent="OpenMap"]
 script = ExtResource( 53 )
 
 [node name="SaveMap" type="Node" parent="."]
 script = ExtResource( 31 )
-
-[node name="WriteData" type="Node" parent="SaveMap"]
-script = ExtResource( 32 )
 
 [node name="CustomObjectSystem" type="Node" parent="."]
 script = ExtResource( 92 )

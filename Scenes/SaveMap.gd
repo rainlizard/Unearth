@@ -10,8 +10,10 @@ onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oDataClm = Nodelist.list["oDataClm"]
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var queueExit = false
+
 
 func save_map(filePath): # auto opens other files
 	var map = filePath.get_basename()
@@ -22,7 +24,7 @@ func save_map(filePath): # auto opens other files
 	
 	var writeFailure = false
 	
-	for EXT in Filetypes.FILE_TYPES:
+	for EXT in oBuffers.FILE_TYPES:
 		
 		# List of file extensions to skip creating
 		# Remember "continue" means skip
@@ -35,7 +37,7 @@ func save_map(filePath): # auto opens other files
 		
 		var saveToFilePath = map + '.' + EXT.to_lower()
 		
-		var err = Filetypes.write(saveToFilePath, EXT.to_upper())
+		var err = oBuffers.write(saveToFilePath, EXT.to_upper())
 		if err != OK:
 			writeFailure = true
 		var getModifiedTime = File.new().get_modified_time(saveToFilePath)
@@ -57,12 +59,13 @@ func save_map(filePath): # auto opens other files
 		if queueExit == true:
 			get_tree().quit()
 
+
 func delete_existing_files(map):
 	var fileTypesToDelete = [] 
 	
 	if OS.get_name() == "X11":
 		# Important for Linux to delete all files otherwise duplicates can be created. (Lowercase files can be saved without replacing the uppercase files)
-		fileTypesToDelete = Filetypes.FILE_TYPES
+		fileTypesToDelete = oBuffers.FILE_TYPES
 	else:
 		# If switching formats, then it's important to delete files of the other format (TNG and TNGFX shouldn't exist at the same time)
 		if oCurrentFormat.selected == 0: # Classic format
@@ -89,17 +92,6 @@ func delete_existing_files(map):
 	else:
 		print("An error occurred when trying to access the path.")
 
+
 func clicked_save_on_menu():
 	save_map(oCurrentMap.path)
-
-#	if File.new().file_exists(path + ".slb") == true:
-#		mapPathSave = path
-#		oConfirmOverwrite.Utils.popup_centered(self)
-#	else:
-#		oSaveMap.save_map(path)
-#		hide()
-#
-#var mapPathSave # set before popping up the overwrite confirmation box
-#func _on_ConfirmOverwrite_confirmed():
-#	oSaveMap.save_map(mapPathSave)
-#	hide()

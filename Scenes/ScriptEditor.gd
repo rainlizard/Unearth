@@ -8,6 +8,7 @@ onready var oScriptEmptyStatus = Nodelist.list["oScriptEmptyStatus"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var scriptHasBeenEditedInUnearth = false
 
@@ -87,7 +88,7 @@ func check_if_txt_file_has_been_modified():
 			oMessage.quick("Script reloaded from file.") #"Script was reloaded from file."
 			oCurrentMap.currentFilePaths["TXT"][oCurrentMap.MODIFIED_DATE] = getModifiedTime
 			# Reload
-			Filetypes.read(filePath, "TXT")
+			oBuffers.read(filePath, "TXT")
 			update_texteditor()
 			set_script_as_edited(false)
 

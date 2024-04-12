@@ -15,9 +15,6 @@ onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMessage = Nodelist.list["oMessage"]
 
-onready var TILE_SIZE = Constants.TILE_SIZE
-onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
-
 #var tng_creation_order = []
 #var lgt_creation_order = []
 #var apt_creation_order = []
