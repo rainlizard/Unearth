@@ -340,33 +340,48 @@ func write_dat(buffer):
 
 func write_clm(buffer):
 	oDataClm.update_all_utilized()
-	
+
 	var numberOfClmEntries = 2048
 	buffer.put_16(numberOfClmEntries)
-	buffer.put_data([0,0])
+	buffer.put_data([0, 0])
 	buffer.put_16(oDataClm.unknownData)
-	buffer.put_data([0,0])
-	
+	buffer.put_data([0, 0])
+
+	var data = PoolByteArray()
+	data.resize(numberOfClmEntries * 24)
+
+	var utilized = oDataClm.utilized
+	var permanent = oDataClm.permanent
+	var lintel = oDataClm.lintel
+	var height = oDataClm.height
+	var solidMask = oDataClm.solidMask
+	var floorTexture = oDataClm.floorTexture
+	var orientation = oDataClm.orientation
+	var cubes = oDataClm.cubes
+
 	for entry in numberOfClmEntries:
-		buffer.put_16(oDataClm.utilized[entry]) # 0-1
-		#buffer.put_8(oDataClm.permanent[entry] + (oDataClm.lintel[entry]*2) + (oDataClm.height[entry]*16)) # 2
-		buffer.put_8((oDataClm.permanent[entry] & 1) + ((oDataClm.lintel[entry] & 7) << 1) + ((oDataClm.height[entry] & 15) << 4))
-		buffer.put_16(oDataClm.solidMask[entry]) # 3-4
-		buffer.put_16(oDataClm.floorTexture[entry]) # 5-6
-		buffer.put_8(oDataClm.orientation[entry]) # 7
-		
+		var index = entry * 24
+
+		data[index] = utilized[entry] & 0xFF
+		data[index + 1] = (utilized[entry] >> 8) & 0xFF
+
+		data[index + 2] = (permanent[entry] & 1) + ((lintel[entry] & 7) << 1) + ((height[entry] & 15) << 4)
+
+		data[index + 3] = solidMask[entry] & 0xFF
+		data[index + 4] = (solidMask[entry] >> 8) & 0xFF
+
+		data[index + 5] = floorTexture[entry] & 0xFF
+		data[index + 6] = (floorTexture[entry] >> 8) & 0xFF
+
+		data[index + 7] = orientation[entry]
+
+		var cubesEntry = cubes[entry]
 		for cubeNumber in 8:
-			buffer.put_16(oDataClm.cubes[entry][cubeNumber]) # 8-23
-	
-#		var specialByte = buffer.put_8() # 2
-#		var get_height = specialByte / 16
-#		oDataClm.height.append(get_height)
-#		specialByte -= get_height * 16
-#		var get_lintel = specialByte / 2
-#		oDataClm.lintel.append(get_lintel)
-#		specialByte -= get_lintel * 2
-#		var get_permanent = specialByte
-#		oDataClm.permanent.append(get_permanent)
+			var cube = cubesEntry[cubeNumber]
+			data[index + 8 + cubeNumber * 2] = cube & 0xFF
+			data[index + 9 + cubeNumber * 2] = (cube >> 8) & 0xFF
+
+	buffer.put_data(data)
 
 
 #	for entry in numberOfClmEntries:
