@@ -230,34 +230,32 @@ func write_apt(buffer):
 		buffer.put_8(apNode.pointNumber) # 6
 		buffer.put_8(apNode.data7) # 7
 
+
 func write_aptfx(buffer):
-	var t = ""
-	var numberOfActionPoints = get_tree().get_nodes_in_group("ActionPoint").size()
-	t += "[common]" + "\n"
-	t += "ActionPointsCount = " + str(numberOfActionPoints) + "\n"
+	var lines = PoolStringArray()
+	lines.append("[common]")
+	lines.append("") # This gets changed at the end
 	
 	var entryNumber = 0
 	for apNode in get_tree().get_nodes_in_group("ActionPoint"):
-		t += "\n"
-		t += "[actionpoint"+str(entryNumber)+"]" + "\n"
+		lines.append("")
+		lines.append("[actionpoint" + str(entryNumber) + "]")
 		
 		if apNode.pointNumber != null:
-			t += "PointNumber = " +str(apNode.pointNumber) + "\n"
+			lines.append("PointNumber = " + str(apNode.pointNumber))
 		
 		if apNode.pointRange != null:
 			var setRange = str(int(apNode.pointRange))
-			var setRangeInner = str(fmod(apNode.pointRange,1.0) * 256)
-			t += "PointRange = [" + setRange + ", " + setRangeInner + "]" + "\n"
+			var setRangeInner = str(fmod(apNode.pointRange, 1.0) * 256)
+			lines.append("PointRange = [" + setRange + ", " + setRangeInner + "]")
 		
-		var x = str(int(apNode.locationX))
-		var xInner = str(fmod(apNode.locationX,1.0) * 256)
-		var y = str(int(apNode.locationY))
-		var yInner = str(fmod(apNode.locationY,1.0) * 256)
-		t += "SubtileX = [" + x + ", " + xInner + "]" + "\n"
-		t += "SubtileY = [" + y + ", " + yInner + "]" + "\n"
+		lines.append("SubtileX = [" + str(int(apNode.locationX)) + ", " + str(int(fmod(apNode.locationX, 1.0) * 256)) + "]")
+		lines.append("SubtileY = [" + str(int(apNode.locationY)) + ", " + str(int(fmod(apNode.locationY, 1.0) * 256)) + "]")
+		
 		entryNumber += 1
 	
-	buffer.put_data(t.to_ascii())
+	lines.set(1, "ActionPointsCount = " + str(entryNumber))
+	buffer.put_data("\n".join(lines).to_ascii())
 
 func write_lgt(buffer):
 	var numberOfLightPoints = get_tree().get_nodes_in_group("Light").size()
@@ -286,39 +284,35 @@ func write_lgt(buffer):
 		buffer.put_16(lightNode.parentTile) # 18-19
 
 func write_lgtfx(buffer):
-	var t = ""
-	var numberOfLightPoints = get_tree().get_nodes_in_group("Light").size()
-	t += "[common]" + "\n"
-	t += "LightsCount = " + str(numberOfLightPoints) + "\n"
+	var lines = PoolStringArray()
+	lines.append("[common]")
+	lines.append("") # This gets changed at the end
 	
 	var entryNumber = 0
 	for lightNode in get_tree().get_nodes_in_group("Light"):
-		t += "\n"
-		t += "[light"+str(entryNumber)+"]" + "\n"
+		lines.append("")
+		lines.append("[light" + str(entryNumber) + "]")
 		
 		if lightNode.lightIntensity != null:
-			t += "LightIntensity = " +str(lightNode.lightIntensity) + "\n"
+			lines.append("LightIntensity = " + str(lightNode.lightIntensity))
 		
 		if lightNode.lightRange != null:
 			var setRange = str(int(lightNode.lightRange))
-			var setRangeInner = str(fmod(lightNode.lightRange,1.0) * 256)
-			t += "LightRange = [" + setRange + ", " + setRangeInner + "]" + "\n"
+			var setRangeInner = str(fmod(lightNode.lightRange, 1.0) * 256)
+			lines.append("LightRange = [" + setRange + ", " + setRangeInner + "]")
 		
 		if lightNode.parentTile != null:
-			t += "ParentTile = " +str(lightNode.parentTile) + "\n"
+			lines.append("ParentTile = " + str(lightNode.parentTile))
 		
-		var x = str(int(lightNode.locationX))
-		var xInner = str(fmod(lightNode.locationX,1.0) * 256)
-		var y = str(int(lightNode.locationY))
-		var yInner = str(fmod(lightNode.locationY,1.0) * 256)
-		var z = str(int(lightNode.locationZ))
-		var zInner = str(fmod(lightNode.locationZ,1.0) * 256)
-		t += "SubtileX = [" + x + ", " + xInner + "]" + "\n"
-		t += "SubtileY = [" + y + ", " + yInner + "]" + "\n"
-		t += "SubtileZ = [" + z + ", " + zInner + "]" + "\n"
+		lines.append("SubtileX = [" + str(int(lightNode.locationX)) + ", " + str(int(fmod(lightNode.locationX, 1.0) * 256)) + "]")
+		lines.append("SubtileY = [" + str(int(lightNode.locationY)) + ", " + str(int(fmod(lightNode.locationY, 1.0) * 256)) + "]")
+		lines.append("SubtileZ = [" + str(int(lightNode.locationZ)) + ", " + str(int(fmod(lightNode.locationZ, 1.0) * 256)) + "]")
+		
 		entryNumber += 1
 	
-	buffer.put_data(t.to_ascii())
+	lines.set(1, "LightsCount = " + str(entryNumber))
+	buffer.put_data("\n".join(lines).to_ascii())
+
 
 func write_inf(buffer):
 	value = oDataLevelStyle.data
