@@ -47,7 +47,6 @@ var compressedFiles = []
 var ALWAYS_DECOMPRESS = false # Default to false
 
 func start():
-	
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
 	
 	if oGame.EXECUTABLE_PATH == "": return # Silently wait for user to set executable path. No need to show an error.
@@ -173,8 +172,7 @@ func open_map(filePath):
 		else:
 			# Begin decompression without confirmation dialog
 			_on_ConfirmDecompression_confirmed()
-#	else:
-#		oMessage.quick("Error: Map files not found")
+
 
 func load_cfg_stuff(map):
 	var CODETIME_START = OS.get_ticks_msec()
@@ -195,7 +193,7 @@ func load_cfg_stuff(map):
 
 
 func finish_opening_map(map):
-	
+	# initialize_editor_components
 	oPickThingWindow.initialize_thing_grid_items()
 	oCurrentMap.set_path_and_title(map)
 	oDynamicMapTree.highlight_current_map()
@@ -204,8 +202,8 @@ func finish_opening_map(map):
 	oScriptEditor.initialize_for_new_map()
 	oOverheadOwnership.start()
 	oScriptHelpers.start()
-	
-	
+
+	# update_editor_data
 	if Slabset.dat.empty() == true: Slabset.load_default_slabset()
 	if Columnset.cubes.empty() == true: Columnset.load_default_columnset()
 	
@@ -213,16 +211,17 @@ func finish_opening_map(map):
 	oOverheadGraphics.update_map_overhead_2d_textures()
 	oPickSlabWindow.add_slabs()
 	oDataClm.count_filled_clm_entries()
-	
+
 	oTextureCache.set_current_texture_pack()
-	
+
 	if oCurrentMap.path == "":
 		oMessage.quick('New map')
 	else:
 		oMessage.quick('Opened map')
-	
+
+	# finalize_map_opening
 	oEditor.set_view_2d()
-	
+
 	oMenu.add_recent(map)
 	
 	# When opening a map, be sure that column 0 is empty. Otherwise apply a fix.
@@ -240,26 +239,16 @@ func finish_opening_map(map):
 	else:
 		oCamera2D.skip_camera_reset = false
 	
-#	if oGame.running_keeperfx() == true:
-#		if oCurrentFormat.selected == 1: # KFX format
-#			if oGame.KEEPERFX_VERSION_INT != 500: # Skip worrying about the compiled versions (0.5.0.0)
-#				if oGame.KEEPERFX_VERSION_INT != 0 and oGame.KEEPERFX_VERSION_INT < oGame.KEEPERFX_VERSION_REQUIRED_INT:
-#
-#					oMessage.big("Warning", "Your KeeperFX version is " + oGame.KEEPERFX_VERSION_STRING + " which is too old to use the features of KFX Map Format in-game. Download the latest alpha to rectify.")
-	
 	print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 
+
 func _on_ConfirmDecompression_confirmed():
-	#var CODETIME_START = OS.get_ticks_msec()
 	print('Attempting to decompress...')
-	# Decompress files
-	#var dir = Directory.new()
+	
 	for path in compressedFiles:
 		oRNC.decompress(path)
-	#print('Decompressed in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	# Retry opening the map
-	# (any of the compressed files will have the appropriate name)
 	open_map(compressedFiles[0])
 
 func _on_FileDialogOpen_file_selected(path):
@@ -288,41 +277,3 @@ func get_accompanying_files(map):
 			fileName = dir.get_next()
 	print('get_accompanying_files: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return dict
-
-
-
-
-
-
-
-
-#file.seek(2+(3*( x + (y*85))))
-#	for x in 85:
-#		for y in 85:
-#			#1ms
-#			value = file.get_8() #8ms
-#			file.seek(1 * ( (y*(85)) + x ) ) #2ms
-#			GridOwnership.set_cell(Vector2(x,y),value)
-
-
-	# 8 bytes per subtile
-	# 3 subtiles per tile
-	# 85 tiles per side
-	# 255 tiles total
-	# + 2 subtiles * 85
-	# + 2 subtiles * 85
-#	var subtileY = 0
-#	var subtileX = 0
-#	var dataHeight = (85*3)+1
-#	var dataWidth = (85*3)+1
-#	while subtileY <= dataHeight:
-#		while subtileX <= dataWidth:
-#			file.seek( subtileX + (subtileY*dataWidth))
-#			value = file.get_8()
-#			GridOwnership.set_cell(Vector2(floor(subtileX/3),floor(subtileY/3)),value)
-#			subtileX+=1
-#		subtileX = 0
-#		subtileY += 1
-
-
-

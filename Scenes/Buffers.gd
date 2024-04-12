@@ -58,6 +58,7 @@ func read(filePath, EXT):
 	print('.' + EXT + ' read success in ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func read_buffer_for_extension(buffer, EXT):
+	buffer.seek(0) # Important!
 	match EXT:
 		"LOF" : oReadData.read_lof(buffer)
 		"CLM" : oReadData.read_clm(buffer)
