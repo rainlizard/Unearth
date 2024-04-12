@@ -17,7 +17,8 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var value # just so I don't have to initialize the var in every function
 
-func write_keeperfx_lof(buffer):
+func write_keeperfx_lof():
+	var buffer = StreamPeerBuffer.new()
 	var newString = ""
 	newString += "; KeeperFX Level Overview File (LOF)" + "\n"
 	newString += "MAP_FORMAT_VERSION = " + str(Version.unearth_map_format_version).pad_decimals(2) + "\n"
@@ -38,9 +39,10 @@ func write_keeperfx_lof(buffer):
 	newString += "MAPSIZE = " + str(M.xSize) + " " + str(M.ySize)
 	var scriptBytes = newString.to_ascii()
 	buffer.put_data(scriptBytes)
+	return buffer
 
-
-func write_lif(buffer, filePath):
+func write_lif(filePath):
+	var buffer = StreamPeerBuffer.new()
 	var mapNumber = filePath.get_file().get_basename().to_upper().trim_prefix('MAP')
 	
 	# Remove 3 leading zeroes. I could remove 4 but I'm unsure if I should.
@@ -50,8 +52,10 @@ func write_lif(buffer, filePath):
 	value = mapNumber + ', ' + oDataMapName.data
 	
 	buffer.put_data(value.to_utf8())
+	return buffer
 
-func write_txt(buffer):
+func write_txt():
+	var buffer = StreamPeerBuffer.new()
 	value = oDataScript.data
 	# I'm only using \n (LF) instead of \r\n (CRLF), because to_ascii() is removing the \r (CR) for some reason.
 	# Old Notepad will not display TXT files correctly.
@@ -60,51 +64,35 @@ func write_txt(buffer):
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	var scriptBytes = value.to_ascii()
 	buffer.put_data(scriptBytes)
+	return buffer
 
-func write_une(buffer):
+func write_une():
+	var buffer = StreamPeerBuffer.new()
 	buffer.data_array = oDataFakeSlab.buffer.data_array
-	
-#	for ySlab in M.ySize:
-#		for xSlab in M.xSize:
-#			value = oDataFakeSlab.get_cell(xSlab,ySlab)
-#			buffer.put_16(value)
+	return buffer
 
-func write_wlb(buffer):
+func write_wlb():
+	var buffer = StreamPeerBuffer.new()
 	buffer.data_array = oDataLiquid.buffer.data_array
-#	for ySlab in M.ySize:
-#		for xSlab in M.xSize:
-#			value = oDataLiquid.get_cell(xSlab,ySlab)
-#			buffer.put_8(value)
+	return buffer
 
-func write_wib(buffer):
+func write_wib():
+	var buffer = StreamPeerBuffer.new()
 	buffer.data_array = oDataWibble.buffer.data_array
-	
-#	var dataHeight = (M.ySize*3)+1
-#	var dataWidth = (M.xSize*3)+1
-#	for subtileY in dataHeight:
-#		for subtileX in dataWidth:
-#			buffer.put_8(oDataWibble.get_cell(subtileX,subtileY))
+	return buffer
 
-func write_slb(buffer):
-#	for y in M.ySize:
-#		for x in M.xSize:
-#			value = oDataSlab.get_cell(x,y)
-#			#print('x:' + str(x) + " " + 'y:' + str(y))
-#			buffer.put_8(value)
-#			buffer.put_8(0)
+func write_slb():
+	var buffer = StreamPeerBuffer.new()
 	buffer.data_array = oDataSlab.buffer.data_array
+	return buffer
 
-func write_own(buffer):
-#	var dataHeight = (M.ySize * 3) + 1
-#	var dataWidth = (M.xSize * 3) + 1
-#	var size = dataHeight * dataWidth
-#	for i in size:
-#		var subtileX = i % dataWidth
-#		var subtileY = i / dataWidth
-#		buffer.put_8(oDataOwnership.get_cell_ownership(subtileX / 3, subtileY / 3))
+func write_own():
+	var buffer = StreamPeerBuffer.new()
 	buffer.data_array = oDataOwnership.buffer.data_array
+	return buffer
 
-func write_tng(buffer):
+func write_tng():
+	var buffer = StreamPeerBuffer.new()
 	var numberOfTngEntries = get_tree().get_nodes_in_group("Thing").size()
 	buffer.put_16(numberOfTngEntries)
 	
@@ -154,9 +142,11 @@ func write_tng(buffer):
 		buffer.put_8(thingNode.data17) # 17
 		buffer.put_16(thingNode.data18_19) # 18-19
 		buffer.put_8(thingNode.data20) # 20
+	return buffer
 
 
-func write_tngfx(buffer):
+func write_tngfx():
+	var buffer = StreamPeerBuffer.new()
 	var groupNames = {
 		Things.TYPE.OBJECT: "Object",
 		Things.TYPE.CREATURE: "Creature",
@@ -214,9 +204,11 @@ func write_tngfx(buffer):
 	
 	lines.set(1, "ThingsCount = " + str(entryNumber))
 	buffer.put_data("\n".join(lines).to_ascii())
+	return buffer
 
 
-func write_apt(buffer):
+func write_apt():
+	var buffer = StreamPeerBuffer.new()
 	var numberOfActionPoints = get_tree().get_nodes_in_group("ActionPoint").size()
 	buffer.put_32(numberOfActionPoints)
 	
@@ -229,9 +221,11 @@ func write_apt(buffer):
 		buffer.put_8(int(apNode.pointRange)) # 5
 		buffer.put_8(apNode.pointNumber) # 6
 		buffer.put_8(apNode.data7) # 7
+	return buffer
 
 
-func write_aptfx(buffer):
+func write_aptfx():
+	var buffer = StreamPeerBuffer.new()
 	var lines = PoolStringArray()
 	lines.append("[common]")
 	lines.append("") # This gets changed at the end
@@ -256,8 +250,10 @@ func write_aptfx(buffer):
 	
 	lines.set(1, "ActionPointsCount = " + str(entryNumber))
 	buffer.put_data("\n".join(lines).to_ascii())
+	return buffer
 
-func write_lgt(buffer):
+func write_lgt():
+	var buffer = StreamPeerBuffer.new()
 	var numberOfLightPoints = get_tree().get_nodes_in_group("Light").size()
 	buffer.put_32(numberOfLightPoints)
 	
@@ -282,8 +278,10 @@ func write_lgt(buffer):
 		buffer.put_8(lightNode.data16) # 16
 		buffer.put_8(lightNode.data17) # 17
 		buffer.put_16(lightNode.parentTile) # 18-19
+	return buffer
 
-func write_lgtfx(buffer):
+func write_lgtfx():
+	var buffer = StreamPeerBuffer.new()
 	var lines = PoolStringArray()
 	lines.append("[common]")
 	lines.append("") # This gets changed at the end
@@ -312,33 +310,30 @@ func write_lgtfx(buffer):
 	
 	lines.set(1, "LightsCount = " + str(entryNumber))
 	buffer.put_data("\n".join(lines).to_ascii())
+	return buffer
 
 
-func write_inf(buffer):
+func write_inf():
+	var buffer = StreamPeerBuffer.new()
 	value = oDataLevelStyle.data
 	buffer.put_8(value)
+	return buffer
 
-func write_slx(buffer):
+func write_slx():
+	var buffer = StreamPeerBuffer.new()
 	var slx_data = oDataSlx.slxImgData.get_data()
 	for i in range(0, slx_data.size(), 3):
 		buffer.put_8(slx_data[i])
+	return buffer
 
 
-func write_dat(buffer):
+func write_dat():
+	var buffer = StreamPeerBuffer.new()
 	buffer.data_array = oDataClmPos.buffer.data_array
-	
-#	var dataHeight = (M.ySize*3)+1
-#	var dataWidth = (M.xSize*3)+1
-#	for subtileY in dataHeight:
-#		for subtileX in dataWidth:
-#			buffer.seek(2*(subtileX + (subtileY*dataWidth)))
-#
-#			value = 65536 - oDataClmPos.get_cell(subtileX,subtileY)
-#			if value == 65536: value = 0
-#
-#			buffer.put_16(value)
+	return buffer
 
-func write_clm(buffer):
+func write_clm():
+	var buffer = StreamPeerBuffer.new()
 	oDataClm.update_all_utilized()
 
 	var numberOfClmEntries = 2048
@@ -382,17 +377,4 @@ func write_clm(buffer):
 			data[index + 9 + cubeNumber * 2] = (cube >> 8) & 0xFF
 
 	buffer.put_data(data)
-
-
-#	for entry in numberOfClmEntries:
-#		var twentyFourByteArray = oDataClm.data[entry]
-#
-#		buffer.put_16(oDataClm.utilized[entry])
-#
-#		var pos = 8 + (entry * 24)
-#		for i in range(2, 24): # Skip "USE" value
-#		#for i in 24:
-#			buffer.seek(pos+i)
-#			value = twentyFourByteArray[i]
-#			buffer.put_8(value)
-
+	return buffer

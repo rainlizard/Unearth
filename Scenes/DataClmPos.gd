@@ -13,7 +13,7 @@ func get_cell_clmpos_fast(x, y):
 	return abs(buffer.get_16())
 
 func set_cell_clmpos(x, y, value):
-	value = value
+	value = 65536-value
 	set_cell(x, y, value)
 
 # Alternatively, use:
