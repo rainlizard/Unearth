@@ -24,7 +24,6 @@ var middleMousePanning = false
 #var mouseIsMoving = false
 
 var mouseInWindow = true
-var skip_camera_reset = false
 
 func _ready():
 	reset_camera(M.xSize, M.ySize)

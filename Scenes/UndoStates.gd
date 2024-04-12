@@ -56,7 +56,7 @@ func undo():
 		var buffer = previous_state[EXT]
 		oBuffers.read_buffer_for_extension(buffer, EXT)
 
-	oOpenMap.finish_opening_map(oCurrentMap.path)
+	oOpenMap.load_complete(oCurrentMap.path)
 	oMessage.quick("Undo performed.")
 
 

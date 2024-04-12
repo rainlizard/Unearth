@@ -285,5 +285,4 @@ func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in comb
 	oMenuPlayButton.connect("pressed",self,"_on_PlayButton_pressed")
 
 func _on_ConfirmDiscardChanges_confirmed():
-	oCamera2D.skip_camera_reset = true
 	oOpenMap.open_map(oCurrentMap.path)

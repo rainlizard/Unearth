@@ -161,7 +161,9 @@ func open_map(filePath):
 		if map == "":
 			oCurrentFormat.selected = oSetNewFormat.selected
 		
-		finish_opening_map(map)
+		load_complete(map)
+		load_specific_to_openmap(map)
+		print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 	else:
 		if ALWAYS_DECOMPRESS == false:
 			oConfirmDecompression.dialog_text = "In order to open this map, these files must be decompressed: \n\n" #'Unable to open map, it contains files which have RNC compression: \n\n'
@@ -172,7 +174,6 @@ func open_map(filePath):
 		else:
 			# Begin decompression without confirmation dialog
 			_on_ConfirmDecompression_confirmed()
-
 
 func load_cfg_stuff(map):
 	var CODETIME_START = OS.get_ticks_msec()
@@ -191,8 +192,10 @@ func load_cfg_stuff(map):
 		Things.get_cfgs_directory(fullPathToMainCfg)
 	print('load_cfg_stuff: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
+func load_specific_to_openmap(map):
+	oCamera2D.reset_camera(M.xSize, M.ySize)
 
-func finish_opening_map(map):
+func load_complete(map):
 	# initialize_editor_components
 	oPickThingWindow.initialize_thing_grid_items()
 	oCurrentMap.set_path_and_title(map)
@@ -233,13 +236,6 @@ func finish_opening_map(map):
 		oMessage.quick("Fixed column index 0, re-save your map.")
 	
 	oDataClm.store_default_data()
-	
-	if oCamera2D.skip_camera_reset == false:
-		oCamera2D.reset_camera(M.xSize, M.ySize)
-	else:
-		oCamera2D.skip_camera_reset = false
-	
-	print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 
 
 func _on_ConfirmDecompression_confirmed():
