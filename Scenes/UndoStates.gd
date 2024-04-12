@@ -8,7 +8,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 
 var undo_states = []
 #var redo_states = []
-var max_undo_states = 10
+var max_undo_states = 256
 
 #func _process(delta):
 #	set_process(false)
@@ -49,7 +49,9 @@ func undo():
 		return
 
 	var previous_state = undo_states.pop_front()
-
+	
+	oCurrentMap.clear_map()
+	
 	for EXT in previous_state:
 		var buffer = previous_state[EXT]
 		oBuffers.read_buffer_for_extension(buffer, EXT)
