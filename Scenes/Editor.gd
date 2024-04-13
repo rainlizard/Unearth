@@ -26,7 +26,8 @@ var mapHasBeenEdited = false setget set_map_has_been_edited
 
 func set_map_has_been_edited(setVal):
 	mapHasBeenEdited = setVal
-	oUndoStates.attempt_to_save_new_undo_state()
+	if setVal == true:
+		oUndoStates.attempt_to_save_new_undo_state()
 
 func _ready():
 	get_tree().set_auto_accept_quit(false)

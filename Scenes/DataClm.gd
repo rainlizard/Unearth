@@ -32,23 +32,6 @@ func store_default_data():
 var unknownData #The second 4 bytes
 
 
-var topFace = []
-func top_faces_for_editor():
-	var CODETIME_START = OS.get_ticks_msec()
-	topFace.resize(2048)
-	for clmIndex in 2048:
-		var cubeFace = get_top_cube_face(clmIndex, 0)
-#		var valueInput = cubeFace
-#		var r = clamp(valueInput, 0, 255)
-#		valueInput -= 255
-#		var g = clamp(valueInput, 0, 255)
-#		valueInput -= 255
-#		var b = clamp(valueInput, 0, 255)
-#		topFace[clmIndex] = Color8(r,g,b)
-		topFace[clmIndex] = Color8(cubeFace >> 16 & 255, cubeFace >> 8 & 255, cubeFace & 255)
-		
-	print('top_faces_for_editor: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-
 func clm_data_exists():
 	if cubes.empty() == true:
 		return false # Nothing in arrays, so column data doesn't exist

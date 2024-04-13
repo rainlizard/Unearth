@@ -210,7 +210,6 @@ func load_complete(map):
 	if Slabset.dat.empty() == true: Slabset.load_default_slabset()
 	if Columnset.cubes.empty() == true: Columnset.load_default_columnset()
 	
-	oDataClm.top_faces_for_editor()
 	oOverheadGraphics.update_map_overhead_2d_textures()
 	oPickSlabWindow.add_slabs()
 	oDataClm.count_filled_clm_entries()

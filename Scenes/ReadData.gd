@@ -17,6 +17,26 @@ onready var oMessage = Nodelist.list["oMessage"]
 
 var value # just so I don't have to initialize the var in every function
 
+func read_mapsize_from_lof(buffer):
+	buffer.seek(0)
+	value = buffer.get_string(buffer.get_size())
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
+	var array = value.split("\n")
+	for line in array:
+		if line.begins_with(";"):
+			continue
+		
+		var lineParts = line.split("=")
+		
+		if lineParts.size() == 2:
+			if lineParts[0].strip_edges() == "MAPSIZE":
+				var sizeString = lineParts[1].strip_edges().split(" ")
+				if sizeString.size() == 2:
+					var x = sizeString[0].to_int()
+					var y = sizeString[1].to_int()
+					return Vector2(x,y)
+	return Vector2(85,85)
+
 func read_lof(buffer):
 	buffer.seek(0)
 	# Be sure to default to 85x85 in case it can't be read.
@@ -66,28 +86,8 @@ func read_lof(buffer):
 					var y = sizeString[1].to_int()
 					oDataLof.use_size(x,y)
 
-func new_keeperfx_lof():
+func new_lof():
 	oDataLof.KIND = "FREE"
-
-func read_mapsize_from_lof(buffer):
-	buffer.seek(0)
-	value = buffer.get_string(buffer.get_size())
-	value = value.replace(char(0x200B), "") # Remove zero width spaces
-	var array = value.split("\n")
-	for line in array:
-		if line.begins_with(";"):
-			continue
-		
-		var lineParts = line.split("=")
-		
-		if lineParts.size() == 2:
-			if lineParts[0].strip_edges() == "MAPSIZE":
-				var sizeString = lineParts[1].strip_edges().split(" ")
-				if sizeString.size() == 2:
-					var x = sizeString[0].to_int()
-					var y = sizeString[1].to_int()
-					return Vector2(x,y)
-	return Vector2(85,85)
 
 func read_slx(buffer):
 	buffer.seek(0)
@@ -113,11 +113,11 @@ func new_slx():
 	oDataSlx.slxTexData.create_from_image(oDataSlx.slxImgData, 0)
 
 func read_une(buffer):
-	oDataFakeSlab.initialize(M.xSize, M.ySize, 0, Grid.U8)
+	oDataFakeSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
 	oDataFakeSlab.buffer.set_data_array(buffer.data_array)
 
 func new_une():
-	oDataFakeSlab.initialize(M.xSize, M.ySize, 0, Grid.U8)
+	oDataFakeSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
 
 
 func read_wlb(buffer):
@@ -125,14 +125,14 @@ func read_wlb(buffer):
 	oDataLiquid.buffer.set_data_array(buffer.data_array)
 
 func new_wlb():
-	pass
+	oDataLiquid.initialize(M.xSize, M.ySize, 0, Grid.U8)
 
 func read_wib(buffer):
 	oDataWibble.initialize((M.xSize * 3) + 1, (M.ySize * 3) + 1, 0, Grid.U8)
 	oDataWibble.buffer.set_data_array(buffer.data_array)
 
 func new_wib():
-	oDataWibble.initialize((M.xSize*3)+1, (M.ySize*3)+1, 0, Grid.U8)
+	oDataWibble.initialize((M.xSize * 3) + 1, (M.ySize * 3) + 1, 0, Grid.U8)
 
 func read_inf(buffer):
 	buffer.seek(0)
@@ -154,7 +154,7 @@ func read_slb(buffer):
 	oDataSlab.buffer.set_data_array(buffer.data_array)
 
 func new_slb():
-	oDataSlab.initialize(M.xSize, M.ySize, 0, Grid.U8)
+	oDataSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
 
 func read_own(buffer):
 	oDataOwnership.initialize((M.xSize*3)+1, (M.ySize*3)+1, 5, Grid.U8)

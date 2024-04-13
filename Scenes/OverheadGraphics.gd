@@ -47,63 +47,15 @@ func overhead2d_update_rect(shapePositionArray):
 		for i in range(9):  # 3x3 subtiles
 			var x = basePosX + (i % 3)
 			var y = basePosY + (i / 3)
-
 			var clmIndex = oDataClmPos.get_cell_clmpos_fast(x,y)
-
-			var col = oDataClm.topFace[clmIndex]
+			var cubeFace = oDataClm.get_top_cube_face(clmIndex, 0)
 			var pixelIndex = ((y * width) + x) * 3
-			pixelData[pixelIndex] = col.r8
-			pixelData[pixelIndex + 1] = col.g8
-			pixelData[pixelIndex + 2] = col.b8
+			pixelData[pixelIndex] = cubeFace >> 16 & 255
+			pixelData[pixelIndex + 1] = cubeFace >> 8 & 255
+			pixelData[pixelIndex + 2] = cubeFace & 255
 	
 	overheadImgData.create_from_data(width, height, false, Image.FORMAT_RGB8, pixelData)
 	overheadTexData.set_data(overheadImgData)
-
-#	for i in (height*width):
-#		var x = i % width
-#		var y = i / width
-#		var clmIndex = oDataClmPos.get_cell_clmpos_fast(x, y)
-#		var col = oDataClm.topFace[clmIndex]
-#		var pixelIndex = i * 3
-#		pixelData[pixelIndex] = col.r8
-#		pixelData[pixelIndex + 1] = col.g8
-#		pixelData[pixelIndex + 2] = col.b8
-
-
-#func overhead2d_update_rect(shapePositionArray):
-#	overheadImgData.lock()
-#	for pos in shapePositionArray:
-#		#var slabID = oDataSlab.get_cell(pos.x, pos.y)
-#		for ySubtile in 3:
-#			for xSubtile in 3:
-#				var x = (pos.x * 3) + xSubtile
-#				var y = (pos.y * 3) + ySubtile
-#				var clmIndex = oDataClmPos.get_cell(x, y)
-#				var col = oDataClm.topFace[clmIndex]
-#				overheadImgData.set_pixel(x,y,col) #get_overhead_face_value(x, y, slabID)
-#	overheadImgData.unlock()
-#	overheadTexData.set_data(overheadImgData)
-	
-	#overheadImgData.save_png("res://viewTextures.png")
-
-
-#func get_overhead_face_value(x, y, slabID):
-#	# clmIndex is a position inside the 2048 column collection
-#	var clmIndex = oDataClmPos.get_cell(x, y)
-#
-#	if clmIndex > 2048:
-#		clmIndex = 0
-#
-#	# clmData is the 24 byte array.
-#	var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
-#
-#	var valueInput = cubeFace
-#	var r = clamp(valueInput, 0, 255)
-#	valueInput -= 255
-#	var g = clamp(valueInput, 0, 255)
-#	valueInput -= 255
-#	var b = clamp(valueInput, 0, 255)
-#	return Color8(r,g,b)
 
 
 func initialize_display_fields():
