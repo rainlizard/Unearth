@@ -13,14 +13,21 @@ var height = 0
 func initialize(w, h, fillValue, dtype):
 	width = w
 	height = h
-	#buffer.resize(width * height * get_data_size())
-	buffer.resize(width * height)
+	buffer.resize(width * height * get_data_size())
 	buffer.clear()
 	data_type = dtype
 
 func set_cell(x, y, value):
 	if is_valid_coordinate(x, y):
 		if data_type == U8:
+			print("---")
+			print("x: ", x*3)
+			print("y: ", y*3)
+			print("width: ", width)
+			print("height: ", height)
+			print("size: ", width*height)
+			print("seek: ", y*width+x)
+			
 			buffer.seek((y*width+x))
 			buffer.put_u8(value)
 		elif data_type == U16:
@@ -50,9 +57,9 @@ func set_cellv(pos, value):
 func get_cellv(pos):
 	return get_cell(pos.x, pos.y)
 
-#func get_data_size():
-#	if data_type == U8:
-#		return 1
-#	elif data_type == U16:
-#		return 2
-#	return 1
+func get_data_size():
+	if data_type == U8:
+		return 1
+	elif data_type == U16:
+		return 2
+	return 1
