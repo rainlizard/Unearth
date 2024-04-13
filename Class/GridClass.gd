@@ -1,65 +1,49 @@
 extends Node
 class_name Grid
 
-enum {
-	U8, # (8-bit unsigned integer)
-	U16 # (16-bit unsigned integer)
-}
+const U8 = 1
+const U16 = 2
+
 var buffer = StreamPeerBuffer.new()
-var data_type = U8
+var bytes_per_entry = 1
 var width = 0
 var height = 0
+var buffer_size = 0
 
-func initialize(w, h, fillValue, dtype):
+func initialize(w, h, fillValue, setPerEntryBytes):
 	width = w
 	height = h
-	buffer.resize(width * height * get_data_size())
-	buffer.clear()
-	data_type = dtype
+	bytes_per_entry = setPerEntryBytes
+	buffer_size = width * height * bytes_per_entry
+	
+	# Clearing a buffer is troublesome, in order to do so I need to set the buffer to an equal-sized blank PoolByteArray. (this takes 0ms)
+	var blankByteArray = PoolByteArray([])
+	blankByteArray.resize(buffer.get_size())
+	blankByteArray.fill(fillValue)
+	buffer.data_array = blankByteArray
+
 
 func set_cell(x, y, value):
-	if is_valid_coordinate(x, y):
-		if data_type == U8:
-			print("---")
-			print("x: ", x*3)
-			print("y: ", y*3)
-			print("width: ", width)
-			print("height: ", height)
-			print("size: ", width*height)
-			print("seek: ", y*width+x)
-			
-			buffer.seek((y*width+x))
+	var seek_pos = (y * width + x) * bytes_per_entry
+	if seek_pos >= 0 and seek_pos < buffer_size:
+		buffer.seek(seek_pos)
+		if bytes_per_entry == U8:
 			buffer.put_u8(value)
-		elif data_type == U16:
-			buffer.seek((y*width+x) * 2)
+		elif bytes_per_entry == U16:
 			buffer.put_u16(value)
 
 func get_cell(x, y):
-	if is_valid_coordinate(x, y):
-		var value
-		
-		if data_type == U8:
-			buffer.seek((y*width+x))
-			value = buffer.get_u8()
-		elif data_type == U16:
-			buffer.seek((y*width+x) * 2)
-			value = buffer.get_u16()
-		return value
-	
+	var seek_pos = (y * width + x) * bytes_per_entry
+	if seek_pos >= 0 and seek_pos < buffer_size:
+		buffer.seek(seek_pos)
+		if bytes_per_entry == U8:
+			return buffer.get_u8()
+		elif bytes_per_entry == U16:
+			return buffer.get_u16()
 	return -1
-
-func is_valid_coordinate(x, y):
-	return x >= 0 and x < width and y >= 0 and y < height
 
 func set_cellv(pos, value):
 	set_cell(pos.x, pos.y, value)
 
 func get_cellv(pos):
 	return get_cell(pos.x, pos.y)
-
-func get_data_size():
-	if data_type == U8:
-		return 1
-	elif data_type == U16:
-		return 2
-	return 1

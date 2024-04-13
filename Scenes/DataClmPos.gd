@@ -1,15 +1,15 @@
 extends Grid
 
-
 func get_cell_clmpos(x, y):
-	if is_valid_coordinate(x, y) == false:
-		return 0
-	
-	buffer.seek((y*width+x) * 2)
-	return abs(buffer.get_16())
+	var seek_pos = (y * width + x) * bytes_per_entry
+	if seek_pos >= 0 and seek_pos < buffer_size:
+		buffer.seek(seek_pos)
+		return abs(buffer.get_16())
+	return 0
 
 func get_cell_clmpos_fast(x, y):
-	buffer.seek((y*width+x) * 2)
+	var seek_pos = (y * width + x) * bytes_per_entry
+	buffer.seek(seek_pos)
 	return abs(buffer.get_16())
 
 func set_cell_clmpos(x, y, value):
