@@ -439,12 +439,13 @@ func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 
 func set_collectibles_ownership(id, slabID, slabOwnership):
 	if id.thingType == Things.TYPE.OBJECT:
-		var genre = Things.DATA_OBJECT[id.subtype][Things.EDITOR_TAB]
-		if Things.collectible_belonging.has(genre):
-			if slabID == Things.collectible_belonging[genre]:
-				id.ownership = slabOwnership
-			else:
-				id.ownership = 5
+		if Things.DATA_OBJECT.has(id.subtype):
+			var genre = Things.DATA_OBJECT[id.subtype][Things.EDITOR_TAB]
+			if Things.collectible_belonging.has(genre):
+				if slabID == Things.collectible_belonging[genre]:
+					id.ownership = slabOwnership
+				else:
+					id.ownership = 5
 
 func manage_thing_ownership_on_slab(xSlab, ySlab, ownership):
 	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)

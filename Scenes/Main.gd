@@ -46,7 +46,6 @@ func initialize_window_settings():
 		OS.window_fullscreen = false
 
 
-
 #func get_mipmap(img, level): # Doesn't need to care about formats, but can't handle the smallest MIP level
 #	if img.has_mipmaps() == false: return
 #

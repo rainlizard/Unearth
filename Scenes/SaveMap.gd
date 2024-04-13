@@ -19,6 +19,8 @@ func save_map(filePath): # auto opens other files
 	var SAVETIME_START = OS.get_ticks_msec()
 	delete_existing_files(map)
 	
+	oDataClm.update_all_utilized() # Doesn't need to be in "Undo"
+	
 	var writeFailure = false
 	for EXT in oBuffers.FILE_TYPES:
 		if not oBuffers.should_process_file_type(EXT):

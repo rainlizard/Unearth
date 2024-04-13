@@ -334,7 +334,6 @@ func write_dat():
 
 func write_clm():
 	var buffer = StreamPeerBuffer.new()
-	oDataClm.update_all_utilized()
 
 	var numberOfClmEntries = 2048
 	buffer.put_16(numberOfClmEntries)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=187 format=2]
+[gd_scene load_steps=188 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -166,6 +166,7 @@
 [ext_resource path="res://Scenes/DataWibble.gd" type="Script" id=164]
 [ext_resource path="res://Scenes/Buffers.gd" type="Script" id=165]
 [ext_resource path="res://Scenes/UndoStates.gd" type="Script" id=166]
+[ext_resource path="res://Scenes/ThreadedSaveUndo.gd" type="Script" id=167]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -383,6 +384,9 @@ script = ExtResource( 97 )
 
 [node name="UndoStates" type="Node" parent="."]
 script = ExtResource( 166 )
+
+[node name="ThreadedSaveUndo" type="Node" parent="UndoStates"]
+script = ExtResource( 167 )
 
 [node name="Buffers" type="Node" parent="."]
 script = ExtResource( 165 )

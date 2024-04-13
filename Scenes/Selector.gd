@@ -166,6 +166,7 @@ func mouse_button_on_field():
 	
 	# Release button
 	if Input.is_action_just_released("mouse_left"):
+		OS.move_window_to_foreground() # See if this helps any issues which cause Unearth minimize button to stop working.
 		if is_instance_valid(holdClickOnInstance):
 			if draggingInstance == true:
 				draggingInstance = false
