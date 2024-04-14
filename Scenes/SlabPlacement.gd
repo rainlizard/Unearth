@@ -315,7 +315,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	#print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
-
+	
 
 func do_update_auto_walls(slabID):
 	# If this ID has been set to WALL_AUTOMATIC, by whatever reason, then it must be updated. This doesn't mean you're placing a WALL_AUTOMATIC, just that this slab has been set to it.

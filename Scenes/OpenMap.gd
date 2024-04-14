@@ -234,7 +234,7 @@ func continue_load(map):
 
 func continue_load_openmap(map):
 	oCamera2D.reset_camera(M.xSize, M.ySize)
-	oUndoStates.clear_undo_history()
+	oUndoStates.clear_history()
 	if map == "":
 		oMessage.quick('New map')
 	else:

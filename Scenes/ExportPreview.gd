@@ -56,7 +56,7 @@ func _on_ExportPreview_about_to_show():
 	oUiTools.visible = false
 	oUi.hide_tools()
 	oUi3D.visible = false
-	yield(oGenerateTerrain, "terrain_finished_generating")
+	yield(oGenerateTerrain, "terrain3D_finished_generating")
 	oGame3D.visible = true
 	modulate.a = 1.0
 	_on_SavePreviewMipmapsCheckbox_toggled(oSavePreviewMipmapsCheckbox.pressed)
