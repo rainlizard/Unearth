@@ -39,6 +39,7 @@ func _init():
 func _on_ButtonNewMap_pressed():
 	oOpenMap.open_map("") # This means "blank" map
 
+
 func set_path_and_title(newpath):
 	if newpath != "":
 		OS.set_window_title(newpath + ' - Unearth v'+Version.full)
@@ -48,6 +49,7 @@ func set_path_and_title(newpath):
 	path = newpath
 	
 	oGame.reconstruct_command_line() # Always update command line whenever the path changes
+
 
 var instancesToFree = []
 func _process(delta):

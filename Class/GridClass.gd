@@ -18,7 +18,7 @@ func initialize(w, h, fillValue, setPerEntryBytes):
 	
 	# Clearing a buffer is troublesome, in order to do so I need to set the buffer to an equal-sized blank PoolByteArray. (this takes 0ms)
 	var blankByteArray = PoolByteArray([])
-	blankByteArray.resize(buffer.get_size())
+	blankByteArray.resize(buffer_size)
 	blankByteArray.fill(fillValue)
 	buffer.data_array = blankByteArray
 

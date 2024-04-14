@@ -1,63 +1,53 @@
 extends Node
+
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oThreadedSaveUndo = Nodelist.list["oThreadedSaveUndo"]
+onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 
 var is_saving_state = false
-var undo_states = []
+var undo_history = []
 var max_undo_states = 256
 
 func _input(event):
 	if event.is_action_pressed("undo"):
-		undo()
+		perform_undo()
+
+func clear_undo_history():
+	oMessage.quick("Undo history cleared")
+	undo_history.clear()
+	oThreadedSaveUndo.semaphore.post() # Clear to base state
 
 func attempt_to_save_new_undo_state(): # called by oEditor
 	if is_saving_state == false:
 		is_saving_state = true
-		while Input.is_mouse_button_pressed(BUTTON_LEFT):
+		while Input.is_mouse_button_pressed(BUTTON_LEFT) or oLoadingBar.visible == true:
 			yield(get_tree(), "idle_frame")
 		oThreadedSaveUndo.semaphore.post()
 
-func save_completed(new_state_saved):
-	if undo_states.size() >= max_undo_states:
-		undo_states.pop_back()
-	
-	if undo_states.empty() or new_state_saved != undo_states[0]:
-		undo_states.push_front(new_state_saved)
-		oMessage.quick("Added undo-state")
-	
+func on_undo_state_saved(new_state):
 	is_saving_state = false
-
-func undo():
-	if undo_states.empty():
-		oMessage.quick("No more undo states available")
+	if undo_history.size() >= 2 and new_state == undo_history[1]:
+		oMessage.quick("Didn't add undo state as it is the same as the previous undo-state")
 		return
-	var previous_state = undo_states.pop_front()
+	if undo_history.size() >= max_undo_states:
+		undo_history.pop_back()
+	undo_history.push_front(new_state)
+	oMessage.quick("Added undo state. Array size: " + str(undo_history.size()))
+
+func perform_undo():
+	if undo_history.size() <= 1:
+		oMessage.quick("No more undo states")
+		return
+
+	var previous_state = undo_history[1]
 	oCurrentMap.clear_map()
 	for EXT in previous_state:
 		var buffer = previous_state[EXT]
 		oBuffers.read_buffer_for_extension(buffer, EXT)
-	oOpenMap.load_complete(oCurrentMap.path)
+	oOpenMap.continue_load(oCurrentMap.path)
+	undo_history.pop_front()
 	oMessage.quick("Undo performed")
-
-#func redo():
-#	if redo_states.empty():
-#		oMessage.quick("No more redo states available.")
-#		return
-#
-#	var next_state = redo_states.pop_front()
-#
-#	for EXT in next_state:
-#		var buffer = next_state[EXT]
-#		oBuffers.read_buffer_for_extension(buffer, EXT)
-#
-#	undo_states.push_front(next_state)
-#
-#	if undo_states.size() > max_undo_states:
-#		undo_states.pop_back()
-#
-#	oOpenMap.finish_opening_map(oCurrentMap.path)
-#	oMessage.quick("Redo performed.")

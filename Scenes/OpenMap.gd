@@ -40,6 +40,7 @@ onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
 onready var oBuffers = Nodelist.list["oBuffers"]
+onready var oUndoStates = Nodelist.list["oUndoStates"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -58,9 +59,10 @@ func start():
 		open_map(cmdLine[0])
 	else:
 		if OS.has_feature("standalone") == false:
-			#yield(get_tree(), "idle_frame")
+			#for i in 200:
+			#	yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
-			open_map("D:/Dungeon Keeper/levels/personal/map00002.slb")
+			#open_map("D:/Dungeon Keeper/levels/personal/map00002.slb")
 			pass
 		else:
 			# initialize a cleared map
@@ -161,8 +163,8 @@ func open_map(filePath):
 		if map == "":
 			oCurrentFormat.selected = oSetNewFormat.selected
 		
-		load_complete(map)
-		load_specific_to_openmap(map)
+		continue_load(map)
+		continue_load_openmap(map)
 		print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 	else:
 		if ALWAYS_DECOMPRESS == false:
@@ -174,6 +176,7 @@ func open_map(filePath):
 		else:
 			# Begin decompression without confirmation dialog
 			_on_ConfirmDecompression_confirmed()
+
 
 func load_cfg_stuff(map):
 	var CODETIME_START = OS.get_ticks_msec()
@@ -192,10 +195,8 @@ func load_cfg_stuff(map):
 		Things.get_cfgs_directory(fullPathToMainCfg)
 	print('load_cfg_stuff: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
-func load_specific_to_openmap(map):
-	oCamera2D.reset_camera(M.xSize, M.ySize)
 
-func load_complete(map):
+func continue_load(map):
 	# initialize_editor_components
 	oPickThingWindow.initialize_thing_grid_items()
 	oCurrentMap.set_path_and_title(map)
@@ -216,11 +217,6 @@ func load_complete(map):
 
 	oTextureCache.set_current_texture_pack()
 
-	if oCurrentMap.path == "":
-		oMessage.quick('New map')
-	else:
-		oMessage.quick('Opened map')
-
 	# finalize_map_opening
 	oEditor.set_view_2d()
 
@@ -236,6 +232,14 @@ func load_complete(map):
 	
 	oDataClm.store_default_data()
 
+func continue_load_openmap(map):
+	oCamera2D.reset_camera(M.xSize, M.ySize)
+	oUndoStates.clear_undo_history()
+	if map == "":
+		oMessage.quick('New map')
+	else:
+		oMessage.quick('Opened map')
+
 
 func _on_ConfirmDecompression_confirmed():
 	print('Attempting to decompress...')
@@ -246,8 +250,10 @@ func _on_ConfirmDecompression_confirmed():
 	# Retry opening the map
 	open_map(compressedFiles[0])
 
+
 func _on_FileDialogOpen_file_selected(path):
 	open_map(path)
+
 
 func get_accompanying_files(map):
 	var CODETIME_START = OS.get_ticks_msec()
