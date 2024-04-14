@@ -8,6 +8,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oThreadedSaveUndo = Nodelist.list["oThreadedSaveUndo"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 var is_saving_state = false
 var undo_history = []
@@ -58,3 +59,6 @@ func perform_undo():
 	oOpenMap.continue_load(oCurrentMap.path)
 	undo_history.pop_front()
 	oMessage.quick("Undo performed")
+	
+	if undo_history.size() <= 1: # Check after pop_front()
+		oEditor.mapHasBeenEdited = false

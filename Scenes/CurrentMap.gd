@@ -69,8 +69,6 @@ func clear_map():
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	
-	set_path_and_title("")
-	
 	# "lif"
 	oDataMapName.clear()
 	# "wib"

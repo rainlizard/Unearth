@@ -161,7 +161,9 @@ func constantly_monitor_play_button_state():
 		oMenuPlayButton.disabled = true
 		oMenuPlayButton.hint_tooltip = "Map must be saved in the correct directory in order to play."
 	
-	if oEditor.mapHasBeenEdited == true:
+	if oCurrentMap.path == "":
+		oMenuPlayButton.text = "Save & Play"
+	elif oEditor.mapHasBeenEdited == true:
 		oMenuPlayButton.text = "Save & Play"
 	else:
 		oMenuPlayButton.text = "Play"
