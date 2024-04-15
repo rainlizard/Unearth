@@ -35,28 +35,43 @@ func update_map_overhead_2d_textures():
 #	for ySubtile in height:
 #		for xSubtile in width:
 
-var pixelData = PoolByteArray()
+
+var thread = Thread.new()
+var semaphore = Semaphore.new()
+
+
 func overhead2d_update_rect(shapePositionArray):
+	thread.start(self, "multi_threaded", shapePositionArray)
+	semaphore.post()  # Release the semaphore after starting the thread
+
+
+func thread_done(pixelData):
 	var width = M.xSize * 3
 	var height = M.ySize * 3
-	pixelData.resize(width * height * 3)  # Assuming RGB8 format
-	
-	for pos in shapePositionArray:
-		var basePosX = pos.x * 3
-		var basePosY = pos.y * 3
-		for i in range(9):  # 3x3 subtiles
-			var x = basePosX + (i % 3)
-			var y = basePosY + (i / 3)
-			var clmIndex = oDataClmPos.get_cell_clmpos_fast(x,y)
-			var cubeFace = oDataClm.get_top_cube_face(clmIndex, 0)
-			var pixelIndex = ((y * width) + x) * 3
-			pixelData[pixelIndex] = cubeFace >> 16 & 255
-			pixelData[pixelIndex + 1] = cubeFace >> 8 & 255
-			pixelData[pixelIndex + 2] = cubeFace & 255
-	
 	overheadImgData.create_from_data(width, height, false, Image.FORMAT_RGB8, pixelData)
 	overheadTexData.set_data(overheadImgData)
 
+func multi_threaded(shapePositionArray):
+	while true:
+		semaphore.wait()  # Acquire the semaphore before processing
+		var width = M.xSize * 3
+		var height = M.ySize * 3
+		var pixelData = PoolByteArray()
+		pixelData.resize(width * height * 3)  # Assuming RGB8 format
+		for pos in shapePositionArray:
+			var basePosX = pos.x * 3
+			var basePosY = pos.y * 3
+			for i in range(9):  # 3x3 subtiles
+				var x = basePosX + (i % 3)
+				var y = basePosY + (i / 3)
+				var clmIndex = oDataClmPos.get_cell_clmpos_fast(x, y)
+				var cubeFace = oDataClm.get_top_cube_face(clmIndex, 0)
+				var pixelIndex = ((y * width) + x) * 3
+
+				pixelData[pixelIndex] = cubeFace >> 16 & 255
+				pixelData[pixelIndex + 1] = cubeFace >> 8 & 255
+				pixelData[pixelIndex + 2] = cubeFace & 255
+		call_deferred("thread_done", pixelData)
 
 func initialize_display_fields():
 	arrayOfColorRects.clear() # just in case
