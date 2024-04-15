@@ -51,11 +51,11 @@ func set_path_and_title(newpath):
 	oGame.reconstruct_command_line() # Always update command line whenever the path changes
 
 func clear_map():
+	var CODETIME_START = OS.get_ticks_msec()
+	
 	var allInst = get_tree().get_nodes_in_group("Instance")
 	for id in allInst:
 		oInstances.kill_instance(id)
-	
-	var CODETIME_START = OS.get_ticks_msec()
 	
 	# "lif"
 	oDataMapName.clear()

@@ -76,6 +76,7 @@ func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
 func open_map(filePath):
+	
 	# a filePath of "" means make a blank map.
 	
 	# This will replace \ with /, just for the sake of fixing ugliness
@@ -91,14 +92,15 @@ func open_map(filePath):
 		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
 		return
 	
+	print("----------- Opening map ------------")
+	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
+	
 	# Always begin by clearing map
 	oCurrentMap.clear_map()
-	
 	# Close windows that I want closed
 	oMapSettingsWindow.visible = false
 	oColumnEditor.visible = false
 	
-	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
 	var map = filePath.get_basename()
 	
 	load_cfg_stuff(map)
@@ -166,6 +168,7 @@ func open_map(filePath):
 		continue_load(map)
 		continue_load_openmap(map)
 		print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
+		print("----------------------------------------------")
 	else:
 		if ALWAYS_DECOMPRESS == false:
 			oConfirmDecompression.dialog_text = "In order to open this map, these files must be decompressed: \n\n" #'Unable to open map, it contains files which have RNC compression: \n\n'
@@ -209,7 +212,7 @@ func continue_load(map):
 	if Columnset.cubes.empty() == true: Columnset.load_default_columnset()
 	
 	oOverheadGraphics.update_map_overhead_2d_textures()
-	oPickSlabWindow.add_slabs()
+	
 	oDataClm.count_filled_clm_entries()
 
 	oTextureCache.set_current_texture_pack()
@@ -231,6 +234,7 @@ func continue_load(map):
 
 func continue_load_openmap(map):
 	oEditor.mapHasBeenEdited = false
+	oPickSlabWindow.add_slabs()
 	oDynamicMapTree.highlight_current_map()
 	oCurrentMap.set_path_and_title(map)
 	oCamera2D.reset_camera(M.xSize, M.ySize)

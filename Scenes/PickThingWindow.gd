@@ -186,10 +186,11 @@ func add_item_to_grid(tabID, id, set_text):
 	id.connect("pressed",self,"pressed",[id])
 	id.rect_min_size = Vector2(grid_item_size.x * grid_window_scale, grid_item_size.y * grid_window_scale)
 	
-	yield(get_tree(),'idle_frame')
-	var subtype = id.get_meta("thingSubtype")
-	if Things.LIST_OF_BOXES.has(subtype):
-		add_workshop_item_sprite_overlay(id, subtype)
+	#yield(get_tree(),'idle_frame')
+	if is_instance_valid(id) == true:
+		var subtype = id.get_meta("thingSubtype")
+		if Things.LIST_OF_BOXES.has(subtype):
+			add_workshop_item_sprite_overlay(id, subtype)
 
 func add_workshop_item_sprite_overlay(textureParent, subtype):
 	var itemType = Things.LIST_OF_BOXES[subtype][0]

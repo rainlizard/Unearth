@@ -14,7 +14,7 @@ func _enter_tree():
 func run_threaded_undo_save(_userdata):
 	while true:
 		semaphore.wait()
-		print("Thread start")
+		print("Start multi-threaded save undo state")
 		var CODETIME_START = OS.get_ticks_msec()
 		
 		var consistent_state = {}
@@ -32,13 +32,12 @@ func run_threaded_undo_save(_userdata):
 		
 		# The captured state is consistent, save it as the undo state
 		oUndoStates.call_deferred("on_undo_state_saved", consistent_state)
-		print("Undo state save time: " + str(OS.get_ticks_msec() - CODETIME_START) + "ms")
-		print("Thread end")
+		print("End multi-threaded save undo state: " + str(OS.get_ticks_msec() - CODETIME_START) + "ms")
 
 func create_state():
 	var new_state = {}
 	for EXT in oBuffers.FILE_TYPES:
-		print("Undo processing: ", EXT)
+		#print("Undo processing: ", EXT)
 		if oBuffers.should_process_file_type(EXT) == false:
 			continue
 		new_state[EXT] = oBuffers.get_buffer_for_extension(EXT, oCurrentMap.path)

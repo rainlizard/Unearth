@@ -47,19 +47,19 @@ func on_undo_state_saved(new_state):
 	is_saving_state = false
 
 func perform_undo():
+	print("perform_undo")
 	if performing_undo == true or undo_history.size() <= 1:
 		return
-
-	performing_undo = true
-
 	var previous_state = undo_history[1]
-	oCurrentMap.clear_map()
-
 	if typeof(previous_state) != TYPE_DICTIONARY:
 		print("Error: previous_state is not a dictionary")
 		oMessage.big("Undo state error", "previous_state is not a dictionary")
-		performing_undo = false
 		return
+	
+	var CODETIME_START = OS.get_ticks_msec()
+	performing_undo = true
+	
+	oCurrentMap.clear_map()
 	
 	for EXT in previous_state:
 		var buffer = previous_state[EXT]
@@ -67,7 +67,9 @@ func perform_undo():
 			print("Undo state error: buffer '%s' is not a valid StreamPeerBuffer" % EXT)
 			oMessage.big("Undo state error", "Buffer '%s' is not a valid StreamPeerBuffer" % EXT)
 			continue
+		var undotimeExt = OS.get_ticks_msec()
 		oBuffers.read_buffer_for_extension(buffer, EXT)
+		print(str(EXT) + ' Undotime: ' + str(OS.get_ticks_msec() - undotimeExt) + 'ms')
 
 	oOpenMap.continue_load(oCurrentMap.path)
 	undo_history.pop_front()
@@ -78,6 +80,7 @@ func perform_undo():
 
 	yield(get_tree(), 'idle_frame')
 	performing_undo = false
+	print('perform_undo: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 
 func are_states_equal(state1, state2): # (0ms or 1ms)
