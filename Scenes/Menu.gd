@@ -96,28 +96,32 @@ func initialize_recently_opened(value):
 	recentlyOpened = value
 	populate_recently_opened()
 
+var tdir = Directory.new()
 
 func populate_recently_opened():
 	recentlyOpenedPopupMenu.clear()
 	
 	for i in range(recentlyOpened.size() - 1, -1, -1): # iterate in reverse
-		var filePath = recentlyOpened[i]
-		
-		if Directory.new().file_exists(filePath.get_basename()+".slb") == false and Directory.new().file_exists(filePath.get_basename()+".SLB") == false:
+		var filePath = recentlyOpened[i].get_basename()
+		if tdir.file_exists(filePath + ".slb") == false and tdir.file_exists(filePath + ".SLB") == false:
 			recentlyOpened.remove(i)
 	
 	for i in recentlyOpened.size():
-		var filePath = recentlyOpened[i]
+		var filePath = recentlyOpened[i].get_basename()
 		
 		filePath = filePath.replace("\\", "/")
 		var mapName = ""
 		
-		if mapName == "": mapName = oDataLof.lof_name_text(filePath + ".lof")
-		if mapName == "": mapName = oDataLof.lof_name_text(filePath + ".LOF")
-		if mapName == "": mapName = oDataMapName.lif_name_text(filePath + '.lif')
-		if mapName == "": mapName = oDataMapName.lif_name_text(filePath + '.LIF')
-		if mapName == "": mapName = oDataMapName.get_special_lif_text(filePath)
-		if mapName == "": mapName = oDataMapName.get_special_lif_text(filePath)
+		if tdir.file_exists(filePath + ".lof"):
+			mapName = oDataLof.lof_name_text(filePath + ".lof")
+		elif tdir.file_exists(filePath + ".LOF"):
+			mapName = oDataLof.lof_name_text(filePath + ".LOF")
+		elif tdir.file_exists(filePath + ".lif"):
+			mapName = oDataMapName.lif_name_text(filePath + '.lif')
+		elif tdir.file_exists(filePath + ".LIF"):
+			mapName = oDataMapName.lif_name_text(filePath + '.LIF')
+		else:
+			mapName = oDataMapName.get_special_lif_text(filePath)
 		
 		# Trim game directory from path to make it look nicer
 		var baseDir = oGame.GAME_DIRECTORY.replace('\\','/')

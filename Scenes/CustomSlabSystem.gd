@@ -49,10 +49,10 @@ func load_file():
 		}
 		
 		var retrieve_value
-		retrieve_value = cfg.get_value(section, "door_thing", null) # Default = null
-		if retrieve_value != null: slab_dict["door_thing"] = retrieve_value
-		retrieve_value = cfg.get_value(section, "door_orientation", null)
-		if retrieve_value != null: slab_dict["door_orientation"] = retrieve_value
+		retrieve_value = cfg.get_value(section, "door_thing", "NOT_FOUND") # Default = null
+		if retrieve_value != "NOT_FOUND": slab_dict["door_thing"] = retrieve_value
+		retrieve_value = cfg.get_value(section, "door_orientation", "NOT_FOUND")
+		if retrieve_value != "NOT_FOUND": slab_dict["door_orientation"] = retrieve_value
 		
 		add_custom_slab(slab_dict)
 
