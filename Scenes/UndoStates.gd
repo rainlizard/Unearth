@@ -77,10 +77,14 @@ func perform_undo():
 
 	if undo_history.size() <= 1:
 		oEditor.mapHasBeenEdited = false
-
-	yield(get_tree(), 'idle_frame')
-	performing_undo = false
+	
 	print('perform_undo: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	
+	var IDLE_FRAME_CODETIME_START = OS.get_ticks_msec()
+	yield(get_tree(), 'idle_frame')
+	print('Idle frame (after undo): ' + str(OS.get_ticks_msec() - IDLE_FRAME_CODETIME_START) + 'ms')
+	performing_undo = false
+	
 
 
 func are_states_equal(state1, state2): # (0ms or 1ms)

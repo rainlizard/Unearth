@@ -423,13 +423,35 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 #			3: partnerArrow.texture = preload("res://Art/torchdir3.png")
 #		id.add_child(partnerArrow)
 
+var instances_to_erase = []
+
+func _process(delta):
+	set_process(false)
+	for i in 2: # We need 2 idle_frames to separate the wait from the 1 idle_frame that perform_undo uses
+		yield(get_tree(),'idle_frame')
+	var items_freed = 0
+	var max_items_to_free = max(1, instances_to_erase.size() * 0.01)
+	#var FREEING_CODETIME_START = OS.get_ticks_msec()
+	while true:
+		var id = instances_to_erase.pop_back()
+		if is_instance_valid(id):
+			items_freed += 1
+			id.free()
+		if instances_to_erase.size() > 2000: # If you're not erasing them fast enough, leaving too many instances on the field creates its own lag.
+			continue
+		elif instances_to_erase.empty() == true or items_freed > max_items_to_free:
+			break
+	#if items_freed > 0:
+		#print(items_freed)
+		#print('Time spent freeing instances: ' + str(OS.get_ticks_msec() - FREEING_CODETIME_START) + 'ms')
+	set_process(true)
+
 func kill_instance(id): # Multi-thread safe
-	remove_child(id)
-	id.position = Vector2(-9999999,-9999999)
 	id.visible = false
 	for group in id.get_groups():
 		id.remove_from_group(group)
-	id.queue_free()
+	instances_to_erase.append(id)
+
 
 func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
