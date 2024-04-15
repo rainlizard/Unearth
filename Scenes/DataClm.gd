@@ -160,7 +160,7 @@ func sort_columns_by_utilized():
 		for xSlab in range(0, M.xSize):
 			shapePositionArray.append(Vector2(xSlab,ySlab))
 	
-	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
+	oOverheadGraphics.overhead2d_update_rect_single_threaded(shapePositionArray)
 	
 	
 	utilized[0] = 0 # Pretend that the utilized value is maximum for column 0, so it's placed first. Set it back to 0 afterwards.

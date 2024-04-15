@@ -86,7 +86,7 @@ func remove_outside_instances(newWidth, newHeight):
 func update_editor_appearance():
 	oEditor.update_boundaries()
 	oOverheadOwnership.start()
-	oOverheadGraphics.update_map_overhead_2d_textures()
+	oOverheadGraphics.update_full_overhead_map()
 
 # The main function that calls all the helper functions
 func _on_ResizeApplyButton_pressed():
@@ -169,7 +169,7 @@ func _on_ResizeFillWithID_value_changed(value):
 #
 #	oEditor.update_boundaries()
 #	oOverheadOwnership.start()
-#	oOverheadGraphics.update_map_overhead_2d_textures()
+#	oOverheadGraphics.update_full_overhead_map()
 #
 #	# Apply changes for added positions
 #	oSlabPlacement.place_shape_of_slab_id(positionsToUpdate.keys(), Slabs.EARTH, 5)

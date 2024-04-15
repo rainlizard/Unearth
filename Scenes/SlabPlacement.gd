@@ -314,7 +314,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	
 	#print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
-	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
+	oOverheadGraphics.overhead2d_update_rect_single_threaded(shapePositionArray)
 	
 
 func do_update_auto_walls(slabID):

@@ -64,8 +64,6 @@ func clear_map():
 	oOverheadOwnership.clear()
 	# "inf"
 	oDataLevelStyle.data = 0
-	# "clm"
-	oOverheadGraphics.clear_img()
 	# 3D
 	oGenerateTerrain.clear()
 	#"TXT"
