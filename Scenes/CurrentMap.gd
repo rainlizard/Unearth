@@ -50,22 +50,10 @@ func set_path_and_title(newpath):
 	
 	oGame.reconstruct_command_line() # Always update command line whenever the path changes
 
-
-var instancesToFree = []
-func _process(delta):
-	# For whatever reason, clearing here instead from an array prevents Godot from crashing
-	while instancesToFree.empty() == false:
-		instancesToFree.pop_back().queue_free()
-
 func clear_map():
 	var allInst = get_tree().get_nodes_in_group("Instance")
 	for id in allInst:
-		oInstances.remove_child(id)
-		id.position = Vector2(-9999999,-9999999)
-		id.visible = false
-		for group in id.get_groups():
-			id.remove_from_group(group)
-		instancesToFree.append(id)
+		oInstances.kill_instance(id)
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	

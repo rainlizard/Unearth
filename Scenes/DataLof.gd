@@ -39,6 +39,8 @@ func clear_all():
 	M.ySize = 85
 
 func lof_name_text(pathString):
+	return ""
+	
 	var buffer = oBuffers.file_path_to_buffer(pathString)
 	
 	buffer.seek(0)

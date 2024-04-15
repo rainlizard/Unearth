@@ -139,7 +139,7 @@ func mirror_deletion_of_instance(instanceBeingDeleted):
 			if is_instance_valid(getNodeAtMirroredPosition):
 				if getNodeAtMirroredPosition.subtype == instanceBeingDeleted.subtype:
 					if getNodeAtMirroredPosition.thingType == instanceBeingDeleted.thingType:
-						getNodeAtMirroredPosition.queue_free()
+						kill_instance(getNodeAtMirroredPosition)
 
 func placement_is_obstructed(thingType, placeSubtile):
 	var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(placeSubtile.x,placeSubtile.y)]
@@ -325,7 +325,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			id.locationY = -32767
 			var goldID = get_node_on_subtile(locX, locY, "TreasuryGold")
 			if is_instance_valid(goldID) == true:
-				goldID.queue_free()
+				kill_instance(goldID)
 			id.locationX = locX
 			id.locationY = locY
 	elif id.thingType == Things.TYPE.DOOR:
@@ -395,7 +395,7 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 				1: id.subtype = 116 # Blue
 				2: id.subtype = 117 # Green
 				3: id.subtype = 118 # Yellow
-				4: id.queue_free() # White
+				4: kill_instance(id) # White
 				5: id.subtype = 119 # None
 	elif slabID == Slabs.DUNGEON_HEART:
 		if tngObj[Slabset.obj.THING_SUBTYPE] == 111: # Heart Flame (Red)
@@ -404,8 +404,8 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 				1: id.subtype = 120 # Blue
 				2: id.subtype = 121 # Green
 				3: id.subtype = 122 # Yellow
-				4: id.queue_free() # White
-				5: id.queue_free() # None
+				4: kill_instance(id) # White
+				5: kill_instance(id) # None
 	
 	add_child(id)
 	
@@ -423,12 +423,19 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 #			3: partnerArrow.texture = preload("res://Art/torchdir3.png")
 #		id.add_child(partnerArrow)
 
+func kill_instance(id): # Multi-thread safe
+	remove_child(id)
+	id.position = Vector2(-9999999,-9999999)
+	id.visible = false
+	for group in id.get_groups():
+		id.remove_from_group(group)
+	id.queue_free()
 
 func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
 		var nodesOnSlab = get_all_nodes_on_slab(xSlab, ySlab, ["Thing"])
-		for i in nodesOnSlab:
-			i.queue_free()
+		for id in nodesOnSlab:
+			kill_instance(id)
 	else:
 		var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
 		for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
@@ -505,7 +512,7 @@ func on_slab_delete_stray_door_thing_and_key(id, slabID):
 		# Kill doors and keys that aren't on door slabIDs
 		if id.is_in_group("Door") or id.is_in_group("Key"):
 			if Slabs.is_door(slabID) == false:
-				id.queue_free()
+				kill_instance(id)
 
 
 
@@ -543,7 +550,7 @@ func delete_attached_instances_on_slab(xSlab, ySlab):
 	var groupName = 'attachedtotile_'+str((ySlab*M.xSize)+xSlab)
 	if groupName == "attachedtotile_0": return # This fixes an edge case issue with Spinning Keys being destroyed if you click the top left corner
 	for id in get_tree().get_nodes_in_group(groupName):
-		id.queue_free()
+		kill_instance(id)
 
 func get_free_index_number():
 	var listOfThingNumbers = []

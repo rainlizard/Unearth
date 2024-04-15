@@ -199,7 +199,6 @@ func load_cfg_stuff(map):
 func continue_load(map):
 	# initialize_editor_components
 	oPickThingWindow.initialize_thing_grid_items()
-	oDynamicMapTree.highlight_current_map()
 	oEditor.update_boundaries()
 	oScriptEditor.initialize_for_new_map()
 	oOverheadOwnership.start()
@@ -232,6 +231,7 @@ func continue_load(map):
 
 func continue_load_openmap(map):
 	oEditor.mapHasBeenEdited = false
+	oDynamicMapTree.highlight_current_map()
 	oCurrentMap.set_path_and_title(map)
 	oCamera2D.reset_camera(M.xSize, M.ySize)
 	oUndoStates.clear_history()
@@ -239,7 +239,7 @@ func continue_load_openmap(map):
 		oMessage.quick('New map')
 	else:
 		oMessage.quick('Opened map')
-
+	
 
 func _on_ConfirmDecompression_confirmed():
 	print('Attempting to decompress...')

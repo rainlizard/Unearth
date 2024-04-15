@@ -293,7 +293,7 @@ func manually_delete_one_instance(inst):
 		if oMirrorPlacementCheckBox.pressed == true:
 			oInstances.mirror_deletion_of_instance(inst)
 		
-		inst.queue_free()
+		oInstances.kill_instance(inst)
 
 #func ui_hover():
 #	if oSelector.cursorIsOnGrid == true:

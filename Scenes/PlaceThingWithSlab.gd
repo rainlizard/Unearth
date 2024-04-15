@@ -59,7 +59,7 @@ func create_door_thing(xSlab, ySlab, ownership):
 	var doorID = oInstances.get_node_on_subtile(createAtPos.x, createAtPos.y, "Door")
 	if is_instance_valid(doorID):
 		rememberLockedState = doorID.doorLocked
-		doorID.queue_free()
+		oInstances.kill_instance(doorID)
 	
 	var id = oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership)
 	id.doorLocked = rememberLockedState

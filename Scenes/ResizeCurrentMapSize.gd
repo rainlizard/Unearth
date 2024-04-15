@@ -15,6 +15,7 @@ onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
+onready var oInstances = Nodelist.list["oInstances"]
 
 func _on_ResizeCurrentMapSizeButton_pressed():
 	Utils.popup_centered(self)
@@ -77,7 +78,7 @@ func remove_outside_instances(newWidth, newHeight):
 	for instance in get_tree().get_nodes_in_group("Instance"):
 		if instance.locationX >= newWidthInSubtiles or instance.locationY >= newHeightInSubtiles:
 			deletedInstancesCount += 1
-			instance.queue_free()
+			oInstances.kill_instance(instance)
 	
 	if deletedInstancesCount > 0:
 		oMessage.quick("Deleted " + str(deletedInstancesCount) + " instances that were outside of the new map size.")

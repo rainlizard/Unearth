@@ -318,7 +318,7 @@ func update_spinning_key(): # Called after changing the lock state
 		# Door is unlocked
 		if is_instance_valid(keyID) == true:
 			# There's a key, so remove it
-			keyID.queue_free()
+			oInstances.kill_instance(keyID)
 	else:
 		# Door is locked
 		if is_instance_valid(keyID) == false:

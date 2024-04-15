@@ -36,8 +36,7 @@ func attempt_to_save_new_undo_state(): # called by oEditor
 
 
 func on_undo_state_saved(new_state):
-	
-	if undo_history.size() >= 2 and new_state == undo_history[1]:
+	if undo_history.size() >= 2 and are_states_equal(new_state, undo_history[1]):
 		oMessage.quick("Didn't add undo state as it is the same as the previous undo-state")
 		is_saving_state = false
 		return
@@ -48,7 +47,7 @@ func on_undo_state_saved(new_state):
 	is_saving_state = false
 
 func perform_undo():
-	if performing_undo or undo_history.size() <= 1:
+	if performing_undo == true or undo_history.size() <= 1:
 		return
 
 	performing_undo = true
@@ -58,15 +57,15 @@ func perform_undo():
 
 	if typeof(previous_state) != TYPE_DICTIONARY:
 		print("Error: previous_state is not a dictionary")
-		oMessage.quick("Error: previous_state is not a dictionary")
+		oMessage.big("Undo state error", "previous_state is not a dictionary")
 		performing_undo = false
 		return
 	
 	for EXT in previous_state:
 		var buffer = previous_state[EXT]
 		if buffer == null or !(buffer is StreamPeerBuffer):
-			print("Error: buffer for EXT '%s' is not a valid StreamPeerBuffer!" % EXT)
-			oMessage.quick("Error: buffer for EXT '%s' is not a valid StreamPeerBuffer!" % EXT)
+			print("Undo state error: buffer '%s' is not a valid StreamPeerBuffer" % EXT)
+			oMessage.big("Undo state error", "Buffer '%s' is not a valid StreamPeerBuffer" % EXT)
 			continue
 		oBuffers.read_buffer_for_extension(buffer, EXT)
 
@@ -79,3 +78,18 @@ func perform_undo():
 
 	yield(get_tree(), 'idle_frame')
 	performing_undo = false
+
+
+func are_states_equal(state1, state2): # (0ms or 1ms)
+	for EXT in state1.keys():
+		var buffer1 = state1[EXT]
+		var buffer2 = state2.get(EXT)
+		if buffer1 is StreamPeerBuffer and buffer2 is StreamPeerBuffer:
+			if buffer1.data_array != buffer2.data_array:
+				return false
+		
+		if buffer1 == null and buffer2 != null:
+			return false
+		if buffer1 != null and buffer2 == null:
+			return false
+	return true

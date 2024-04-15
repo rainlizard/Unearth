@@ -97,6 +97,8 @@ func write_tng():
 	buffer.put_16(numberOfTngEntries)
 	
 	for thingNode in get_tree().get_nodes_in_group("Thing"):
+		if thingNode.is_queued_for_deletion() == true:
+			continue
 		buffer.put_8(fmod(thingNode.locationX,1.0) * 256) # 0
 		buffer.put_8(int(thingNode.locationX)) # 1
 		buffer.put_8(fmod(thingNode.locationY,1.0) * 256) # 2
@@ -164,6 +166,8 @@ func write_tngfx():
 		var groupName = groupNames[thingType]
 		
 		for thingNode in get_tree().get_nodes_in_group(groupName):
+			if thingNode.is_queued_for_deletion() == true:
+				continue
 			lines.append("")
 			lines.append("[thing" + str(entryNumber) + "]")
 			lines.append("ThingType = \"" + groupName + "\"")
@@ -213,6 +217,8 @@ func write_apt():
 	buffer.put_32(numberOfActionPoints)
 	
 	for apNode in get_tree().get_nodes_in_group("ActionPoint"):
+		if apNode.is_queued_for_deletion() == true:
+			continue
 		buffer.put_8(fmod(apNode.locationX,1.0) * 256) # 0
 		buffer.put_8(int(apNode.locationX)) # 1
 		buffer.put_8(fmod(apNode.locationY,1.0) * 256) # 2
@@ -232,6 +238,8 @@ func write_aptfx():
 	
 	var entryNumber = 0
 	for apNode in get_tree().get_nodes_in_group("ActionPoint"):
+		if apNode.is_queued_for_deletion() == true:
+			continue
 		lines.append("")
 		lines.append("[actionpoint" + str(entryNumber) + "]")
 		
@@ -258,7 +266,8 @@ func write_lgt():
 	buffer.put_32(numberOfLightPoints)
 	
 	for lightNode in get_tree().get_nodes_in_group("Light"):
-		
+		if lightNode.is_queued_for_deletion() == true:
+			continue
 		buffer.put_8(fmod(lightNode.lightRange,1.0) * 256) # 0
 		buffer.put_8(int(lightNode.lightRange)) # 1
 		buffer.put_8(lightNode.lightIntensity) # 2
@@ -288,6 +297,8 @@ func write_lgtfx():
 	
 	var entryNumber = 0
 	for lightNode in get_tree().get_nodes_in_group("Light"):
+		if lightNode.is_queued_for_deletion() == true:
+			continue
 		lines.append("")
 		lines.append("[light" + str(entryNumber) + "]")
 		

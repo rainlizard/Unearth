@@ -234,7 +234,7 @@ func mouse_button_on_field():
 				for inst in nodesOnSlab:
 					if oMirrorPlacementCheckBox.pressed == true:
 						oInstances.mirror_deletion_of_instance(inst)
-					inst.queue_free()
+					oInstances.kill_instance(inst)
 		
 		oThingDetails.update_details()
 
