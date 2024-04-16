@@ -82,7 +82,7 @@ func update_all_utilized():
 		utilized[clearIndex] = 0
 	for y in (M.ySize*3):
 		for x in (M.xSize*3):
-			var value = oDataClmPos.get_cell_clmpos_fast(x,y)
+			var value = oDataClmPos.get_cell_clmpos(x,y)
 			utilized[value] += 1
 	
 	print('All CLM utilized updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')

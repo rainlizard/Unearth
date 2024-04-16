@@ -40,7 +40,7 @@ onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 onready var oGridDataWindow = Nodelist.list["oGridDataWindow"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oActionPointListWindow = Nodelist.list["oActionPointListWindow"]
-
+onready var oUndoStates = Nodelist.list["oUndoStates"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -68,6 +68,28 @@ func _ready():
 	oMenuButtonEdit.get_popup().connect("id_pressed",self,"_on_EditSubmenu_Pressed")
 	oMenuButtonView.get_popup().connect("id_pressed",self,"_on_ViewSubmenu_Pressed")
 	oMenuButtonHelp.get_popup().connect("id_pressed",self,"_on_HelpSubmenu_Pressed")
+	
+	add_edit_menu_items()
+
+func add_edit_menu_items():
+	# Add menu items to oMenuButtonEdit
+	var edit_popup = oMenuButtonEdit.get_popup()
+	
+	edit_popup.add_item("Undo", 0)
+	edit_popup.add_separator()
+	edit_popup.add_item("Map columns", 1)
+	edit_popup.add_item("Custom objects", 2)
+	edit_popup.add_item("Resize map", 3)
+	edit_popup.add_item("Update all slabs", 4)
+	edit_popup.add_separator()
+	edit_popup.add_item("Make a tileset", 5)
+	edit_popup.add_item("Slabset", 6)
+
+func update_undo_availability():
+	if oUndoStates.undo_history.size() <= 1:
+		oMenuButtonEdit.get_popup().set_item_disabled(0, true)
+	else:
+		oMenuButtonEdit.get_popup().set_item_disabled(0, false)
 
 
 func _on_RecentSubmenu_Pressed(pressedID):
@@ -188,18 +210,20 @@ func _on_FileSubmenu_Pressed(pressedID):
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:
-		0: # Custom columns
+		0: # Undo
+			oUndoStates.perform_undo()
+		1: # Custom columns
 			Utils.popup_centered(oColumnEditor)
-		1: # Custom objects
+		2: # Custom objects
 			Utils.popup_centered(oAddCustomObjectWindow)
-		2: # Resize and shift
+		3: # Resize and shift
 			Utils.popup_centered(oResizeCurrentMapSize)
-		3: # Update all slabs
+		4: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oConfirmAutoGen)
-		4: # Texture editing
+		5: # Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
-		5: # Modify slabset
+		6: # Modify slabset
 			Utils.popup_centered(oSlabsetWindow)
 
 func _on_slab_style_window_close_button_clicked():

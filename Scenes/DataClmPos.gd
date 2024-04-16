@@ -7,11 +7,6 @@ func get_cell_clmpos(x, y):
 		return abs(buffer.get_16())
 	return 0
 
-func get_cell_clmpos_fast(x, y):
-	var seek_pos = (y * width + x) * bytes_per_entry
-	buffer.seek(seek_pos)
-	return abs(buffer.get_16())
-
 func set_cell_clmpos(x, y, value):
 	value = 65536-value
 	set_cell(x, y, value)

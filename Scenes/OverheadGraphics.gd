@@ -66,7 +66,7 @@ func overhead2d_update_rect_single_threaded(shapePositionArray):
 		for i in range(9):  # 3x3 subtiles
 			var x = basePosX + (i % 3)
 			var y = basePosY + (i / 3)
-			var clmIndex = oDataClmPos.get_cell_clmpos_fast(x, y)
+			var clmIndex = oDataClmPos.get_cell_clmpos(x, y)
 			var cubeFace = oDataClm.get_top_cube_face(clmIndex, 0)
 			var pixelIndex = ((y * width) + x) * 3
 
@@ -110,7 +110,7 @@ func generate_pixel_data(pixData, shapePositionArray):
 		for i in range(9):  # 3x3 subtiles
 			var x = basePosX + (i % 3)
 			var y = basePosY + (i / 3)
-			var clmIndex = oDataClmPos.get_cell_clmpos_fast(x, y)
+			var clmIndex = oDataClmPos.get_cell_clmpos(x, y)
 			var cubeFace = oDataClm.get_top_cube_face(clmIndex, 0)
 			var pixelIndex = ((y * width) + x) * 3
 

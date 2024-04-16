@@ -9,6 +9,8 @@ onready var oThreadedSaveUndo = Nodelist.list["oThreadedSaveUndo"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
+onready var oMenu = Nodelist.list["oMenu"]
+
 
 var is_saving_state = false
 var undo_history = []
@@ -23,9 +25,11 @@ func _input(event):
 func clear_history():
 	oMessage.quick("Undo history cleared")
 	undo_history.clear()
+	oMenu.update_undo_availability()
+	
 	is_saving_state = false # To be sure it's executed
 	call_deferred("attempt_to_save_new_undo_state")
-
+	
 
 func attempt_to_save_new_undo_state(): # called by oEditor
 	if is_saving_state == false:
@@ -43,8 +47,13 @@ func on_undo_state_saved(new_state):
 	if undo_history.size() >= max_undo_states:
 		undo_history.pop_back()
 	undo_history.push_front(new_state)
-	oMessage.quick("Added undo state. Array size: " + str(undo_history.size()))
+	oMenu.update_undo_availability()
+	
+	oMessage.quick("Undo history size: " + str(undo_history.size()) + " (test)")
+	
+	
 	is_saving_state = false
+	
 
 func perform_undo():
 	print("perform_undo")
@@ -73,6 +82,7 @@ func perform_undo():
 
 	oOpenMap.continue_load(oCurrentMap.path)
 	undo_history.pop_front()
+	oMenu.update_undo_availability()
 	oMessage.quick("Undo performed")
 
 	if undo_history.size() <= 1:
@@ -83,6 +93,7 @@ func perform_undo():
 	var IDLE_FRAME_CODETIME_START = OS.get_ticks_msec()
 	yield(get_tree(), 'idle_frame')
 	print('Idle frame (after undo): ' + str(OS.get_ticks_msec() - IDLE_FRAME_CODETIME_START) + 'ms')
+	
 	performing_undo = false
 	
 
