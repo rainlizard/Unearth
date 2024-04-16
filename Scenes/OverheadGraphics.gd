@@ -9,6 +9,10 @@ onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oQuickMapPreviewDisplay = Nodelist.list["oQuickMapPreviewDisplay"]
 
+signal graphics_thread_completed
+
+var thread_currently_processing = false
+
 var overheadImgData = Image.new()
 var overheadTexData = ImageTexture.new()
 
@@ -20,14 +24,13 @@ var mutex = Mutex.new()
 var job_queue = []
 var pixel_data = PoolByteArray()
 
+
+
 func _ready():
 	thread.start(self, "multi_threaded")
 
 
 func update_full_overhead_map():
-	if oUndoStates.performing_undo == false: # Remove black flicker from undoing
-		make_image_black()
-	
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	if arrayOfColorRects.empty() == true:
@@ -43,11 +46,14 @@ func update_full_overhead_map():
 	mutex.lock()
 	job_queue.append(shapePositionArray)
 	mutex.unlock()
+	
+	thread_currently_processing = true
 	semaphore.post()  # Release the semaphore to signal the thread to process the job
 	
 	print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-
+# Using a single threaded version for updating partial graphics.
+# and a multi-threaded version for updating the entire map's graphics.
 func overhead2d_update_rect_single_threaded(shapePositionArray):
 	#pixel_data = generate_pixel_data(pixel_data, shapePositionArray)
 	
@@ -74,6 +80,8 @@ func overhead2d_update_rect_single_threaded(shapePositionArray):
 func multi_threaded():
 	while true:
 		semaphore.wait()  # Acquire the semaphore before processing
+		print("graphics multi_threaded start")
+		
 		mutex.lock()
 		var shapePositionArray = job_queue.pop_front()
 		mutex.unlock()
@@ -81,12 +89,17 @@ func multi_threaded():
 		var newPixelData = PoolByteArray()
 		var resulting_pixel_data = generate_pixel_data(newPixelData, shapePositionArray)
 		call_deferred("thread_done", resulting_pixel_data)
+		print("graphics multi_threaded end")
 
 func thread_done(resulting_pixel_data):
 	pixel_data = resulting_pixel_data
 	overheadImgData.create_from_data(M.xSize * 3, M.ySize * 3, false, Image.FORMAT_RGB8, pixel_data)
+	
 	overheadTexData.create_from_image(overheadImgData, 0)
-
+	
+	thread_currently_processing = false
+	emit_signal("graphics_thread_completed")
+	
 func generate_pixel_data(pixData, shapePositionArray):
 	var width = M.xSize * 3
 	var height = M.ySize * 3
@@ -145,9 +158,3 @@ func update_display_fields_size():
 	for displayField in arrayOfColorRects:
 		displayField.rect_size = Vector2(M.xSize * 96, M.ySize * 96)
 		displayField.material.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
-
-func make_image_black():
-	if overheadImgData.is_empty() == false:
-		#overheadImgData.fill(Color(0,0,0,1))
-		#overheadTexData.set_data(overheadImgData)
-		overheadTexData = oQuickMapPreviewDisplay.texture

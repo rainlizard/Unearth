@@ -20,6 +20,8 @@ var thingScn = preload("res://Scenes/ThingInstance.tscn")
 var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
 var lightScn = preload("res://Scenes/LightInstance.tscn")
 
+func _ready():
+	erase_instances_loop()
 
 func place_new_light(newThingType, newSubtype, newPosition, newOwnership):
 	var id = lightScn.instance()
@@ -425,13 +427,13 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 
 var instances_to_erase = []
 
-func _process(delta):
-	set_process(false)
+func erase_instances_loop(): # started by _ready()
 	for i in 2: # We need 2 idle_frames to separate the wait from the 1 idle_frame that perform_undo uses
 		yield(get_tree(),'idle_frame')
 	var items_freed = 0
 	var max_items_to_free = max(1, instances_to_erase.size() * 0.01)
 	#var FREEING_CODETIME_START = OS.get_ticks_msec()
+	
 	while true:
 		var id = instances_to_erase.pop_back()
 		if is_instance_valid(id):
@@ -444,7 +446,8 @@ func _process(delta):
 	#if items_freed > 0:
 		#print(items_freed)
 		#print('Time spent freeing instances: ' + str(OS.get_ticks_msec() - FREEING_CODETIME_START) + 'ms')
-	set_process(true)
+	
+	erase_instances_loop()
 
 func kill_instance(id): # Multi-thread safe
 	id.visible = false
