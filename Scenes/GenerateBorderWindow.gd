@@ -123,7 +123,6 @@ func _on_ButtonNewMapOK_pressed():
 	# yield must be used here, because this function has yields inside of it.
 	yield(oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, false), "completed")
 	
-	
 	if oCheckBoxNewMapAutoOpensMapSettings.pressed == true:
 		Utils.popup_centered(oMapSettingsWindow)
 	

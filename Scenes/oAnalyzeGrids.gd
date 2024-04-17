@@ -21,7 +21,7 @@ onready var tilemap_data = {
 	"Wibble":           {"extension": ".wib", "grid_type": "SUBTILE", "node": oDataWibble},
 	"Liquid":           {"extension": ".wlb", "grid_type": "TILE",    "node": oDataLiquid},
 	"Slab":             {"extension": ".slb", "grid_type": "TILE",    "node": oDataSlab},
-	"Ownership":        {"extension": ".own", "grid_type": "TILE",    "node": oDataOwnership},
+	"Ownership":        {"extension": ".own", "grid_type": "SUBTILE", "node": oDataOwnership},
 	"Column Positions": {"extension": ".dat", "grid_type": "SUBTILE", "node": oDataClmPos},
 	"Fake Slabs":       {"extension": ".une", "grid_type": "TILE",    "node": oDataFakeSlab},
 	"Style":            {"extension": ".slx", "grid_type": "TILE",    "node": oDataSlx}

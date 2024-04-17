@@ -405,7 +405,7 @@ func _on_ConfirmAutoGen_confirmed():
 			shapePositionArray.append(Vector2(xSlab,ySlab))
 	
 	autogen_was_called = true
-	generate_slabs_based_on_id(shapePositionArray, updateNearby)
+	yield(generate_slabs_based_on_id(shapePositionArray, updateNearby), "completed")
 	autogen_was_called = false
 	
 	print('Auto-generated all slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
