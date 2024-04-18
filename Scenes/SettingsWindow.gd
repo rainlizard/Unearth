@@ -37,8 +37,6 @@ onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMap
 #onready var oTab2DView = Nodelist.list["oTab2DView"]
 #onready var oTab3DView = Nodelist.list["oTab3DView"]
 
-onready var oCheckBoxHideUnknown = Nodelist.list["oCheckBoxHideUnknown"]
-
 func _ready():
 	oTabSettings.set_tab_title(0,"Files")
 	oTabSettings.set_tab_title(1,"Placements")
@@ -76,7 +74,6 @@ func _on_SettingsWindow_about_to_show():
 	oUiScale.update_appearance(Settings.get_setting("ui_scale"))
 	oSlabWindowScale.update_appearance(Settings.get_setting("slab_window_scale"))
 	oThingWindowScale.update_appearance(Settings.get_setting("thing_window_scale"))
-	oCheckBoxHideUnknown.pressed = Settings.get_setting("hide_unknown_data")
 	oOwnerAlpha.update_appearance(Settings.get_setting("graphics_ownership_alpha"))
 	oCreatureLevelFontSizeScale.update_appearance(Settings.get_setting("font_size_creature_level_scale"))
 	oCreatureLevelFontSizeMaxZoom.update_appearance(Settings.get_setting("font_size_creature_level_max"))
@@ -178,9 +175,6 @@ func edited_OwnerAlpha(new_text):
 
 func _on_CheckBoxDisplay3dInfo_toggled(button_pressed):
 	Settings.set_setting("display_3d_info", button_pressed)
-
-func _on_CheckBoxHideUnknown_toggled(button_pressed):
-	Settings.set_setting("hide_unknown_data", button_pressed)
 
 func _on_CheckBoxNewMapAutoOpensMapSettings_toggled(button_pressed):
 	Settings.set_setting("auto_open_map_settings", button_pressed)

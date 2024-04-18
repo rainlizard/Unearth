@@ -54,7 +54,6 @@ var listOfSettings = [
 	"details_viewer_window_position",
 	"slab_style_window_size",
 	"slab_style_window_position",
-	"hide_unknown_data",
 	"ownable_natural_terrain",
 	"editable_borders",
 	"bridges_only_on_liquid",
@@ -308,10 +307,6 @@ func game_setting(doWhat,string,value):
 #			var oPropertiesWindow = $'../Main/Ui/UiTools/PropertiesWindow'
 #			if doWhat == SET: oPropertiesWindow.display_details = value
 #			if doWhat == GET: return oPropertiesWindow.display_details
-		"hide_unknown_data":
-			var oThingDetails = $'../Main/Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails'
-			if doWhat == SET: oThingDetails.HIDE_UNKNOWN_DATA = value
-			if doWhat == GET: return oThingDetails.HIDE_UNKNOWN_DATA
 		"ownable_natural_terrain":
 			var oOwnableNaturalTerrain = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/OwnableNaturalTerrain'
 			if doWhat == SET: oOwnableNaturalTerrain.pressed = value
