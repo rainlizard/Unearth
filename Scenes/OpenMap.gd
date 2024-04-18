@@ -41,6 +41,7 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
+onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -201,6 +202,7 @@ func load_cfg_stuff(map):
 
 func continue_load(map):
 	# initialize_editor_components
+	oDisplaySlxNumbers.update()
 	oPickThingWindow.initialize_thing_grid_items()
 	oEditor.update_boundaries()
 	oScriptEditor.initialize_for_new_map()
