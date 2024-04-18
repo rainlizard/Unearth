@@ -154,6 +154,7 @@ func mouse_edge_pan():
 	panDirectionMouse = panDirectionMouse.normalized()
 
 func keyboard_pan():
+	if Input.is_action_pressed("save"): return
 	if Input.is_action_pressed('keyboard_zoom_in'): return
 	if Input.is_action_pressed('keyboard_zoom_out'): return
 	

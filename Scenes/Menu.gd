@@ -194,6 +194,12 @@ func constantly_monitor_play_button_state():
 	else:
 		oMenuPlayButton.text = "Play"
 
+func pressed_save_keyboard_shortcut():
+	if oMenuButtonFile.get_popup().is_item_disabled(oMenuButtonFile.get_popup().get_item_index(4)) == true:
+		_on_FileSubmenu_Pressed(5) # Save As
+	else:
+		_on_FileSubmenu_Pressed(4) # Save
+
 func _on_FileSubmenu_Pressed(pressedID):
 	match pressedID:
 		0: Utils.popup_centered(oNewMapWindow)#oCurrentMap._on_ButtonNewMap_pressed() # New

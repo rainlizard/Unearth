@@ -11,8 +11,13 @@ onready var oMenu = Nodelist.list["oMenu"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oBuffers = Nodelist.list["oBuffers"]
+onready var oMenuButtonFile = Nodelist.list["oMenuButtonFile"]
 
 var queueExit = false
+
+func _input(event):
+	if event.is_action_pressed("save"):
+		oMenu.pressed_save_keyboard_shortcut()
 
 func save_map(filePath): # auto opens other files
 	var map = filePath.get_basename()
