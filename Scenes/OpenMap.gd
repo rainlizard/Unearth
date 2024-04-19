@@ -98,9 +98,6 @@ func open_map(filePath):
 	
 	# Always begin by clearing map
 	oCurrentMap.clear_map()
-	# Close windows that I want closed
-	oMapSettingsWindow.visible = false
-	oColumnEditor.visible = false
 	
 	var map = filePath.get_basename()
 	
@@ -233,6 +230,13 @@ func continue_load(map):
 		oMessage.quick("Fixed column index 0, re-save your map.")
 	
 	oDataClm.store_default_data()
+	
+	oMapSettingsWindow.visible = false
+	
+	
+	if oColumnEditor.visible == true:
+		oColumnEditor.visible = false
+		Utils.popup_centered(oColumnEditor)
 
 func continue_load_openmap(map):
 	oEditor.mapHasBeenEdited = false

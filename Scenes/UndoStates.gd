@@ -40,7 +40,7 @@ func attempt_to_save_new_undo_state(): # called by oEditor
 
 
 func on_undo_state_saved(new_state):
-	if undo_history.size() >= 2 and are_states_equal(new_state, undo_history[1]):
+	if undo_history.size() >= 1 and are_states_equal(new_state, undo_history[0]):
 		oMessage.quick("Didn't add undo state as it is the same as the previous undo-state")
 		is_saving_state = false
 		return

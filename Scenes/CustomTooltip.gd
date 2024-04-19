@@ -39,7 +39,7 @@ func set_floortexture(floorTextureValue):
 	dataTexture.create_from_image(dataImage, 0)
 
 	dataImage.lock()
-	dataImage.set_pixel(0, 0, Color8(floorTextureValue >> 16 & 255, floorTextureValue >> 8 & 255, floorTextureValue & 255))
+	dataImage.set_pixel(0, 0, Color8(int(floorTextureValue) >> 16 & 255, int(floorTextureValue) >> 8 & 255, int(floorTextureValue) & 255))
 	dataImage.unlock()
 	dataTexture.set_data(dataImage)
 	
