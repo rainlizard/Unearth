@@ -83,6 +83,12 @@ func _process(delta):
 		mouse_button_anywhere()
 		if oUi.mouseOnUi == false:
 			mouse_button_on_field()
+		else:
+			# Dragging an instance over UI, so reset its drag positon to original.
+			if draggingInstance == true and is_instance_valid(holdClickOnInstance) and Input.is_action_just_released("mouse_left"):
+				holdClickOnInstance.global_position = subtile2world(Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY))
+				holdClickOnInstance = null
+				draggingInstance = false
 
 func mouse_button_anywhere():
 	if Input.is_action_pressed("mouse_left") == false:
@@ -172,7 +178,6 @@ func mouse_button_on_field():
 				draggingInstance = false
 				var snapToPos = world2subtile(get_global_mouse_position())
 				var originalPosition = Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY)
-				
 				holdClickOnInstance.locationX = snapToPos.x + 0.5
 				holdClickOnInstance.locationY = snapToPos.y + 0.5
 				
@@ -334,6 +339,9 @@ func world2tile(pos):
 
 func world2subtile(pos):
 	return Vector2(floor(pos.x/SUBTILE_SIZE),floor(pos.y/SUBTILE_SIZE))
+
+func subtile2world(subtilePos):
+	return Vector2(subtilePos.x * SUBTILE_SIZE,subtilePos.y * SUBTILE_SIZE)
 
 func instance_position(checkPos, checkGroup):
 	var space = get_world_2d().direct_space_state
