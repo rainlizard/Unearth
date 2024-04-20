@@ -8,6 +8,8 @@ onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oQuickMapPreviewDisplay = Nodelist.list["oQuickMapPreviewDisplay"]
+onready var oMessage = Nodelist.list["oMessage"]
+
 
 signal graphics_thread_completed
 
@@ -92,10 +94,12 @@ func multi_threaded():
 		print("graphics multi_threaded end")
 
 func thread_done(resulting_pixel_data):
-	pixel_data = resulting_pixel_data
-	overheadImgData.create_from_data(M.xSize * 3, M.ySize * 3, false, Image.FORMAT_RGB8, pixel_data)
-	
-	overheadTexData.create_from_image(overheadImgData, 0)
+	if resulting_pixel_data != null:
+		pixel_data = resulting_pixel_data
+		overheadImgData.create_from_data(M.xSize * 3, M.ySize * 3, false, Image.FORMAT_RGB8, pixel_data)
+		overheadTexData.create_from_image(overheadImgData, 0)
+	else:
+		oMessage.quick("thread crashed")
 	
 	thread_currently_processing = false
 	emit_signal("graphics_thread_completed")

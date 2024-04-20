@@ -208,8 +208,10 @@ func continue_load(map):
 	oScriptHelpers.start()
 
 	# update_editor_data
-	if Slabset.dat.empty() == true: Slabset.load_default_slabset()
-	if Columnset.cubes.empty() == true: Columnset.load_default_columnset()
+	if Slabset.dat.empty() == true:
+		Slabset.load_default_slabset()
+	if Columnset.cubes.empty() == true:
+		Columnset.load_default_columnset()
 	
 	oOverheadGraphics.update_full_overhead_map()
 	
@@ -221,14 +223,6 @@ func continue_load(map):
 	oEditor.set_view_2d()
 
 	oMenu.add_recent(map)
-	
-	# When opening a map, be sure that column 0 is empty. Otherwise apply a fix.
-	if oDataClm.permanent[0] != 0 or oDataClm.cubes[0] != [0,0,0,0, 0,0,0,0]:
-		# Make column 0 empty while preserving the column that was there.
-		oDataClm.sort_columns_by_utilized()
-		oDataClm.delete_column(0)
-		oEditor.mapHasBeenEdited = true
-		oMessage.quick("Fixed column index 0, re-save your map.")
 	
 	oDataClm.store_default_data()
 	
@@ -259,6 +253,14 @@ func continue_load_openmap(map):
 	else:
 		oMessage.quick('Opened map')
 	
+	# When opening a map, be sure that column 0 is empty. Otherwise apply a fix.
+	if oDataClm.permanent[0] != 0 or oDataClm.cubes[0] != [0,0,0,0, 0,0,0,0]:
+		# Make column 0 empty while preserving the column that was there.
+		oDataClm.sort_columns_by_utilized()
+		oDataClm.delete_column(0)
+		oEditor.mapHasBeenEdited = true
+		oMessage.quick("Fixed column index 0, re-save your map.")
+
 
 func _on_ConfirmDecompression_confirmed():
 	print('Attempting to decompress...')
