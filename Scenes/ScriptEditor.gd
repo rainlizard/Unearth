@@ -14,6 +14,12 @@ var scriptHasBeenEditedInUnearth = false
 
 var SCRIPT_EDITOR_FONT_SIZE = 20 setget set_SCRIPT_EDITOR_FONT_SIZE, get_SCRIPT_EDITOR_FONT_SIZE
 
+func _ready():
+	oScriptTextEdit.get_menu().remove_item(0) # Remove Undo from menu because this Undo isn't used
+	oScriptTextEdit.get_menu().remove_item(0) # Remove Redo from menu because this Redo isn't used
+	oScriptTextEdit.get_menu().remove_item(0) # Remove Separator
+
+
 func set_SCRIPT_EDITOR_FONT_SIZE(setVal):
 	SCRIPT_EDITOR_FONT_SIZE = setVal
 	var current_font = oScriptTextEdit.get_font("font").duplicate()
@@ -29,6 +35,7 @@ func initialize_for_new_map():
 	oScriptTextEdit.clear_undo_history() # Important so the 1st undo state is the loaded script
 
 func _on_ScriptTextEdit_text_changed():
+	oScriptTextEdit.clear_undo_history()
 	set_script_as_edited(true)
 	set_script_data(oScriptTextEdit.text)
 	update_empty_script_status()
@@ -70,7 +77,17 @@ func load_generated_text(setWithString):
 	update_texteditor()
 
 func update_texteditor():
-	oScriptTextEdit.text = oDataScript.data
+	# This is for when pressing Undo
+	var scroll = oScriptTextEdit.scroll_vertical
+	var lineNumber = oScriptTextEdit.cursor_get_line()
+	var columnNumber = oScriptTextEdit.cursor_get_column()
+	
+	oScriptTextEdit.text = oDataScript.data # This resets a bunch of stuff in TextEdit like cursor line.
+	
+	oScriptTextEdit.cursor_set_line(lineNumber)
+	oScriptTextEdit.scroll_vertical = scroll
+	oScriptTextEdit.cursor_set_column(columnNumber)
+	
 	update_empty_script_status()
 	oScriptHelpers.start() # in the case of editing text file outside of Unearth
 

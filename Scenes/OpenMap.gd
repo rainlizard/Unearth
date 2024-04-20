@@ -237,8 +237,6 @@ func continue_load(map):
 	
 	oDisplaySlxNumbers.update()
 	
-	oMapSettingsWindow.visible = false
-	
 	
 	if oColumnEditor.visible == true:
 		oColumnEditor.visible = false
@@ -255,6 +253,7 @@ func continue_load_openmap(map):
 	oCurrentMap.set_path_and_title(map)
 	oCamera2D.reset_camera(M.xSize, M.ySize)
 	oUndoStates.clear_history()
+	oMapSettingsWindow.visible = false
 	if map == "":
 		oMessage.quick('New map')
 	else:
