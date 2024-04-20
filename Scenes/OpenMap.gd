@@ -42,6 +42,8 @@ onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
+onready var oThingDetails = Nodelist.list["oThingDetails"]
+onready var oInspector = Nodelist.list["oInspector"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -199,7 +201,6 @@ func load_cfg_stuff(map):
 
 func continue_load(map):
 	# initialize_editor_components
-	oDisplaySlxNumbers.update()
 	oPickThingWindow.initialize_thing_grid_items()
 	oEditor.update_boundaries()
 	oScriptEditor.initialize_for_new_map()
@@ -215,7 +216,7 @@ func continue_load(map):
 	oDataClm.count_filled_clm_entries()
 
 	oTextureCache.set_current_texture_pack()
-
+	
 	# finalize_map_opening
 	oEditor.set_view_2d()
 
@@ -231,12 +232,21 @@ func continue_load(map):
 	
 	oDataClm.store_default_data()
 	
+	
+	# Update for Undo
+	
+	oDisplaySlxNumbers.update()
+	
 	oMapSettingsWindow.visible = false
 	
 	
 	if oColumnEditor.visible == true:
 		oColumnEditor.visible = false
 		Utils.popup_centered(oColumnEditor)
+	
+	if is_instance_valid(oInspector.inspectingInstance):
+		oInspector.deselect()
+
 
 func continue_load_openmap(map):
 	oEditor.mapHasBeenEdited = false

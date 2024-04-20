@@ -56,4 +56,3 @@ func deselect():
 	oSelectionStatus.visible = false
 	yield(get_tree(),'idle_frame')
 	oThingDetails.update_details()
-	
