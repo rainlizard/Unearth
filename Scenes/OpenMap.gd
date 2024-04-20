@@ -224,7 +224,7 @@ func continue_load(map):
 
 	oMenu.add_recent(map)
 	
-	oDataClm.store_default_data()
+	
 	
 	
 	# Update for Undo
@@ -260,7 +260,7 @@ func continue_load_openmap(map):
 		oDataClm.delete_column(0)
 		oEditor.mapHasBeenEdited = true
 		oMessage.quick("Fixed column index 0, re-save your map.")
-
+	oDataClm.store_default_data()
 
 func _on_ConfirmDecompression_confirmed():
 	print('Attempting to decompress...')
