@@ -102,7 +102,8 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 				MIRROR_STYLE:
 					pass
 				MIRROR_ONLY_OWNERSHIP:
-					calculateOwner = true
+					if slabID_is_ownable(slabID):
+						calculateOwner = true
 			
 			if calculateOwner == true:
 				if oMirrorOptions.ui_quadrants_have_owner(mainPaint) == false:

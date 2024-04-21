@@ -16,7 +16,6 @@ func _on_ColumnEditor_visibility_changed():
 	if is_instance_valid(oDataClm) == false: return
 	
 	if visible == true:
-		oDataClm.update_all_utilized() # Run this before _on_ColumnEditorTabs_tab_changed()
 		oColumnEditorVoxelView.initialize()
 		oPropertiesTabs.set_current_tab(2)
 		

@@ -161,8 +161,6 @@ extends Node
 
 	#print(columnModels[idx])
 	
-	#oDataClm.update_all_utilized()
-	
 	#CODETIME_START = OS.get_ticks_msec()
 	
 #	var mmInstance = MultiMeshInstance.new()
