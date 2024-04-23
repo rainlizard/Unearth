@@ -9,7 +9,7 @@ func get_highest_cube_height(cubeArray):
 	return 0
 
 func get_height_from_bottom(cubeArray):
-	for cubeNumber in 7:
+	for cubeNumber in 8:
 		if cubeArray[cubeNumber] == 0:
 			return cubeNumber
 	return 8

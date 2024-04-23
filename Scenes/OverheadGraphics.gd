@@ -65,11 +65,12 @@ func overhead2d_update_rect_single_threaded(shapePositionArray):
 	for pos in shapePositionArray:
 		var basePosX = pos.x * 3
 		var basePosY = pos.y * 3
+		var slabID = oDataSlab.get_cellv(pos)
 		for i in range(9):  # 3x3 subtiles
 			var x = basePosX + (i % 3)
 			var y = basePosY + (i / 3)
 			var clmIndex = oDataClmPos.get_cell_clmpos(x, y)
-			var cubeFace = oDataClm.get_top_cube_face(clmIndex, 0)
+			var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
 			var pixelIndex = ((y * width) + x) * 3
 
 			pixel_data[pixelIndex] = cubeFace >> 16 & 255
@@ -111,11 +112,12 @@ func generate_pixel_data(pixData, shapePositionArray):
 	for pos in shapePositionArray:
 		var basePosX = pos.x * 3
 		var basePosY = pos.y * 3
+		var slabID = oDataSlab.get_cellv(pos)
 		for i in range(9):  # 3x3 subtiles
 			var x = basePosX + (i % 3)
 			var y = basePosY + (i / 3)
 			var clmIndex = oDataClmPos.get_cell_clmpos(x, y)
-			var cubeFace = oDataClm.get_top_cube_face(clmIndex, 0)
+			var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
 			var pixelIndex = ((y * width) + x) * 3
 
 			pixData[pixelIndex] = cubeFace >> 16 & 255

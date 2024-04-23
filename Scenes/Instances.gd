@@ -450,7 +450,7 @@ func erase_instances_loop(): # started by _ready()
 	erase_instances_loop()
 
 func kill_instance(id): # Multi-thread safe
-	id.visible = false
+	id.position = Vector2(rand_range(-10000000,-20000000),rand_range(-10000000,-20000000)) # Stacking them on the same position causes lag for some reason.
 	for group in id.get_groups():
 		id.remove_from_group(group)
 	instances_to_erase.append(id)
