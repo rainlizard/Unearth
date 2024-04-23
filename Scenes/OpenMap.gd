@@ -44,6 +44,7 @@ onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oInspector = Nodelist.list["oInspector"]
+onready var oGuidelines = Nodelist.list["oGuidelines"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -247,6 +248,7 @@ func continue_load_openmap(map):
 	oCurrentMap.set_path_and_title(map)
 	oCamera2D.reset_camera(M.xSize, M.ySize)
 	oUndoStates.clear_history()
+	oGuidelines.update()
 	oMapSettingsWindow.visible = false
 	if map == "":
 		oMessage.quick('New map')
@@ -261,6 +263,7 @@ func continue_load_openmap(map):
 		oEditor.mapHasBeenEdited = true
 		oMessage.quick("Fixed column index 0, re-save your map.")
 	oDataClm.store_default_data()
+	
 
 func _on_ConfirmDecompression_confirmed():
 	print('Attempting to decompress...')

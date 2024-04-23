@@ -16,6 +16,7 @@ onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oInstances = Nodelist.list["oInstances"]
+onready var oGuidelines = Nodelist.list["oGuidelines"]
 
 func _on_ResizeCurrentMapSizeButton_pressed():
 	Utils.popup_centered(self)
@@ -87,6 +88,7 @@ func update_editor_appearance():
 	oEditor.update_boundaries()
 	oOverheadOwnership.start()
 	oOverheadGraphics.update_full_overhead_map()
+	oGuidelines.update()
 
 # The main function that calls all the helper functions
 func _on_ResizeApplyButton_pressed():

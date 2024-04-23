@@ -30,6 +30,7 @@ onready var oOwnerAlpha = Nodelist.list["oOwnerAlpha"]
 onready var oScriptEditorFontSize = Nodelist.list["oScriptEditorFontSize"]
 onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
+onready var oSymmetryGuidelinesSetting = Nodelist.list["oSymmetryGuidelinesSetting"]
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
 #onready var oTabGraphics = Nodelist.list["oTabGraphics"]
@@ -75,6 +76,7 @@ func _on_SettingsWindow_about_to_show():
 	oSlabWindowScale.update_appearance(Settings.get_setting("slab_window_scale"))
 	oThingWindowScale.update_appearance(Settings.get_setting("thing_window_scale"))
 	oOwnerAlpha.update_appearance(Settings.get_setting("graphics_ownership_alpha"))
+	oSymmetryGuidelinesSetting.update_appearance(Settings.get_setting("symmetry_guidelines"))
 	oCreatureLevelFontSizeScale.update_appearance(Settings.get_setting("font_size_creature_level_scale"))
 	oCreatureLevelFontSizeMaxZoom.update_appearance(Settings.get_setting("font_size_creature_level_max"))
 	oSciptIconScale.update_appearance(Settings.get_setting("script_icon_scale"))
@@ -172,6 +174,9 @@ func edited_OwnerWindowScale(new_text):
 
 func edited_OwnerAlpha(new_text):
 	Settings.set_setting("graphics_ownership_alpha", float(new_text))
+
+func edited_SymmetryGuidelinesSetting(new_text):
+	Settings.set_setting("symmetry_guidelines", float(new_text))
 
 func _on_CheckBoxDisplay3dInfo_toggled(button_pressed):
 	Settings.set_setting("display_3d_info", button_pressed)
