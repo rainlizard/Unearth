@@ -214,7 +214,7 @@ func continue_load(map):
 	if Columnset.cubes.empty() == true:
 		Columnset.load_default_columnset()
 	
-	oOverheadGraphics.update_full_overhead_map()
+	oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.MULTI_THREADED)
 	
 	oDataClm.count_filled_clm_entries()
 

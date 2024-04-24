@@ -1,5 +1,19 @@
 extends Node
 
+onready var oDataSlab = Nodelist.list["oDataSlab"]
+onready var oDataOwnership = Nodelist.list["oDataOwnership"]
+onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
+onready var oDataClmPos = Nodelist.list["oDataClmPos"]
+onready var oDataClm = Nodelist.list["oDataClm"]
+onready var oDataWibble = Nodelist.list["oDataWibble"]
+onready var oDataSlx = Nodelist.list["oDataSlx"]
+onready var oDataLiquid = Nodelist.list["oDataLiquid"]
+onready var oDataMapName = Nodelist.list["oDataMapName"]
+onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oDataScript = Nodelist.list["oDataScript"]
+onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
+onready var oDataLof = Nodelist.list["oDataLof"]
+
 onready var oWriteData = Nodelist.list["oWriteData"]
 onready var oReadData = Nodelist.list["oReadData"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
@@ -133,3 +147,13 @@ func should_process_file_type(EXT):
 		if ["LIF", "TNG", "APT", "LGT"].has(EXT):
 			return false
 	return true
+
+func resize_all_data_structures(new_width, new_height):
+	oDataSlab.resize(new_width, new_height, 0)
+	oDataOwnership.resize((new_width*3)+1, (new_height*3)+1, 5)
+	oDataClmPos.resize((new_width*3)+1, (new_height*3)+1, 0)
+	oDataWibble.resize((new_width*3)+1, (new_height*3)+1, 0)
+	oDataLiquid.resize(new_width, new_height, 0)
+	oDataFakeSlab.resize(new_width, new_height, 0)
+	
+	#oDataSlx.resize(new_width, new_height, 0)

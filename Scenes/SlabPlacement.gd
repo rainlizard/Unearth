@@ -316,7 +316,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	#print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	oOverheadGraphics.overhead2d_update_rect_single_threaded(shapePositionArray)
-	
+	yield(get_tree(),'idle_frame') # This is necessary for yielding this function to work. Unlike 'await' in Godot 4.0, You can only yield a function which itself also yields.
 
 func do_update_auto_walls(slabID):
 	# If this ID has been set to WALL_AUTOMATIC, by whatever reason, then it must be updated. This doesn't mean you're placing a WALL_AUTOMATIC, just that this slab has been set to it.

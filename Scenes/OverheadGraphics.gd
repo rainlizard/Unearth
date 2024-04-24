@@ -26,13 +26,16 @@ var mutex = Mutex.new()
 var job_queue = []
 var pixel_data = PoolByteArray()
 
-
+enum {
+	SINGLE_THREADED,
+	MULTI_THREADED,
+}
 
 func _ready():
 	thread.start(self, "multi_threaded")
 
 
-func update_full_overhead_map():
+func update_full_overhead_map(threadType):
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	if arrayOfColorRects.empty() == true:
@@ -45,14 +48,18 @@ func update_full_overhead_map():
 		for xSlab in range(0, M.xSize):
 			shapePositionArray.append(Vector2(xSlab,ySlab))
 	
-	mutex.lock()
-	job_queue.append(shapePositionArray)
-	mutex.unlock()
-	
-	thread_currently_processing = true
-	semaphore.post()  # Release the semaphore to signal the thread to process the job
-	
+	match threadType:
+		SINGLE_THREADED:
+			overhead2d_update_rect_single_threaded(shapePositionArray)
+		MULTI_THREADED:
+			mutex.lock()
+			job_queue.append(shapePositionArray)
+			mutex.unlock()
+			thread_currently_processing = true
+			semaphore.post()  # Release the semaphore to signal the thread to process the job
 	print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+
+
 
 # Using a single threaded version for updating partial graphics.
 # and a multi-threaded version for updating the entire map's graphics.
