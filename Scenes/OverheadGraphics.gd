@@ -57,28 +57,10 @@ func update_full_overhead_map():
 # Using a single threaded version for updating partial graphics.
 # and a multi-threaded version for updating the entire map's graphics.
 func overhead2d_update_rect_single_threaded(shapePositionArray):
-	#pixel_data = generate_pixel_data(pixel_data, shapePositionArray)
-	
-	var width = M.xSize * 3
-	var height = M.ySize * 3
-	pixel_data.resize(width * height * 3)  # Assuming RGB8 format
-	for pos in shapePositionArray:
-		var basePosX = pos.x * 3
-		var basePosY = pos.y * 3
-		var slabID = oDataSlab.get_cellv(pos)
-		for i in range(9):  # 3x3 subtiles
-			var x = basePosX + (i % 3)
-			var y = basePosY + (i / 3)
-			var clmIndex = oDataClmPos.get_cell_clmpos(x, y)
-			var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
-			var pixelIndex = ((y * width) + x) * 3
-
-			pixel_data[pixelIndex] = cubeFace >> 16 & 255
-			pixel_data[pixelIndex + 1] = cubeFace >> 8 & 255
-			pixel_data[pixelIndex + 2] = cubeFace & 255
-	
+	pixel_data = generate_pixel_data(pixel_data, shapePositionArray)
 	overheadImgData.create_from_data(M.xSize * 3, M.ySize * 3, false, Image.FORMAT_RGB8, pixel_data)
 	overheadTexData.create_from_image(overheadImgData, 0)
+
 
 func multi_threaded():
 	while true:
