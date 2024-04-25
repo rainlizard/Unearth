@@ -333,8 +333,10 @@ func write_inf():
 func write_slx():
 	var buffer = StreamPeerBuffer.new()
 	var slx_data = oDataSlx.slxImgData.get_data()
+	
 	for i in range(0, slx_data.size(), 3):
 		buffer.put_8(slx_data[i])
+	
 	return buffer
 
 

@@ -96,7 +96,7 @@ func read_slx(buffer):
 	# 2 = Tileset 1
 	# 3 = Tileset 2, etc.
 	oDataSlx.slxImgData.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)
-	oDataSlx.slxTexData.create_from_image(oDataSlx.slxImgData, 0)
+	
 	oDataSlx.slxImgData.lock()
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
@@ -105,7 +105,8 @@ func read_slx(buffer):
 			# Red value will be used to store the slx value
 			oDataSlx.slxImgData.set_pixel(xSlab, ySlab, Color8(lower4bits,0,0,255))
 	oDataSlx.slxImgData.unlock()
-	oDataSlx.slxTexData.set_data(oDataSlx.slxImgData)
+	
+	oDataSlx.slxTexData.create_from_image(oDataSlx.slxImgData, 0)
 
 func new_slx():
 	oDataSlx.slxImgData.create(M.xSize, M.ySize, false, Image.FORMAT_RGB8)

@@ -156,4 +156,4 @@ func resize_all_data_structures(new_width, new_height):
 	oDataLiquid.resize(new_width, new_height, 0)
 	oDataFakeSlab.resize(new_width, new_height, 0)
 	
-	#oDataSlx.resize(new_width, new_height, 0)
+	oDataSlx.resize_bottom_right(new_width, new_height, 0)
