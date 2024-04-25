@@ -6427,8 +6427,8 @@ visible = true
 margin_left = 1264.0
 margin_top = -2160.0
 margin_right = 1668.0
-margin_bottom = -1937.0
-rect_min_size = Vector2( 404, 223 )
+margin_bottom = -1982.0
+rect_min_size = Vector2( 404, 178 )
 mouse_filter = 1
 window_title = "Resize map"
 resizable = true
@@ -6449,7 +6449,7 @@ custom_constants/margin_bottom = 20
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 384.0
-margin_bottom = 203.0
+margin_bottom = 158.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer"]
 margin_right = 364.0
@@ -6603,21 +6603,21 @@ pressed = true
 text = "Apply border"
 
 [node name="Label" type="Label" parent="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer"]
-margin_top = 107.0
+margin_top = 62.0
 margin_right = 364.0
-margin_bottom = 152.0
+margin_bottom = 107.0
 size_flags_vertical = 10
 custom_colors/font_color = Color( 1, 0.85098, 0.603922, 1 )
-text = "Resizing still needs testing, it may break your map so please keep a backup."
+text = "Every slab on the map will be automatically updated when you resize."
 align = 1
 valign = 1
 autowrap = true
 
 [node name="ResizeApplyButton" type="Button" parent="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer"]
 margin_left = 107.0
-margin_top = 156.0
+margin_top = 111.0
 margin_right = 257.0
-margin_bottom = 183.0
+margin_bottom = 138.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 6
 size_flags_vertical = 8

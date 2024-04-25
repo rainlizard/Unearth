@@ -104,17 +104,19 @@ func _on_ResizeApplyButton_pressed():
 	oBuffers.resize_all_data_structures(newWidth, newHeight)
 	remove_outside_instances(newWidth, newHeight)
 	
-#	var positionsToUpdate = get_positions_to_update(newWidth, newHeight, previousWidth, previousHeight)
-#	var removeBorder = remove_old_borders(newWidth, newHeight, previousWidth, previousHeight)
-#	var addBorder = add_new_borders(newWidth, newHeight)
-#	for pos in removeBorder:
-#		positionsToUpdate[pos] = true
-#	for pos in addBorder:
-#		positionsToUpdate[pos] = true
+	var positionsToUpdate = get_positions_to_update(newWidth, newHeight, previousWidth, previousHeight)
+	var removeBorder = remove_old_borders(newWidth, newHeight, previousWidth, previousHeight)
+	var addBorder = add_new_borders(newWidth, newHeight)
+	for pos in removeBorder:
+		positionsToUpdate[pos] = true
+	for pos in addBorder:
+		positionsToUpdate[pos] = true
 	
 	update_editor_appearance()
 	
 	oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.SINGLE_THREADED)
+	
+	# I need to update every slab on the map, it's bugged otherwise, it clears a diagonal streak of objects for some reason.
 	
 	var shapePositionArray = []
 	for ySlab in range(0, M.ySize):
@@ -143,3 +145,9 @@ func _on_ResizeFillWithID_value_changed(value):
 	value = int(value)
 	if Slabs.data.has(value):
 		oResizeFillWithIDLabel.text = Slabs.data[value][Slabs.NAME]
+
+#	for pos in positionsToUpdate.keys():
+#		var scene = preload('res://t.tscn')
+#		var id = scene.instance()
+#		id.position = Vector2((pos.x*96)+48, (pos.y*96)+48)
+#		oInstances.add_child(id)
