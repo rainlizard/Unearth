@@ -45,6 +45,7 @@ onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oGuidelines = Nodelist.list["oGuidelines"]
+onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -66,7 +67,7 @@ func start():
 			#for i in 200:
 			#	yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
-			open_map("D:/Dungeon Keeper/levels/personal/map00056.slb")
+			open_map("D:/Dungeon Keeper/levels/personal/map00002.slb")
 			pass
 		else:
 			# initialize a cleared map
@@ -236,6 +237,8 @@ func continue_load(map):
 	if oColumnEditor.visible == true:
 		oColumnEditor.visible = false
 		Utils.popup_centered(oColumnEditor)
+	if oResizeCurrentMapSize.visible == true:
+		oResizeCurrentMapSize._on_ResizeCurrentMapSize_about_to_show()
 	
 	if is_instance_valid(oInspector.inspectingInstance):
 		oInspector.deselect()

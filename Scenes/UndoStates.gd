@@ -12,6 +12,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oMenu = Nodelist.list["oMenu"]
 
 
+
 var is_saving_state = false
 var undo_history = []
 var max_undo_states = 256
@@ -65,6 +66,8 @@ func perform_undo():
 		oMessage.big("Undo state error", "previous_state is not a dictionary")
 		return
 	
+
+	
 	var CODETIME_START = OS.get_ticks_msec()
 	performing_undo = true
 	
@@ -85,7 +88,9 @@ func perform_undo():
 	oMenu.update_undo_availability()
 	oMessage.quick("Undo performed")
 
-	if undo_history.size() <= 1:
+	if oEditor.mapHasBeenEdited == false:
+		oEditor.mapHasBeenEdited = oEditor.SET_EDITED_WITHOUT_SAVING_STATE
+	elif undo_history.size() <= 1:
 		oEditor.mapHasBeenEdited = false
 	
 	print('perform_undo: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
@@ -95,7 +100,7 @@ func perform_undo():
 	print('Idle frame (after undo): ' + str(OS.get_ticks_msec() - IDLE_FRAME_CODETIME_START) + 'ms')
 	
 	performing_undo = false
-	
+
 
 
 func are_states_equal(state1, state2): # (0ms or 1ms)

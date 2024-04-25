@@ -19,7 +19,6 @@ onready var oInstances = Nodelist.list["oInstances"]
 onready var oGuidelines = Nodelist.list["oGuidelines"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 
-
 func _on_ResizeCurrentMapSizeButton_pressed():
 	Utils.popup_centered(self)
 
@@ -33,8 +32,8 @@ func set_new_map_size(newWidth, newHeight):
 	M.xSize = newWidth
 	M.ySize = newHeight
 	oMapSizeTextLabel.text = str(M.xSize) + " x " + str(M.ySize)
-	
-	
+
+
 # Function to get positions that need to be updated
 func get_positions_to_update(newWidth, newHeight, previousWidth, previousHeight):
 	var positionsToUpdate = {}

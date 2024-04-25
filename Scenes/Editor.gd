@@ -14,10 +14,12 @@ onready var oMenu = Nodelist.list["oMenu"]
 onready var oConfirmSaveBeforeQuit = Nodelist.list["oConfirmSaveBeforeQuit"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 enum {
 	VIEW_2D = 0
 	VIEW_3D = 1
+	SET_EDITED_WITHOUT_SAVING_STATE = 777
 }
 
 var currentView = VIEW_2D
@@ -25,9 +27,13 @@ var fieldBoundary = Rect2()
 var mapHasBeenEdited = false setget set_map_has_been_edited
 
 func set_map_has_been_edited(setVal):
-	mapHasBeenEdited = setVal
-	if setVal == true:
+	if int(setVal) == oEditor.SET_EDITED_WITHOUT_SAVING_STATE: #If you save, then click Undo, it should mark as not saved but not create a new undo state when marking as edited.
+		mapHasBeenEdited = true
+		return
+	elif setVal == true:
 		oUndoStates.call_deferred("attempt_to_save_new_undo_state")
+	mapHasBeenEdited = setVal
+
 
 func _ready():
 	get_tree().set_auto_accept_quit(false)
