@@ -39,7 +39,13 @@ onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
-
+onready var oBuffers = Nodelist.list["oBuffers"]
+onready var oUndoStates = Nodelist.list["oUndoStates"]
+onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
+onready var oThingDetails = Nodelist.list["oThingDetails"]
+onready var oInspector = Nodelist.list["oInspector"]
+onready var oGuidelines = Nodelist.list["oGuidelines"]
+onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -47,12 +53,9 @@ var compressedFiles = []
 var ALWAYS_DECOMPRESS = false # Default to false
 
 func start():
-	
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
 	
 	if oGame.EXECUTABLE_PATH == "": return # Silently wait for user to set executable path. No need to show an error.
-	
-	
 	
 	if OS.get_cmdline_args():
 		# FILE ASSOCIATION
@@ -61,7 +64,8 @@ func start():
 		open_map(cmdLine[0])
 	else:
 		if OS.has_feature("standalone") == false:
-			#yield(get_tree(), "idle_frame")
+			#for i in 200:
+			#	yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
 			open_map("D:/Dungeon Keeper/levels/personal/map00002.slb")
 			pass
@@ -77,6 +81,7 @@ func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
 func open_map(filePath):
+	
 	# a filePath of "" means make a blank map.
 	
 	# This will replace \ with /, just for the sake of fixing ugliness
@@ -92,14 +97,12 @@ func open_map(filePath):
 		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
 		return
 	
+	print("----------- Opening map ------------")
+	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
+	
 	# Always begin by clearing map
 	oCurrentMap.clear_map()
 	
-	# Close windows that I want closed
-	oMapSettingsWindow.visible = false
-	oColumnEditor.visible = false
-	
-	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
 	var map = filePath.get_basename()
 	
 	load_cfg_stuff(map)
@@ -120,7 +123,7 @@ func open_map(filePath):
 			print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
 		
 		var formatType = 0
-		for EXT in Filetypes.FILE_TYPES:
+		for EXT in oBuffers.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
 				
 				# Don't bother reading original formats if KFX format files have been found
@@ -138,10 +141,11 @@ func open_map(filePath):
 				if EXT == "APTFX": formatType = 1
 				if EXT == "LGTFX": formatType = 1
 				
-				Filetypes.read(oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING], EXT.to_upper())
+				var readPath = oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING]
+				oBuffers.read(readPath, EXT.to_upper())
 			else:
 				print("Missing " + EXT + " file, so create blank data for that one.")
-				Filetypes.new_blank(EXT.to_upper())
+				oBuffers.new_blank(EXT.to_upper())
 				
 				# Assign name data to any that's missing
 				if EXT == "LIF":
@@ -163,7 +167,10 @@ func open_map(filePath):
 		if map == "":
 			oCurrentFormat.selected = oSetNewFormat.selected
 		
-		finish_opening_map(map)
+		continue_load(map)
+		continue_load_openmap(map)
+		print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
+		print("----------------------------------------------")
 	else:
 		if ALWAYS_DECOMPRESS == false:
 			oConfirmDecompression.dialog_text = "In order to open this map, these files must be decompressed: \n\n" #'Unable to open map, it contains files which have RNC compression: \n\n'
@@ -174,10 +181,10 @@ func open_map(filePath):
 		else:
 			# Begin decompression without confirmation dialog
 			_on_ConfirmDecompression_confirmed()
-#	else:
-#		oMessage.quick("Error: Map files not found")
+
 
 func load_cfg_stuff(map):
+	var CODETIME_START = OS.get_ticks_msec()
 	Things.reset_thing_data_to_default()
 	if Cube.tex.empty() == true:
 		Cube.read_cubes_cfg()
@@ -191,37 +198,65 @@ func load_cfg_stuff(map):
 	var fullPathToMainCfg = oGame.get_precise_filepath(parentDirectory, mainCfgName)
 	if fullPathToMainCfg != "":
 		Things.get_cfgs_directory(fullPathToMainCfg)
+	print('load_cfg_stuff: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 
-
-func finish_opening_map(map):
+func continue_load(map):
+	# initialize_editor_components
 	oPickThingWindow.initialize_thing_grid_items()
-	oCurrentMap.set_path_and_title(map)
-	oDynamicMapTree.highlight_current_map()
 	oEditor.update_boundaries()
-	oEditor.mapHasBeenEdited = false
 	oScriptEditor.initialize_for_new_map()
 	oOverheadOwnership.start()
 	oScriptHelpers.start()
-	oCamera2D.reset_camera(M.xSize, M.ySize)
+
+	# update_editor_data
+	if Slabset.dat.empty() == true:
+		Slabset.load_default_slabset()
+	if Columnset.cubes.empty() == true:
+		Columnset.load_default_columnset()
 	
-	if Slabset.dat.empty() == true: Slabset.load_default_slabset()
-	if Columnset.cubes.empty() == true: Columnset.load_default_columnset()
+	oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.MULTI_THREADED)
 	
-	oOverheadGraphics.update_map_overhead_2d_textures()
-	oPickSlabWindow.add_slabs()
 	oDataClm.count_filled_clm_entries()
-	
+
 	oTextureCache.set_current_texture_pack()
 	
-	if oCurrentMap.path == "":
+	# finalize_map_opening
+	oEditor.set_view_2d()
+
+	oMenu.add_recent(map)
+	
+	
+	
+	
+	# Update for Undo
+	
+	oDisplaySlxNumbers.update()
+	
+	
+	if oColumnEditor.visible == true:
+		oColumnEditor.visible = false
+		Utils.popup_centered(oColumnEditor)
+	if oResizeCurrentMapSize.visible == true:
+		oResizeCurrentMapSize._on_ResizeCurrentMapSize_about_to_show()
+	
+	if is_instance_valid(oInspector.inspectingInstance):
+		oInspector.deselect()
+
+
+func continue_load_openmap(map):
+	oEditor.mapHasBeenEdited = false
+	oPickSlabWindow.add_slabs()
+	oDynamicMapTree.highlight_current_map()
+	oCurrentMap.set_path_and_title(map)
+	oCamera2D.reset_camera(M.xSize, M.ySize)
+	oUndoStates.clear_history()
+	oGuidelines.update()
+	oMapSettingsWindow.visible = false
+	if map == "":
 		oMessage.quick('New map')
 	else:
 		oMessage.quick('Opened map')
-	
-	oEditor.set_view_2d()
-	
-	oMenu.add_recent(map)
 	
 	# When opening a map, be sure that column 0 is empty. Otherwise apply a fix.
 	if oDataClm.permanent[0] != 0 or oDataClm.cubes[0] != [0,0,0,0, 0,0,0,0]:
@@ -230,37 +265,27 @@ func finish_opening_map(map):
 		oDataClm.delete_column(0)
 		oEditor.mapHasBeenEdited = true
 		oMessage.quick("Fixed column index 0, re-save your map.")
-	
 	oDataClm.store_default_data()
 	
-#	if oGame.running_keeperfx() == true:
-#		if oCurrentFormat.selected == 1: # KFX format
-#			if oGame.KEEPERFX_VERSION_INT != 500: # Skip worrying about the compiled versions (0.5.0.0)
-#				if oGame.KEEPERFX_VERSION_INT != 0 and oGame.KEEPERFX_VERSION_INT < oGame.KEEPERFX_VERSION_REQUIRED_INT:
-#
-#					oMessage.big("Warning", "Your KeeperFX version is " + oGame.KEEPERFX_VERSION_STRING + " which is too old to use the features of KFX Map Format in-game. Download the latest alpha to rectify.")
-	
-	print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 
 func _on_ConfirmDecompression_confirmed():
-	#var CODETIME_START = OS.get_ticks_msec()
 	print('Attempting to decompress...')
-	# Decompress files
-	#var dir = Directory.new()
+	
 	for path in compressedFiles:
 		oRNC.decompress(path)
-	#print('Decompressed in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	# Retry opening the map
-	# (any of the compressed files will have the appropriate name)
 	open_map(compressedFiles[0])
+
 
 func _on_FileDialogOpen_file_selected(path):
 	open_map(path)
 
+
 func get_accompanying_files(map):
+	var CODETIME_START = OS.get_ticks_msec()
 	var baseDir = map.get_base_dir()
-	var mapName = map.get_file()
+	var mapName = map.get_file().get_basename() # Get the map name without the extension
 	
 	var dict = {}
 	var dir = Directory.new()
@@ -270,47 +295,13 @@ func get_accompanying_files(map):
 		var fileName = dir.get_next()
 		while fileName != "":
 			if dir.current_is_dir() == false:
-				if fileName.to_upper().begins_with(mapName.to_upper()): # Get file regardless of case (case insensitive)
+				var fileBaseName = fileName.get_basename() # Get the file name without the extension
+				if fileBaseName.to_upper() == mapName.to_upper():
 					var EXT = fileName.get_extension().to_upper()
-					if Filetypes.FILE_TYPES.has(EXT):
+					if oBuffers.FILE_TYPES.has(EXT):
 						var fullPath = baseDir.plus_file(fileName)
 						var getModifiedTime = File.new().get_modified_time(fullPath)
 						dict[EXT] = [fullPath, getModifiedTime]
 			fileName = dir.get_next()
+	print('get_accompanying_files: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return dict
-
-
-
-
-
-
-#file.seek(2+(3*( x + (y*85))))
-#	for x in 85:
-#		for y in 85:
-#			#1ms
-#			value = file.get_8() #8ms
-#			file.seek(1 * ( (y*(85)) + x ) ) #2ms
-#			GridOwnership.set_cell(Vector2(x,y),value)
-
-
-	# 8 bytes per subtile
-	# 3 subtiles per tile
-	# 85 tiles per side
-	# 255 tiles total
-	# + 2 subtiles * 85
-	# + 2 subtiles * 85
-#	var subtileY = 0
-#	var subtileX = 0
-#	var dataHeight = (85*3)+1
-#	var dataWidth = (85*3)+1
-#	while subtileY <= dataHeight:
-#		while subtileX <= dataWidth:
-#			file.seek( subtileX + (subtileY*dataWidth))
-#			value = file.get_8()
-#			GridOwnership.set_cell(Vector2(floor(subtileX/3),floor(subtileY/3)),value)
-#			subtileX+=1
-#		subtileX = 0
-#		subtileY += 1
-
-
-

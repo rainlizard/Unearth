@@ -142,7 +142,7 @@ func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
 	nodeClm.cubes[clmIndex][cubeNumber] = int(value)
 	nodeVoxelView.update_column_view()
 	
-	oHeightSpinBox.value = nodeClm.get_real_height(nodeClm.cubes[clmIndex])
+	oHeightSpinBox.value = nodeClm.get_height_from_bottom(nodeClm.cubes[clmIndex])
 	oSolidMaskSpinBox.value = nodeClm.calculate_solid_mask(nodeClm.cubes[clmIndex])
 	
 	_on_cube_mouse_entered(cubeNumber) # Update tooltip

@@ -59,12 +59,12 @@ extends Spatial
 #	var clmIndex
 #	var newSize
 #	if oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_MAP:
-#		clmIndex = oDataClmPos.get_cell(translation.x,translation.z)
+#		clmIndex = oDataClmPos.get_cell_clmpos(translation.x,translation.z)
 #	elif oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_CLM:
 #		clmIndex = oGenerateTerrain.get_clm_index(translation.x,translation.z)
 #
 #	if clmIndex != null:
-#		newSize = oDataClm.get_real_height(clmIndex)
+#		newSize = oDataClm.get_height_from_bottom(clmIndex)
 #	else:
 #		newSize = 0
 #

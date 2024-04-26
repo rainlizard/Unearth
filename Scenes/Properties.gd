@@ -12,25 +12,38 @@ onready var oAdvancedMapProperties = Nodelist.list["oAdvancedMapProperties"]
 onready var oMapSizeTextLabel = Nodelist.list["oMapSizeTextLabel"]
 onready var oMapNameLineEdit = Nodelist.list["oMapNameLineEdit"]
 onready var oNameIDLineEdit = Nodelist.list["oNameIDLineEdit"]
-onready var oKindLineEdit = Nodelist.list["oKindLineEdit"]
-onready var oEnsignPositionLineEdit = Nodelist.list["oEnsignPositionLineEdit"]
-onready var oEnsignZoomLineEdit = Nodelist.list["oEnsignZoomLineEdit"]
-onready var oPlayersLineEdit = Nodelist.list["oPlayersLineEdit"]
-onready var oOptionsLineEdit = Nodelist.list["oOptionsLineEdit"]
 onready var oSpeechLineEdit = Nodelist.list["oSpeechLineEdit"]
 onready var oLandViewLineEdit = Nodelist.list["oLandViewLineEdit"]
 onready var oAuthorLineEdit = Nodelist.list["oAuthorLineEdit"]
 onready var oDescriptionLineEdit = Nodelist.list["oDescriptionLineEdit"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oKindOptionButton = Nodelist.list["oKindOptionButton"]
+onready var oPlayersSpinBox = Nodelist.list["oPlayersSpinBox"]
+onready var oOptionsOptionButton = Nodelist.list["oOptionsOptionButton"]
+onready var oEnsignPositionX = Nodelist.list["oEnsignPositionX"]
+onready var oEnsignPositionY = Nodelist.list["oEnsignPositionY"]
+onready var oMapCoordinatesWindow = Nodelist.list["oMapCoordinatesWindow"]
+
+onready var oHBoxPlayers = Nodelist.list["oHBoxPlayers"]
+onready var oHBoxSpeech = Nodelist.list["oHBoxSpeech"]
+onready var oHBoxEnsignPosition = Nodelist.list["oHBoxEnsignPosition"]
+onready var oHBoxOptions = Nodelist.list["oHBoxOptions"]
+onready var oHBoxLandView = Nodelist.list["oHBoxLandView"]
+onready var oHBoxNameID = Nodelist.list["oHBoxNameID"]
 
 const kind_options = {
 	"Solo" : "FREE",
-	"Campaign" : "SINGLE",
 	"Multiplayer" : "MULTI",
-	"Secret" : "BONUS",
-	"Moon" : "EXTRA",
+	"Campaign" : "SINGLE",
+	"Campaign Secret" : "BONUS",
+	"Campaign Moon" : "EXTRA",
 }
+
+const options_options = {
+	"None" : "",
+	"Tutorial flag icon" : "TUTORIAL",
+}
+
 
 func _ready():
 	var tooltip_text = ""
@@ -41,11 +54,15 @@ func _ready():
 	# Default to hiding ONCE, when you start the editor.
 	oAdvancedMapProperties.visible = false
 	
-	
 	# Construct oKindOptionButton
 	for stringKind in kind_options.keys():
 		oKindOptionButton.add_item(stringKind)
 		oKindOptionButton.selected = 0
+	
+	# Construct oOptionsOptionButton
+	for stringKind in options_options.keys():
+		oOptionsOptionButton.add_item(stringKind)
+		oOptionsOptionButton.selected = 0
 
 func _on_MapProperties_visibility_changed():
 	if is_instance_valid(oDungeonStyleList) == false: return
@@ -54,10 +71,14 @@ func _on_MapProperties_visibility_changed():
 		oMapNameLineEdit.text = oDataMapName.data
 		oNameIDLineEdit.text = oDataLof.NAME_ID
 		oKindOptionButton.selected = kind_text_to_button_id()
-		oEnsignPositionLineEdit.text = oDataLof.ENSIGN_POS
-		oEnsignZoomLineEdit.text = oDataLof.ENSIGN_ZOOM
-		oPlayersLineEdit.text = oDataLof.PLAYERS
-		oOptionsLineEdit.text = oDataLof.OPTIONS
+		oOptionsOptionButton.selected = options_text_to_button_id()
+		
+		var ENSIGN_XY = oDataLof.ENSIGN_POS.split(" ")
+		if ENSIGN_XY.size() >= 2:
+			oEnsignPositionX.text = ENSIGN_XY[0]
+			oEnsignPositionY.text = ENSIGN_XY[1]
+		
+		oPlayersSpinBox.value = int(oDataLof.PLAYERS)
 		oSpeechLineEdit.text = oDataLof.SPEECH
 		oLandViewLineEdit.text = oDataLof.LAND_VIEW
 		oAuthorLineEdit.text = oDataLof.AUTHOR
@@ -72,6 +93,8 @@ func _on_MapProperties_visibility_changed():
 			oCurrentFormat.disabled = false
 		
 		set_format_selection(oCurrentFormat.selected)
+		
+		update_section_visibility()
 
 func _on_MapFormatSetting_item_selected(index):
 	# Clicked using mouse
@@ -104,28 +127,6 @@ func refresh_dungeon_style_options():
 	if oDataLevelStyle.data <= oTextureCache.cachedTextures.size():
 		oDungeonStyleList.selected = oDataLevelStyle.data
 
-#	for i in oDungeonStyleList.get_children():
-#		i.queue_free()
-#
-#	for i in oTextureCache.cachedTextures.size():
-#		var aaa = CheckBox.new()
-#		aaa.align = Button.ALIGN_LEFT
-#		if i == oDataLevelStyle.data:
-#			aaa.pressed = true
-#		aaa.group = load("res://Theme/ButtonGroupDungeonStyle.tres")
-#		if Constants.TEXTURE_MAP_NAMES.has(i) == true:
-#			aaa.text = Constants.TEXTURE_MAP_NAMES[i]
-#		else:
-#			aaa.text = "Untitled"
-#		aaa.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_CENTER
-#		aaa.size_flags_horizontal = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_CENTER
-#		aaa.connect("pressed",self,"_on_DungeonStyleButtonPressed",[i])
-#		oDungeonStyleList.add_child(aaa)
-#
-#		var bbb = Label.new()
-#		bbb.text = "tmapa" + str(i).pad_zeros(3) + ".dat"
-#		oDungeonStyleList.add_child(bbb)
-
 func _on_DungeonStyleList_item_selected(value):
 	oEditor.mapHasBeenEdited = true
 	oDataLevelStyle.data = value
@@ -145,15 +146,6 @@ func _on_NameIDLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataLof.NAME_ID = new_text
 
-func _on_EnsignPositionLineEdit_text_changed(new_text):
-	oEditor.mapHasBeenEdited = true
-	oDataLof.ENSIGN_POS = new_text
-func _on_EnsignZoomLineEdit_text_changed(new_text):
-	oEditor.mapHasBeenEdited = true
-	oDataLof.ENSIGN_ZOOM = new_text
-func _on_PlayersLineEdit_text_changed(new_text):
-	oEditor.mapHasBeenEdited = true
-	oDataLof.PLAYERS = new_text
 func _on_OptionsLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataLof.OPTIONS = new_text
@@ -164,26 +156,109 @@ func _on_LandViewLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataLof.LAND_VIEW = new_text
 
+func _on_PlayersSpinBox_value_changed(value):
+	oEditor.mapHasBeenEdited = true
+	oDataLof.PLAYERS = str(value)
 
-#func _on_KindLineEdit_text_changed(new_text):
-#	oEditor.mapHasBeenEdited = true
-#	oDataLof.KIND = new_text
 
 func _on_KindOptionButton_item_selected(index):
-	oDataLof.KIND = kind_options[oKindOptionButton.text]
 	oEditor.mapHasBeenEdited = true
+	oDataLof.KIND = kind_options[oKindOptionButton.text]
+	update_section_visibility()
 
-func kind_text_to_button_id():
-	var kind_value = oDataLof.KIND
-	var button_id = -1
 
-	for i in range(oKindOptionButton.get_item_count()):
-		if kind_options[oKindOptionButton.get_item_text(i)] == kind_value:
+func _on_OptionsOptionButton_item_selected(index):
+	oEditor.mapHasBeenEdited = true
+	oDataLof.OPTIONS = options_options[oOptionsOptionButton.text]
+
+
+func _on_EnsignPositionX_focus_exited():
+	oEditor.mapHasBeenEdited = true
+	if int(oEnsignPositionX.text) > 1000000: # Change this if I need to set a cap
+		oEnsignPositionX.text = "1000000"
+	oDataLof.ENSIGN_POS = oEnsignPositionX.text + " " + oEnsignPositionY.text
+	oDataLof.ENSIGN_ZOOM = oDataLof.ENSIGN_POS
+
+func _on_EnsignPositionY_focus_exited():
+	oEditor.mapHasBeenEdited = true
+	if int(oEnsignPositionY.text) > 1000000:
+		oEnsignPositionY.text = "1000000"
+	oDataLof.ENSIGN_POS = oEnsignPositionX.text + " " + oEnsignPositionY.text
+	oDataLof.ENSIGN_ZOOM = oDataLof.ENSIGN_POS
+
+func set_flag_pos_by_landview_img(newPos):
+	oEnsignPositionX.text = str(newPos.x)
+	oEnsignPositionY.text = str(newPos.y)
+	_on_EnsignPositionX_focus_exited()
+	_on_EnsignPositionY_focus_exited()
+
+
+func options_text_to_button_id():
+	var button_id = 0
+	for i in range(oOptionsOptionButton.get_item_count()):
+		if options_options[oOptionsOptionButton.get_item_text(i)] == oDataLof.OPTIONS:
 			button_id = i
 			break
-
-	if button_id == -1:
-		button_id = 0  # Default to 0 or another suitable default index
-
 	return button_id
 
+func kind_text_to_button_id():
+	var button_id = 0
+	for i in range(oKindOptionButton.get_item_count()):
+		if kind_options[oKindOptionButton.get_item_text(i)] == oDataLof.KIND:
+			button_id = i
+			break
+	return button_id
+
+
+func update_section_visibility():
+	oHBoxPlayers.visible = false
+	oHBoxSpeech.visible = false
+	oHBoxEnsignPosition.visible = false
+	oHBoxOptions.visible = false
+	oHBoxLandView.visible = false
+	oHBoxNameID.visible = false
+	match oKindOptionButton.get_item_text(oKindOptionButton.selected):
+		"Solo":
+			pass
+		"Multiplayer":
+			oHBoxPlayers.visible = true
+			oHBoxEnsignPosition.visible = true
+			oHBoxOptions.visible = false
+			oHBoxLandView.visible = true
+			oHBoxNameID.visible = true
+		"Campaign", "Campaign Secret", "Campaign Moon":
+			oHBoxSpeech.visible = true
+			oHBoxEnsignPosition.visible = true
+			oHBoxOptions.visible = true
+			oHBoxLandView.visible = true
+			oHBoxNameID.visible = true
+	
+	if oHBoxPlayers.visible == false:
+		oPlayersSpinBox.value = 2
+		oDataLof.PLAYERS = ""
+	
+	if oHBoxSpeech.visible == false:
+		oSpeechLineEdit.text = ""
+		oDataLof.SPEECH = ""
+	
+	if oHBoxEnsignPosition.visible == false:
+		oEnsignPositionX.text = ""
+		oEnsignPositionY.text = ""
+		oDataLof.ENSIGN_POS = ""
+		oDataLof.ENSIGN_ZOOM = ""
+	
+	if oHBoxOptions.visible == false:
+		oOptionsOptionButton.selected = 0
+		oDataLof.OPTIONS = ""
+	
+	if oHBoxLandView.visible == false:
+		oLandViewLineEdit.text = ""
+		oDataLof.LAND_VIEW = ""
+	
+	if oHBoxNameID.visible == false:
+		oNameIDLineEdit.text = ""
+		oDataLof.NAME_ID = ""
+
+
+func _on_OpenMapCoordButton_pressed():
+	Utils.popup_centered(oMapCoordinatesWindow)

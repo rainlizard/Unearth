@@ -5,6 +5,7 @@
 [node name="BigMessageInstance" type="AcceptDialog"]
 margin_right = 55.0
 margin_bottom = 58.0
+rect_min_size = Vector2( 400, 0 )
 window_title = ""
 dialog_autowrap = true
 script = ExtResource( 1 )

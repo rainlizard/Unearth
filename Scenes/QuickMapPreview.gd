@@ -4,7 +4,7 @@ onready var oRNC = Nodelist.list["oRNC"]
 onready var oReadData = Nodelist.list["oReadData"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oMapBrowserTabContainer = Nodelist.list["oMapBrowserTabContainer"]
-
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var img = Image.new()
 var tex = ImageTexture.new()
@@ -103,7 +103,7 @@ func update_img(slbFilePath):
 	elif File.new().file_exists(slbFilePath.get_basename()+".LOF") == true:
 		lofFilePath = slbFilePath.get_basename()+".LOF"
 	
-	var lofBuffer = Filetypes.file_path_to_buffer(lofFilePath)
+	var lofBuffer = oBuffers.file_path_to_buffer(lofFilePath)
 	var xy = oReadData.read_mapsize_from_lof(lofBuffer)
 	#print(xy)
 	
@@ -122,10 +122,10 @@ func update_img(slbFilePath):
 	
 	var ownBuffer = null
 	if ownFilePath != "":
-		ownBuffer = Filetypes.file_path_to_buffer(ownFilePath)
+		ownBuffer = oBuffers.file_path_to_buffer(ownFilePath)
 		ownBuffer.seek(0)
 	
-	var slbBuffer = Filetypes.file_path_to_buffer(slbFilePath)
+	var slbBuffer = oBuffers.file_path_to_buffer(slbFilePath)
 	slbBuffer.seek(0)
 	
 	var slabID

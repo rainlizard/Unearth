@@ -37,15 +37,12 @@ func add_item(leftString, rightString):
 	var nodeRightColumn
 	match leftString:
 		"Door locked":
-			nodeRightColumn = OptionButton.new()
-			nodeRightColumn.add_item("False")
-			nodeRightColumn.add_item("True")
-			
-			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftString])
-			nodeRightColumn.connect("toggled",self,"_on_optionbutton_toggled", [nodeRightColumn])
-			for i in nodeRightColumn.get_item_count():
-				if nodeRightColumn.get_item_text(nodeRightColumn.get_item_index(i)) == rightString:
-					nodeRightColumn.selected = i
+			nodeRightColumn = CheckBox.new()
+			nodeRightColumn.size_flags_horizontal = Control.SIZE_EXPAND
+			match int(rightString):
+				0: nodeRightColumn.pressed = false
+				1: nodeRightColumn.pressed = true
+			nodeRightColumn.connect("toggled",self,"_on_optionbutton_item_selected", [leftString])
 		"Ownership":
 			nodeRightColumn = OptionButton.new()
 			nodeRightColumn.focus_mode = 0 # Fixes clicking on the menu
@@ -297,7 +294,9 @@ func _on_optionbutton_item_selected(indexSelected, leftString):
 			value = Constants.listOrientations[indexSelected]
 		"Door locked":
 			property_name = "doorLocked"
-			value = indexSelected
+			match indexSelected:
+				false: value = 0
+				true: value = 1
 			if name == "ThingListData":
 				if is_instance_valid(inst):
 					inst.set(property_name, value) # Must be set before update_spinning_key()

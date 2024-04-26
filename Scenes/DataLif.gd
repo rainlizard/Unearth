@@ -1,7 +1,7 @@
 extends Node
 onready var oReadData = Nodelist.list["oReadData"]
 onready var oDataLof = Nodelist.list["oDataLof"]
-
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var data = ""
 
@@ -24,7 +24,7 @@ func clear():
 
 
 func lif_name_text(pathString):
-	var buffer = Filetypes.file_path_to_buffer(pathString)
+	var buffer = oBuffers.file_path_to_buffer(pathString)
 	var array = oReadData.lif_buffer_to_array(buffer)
 	var mapName = oReadData.lif_array_to_map_name(array)
 	return mapName
@@ -40,7 +40,7 @@ func get_special_lif_text(pathString): # Uses the path only as a string rather t
 		readSpecial = Settings.unearthdata.plus_file("ddisk1.lif")
 
 	if readSpecial != "":
-		var buffer = Filetypes.file_path_to_buffer(readSpecial)
+		var buffer = oBuffers.file_path_to_buffer(readSpecial)
 		var lifArray = oReadData.lif_buffer_to_array(buffer)
 		
 		if lifArray.empty() == false:

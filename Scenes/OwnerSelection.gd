@@ -4,6 +4,7 @@ onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oUseSlabOwnerCheckBox = Nodelist.list["oUseSlabOwnerCheckBox"]
 onready var oOwnershipGridContainer = Nodelist.list["oOwnershipGridContainer"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
+onready var oCollectibleLabel = Nodelist.list["oCollectibleLabel"]
 
 #onready var oEditor = Nodelist.list["oEditor"]
 onready var gridItemScene = preload("res://Scenes/GenericGridItem.tscn")
@@ -14,6 +15,8 @@ onready var oCenteredLabel = $Control/CenteredLabel
 #export var grid_window_scale : float setget update_scale
 #
 var owner_order = [0,1,2,3,4,6,7,8,5]
+
+var ownership_available = true
 
 func _ready():
 	for i in owner_order:
@@ -49,8 +52,10 @@ func add_child_to_grid(id, set_text):
 
 func pressed(id):
 	var setValue = id.get_meta("grid_value")
-	if oUseSlabOwnerCheckBox.pressed == true and oUseSlabOwnerCheckBox.visible == true:
-		setValue = 5
+	if oCollectibleLabel.visible == true:
+		return
+	elif oUseSlabOwnerCheckBox.pressed == true and oUseSlabOwnerCheckBox.visible == true:
+		oUseSlabOwnerCheckBox.pressed = false
 	oSelection.paintOwnership = setValue
 	set_selection(setValue)
 	oOnlyOwnership.select_appropriate_button()
@@ -61,10 +66,12 @@ func _process(delta): # It's necessary to use _process to update selection, beca
 func update_selection():
 	if oSelectedRect == null: return
 	if is_instance_valid(oSelectedRect.boundToItem) == false: return
-	# If checkbox is checked then don't do anything
-	if oUseSlabOwnerCheckBox.pressed == true and oUseSlabOwnerCheckBox.visible == true:
+	
+	# If greyed out then don't do anything
+	if ownership_available == false:
 		oSelectedRect.visible = false
 		return
+	
 	oSelectedRect.visible = true
 	oSelectedRect.rect_global_position = oSelectedRect.boundToItem.rect_global_position
 	oSelectedRect.rect_size = oSelectedRect.boundToItem.rect_size
@@ -88,6 +95,26 @@ func set_selection(value):
 	for id in oOwnershipGridContainer.get_children():
 		if id.get_meta("grid_value") == value:
 			oSelectedRect.boundToItem = id
+
+func collectible_ownership_mode(collMode):
+	if collMode == true:
+		oCollectibleLabel.visible = true
+		oUseSlabOwnerCheckBox.visible = false
+	else:
+		oCollectibleLabel.visible = false
+		oUseSlabOwnerCheckBox.visible = true
+	update_ownership_available()
+
+func update_ownership_available():
+	ownership_available = true
+	oOwnershipGridContainer.modulate.a = 1.00
+	
+	if oCollectibleLabel.visible == true:
+		ownership_available = false
+		oOwnershipGridContainer.modulate.a = 0.25
+	elif oUseSlabOwnerCheckBox.visible == true and oUseSlabOwnerCheckBox.pressed == true:
+		ownership_available = false
+		oOwnershipGridContainer.modulate.a = 0.25
 
 
 #

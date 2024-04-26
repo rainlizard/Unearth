@@ -1,6 +1,5 @@
 extends Node
 
-
 func _on_GridWindow_visibility_changed(callingNode): # Initial load for correct grid arrangement
 	if callingNode.visible == true:
 		for i in 2:
@@ -45,7 +44,6 @@ func _on_GridWindow_resized(callingNode):
 		var itemCount = oGridContainer.get_child_count()
 		if itemCount > 0:
 			oGridContainer.set_columns(ceil(float(itemCount)/float(maxHeight)))
-
 
 func _on_tab_changed(newTab, callingNode):
 	callingNode.update_scale(callingNode.grid_window_scale)

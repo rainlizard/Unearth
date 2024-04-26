@@ -3,7 +3,7 @@ onready var oSelection = Nodelist.list["oSelection"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 
 var scnOwnerButton = preload("res://Scenes/OnlyOwnershipButton.tscn")
-onready var oSelectedRect = get_node("../../../Clippy/SelectedRect")
+onready var oSelectedRect = get_node("../../../../Clippy/SelectedRect")
 
 func initialize_grid_items():
 	var oGridContainer = current_grid_container()

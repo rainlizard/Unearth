@@ -125,10 +125,7 @@ func _on_slab_button_pressed(buttonID):
 		oMessage.quick("Must first click on a pixel within the image.")
 		return
 	
-	
 	var slabID = buttonID.get_meta("slabID")
-	
-	
 	
 	# Many colours can be assigned to one Button.
 	# Many buttons CANNOT be assigned to one colour.

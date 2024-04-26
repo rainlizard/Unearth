@@ -71,7 +71,7 @@ extends Node
 #
 #	for z in 255:
 #		for x in 255:
-#			var idx = oDataClmPos.get_cell(z,x)
+#			var idx = oDataClmPos.get_cell_clmpos(z,x)
 #			if oDataClm.solidMask[idx] > 0: # DON'T USE SOLID MASK LIKE THIS!!!!!!!!!!!!!!!!!!!!!!!!
 #				tempArrays[Mesh.ARRAY_INDEX].append_array(columnMeshArrays[idx][Mesh.ARRAY_INDEX])
 #				tempArrays[Mesh.ARRAY_VERTEX].append_array(columnMeshArrays[idx][Mesh.ARRAY_VERTEX])
@@ -160,8 +160,6 @@ extends Node
 #var multiMeshes = []
 
 	#print(columnModels[idx])
-	
-	#oDataClm.update_all_utilized()
 	
 	#CODETIME_START = OS.get_ticks_msec()
 	

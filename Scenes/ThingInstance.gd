@@ -5,6 +5,7 @@ onready var oInspector = Nodelist.list["oInspector"]
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
+onready var oActionPointList = Nodelist.list["oActionPointList"]
 
 #onready var oSelection = $'../../Selector/Selection'
 #onready var oInstanceOwnership = $'../../OverheadOwnership/InstanceOwnership'
@@ -70,6 +71,12 @@ func _enter_tree():
 				add_to_group("TreasuryGold")
 			elif subtype in Things.LIST_OF_SPELLBOOKS:
 				add_to_group("Spellbook")
+			elif subtype == 49:
+				add_to_group("HeroGate")
+				yield(get_tree(),'idle_frame')
+				if oActionPointList:
+					oActionPointList.update_ap_list()
+					
 		Things.TYPE.CREATURE:
 			add_to_group("Creature")
 			var oCamera2D = Nodelist.list["oCamera2D"]
@@ -311,7 +318,7 @@ func update_spinning_key(): # Called after changing the lock state
 		# Door is unlocked
 		if is_instance_valid(keyID) == true:
 			# There's a key, so remove it
-			keyID.queue_free()
+			oInstances.kill_instance(keyID)
 	else:
 		# Door is locked
 		if is_instance_valid(keyID) == false:

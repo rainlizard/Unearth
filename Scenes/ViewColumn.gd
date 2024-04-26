@@ -28,7 +28,7 @@ func update_details():
 	
 	if oEditor.currentView == oEditor.VIEW_2D and oUi.mouseOnUi == false:
 		pos = oSelector.cursorSubtile
-		entryIndex = oDataClmPos.get_cell(pos.x,pos.y)
+		entryIndex = oDataClmPos.get_cell_clmpos(pos.x,pos.y)
 #	elif oEditor.currentView == oEditor.VIEW_3D:
 #		if oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_MAP:
 #			pos = Vector2(oSelector3D.translation.x, oSelector3D.translation.z)

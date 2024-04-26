@@ -46,6 +46,8 @@ void vertex() {
 }
 
 void fragment() {
+	// This is a bit of a hack, but allows us to store the texture index within the mesh as UV2.
+	// Adding 0.5 so the int() floor will be correct.
 	int index = getIndex(UV2);
 	
 	if (index >= 544) { // 544 is the index where the TexAnims start (544 - 585)

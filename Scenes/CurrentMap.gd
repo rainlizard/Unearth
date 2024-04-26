@@ -39,6 +39,7 @@ func _init():
 func _on_ButtonNewMap_pressed():
 	oOpenMap.open_map("") # This means "blank" map
 
+
 func set_path_and_title(newpath):
 	if newpath != "":
 		OS.set_window_title(newpath + ' - Unearth v'+Version.full)
@@ -49,51 +50,24 @@ func set_path_and_title(newpath):
 	
 	oGame.reconstruct_command_line() # Always update command line whenever the path changes
 
-var instancesToFree = []
-func _process(delta):
-	# For whatever reason, clearing here instead from an array prevents Godot from crashing
-	while instancesToFree.empty() == false:
-		instancesToFree.pop_back().queue_free()
-
 func clear_map():
-	var allInst = get_tree().get_nodes_in_group("Instance")
-	for id in allInst:
-		oInstances.remove_child(id)
-		id.position = Vector2(-9999999,-9999999)
-		id.visible = false
-		for group in id.get_groups():
-			id.remove_from_group(group)
-		instancesToFree.append(id)
-	
 	var CODETIME_START = OS.get_ticks_msec()
 	
-	set_path_and_title("")
+	var allInst = get_tree().get_nodes_in_group("Instance")
+	for id in allInst:
+		oInstances.kill_instance(id)
 	
 	# "lif"
 	oDataMapName.clear()
 	# "wib"
 	oDataSlx.clear_img()
-	# "wib" (Wibble)
-	oDataWibble.clear()
-	# "wlb" (Water Lava Block)
-	oDataLiquid.clear()
-	# "slb"
-	oDataSlab.clear()
-	# "own"
-	oDataOwnership.clear()
 	oOverheadOwnership.clear()
 	# "inf"
 	oDataLevelStyle.data = 0
-	# "dat"
-	oDataClmPos.clear()
-	# "clm"
-	oOverheadGraphics.clear_img()
 	# 3D
 	oGenerateTerrain.clear()
 	#"TXT"
 	oDataScript.data = ""
-	# "UNE"
-	oDataFakeSlab.clear()
 	
 	oScriptHelpers.clear()
 	

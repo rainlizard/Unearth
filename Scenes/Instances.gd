@@ -12,12 +12,16 @@ onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
+onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
+onready var oDataOwnership = Nodelist.list["oDataOwnership"]
 
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
 var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
 var lightScn = preload("res://Scenes/LightInstance.tscn")
 
+func _ready():
+	erase_instances_loop()
 
 func place_new_light(newThingType, newSubtype, newPosition, newOwnership):
 	var id = lightScn.instance()
@@ -137,10 +141,10 @@ func mirror_deletion_of_instance(instanceBeingDeleted):
 			if is_instance_valid(getNodeAtMirroredPosition):
 				if getNodeAtMirroredPosition.subtype == instanceBeingDeleted.subtype:
 					if getNodeAtMirroredPosition.thingType == instanceBeingDeleted.thingType:
-						getNodeAtMirroredPosition.queue_free()
+						kill_instance(getNodeAtMirroredPosition)
 
 func placement_is_obstructed(thingType, placeSubtile):
-	var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(placeSubtile.x,placeSubtile.y)]
+	var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(placeSubtile.x,placeSubtile.y)]
 	if oPlaceThingsAnywhere.pressed == false and detectTerrainHeight >= 5 and thingType != Things.TYPE.EXTRA: # Lights and Action Points can always be placed anywhere
 		return true
 	return false
@@ -247,6 +251,8 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 	id.subtype = newSubtype
 	id.ownership = newOwnership
 	
+	set_collectibles_ownership(id, slabID, oDataOwnership.get_cell_ownership(xSlab, ySlab))
+	
 	match id.thingType:
 		Things.TYPE.OBJECT:
 			id.parentTile = 65535 # "None"
@@ -308,9 +314,9 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 		if id.subtype == 10:
 			if slabID != Slabs.HATCHERY:
 				oMessage.big("Warning","Chicken won't appear unless placed inside a Hatchery. Place an Egg instead.")
-		if id.subtype in [52,53,54,55,56]: # Treasury Gold
+		if id.subtype in [52,53,54,55,56]: # Treasury Hoard
 			if slabID != Slabs.TREASURE_ROOM:
-				oMessage.big("Warning","Treasury Gold won't appear unless placed inside a Treasure Room.")
+				oMessage.big("Warning","Treasury Hoard should be placed inside a Treasure Room.")
 			
 			# Place on center of slab. Won't be functional otherwise.
 			var locX = (floor( floor(id.locationX) / 3 ) * 3) + 1.5
@@ -321,9 +327,12 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			id.locationY = -32767
 			var goldID = get_node_on_subtile(locX, locY, "TreasuryGold")
 			if is_instance_valid(goldID) == true:
-				goldID.queue_free()
+				kill_instance(goldID)
 			id.locationX = locX
 			id.locationY = locY
+	elif id.thingType == Things.TYPE.DOOR:
+		if Slabs.door_data.has(slabID) == false:
+			oMessage.big("Warning","You placed a Door Thing without a Door Slab. Switch to Slab Mode and place a Door Slab for proper functionality.")
 	return id
 
 #Slabset.obj.IS_LIGHT,     # [0] IsLight [0-1]
@@ -389,7 +398,7 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 				2: id.subtype = 117 # Green
 				3: id.subtype = 118 # Yellow
 				4: id.subtype = 161 # White
-				5: id.queue_free() # None
+				5:id.subtype = 119 # None
 				6: id.subtype = 164 # Purple
 				7: id.subtype = 166 # Black
 				8: id.subtype = 168 # Orange
@@ -400,8 +409,8 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 				1: id.subtype = 120 # Blue
 				2: id.subtype = 121 # Green
 				3: id.subtype = 122 # Yellow
-				4: id.queue_free() # White
-				5: id.queue_free() # None
+				4: kill_instance(id) # White
+				5: kill_instance(id) # None
 				6: id.subtype = 165 # Purple
 				7: id.subtype = 167 # Black
 				8: id.subtype = 169 # Orange
@@ -422,18 +431,65 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 #			3: partnerArrow.texture = preload("res://Art/torchdir3.png")
 #		id.add_child(partnerArrow)
 
+var instances_to_erase = []
+
+func erase_instances_loop(): # started by _ready()
+	for i in 2: # We need 2 idle_frames to separate the wait from the 1 idle_frame that perform_undo uses
+		yield(get_tree(),'idle_frame')
+	var items_freed = 0
+	var max_items_to_free = max(1, instances_to_erase.size() * 0.01)
+	#var FREEING_CODETIME_START = OS.get_ticks_msec()
+	
+	while true:
+		var id = instances_to_erase.pop_back()
+		if is_instance_valid(id):
+			items_freed += 1
+			id.free()
+		if instances_to_erase.size() > 2000: # If you're not erasing them fast enough, leaving too many instances on the field creates its own lag.
+			continue
+		elif instances_to_erase.empty() == true or items_freed > max_items_to_free:
+			break
+	#if items_freed > 0:
+		#print(items_freed)
+		#print('Time spent freeing instances: ' + str(OS.get_ticks_msec() - FREEING_CODETIME_START) + 'ms')
+	
+	erase_instances_loop()
+
+func kill_instance(id): # Multi-thread safe
+	id.position = Vector2(rand_range(-10000000,-20000000),rand_range(-10000000,-20000000)) # Stacking them on the same position causes lag for some reason.
+	for group in id.get_groups():
+		id.remove_from_group(group)
+	instances_to_erase.append(id)
+
 
 func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
 		var nodesOnSlab = get_all_nodes_on_slab(xSlab, ySlab, ["Thing"])
-		for i in nodesOnSlab:
-			i.queue_free()
+		for id in nodesOnSlab:
+			kill_instance(id)
 	else:
 		var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
 		for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
 			on_slab_update_thing_height(id)
 			on_slab_delete_stray_door_thing_and_key(id, slabID)
-			on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership)
+			set_collectibles_ownership(id, slabID, ownership)
+
+
+func set_collectibles_ownership(id, slabID, slabOwnership):
+	if id.thingType == Things.TYPE.OBJECT:
+		if Things.DATA_OBJECT.has(id.subtype):
+			var genre = Things.DATA_OBJECT[id.subtype][Things.EDITOR_TAB]
+			if Things.collectible_belonging.has(genre):
+				if slabID == Things.collectible_belonging[genre]:
+					id.ownership = slabOwnership
+				else:
+					id.ownership = 5
+
+func manage_thing_ownership_on_slab(xSlab, ySlab, ownership):
+	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
+	for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):
+		id.ownership = ownership
+
 
 #func delete_all_on_slab(xSlab, ySlab, arrayOfGroupNameStrings):
 #	var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
@@ -473,7 +529,7 @@ func on_slab_update_thing_height(id): # Update heights of any manually placed ob
 		if id.parentTile == 65535: # None. Not attached to any slab.
 			var xSubtile = floor(id.locationX)
 			var ySubtile = floor(id.locationY)
-			var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(xSubtile,ySubtile)]
+			var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(xSubtile,ySubtile)]
 			id.locationZ = detectTerrainHeight
 			if id.subtype in [2,7]:
 				update_stray_torch_height(id)
@@ -487,11 +543,9 @@ func on_slab_delete_stray_door_thing_and_key(id, slabID):
 		# Kill doors and keys that aren't on door slabIDs
 		if id.is_in_group("Door") or id.is_in_group("Key"):
 			if Slabs.is_door(slabID) == false:
-				id.queue_free()
+				kill_instance(id)
 
-func on_slab_set_gold_owner_to_slab_owner(id, slabID, ownership):
-	if slabID == Slabs.TREASURE_ROOM and id.thingType == Things.TYPE.OBJECT and id.subtype in [52,53,54,55,56,3,6,43,136]:
-		id.ownership = ownership
+
 
 
 #	for groupName in arrayOfGroupNameStrings:
@@ -527,7 +581,7 @@ func delete_attached_instances_on_slab(xSlab, ySlab):
 	var groupName = 'attachedtotile_'+str((ySlab*M.xSize)+xSlab)
 	if groupName == "attachedtotile_0": return # This fixes an edge case issue with Spinning Keys being destroyed if you click the top left corner
 	for id in get_tree().get_nodes_in_group(groupName):
-		id.queue_free()
+		kill_instance(id)
 
 func get_free_index_number():
 	var listOfThingNumbers = []
@@ -548,7 +602,7 @@ func get_free_index_number():
 func get_free_hero_gate_number():
 	var listOfHeroGateNumbers = []
 	for id in get_tree().get_nodes_in_group("Thing"):
-		if id.thingType == Things.TYPE.OBJECT and id.subtype == 49: # Hero gate
+		if id.is_in_group("HeroGate"):
 			listOfHeroGateNumbers.append(id.herogateNumber)
 	
 	var newNumber = 1
@@ -579,7 +633,7 @@ func return_dungeon_heart(ownership):
 
 func return_hero_gate(number):
 	for id in get_tree().get_nodes_in_group("Thing"):
-		if id.thingType == Things.TYPE.OBJECT and id.subtype == 49: # Hero gate
+		if id.is_in_group("HeroGate"):
 			if id.herogateNumber == number:
 				return id
 	return null

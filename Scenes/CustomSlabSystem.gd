@@ -49,10 +49,10 @@ func load_file():
 		}
 		
 		var retrieve_value
-		retrieve_value = cfg.get_value(section, "door_thing", null) # Default = null
-		if retrieve_value != null: slab_dict["door_thing"] = retrieve_value
-		retrieve_value = cfg.get_value(section, "door_orientation", null)
-		if retrieve_value != null: slab_dict["door_orientation"] = retrieve_value
+		retrieve_value = cfg.get_value(section, "door_thing", "NOT_FOUND") # Default = null
+		if retrieve_value != "NOT_FOUND": slab_dict["door_thing"] = retrieve_value
+		retrieve_value = cfg.get_value(section, "door_orientation", "NOT_FOUND")
+		if retrieve_value != "NOT_FOUND": slab_dict["door_orientation"] = retrieve_value
 		
 		add_custom_slab(slab_dict)
 
@@ -136,7 +136,7 @@ func remove_custom_slab(header_id):
 
 func get_top_fake_cube_face(indexIn3x3, slabID):
 	var cubesArray = Slabs.fake_extra_data[slabID][Slabs.FAKE_CUBE_DATA][indexIn3x3]
-	var get_height = oDataClm.get_real_height(cubesArray)
+	var get_height = oDataClm.get_highest_cube_height(cubesArray)
 	if get_height == 0:
 		return Slabs.fake_extra_data[slabID][Slabs.FAKE_FLOOR_DATA][indexIn3x3]
 	else:

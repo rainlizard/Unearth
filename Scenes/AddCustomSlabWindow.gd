@@ -154,7 +154,7 @@ func copy_values_from_slabset_and_index_them():
 func get_column_indexes_on_tile(cursorTile):
 	for ySubtile in 3:
 		for xSubtile in 3:
-			var newIndex = oDataClmPos.get_cell((cursorTile.x*3)+xSubtile, (cursorTile.y*3)+ySubtile)
+			var newIndex = oDataClmPos.get_cell_clmpos((cursorTile.x*3)+xSubtile, (cursorTile.y*3)+ySubtile)
 			var i = (ySubtile*3) + xSubtile
 			customSlabArrayOfSpinbox[i].value = newIndex
 

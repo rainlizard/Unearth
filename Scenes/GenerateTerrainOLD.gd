@@ -138,7 +138,7 @@ func generation():
 								var pos = Vector3(x,y-1,z)
 								var clmIndex
 								if GENERATED_TYPE == GEN_MAP:
-									clmIndex = oDataClmPos.get_cell(x,z)
+									clmIndex = oDataClmPos.get_cell_clmpos(x,z)
 								elif GENERATED_TYPE == GEN_CLM:
 									if x/2 != x/2.0 or z/2 != z/2.0: continue #skips current loop
 									clmIndex = ((z/2) * (TERRAIN_SIZE_X/2)) + (x/2)
@@ -195,7 +195,7 @@ func set_cube_id_with_column_position_data():
 			blockMap[x][z] = []
 			blockMap[x][z].resize(TERRAIN_SIZE_Y)
 			
-			var clmIndex = oDataClmPos.get_cell(x,z)
+			var clmIndex = oDataClmPos.get_cell_clmpos(x,z)
 			blockMap[x][z] = oDataClm.cubes[clmIndex] # Warning: this is probably a reference. But it probably doesn't matter.
 
 func set_cube_id_to_clm_index():

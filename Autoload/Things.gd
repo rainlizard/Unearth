@@ -23,7 +23,6 @@ enum TYPE {
 	EXTRA = 696969
 }
 
-
 var data_structure_name = {
 	TYPE.NONE: "Empty",
 	TYPE.OBJECT: "Object",
@@ -41,6 +40,7 @@ var data_structure_name = {
 	TYPE.CAVEIN: "CaveIn",
 	TYPE.EXTRA: "Extra"
 }
+
 var reverse_data_structure_name = {
 	"Empty": TYPE.NONE,
 	"Object":TYPE.OBJECT,
@@ -58,8 +58,6 @@ var reverse_data_structure_name = {
 	"CaveIn":TYPE.CAVEIN,
 	"Extra":TYPE.EXTRA,
 }
-
-
 
 enum {
 	NAME = 0
@@ -249,11 +247,11 @@ var DATA_OBJECT = {
 049 : ["Hero Gate", null,null, preload("res://dk_images/crucials/anim0780/AnimHeroGate.tres"), null, TAB_ACTION],
 050 : ["Spinning Key 2", null,null, preload("res://dk_images/traps_doors/anim0811/AnimSpinningKey.tres"), null, TAB_MISC],
 051 : ["Armour Effect", null,null, null, null, TAB_MISC],
-052 : ["Treasury Gold 1 (800)", null,null,  preload("res://dk_images/valuables/gold_hoard2_tp/AnimGoldHoard2.tres"), null, TAB_GOLD],
-053 : ["Treasury Gold 2 (1200)", null,null, preload("res://dk_images/valuables/gold_hoard3_tp/AnimGoldHoard3.tres"), null, TAB_GOLD],
-054 : ["Treasury Gold 3 (1600)", null,null, preload("res://dk_images/valuables/gold_hoard4_tp/AnimGoldHoard4.tres"), null, TAB_GOLD],
-055 : ["Treasury Gold 4 (2000)", null,null, preload("res://dk_images/valuables/gold_hoard5_tp/AnimGoldHoard5.tres"), null, TAB_GOLD],
-056 : ["Treasury Gold 5 (2400)", null,null, preload("res://dk_images/valuables/gold_hoard5_tp/AnimGoldHoard5.tres"), null, TAB_GOLD],
+052 : ["Treasury Hoard 1 (400)", null,null, preload("res://dk_images/valuables/gold_hoard1_tp/AnimGoldHoard1.tres"), null, TAB_GOLD],
+053 : ["Treasury Hoard 2 (800)", null,null, preload("res://dk_images/valuables/gold_hoard2_tp/AnimGoldHoard2.tres"), null, TAB_GOLD],
+054 : ["Treasury Hoard 3 (1200)", null,null, preload("res://dk_images/valuables/gold_hoard3_tp/AnimGoldHoard3.tres"), null, TAB_GOLD],
+055 : ["Treasury Hoard 4 (1600)", null,null, preload("res://dk_images/valuables/gold_hoard4_tp/AnimGoldHoard4.tres"), null, TAB_GOLD],
+056 : ["Treasury Hoard 5 (2000)", null,null, preload("res://dk_images/valuables/gold_hoard5_tp/AnimGoldHoard5.tres"), null, TAB_GOLD],
 057 : ["Lair: Wizard", null,null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.tres"), null, TAB_LAIR],
 058 : ["Lair: Barbarian", null,null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.tres"), null, TAB_LAIR],
 059 : ["Lair: Archer", null,null, preload("res://edited_images/lair/creature_generic/anim0126/AnimLairGeneric.tres"), null, TAB_LAIR],
@@ -398,6 +396,13 @@ enum SPELLBOOK {
 	DISEASE = 45
 	ARMAGEDDON = 134
 	DESTROY_WALLS = 47
+}
+
+var collectible_belonging = {
+	TAB_GOLD : Slabs.TREASURE_ROOM,
+	TAB_SPELL : Slabs.LIBRARY,
+	TAB_SPECIAL : Slabs.LIBRARY,
+	TAB_BOX : Slabs.WORKSHOP,
 }
 
 	#OBJECT = 1

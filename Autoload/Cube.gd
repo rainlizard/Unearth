@@ -71,7 +71,7 @@ func _notification(what: int):
 				read_cubes_cfg()
 				# Refresh the display of anything that handles cubes
 				
-				oOverheadGraphics.update_map_overhead_2d_textures()
+				oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.SINGLE_THREADED)
 				oPickSlabWindow.add_slabs()
 				oColumnEditor._on_ColumnEditor_visibility_changed()
 				oSlabsetWindow._on_SlabsetWindow_visibility_changed()

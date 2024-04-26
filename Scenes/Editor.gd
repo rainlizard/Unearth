@@ -13,15 +13,26 @@ onready var oEditableBordersCheckbox = Nodelist.list["oEditableBordersCheckbox"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oConfirmSaveBeforeQuit = Nodelist.list["oConfirmSaveBeforeQuit"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
+onready var oUndoStates = Nodelist.list["oUndoStates"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 enum {
 	VIEW_2D = 0
 	VIEW_3D = 1
+	SET_EDITED_WITHOUT_SAVING_STATE = 777
 }
 
 var currentView = VIEW_2D
 var fieldBoundary = Rect2()
-var mapHasBeenEdited = false
+var mapHasBeenEdited = false setget set_map_has_been_edited
+
+func set_map_has_been_edited(setVal):
+	if int(setVal) == oEditor.SET_EDITED_WITHOUT_SAVING_STATE: #If you save, then click Undo, it should mark as not saved but not create a new undo state when marking as edited.
+		mapHasBeenEdited = true
+		return
+	elif setVal == true:
+		oUndoStates.call_deferred("attempt_to_save_new_undo_state")
+	mapHasBeenEdited = setVal
 
 
 func _ready():
@@ -33,17 +44,11 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed('ui_cancel'):
 		match currentView:
 			VIEW_2D:
-				var foundDialogToClose = false
-				
 				for i in oUi.listOfWindowDialogs:
 					if is_instance_valid(i) == true:
 						if i.visible == true:
 							if i.get_close_button().visible == true:
 								i.visible = false
-								foundDialogToClose = true
-				
-				if foundDialogToClose == false:
-					notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 			VIEW_3D:
 				if oExportPreview.visible == true:
 					oExportPreview.hide()
@@ -61,13 +66,13 @@ func _notification(what):
 		Settings.write_cfg("editor_window_fullscreen_state", OS.window_fullscreen)
 		Settings.write_cfg("editor_window_size", OS.window_size)
 		
-		if OS.has_feature("standalone") == true:
-			if mapHasBeenEdited == true:
-				Utils.popup_centered(oConfirmSaveBeforeQuit)
-			else:
-				Utils.popup_centered(oConfirmQuit)
+		#if OS.has_feature("standalone") == true:
+		if mapHasBeenEdited == true:
+			Utils.popup_centered(oConfirmSaveBeforeQuit)
 		else:
 			get_tree().quit()
+#		else:
+#			get_tree().quit()
 #	elif what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
 #		Engine.target_fps = 0
 #	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:

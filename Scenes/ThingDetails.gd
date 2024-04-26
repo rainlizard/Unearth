@@ -10,12 +10,10 @@ onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 
-var HIDE_UNKNOWN_DATA = true
-
 #var rememberInstance = null
 
 func _ready():
-	get_parent().set_tab_title(0, "Inspect")
+	oPropertiesTabs.set_tab_title(0, "Inspect")
 
 func update_details():
 	oThingListData.clear()
@@ -37,7 +35,7 @@ func get_selected_or_hovered_instance():
 	return null
 
 func actionpoint_details(id):
-	for i in 5:
+	for i in 4:
 		var description = null
 		var value = null
 		match i:
@@ -53,10 +51,6 @@ func actionpoint_details(id):
 			3:
 				description = "Point #"
 				value = id.pointNumber
-			4:
-				description = "Unknown 7"
-				value = id.data7
-				if HIDE_UNKNOWN_DATA == true: value = null
 		
 		if value != null:
 			oThingListData.add_item(description, str(value))
@@ -73,7 +67,7 @@ var data17 = null
 var data18_19 = null
 
 func light_details(id):
-	for i in 15:
+	for i in 5:
 		var description = null
 		var value = null
 		match i:
@@ -103,53 +97,13 @@ func light_details(id):
 					value += ' (' + str(parentX) + ','+str(parentY) + ')'
 				if id.parentTile == 65535:
 					value = "Manually placed"
-			5:
-				description = "Unknown 3"
-				value = id.data3
-				if HIDE_UNKNOWN_DATA == true: value = null
-			6:
-				description = "Unknown 4"
-				value = id.data4
-				if HIDE_UNKNOWN_DATA == true: value = null
-			7:
-				description = "Unknown 5"
-				value = id.data5
-				if HIDE_UNKNOWN_DATA == true: value = null
-			8:
-				description = "Unknown 6"
-				value = id.data6
-				if HIDE_UNKNOWN_DATA == true: value = null
-			9:
-				description = "Unknown 7"
-				value = id.data7
-				if HIDE_UNKNOWN_DATA == true: value = null
-			10:
-				description = "Unknown 8"
-				value = id.data8
-				if HIDE_UNKNOWN_DATA == true: value = null
-			11:
-				description = "Unknown 9"
-				value = id.data9
-				if HIDE_UNKNOWN_DATA == true: value = null
-			12:
-				description = "Unknown 16"
-				value = id.data16
-				if HIDE_UNKNOWN_DATA == true: value = null
-			13:
-				description = "Unknown 17"
-				value = id.data17
-				if HIDE_UNKNOWN_DATA == true: value = null
-			14:
-				description = "Unknown 18_19"
-				value = id.data18_19
-				if HIDE_UNKNOWN_DATA == true: value = null
 			
 		if value != null:
 			oThingListData.add_item(description, str(value))
 
 
 func thing_details(id):
-	for i in 27:
+	for i in 16:
 		var description = null
 		var value = null
 		match i:
@@ -169,14 +123,6 @@ func thing_details(id):
 				description = "Effect range" # 9-10
 				value = id.effectRange
 			5:
-				description = "Unknown 9"
-				value = id.data9
-				if HIDE_UNKNOWN_DATA == true: value = null
-			6:
-				description = "Unknown 10"
-				value = id.data10
-				if HIDE_UNKNOWN_DATA == true: value = null
-			7:
 				description = "Attached to" # 11-12
 				if id.parentTile != null:
 					var parentY = int(id.parentTile/M.ySize)
@@ -190,79 +136,41 @@ func thing_details(id):
 					value += ' (' + str(parentX) + ','+str(parentY) + ')'
 				if id.parentTile == 65535:
 					value = "Manually placed"
-			8:
-				#description = "Index" # 11-12
-				#value = id.index
-				value = null # skip
-			9:
-				description = "Unknown 11-12"
-				value = id.data11_12
-				if HIDE_UNKNOWN_DATA == true: value = null
-			10:
+			6:
 				description = "Door orientation" # 13
 				match id.doorOrientation:
 					0: value = "E/W"
 					1: value = "N/S"
-			11:
-				description = "Unknown 13"
-				value = id.data13
-				if HIDE_UNKNOWN_DATA == true: value = null
-			12:
+			7:
 				description = "Level" # 14
 				value = id.creatureLevel
-			13:
+			8:
 				description = "Gate #" # 14
 				value = id.herogateNumber
-			14:
+			9:
 				description = "Custom box" # 14
 				value = id.boxNumber
-			15:
+			10:
 				description = "Door locked" # 14
-				match id.doorLocked:
-					0: value = "False"
-					1: value = "True"
-			16:
-				description = "Unknown 14"
-				value = id.data14
-				if HIDE_UNKNOWN_DATA == true: value = null
-			17:
-				description = "Unknown 15"
-				value = id.data15
-				if HIDE_UNKNOWN_DATA == true: value = null
-			18:
-				description = "Unknown 16"
-				value = id.data16
-				if HIDE_UNKNOWN_DATA == true: value = null
-			19:
-				description = "Unknown 17"
-				value = id.data17
-				if HIDE_UNKNOWN_DATA == true: value = null
-			20:
-				description = "Unknown 18_19"
-				value = id.data18_19
-				if HIDE_UNKNOWN_DATA == true: value = null
-			21:
-				description = "Unknown 20"
-				value = id.data20
-				if HIDE_UNKNOWN_DATA == true: value = null
+				value = id.doorLocked
 			# FX extended fields
-			22:
+			11:
 				description = "Health %"
 				value = id.creatureInitialHealth
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			23:
+			12:
 				description = "Gold held"
 				value = id.creatureGold
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			24:
+			13:
 				description = "Name" # Creature name
 				value = id.creatureName
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			25:
+			14:
 				description = "Gold value"
 				value = id.goldValue
 				if oCurrentFormat.selected == 0: value = null # Classic format
-			26:
+			15:
 				description = "Orientation"
 				value = id.orientation
 				if oCurrentFormat.selected == 0: value = null # Classic format

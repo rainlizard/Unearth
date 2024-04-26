@@ -83,6 +83,12 @@ func _process(delta):
 		mouse_button_anywhere()
 		if oUi.mouseOnUi == false:
 			mouse_button_on_field()
+		else:
+			# Dragging an instance over UI, so reset its drag positon to original.
+			if draggingInstance == true and is_instance_valid(holdClickOnInstance) and Input.is_action_just_released("mouse_left"):
+				holdClickOnInstance.global_position = subtile2world(Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY))
+				holdClickOnInstance = null
+				draggingInstance = false
 
 func mouse_button_anywhere():
 	if Input.is_action_pressed("mouse_left") == false:
@@ -166,18 +172,18 @@ func mouse_button_on_field():
 	
 	# Release button
 	if Input.is_action_just_released("mouse_left"):
+		OS.move_window_to_foreground() # See if this helps any issues which cause Unearth minimize button to stop working.
 		if is_instance_valid(holdClickOnInstance):
 			if draggingInstance == true:
 				draggingInstance = false
 				var snapToPos = world2subtile(get_global_mouse_position())
 				var originalPosition = Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY)
-				
 				holdClickOnInstance.locationX = snapToPos.x + 0.5
 				holdClickOnInstance.locationY = snapToPos.y + 0.5
 				
 				# Readjust the thing's height when dragging it from different heights
 				if holdClickOnInstance.locationZ != 2.875: # don't knock torches onto the ground if dragging them (accidental clicks would knock them down too)
-					var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cellv(snapToPos)]
+					var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(snapToPos.x,snapToPos.y)]
 					holdClickOnInstance.locationZ = detectTerrainHeight
 				
 				oInstances.mirror_adjusted_value(holdClickOnInstance, "locationXYZ", originalPosition)
@@ -233,7 +239,7 @@ func mouse_button_on_field():
 				for inst in nodesOnSlab:
 					if oMirrorPlacementCheckBox.pressed == true:
 						oInstances.mirror_deletion_of_instance(inst)
-					inst.queue_free()
+					oInstances.kill_instance(inst)
 		
 		oThingDetails.update_details()
 
@@ -297,13 +303,7 @@ func moved_to_new_subtile():
 	if mode == MODE_SUBTILE:
 		canPlace = true
 		if oUseSlabOwnerCheckBox.pressed == true and visible == true:
-			if oUseSlabOwnerCheckBox.pressed == true:
-				oSelection.paintOwnership = oDataOwnership.get_cellv(cursorTile)
-				#oSelection.newOwnership(oDataOwnership.get_cellv(cursorTile))
-			#oUi.update_theme_colour(oDataOwnership.get_cellv(cursorTile))
-#		var realPos = Vector2((cursorSubtile.x*SUBTILE_SIZE)+(SUBTILE_SIZE/2),(cursorSubtile.y*SUBTILE_SIZE)+(SUBTILE_SIZE/2))
-#		var instanceAtCursorSubtile = instance_position(realPos, "Instance")
-#		print(instanceAtCursorSubtile)
+			oSelection.paintOwnership = oDataOwnership.get_cellv_ownership(cursorTile)
 
 #func fadeOutWalls(delta):
 #	if Slabs.array[oSelection.cursorOverSlab][Slabs.SIDE_OF] == Slabs.SIDE_SLAB:
@@ -339,6 +339,9 @@ func world2tile(pos):
 
 func world2subtile(pos):
 	return Vector2(floor(pos.x/SUBTILE_SIZE),floor(pos.y/SUBTILE_SIZE))
+
+func subtile2world(subtilePos):
+	return Vector2(subtilePos.x * SUBTILE_SIZE,subtilePos.y * SUBTILE_SIZE)
 
 func instance_position(checkPos, checkGroup):
 	var space = get_world_2d().direct_space_state

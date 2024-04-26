@@ -11,6 +11,7 @@ onready var oMirrorColor1 = Nodelist.list["oMirrorColor1"]
 onready var oMirrorColor2 = Nodelist.list["oMirrorColor2"]
 onready var oMirrorColor3 = Nodelist.list["oMirrorColor3"]
 onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
+onready var oGuidelines = Nodelist.list["oGuidelines"]
 
 var splitType = 2
 var ownerValue = [0,1,2,3]
@@ -112,6 +113,7 @@ func gui_input_on_color_fields(event, buttonIndex, buttonNode):
 
 func _on_MirrorPlacementCheckBox_pressed():
 	visible = oMirrorPlacementCheckBox.pressed
+	oGuidelines.update()
 
 func get_quadrant(pos, fieldX, fieldY):
 	match splitType:

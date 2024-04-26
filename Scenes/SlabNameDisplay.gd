@@ -12,4 +12,4 @@ func _process(delta):
 		slabName = Slabs.data[slabID][Slabs.NAME]
 	
 	text = slabName + ' : ' + str(slabID)
-	#get_parent().self_modulate = Constants.ownerRoomCol[oDataOwnership.get_cell(oSelector.cursorTile.x,oSelector.cursorTile.y)]
+	#get_parent().self_modulate = Constants.ownerRoomCol[oDataOwnership.get_cell_ownership(oSelector.cursorTile.x,oSelector.cursorTile.y)]
