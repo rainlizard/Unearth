@@ -54,7 +54,7 @@ func start():
 	slabOwnershipImage.lock()
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
-			var getOwner = oDataOwnership.get_cell(xSlab,ySlab)
+			var getOwner = oDataOwnership.get_cell_ownership(xSlab,ySlab)
 			if getOwner < Constants.PLAYERS_COUNT:
 				slabOwnershipImage.set_pixel(xSlab, ySlab, Constants.ownerRoomCol[getOwner])
 	slabOwnershipImage.unlock()
