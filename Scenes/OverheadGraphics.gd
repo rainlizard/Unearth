@@ -137,8 +137,10 @@ func createDisplayField(setMap, showStyle):
 	displayField.material = mat
 	
 	if showStyle != 0: # Do not change the texturemap for default style
-		mat.set_shader_param("dkTextureMap_Split_A", oTextureCache.cachedTextures[setMap][0])
-		mat.set_shader_param("dkTextureMap_Split_B", oTextureCache.cachedTextures[setMap][1])
+		mat.set_shader_param("dkTextureMap_Split_A1", oTextureCache.cachedTextures[setMap][0])
+		mat.set_shader_param("dkTextureMap_Split_A2", oTextureCache.cachedTextures[setMap][1])
+		mat.set_shader_param("dkTextureMap_Split_B1", oTextureCache.cachedTextures[setMap][2])
+		mat.set_shader_param("dkTextureMap_Split_B2", oTextureCache.cachedTextures[setMap][3])
 	
 	mat.set_shader_param("showOnlySpecificStyle", showStyle)
 	mat.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))

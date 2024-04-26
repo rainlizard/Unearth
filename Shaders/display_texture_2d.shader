@@ -61,7 +61,7 @@ void fragment() {
 	}
 	
 	int index = getIndex(ivec2(subtileX,subtileY));
-	if (index >= 544) { // 544 is the index where the TexAnims start (544 - 585)
+	if (index >= 544 && index < 1000) { // 544 is the index where the TexAnims start (544 - 999)
 		int frame = int(mod(TIME * TEXTURE_ANIMATION_SPEED, 8));
 		index = getAnimationFrame(frame, index-544);
 	}

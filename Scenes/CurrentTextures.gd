@@ -105,7 +105,7 @@ func scan_dk_data_directory():
 		var fileName = dir.get_next()
 		while fileName != "":
 			if dir.current_is_dir() == false:
-				if fileName.to_upper().begins_with("TMAPA") == true: # Get file regardless of case (case insensitive)
+				if fileName.to_upper().begins_with("TMAP") == true: # Get file regardless of case (case insensitive)
 					if fileName.to_upper().get_extension() == "DAT":
 						if fileName.to_upper().begins_with("TMAPANIM") == false:
 							var getModifiedTime = File.new().get_modified_time(path.plus_file(fileName))
@@ -182,6 +182,8 @@ func convert_img_to_two_texture_arrays(img):
 	var twoTextureArrays = [
 		TextureArray.new(),
 		TextureArray.new(),
+		TextureArray.new(),
+		TextureArray.new(),
 	]
 	var xSlices = 8
 	var ySlices = 34
@@ -189,10 +191,12 @@ func convert_img_to_two_texture_arrays(img):
 	var sliceHeight = 32 #img.get_height() / ySlices;
 	twoTextureArrays[0].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS+TextureLayered.FLAG_ANISOTROPIC_FILTER)
 	twoTextureArrays[1].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS+TextureLayered.FLAG_ANISOTROPIC_FILTER)
+	twoTextureArrays[2].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS+TextureLayered.FLAG_ANISOTROPIC_FILTER)
+	twoTextureArrays[3].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS+TextureLayered.FLAG_ANISOTROPIC_FILTER)
 	
-	for i in 2:
+	for i in 4:
 		var yOffset = 0
-		if i == 1:
+		if i == 1 or i == 3:
 			yOffset = 34
 		
 		for y in ySlices:
@@ -215,29 +219,39 @@ func set_current_texture_pack():
 	
 	# 2D
 	if oOverheadGraphics.arrayOfColorRects.size() > 0:
-		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
+		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
+		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_B1", cachedTextures[value][2])
+		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_B2", cachedTextures[value][3])
 	
 	# 3D
 	if oGame3D.materialArray.size() > 0:
-		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][2])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][3])
 	
 	for nodeID in get_tree().get_nodes_in_group("VoxelViewer"):
 		if nodeID.oAllVoxelObjects.mesh != null:
-			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
+			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
+			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B1", cachedTextures[value][2])
+			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B2", cachedTextures[value][3])
 		if nodeID.oSelectedVoxelObject.mesh != null:
-			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
+			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
+			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B1", cachedTextures[value][2])
+			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B2", cachedTextures[value][3])
 	
 	assign_textures_to_slab_window(value)
 
 
 func assign_textures_to_slab_window(value): # Called by SlabStyleWindow
 	for nodeID in get_tree().get_nodes_in_group("SlabDisplay"):
-		nodeID.get_material().set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-		nodeID.get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+		nodeID.get_material().set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
+		nodeID.get_material().set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
+		nodeID.get_material().set_shader_param("dkTextureMap_Split_B1", cachedTextures[value][2])
+		nodeID.get_material().set_shader_param("dkTextureMap_Split_B2", cachedTextures[value][3])
 
 
 
