@@ -31,11 +31,11 @@ enum {
 # To adjust space around the icon, "hseparation" is actually the space between a tab's text and its icon. And also increase content_margin_left in theme.
 
 onready var tabs = {
-	Slabs.TAB_MAINSLAB: [$SlabTabs/TabFolder/MainSlabs/ScrollContainer/GridContainer, "res://edited_images/icon_slab1.png"], #"res://dk_images/crspell_64/dig_std.png"
-	Slabs.TAB_OTHER: [$SlabTabs/TabFolder/WallSlabs/ScrollContainer/GridContainer, "res://edited_images/icon_slab2.png"], #"res://dk_images/crspell_64/dig_dis.png"
-	Slabs.TAB_CUSTOM: [$SlabTabs/TabFolder/CustomSlabsTab/ScrollContainer/GridContainer, "res://edited_images/icon_slab2.png"],
-	Slabs.TAB_STYLE: [$SlabTabs/TabFolder/SlabStyle/ScrollContainer/GridContainer, "res://dk_images/magic_dust/anim0978/r1frame06.png"],
-	Slabs.TAB_OWNER: [$SlabTabs/TabFolder/OnlyOwnership/ScrollContainer/GridContainer, "res://dk_images/furniture/flagpole_redflag_fp/r1frame05.png"], # "res://edited_images/ownership.png"
+	Slabs.TAB_MAINSLAB: [oSlabTabs.get_node("TabFolder/MainSlabs/ScrollContainer/GridContainer"), "res://edited_images/icon_slab1.png"], #"res://dk_images/crspell_64/dig_std.png"
+	Slabs.TAB_OTHER: [oSlabTabs.get_node("TabFolder/WallSlabs/ScrollContainer/GridContainer"), "res://edited_images/icon_slab2.png"], #"res://dk_images/crspell_64/dig_dis.png"
+	Slabs.TAB_CUSTOM: [oSlabTabs.get_node("TabFolder/CustomSlabsTab/ScrollContainer/GridContainer"), "res://edited_images/icon_slab2.png"],
+	Slabs.TAB_STYLE: [oSlabTabs.get_node("TabFolder/SlabStyle/ScrollContainer/GridContainer"), "res://dk_images/magic_dust/anim0978/r1frame06.png"],
+	Slabs.TAB_OWNER: [oSlabTabs.get_node("TabFolder/OnlyOwnership/ScrollContainer/GridContainer"), "res://dk_images/furniture/flagpole_redflag_fp/r1frame05.png"], # "res://edited_images/ownership.png"
 	Slabs.TAB_NONE: [null, ""],
 }
 
@@ -58,7 +58,7 @@ func _ready():
 	
 	# Window's minimum size
 	rect_min_size = Vector2((grid_item_size.x*grid_window_scale)+11, (grid_item_size.y*grid_window_scale)+11)
-	$SlabTabs.initialize(["Main", "Other", "Custom", "Style", "Ownership"])
+	oSlabTabs.initialize(["Main", "Other", "Custom", "Style", "Ownership"])
 
 func _process(delta): # It's necessary to use _process to update selection, because ScrollContainer won't fire a signal while you're scrolling.
 	update_selection_position()
@@ -71,6 +71,7 @@ func update_selection_position():
 
 
 func add_slabs():
+	var CODETIME_START = OS.get_ticks_msec()
 	clear_grid()
 	oOnlyOwnership.initialize_grid_items()
 	oSlabStyle.initialize_grid_items()
@@ -121,6 +122,7 @@ func add_slabs():
 	
 	if visible == true:
 		set_selection(oSelection.paintSlab) # Default initial selection
+	print('add_slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func custom_slab_add_new_button():
 	var scene = preload('res://Scenes/GenericGridItem.tscn')
@@ -182,7 +184,7 @@ func _on_hovered_none():
 
 func _on_hovered_over_item(id):
 	var offset
-	match $SlabTabs.current_tab:
+	match oSlabTabs.current_tab:
 		Slabs.TAB_STYLE,Slabs.TAB_OWNER:
 			offset = Vector2(id.rect_size.x * 0.5, id.rect_size.y * 0.25)
 		_:

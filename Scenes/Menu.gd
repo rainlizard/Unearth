@@ -38,6 +38,9 @@ onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
 onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 onready var oGridDataWindow = Nodelist.list["oGridDataWindow"]
+onready var oCamera2D = Nodelist.list["oCamera2D"]
+onready var oActionPointListWindow = Nodelist.list["oActionPointListWindow"]
+onready var oUndoStates = Nodelist.list["oUndoStates"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -65,6 +68,28 @@ func _ready():
 	oMenuButtonEdit.get_popup().connect("id_pressed",self,"_on_EditSubmenu_Pressed")
 	oMenuButtonView.get_popup().connect("id_pressed",self,"_on_ViewSubmenu_Pressed")
 	oMenuButtonHelp.get_popup().connect("id_pressed",self,"_on_HelpSubmenu_Pressed")
+	
+	add_edit_menu_items()
+
+func add_edit_menu_items():
+	# Add menu items to oMenuButtonEdit
+	var edit_popup = oMenuButtonEdit.get_popup()
+	
+	edit_popup.add_item("Undo", 0)
+	edit_popup.add_separator()
+	edit_popup.add_item("Map columns", 1)
+	edit_popup.add_item("Custom objects", 2)
+	edit_popup.add_item("Resize map", 3)
+	edit_popup.add_item("Update all slabs", 4)
+	edit_popup.add_separator()
+	edit_popup.add_item("Make a tileset", 5)
+	edit_popup.add_item("Slabset", 6)
+
+func update_undo_availability():
+	if oUndoStates.undo_history.size() <= 1:
+		oMenuButtonEdit.get_popup().set_item_disabled(0, true)
+	else:
+		oMenuButtonEdit.get_popup().set_item_disabled(0, false)
 
 
 func _on_RecentSubmenu_Pressed(pressedID):
@@ -93,28 +118,32 @@ func initialize_recently_opened(value):
 	recentlyOpened = value
 	populate_recently_opened()
 
+var tdir = Directory.new()
 
 func populate_recently_opened():
 	recentlyOpenedPopupMenu.clear()
 	
 	for i in range(recentlyOpened.size() - 1, -1, -1): # iterate in reverse
-		var filePath = recentlyOpened[i]
-		
-		if Directory.new().file_exists(filePath.get_basename()+".slb") == false and Directory.new().file_exists(filePath.get_basename()+".SLB") == false:
+		var filePath = recentlyOpened[i].get_basename()
+		if tdir.file_exists(filePath + ".slb") == false and tdir.file_exists(filePath + ".SLB") == false:
 			recentlyOpened.remove(i)
 	
 	for i in recentlyOpened.size():
-		var filePath = recentlyOpened[i]
+		var filePath = recentlyOpened[i].get_basename()
 		
 		filePath = filePath.replace("\\", "/")
 		var mapName = ""
 		
-		if mapName == "": mapName = oDataLof.lof_name_text(filePath + ".lof")
-		if mapName == "": mapName = oDataLof.lof_name_text(filePath + ".LOF")
-		if mapName == "": mapName = oDataMapName.lif_name_text(filePath + '.lif')
-		if mapName == "": mapName = oDataMapName.lif_name_text(filePath + '.LIF')
-		if mapName == "": mapName = oDataMapName.get_special_lif_text(filePath)
-		if mapName == "": mapName = oDataMapName.get_special_lif_text(filePath)
+		if tdir.file_exists(filePath + ".lof"):
+			mapName = oDataLof.lof_name_text(filePath + ".lof")
+		elif tdir.file_exists(filePath + ".LOF"):
+			mapName = oDataLof.lof_name_text(filePath + ".LOF")
+		elif tdir.file_exists(filePath + ".lif"):
+			mapName = oDataMapName.lif_name_text(filePath + '.lif')
+		elif tdir.file_exists(filePath + ".LIF"):
+			mapName = oDataMapName.lif_name_text(filePath + '.LIF')
+		else:
+			mapName = oDataMapName.get_special_lif_text(filePath)
 		
 		# Trim game directory from path to make it look nicer
 		var baseDir = oGame.GAME_DIRECTORY.replace('\\','/')
@@ -158,10 +187,18 @@ func constantly_monitor_play_button_state():
 		oMenuPlayButton.disabled = true
 		oMenuPlayButton.hint_tooltip = "Map must be saved in the correct directory in order to play."
 	
-	if oEditor.mapHasBeenEdited == true:
+	if oCurrentMap.path == "":
+		oMenuPlayButton.text = "Save & Play"
+	elif oEditor.mapHasBeenEdited == true:
 		oMenuPlayButton.text = "Save & Play"
 	else:
 		oMenuPlayButton.text = "Play"
+
+func pressed_save_keyboard_shortcut():
+	if oMenuButtonFile.get_popup().is_item_disabled(oMenuButtonFile.get_popup().get_item_index(4)) == true:
+		_on_FileSubmenu_Pressed(5) # Save As
+	else:
+		_on_FileSubmenu_Pressed(4) # Save
 
 func _on_FileSubmenu_Pressed(pressedID):
 	match pressedID:
@@ -179,18 +216,20 @@ func _on_FileSubmenu_Pressed(pressedID):
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:
-		0: # Custom columns
+		0: # Undo
+			oUndoStates.perform_undo()
+		1: # Custom columns
 			Utils.popup_centered(oColumnEditor)
-		1: # Custom objects
+		2: # Custom objects
 			Utils.popup_centered(oAddCustomObjectWindow)
-		2: # Resize and shift
+		3: # Resize and shift
 			Utils.popup_centered(oResizeCurrentMapSize)
-		3: # Update all slabs
+		4: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oConfirmAutoGen)
-		4: # Texture editing
+		5: # Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
-		5: # Modify slabset
+		6: # Modify slabset
 			Utils.popup_centered(oSlabsetWindow)
 
 func _on_slab_style_window_close_button_clicked():
@@ -198,25 +237,25 @@ func _on_slab_style_window_close_button_clicked():
 
 func _on_MenuButtonHelp_about_to_show():
 	if oGame.running_keeperfx() == true:
-		oMenuButtonHelp.get_popup().set_item_disabled(0, false)
-		oMenuButtonHelp.get_popup().set_item_disabled(1, false)
-		oMenuButtonHelp.get_popup().set_item_disabled(2, true)
+		oMenuButtonHelp.get_popup().set_item_disabled(0, false) # New script commands
+		oMenuButtonHelp.get_popup().set_item_disabled(1, true) # Old Script commands
 	else:
-		oMenuButtonHelp.get_popup().set_item_disabled(0, true)
-		oMenuButtonHelp.get_popup().set_item_disabled(1, true)
-		oMenuButtonHelp.get_popup().set_item_disabled(2, false)
+		oMenuButtonHelp.get_popup().set_item_disabled(0, true) # New script commands
+		oMenuButtonHelp.get_popup().set_item_disabled(1, false) # Old Script commands
 
 func _on_HelpSubmenu_Pressed(pressedID):
 	match pressedID:
 		0:
-			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/New-and-Modified-Level-Script-Commands")
+			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Level-Script-commands")
 		1:
-			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Creating-a-new-campaign")
-		2:
 			OS.shell_open("https://lubiki.keeperklan.com/dk1_docs/dk_scripting_ref.htm")
+		2:
+			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Creating-a-new-campaign")
 		3:
-			Utils.popup_centered(oControlsWindow)
+			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/KeeperFx-Map-files-format-reference")
 		4:
+			Utils.popup_centered(oControlsWindow)
+		5:
 			Utils.popup_centered(oAboutWindow)
 
 func _on_ViewSubmenu_Pressed(pressedID):
@@ -248,6 +287,8 @@ func _on_ViewSubmenu_Pressed(pressedID):
 				oGenerateTerrain.start()
 			oUi.switch_to_1st_person()
 		4:
+			Utils.popup_centered(oActionPointListWindow)
+		5:
 			Utils.popup_centered(oGridDataWindow)
 #		4:
 #			if oEditor.currentView == oEditor.VIEW_2D:

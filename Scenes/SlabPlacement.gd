@@ -34,6 +34,7 @@ onready var oRoundGoldNearLiquid = Nodelist.list["oRoundGoldNearLiquid"]
 onready var oRoundWaterNearLava = Nodelist.list["oRoundWaterNearLava"]
 onready var oAutomaticTorchSlabsCheckbox = Nodelist.list["oAutomaticTorchSlabsCheckbox"]
 onready var oPathStonePercent = Nodelist.list["oPathStonePercent"]
+onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 
 enum dir {
 	s = 0
@@ -53,6 +54,8 @@ enum {
 	MIRROR_STYLE
 	MIRROR_ONLY_OWNERSHIP
 }
+
+var autogen_was_called = false
 
 func mirror_placement(shapePositionArray, mirrorWhat):
 	var mirroredPositionArray = []
@@ -99,18 +102,19 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 				MIRROR_STYLE:
 					pass
 				MIRROR_ONLY_OWNERSHIP:
-					calculateOwner = true
+					if slabID_is_ownable(slabID):
+						calculateOwner = true
 			
 			if calculateOwner == true:
 				if oMirrorOptions.ui_quadrants_have_owner(mainPaint) == false:
-					oDataOwnership.set_cellv(toPos, mainPaint)
+					oDataOwnership.set_cellv_ownership(toPos, mainPaint)
 				else:
 					if mainPaint == quadrantDestinationOwner:
-						oDataOwnership.set_cellv(toPos, quadrantClickedOnOwner)
+						oDataOwnership.set_cellv_ownership(toPos, quadrantClickedOnOwner)
 					else:
 						match oMirrorOptions.splitType:
 							0,1:
-								oDataOwnership.set_cellv(toPos, quadrantDestinationOwner)
+								oDataOwnership.set_cellv_ownership(toPos, quadrantDestinationOwner)
 							2:
 								var otherTwoQuadrants = []
 								for i in 4:
@@ -120,11 +124,11 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 								
 								if otherTwoQuadrants.size() == 2:
 									if quadrantDestinationOwner == otherTwoQuadrants[0]:
-										oDataOwnership.set_cellv(toPos, otherTwoQuadrants[1])
+										oDataOwnership.set_cellv_ownership(toPos, otherTwoQuadrants[1])
 									else:
-										oDataOwnership.set_cellv(toPos, otherTwoQuadrants[0])
+										oDataOwnership.set_cellv_ownership(toPos, otherTwoQuadrants[0])
 								else:
-									oDataOwnership.set_cellv(toPos, quadrantDestinationOwner)
+									oDataOwnership.set_cellv_ownership(toPos, quadrantDestinationOwner)
 			
 			# Always add position to mirroredPositionArray, decide what to do with the positions after the loop is done.
 			mirroredPositionArray.append(toPos)
@@ -158,7 +162,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	
 	#var CODETIME_START = OS.get_ticks_msec()
 	for pos in shapePositionArray:
-		oDataOwnership.set_cellv(pos, ownership)
+		oDataOwnership.set_cellv_ownership(pos, ownership)
 		
 		if slabID < 1000:
 			oDataFakeSlab.set_cellv(pos, 0)
@@ -168,8 +172,11 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 		match slabID:
 			Slabs.BRIDGE:
 				if oBridgesOnlyOnLiquidCheckbox.pressed == true:
-					if oDataSlab.get_cellv(pos) != Slabs.WATER and oDataSlab.get_cellv(pos) != Slabs.LAVA:
-						removeFromShape.append(pos) # This prevents ownership from changing if placing a bridge on something that's not liquid
+					match oDataSlab.get_cellv(pos):
+						Slabs.WATER, Slabs.LAVA, Slabs.BRIDGE:
+							pass
+						_:
+							removeFromShape.append(pos) # This prevents ownership from changing if placing a bridge on something that's not liquid (or another bridge)
 				if removeFromShape.has(pos) == false:
 					oDataSlab.set_cellv(pos, slabID)
 #			Slabs.EARTH:
@@ -214,7 +221,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 				var surrSlab = oDataSlab.get_cellv(threePos)
 				# Only IDs that are EARTH or EARTH_WITH_TORCH will become fortified walls.
 				if surrSlab == Slabs.EARTH or surrSlab == Slabs.EARTH_WITH_TORCH:
-					oDataOwnership.set_cellv(threePos, ownership)
+					oDataOwnership.set_cellv_ownership(threePos, ownership)
 					#var autoWallID = auto_wall(threePos.x, threePos.y, slabID)
 					oDataSlab.set_cellv(threePos, Slabs.WALL_AUTOMATIC)
 					shapePositionArray.append(threePos)
@@ -237,6 +244,15 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	#var CODETIME_START = OS.get_ticks_msec()
 	
 	oEditor.mapHasBeenEdited = true
+	
+	# When adjusting "only ownership", do not affect the ownership of things on surrounding slabs (but we do need to adjust those slabs so we can't just set updateNearby to false)
+	if oOnlyOwnership.visible == true and autogen_was_called == false:
+		for pos in shapePositionArray:
+			var slabID = oDataSlab.get_cell(pos.x, pos.y)
+			var ownership = oDataOwnership.get_cell_ownership(pos.x, pos.y)
+			if Slabs.data.has(slabID):
+				oInstances.manage_thing_ownership_on_slab(pos.x, pos.y, ownership)
+	
 	if updateNearby == true:
 		# Include surrounding. This only takes 14ms to 'Update all slabs'
 		var surroundingShape = {}
@@ -282,7 +298,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	for pos in shapePositionArray:
 		var slabID = oDataSlab.get_cell(pos.x, pos.y)
 		
-		var ownership = oDataOwnership.get_cell(pos.x, pos.y)
+		var ownership = oDataOwnership.get_cell_ownership(pos.x, pos.y)
 		
 		if Slabs.data.has(slabID):
 			do_slab(pos.x, pos.y, slabID, ownership)
@@ -299,7 +315,8 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	
 	#print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
-	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
+	oOverheadGraphics.overhead2d_update_rect_single_threaded(shapePositionArray)
+	yield(get_tree(),'idle_frame') # This is necessary for yielding this function to work. Unlike 'await' in Godot 4.0, You can only yield a function which itself also yields.
 
 func do_update_auto_walls(slabID):
 	# If this ID has been set to WALL_AUTOMATIC, by whatever reason, then it must be updated. This doesn't mean you're placing a WALL_AUTOMATIC, just that this slab has been set to it.
@@ -387,7 +404,10 @@ func _on_ConfirmAutoGen_confirmed():
 	for ySlab in range(0, M.ySize):
 		for xSlab in range(0, M.xSize):
 			shapePositionArray.append(Vector2(xSlab,ySlab))
-	generate_slabs_based_on_id(shapePositionArray, updateNearby)
+	
+	autogen_was_called = true
+	yield(generate_slabs_based_on_id(shapePositionArray, updateNearby), "completed")
+	autogen_was_called = false
 	
 	print('Auto-generated all slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
@@ -487,34 +507,38 @@ func set_torch_side(xSlab, ySlab, slabID, slabsetIndexGroup, constructedColumns,
 
 
 func calculate_torch_side(xSlab:int, ySlab:int, surrID):
-	
-	var isOdd = (xSlab + ySlab) % 2 == 1
-	
+	# Check if the slab is at a multiple of 5 position
+	var sporadicDir = null
 	if xSlab % 5 == 0:
-		if isOdd:
-			if surrID[dir.s] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]:
-				return dir.s
-		elif surrID[dir.n] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]:
-			return dir.n
+		if (xSlab + ySlab) % 2 == 1: # Is odd
+			sporadicDir = dir.s
+		else:
+			sporadicDir = dir.n
 	if ySlab % 5 == 0:
-		if isOdd:
-			if surrID[dir.e] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]:
-				return dir.e
-		elif surrID[dir.w] == Slabs.CLAIMED_GROUND or not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]:
-			return dir.w
+		if (xSlab + ySlab) % 2 == 1: # Is odd
+			sporadicDir = dir.e
+		else:
+			sporadicDir = dir.w
+	if sporadicDir != null:
+		var slabAtDir = surrID[sporadicDir]
+		if slabAtDir == Slabs.CLAIMED_GROUND:
+			return sporadicDir
+		if Slabs.data[slabAtDir][Slabs.IS_SOLID] == false and Slabs.is_door(slabAtDir) == false:
+			return sporadicDir
 	
-	# If the direction fails, then pick any direction. This is for manually placed torch slabs.
-	var preference = (xSlab + ySlab) % 4 # Prioritize directions based on the coordinate (basically it's random)
-	if preference == 0 and not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]: return dir.s
-	elif preference == 1 and not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]: return dir.w
-	elif preference == 2 and not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]: return dir.n
-	elif preference == 3 and not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]: return dir.e
-	# Check the next available direction
-	if not Slabs.data[surrID[dir.s]][Slabs.IS_SOLID]: return dir.s
-	elif not Slabs.data[surrID[dir.w]][Slabs.IS_SOLID]: return dir.w
-	elif not Slabs.data[surrID[dir.n]][Slabs.IS_SOLID]: return dir.n
-	elif not Slabs.data[surrID[dir.e]][Slabs.IS_SOLID]: return dir.e
-	return -1 # If all directions are solid, return -1 for no torch placement
+	# Create the directions array with the preference direction first
+	var directions = []
+	match (xSlab + ySlab) % 4: # Prioritize directions based on the coordinate (basically it's random)
+		0: directions = [dir.s, dir.w, dir.n, dir.e]
+		1: directions = [dir.w, dir.n, dir.e, dir.s]
+		2: directions = [dir.n, dir.e, dir.s, dir.w]
+		3: directions = [dir.e, dir.s, dir.w, dir.n]
+	for direction in directions: # Check each direction in the array
+		var slabAtDir = surrID[direction]
+		if Slabs.data[slabAtDir][Slabs.IS_SOLID] == false and Slabs.is_door(slabAtDir) == false:
+			return direction
+	
+	return -1 # If all directions are solid or doors, return -1 for no torch placement
 
 
 func determine_door_direction(xSlab, ySlab, slabID, surrID, bitmaskType):
@@ -720,15 +744,16 @@ func slabset_position_to_column_data(slabsetIndexGroup, ownership):
 #	for i in 9:
 #		var ySubtile = positionsArray3x3[i].y#i/3
 #		var xSubtile = positionsArray3x3[i].x#i - (ySubtile*3)
-#		oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
+#		oDataClmPos.set_cell_clmpos((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, array[i])
 
 func set_columns(xSlab, ySlab, constructedColumns, constructedFloor):
+	oDataClm.a_column_has_changed_since_last_updating_utilized = true
 	for i in 9:
 		var clmIndex = oDataClm.index_entry(constructedColumns[i], constructedFloor[i])
 		
 		var ySubtile = i/3
 		var xSubtile = i - (ySubtile*3)
-		oDataClmPos.set_cell((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, clmIndex)
+		oDataClmPos.set_cell_clmpos((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, clmIndex)
 
 func get_tall_bitmask(surrID):
 	var bitmask = 0
@@ -739,10 +764,10 @@ func get_tall_bitmask(surrID):
 	return bitmask
 
 func get_wall_bitmask(xSlab, ySlab, surrID, ownership):
-	var ownerS = oDataOwnership.get_cell(xSlab, ySlab+1)
-	var ownerW = oDataOwnership.get_cell(xSlab-1, ySlab)
-	var ownerN = oDataOwnership.get_cell(xSlab, ySlab-1)
-	var ownerE = oDataOwnership.get_cell(xSlab+1, ySlab)
+	var ownerS = oDataOwnership.get_cell_ownership(xSlab, ySlab+1)
+	var ownerW = oDataOwnership.get_cell_ownership(xSlab-1, ySlab)
+	var ownerN = oDataOwnership.get_cell_ownership(xSlab, ySlab-1)
+	var ownerE = oDataOwnership.get_cell_ownership(xSlab+1, ySlab)
 	if ownerS == 5: ownerS = ownership # If next to a Player 5 wall, treat it as earth, don't put up a wall against it.
 	if ownerW == 5: ownerW = ownership
 	if ownerN == 5: ownerN = ownership
@@ -799,14 +824,14 @@ func get_surrounding_slabIDs(xSlab, ySlab):
 func get_surrounding_ownership(xSlab, ySlab):
 	var surrOwner = []
 	surrOwner.resize(8)
-	surrOwner[dir.n] = oDataOwnership.get_cell(xSlab, ySlab-1)
-	surrOwner[dir.s] = oDataOwnership.get_cell(xSlab, ySlab+1)
-	surrOwner[dir.e] = oDataOwnership.get_cell(xSlab+1, ySlab)
-	surrOwner[dir.w] = oDataOwnership.get_cell(xSlab-1, ySlab)
-	surrOwner[dir.ne] = oDataOwnership.get_cell(xSlab+1, ySlab-1)
-	surrOwner[dir.nw] = oDataOwnership.get_cell(xSlab-1, ySlab-1)
-	surrOwner[dir.se] = oDataOwnership.get_cell(xSlab+1, ySlab+1)
-	surrOwner[dir.sw] = oDataOwnership.get_cell(xSlab-1, ySlab+1)
+	surrOwner[dir.n] = oDataOwnership.get_cell_ownership(xSlab, ySlab-1)
+	surrOwner[dir.s] = oDataOwnership.get_cell_ownership(xSlab, ySlab+1)
+	surrOwner[dir.e] = oDataOwnership.get_cell_ownership(xSlab+1, ySlab)
+	surrOwner[dir.w] = oDataOwnership.get_cell_ownership(xSlab-1, ySlab)
+	surrOwner[dir.ne] = oDataOwnership.get_cell_ownership(xSlab+1, ySlab-1)
+	surrOwner[dir.nw] = oDataOwnership.get_cell_ownership(xSlab-1, ySlab-1)
+	surrOwner[dir.se] = oDataOwnership.get_cell_ownership(xSlab+1, ySlab+1)
+	surrOwner[dir.sw] = oDataOwnership.get_cell_ownership(xSlab-1, ySlab+1)
 	return surrOwner
 
 

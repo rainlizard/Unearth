@@ -5,6 +5,8 @@ onready var oDataOwnership = Nodelist.list["oDataOwnership"]
 onready var oColorRectSlabOwner = Nodelist.list["oColorRectSlabOwner"]
 onready var oInstanceOwnership = Nodelist.list["oInstanceOwnership"]
 onready var oInstances = Nodelist.list["oInstances"]
+onready var oDataSlab = Nodelist.list["oDataSlab"]
+onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 
 onready var oMain = Nodelist.list["oMain"]
 var OWNERSHIP_ALPHA = 0.5 setget set_ownership_alpha_graphics
@@ -46,6 +48,7 @@ func clear():
 		slabOwnershipTexture.create_from_image(slabOwnershipImage, 0)
 
 func start():
+	var CODETIME_START = OS.get_ticks_msec()
 	slabOwnershipImage.create(M.xSize,M.ySize,false,Image.FORMAT_RGBA8)
 	# Read ownership data as pixels
 	slabOwnershipImage.lock()
@@ -61,6 +64,7 @@ func start():
 	#yield(get_tree(),'idle_frame')
 	#print(oColorRectSlabOwner.rect_scale)
 	#oColorRectSlabOwner.rect_position = Vector2(96,96)
+	print('overhead ownership (start): ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func ownership_paint_shape(shapePositionArray, ownership):
 	
@@ -68,8 +72,10 @@ func ownership_paint_shape(shapePositionArray, ownership):
 	
 	slabOwnershipImage.lock()
 	for pos in shapePositionArray:
-		oDataOwnership.set_cellv(pos, ownership) # Set cell data
-		slabOwnershipImage.set_pixelv(pos, setColour)  # Set image data
+		var slabID = oDataSlab.get_cell(pos.x, pos.y)
+		if oSlabPlacement.slabID_is_ownable(slabID) == true:
+			oDataOwnership.set_cellv_ownership(pos, ownership) # Set cell data
+			slabOwnershipImage.set_pixelv(pos, setColour)  # Set image data
 	slabOwnershipImage.unlock()
 	
 	slabOwnershipTexture.set_data(slabOwnershipImage)
@@ -77,7 +83,7 @@ func ownership_paint_shape(shapePositionArray, ownership):
 func update_ownership_image_based_on_shape(shapePositionArray):
 	slabOwnershipImage.lock()
 	for pos in shapePositionArray:
-		var ownership = oDataOwnership.get_cellv(pos) # Get cell data
+		var ownership = oDataOwnership.get_cellv_ownership(pos) # Get cell data
 		var setColour = Constants.ownerRoomCol[ownership]
 		slabOwnershipImage.set_pixelv(pos, setColour)  # Set image data
 	slabOwnershipImage.unlock()

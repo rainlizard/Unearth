@@ -8,10 +8,17 @@ onready var oScriptEmptyStatus = Nodelist.list["oScriptEmptyStatus"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var scriptHasBeenEditedInUnearth = false
 
 var SCRIPT_EDITOR_FONT_SIZE = 20 setget set_SCRIPT_EDITOR_FONT_SIZE, get_SCRIPT_EDITOR_FONT_SIZE
+
+func _ready():
+	oScriptTextEdit.get_menu().remove_item(0) # Remove Undo from menu because this Undo isn't used
+	oScriptTextEdit.get_menu().remove_item(0) # Remove Redo from menu because this Redo isn't used
+	oScriptTextEdit.get_menu().remove_item(0) # Remove Separator
+
 
 func set_SCRIPT_EDITOR_FONT_SIZE(setVal):
 	SCRIPT_EDITOR_FONT_SIZE = setVal
@@ -28,6 +35,7 @@ func initialize_for_new_map():
 	oScriptTextEdit.clear_undo_history() # Important so the 1st undo state is the loaded script
 
 func _on_ScriptTextEdit_text_changed():
+	oScriptTextEdit.clear_undo_history()
 	set_script_as_edited(true)
 	set_script_data(oScriptTextEdit.text)
 	update_empty_script_status()
@@ -69,7 +77,17 @@ func load_generated_text(setWithString):
 	update_texteditor()
 
 func update_texteditor():
-	oScriptTextEdit.text = oDataScript.data
+	# This is for when pressing Undo
+	var scroll = oScriptTextEdit.scroll_vertical
+	var lineNumber = oScriptTextEdit.cursor_get_line()
+	var columnNumber = oScriptTextEdit.cursor_get_column()
+	
+	oScriptTextEdit.text = oDataScript.data # This resets a bunch of stuff in TextEdit like cursor line.
+	
+	oScriptTextEdit.cursor_set_line(lineNumber)
+	oScriptTextEdit.scroll_vertical = scroll
+	oScriptTextEdit.cursor_set_column(columnNumber)
+	
 	update_empty_script_status()
 	oScriptHelpers.start() # in the case of editing text file outside of Unearth
 
@@ -87,7 +105,7 @@ func check_if_txt_file_has_been_modified():
 			oMessage.quick("Script reloaded from file.") #"Script was reloaded from file."
 			oCurrentMap.currentFilePaths["TXT"][oCurrentMap.MODIFIED_DATE] = getModifiedTime
 			# Reload
-			Filetypes.read(filePath, "TXT")
+			oBuffers.read(filePath, "TXT")
 			update_texteditor()
 			set_script_as_edited(false)
 

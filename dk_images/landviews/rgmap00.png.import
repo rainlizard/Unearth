@@ -1,0 +1,35 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/rgmap00.png-f451107a4f166f0d9655b4f772884fab.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://dk_images/landviews/rgmap00.png"
+dest_files=[ "res://.import/rgmap00.png-f451107a4f166f0d9655b4f772884fab.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=true
+flags/anisotropic=true
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+process/normal_map_invert_y=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0

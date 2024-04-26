@@ -300,7 +300,7 @@ margin_left = 132.0
 margin_top = 224.0
 margin_right = 206.0
 margin_bottom = 248.0
-hint_tooltip = "This is the flat texture which is lower than the bottom cube"
+hint_tooltip = "This is the flat texture which is below even the bottom cube"
 size_flags_horizontal = 10
 max_value = 1e+09
 script = ExtResource( 1 )
@@ -310,14 +310,13 @@ margin_top = 384.0
 margin_right = 206.0
 margin_bottom = 408.0
 rect_min_size = Vector2( 24, 24 )
-hint_tooltip = "You don't need to manually edit these"
-text = "Show all"
+text = "Advanced"
 
 [node name="GridAdvancedValues" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 margin_top = 412.0
 margin_right = 206.0
-margin_bottom = 548.0
+margin_bottom = 520.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -325,7 +324,7 @@ __meta__ = {
 
 [node name="Label5" type="Label" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
 margin_top = 5.0
-margin_right = 73.0
+margin_right = 70.0
 margin_bottom = 19.0
 text = "Height"
 __meta__ = {
@@ -337,13 +336,14 @@ unique_name_in_owner = true
 margin_left = 132.0
 margin_right = 206.0
 margin_bottom = 24.0
+hint_tooltip = "Height is set to the position of highest cube for this column."
 size_flags_horizontal = 10
 max_value = 99999.0
 script = ExtResource( 1 )
 
 [node name="Label7" type="Label" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
 margin_top = 33.0
-margin_right = 73.0
+margin_right = 70.0
 margin_bottom = 47.0
 text = "Solid mask"
 __meta__ = {
@@ -356,13 +356,14 @@ margin_left = 132.0
 margin_top = 28.0
 margin_right = 206.0
 margin_bottom = 52.0
+hint_tooltip = "Needs more info."
 size_flags_horizontal = 10
 max_value = 99999.0
 script = ExtResource( 1 )
 
 [node name="Label3" type="Label" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
 margin_top = 61.0
-margin_right = 73.0
+margin_right = 70.0
 margin_bottom = 75.0
 text = "Permanent"
 __meta__ = {
@@ -375,11 +376,13 @@ margin_left = 132.0
 margin_top = 56.0
 margin_right = 206.0
 margin_bottom = 80.0
+hint_tooltip = "Non-permanent columns are recycled when their Utilized drops to zero."
 size_flags_horizontal = 10
 max_value = 99999.0
 script = ExtResource( 1 )
 
 [node name="Label2" type="Label" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
+visible = false
 margin_top = 89.0
 margin_right = 73.0
 margin_bottom = 103.0
@@ -390,18 +393,20 @@ __meta__ = {
 
 [node name="OrientationSpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
 unique_name_in_owner = true
+visible = false
 margin_left = 132.0
 margin_top = 84.0
 margin_right = 206.0
 margin_bottom = 108.0
+hint_tooltip = "Unused"
 size_flags_horizontal = 10
 max_value = 99999.0
 script = ExtResource( 1 )
 
 [node name="Label4" type="Label" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
-margin_top = 117.0
-margin_right = 73.0
-margin_bottom = 131.0
+margin_top = 89.0
+margin_right = 70.0
+margin_bottom = 103.0
 text = "Lintel"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -410,9 +415,10 @@ __meta__ = {
 [node name="LintelSpinBox" type="SpinBox" parent="ScrollContainer/VBoxContainer/GridAdvancedValues"]
 unique_name_in_owner = true
 margin_left = 132.0
-margin_top = 112.0
+margin_top = 84.0
 margin_right = 206.0
-margin_bottom = 136.0
+margin_bottom = 108.0
+hint_tooltip = "This should affect how  columns are attached to the ceiling, but it may be non-functional. Needs more info."
 size_flags_horizontal = 10
 max_value = 99999.0
 script = ExtResource( 1 )

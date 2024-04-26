@@ -28,7 +28,8 @@ var COMMAND_LINE_CONSOLE_ARG = ""
 var DK_COMMANDS = "-nointro -alex -nocd"
 
 func running_keeperfx():
-	if EXECUTABLE_PATH.get_file().to_lower() == "keeperfx.exe":
+	var path = EXECUTABLE_PATH.get_file().to_lower()
+	if path == "keeperfx.exe" or path == "keeperfx_hvlog.exe":
 		return true
 	else:
 		return false
@@ -187,14 +188,27 @@ func get_precise_filepath(lookInDirectory, lookForFileName):
 
 func set_keeperfx_version():
 	var output = []
-	var getVer = Settings.unearthdata.plus_file("GetVersion.cmd")
-	var _exit_code = OS.execute(getVer, [EXECUTABLE_PATH], true, output)
-	if output.size() == 1:
+
+	match OS.get_name():
+		"Windows":
+			var powershell_script = "[System.Diagnostics.FileVersionInfo]::GetVersionInfo('%s').FileVersion" % EXECUTABLE_PATH
+			OS.execute("powershell.exe", ["-Command", powershell_script], true, output, true)
+		"X11":
+			var script = ""
+			script += "cd " + EXECUTABLE_PATH.get_base_dir() + ";"
+			script += "exiftool -ProductVersion -n keeperfx.exe | awk -F ': ' '{print $2}'"
+			var _exit_code = OS.execute("bash", ["-c", script], true, output, true)
+			#print("Exit code: ", exit_code)
+			#print("Output: ", output)
+			#print(script)
+			if output.size() >= 1:
+				output[0] = output[0].replace("Product Version", "")
+				output[0] = output[0].replace(":", "")
+
+	if output.size() >= 1:
 		KEEPERFX_VERSION_STRING = output[0].strip_edges()
-		#KEEPERFX_VERSION_INT = int(KEEPERFX_VERSION_STRING.replace(".",""))
 	else:
 		KEEPERFX_VERSION_STRING = "Undetected"
-		#KEEPERFX_VERSION_INT = 0
 
 #func load_command_line_from_settings(COMMAND_LINE):
 #	COMMAND_LINE = COMMAND_LINE.replace("%DIR%", GAME_DIRECTORY)

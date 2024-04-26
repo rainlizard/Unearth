@@ -508,7 +508,7 @@ extends Node
 #				var value = Columnset.dat[slabVariation][subtile] # slab variation - subtile of that variation				
 #				var ySubtile = subtile/3
 #				var xSubtile = subtile-(ySubtile*3)
-#				oDataClmPos.set_cell( (xSlab*3)+xSubtile, (ySlab*3)+ySubtile, value)
+#				oDataClmPos.set_cell_clmpos( (xSlab*3)+xSubtile, (ySlab*3)+ySubtile, value)
 
 #func update_slab_palette_for_map():
 #	var dictionary = {}

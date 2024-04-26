@@ -61,7 +61,6 @@ func set_visual(columnArray):
 				
 				var cubeID = Columnset.cubes[clmIndex][sideViewZoffset-z]
 				var cubeFace = Cube.tex[cubeID][Cube.SIDE_SOUTH]
-				
 				dataImage.set_pixel(x, z, Color8(cubeFace >> 16 & 255, cubeFace >> 8 & 255, cubeFace & 255))
 	
 	dataImage.unlock()

@@ -121,9 +121,7 @@ func update_placing_tab():
 					value = creatureLevel
 				FIELDS.DOOR_LOCKED:
 					description = "Door locked" # 14
-					match doorLocked:
-						0: value = "False"
-						1: value = "True"
+					value = doorLocked
 				FIELDS.POINT_RANGE:
 					description = "Point range"
 					value = pointRange

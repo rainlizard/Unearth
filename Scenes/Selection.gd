@@ -81,6 +81,14 @@ func newPaintSubtype(value):
 		oSelector.change_mode(oSelector.MODE_SUBTILE)
 		oPickSlabWindow.set_selection(null) # Deselect anything in slab window
 	paintSubtype = value
+	
+	oOwnerSelection.collectible_ownership_mode(false)
+	if paintThingType == Things.TYPE.OBJECT:
+		if Things.DATA_OBJECT.has(paintSubtype):
+			var genre = Things.DATA_OBJECT[paintSubtype][Things.EDITOR_TAB]
+			if Things.collectible_belonging.has(genre):
+				oOwnerSelection.collectible_ownership_mode(true)
+
 
 func newOwnership(value):
 	oUi.update_theme_colour(value)
@@ -94,7 +102,7 @@ func newPaintSlab(value):
 
 func update_under_cursor():
 	cursorOverSlab = oSelector.get_slabID_at_pos(oSelector.cursorTile)
-	cursorOverSlabOwner = oDataOwnership.get_cellv(oSelector.cursorTile)
+	cursorOverSlabOwner = oDataOwnership.get_cellv_ownership(oSelector.cursorTile)
 	oSlabSideViewer.update_side()
 
 func update_paint():
@@ -164,39 +172,47 @@ func construct_shape_for_placement(constructType):
 		CONSTRUCT_FILL:
 			var beginTile = oSelector.world2tile(get_global_mouse_position())
 			
-			# Prevent clicking outside
-			if beginTile.x < oEditor.fieldBoundary.position.x: return
-			if beginTile.x > oEditor.fieldBoundary.end.x-1: return
-			if beginTile.y < oEditor.fieldBoundary.position.y: return
-			if beginTile.y > oEditor.fieldBoundary.end.y-1: return
+			if not oEditor.fieldBoundary.has_point(beginTile):
+				return
 			
-			var coordsToCheck = [beginTile]
 			var fillTargetID = oSelector.get_slabID_at_pos(oSelector.cursorTile)
-			var checkedCoords = {}  # Use a dictionary to mimic set behavior for checked coordinates
+			var checkedCoords = {}
+			var coordsToCheck = [beginTile]
+			
+			var targetIsFortifiedWall = Slabs.auto_wall_updates_these.has(fillTargetID)
 			
 			var preventFillingBorder = false
 			if fillTargetID == Slabs.ROCK:
 				preventFillingBorder = true
 			
-			while coordsToCheck.size() > 0:
+			var neighborOffsets = [Vector2(0, 1), Vector2(0, -1), Vector2(1, 0), Vector2(-1, 0)]
+			
+			while coordsToCheck:
 				var coord = coordsToCheck.pop_back()
-				
-				if coord in checkedCoords: # Skip if already checked
+				if checkedCoords.has(coord):
 					continue
+				
 				checkedCoords[coord] = true
 				
-				if preventFillingBorder:
-					if coord.x < oEditor.fieldBoundary.position.x: continue
-					if coord.x > oEditor.fieldBoundary.end.x-1: continue
-					if coord.y < oEditor.fieldBoundary.position.y: continue
-					if coord.y > oEditor.fieldBoundary.end.y-1: continue
+				if preventFillingBorder and not oEditor.fieldBoundary.has_point(coord):
+					continue
 				
-				if oSelector.get_slabID_at_pos(coord) == fillTargetID:
+				var currentSlabID = oSelector.get_slabID_at_pos(coord)
+				
+				var shouldAppend = false
+				if targetIsFortifiedWall:
+					if Slabs.auto_wall_updates_these.has(currentSlabID):
+						shouldAppend = true
+				else:
+					if currentSlabID == fillTargetID:
+						shouldAppend = true
+				
+				if shouldAppend:
 					shapePositionArray.append(coord)
 					
-					var neighbors = [coord + Vector2(0,1), coord + Vector2(0,-1), coord + Vector2(1,0), coord + Vector2(-1,0)]
-					for neighbor in neighbors:
-						if not checkedCoords.has(neighbor):
+					for offset in neighborOffsets:
+						var neighbor = coord + offset
+						if not checkedCoords.has(neighbor) and oEditor.fieldBoundary.has_point(neighbor):
 							coordsToCheck.append(neighbor)
 	
 	if oSlabStyle.visible == true:
@@ -225,6 +241,7 @@ func construct_shape_for_placement(constructType):
 			var updateNearby = some_manual_placements_dont_update_nearby()
 			oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
 
+
 func some_manual_placements_dont_update_nearby():
 	# Fake Slabs don't update the surroundings (! HAD TO COMMENT THIS OUT BECAUSE IT BREAKS CUSTOM SLABSET SLABS)
 #	if oCustomSlabsTab.visible == true and oPickSlabWindow.oSelectedRect.visible == true:
@@ -245,7 +262,7 @@ func place_subtile(placeSubtile):
 	oEditor.mapHasBeenEdited = true
 	
 	if paintThingType != null:
-		var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell(placeSubtile.x,placeSubtile.y)]
+		var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(placeSubtile.x, placeSubtile.y)]
 		var newPos:Vector3 = Vector3(placeSubtile.x + 0.5, placeSubtile.y + 0.5, detectTerrainHeight)
 		
 		match paintThingType:
@@ -285,7 +302,7 @@ func manually_delete_one_instance(inst):
 		if oMirrorPlacementCheckBox.pressed == true:
 			oInstances.mirror_deletion_of_instance(inst)
 		
-		inst.queue_free()
+		oInstances.kill_instance(inst)
 
 #func ui_hover():
 #	if oSelector.cursorIsOnGrid == true:

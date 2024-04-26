@@ -4,6 +4,7 @@ onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oSelectionStatus = Nodelist.list["oSelectionStatus"]
 onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
+onready var oActionPointList = Nodelist.list["oActionPointList"]
 
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
 
@@ -28,9 +29,13 @@ func set_inspector_instance(setval):
 	if is_instance_valid(setval):
 		setval.instance_was_selected()
 		oPropertiesWindow.oPropertiesTabs.current_tab = 0
+		
+		if setval.is_in_group("ActionPoint") or setval.is_in_group("HeroGate"):
+			pass
+		else:
+			oActionPointList.unselect_all()
 	
 	oThingDetails.update_details()
-
 
 func inspect_something(id):
 	if is_instance_valid(id) and inspectingInstance != id: # Allow deselect by left clicking the same thing again
@@ -43,6 +48,9 @@ func inspect_something(id):
 
 func deselect():
 	if is_instance_valid(oThingDetails) == false: return # (initial mode select)
+	
+	oActionPointList.unselect_all()
+	
 	set_inspector_instance(null)
 	set_inspector_subtile(Vector2(-1000000,-1000000))
 	oSelectionStatus.visible = false

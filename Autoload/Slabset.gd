@@ -1,6 +1,7 @@
 extends Node
 onready var oGame = Nodelist.list["oGame"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var tng = []
 var dat = []
@@ -57,8 +58,8 @@ func load_default_slabset():
 
 func load_default_original_slabset():
 	
-	var dat_buffer = Filetypes.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.DAT"))
-	var tng_buffer = Filetypes.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG"))
+	var dat_buffer = oBuffers.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.DAT"))
+	var tng_buffer = oBuffers.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG"))
 	
 	var object_info = create_object_list(tng_buffer)
 	if object_info.size() == 0:

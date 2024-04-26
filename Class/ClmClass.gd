@@ -2,11 +2,17 @@ extends Node
 
 # Class is used by both DkClm and DataClm
 
-func get_real_height(cubeArray):
+func get_highest_cube_height(cubeArray):
 	for cubeNumber in 8:
 		if cubeArray[7-cubeNumber] != 0:
 			return 8-cubeNumber
 	return 0
+
+func get_height_from_bottom(cubeArray):
+	for cubeNumber in 8:
+		if cubeArray[cubeNumber] == 0:
+			return cubeNumber
+	return 8
 
 func calculate_solid_mask(cubeArray):
 	# For each cube value that isn't 0, add a bitmask value.
@@ -93,7 +99,7 @@ func find_cubearray_index(cubeArray, floorID):
 func get_top_cube_face(index, slabID):
 	var get_height = self.height[index]
 	if slabID == Slabs.PORTAL:
-		get_height = get_real_height(self.cubes[index])
+		get_height = get_highest_cube_height(self.cubes[index])
 	if get_height == 0:
 		return self.floorTexture[index]
 	else:

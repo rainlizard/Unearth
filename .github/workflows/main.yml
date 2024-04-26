@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
+    tags:
+      - '*'
   pull_request:
     branches:
       - '*'
-  workflow_dispatch:
 
 jobs:
   build_application:
@@ -27,11 +28,9 @@ jobs:
         FULL_VERSION="$MAJOR_MINOR.$PATCH"
         echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_OUTPUT
         echo "PATCH=$PATCH" >> $GITHUB_ENV
-
     - name: Update Version in Godot Script
       run: |
         sed -i "s/var patch = .*/var patch = \"$PATCH\"/" Autoload/Version.gd
-
     - name: Setup Godot and Export Templates
       run: |
         wget -q https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_linux_headless.64.zip
@@ -41,12 +40,10 @@ jobs:
         mkdir -p ~/.local/share/godot/templates/3.5.3.stable/
         mv templates/* ~/.local/share/godot/templates/3.5.3.stable/
         chmod +x Godot_v3.5.3-stable_linux_headless.64
-
     - name: Prepare Directories
       run: |
         rm -rf ./bin
         mkdir -p ./bin/ExportLinux/Unearth ./bin/ExportWindows/Unearth
-
     - name: Export Godot Game (Linux)
       run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" ./bin/ExportLinux/Unearth/Unearth.x86_64
 
@@ -57,43 +54,54 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y wine64
-
     - name: Download rcedit
       run: |
         wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
-
     - name: Replace Icon in Windows Export with rcedit
       run: |
         wine64 rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe --set-icon Art/UnearthIcon.ico
-
     - name: Upload Linux Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux
-        path: ./bin/ExportLinux/
+        path: ./bin/ExportLinux/Unearth/
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
-        path: ./bin/ExportWindows/
+        path: ./bin/ExportWindows/Unearth/
 
-    ############# Release with workflow_dispatch #############
+    - name: Install Butler
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
+        unzip -o butler.zip
+        chmod +x butler
+        ./butler -V
 
     - name: Zip Linux Build for Release
-      if: github.event_name == 'workflow_dispatch'
+      if: startsWith(github.ref, 'refs/tags/')
       run: |
         cd ./bin/ExportLinux/
-        zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip ./
+        zip -r ../unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip Unearth/
 
     - name: Zip Windows Build for Release
-      if: github.event_name == 'workflow_dispatch'
+      if: startsWith(github.ref, 'refs/tags/')
       run: |
         cd ./bin/ExportWindows/
-        zip -r ../Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip ./
+        zip -r ../unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip Unearth/
+
+    - name: Upload to itch.io
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        BUTLER_API_KEY: ${{ secrets.ITCHIO_API_KEY }}
+      run: |
+        ./butler push ./bin/unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip rainlizard/unearth:linux --userversion ${{ steps.version_info.outputs.FULL_VERSION }}
+        ./butler push ./bin/unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip rainlizard/unearth:windows --userversion ${{ steps.version_info.outputs.FULL_VERSION }}
 
     - name: Create Release
-      if: github.event_name == 'workflow_dispatch'
+      if: startsWith(github.ref, 'refs/tags/')
       id: create_release
       uses: actions/create-release@v1
       env:
@@ -105,24 +113,23 @@ jobs:
         prerelease: false
 
     - name: Upload Zipped Linux Artifact to Release
-      if: github.event_name == 'workflow_dispatch'
+      if: startsWith(github.ref, 'refs/tags/')
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
+        asset_path: ./bin/unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
         asset_name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip
         asset_content_type: application/zip
 
     - name: Upload Zipped Windows Artifact to Release
-      if: github.event_name == 'workflow_dispatch'
+      if: startsWith(github.ref, 'refs/tags/')
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/Unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
+        asset_path: ./bin/unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
         asset_name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip
         asset_content_type: application/zip
-

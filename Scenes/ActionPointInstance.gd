@@ -2,6 +2,7 @@ extends Node2D
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
+onready var oActionPointList = Nodelist.list["oActionPointList"]
 
 var ownership = 5 # Not used by Dungeon Keeper, this is just to make it easy for the editor.
 var thingType = Things.TYPE.EXTRA
@@ -66,3 +67,13 @@ func _on_VisibilityNotifier2D_screen_entered():
 
 func _on_VisibilityNotifier2D_screen_exited():
 	visible = false
+
+
+func _enter_tree():
+	yield(get_tree(),'idle_frame')
+	if oActionPointList:
+		oActionPointList.update_ap_list()
+
+func _exit_tree():
+	if oActionPointList:
+		oActionPointList.update_ap_list()

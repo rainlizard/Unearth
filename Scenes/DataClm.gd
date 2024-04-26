@@ -31,6 +31,7 @@ func store_default_data():
 
 var unknownData #The second 4 bytes
 
+
 func clm_data_exists():
 	if cubes.empty() == true:
 		return false # Nothing in arrays, so column data doesn't exist
@@ -39,11 +40,13 @@ func clm_data_exists():
 
 
 func count_filled_clm_entries():
+	var CODETIME_START = OS.get_ticks_msec()
 	var numberOfFilledEntries = 0
 	for entry in 2048:
 		if cubes[entry] != [0,0,0,0, 0,0,0,0]:
 			numberOfFilledEntries += 1
 	oUniversalDetails.clmEntryCount = numberOfFilledEntries
+	print('count_filled_clm_entries: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return numberOfFilledEntries
 
 func index_entry(cubeArray, setFloorID):
@@ -58,24 +61,28 @@ func index_entry(cubeArray, setFloorID):
 		solidMask[index] = calculate_solid_mask(cubeArray)
 		permanent[index] = 1 # Does this affect whether columns get reset?
 		lintel[index] = 0
-		height[index] = get_real_height(cubeArray)
+		height[index] = get_height_from_bottom(cubeArray)
 		cubes[index] = cubeArray
 		floorTexture[index] = setFloorID
 		
 		oTimerUpdateColumnEntries.start()
 		return index
 
-	oMessage.quick("Error: Cannot add clm entry, ran out of blank clm entries.")
-	print("ERROR: CAN'T ADD CLM ENTRY, RAN OUT OF BLANK CLM ENTRIES")
+	oMessage.big("Error", "Clm entries are full. Try the 'Clear Unused' button in the Map Columns window.")
 	return 0
 
+var a_column_has_changed_since_last_updating_utilized = false
 func update_all_utilized():
+	if a_column_has_changed_since_last_updating_utilized == false:
+		return
+	a_column_has_changed_since_last_updating_utilized = false
+	
 	var CODETIME_START = OS.get_ticks_msec()
 	for clearIndex in 2048:
 		utilized[clearIndex] = 0
 	for y in (M.ySize*3):
 		for x in (M.xSize*3):
-			var value = oDataClmPos.get_cell(x,y)
+			var value = oDataClmPos.get_cell_clmpos(x,y)
 			utilized[value] += 1
 	
 	print('All CLM utilized updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
@@ -145,15 +152,15 @@ func sort_columns_by_utilized():
 	
 	for y in (M.ySize*3):
 		for x in (M.xSize*3):
-			var clmIndex = oDataClmPos.get_cell(x,y)
-			oDataClmPos.set_cell(x, y, dictSrcDest[clmIndex])
+			var clmIndex = oDataClmPos.get_cell_clmpos(x,y)
+			oDataClmPos.set_cell_clmpos(x, y, dictSrcDest[clmIndex])
 	
 	var shapePositionArray = []
 	for ySlab in range(0, M.ySize):
 		for xSlab in range(0, M.xSize):
 			shapePositionArray.append(Vector2(xSlab,ySlab))
 	
-	oOverheadGraphics.overhead2d_update_rect(shapePositionArray)
+	oOverheadGraphics.overhead2d_update_rect_single_threaded(shapePositionArray)
 	
 	
 	utilized[0] = 0 # Pretend that the utilized value is maximum for column 0, so it's placed first. Set it back to 0 afterwards.

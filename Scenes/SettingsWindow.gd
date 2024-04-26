@@ -30,14 +30,13 @@ onready var oOwnerAlpha = Nodelist.list["oOwnerAlpha"]
 onready var oScriptEditorFontSize = Nodelist.list["oScriptEditorFontSize"]
 onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
+onready var oSymmetryGuidelinesSetting = Nodelist.list["oSymmetryGuidelinesSetting"]
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
 #onready var oTabGraphics = Nodelist.list["oTabGraphics"]
 #onready var oGeneralView = Nodelist.list["oGeneralView"]
 #onready var oTab2DView = Nodelist.list["oTab2DView"]
 #onready var oTab3DView = Nodelist.list["oTab3DView"]
-
-onready var oCheckBoxHideUnknown = Nodelist.list["oCheckBoxHideUnknown"]
 
 func _ready():
 	oTabSettings.set_tab_title(0,"Files")
@@ -76,8 +75,8 @@ func _on_SettingsWindow_about_to_show():
 	oUiScale.update_appearance(Settings.get_setting("ui_scale"))
 	oSlabWindowScale.update_appearance(Settings.get_setting("slab_window_scale"))
 	oThingWindowScale.update_appearance(Settings.get_setting("thing_window_scale"))
-	oCheckBoxHideUnknown.pressed = Settings.get_setting("hide_unknown_data")
 	oOwnerAlpha.update_appearance(Settings.get_setting("graphics_ownership_alpha"))
+	oSymmetryGuidelinesSetting.update_appearance(Settings.get_setting("symmetry_guidelines"))
 	oCreatureLevelFontSizeScale.update_appearance(Settings.get_setting("font_size_creature_level_scale"))
 	oCreatureLevelFontSizeMaxZoom.update_appearance(Settings.get_setting("font_size_creature_level_max"))
 	oSciptIconScale.update_appearance(Settings.get_setting("script_icon_scale"))
@@ -176,11 +175,11 @@ func edited_OwnerWindowScale(new_text):
 func edited_OwnerAlpha(new_text):
 	Settings.set_setting("graphics_ownership_alpha", float(new_text))
 
+func edited_SymmetryGuidelinesSetting(new_text):
+	Settings.set_setting("symmetry_guidelines", float(new_text))
+
 func _on_CheckBoxDisplay3dInfo_toggled(button_pressed):
 	Settings.set_setting("display_3d_info", button_pressed)
-
-func _on_CheckBoxHideUnknown_toggled(button_pressed):
-	Settings.set_setting("hide_unknown_data", button_pressed)
 
 func _on_CheckBoxNewMapAutoOpensMapSettings_toggled(button_pressed):
 	Settings.set_setting("auto_open_map_settings", button_pressed)

@@ -93,7 +93,7 @@ func start():
 	texturesLoadedState = LOADING_SUCCESS
 	
 	# This is important to do here if updating textures while a map is already open
-	if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
+	if oDataSlab.get_cell(0,0) != -1:
 		set_current_texture_pack()
 
 func scan_dk_data_directory():

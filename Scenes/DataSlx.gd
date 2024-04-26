@@ -10,14 +10,6 @@ func clear_img():
 		slxImgData.fill(Color(0,0,0,1))
 		slxTexData.set_data(slxImgData)
 
-#func set_tileset_value(x,y):
-#	var value = Color8(oSlabStyle.paintSlabStyle,0,0)
-#	slxImgData.lock()
-#	slxImgData.set_pixel(x,y,value)
-#	slxImgData.unlock()
-#	slxTexData.set_data(slxImgData)
-#	oDisplaySlxNumbers.update_grid()
-
 func set_tileset_shape(shapePositionArray):
 	var value = Color8(oSlabStyle.paintSlabStyle,0,0)
 	slxImgData.lock()
@@ -32,3 +24,17 @@ func get_tileset_value(x,y):
 	var r = slxImgData.get_pixel(x,y).r8
 	slxImgData.unlock()
 	return r
+
+func resize_bottom_right(new_width: int, new_height: int, fillValue: int):
+	var resized_image = Image.new()
+	resized_image.create(new_width, new_height, false, slxImgData.get_format())
+	
+	var fill_color = Color8(fillValue, 0, 0)
+	resized_image.fill(fill_color)
+	
+	var copy_width = min(slxImgData.get_width(), new_width)
+	var copy_height = min(slxImgData.get_height(), new_height)
+	
+	resized_image.blit_rect(slxImgData, Rect2(0, 0, copy_width, copy_height), Vector2.ZERO)
+	
+	slxImgData = resized_image

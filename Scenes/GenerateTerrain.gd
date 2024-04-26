@@ -7,7 +7,7 @@ onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 
-signal terrain_finished_generating
+signal terrain3D_finished_generating
 
 func start():
 	var CODETIME_START = OS.get_ticks_msec()
@@ -38,13 +38,13 @@ func start():
 					var x = (xSlab*3) + xSubtile
 					var z = (ySlab*3) + ySubtile
 					
-					var clmIndex = oDataClmPos.get_cell(x,z)
+					var clmIndex = oDataClmPos.get_cell_clmpos(x,z)
 					
 					var surrClmIndex = [
-						oDataClmPos.get_cell(x,z-1),
-						oDataClmPos.get_cell(x+1,z),
-						oDataClmPos.get_cell(x,z+1),
-						oDataClmPos.get_cell(x-1,z),
+						oDataClmPos.get_cell_clmpos(x,z-1),
+						oDataClmPos.get_cell_clmpos(x+1,z),
+						oDataClmPos.get_cell_clmpos(x,z+1),
+						oDataClmPos.get_cell_clmpos(x-1,z),
 					]
 					# Fix the edges
 					if x+1 >= (M.xSize*3): surrClmIndex[1] = TileMap.INVALID_CELL
@@ -58,7 +58,7 @@ func start():
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
 	yield(get_tree(),'idle_frame') # Important to solve race condition
-	emit_signal("terrain_finished_generating")
+	emit_signal("terrain3D_finished_generating")
 
 func loading_bar_start():
 	oLoadingBar.visible = true
