@@ -13,7 +13,7 @@ onready var oCenteredLabel = $Control/CenteredLabel
 #export var grid_item_size : Vector2
 #export var grid_window_scale : float setget update_scale
 #
-var owner_order = [0,1,2,3,4,5,6,7,8]
+var owner_order = [0,1,2,3,4,6,7,8,5]
 
 func _ready():
 	for i in owner_order:

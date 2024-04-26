@@ -147,7 +147,7 @@ func update_img(slbFilePath):
 				if colourDict.has(slabID):
 					img.set_pixel(x,y,colourDict[slabID])
 				else:
-					if slabID == 11 and ownership != 255: # Is claimed floor
+					if slabID == Slabs.CLAIMED_GROUND and ownership != 255:
 						img.set_pixel(x,y,Constants.ownerFloorCol[ownership])
 					else:
 						if ownership == 5:
@@ -162,7 +162,7 @@ func update_img(slbFilePath):
 						pixelHasBeenSet = true
 				else:
 					if ownership == 0:
-						if slabID == 11 and ownership != 255 and ownership == 0: # Is claimed floor
+						if slabID == Slabs.CLAIMED_GROUND and ownership != 255 and ownership == 0:
 							img.set_pixel(x, y, Constants.ownerFloorCol[ownership])
 							pixelHasBeenSet = true
 						else:
