@@ -241,8 +241,8 @@ func set_current_texture_pack():
 	if oGame3D.materialArray.size() > 0:
 		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
 		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
-		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][2])
-		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][3])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_B1", cachedTextures[value][2])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_B2", cachedTextures[value][3])
 	
 	for nodeID in get_tree().get_nodes_in_group("VoxelViewer"):
 		if nodeID.oAllVoxelObjects.mesh != null:
