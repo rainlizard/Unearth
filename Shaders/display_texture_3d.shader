@@ -1,7 +1,9 @@
 shader_type spatial;
 render_mode blend_mix, cull_back, depth_draw_opaque, skip_vertex_transform; //for the sake of performance avoid enabling transparency on all your terrain.
-uniform sampler2DArray dkTextureMap_Split_A;
-uniform sampler2DArray dkTextureMap_Split_B;
+uniform sampler2DArray dkTextureMap_Split_A1;
+uniform sampler2DArray dkTextureMap_Split_A2;
+uniform sampler2DArray dkTextureMap_Split_B1;
+uniform sampler2DArray dkTextureMap_Split_B2;
 
 uniform int use_mipmaps = 1;
 

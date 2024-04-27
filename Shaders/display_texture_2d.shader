@@ -76,9 +76,9 @@ void fragment() {
 	} else if (index < 544){
 		COLOR = textureLod(dkTextureMap_Split_A2, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-272)), mipmapLevel);
 	} else if (index < 1272){
-		COLOR = textureLod(dkTextureMap_Split_B1, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index)), mipmapLevel);
+		COLOR = textureLod(dkTextureMap_Split_B1, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-1000)), mipmapLevel);
 	} else {
-		COLOR = textureLod(dkTextureMap_Split_B2, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-272)), mipmapLevel);
+		COLOR = textureLod(dkTextureMap_Split_B2, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-1272)), mipmapLevel);
 	}
 }
 

@@ -153,7 +153,7 @@ func save_image_as_png(img, inputPath):
 func load_cache_filename(path):
 	var fileName = path.get_file().get_basename().to_lower()
 
-	if(not fileName.to_lower().find("tmapa")):
+	if(fileName.to_lower().find("tmapa") == -1):
 		return
 
 	var cachePathtmapa = Settings.unearthdata.plus_file(fileName + ".png")
@@ -211,7 +211,7 @@ func convert_img_to_two_texture_arrays(imgA,imgB):
 		for y in ySlices:
 			for x in xSlices:
 				var slice
-				if i > 2:
+				if i < 2:
 					slice = imgA.get_rect(Rect2(x*sliceWidth, (y+yOffset)*sliceHeight, sliceWidth, sliceHeight))
 				else:
 					slice = imgB.get_rect(Rect2(x*sliceWidth, (y+yOffset)*sliceHeight, sliceWidth, sliceHeight))
