@@ -152,33 +152,42 @@ func save_image_as_png(img, inputPath):
 
 func load_cache_filename(path):
 	var fileName = path.get_file().get_basename().to_lower()
-	var cachePath = Settings.unearthdata.plus_file(fileName + ".png")
+
+	if(not fileName.to_lower().find("tmapa")):
+		return
+
+	var cachePathtmapa = Settings.unearthdata.plus_file(fileName + ".png")
+	var cachePathtmapb = Settings.unearthdata.plus_file(fileName.replace("tmapa","tmapb") + ".png")
 	var tmapaNumber = int(fileName.to_lower().trim_prefix("tmapa")) # Get the specific position to create within the array
-	
-	if File.new().file_exists(cachePath) == true:
+
+	if File.new().file_exists(cachePathtmapa) == true:
 		# Need to call load() on an Image class if I want the save and load to work correctly (otherwise it saves too fast and doesn't load or something)
-		var img = Image.new()
-		img.load(cachePath)
-		load_image_into_cache(img, tmapaNumber)
+		var imgA = Image.new()
+		imgA.load(cachePathtmapa)
+		var imgB = Image.new()
+		imgB.load(cachePathtmapb)
+		load_image_into_cache(imgA,imgB, tmapaNumber)
 		#print('Loaded cache file: ' + cachePath)
 		return OK
 	else:
-		print('Cache file not found: ' + cachePath)
+		print('Cache file not found: ' + cachePathtmapa)
 		cachedTextures.clear()
 		return FAILED
 
-func load_image_into_cache(img, tmapaNumber):
+func load_image_into_cache(imgA, imgB,tmapaNumber):
 	tmapaNumber = int(tmapaNumber)
 	while cachedTextures.size() <= tmapaNumber: # Fill all array positions, in case a tmapa00#.dat file inbetween is deleted
 		cachedTextures.append([null, null])
-	cachedTextures[tmapaNumber] = convert_img_to_two_texture_arrays(img)
+	cachedTextures[tmapaNumber] = convert_img_to_two_texture_arrays(imgA,imgB)
 
 # SLICE COUNT being too high is the reason TextureArray doesn't work on old PC. (NOT IMAGE SIZE, NOT MIPMAPS EITHER)
 # RES files might actually take longer to generate a TextureArray from than PNG, not sure.
-func convert_img_to_two_texture_arrays(img):
-	if img.get_format() != IMAGE_FORMAT:
-		img.convert(IMAGE_FORMAT)
-	
+func convert_img_to_two_texture_arrays(imgA,imgB):
+	if imgA.get_format() != IMAGE_FORMAT:
+		imgA.convert(IMAGE_FORMAT)
+	if imgB.get_format() != IMAGE_FORMAT:
+		imgB.convert(IMAGE_FORMAT)
+
 	var twoTextureArrays = [
 		TextureArray.new(),
 		TextureArray.new(),
@@ -201,7 +210,11 @@ func convert_img_to_two_texture_arrays(img):
 		
 		for y in ySlices:
 			for x in xSlices:
-				var slice = img.get_rect(Rect2(x*sliceWidth, (y+yOffset)*sliceHeight, sliceWidth, sliceHeight))
+				var slice
+				if i > 2:
+					slice = imgA.get_rect(Rect2(x*sliceWidth, (y+yOffset)*sliceHeight, sliceWidth, sliceHeight))
+				else:
+					slice = imgB.get_rect(Rect2(x*sliceWidth, (y+yOffset)*sliceHeight, sliceWidth, sliceHeight))
 				slice.generate_mipmaps() #Important otherwise it's black when zoomed out
 				twoTextureArrays[i].set_layer_data(slice, (y*xSlices)+x)
 	
