@@ -42,7 +42,7 @@ func attempt_to_save_new_undo_state(): # called by oEditor
 
 func on_undo_state_saved(new_state):
 	if undo_history.size() >= 1 and are_states_equal(new_state, undo_history[0]):
-		oMessage.quick("Didn't add undo state as it is the same as the previous undo-state")
+		#oMessage.quick("Didn't add undo state as it is the same as the previous undo-state")
 		is_saving_state = false
 		return
 	if undo_history.size() >= max_undo_states:
@@ -50,7 +50,7 @@ func on_undo_state_saved(new_state):
 	undo_history.push_front(new_state)
 	oMenu.update_undo_availability()
 	
-	oMessage.quick("Undo history size: " + str(undo_history.size()) + " (test)")
+	#oMessage.quick("Undo history size: " + str(undo_history.size()) + " (test)")
 	
 	
 	is_saving_state = false
@@ -86,7 +86,7 @@ func perform_undo():
 	oOpenMap.continue_load(oCurrentMap.path)
 	undo_history.pop_front()
 	oMenu.update_undo_availability()
-	oMessage.quick("Undo performed")
+	#oMessage.quick("Undo performed")
 
 	if oEditor.mapHasBeenEdited == false:
 		oEditor.mapHasBeenEdited = oEditor.SET_EDITED_WITHOUT_SAVING_STATE

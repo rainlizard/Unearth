@@ -41,6 +41,7 @@ func _ready():
 		var shortcut = id.get_node("ButtonShortcut")
 		shortcut.connect("pressed",self,"shortcut_pressed",[id])
 		spinbox.max_value = 2047
+		spinbox.value = 1
 		spinbox.connect("value_changed",oCustomSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
 		customSlabArrayOfSpinbox.append(spinbox)
 		oGridContainerCustomColumns3x3.add_child(id)
@@ -83,11 +84,15 @@ func _on_AddCustomSlabButton_pressed():
 		# Find an unused ID within the fake data dictionary
 		while Slabs.data.has(newID):
 			newID += 1
+		
 	else:
 		newID = int(oCustomSlabID.value) # For slabset, use the value from the UI
 		if Slabs.data.has(newID):
 			oMessage.big("Error", "For Slabset slabs you must use a unique ID. You may need to first delete the existing one.")
 			return
+	
+	
+	
 	
 	var slabCubeData = []
 	var slabFloorData = []
@@ -97,6 +102,11 @@ func _on_AddCustomSlabButton_pressed():
 			var clmIndex = spinbox.value
 			slabCubeData.append(oDataClm.cubes[clmIndex])
 			slabFloorData.append(oDataClm.floorTexture[clmIndex])
+			
+			if oDataClm.floorTexture[clmIndex] == 0 and oDataClm.cubes[clmIndex] == [0,0,0,0, 0,0,0,0]:
+				oMessage.quick("You should not use blank columns")
+				# Blank columns get indexed by other columns after a while
+				return
 	
 	var slab_dict = {
 		"header_id": newID,
