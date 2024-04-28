@@ -105,7 +105,7 @@ func scan_dk_data_directory():
 		var fileName = dir.get_next()
 		while fileName != "":
 			if dir.current_is_dir() == false:
-				if fileName.to_upper().begins_with("TMAPA") == true: # Get file regardless of case (case insensitive)
+				if fileName.to_upper().begins_with("TMAP") == true: # Get file regardless of case (case insensitive)
 					if fileName.to_upper().get_extension() == "DAT":
 						if fileName.to_upper().begins_with("TMAPANIM") == false:
 							var getModifiedTime = File.new().get_modified_time(path.plus_file(fileName))
@@ -152,34 +152,45 @@ func save_image_as_png(img, inputPath):
 
 func load_cache_filename(path):
 	var fileName = path.get_file().get_basename().to_lower()
-	var cachePath = Settings.unearthdata.plus_file(fileName + ".png")
+
+	if(fileName.to_lower().find("tmapa") == -1):
+		return
+
+	var cachePathtmapa = Settings.unearthdata.plus_file(fileName + ".png")
+	var cachePathtmapb = Settings.unearthdata.plus_file(fileName.replace("tmapa","tmapb") + ".png")
 	var tmapaNumber = int(fileName.to_lower().trim_prefix("tmapa")) # Get the specific position to create within the array
-	
-	if File.new().file_exists(cachePath) == true:
+
+	if File.new().file_exists(cachePathtmapa) == true:
 		# Need to call load() on an Image class if I want the save and load to work correctly (otherwise it saves too fast and doesn't load or something)
-		var img = Image.new()
-		img.load(cachePath)
-		load_image_into_cache(img, tmapaNumber)
+		var imgA = Image.new()
+		imgA.load(cachePathtmapa)
+		var imgB = Image.new()
+		imgB.load(cachePathtmapb)
+		load_image_into_cache(imgA,imgB, tmapaNumber)
 		#print('Loaded cache file: ' + cachePath)
 		return OK
 	else:
-		print('Cache file not found: ' + cachePath)
+		print('Cache file not found: ' + cachePathtmapa)
 		cachedTextures.clear()
 		return FAILED
 
-func load_image_into_cache(img, tmapaNumber):
+func load_image_into_cache(imgA, imgB,tmapaNumber):
 	tmapaNumber = int(tmapaNumber)
 	while cachedTextures.size() <= tmapaNumber: # Fill all array positions, in case a tmapa00#.dat file inbetween is deleted
 		cachedTextures.append([null, null])
-	cachedTextures[tmapaNumber] = convert_img_to_two_texture_arrays(img)
+	cachedTextures[tmapaNumber] = convert_img_to_two_texture_arrays(imgA,imgB)
 
 # SLICE COUNT being too high is the reason TextureArray doesn't work on old PC. (NOT IMAGE SIZE, NOT MIPMAPS EITHER)
 # RES files might actually take longer to generate a TextureArray from than PNG, not sure.
-func convert_img_to_two_texture_arrays(img):
-	if img.get_format() != IMAGE_FORMAT:
-		img.convert(IMAGE_FORMAT)
-	
+func convert_img_to_two_texture_arrays(imgA,imgB):
+	if imgA.get_format() != IMAGE_FORMAT:
+		imgA.convert(IMAGE_FORMAT)
+	if imgB.get_format() != IMAGE_FORMAT:
+		imgB.convert(IMAGE_FORMAT)
+
 	var twoTextureArrays = [
+		TextureArray.new(),
+		TextureArray.new(),
 		TextureArray.new(),
 		TextureArray.new(),
 	]
@@ -189,15 +200,21 @@ func convert_img_to_two_texture_arrays(img):
 	var sliceHeight = 32 #img.get_height() / ySlices;
 	twoTextureArrays[0].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS+TextureLayered.FLAG_ANISOTROPIC_FILTER)
 	twoTextureArrays[1].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS+TextureLayered.FLAG_ANISOTROPIC_FILTER)
+	twoTextureArrays[2].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS+TextureLayered.FLAG_ANISOTROPIC_FILTER)
+	twoTextureArrays[3].create(sliceWidth, sliceHeight, xSlices*ySlices, IMAGE_FORMAT, TextureLayered.FLAG_MIPMAPS+TextureLayered.FLAG_ANISOTROPIC_FILTER)
 	
-	for i in 2:
+	for i in 4:
 		var yOffset = 0
-		if i == 1:
+		if i == 1 or i == 3:
 			yOffset = 34
 		
 		for y in ySlices:
 			for x in xSlices:
-				var slice = img.get_rect(Rect2(x*sliceWidth, (y+yOffset)*sliceHeight, sliceWidth, sliceHeight))
+				var slice
+				if i < 2:
+					slice = imgA.get_rect(Rect2(x*sliceWidth, (y+yOffset)*sliceHeight, sliceWidth, sliceHeight))
+				else:
+					slice = imgB.get_rect(Rect2(x*sliceWidth, (y+yOffset)*sliceHeight, sliceWidth, sliceHeight))
 				slice.generate_mipmaps() #Important otherwise it's black when zoomed out
 				twoTextureArrays[i].set_layer_data(slice, (y*xSlices)+x)
 	
@@ -215,29 +232,39 @@ func set_current_texture_pack():
 	
 	# 2D
 	if oOverheadGraphics.arrayOfColorRects.size() > 0:
-		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
+		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
+		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_B1", cachedTextures[value][2])
+		oOverheadGraphics.arrayOfColorRects[0].get_material().set_shader_param("dkTextureMap_Split_B2", cachedTextures[value][3])
 	
 	# 3D
 	if oGame3D.materialArray.size() > 0:
-		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_B1", cachedTextures[value][2])
+		oGame3D.materialArray[0].set_shader_param("dkTextureMap_Split_B2", cachedTextures[value][3])
 	
 	for nodeID in get_tree().get_nodes_in_group("VoxelViewer"):
 		if nodeID.oAllVoxelObjects.mesh != null:
-			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
+			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
+			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B1", cachedTextures[value][2])
+			nodeID.oAllVoxelObjects.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B2", cachedTextures[value][3])
 		if nodeID.oSelectedVoxelObject.mesh != null:
-			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
+			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
+			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B1", cachedTextures[value][2])
+			nodeID.oSelectedVoxelObject.mesh.surface_get_material(0).set_shader_param("dkTextureMap_Split_B2", cachedTextures[value][3])
 	
 	assign_textures_to_slab_window(value)
 
 
 func assign_textures_to_slab_window(value): # Called by SlabStyleWindow
 	for nodeID in get_tree().get_nodes_in_group("SlabDisplay"):
-		nodeID.get_material().set_shader_param("dkTextureMap_Split_A", cachedTextures[value][0])
-		nodeID.get_material().set_shader_param("dkTextureMap_Split_B", cachedTextures[value][1])
+		nodeID.get_material().set_shader_param("dkTextureMap_Split_A1", cachedTextures[value][0])
+		nodeID.get_material().set_shader_param("dkTextureMap_Split_A2", cachedTextures[value][1])
+		nodeID.get_material().set_shader_param("dkTextureMap_Split_B1", cachedTextures[value][2])
+		nodeID.get_material().set_shader_param("dkTextureMap_Split_B2", cachedTextures[value][3])
 
 
 

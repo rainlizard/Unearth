@@ -15,8 +15,10 @@ const vec2 oneTileSize = vec2(32,32);
 const float TEXTURE_ANIMATION_SPEED = 12.0;
 uniform int showOnlySpecificStyle = 77777;
 uniform sampler2D slxData;
-uniform sampler2DArray dkTextureMap_Split_A;
-uniform sampler2DArray dkTextureMap_Split_B;
+uniform sampler2DArray dkTextureMap_Split_A1;
+uniform sampler2DArray dkTextureMap_Split_A2;
+uniform sampler2DArray dkTextureMap_Split_B1;
+uniform sampler2DArray dkTextureMap_Split_B2;
 
 uniform vec2 fieldSizeInSubtiles = vec2(0.0, 0.0);
 
@@ -61,7 +63,7 @@ void fragment() {
 	}
 	
 	int index = getIndex(ivec2(subtileX,subtileY));
-	if (index >= 544) { // 544 is the index where the TexAnims start (544 - 585)
+	if (index >= 544 && index < 1000) { // 544 is the index where the TexAnims start (544 - 999)
 		int frame = int(mod(TIME * TEXTURE_ANIMATION_SPEED, 8));
 		index = getAnimationFrame(frame, index-544);
 	}
@@ -70,9 +72,13 @@ void fragment() {
 	float mipmapLevel = calc_mip_level(UV * resolutionOfField);
 	
 	if (index < 272) { // Splitting the TextureArray into 2, so that it will work on older PCs.
-		COLOR = textureLod(dkTextureMap_Split_A, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index)), mipmapLevel);
+		COLOR = textureLod(dkTextureMap_Split_A1, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index)), mipmapLevel);
+	} else if (index < 544){
+		COLOR = textureLod(dkTextureMap_Split_A2, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-272)), mipmapLevel);
+	} else if (index < 1272){
+		COLOR = textureLod(dkTextureMap_Split_B1, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-1000)), mipmapLevel);
 	} else {
-		COLOR = textureLod(dkTextureMap_Split_B, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-272)), mipmapLevel);
+		COLOR = textureLod(dkTextureMap_Split_B2, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-1272)), mipmapLevel);
 	}
 }
 

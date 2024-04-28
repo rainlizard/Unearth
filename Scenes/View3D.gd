@@ -18,8 +18,10 @@ func create_material_array(numberOfSlabStyles):
 func create_material(map):
 	var mat = ShaderMaterial.new()
 	mat.shader = preload("res://Shaders/display_texture_3d.shader")
-	mat.set_shader_param("dkTextureMap_Split_A", oTextureCache.cachedTextures[map][0])
-	mat.set_shader_param("dkTextureMap_Split_B", oTextureCache.cachedTextures[map][1])
+	mat.set_shader_param("dkTextureMap_Split_A1", oTextureCache.cachedTextures[map][0])
+	mat.set_shader_param("dkTextureMap_Split_A2", oTextureCache.cachedTextures[map][1])
+	mat.set_shader_param("dkTextureMap_Split_B1", oTextureCache.cachedTextures[map][2])
+	mat.set_shader_param("dkTextureMap_Split_B2", oTextureCache.cachedTextures[map][3])
 	mat.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
 	return mat
 
