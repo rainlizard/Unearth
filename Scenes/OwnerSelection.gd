@@ -5,6 +5,7 @@ onready var oUseSlabOwnerCheckBox = Nodelist.list["oUseSlabOwnerCheckBox"]
 onready var oOwnershipGridContainer = Nodelist.list["oOwnershipGridContainer"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 onready var oCollectibleLabel = Nodelist.list["oCollectibleLabel"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 #onready var oEditor = Nodelist.list["oEditor"]
 onready var gridItemScene = preload("res://Scenes/GenericGridItem.tscn")
@@ -14,11 +15,16 @@ onready var oCenteredLabel = $Control/CenteredLabel
 #export var grid_item_size : Vector2
 #export var grid_window_scale : float setget update_scale
 #
-var owner_order = [0,1,2,3,4,6,7,8,5]
 
 var ownership_available = true
 
 func _ready():
+	var owner_order
+	if oCurrentFormat.selected == 0: # Classic format
+		owner_order = [0,1,2,3,4,5]
+	else:
+		owner_order = [0,1,2,3,6,7,8,4,5]
+		
 	for i in owner_order:
 		var id = gridItemScene.instance()
 		

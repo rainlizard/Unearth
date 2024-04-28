@@ -1,14 +1,22 @@
 extends PanelContainer
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var scnOwnerButton = preload("res://Scenes/OnlyOwnershipButton.tscn")
 onready var oSelectedRect = get_node("../../../../Clippy/SelectedRect")
 
 func initialize_grid_items():
 	var oGridContainer = current_grid_container()
+
+	var owner_order
+	if oCurrentFormat.selected == 0: # Classic format
+		owner_order = [0,1,2,3,4,5]
+	else:
+		owner_order = [0,1,2,3,6,7,8,4,5]
+
 #	# Add children
-	for i in Constants.PLAYERS_COUNT: # +1 is for "Default"
+	for i in owner_order:
 		var id = scnOwnerButton.instance()
 		id.connect("pressed", self, "_on_OwnerButtonPressed", [id])
 		
