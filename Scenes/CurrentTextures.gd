@@ -17,8 +17,7 @@ onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oMapProperties = Nodelist.list["oMapProperties"]
 
 const IMAGE_FORMAT = Image.FORMAT_RGB8
-const textureWidth = 256
-const textureHeight = 2176
+
 enum {
 	LOADING_NOT_STARTED
 	LOADING_IN_PROGRESS
@@ -44,6 +43,7 @@ func _notification(what: int):
 		for i in 100: # wait until file appears. an estimate is fine. this isn't super important, because the list is also refreshed whenever switching to the tab or reopening the window.
 			yield(get_tree(),'idle_frame')
 		oMapProperties._on_MapProperties_visibility_changed() # Refresh list of styles if it's visible
+
 
 func _on_ReloadTextureMapsButton_pressed():
 	if texturesLoadedState != LOADING_IN_PROGRESS: # Don't do anything if it's already doing something
@@ -96,6 +96,7 @@ func start():
 	if oDataSlab.get_cell(0,0) != -1:
 		set_current_texture_pack()
 
+
 func scan_dk_data_directory():
 	var path = oGame.DK_DATA_DIRECTORY
 	var dictionary = {}
@@ -121,24 +122,32 @@ func convert_tmapa_to_image(tmapaDatPath):
 	var file = File.new()
 	if file.open(tmapaDatPath, File.READ) == OK:
 		CODETIME_START = OS.get_ticks_msec()
+		var imageSize = file.get_len() # (Width * Height)
 		
-		var img = Image.new()
-		img.create(textureWidth, textureHeight, false, IMAGE_FORMAT)
-		file.seek(0)
-		img.lock()
-		for y in textureHeight:
-			for x in textureWidth:
-				var paletteIndex = file.get_8()
-				img.set_pixel(x,y,paletteData[paletteIndex])
-		img.unlock()
-		
-		print('Converted tmapa*.dat to image in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+		var texturePalIndices = file.get_buffer(imageSize)
 		file.close()
 		
+		var data = PoolByteArray()
+		data.resize(256 * 2176 * 3)
+		data.fill(0) # Any space that goes beyond the size of tmapb will be set to black
+		
+		var idx = 0
+		for i in (imageSize):
+			var color = paletteData[texturePalIndices[i]]
+			data[idx] = color.r8
+			data[idx + 1] = color.g8
+			data[idx + 2] = color.b8
+			idx += 3
+		
+		var img = Image.new()
+		img.create_from_data(256, 2176, false, IMAGE_FORMAT, data)
+		
+		print("Converted " + str(tmapaDatPath.get_file()) + " to image in: " + str(OS.get_ticks_msec() - CODETIME_START) + "ms")
 		return img
 	else:
 		print("Failed to open file.")
 		return null
+
 
 func save_image_as_png(img, inputPath):
 	var fileName = inputPath.get_file().get_basename().to_lower() + ".png"
@@ -166,7 +175,7 @@ func load_cache_filename(path):
 		imgA.load(cachePathtmapa)
 		var imgB = Image.new()
 		imgB.load(cachePathtmapb)
-		load_image_into_cache(imgA,imgB, tmapaNumber)
+		load_image_into_cache(imgA, imgB, tmapaNumber)
 		#print('Loaded cache file: ' + cachePath)
 		return OK
 	else:
@@ -174,11 +183,13 @@ func load_cache_filename(path):
 		cachedTextures.clear()
 		return FAILED
 
-func load_image_into_cache(imgA, imgB,tmapaNumber):
+
+func load_image_into_cache(imgA, imgB, tmapaNumber):
 	tmapaNumber = int(tmapaNumber)
 	while cachedTextures.size() <= tmapaNumber: # Fill all array positions, in case a tmapa00#.dat file inbetween is deleted
 		cachedTextures.append([null, null])
 	cachedTextures[tmapaNumber] = convert_img_to_two_texture_arrays(imgA,imgB)
+
 
 # SLICE COUNT being too high is the reason TextureArray doesn't work on old PC. (NOT IMAGE SIZE, NOT MIPMAPS EITHER)
 # RES files might actually take longer to generate a TextureArray from than PNG, not sure.
@@ -219,6 +230,7 @@ func convert_img_to_two_texture_arrays(imgA,imgB):
 				twoTextureArrays[i].set_layer_data(slice, (y*xSlices)+x)
 	
 	return twoTextureArrays
+
 
 func set_current_texture_pack():
 	var value = oDataLevelStyle.data

@@ -23,7 +23,7 @@ onready var oOptionsOptionButton = Nodelist.list["oOptionsOptionButton"]
 onready var oEnsignPositionX = Nodelist.list["oEnsignPositionX"]
 onready var oEnsignPositionY = Nodelist.list["oEnsignPositionY"]
 onready var oMapCoordinatesWindow = Nodelist.list["oMapCoordinatesWindow"]
-
+onready var oOwnerSelection = Nodelist.list["oOwnerSelection"]
 onready var oHBoxPlayers = Nodelist.list["oHBoxPlayers"]
 onready var oHBoxSpeech = Nodelist.list["oHBoxSpeech"]
 onready var oHBoxEnsignPosition = Nodelist.list["oHBoxEnsignPosition"]
@@ -112,6 +112,7 @@ func set_format_selection(setFormat):
 	# When you change format, the object settings that are available also change
 	oPlacingSettings.update_placing_tab()
 	oInspector.deselect()
+	oOwnerSelection.update_ownership_head_icons()
 
 func refresh_dungeon_style_options():
 	oDungeonStyleList.clear()
