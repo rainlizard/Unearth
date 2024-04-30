@@ -332,6 +332,14 @@ var DATA_OBJECT = {
 134 : ["Armageddon", null,null, preload("res://dk_images/keepower_64/armagedn_std.png"), null, TAB_SPELL],
 135 : ["Possess", null,null, preload("res://dk_images/keepower_64/possess_std.png"), null, TAB_SPELL],
 136 : ["Gold Bag (100)", null,null, preload("res://dk_images/valuables/gold_sack_tp/r1frame01.png"), null, TAB_GOLD],
+161 : ["White Flag", null,null, preload("res://dk_images/furniture/flagpole_whiteflag_tp/AnimFlagpoleWhite.tres"), null, TAB_FURNITURE],
+162 : ["White Heart Flame", null,null, preload("res://edited_images/heartflames/heartflame_white/AnimWhiteHeartFlame.tres"), null, TAB_FURNITURE],
+164 : ["Purple Flag", null,null, preload("res://dk_images/furniture/flagpole_purpleflag_tp/AnimFlagpolePurple.tres"), null, TAB_FURNITURE],
+165 : ["Purple Heart Flame", null,null, preload("res://edited_images/heartflames/heartflame_purple/AnimPurpleHeartFlame.tres"), null, TAB_FURNITURE],
+166 : ["Black Flag", null,null, preload("res://dk_images/furniture/flagpole_blackflag_tp/AnimFlagpoleBlack.tres"), null, TAB_FURNITURE],
+167 : ["Black Heart Flame", null,null, preload("res://edited_images/heartflames/heartflame_black/AnimBlackHeartFlame.tres"), null, TAB_FURNITURE],
+168 : ["Orange Flag", null,null, preload("res://dk_images/furniture/flagpole_orangeflag_tp/AnimFlagpoleOrange.tres"), null, TAB_FURNITURE],
+169 : ["Orange Heart Flame", null,null, preload("res://edited_images/heartflames/heartflame_orange/AnimOrangeHeartFlame.tres"), null, TAB_FURNITURE],
 }
 
 var LIST_OF_BOXES = {

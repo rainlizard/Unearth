@@ -29,6 +29,10 @@ onready var oResearchables = Nodelist.list["oResearchables"]
 onready var oResearchOrderCategory = Nodelist.list["oResearchOrderCategory"]
 onready var oAdjustResearchCheckBox = Nodelist.list["oAdjustResearchCheckBox"]
 onready var oInstances = Nodelist.list["oInstances"]
+onready var oPurpleAICheckBox = Nodelist.list["oPurpleAICheckBox"]
+onready var oBlackAICheckBox = Nodelist.list["oBlackAICheckBox"]
+onready var oOrangeAICheckBox = Nodelist.list["oOrangeAICheckBox"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var scnAvailableButton = preload('res://Scenes/AvailableButton.tscn')
 
@@ -171,6 +175,17 @@ func _ready():
 #		yield(get_tree(),'idle_frame')
 #	get_parent().current_tab = 1
 #	Utils.popup_centered(Nodelist.list["oMapSettingsWindow"])
+
+func update_options_based_on_mapformat():
+	if oCurrentFormat.selected == 0: # classic format
+		oPurpleAICheckBox.visible = false
+		oBlackAICheckBox.visible = false
+		oOrangeAICheckBox.visible = false
+	else:
+		oPurpleAICheckBox.visible = true
+		oBlackAICheckBox.visible = true
+		oOrangeAICheckBox.visible = true
+
 
 func initialize_researchables():
 	var labelNumber = 0
@@ -329,6 +344,18 @@ func _on_YellowAICheckBox_toggled(button_pressed):
 	if button_pressed == true:
 		if oInstances.check_for_dungeon_heart(3) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
+func _on_PurpleAICheckBox_toggled(button_pressed):
+	if button_pressed == true:
+		if oInstances.check_for_dungeon_heart(6) == false:
+			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
+func _on_BlackAICheckBox_toggled(button_pressed):
+	if button_pressed == true:
+		if oInstances.check_for_dungeon_heart(7) == false:
+			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
+func _on_OrangeAICheckBox_toggled(button_pressed):
+	if button_pressed == true:
+		if oInstances.check_for_dungeon_heart(8) == false:
+			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 
 
 func _on_GenerateScriptButton_pressed():
@@ -361,10 +388,19 @@ func execute_gen():
 	
 	generateString = add_one_extra_line(generateString)
 	
-	if oBlueAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER1,0)" + '\n'
-	if oGreenAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER2,0)" + '\n'
-	if oYellowAICheckBox.pressed == true: generateString += "COMPUTER_PLAYER(PLAYER3,0)" + '\n'
-	
+	if oBlueAICheckBox.pressed == true and oBlueAICheckBox.visible == true:
+		generateString += "COMPUTER_PLAYER(PLAYER1,0)" + '\n'
+	if oGreenAICheckBox.pressed == true and oGreenAICheckBox.visible == true:
+		generateString += "COMPUTER_PLAYER(PLAYER2,0)" + '\n'
+	if oYellowAICheckBox.pressed == true and oYellowAICheckBox.visible == true:
+		generateString += "COMPUTER_PLAYER(PLAYER3,0)" + '\n'
+	if oPurpleAICheckBox.pressed == true and oPurpleAICheckBox.visible == true:
+		generateString += "COMPUTER_PLAYER(PLAYER4,0)" + '\n'
+	if oBlackAICheckBox.pressed == true and oBlackAICheckBox.visible == true:
+		generateString += "COMPUTER_PLAYER(PLAYER5,0)" + '\n'
+	if oOrangeAICheckBox.pressed == true and oOrangeAICheckBox.visible == true:
+		generateString += "COMPUTER_PLAYER(PLAYER6,0)" + '\n'
+
 	generateString = add_one_extra_line(generateString)
 	
 	for i in oCreaturePool.get_children():

@@ -1,7 +1,9 @@
 shader_type spatial;
 render_mode blend_mix, cull_back, depth_draw_opaque, skip_vertex_transform; //for the sake of performance avoid enabling transparency on all your terrain.
-uniform sampler2DArray dkTextureMap_Split_A;
-uniform sampler2DArray dkTextureMap_Split_B;
+uniform sampler2DArray dkTextureMap_Split_A1;
+uniform sampler2DArray dkTextureMap_Split_A2;
+uniform sampler2DArray dkTextureMap_Split_B1;
+uniform sampler2DArray dkTextureMap_Split_B2;
 
 uniform int use_mipmaps = 1;
 
@@ -50,7 +52,7 @@ void fragment() {
 	// Adding 0.5 so the int() floor will be correct.
 	int index = getIndex(UV2);
 	
-	if (index >= 544) { // 544 is the index where the TexAnims start (544 - 585)
+	if (index >= 544 && index < 1000) { // 544 is the index where the TexAnims start (544 - 999)
 		int frame = int(mod(TIME * TEXTURE_ANIMATION_SPEED, 8));
 		index = getAnimationFrame(frame, (index-544) );
 	}
@@ -59,9 +61,13 @@ void fragment() {
 	float mipmapLevel = calc_mip_level(UV * vec2(8.0,68.0)) * float(use_mipmaps);
 	
 	if (index < 272) { // Splitting the TextureArray into 2, so that it will work on older PCs.
-		ALBEDO = textureLod(dkTextureMap_Split_A, vec3(UV.x, UV.y, float(index)), mipmapLevel).rgb;
-	} else {
-		ALBEDO = textureLod(dkTextureMap_Split_B, vec3(UV.x, UV.y, float(index-272)), mipmapLevel).rgb;
+		ALBEDO = textureLod(dkTextureMap_Split_A1, vec3(UV.x, UV.y, float(index)), mipmapLevel).rgb;
+	} else if (index < 544) {
+		ALBEDO = textureLod(dkTextureMap_Split_A2, vec3(UV.x, UV.y, float(index-272)), mipmapLevel).rgb;
+	} else if (index < 1272) { // Splitting the TextureArray into 2, so that it will work on older PCs.
+		ALBEDO = textureLod(dkTextureMap_Split_B1, vec3(UV.x, UV.y, float(index-1000)), mipmapLevel).rgb;
+	} else  {
+		ALBEDO = textureLod(dkTextureMap_Split_B2, vec3(UV.x, UV.y, float(index-1272)), mipmapLevel).rgb;
 	}
 	
 	// Forces the shader to convert albedo from sRGB space to linear space. A problem when using the same TextureArray while mixing 2D and 3D shaders and displaying both 2D and 3D at the same time.

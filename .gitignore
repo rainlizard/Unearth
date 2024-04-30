@@ -7,6 +7,7 @@ custom_slabs.cfg
 custom_objects.cfg
 
 unearthdata/tmapa0*
+unearthdata/tmapb0*
 textures
 
 ### Godot ###

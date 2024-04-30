@@ -16,7 +16,7 @@ func _draw():
 		var size2 = M.ySize if i == 0 else M.xSize
 		
 		var center = floor(size1 * 0.5)
-		var offset = 0.5 if size1 % 2 == 1 else 0
+		var offset = 0.5 if size1 % 2 == 1 else 0.0
 		var thickness = 0.15
 		
 		var start = Vector2(center + offset - thickness, 0)

@@ -36,6 +36,7 @@ onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oSlabSideViewer = Nodelist.list["oSlabSideViewer"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
+onready var oOwnerSelection = Nodelist.list["oOwnerSelection"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -318,7 +319,7 @@ func change_mode(changeModeTo):
 			position = cursorTile * TILE_SIZE
 			$SubtileSelector.visible = false
 			$TileSelector.visible = true
-			oUseSlabOwnerCheckBox.visible = false
+			oOwnerSelection.call_deferred("update_ownership_options")
 			oEditingMode.switch_mode("Slab")
 			oEditingTools.switched_to_slab_mode()
 			oInspector.deselect()
@@ -328,7 +329,7 @@ func change_mode(changeModeTo):
 			position = cursorSubtile * SUBTILE_SIZE
 			$SubtileSelector.visible = true
 			$TileSelector.visible = false
-			oUseSlabOwnerCheckBox.visible = true
+			oOwnerSelection.call_deferred("update_ownership_options")
 			oEditingTools.switched_to_thing_mode()
 			oEditingMode.switch_mode("Thing")
 			oBrushPreview.update_img()

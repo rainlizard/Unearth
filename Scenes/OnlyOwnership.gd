@@ -1,14 +1,22 @@
 extends PanelContainer
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var scnOwnerButton = preload("res://Scenes/OnlyOwnershipButton.tscn")
 onready var oSelectedRect = get_node("../../../../Clippy/SelectedRect")
 
 func initialize_grid_items():
 	var oGridContainer = current_grid_container()
+
+	var owner_order
+	if oCurrentFormat.selected == 0: # Classic format
+		owner_order = [0,1,2,3,4,5]
+	else:
+		owner_order = [0,1,2,3,6,7,8,4,5]
+
 #	# Add children
-	for i in 6: # +1 is for "Default"
+	for i in owner_order:
 		var id = scnOwnerButton.instance()
 		id.connect("pressed", self, "_on_OwnerButtonPressed", [id])
 		
@@ -30,8 +38,11 @@ func initialize_grid_items():
 			1: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_blue_std.png")
 			2: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_green_std.png")
 			3: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_yellow_std.png")
-			4: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_white_2.png")
+			4: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_white_std.png")
 			5: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_any_dis.png")
+			6: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_purple_std.png")
+			7: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_black_std.png")
+			8: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_orange_std.png")
 		
 		oGridContainer.add_child(id)
 

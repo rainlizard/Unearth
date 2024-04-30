@@ -203,12 +203,18 @@ shader_param/alphaFadeColor2 = 1.0
 shader_param/alphaFadeColor3 = 1.0
 shader_param/alphaFadeColor4 = 1.0
 shader_param/alphaFadeColor5 = 1.0
+shader_param/alphaFadeColor6 = 1.0
+shader_param/alphaFadeColor7 = 1.0
+shader_param/alphaFadeColor8 = 1.0
 shader_param/color0 = null
 shader_param/color1 = null
 shader_param/color2 = null
 shader_param/color3 = null
 shader_param/color4 = null
 shader_param/color5 = null
+shader_param/color6 = null
+shader_param/color7 = null
+shader_param/color8 = null
 
 [sub_resource type="ShaderMaterial" id=23]
 shader = ExtResource( 150 )
@@ -696,6 +702,8 @@ margin_right = 151.0
 margin_bottom = 302.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="WallSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
@@ -717,6 +725,8 @@ margin_right = 464.0
 margin_bottom = 85.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="CustomSlabsTab" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
@@ -739,6 +749,8 @@ margin_right = 464.0
 margin_bottom = 85.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="SlabStyle" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
@@ -764,6 +776,8 @@ margin_right = 61.0
 margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="OnlyOwnership" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
@@ -789,6 +803,8 @@ margin_right = 61.0
 margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Clippy" type="Control" parent="Ui/UiTools/PickSlabWindow"]
 anchor_right = 1.0
@@ -882,6 +898,8 @@ margin_right = 316.0
 margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Spell" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -903,6 +921,8 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Trap" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -924,6 +944,8 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Box" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -945,6 +967,8 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Special" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -966,6 +990,8 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Gold" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -987,6 +1013,8 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Decoration" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -1008,6 +1036,8 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Action" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -1029,6 +1059,8 @@ margin_right = 565.0
 margin_bottom = 54.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Effect" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -1050,6 +1082,8 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Furniture" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -1071,6 +1105,8 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Lair" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -1092,6 +1128,8 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Misc" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
 visible = false
@@ -1113,6 +1151,8 @@ margin_right = 626.0
 margin_bottom = 90.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 
 [node name="Clippy" type="Control" parent="Ui/UiTools/PickThingWindow"]
 anchor_right = 1.0
@@ -1295,15 +1335,13 @@ margin_right = 276.0
 margin_bottom = 46.0
 script = ExtResource( 73 )
 
-[node name="HSeparator2" type="HSeparator" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
-margin_right = 276.0
-margin_bottom = 1.0
-
 [node name="OwnershipGridContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
 margin_top = 5.0
 margin_right = 276.0
 margin_bottom = 5.0
 size_flags_horizontal = 3
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 columns = 6
 
 [node name="UseSlabOwnerCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
@@ -4391,7 +4429,7 @@ size_flags_vertical = 3
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer"]
 margin_right = 825.0
-margin_bottom = 471.0
+margin_bottom = 570.0
 size_flags_horizontal = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
@@ -4543,6 +4581,36 @@ margin_right = 335.0
 margin_bottom = 274.0
 hint_tooltip = "Computer PLAYER3"
 text = "Yellow keeper AI"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PurpleAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 245.0
+margin_right = 335.0
+margin_bottom = 274.0
+hint_tooltip = "Computer PLAYER3"
+text = "Purple keeper AI"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BlackAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 245.0
+margin_right = 335.0
+margin_bottom = 274.0
+hint_tooltip = "Computer PLAYER3"
+text = "Black keeper AI"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OrangeAICheckBox" type="CheckBox" parent="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+margin_top = 245.0
+margin_right = 335.0
+margin_bottom = 274.0
+hint_tooltip = "Computer PLAYER3"
+text = "Orange keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -7307,7 +7375,6 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer/SelectionStatusButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails" method="_on_SelectionStatusButton_pressed"]
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer2/DeleteSelectedButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails" method="_on_DeleteSelectedButton_pressed"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" method="_on_UseSlabOwnerCheckBox_toggled"]
-[connection signal="visibility_changed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" method="_on_UseSlabOwnerCheckBox_visibility_changed"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolPencil" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPencil_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolBrush" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolBrush_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolRectangle" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolRectangle_toggled"]
@@ -7417,6 +7484,9 @@ script = SubResource( 20 )
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlueAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_BlueAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/GreenAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_GreenAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/YellowAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_YellowAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/PurpleAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_PurpleAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlackAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_BlackAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/OrangeAICheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_OrangeAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/AdjustResearchCheckBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_AdjustResearchCheckBox_toggled"]
 [connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockAmountSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WarlockAmountSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockLevelSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_WarlockLevelSpinBox_value_changed"]

@@ -14,7 +14,7 @@ onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
 #Bright
 
-var alphaFadeColor = [1.00,1.00,1.00,1.00,1.00,1.00]
+var alphaFadeColor = [1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00]
 const fadeSpeed = 4
 var slabOwnershipImage = Image.new()
 var slabOwnershipTexture = ImageTexture.new()
@@ -28,6 +28,9 @@ func _ready():
 	mat.set_shader_param("color3", Constants.ownerRoomCol[3])
 	mat.set_shader_param("color4", Constants.ownerRoomCol[4])
 	mat.set_shader_param("color5", Constants.ownerRoomCol[5])
+	mat.set_shader_param("color6", Constants.ownerRoomCol[6])
+	mat.set_shader_param("color7", Constants.ownerRoomCol[7])
+	mat.set_shader_param("color8", Constants.ownerRoomCol[8])
 	
 	set_ownership_alpha_graphics(OWNERSHIP_ALPHA)
 
@@ -36,7 +39,7 @@ func set_ownership_alpha_graphics(value):
 	mat.set_shader_param("outlineThickness", 5.0)
 	mat.set_shader_param("alphaOutline", clamp(OWNERSHIP_ALPHA*2.0, 0.0, 1.0))
 	mat.set_shader_param("alphaFilled", OWNERSHIP_ALPHA)
-	for i in 6:
+	for i in Constants.PLAYERS_COUNT:
 		oInstanceOwnership.materialInstanceOwnership[i].set_shader_param("alphaFilled", value)
 
 func clear():
@@ -52,7 +55,7 @@ func start():
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
 			var getOwner = oDataOwnership.get_cell_ownership(xSlab,ySlab)
-			if getOwner <= 5:
+			if getOwner < Constants.PLAYERS_COUNT:
 				slabOwnershipImage.set_pixel(xSlab, ySlab, Constants.ownerRoomCol[getOwner])
 	slabOwnershipImage.unlock()
 	
@@ -125,7 +128,7 @@ func _process(delta):
 			slabOwnershipImage.unlock()
 			mat.set_shader_param("cursorOnColor", cursorOnColor)
 	
-	for i in 6:
+	for i in Constants.PLAYERS_COUNT:
 		if cursorOnColor == Constants.ownerRoomCol[i]:
 			alphaFadeColor[i] = lerp(alphaFadeColor[i], 1.00, fadeSpeed*delta)
 		else:

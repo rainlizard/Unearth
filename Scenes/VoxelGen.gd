@@ -26,12 +26,12 @@ func column_gen(genArray, x, z, clmIndex, surrClmIndex, generateBottomFace, sour
 			
 			# Top face
 			if y == 7 or cubeArray[y+1] == 0:
-				var textureID = Cube.tex[cubeID][4]
+				var textureID = Cube.tex[cubeID][Cube.SIDE_TOP]
 				add_face(genArray, pos, 4, textureID)
 			
 			# Bottom face
 			if (y >= 1 and cubeArray[y-1] == 0) or (y == 0 and generateBottomFace == true):
-				var textureID = Cube.tex[cubeID][5]
+				var textureID = Cube.tex[cubeID][Cube.SIDE_BOTTOM]
 				add_face(genArray, pos, 5, textureID)
 		else:
 			if y == 0:
