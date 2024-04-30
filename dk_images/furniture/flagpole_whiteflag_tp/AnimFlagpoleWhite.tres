@@ -30,4 +30,3 @@ frame_6/delay_sec = 0.0
 frame_7/texture = ExtResource( 4 )
 frame_7/delay_sec = 0.0
 script = ExtResource( 1 )
-sprites_dir = "res://dk_images/furniture/flagpole_whiteflag_tp/"

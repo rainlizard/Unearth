@@ -128,9 +128,9 @@ func custom_slab_add_new_button():
 	var scene = preload('res://Scenes/GenericGridItem.tscn')
 	var id = scene.instance()
 	#id.set_meta("ID_of_slab", 0)
-	id.texture_normal = preload('res://Art/AddCustomSlab.png')
-	id.texture_hover = preload('res://Art/AddCustomSlabHover.png')
-	id.texture_pressed = preload('res://Art/AddCustomSlabPressed.png')
+	id.img_normal = preload('res://Art/AddCustomSlab.png')
+	id.img_hover = preload('res://Art/AddCustomSlabHover.png')
+	id.img_pressed = preload('res://Art/AddCustomSlabPressed.png')
 	
 	var set_text = "Add new"
 	set_text = set_text.replace(" ","\n") # Use "New lines" wherever there was a space.

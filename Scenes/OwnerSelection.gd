@@ -19,33 +19,37 @@ func update_ownership_head_icons():
 	
 	var iconSize
 	var owner_order
+	var setMargin
 	if oCurrentFormat.selected == 0: # Classic format
 		owner_order = [0,1,2,3,4,5]
 		oOwnershipGridContainer.columns = 6
-		oOwnershipGridContainer.set("custom_constants/hseparation", 4)
+		#oOwnershipGridContainer.set("custom_constants/hseparation", 4)
 		iconSize = Vector2(42, 42)
+		setMargin = 1
 	else:
 		owner_order = [0,1,2,3,6,7,8,4,5]
 		oOwnershipGridContainer.columns = 5
-		oOwnershipGridContainer.set("custom_constants/hseparation", 10) #16
+		#oOwnershipGridContainer.set("custom_constants/hseparation", 10) #16
 		iconSize = Vector2(46, 46) #Vector2(51, 51)
+		setMargin = 1
+		
 	
 	for i in owner_order:
 		var id = gridItemScene.instance()
 		
 		id.set_meta("grid_value", i)
-		
+		id.img_margin = setMargin
 		var setText = ""
 		match i:
-			0: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_red_std.png")
-			1: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_blue_std.png")
-			2: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_green_std.png")
-			3: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_yellow_std.png")
-			4: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_white_std.png")
-			5: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_any_dis.png")
-			6: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_purple_std.png")
-			7: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_black_std.png")
-			8: id.texture_normal = preload("res://edited_images/plyrsym_32/symbol_player_orange_std.png")
+			0: id.img_normal = preload("res://edited_images/plyrsym_32/symbol_player_red_std.png")
+			1: id.img_normal = preload("res://edited_images/plyrsym_32/symbol_player_blue_std.png")
+			2: id.img_normal = preload("res://edited_images/plyrsym_32/symbol_player_green_std.png")
+			3: id.img_normal = preload("res://edited_images/plyrsym_32/symbol_player_yellow_std.png")
+			4: id.img_normal = preload("res://edited_images/plyrsym_32/symbol_player_white_std.png")
+			5: id.img_normal = preload("res://edited_images/plyrsym_32/symbol_player_any_dis.png")
+			6: id.img_normal = preload("res://edited_images/plyrsym_32/symbol_player_purple_std.png")
+			7: id.img_normal = preload("res://edited_images/plyrsym_32/symbol_player_black_std.png")
+			8: id.img_normal = preload("res://edited_images/plyrsym_32/symbol_player_orange_std.png")
 		setText = Constants.ownershipNames[i]
 	
 		add_child_to_grid(id, setText, iconSize)

@@ -14,6 +14,7 @@ onready var oSelector = Nodelist.list["oSelector"]
 onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oDataOwnership = Nodelist.list["oDataOwnership"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
@@ -409,7 +410,11 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 				1: id.subtype = 120 # Blue
 				2: id.subtype = 121 # Green
 				3: id.subtype = 122 # Yellow
-				4: kill_instance(id) # White
+				4:
+					if oCurrentFormat.selected == 0: # Classic
+						kill_instance(id) # White
+					else:
+						id.subtype = 162 # White
 				5: kill_instance(id) # None
 				6: id.subtype = 165 # Purple
 				7: id.subtype = 167 # Black

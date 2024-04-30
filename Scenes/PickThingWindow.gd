@@ -59,12 +59,11 @@ func _ready():
 	
 	oThingTabs.initialize([])
 
+
 func initialize_thing_grid_items():
 	yield(get_tree(),'idle_frame') # Needed for loading animation IDs from call_deferred in Things singleton
 	var CODETIME_START = OS.get_ticks_msec()
 	remove_all_grid_items()
-	
-	
 	
 	for thingCategory in [Things.TYPE.OBJECT, Things.TYPE.CREATURE, Things.TYPE.TRAP, Things.TYPE.DOOR, Things.TYPE.EFFECTGEN, Things.TYPE.EXTRA]:
 		match thingCategory:
@@ -101,10 +100,12 @@ func initialize_thing_grid_items():
 	
 	print('Initialized Things window: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
+
 func add_to_category(tabNode, thingsData, type, subtype):
 	var gridcontainer = get_grid_container_node(tabNode)
 	
 	var id = scnGridItem.instance()
+	id.img_margin = 3
 	id.connect('mouse_entered',oThingDetails,"_on_thing_portrait_mouse_entered",[id])
 	id.connect('gui_input',self,"_on_thing_portrait_gui_input",[id])
 	id.set_meta("thingSubtype", subtype)
@@ -113,13 +114,13 @@ func add_to_category(tabNode, thingsData, type, subtype):
 	# Appearance prioritization: Portrait > Texture > ThingDarkened.png
 	var portraitTex = thingsData[subtype][Things.PORTRAIT]
 	if portraitTex != null:
-		id.texture_normal = portraitTex
+		id.img_normal = portraitTex
 	else:
 		var textureTex = thingsData[subtype][Things.TEXTURE]
 		if textureTex != null:
-			id.texture_normal = textureTex
+			id.img_normal = textureTex
 		else:
-			id.texture_normal = preload('res://Art/ThingDarkened.png')
+			id.img_normal = preload('res://Art/ThingDarkened.png')
 	
 	var setText = thingsData[subtype][Things.NAME]
 	
@@ -130,13 +131,16 @@ func add_to_category(tabNode, thingsData, type, subtype):
 		yield(get_tree(),'idle_frame')
 		oGridFunctions._on_GridWindow_resized(self)
 
+
 func _process(delta): # It's necessary to use _process to update selection, because ScrollContainer won't fire a signal while you're scrolling.
 	update_selection_position()
+
 
 func update_selection_position():
 	if is_instance_valid(oSelectedRect.boundToItem) == true:
 		oSelectedRect.rect_global_position = oSelectedRect.boundToItem.rect_global_position
 		oSelectedRect.rect_size = oSelectedRect.boundToItem.rect_size
+
 
 func _on_hovered_none(id):
 	oCenteredLabel.get_node("Label").text = ""
@@ -147,8 +151,8 @@ func _on_hovered_over_item(id):
 	var offset = Vector2(id.rect_size.x * 0.5, id.rect_size.y * 0.5)
 	oCenteredLabel.rect_global_position = id.rect_global_position + offset
 	oCenteredLabel.get_node("Label").text = id.get_meta("grid_item_text")
-	
 	change_portrait_on_hover(id, Things.TEXTURE)
+
 
 func change_portrait_on_hover(id, textureOrPortrait):
 	var portraitTex
@@ -160,7 +164,7 @@ func change_portrait_on_hover(id, textureOrPortrait):
 		Things.TYPE.DOOR: portraitTex = Things.DATA_DOOR[id.get_meta("thingSubtype")][textureOrPortrait]
 		Things.TYPE.EXTRA: portraitTex = Things.DATA_EXTRA[id.get_meta("thingSubtype")][textureOrPortrait]
 	if portraitTex != null:
-		id.texture_normal = portraitTex
+		id.img_normal = portraitTex
 
 func add_item_to_grid(tabID, id, set_text):
 	tabID.add_child(id)
@@ -229,19 +233,18 @@ func add_workshop_item_sprite_overlay(textureParent, subtype):
 	
 	textureParent.add_child(workshopItemInTheBox)
 
+
 func current_grid_container():
-	
 	return get_grid_container_node(oThingTabs.get_current_tab_control())
+
 
 func pressed(id):
 	#oSelection.paintSlab = setValue # Set whatever this needs to be
 	oPickSlabWindow.set_selection(null)
-	
-	
 	set_selection(id.get_meta("thingType"), id.get_meta("thingSubtype"))
-	
 	oPlacingSettings.set_placing_tab_and_update_it()
 	oInspector.deselect()
+
 
 func set_selection(setType, setSubtype):
 	if setType == Things.TYPE.EXTRA and setSubtype == 1:
