@@ -702,8 +702,6 @@ margin_right = 151.0
 margin_bottom = 302.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
 
 [node name="WallSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
@@ -725,8 +723,6 @@ margin_right = 464.0
 margin_bottom = 85.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
 
 [node name="CustomSlabsTab" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
@@ -749,8 +745,6 @@ margin_right = 464.0
 margin_bottom = 85.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
 
 [node name="SlabStyle" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
@@ -776,8 +770,6 @@ margin_right = 61.0
 margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
 
 [node name="OnlyOwnership" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 visible = false
@@ -803,8 +795,6 @@ margin_right = 61.0
 margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
 
 [node name="Clippy" type="Control" parent="Ui/UiTools/PickSlabWindow"]
 anchor_right = 1.0
