@@ -24,7 +24,7 @@ func _input(event):
 
 
 func clear_history():
-	oMessage.quick("Undo history cleared")
+	#oMessage.quick("Undo history cleared")
 	undo_history.clear()
 	oMenu.update_undo_availability()
 	
