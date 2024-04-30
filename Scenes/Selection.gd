@@ -82,12 +82,7 @@ func newPaintSubtype(value):
 		oPickSlabWindow.set_selection(null) # Deselect anything in slab window
 	paintSubtype = value
 	
-	oOwnerSelection.collectible_ownership_mode(false)
-	if paintThingType == Things.TYPE.OBJECT:
-		if Things.DATA_OBJECT.has(paintSubtype):
-			var genre = Things.DATA_OBJECT[paintSubtype][Things.EDITOR_TAB]
-			if Things.collectible_belonging.has(genre):
-				oOwnerSelection.collectible_ownership_mode(true)
+	oOwnerSelection.update_ownership_options()
 
 
 func newOwnership(value):

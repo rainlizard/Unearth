@@ -113,29 +113,21 @@ func set_selection(value):
 	for id in oOwnershipGridContainer.get_children():
 		if id.get_meta("grid_value") == value:
 			oSelectedRect.boundToItem = id
+onready var oSelector = Nodelist.list["oSelector"]
 
-
-func collectible_ownership_mode(collMode):
-	if collMode == true:
-		oCollectibleLabel.visible = true
-		oUseSlabOwnerCheckBox.visible = false
-	else:
-		oCollectibleLabel.visible = false
-		oUseSlabOwnerCheckBox.visible = true
-	update_ownership_available()
-
-
-func update_ownership_available():
-	ownership_available = true
-	oOwnershipGridContainer.modulate.a = 1.00
-	
-	if oCollectibleLabel.visible == true:
-		ownership_available = false
-		oOwnershipGridContainer.modulate.a = 0.25
-	elif oUseSlabOwnerCheckBox.visible == true and oUseSlabOwnerCheckBox.pressed == true:
-		ownership_available = false
-		oOwnershipGridContainer.modulate.a = 0.25
-
+func update_ownership_options():
+	match oSelector.mode:
+		oSelector.MODE_SUBTILE:
+			var is_collectible = oSelection.paintThingType == Things.TYPE.OBJECT and oSelection.paintSubtype in Things.DATA_OBJECT and Things.DATA_OBJECT[oSelection.paintSubtype][Things.EDITOR_TAB] in Things.collectible_belonging
+			oCollectibleLabel.visible = is_collectible
+			oUseSlabOwnerCheckBox.visible = !is_collectible
+			ownership_available = (!is_collectible and !oUseSlabOwnerCheckBox.pressed)
+			oOwnershipGridContainer.modulate.a = 0.25 if not ownership_available else 1.00
+		oSelector.MODE_TILE:
+			oCollectibleLabel.visible = false
+			oUseSlabOwnerCheckBox.visible = false
+			ownership_available = true
+			oOwnershipGridContainer.modulate.a = 1.00
 
 #
 #func clear_grid():

@@ -124,7 +124,7 @@ func convert_tmapa_to_image(tmapaDatPath):
 		CODETIME_START = OS.get_ticks_msec()
 		var imageSize = file.get_len() # (Width * Height)
 		
-		var texturePalIndices = file.get_buffer(imageSize)
+		var dkTextureData = file.get_buffer(imageSize)
 		file.close()
 		
 		var data = PoolByteArray()
@@ -132,8 +132,8 @@ func convert_tmapa_to_image(tmapaDatPath):
 		data.fill(0) # Any space that goes beyond the size of tmapb will be set to black
 		
 		var idx = 0
-		for i in (imageSize):
-			var color = paletteData[texturePalIndices[i]]
+		for i in imageSize:
+			var color = paletteData[dkTextureData[i]]
 			data[idx] = color.r8
 			data[idx + 1] = color.g8
 			data[idx + 2] = color.b8
