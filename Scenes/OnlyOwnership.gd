@@ -2,12 +2,16 @@ extends PanelContainer
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oSlabTabs = Nodelist.list["oSlabTabs"]
 
 var scnOwnerButton = preload("res://Scenes/OnlyOwnershipButton.tscn")
 onready var oSelectedRect = get_node("../../../../Clippy/SelectedRect")
 
-func initialize_grid_items():
+func update_grid_items():
 	var oGridContainer = current_grid_container()
+
+	for i in oGridContainer.get_children():
+		i.free()
 
 	var owner_order
 	if oCurrentFormat.selected == 0: # Classic format
@@ -45,6 +49,13 @@ func initialize_grid_items():
 			8: keeperColourIconPic.texture = preload("res://edited_images/plyrsym_32/symbol_player_orange_std.png")
 		
 		oGridContainer.add_child(id)
+	
+	# Refresh tab by switching away then back
+	if oSlabTabs.get_current_tab_control().name == "OnlyOwnership":
+		var ontab = oSlabTabs.current_tab
+		oSlabTabs.current_tab = ontab-1
+		yield(get_tree(),'idle_frame')
+		oSlabTabs.current_tab = ontab
 
 func _on_OwnerButtonPressed(id):
 	

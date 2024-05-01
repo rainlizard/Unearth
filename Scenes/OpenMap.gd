@@ -48,6 +48,7 @@ onready var oGuidelines = Nodelist.list["oGuidelines"]
 onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 onready var oOwnerSelection = Nodelist.list["oOwnerSelection"]
 onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
+onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -251,6 +252,7 @@ func continue_load_openmap(map):
 	oOwnerSelection.update_ownership_head_icons()
 	oScriptGenerator.update_options_based_on_mapformat()
 	oPickSlabWindow.add_slabs()
+	oOnlyOwnership.update_grid_items()
 	oDynamicMapTree.highlight_current_map()
 	oCurrentMap.set_path_and_title(map)
 	oCamera2D.reset_camera(M.xSize, M.ySize)

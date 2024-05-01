@@ -73,7 +73,6 @@ func update_selection_position():
 func add_slabs():
 	var CODETIME_START = OS.get_ticks_msec()
 	clear_grid()
-	oOnlyOwnership.initialize_grid_items()
 	oSlabStyle.initialize_grid_items()
 	
 	var allSlabIDs = []
