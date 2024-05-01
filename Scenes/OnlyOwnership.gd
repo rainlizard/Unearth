@@ -57,11 +57,12 @@ func update_grid_items():
 		yield(get_tree(),'idle_frame')
 		oSlabTabs.current_tab = ontab
 
+
 func _on_OwnerButtonPressed(id):
-	
 	oSelectedRect.boundToItem = id
 	oSelectedRect.visible = true
 	oSelection.newOwnership(id.get_meta("ownershipID"))
+
 
 func select_appropriate_button():
 	if visible == false: return # Needed because this function can be called when tab isn't visible
