@@ -138,7 +138,6 @@ func custom_slab_add_new_button():
 	id.connect("mouse_entered", self, "_on_hovered_over_item", [id])
 	id.connect("mouse_exited", self, "_on_hovered_none")
 	id.connect("pressed",self,"_on_pressed_add_new_custom_slab")
-	#id.connect('gui_input',self,"_on_slab_portrait_gui_input",[id])
 	id.rect_min_size = Vector2(grid_item_size.x * grid_window_scale, grid_item_size.y * grid_window_scale)
 	
 	var tabID = tabs[Slabs.TAB_CUSTOM][GRIDCON_PATH]

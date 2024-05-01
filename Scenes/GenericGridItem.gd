@@ -33,12 +33,15 @@ func _on_GenericGridItem_mouse_exited():
 
 func _on_GenericGridItem_gui_input(event):
 	if event is InputEventMouseButton:
-		if event.pressed and event.button_index == BUTTON_LEFT:
-			if img_pressed:
-				$TextureRect.texture = img_pressed
-			emit_signal("pressed")
-		else:
-			$TextureRect.texture = img_normal
+		if event.button_index == BUTTON_LEFT:
+			if event.pressed == true:
+				if img_pressed:
+					$TextureRect.texture = img_pressed
+				emit_signal("pressed")
+				for i in 20:
+					yield(get_tree(),'idle_frame')
+				_on_GenericGridItem_mouse_exited()
+
 
 func set_image_normal(setVal):
 	$TextureRect.texture = setVal
