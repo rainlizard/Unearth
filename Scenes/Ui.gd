@@ -84,9 +84,12 @@ func update_theme_colour(val):
 		0: col = HSV_8(0,40,60)#Color8(132,44,0,255)
 		1: col = HSV_8(279,30,66)#Color8(136,112,148,255)##
 		2: col = HSV_8(88,34,50)#col = Color8(52,96,4,255)
-		3: col = HSV_8(50,43,72)#col = Color8(188,156,0,255)
+		3: col = HSV_8(55,35,70)#col = Color8(188,156,0,255)
 		4: col = HSV_8(0,0,72)#col = Color8(180,160,124,255)
 		5: col = HSV_8(251,20,40)#col = Color8(64,62,72,255)
+		6: col = HSV_8(330,40,60)
+		7: col = HSV_8(0,0,2)
+		8: col = HSV_8(30,50,70)
 #	print(col.r8)
 #	print(col.g8)
 #	print(col.b8)
