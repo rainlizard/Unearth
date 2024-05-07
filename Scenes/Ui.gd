@@ -17,6 +17,8 @@ onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oCamera3D = Nodelist.list["oCamera3D"]
 onready var oPlayer = Nodelist.list["oPlayer"]
 onready var o3DCameraInfo = Nodelist.list["o3DCameraInfo"]
+onready var oSelection = Nodelist.list["oSelection"]
+onready var oSelector = Nodelist.list["oSelector"]
 
 var FONT_SIZE_CR_LVL_BASE := 1.00 setget set_FONT_SIZE_CR_LVL_BASE
 var FONT_SIZE_CR_LVL_MAX := 8.00 setget set_FONT_SIZE_CR_LVL_MAX
@@ -69,32 +71,10 @@ func _unhandled_input(event):
 			mouseOnUi = true
 
 
-
-#func _process(delta):
-#	if 
-#	var a = Control.new()
-#	add_child(a)
-#	print(a.get_focus_owner())
-
-
-
 func update_theme_colour(val):
-	var col
-	match val:
-		0: col = HSV_8(0,40,60)#Color8(132,44,0,255)
-		1: col = HSV_8(279,30,66)#Color8(136,112,148,255)##
-		2: col = HSV_8(88,34,50)#col = Color8(52,96,4,255)
-		3: col = HSV_8(55,35,70)#col = Color8(188,156,0,255)
-		4: col = HSV_8(0,0,72)#col = Color8(180,160,124,255)
-		5: col = HSV_8(251,20,40)#col = Color8(64,62,72,255)
-		6: col = HSV_8(330,40,60)
-		7: col = HSV_8(0,0,2)
-		8: col = HSV_8(30,50,70)
-#	print(col.r8)
-#	print(col.g8)
-#	print(col.b8)
-	
-	windowStyleBoxFlat.set('border_color', col)
+	var col = Constants.windowTitleCol[val]
+	if windowStyleBoxFlat.get('border_color') != col:
+		windowStyleBoxFlat.set('border_color', col)
 
 func HSV_8(h,s,v):
 	return Color.from_hsv(h/359.0,s/100.0,v/100.0, 1.0)

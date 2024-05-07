@@ -30,6 +30,7 @@ onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
 onready var oSlabSideViewer = Nodelist.list["oSlabSideViewer"]
+onready var oUseSlabOwnerCheckBox = Nodelist.list["oUseSlabOwnerCheckBox"]
 
 enum {
 	CONSTRUCT_BRUSH
@@ -86,9 +87,9 @@ func newPaintSubtype(value):
 
 
 func newOwnership(value):
-	oUi.update_theme_colour(value)
 	oOwnerSelection.set_selection(value)
 	paintOwnership = value
+	oUi.update_theme_colour(value)
 
 func newPaintSlab(value):
 	oSelector.change_mode(oSelector.MODE_TILE)
@@ -255,6 +256,9 @@ func place_subtile(placeSubtile):
 		if Input.is_action_pressed("place_overlapping") == false: # While holding control, allow overlapping placements
 			return
 	oEditor.mapHasBeenEdited = true
+	
+	if oUseSlabOwnerCheckBox.pressed == true and visible == true:
+		newOwnership(oDataOwnership.get_cellv_ownership(oSelector.cursorTile))
 	
 	if paintThingType != null:
 		var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(placeSubtile.x, placeSubtile.y)]

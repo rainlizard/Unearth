@@ -9,6 +9,7 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var gridItemScene = preload("res://Scenes/GenericGridItem.tscn")
 onready var oSelectedRect = $Control/SelectedRect
 onready var oCenteredLabel = $Control/CenteredLabel
+onready var oSelector = Nodelist.list["oSelector"]
 
 var ownership_available = true
 
@@ -117,7 +118,6 @@ func set_selection(value):
 	for id in oOwnershipGridContainer.get_children():
 		if id.get_meta("grid_value") == value:
 			oSelectedRect.boundToItem = id
-onready var oSelector = Nodelist.list["oSelector"]
 
 func update_ownership_options():
 	match oSelector.mode:
