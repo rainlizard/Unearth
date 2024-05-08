@@ -59,7 +59,7 @@ jobs:
         wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
     - name: Replace Icon in Windows Export with rcedit
       run: |
-        wine64 rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe --set-icon Art/UnearthIcon.ico
+        wine64 rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe --set-icon Art/icon/UnearthIcon.ico
     - name: Upload Linux Artifacts
       uses: actions/upload-artifact@v3
       with:
