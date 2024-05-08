@@ -13,6 +13,7 @@ onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 
 const columnLeftSize = 120
@@ -53,9 +54,10 @@ func add_item(leftString, rightString):
 			nodeRightColumn.add_item("Yellow")
 			nodeRightColumn.add_item("White")
 			nodeRightColumn.add_item("None")
-			nodeRightColumn.add_item("Purple")
-			nodeRightColumn.add_item("Black")
-			nodeRightColumn.add_item("Orange")
+			if oCurrentFormat.selected == Constants.KfxFormat:
+				nodeRightColumn.add_item("Purple")
+				nodeRightColumn.add_item("Black")
+				nodeRightColumn.add_item("Orange")
 			
 #			print(nodeRightColumn.get_popup().mouse_filter)
 			

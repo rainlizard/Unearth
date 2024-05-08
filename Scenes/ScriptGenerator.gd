@@ -177,7 +177,7 @@ func _ready():
 #	Utils.popup_centered(Nodelist.list["oMapSettingsWindow"])
 
 func update_options_based_on_mapformat():
-	if oCurrentFormat.selected == 0: # classic format
+	if oCurrentFormat.selected == Constants.ClassicFormat:
 		oPurpleAICheckBox.visible = false
 		oBlackAICheckBox.visible = false
 		oOrangeAICheckBox.visible = false

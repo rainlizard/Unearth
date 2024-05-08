@@ -66,10 +66,10 @@ func delete_existing_files(map):
 		fileTypesToDelete = oBuffers.FILE_TYPES
 	else:
 		# If switching formats, then it's important to delete files of the other format (TNG and TNGFX shouldn't exist at the same time)
-		if oCurrentFormat.selected == 0: # Classic format
+		if oCurrentFormat.selected == Constants.ClassicFormat:
 			# Do not delete LOF because Classic format can be used with LOF multiplayer levels
 			fileTypesToDelete = ["TNGFX", "APTFX", "LGTFX"]
-		elif oCurrentFormat.selected == 1: # KFX format
+		elif oCurrentFormat.selected == Constants.KfxFormat:
 			fileTypesToDelete = ["LIF", "TNG", "APT", "LGT"]
 	
 	var baseDirectory = map.get_base_dir()

@@ -21,7 +21,7 @@ func update_ownership_head_icons():
 	var iconSize
 	var owner_order
 	var setMargin
-	if oCurrentFormat.selected == 0: # Classic format
+	if oCurrentFormat.selected == Constants.ClassicFormat:
 		owner_order = [0,1,2,3,4,5]
 		oOwnershipGridContainer.columns = 6
 		#oOwnershipGridContainer.set("custom_constants/hseparation", 4)

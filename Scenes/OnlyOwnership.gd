@@ -14,7 +14,7 @@ func update_grid_items():
 		i.free()
 
 	var owner_order
-	if oCurrentFormat.selected == 0: # Classic format
+	if oCurrentFormat.selected == Constants.ClassicFormat:
 		owner_order = [0,1,2,3,4,5]
 	else:
 		owner_order = [0,1,2,3,6,7,8,4,5]

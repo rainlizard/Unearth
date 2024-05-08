@@ -309,7 +309,7 @@ func _on_MenuButtonSettings_pressed():
 
 
 func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in combination with OS.execute otherwise a Godot bug occurs
-	if oCurrentFormat.selected == 1: # KFX Format
+	if oCurrentFormat.selected == Constants.KfxFormat:
 		if oGame.running_keeperfx() == false:
 			oMessage.big("Incompatible", "Your map format is set to KFX format, but your game executable is not set to keeperfx.exe")
 			return

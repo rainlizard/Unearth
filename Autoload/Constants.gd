@@ -25,6 +25,10 @@ enum {
 	WRITE = 1
 }
 
+const ClassicFormat = 0
+const KfxFormat = 1
+
+
 const TEXTURE_MAP_NAMES = {
 0: "Standard",
 1: "Ancient",

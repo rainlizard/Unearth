@@ -140,10 +140,10 @@ func get_buffer_for_extension(EXT, filePath):
 		"UNE": return oWriteData.write_une()
 
 func should_process_file_type(EXT):
-	if oCurrentFormat.selected == 0: # Classic format
+	if oCurrentFormat.selected == Constants.ClassicFormat:
 		if ["LOF", "TNGFX", "APTFX", "LGTFX"].has(EXT):
 			return false
-	elif oCurrentFormat.selected == 1: # KFX format
+	elif oCurrentFormat.selected == Constants.KfxFormat:
 		if ["LIF", "TNG", "APT", "LGT"].has(EXT):
 			return false
 	return true

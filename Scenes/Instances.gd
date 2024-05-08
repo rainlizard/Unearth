@@ -411,7 +411,7 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 				2: id.subtype = 121 # Green
 				3: id.subtype = 122 # Yellow
 				4:
-					if oCurrentFormat.selected == 0: # Classic
+					if oCurrentFormat.selected == Constants.ClassicFormat:
 						kill_instance(id) # White
 					else:
 						id.subtype = 162 # White
