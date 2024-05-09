@@ -1,4 +1,4 @@
-[gd_scene load_steps=189 format=2]
+[gd_scene load_steps=190 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -168,6 +168,7 @@
 [ext_resource path="res://Scenes/UndoStates.gd" type="Script" id=166]
 [ext_resource path="res://Scenes/ThreadedSaveUndo.gd" type="Script" id=167]
 [ext_resource path="res://Scenes/Guidelines.gd" type="Script" id=168]
+[ext_resource path="res://Scenes/FxDataCache.gd" type="Script" id=169]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -331,6 +332,9 @@ script = ExtResource( 37 )
 
 [node name="Game" type="Node" parent="."]
 script = ExtResource( 30 )
+
+[node name="FxDataCache" type="Node" parent="."]
+script = ExtResource( 169 )
 
 [node name="TextureCache" type="Node" parent="."]
 script = ExtResource( 46 )

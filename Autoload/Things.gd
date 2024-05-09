@@ -686,22 +686,22 @@ func file_to_upper_string(dir, fileName):
 	return massiveString
 
 
-func get_zip_files_in_dir(path):
-	var array = []
-	var dir = Directory.new()
-	if dir.open(path) == OK:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if dir.current_is_dir():
-				pass
-			else:
-				if file_name.get_extension().to_upper() == "ZIP":
-					array.append(path.plus_file(file_name))
-			file_name = dir.get_next()
-	else:
-		print("An error occurred when trying to access the path.")
-	return array
+#func get_zip_files_in_dir(path):
+#	var array = []
+#	var dir = Directory.new()
+#	if dir.open(path) == OK:
+#		dir.list_dir_begin()
+#		var file_name = dir.get_next()
+#		while file_name != "":
+#			if dir.current_is_dir():
+#				pass
+#			else:
+#				if file_name.get_extension().to_upper() == "ZIP":
+#					array.append(path.plus_file(file_name))
+#			file_name = dir.get_next()
+#	else:
+#		print("An error occurred when trying to access the path.")
+#	return array
 
 func look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName):
 	if custom_images_list.empty() == true:

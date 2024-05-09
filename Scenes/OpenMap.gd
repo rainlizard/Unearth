@@ -13,6 +13,7 @@ onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oTextureCache = Nodelist.list["oTextureCache"]
+onready var oFxDataCache = Nodelist.list["oFxDataCache"]
 onready var oUiTools = Nodelist.list["oUiTools"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
@@ -99,6 +100,8 @@ func open_map(filePath):
 	if oTextureCache.texturesLoadedState != oTextureCache.LOADING_SUCCESS:
 		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
 		return
+	
+	oFxDataCache.start()
 	
 	print("----------- Opening map ------------")
 	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
