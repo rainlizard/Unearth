@@ -32,7 +32,6 @@ func load_file():
 		
 		var constructArray = [
 			objName, # NAME
-			null, # KEEPERFX_NAME
 			null, # ANIMATION_ID
 			null, # TEXTURE
 			null, # PORTRAIT

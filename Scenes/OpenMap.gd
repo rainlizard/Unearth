@@ -13,7 +13,6 @@ onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oTextureCache = Nodelist.list["oTextureCache"]
-onready var oFxDataCache = Nodelist.list["oFxDataCache"]
 onready var oUiTools = Nodelist.list["oUiTools"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
@@ -50,6 +49,7 @@ onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 onready var oOwnerSelection = Nodelist.list["oOwnerSelection"]
 onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
+onready var oFxData = Nodelist.list["oFxData"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -101,7 +101,7 @@ func open_map(filePath):
 		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
 		return
 	
-	oFxDataCache.start()
+	
 	
 	print("----------- Opening map ------------")
 	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
@@ -111,7 +111,7 @@ func open_map(filePath):
 	
 	var map = filePath.get_basename()
 	
-	load_cfg_stuff(map)
+	oFxData.start()
 	
 	# Open all map file types
 	oCurrentMap.currentFilePaths = get_accompanying_files(map)
@@ -187,25 +187,6 @@ func open_map(filePath):
 		else:
 			# Begin decompression without confirmation dialog
 			_on_ConfirmDecompression_confirmed()
-
-
-func load_cfg_stuff(map):
-	var CODETIME_START = OS.get_ticks_msec()
-	Things.reset_thing_data_to_default()
-	if Cube.tex.empty() == true:
-		Cube.read_cubes_cfg()
-	
-	oCustomObjectSystem.load_file()
-	
-	var parentDirectory = map.get_base_dir().get_base_dir()
-	var mainCfgName = map.get_base_dir().get_file() + ".cfg"
-	print("Parent directory: " + parentDirectory)
-	print("Main cfg name: " + mainCfgName)
-	var fullPathToMainCfg = oGame.get_precise_filepath(parentDirectory, mainCfgName)
-	if fullPathToMainCfg != "":
-		Things.get_cfgs_directory(fullPathToMainCfg)
-	print('load_cfg_stuff: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-
 
 func continue_load(map):
 	# initialize_editor_components
