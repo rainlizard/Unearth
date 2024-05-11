@@ -45,13 +45,6 @@ func start():
 	print('Parsed all dkcfg files: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	var CODETIME_LOADCFG_START = OS.get_ticks_msec()
 	
-	for key in objects_cfg.keys():
-		if "object" in key:
-			print(key)
-			print(objects_cfg[key]["Name"])
-			if Things.DATA_OBJECT.has(int(key)):
-				print(Things.DATA_OBJECT[int(key)][Things.NAME])
-	
 	var id = 0
 	while true:
 		id += 1

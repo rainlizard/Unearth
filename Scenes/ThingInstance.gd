@@ -250,25 +250,9 @@ func set_texture_based_on_thingtype():
 		$ThingTexture.rect_scale = Vector2(0.5,0.5)
 		$TextNameLabel.visible = true
 		yield(get_tree(),'idle_frame')
-		match thingType:
-			Things.TYPE.OBJECT:
-				if Things.DATA_OBJECT.has(subtype):
-					$TextNameLabel.text = Things.DATA_OBJECT[subtype][Things.NAME]
-			Things.TYPE.CREATURE:
-				if Things.DATA_CREATURE.has(subtype):
-					$TextNameLabel.text = Things.DATA_CREATURE[subtype][Things.NAME]
-			Things.TYPE.EFFECTGEN:
-				if Things.DATA_EFFECTGEN.has(subtype):
-					$TextNameLabel.text = Things.DATA_EFFECTGEN[subtype][Things.NAME]
-			Things.TYPE.TRAP:
-				if Things.DATA_TRAP.has(subtype):
-					$TextNameLabel.text = Things.DATA_TRAP[subtype][Things.NAME]
-			Things.TYPE.DOOR:
-				if Things.DATA_DOOR.has(subtype):
-					$TextNameLabel.text = Things.DATA_DOOR[subtype][Things.NAME]
-			Things.TYPE.EXTRA:
-				if Things.DATA_EXTRA.has(subtype):
-					$TextNameLabel.text = Things.DATA_EXTRA[subtype][Things.NAME]
+		
+		$TextNameLabel.text = Things.fetch_name(thingType, subtype)
+		
 		if " " in $TextNameLabel.text:
 			$TextNameLabel.text = $TextNameLabel.text.replace(" ", "\n")
 			$TextNameLabel.grow_vertical = Control.GROW_DIRECTION_BOTH
