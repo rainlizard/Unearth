@@ -409,16 +409,9 @@ func update_obj_name():
 	if oObjIsLightCheckBox.pressed == true:
 		oObjNameLabel.text = "Light"
 	else:
-		var dataStruct = Things.data_structure(int(oObjThingTypeSpinBox.value))
+		var thingType = int(oObjThingTypeSpinBox.value)
 		var subtype = int(oObjSubtypeSpinBox.value)
-		if dataStruct.has(subtype):
-			var newName = dataStruct[subtype][Things.NAME]
-			if newName is String:
-				oObjNameLabel.text = newName
-			else:
-				oObjNameLabel.text = "Name not found"
-		else:
-			oObjNameLabel.text = "Name not found"
+		oObjNameLabel.text = Things.fetch_name(thingType, subtype)
 
 func _on_ObjAddButton_pressed():
 	var variation = get_current_variation()

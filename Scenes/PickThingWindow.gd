@@ -101,7 +101,7 @@ func initialize_thing_grid_items():
 	print('Initialized Things window: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 
-func add_to_category(tabNode, thingsData, type, subtype):
+func add_to_category(tabNode, thingsData, thingtype, subtype):
 	var gridcontainer = get_grid_container_node(tabNode)
 	
 	var id = scnGridItem.instance()
@@ -109,7 +109,7 @@ func add_to_category(tabNode, thingsData, type, subtype):
 	id.connect('mouse_entered',oThingDetails,"_on_thing_portrait_mouse_entered",[id])
 	id.connect('gui_input',self,"_on_thing_portrait_gui_input",[id])
 	id.set_meta("thingSubtype", subtype)
-	id.set_meta("thingType", type)
+	id.set_meta("thingType", thingtype)
 	
 	# Appearance prioritization: Portrait > Texture > ThingDarkened.png
 	var portraitTex = thingsData[subtype][Things.PORTRAIT]
@@ -122,7 +122,9 @@ func add_to_category(tabNode, thingsData, type, subtype):
 		else:
 			id.img_normal = preload('res://Art/ThingDarkened.png')
 	
-	var setText = thingsData[subtype][Things.NAME]
+	
+	
+	var setText = Things.fetch_name(thingtype, subtype)
 	
 	add_item_to_grid(gridcontainer, id, setText)
 	

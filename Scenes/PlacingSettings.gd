@@ -106,7 +106,7 @@ func update_placing_tab():
 			match i:
 				FIELDS.ID:
 					description = "ID"
-					value = oThingDetails.retrieve_thing_name(thingType, subtype)
+					value = Things.fetch_name(thingType, subtype)
 				FIELDS.TYPE:
 					description = "Type"
 					value = oThingDetails.retrieve_subtype_value(thingType, subtype)

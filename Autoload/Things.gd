@@ -24,9 +24,15 @@ enum TYPE {
 }
 
 func fetch_name(thing_type, sub_type):
-	if NAME_MAPPINGS.has(thing_type):
-		var dictionary_of_names = NAME_MAPPINGS[thing_type]
-		return dictionary_of_names.get(sub_type, "Unknown " + data_structure_name[thing_type] + " " + str(sub_type))
+	var dictionary_of_names = NAME_MAPPINGS.get(thing_type)
+	if dictionary_of_names:
+		var data_structure = data_structure(thing_type)
+		var sub_type_data = data_structure.get(sub_type)
+		if sub_type_data:
+			var nameId = sub_type_data[NAME_ID]
+			return dictionary_of_names.get(nameId, nameId.capitalize())
+		else:
+			return "Unknown " + data_structure_name[thing_type] + " Subtype: " + str(sub_type)
 	else:
 		return "Unknown Thingtype " + str(thing_type) + ", Subtype: " + str(sub_type)
 

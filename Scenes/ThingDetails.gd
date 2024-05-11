@@ -109,7 +109,7 @@ func thing_details(id):
 		match i:
 			0:
 				description = "ID"
-				value = retrieve_thing_name(id.thingType, id.subtype)
+				value = Things.fetch_name(id.thingType, id.subtype)
 			1:
 				description = "Type"
 				value = retrieve_subtype_value(id.thingType, id.subtype)
@@ -194,27 +194,28 @@ func _on_SelectionStatusButton_mouse_entered():
 func _on_SelectionStatusButton_mouse_exited():
 	oSelectionStatusButton.text = "Selected"
 
-func retrieve_thing_name(t_type, s_type): # called by ThingInstance too
-	match t_type:
-		Things.TYPE.OBJECT:
-			if Things.DATA_OBJECT.has(s_type):
-				return Things.DATA_OBJECT[s_type][Things.NAME]
-		Things.TYPE.CREATURE:
-			if Things.DATA_CREATURE.has(s_type):
-				return Things.DATA_CREATURE[s_type][Things.NAME]
-		Things.TYPE.EFFECTGEN:
-			if Things.DATA_EFFECTGEN.has(s_type):
-				return Things.DATA_EFFECTGEN[s_type][Things.NAME]
-		Things.TYPE.TRAP:
-			if Things.DATA_TRAP.has(s_type):
-				return Things.DATA_TRAP[s_type][Things.NAME]
-		Things.TYPE.DOOR:
-			if Things.DATA_DOOR.has(s_type):
-				return Things.DATA_DOOR[s_type][Things.NAME]
-		Things.TYPE.EXTRA:
-			if Things.DATA_EXTRA.has(s_type):
-				return Things.DATA_EXTRA[s_type][Things.NAME]
-	return "Unknown"
+func _on_thing_portrait_mouse_entered(nodeId):
+	# Don't display data if something is selected
+	if is_instance_valid(oInspector.inspectingInstance) == true:
+		return
+	
+	oThingListData.clear()
+	var portraitSubtype = nodeId.get_meta("thingSubtype")
+	var portraitThingType = nodeId.get_meta("thingType")
+	
+	
+	var value = null
+	
+	# Name
+	value = Things.fetch_name(portraitThingType, portraitSubtype)
+	if value != null:
+		oThingListData.add_item(str(value),"")
+	
+	value = null
+	if portraitThingType != Things.TYPE.EXTRA:
+		value = retrieve_subtype_value(portraitThingType, portraitSubtype)
+		if value != null:
+			oThingListData.add_item(str(value),"")
 
 func retrieve_subtype_value(t_type, s_type):
 	match t_type:
@@ -229,30 +230,6 @@ func retrieve_subtype_value(t_type, s_type):
 #				1: return "Action point : " + str(s_type)
 #				2: return "Light : " + str(s_type)
 	return "Unknown"
-
-func _on_thing_portrait_mouse_entered(nodeId):
-	# Don't display data if something is selected
-	if is_instance_valid(oInspector.inspectingInstance) == true:
-		return
-	
-	oThingListData.clear()
-	var portraitSubtype = nodeId.get_meta("thingSubtype")
-	var portraitThingType = nodeId.get_meta("thingType")
-	
-	
-	var value = null
-	
-	# Name
-	value = retrieve_thing_name(portraitThingType, portraitSubtype)
-	if value != null:
-		oThingListData.add_item(str(value),"")
-	
-	value = null
-	if portraitThingType != Things.TYPE.EXTRA:
-		value = retrieve_subtype_value(portraitThingType, portraitSubtype)
-		if value != null:
-			oThingListData.add_item(str(value),"")
-
 
 # Fixes an obscure issue where it would continue to show what you've highlighted in the Thing Window inside of the Properties' Thing column.
 #func _on_PropertiesTabs_tab_changed(tab):

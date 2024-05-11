@@ -61,8 +61,9 @@ func update_overlap_tree():
 	for i in oSelection.cursorOnInstancesArray:
 		if is_instance_valid(i) and i.is_queued_for_deletion() == false:
 			var item = oTreeOfOverlaps.create_item(treeRoot)
-			item.set_text(0, oThingDetails.retrieve_thing_name(i.thingType, i.subtype))
+			item.set_text(0, Things.fetch_name(i.thingType, i.subtype))
 			rect_size.y += 29
+			
 	
 	var highlightItem = oTreeOfOverlaps.get_item_at_position(Vector2(10,10))
 	if is_instance_valid(highlightItem) and highlightItem.is_queued_for_deletion() == false:
