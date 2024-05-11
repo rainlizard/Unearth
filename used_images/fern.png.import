@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/fern_small.png-3436801fe24af8422680511d72d0878c.stex"
+path="res://.import/fern.png-15a40304e0fae568fb2f86a3ba4d85b3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://unearthdata/custom-object-images/fern_small.png"
-dest_files=[ "res://.import/fern_small.png-3436801fe24af8422680511d72d0878c.stex" ]
+source_file="res://used_images/fern.png"
+dest_files=[ "res://.import/fern.png-15a40304e0fae568fb2f86a3ba4d85b3.stex" ]
 
 [params]
 

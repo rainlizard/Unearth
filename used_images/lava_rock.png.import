@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/druid_portrait.png-29f2342ee668f365ddbf8be827d4de49.stex"
+path="res://.import/lava_rock.png-d523e55866694c3403dd8dc2eb790b0d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://unearthdata/custom-object-images/druid_portrait.png"
-dest_files=[ "res://.import/druid_portrait.png-29f2342ee668f365ddbf8be827d4de49.stex" ]
+source_file="res://used_images/lava_rock.png"
+dest_files=[ "res://.import/lava_rock.png-d523e55866694c3403dd8dc2eb790b0d.stex" ]
 
 [params]
 

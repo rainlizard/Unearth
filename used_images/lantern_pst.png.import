@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/mushroom_green.png-40c59af8d2feef52ce620e7eea557126.stex"
+path="res://.import/lantern_pst.png-140d56a402854be02486119c55bf2868.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://unearthdata/custom-object-images/mushroom_green.png"
-dest_files=[ "res://.import/mushroom_green.png-40c59af8d2feef52ce620e7eea557126.stex" ]
+source_file="res://used_images/lantern_pst.png"
+dest_files=[ "res://.import/lantern_pst.png-140d56a402854be02486119c55bf2868.stex" ]
 
 [params]
 

@@ -213,35 +213,18 @@ func set_herogateNumber(setval):
 	$GateNumber.text = str(herogateNumber)
 
 func set_texture_based_on_thingtype():
-	var tex = null
+	var tex = Things.fetch_sprite(thingType, subtype)
 	match thingType:
-		Things.TYPE.NONE:
-			pass
 		Things.TYPE.OBJECT:
-			if Things.DATA_OBJECT.has(subtype) == true:
-				
-				tex = Things.DATA_OBJECT[subtype][Things.TEXTURE]
-				
-				if subtype in [49, 111,120,121,122]: # Heart Flame and Gate
-					$ThingTexture.self_modulate = "a0ffffff"
-				elif Things.LIST_OF_BOXES.has(subtype):
-					$ThingTexture.rect_position += Vector2(-1,9)
-					Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($ThingTexture, subtype)
+			if subtype in [49, 111,120,121,122]: # Heart Flame and Gate
+				$ThingTexture.self_modulate = "a0ffffff"
+			elif Things.LIST_OF_BOXES.has(subtype):
+				$ThingTexture.rect_position += Vector2(-1,9)
+				Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($ThingTexture, subtype)
 		Things.TYPE.CREATURE:
-			if Things.DATA_CREATURE.has(subtype) == true:
-				tex = Things.DATA_CREATURE[subtype][Things.TEXTURE]
-				if tex != null:
-					#$ThingTexture.rect_position.y -= 12
-					$ThingTexture.rect_scale = Vector2(1.5,1.5)
-		Things.TYPE.EFFECTGEN:
-			if Things.DATA_EFFECTGEN.has(subtype) == true:
-				tex = Things.DATA_EFFECTGEN[subtype][Things.TEXTURE]
-		Things.TYPE.TRAP:
-			if Things.DATA_TRAP.has(subtype) == true:
-				tex = Things.DATA_TRAP[subtype][Things.TEXTURE]
-		Things.TYPE.DOOR:
-			if Things.DATA_DOOR.has(subtype) == true:
-				tex = Things.DATA_DOOR[subtype][Things.TEXTURE]
+			if tex != null:
+				#$ThingTexture.rect_position.y -= 12
+				$ThingTexture.rect_scale = Vector2(1.5,1.5)
 	if tex != null:
 		$ThingTexture.texture = tex
 	else:
@@ -258,6 +241,7 @@ func set_texture_based_on_thingtype():
 			$TextNameLabel.grow_vertical = Control.GROW_DIRECTION_BOTH
 		else:
 			$TextNameLabel.grow_vertical = Control.GROW_DIRECTION_END
+
 
 func set_grow_direction():
 	# Change Grow Direction so the art pokes out from the base.

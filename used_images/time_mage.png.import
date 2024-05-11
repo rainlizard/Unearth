@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/cattails.png-2c0038e4621597f091313f049ccfbeef.stex"
+path="res://.import/time_mage.png-b514b1b160ae1f00c2c835f3a87e11ca.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://unearthdata/custom-object-images/cattails.png"
-dest_files=[ "res://.import/cattails.png-2c0038e4621597f091313f049ccfbeef.stex" ]
+source_file="res://used_images/time_mage.png"
+dest_files=[ "res://.import/time_mage.png-b514b1b160ae1f00c2c835f3a87e11ca.stex" ]
 
 [params]
 

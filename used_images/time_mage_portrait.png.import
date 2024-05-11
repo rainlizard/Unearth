@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/lilypad.png-900af6dc3f34704d84dbf68d003bf604.stex"
+path="res://.import/time_mage_portrait.png-3fa991cf35228f786c69a87276ac1f7a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://unearthdata/custom-object-images/lilypad.png"
-dest_files=[ "res://.import/lilypad.png-900af6dc3f34704d84dbf68d003bf604.stex" ]
+source_file="res://used_images/time_mage_portrait.png"
+dest_files=[ "res://.import/time_mage_portrait.png-3fa991cf35228f786c69a87276ac1f7a.stex" ]
 
 [params]
 

@@ -255,7 +255,7 @@ func initialize_creatures_available(): # oCreaturePool
 		id.set_meta("variable", functionVariable)
 		var getName = Things.fetch_name(Things.TYPE.CREATURE, subtype)
 		id.hint_tooltip = getName + ' availability'
-		id.get_node("%IconTextureRect").texture = Things.DATA_CREATURE[subtype][Things.TEXTURE]
+		id.get_node("%IconTextureRect").texture = Things.fetch_sprite(Things.TYPE.CREATURE, subtype)
 		id.get_node("%TextEditableLabel").hint_tooltip = getName + ' in pool'
 		id.get_node("%TextEditableLabel").text = str(defaultAvailability)
 		id.get_node("%TextEditableLabel").editable = true
@@ -280,7 +280,7 @@ func initialize_traps_available(): # oTrapsAvailable
 		var id = scnAvailableButton.instance()
 		var getName = Things.fetch_name(Things.TYPE.TRAP, subtype)
 		id.hint_tooltip = getName + ' availability'
-		id.get_node("%IconTextureRect").texture = Things.DATA_TRAP[subtype][Things.TEXTURE]
+		id.get_node("%IconTextureRect").texture = Things.fetch_sprite(Things.TYPE.TRAP, subtype)
 		id.set_meta("variable", functionVariable)
 		id.get_node("%TextEditableLabel").editable = false
 		
@@ -299,7 +299,7 @@ func initialize_magic_available(): # oMagicAvailable
 		var id = scnAvailableButton.instance()
 		var getName = Things.fetch_name(Things.TYPE.OBJECT, subtype)
 		id.hint_tooltip = getName + ' availability'
-		id.get_node("%IconTextureRect").texture = Things.DATA_OBJECT[subtype][Things.TEXTURE]
+		id.get_node("%IconTextureRect").texture = Things.fetch_sprite(Things.TYPE.OBJECT, subtype)
 		id.set_meta("variable", functionVariable)
 		id.set_meta("ID", subtype)
 		id.get_node("%TextEditableLabel").editable = false
@@ -319,7 +319,7 @@ func initialize_doors_available(): # oDoorsAvailable
 		var id = scnAvailableButton.instance()
 		var getName = Things.fetch_name(Things.TYPE.DOOR, subtype)
 		id.hint_tooltip = getName + ' availability'
-		id.get_node("%IconTextureRect").texture = Things.DATA_DOOR[subtype][Things.TEXTURE]
+		id.get_node("%IconTextureRect").texture = Things.fetch_sprite(Things.TYPE.DOOR, subtype)
 		id.set_meta("variable", functionVariable)
 		id.get_node("%TextEditableLabel").editable = false
 		

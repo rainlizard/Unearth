@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/mushroom_yellow.png-14d7d9a1e69bd4d3e4faf5df017317be.stex"
+path="res://.import/rock.png-0b96a93148362a2da52336597eeecc4d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://unearthdata/custom-object-images/mushroom_yellow.png"
-dest_files=[ "res://.import/mushroom_yellow.png-14d7d9a1e69bd4d3e4faf5df017317be.stex" ]
+source_file="res://used_images/rock.png"
+dest_files=[ "res://.import/rock.png-0b96a93148362a2da52336597eeecc4d.stex" ]
 
 [params]
 

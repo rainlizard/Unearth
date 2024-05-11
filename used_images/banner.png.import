@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tnt.png-b6cf318d6f37ea89ba3c16835b2dea5e.stex"
+path="res://.import/banner.png-9be04942c9c5198ab90865299103459d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://unearthdata/custom-object-images/tnt.png"
-dest_files=[ "res://.import/tnt.png-b6cf318d6f37ea89ba3c16835b2dea5e.stex" ]
+source_file="res://used_images/banner.png"
+dest_files=[ "res://.import/banner.png-9be04942c9c5198ab90865299103459d.stex" ]
 
 [params]
 

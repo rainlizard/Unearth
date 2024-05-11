@@ -45,32 +45,48 @@ func start():
 	print('Parsed all dkcfg files: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	var CODETIME_LOADCFG_START = OS.get_ticks_msec()
 	
-	var id = 0
-	while true:
-		id += 1
-		if id >= 136 or id in [100,101,102,103,104,105]: # Dummy Boxes should be overwritten
-			var section = "object"+str(id)
-			if objects_cfg.has(section):
-				var newName = objects_cfg[section]["Name"]
+	for section in objects_cfg:
+		if section.begins_with("object"):
+			var id = int(section)
+			if id == 0: continue
+			if id >= 136 or id in [100,101,102,103,104,105]: # Dummy Boxes should be overwritten
 				var newGenre = objects_cfg[section]["Genre"]
-				var newEditorTab = Things.GENRE_TO_TAB[newGenre]
-				
-				var newTexture = null
-				match newGenre:
-					"SPECIALBOX": newTexture = preload("res://dk_images/trapdoor_64/bonus_box_std.png")
-					"SPELLBOOK": newTexture = preload("res://edited_images/icon_book.png")
-					"WORKSHOPBOX": newTexture = preload("res://dk_images/traps_doors/anim0116/AnimBox.tres")
-				
+				var newSprite = null
 				Things.DATA_OBJECT[id] = [
-					newName, # NAME
-					null, # ANIMATION_ID
-					newTexture, # TEXTURE
+					objects_cfg[section]["Name"], # NAME
+					newSprite, # SPRITE
 					null, # PORTRAIT
-					newEditorTab, # EDITOR_TAB
+					Things.GENRE_TO_TAB[newGenre], # EDITOR_TAB
 				]
-			else:
-				break
 	print('Loaded objects.cfg: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
+	
+	for id_number in creature_cfg["common"]["Creatures"].size():
+		if Things.DATA_CREATURE.has(id_number+1) == false:
+			Things.DATA_CREATURE[id_number+1] = [
+				creature_cfg["common"]["Creatures"][id_number], # NAME
+				null, # SPRITE
+				null, # PORTRAIT
+				Things.TAB_CREATURE, # EDITOR_TAB
+			]
+	
+	for section in trapdoor_cfg:
+		var id = int(section)
+		if id == 0: continue
+		if section.begins_with("door"):
+			Things.DATA_DOOR[id] = [
+				trapdoor_cfg[section]["Name"], # NAME
+				null, # SPRITE
+				null, # PORTRAIT
+				Things.TAB_MISC, # EDITOR_TAB
+			]
+		if section.begins_with("trap"):
+			Things.DATA_TRAP[id] = [
+				trapdoor_cfg[section]["Name"], # NAME
+				null, # SPRITE
+				null, # PORTRAIT
+				Things.TAB_TRAP, # EDITOR_TAB
+			]
+
 
 func read_dkcfg_file(file_path) -> Dictionary: # Optimized
 	var config = {}
@@ -114,3 +130,23 @@ func read_dkcfg_file(file_path) -> Dictionary: # Optimized
 						config[current_section][key] = value
 	
 	return config
+
+#	print ("var sprite_id = {")
+#	for key in objects_cfg.keys():
+#		if "object" in key:
+#			#print(key)
+#			#print(objects_cfg[key]["Name"] + " ")
+#			#print(objects_cfg[key]["AnimationID"] + " : " + "")
+#			var b = '""'
+#			if Things.DATA_OBJECT.has(int(key)):
+#				var fsffsa = Things.DATA_OBJECT[int(key)][Things.TEXTURE]
+#				if fsffsa != null:
+#					b = 'preload("' +fsffsa.resource_path + '")'
+#
+#			var a = objects_cfg[key]["AnimationID"]
+#			if a is String:
+#				print('"' + a + '"' + " : " + b + ",")
+#			else:
+#				print(str(a) + " : " + str(b) + ",")
+#	print("}")
+	

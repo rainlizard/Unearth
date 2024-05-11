@@ -112,11 +112,11 @@ func add_to_category(tabNode, thingsData, thingtype, subtype):
 	id.set_meta("thingType", thingtype)
 	
 	# Appearance prioritization: Portrait > Texture > ThingDarkened.png
-	var portraitTex = thingsData[subtype][Things.PORTRAIT]
+	var portraitTex = Things.fetch_portrait(thingtype, subtype)
 	if portraitTex != null:
 		id.img_normal = portraitTex
 	else:
-		var textureTex = thingsData[subtype][Things.TEXTURE]
+		var textureTex = Things.fetch_sprite(thingtype, subtype)
 		if textureTex != null:
 			id.img_normal = textureTex
 		else:
@@ -153,20 +153,18 @@ func _on_hovered_over_item(id):
 	var offset = Vector2(id.rect_size.x * 0.5, id.rect_size.y * 0.5)
 	oCenteredLabel.rect_global_position = id.rect_global_position + offset
 	oCenteredLabel.get_node("Label").text = id.get_meta("grid_item_text")
-	change_portrait_on_hover(id, Things.TEXTURE)
+	change_portrait_on_hover(id, Things.SPRITE)
 
 
 func change_portrait_on_hover(id, textureOrPortrait):
-	var portraitTex
-	match id.get_meta("thingType"):
-		Things.TYPE.OBJECT: portraitTex = Things.DATA_OBJECT[id.get_meta("thingSubtype")][textureOrPortrait]
-		Things.TYPE.CREATURE: portraitTex = Things.DATA_CREATURE[id.get_meta("thingSubtype")][textureOrPortrait]
-		Things.TYPE.EFFECTGEN: portraitTex = Things.DATA_EFFECTGEN[id.get_meta("thingSubtype")][textureOrPortrait]
-		Things.TYPE.TRAP: portraitTex = Things.DATA_TRAP[id.get_meta("thingSubtype")][textureOrPortrait]
-		Things.TYPE.DOOR: portraitTex = Things.DATA_DOOR[id.get_meta("thingSubtype")][textureOrPortrait]
-		Things.TYPE.EXTRA: portraitTex = Things.DATA_EXTRA[id.get_meta("thingSubtype")][textureOrPortrait]
-	if portraitTex != null:
-		id.img_normal = portraitTex
+	var thingType = id.get_meta("thingType")
+	var subtype = id.get_meta("thingSubtype")
+	var tex
+	match textureOrPortrait:
+		Things.SPRITE: tex = Things.fetch_sprite(thingType, subtype)
+		Things.PORTRAIT: tex = Things.fetch_portrait(thingType, subtype)
+	if tex != null:
+		id.img_normal = tex
 
 func add_item_to_grid(tabID, id, set_text):
 	tabID.add_child(id)
@@ -205,10 +203,8 @@ func add_workshop_item_sprite_overlay(textureParent, subtype):
 	var workshopItemInTheBox = TextureRect.new()
 	
 	match itemType:
-		Things.TYPE.TRAP:
-			workshopItemInTheBox.texture = Things.DATA_TRAP[itemSubtype][Things.TEXTURE]
-		Things.TYPE.DOOR:
-			workshopItemInTheBox.texture = Things.DATA_DOOR[itemSubtype][Things.TEXTURE]
+		Things.TYPE.TRAP: workshopItemInTheBox.texture = Things.fetch_sprite(itemType, itemSubtype)
+		Things.TYPE.DOOR: workshopItemInTheBox.texture = Things.fetch_sprite(itemType, itemSubtype)
 	
 	workshopItemInTheBox.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	#workshopItemInTheBox.size_flags_vertical = Control.SIZE_EXPAND_FILL

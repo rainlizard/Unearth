@@ -34,9 +34,9 @@ func set_label_number(setText):
 	var oOrderNumberLabel = $"HBoxContainer/VBoxContainer/OrderNumberLabel"
 	oOrderNumberLabel.text = str(setText)
 
-func set_magic_texture(thingID):
+func set_magic_texture(subtype):
 	var oTextureRectIcon = $"HBoxContainer/TextureRectIcon"
-	oTextureRectIcon.texture = Things.DATA_OBJECT[thingID][Things.TEXTURE]
+	oTextureRectIcon.texture = Things.fetch_sprite(Things.TYPE.OBJECT, subtype)
 
 func set_room_texture(slabID):
 	var oTextureRectIcon = $"HBoxContainer/TextureRectIcon"

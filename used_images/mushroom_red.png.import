@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/fern.png-2b3516cc8ac9562d30b1a8dc1f1ef61c.stex"
+path="res://.import/mushroom_red.png-0d440f54d341a25345e0a474312111d8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://unearthdata/custom-object-images/fern.png"
-dest_files=[ "res://.import/fern.png-2b3516cc8ac9562d30b1a8dc1f1ef61c.stex" ]
+source_file="res://used_images/mushroom_red.png"
+dest_files=[ "res://.import/mushroom_red.png-0d440f54d341a25345e0a474312111d8.stex" ]
 
 [params]
 

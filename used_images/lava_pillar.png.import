@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/potion_red.png-1f6ac617d4b543a5a11f62ac9f32e940.stex"
+path="res://.import/lava_pillar.png-c68d176374b96970ae4779707989cbf8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://unearthdata/custom-object-images/potion_red.png"
-dest_files=[ "res://.import/potion_red.png-1f6ac617d4b543a5a11f62ac9f32e940.stex" ]
+source_file="res://used_images/lava_pillar.png"
+dest_files=[ "res://.import/lava_pillar.png-c68d176374b96970ae4779707989cbf8.stex" ]
 
 [params]
 
