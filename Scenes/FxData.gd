@@ -10,30 +10,6 @@ var objects_cfg : Dictionary
 var creature_cfg : Dictionary
 var trapdoor_cfg : Dictionary
 
-
-#func _ready():
-#	var directory = Directory.new()
-#	var image_directory = "res://Art/"
-#
-#	if directory.open(image_directory) == OK:
-#		directory.list_dir_begin()
-#		var file_name = directory.get_next()
-#		while file_name != "":
-#			if file_name.get_extension().to_lower() in ["png", "jpg", "jpeg", "webp"]:
-#				var image_path = image_directory + file_name
-#				print("Loaded image: ", image_path)
-#
-#			file_name = directory.get_next()
-#	else:
-#		print("Failed to open the directory.")
-
-#				var newName
-#				var checkName = objects_cfg[section]["Name"]
-#				if Things.convert_name.has(checkName):
-#					newName = Things.convert_name[checkName]
-#				else:
-#					newName = checkName.capitalize()
-
 func start():
 	if Cube.tex.empty() == true:
 		Cube.read_cubes_cfg()
@@ -44,75 +20,56 @@ func start():
 	trapdoor_cfg = read_dkcfg_file(oGame.DK_FXDATA_DIRECTORY.plus_file("trapdoor.cfg"))
 	print('Parsed all dkcfg files: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
-	
 	var CODETIME_LOADCFG_START = OS.get_ticks_msec()
-	
+	load_objects_data()
+	load_creatures_data()
+	load_trapdoor_data()
+	print('Loaded things from cfg files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
+
+
+func load_objects_data():
 	for section in objects_cfg:
 		if section.begins_with("object"):
 			var id = int(section)
 			if id == 0: continue
-			if id >= 136 or id in [100,101,102,103,104,105]: # Dummy Boxes should be overwritten
-				var newName = objects_cfg[section]["Name"]
-				
-				var animID = objects_cfg[section]["AnimationID"]
-				var newSprite = null
-				if Graphics.sprite_id.has(animID):
-					newSprite = animID
-				elif Graphics.sprite_id.has(newName):
-					newSprite = newName
-				
-				var newGenre = objects_cfg[section].get("Genre", null)
+			if id >= 136 or id in [100, 101, 102, 103, 104, 105]: # Dummy Boxes should be overwritten
+				var data = objects_cfg[section]
+				var newName = data["Name"]
+				var animID = data["AnimationID"]
+				var newSprite = get_sprite(animID, newName)
+				var newGenre = data.get("Genre", null)
 				var newEditorTab = Things.GENRE_TO_TAB[newGenre]
-				
-				Things.DATA_OBJECT[id] = [
-					newName, # NAME
-					newSprite, # SPRITE
-					newEditorTab, # EDITOR_TAB
-				]
-	
+				Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
+
+
+func load_creatures_data():
 	for id_number in creature_cfg["common"]["Creatures"].size():
 		if Things.DATA_CREATURE.has(id_number+1) == false:
-			
 			var newName = creature_cfg["common"]["Creatures"][id_number]
-			
-			var newSprite = null
-			if Graphics.sprite_id.has(newName):
-				newSprite = newName
-			
-			var newPortrait = null
-			if Graphics.sprite_id.has(str(newSprite) + "_PORTRAIT"):
-				newPortrait = str(newSprite) + "_PORTRAIT"
-			
-			Things.DATA_CREATURE[id_number+1] = [
-				newName, # NAME
-				newSprite, # SPRITE
-				Things.TAB_CREATURE, # EDITOR_TAB
-			]
-	
+			var newSprite = get_sprite(newName)
+			Things.DATA_CREATURE[id_number + 1] = [newName, newSprite, Things.TAB_CREATURE]
+
+
+func load_trapdoor_data():
 	for section in trapdoor_cfg:
 		var id = int(section)
 		if id == 0: continue
+		var data = trapdoor_cfg[section]
+		var newName = data.get("Name", null)
+		var newSprite = get_sprite(newName)
 		if section.begins_with("door"):
-			var newName = trapdoor_cfg[section]["Name"]
-			var newSprite = null
-			if Graphics.sprite_id.has(newName):
-				newSprite = newName
-			Things.DATA_DOOR[id] = [
-				newName, # NAME
-				newSprite, # SPRITE
-				Things.TAB_MISC, # EDITOR_TAB
-			]
+			Things.DATA_DOOR[id] = [newName, newSprite, Things.TAB_MISC]
 		elif section.begins_with("trap"):
-			var newName = trapdoor_cfg[section]["Name"]
-			var newSprite = null
-			if Graphics.sprite_id.has(newName):
-				newSprite = newName
-			Things.DATA_TRAP[id] = [
-				newName, # NAME
-				newSprite, # SPRITE
-				Things.TAB_TRAP, # EDITOR_TAB
-			]
-	print('Loaded things from cfg files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
+			Things.DATA_TRAP[id] = [newName, newSprite, Things.TAB_TRAP]
+
+
+func get_sprite(id, fallback = null):
+	if Graphics.sprite_id.has(id):
+		return id
+	elif fallback and Graphics.sprite_id.has(fallback):
+		return fallback
+	return null
+
 
 func read_dkcfg_file(file_path) -> Dictionary: # Optimized
 	var config = {}
@@ -156,23 +113,3 @@ func read_dkcfg_file(file_path) -> Dictionary: # Optimized
 						config[current_section][key] = value
 	
 	return config
-
-#	print ("var sprite_id = {")
-#	for key in objects_cfg.keys():
-#		if "object" in key:
-#			#print(key)
-#			#print(objects_cfg[key]["Name"] + " ")
-#			#print(objects_cfg[key]["AnimationID"] + " : " + "")
-#			var b = '""'
-#			if Things.DATA_OBJECT.has(int(key)):
-#				var fsffsa = Things.DATA_OBJECT[int(key)][Things.TEXTURE]
-#				if fsffsa != null:
-#					b = 'preload("' +fsffsa.resource_path + '")'
-#
-#			var a = objects_cfg[key]["AnimationID"]
-#			if a is String:
-#				print('"' + a + '"' + " : " + b + ",")
-#			else:
-#				print(str(a) + " : " + str(b) + ",")
-#	print("}")
-	
