@@ -332,7 +332,7 @@ func look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName):
 		if err == OK:
 			var tex = ImageTexture.new()
 			tex.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
-			DATA_ARRAY[objectID][Things.TEXTURE] = tex
+			#DATA_ARRAY[objectID][Things.TEXTURE] = tex
 	
 	if realPortraitFilename != "":
 		var img = Image.new()
@@ -340,7 +340,7 @@ func look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName):
 		if err == OK:
 			var tex = ImageTexture.new()
 			tex.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
-			DATA_ARRAY[objectID][Things.PORTRAIT] = tex
+			#DATA_ARRAY[objectID][Things.PORTRAIT] = tex
 
 
 

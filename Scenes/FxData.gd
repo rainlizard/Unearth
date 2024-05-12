@@ -43,6 +43,8 @@ func start():
 	creature_cfg = read_dkcfg_file(oGame.DK_FXDATA_DIRECTORY.plus_file("creature.cfg"))
 	trapdoor_cfg = read_dkcfg_file(oGame.DK_FXDATA_DIRECTORY.plus_file("trapdoor.cfg"))
 	print('Parsed all dkcfg files: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	
+	
 	var CODETIME_LOADCFG_START = OS.get_ticks_msec()
 	
 	for section in objects_cfg:
@@ -50,22 +52,40 @@ func start():
 			var id = int(section)
 			if id == 0: continue
 			if id >= 136 or id in [100,101,102,103,104,105]: # Dummy Boxes should be overwritten
-				var newGenre = objects_cfg[section]["Genre"]
+				var newName = objects_cfg[section]["Name"]
+				
+				var animID = objects_cfg[section]["AnimationID"]
 				var newSprite = null
+				if Graphics.sprite_id.has(animID):
+					newSprite = animID
+				elif Graphics.sprite_id.has(newName):
+					newSprite = newName
+				
+				var newGenre = objects_cfg[section].get("Genre", null)
+				var newEditorTab = Things.GENRE_TO_TAB[newGenre]
+				
 				Things.DATA_OBJECT[id] = [
-					objects_cfg[section]["Name"], # NAME
+					newName, # NAME
 					newSprite, # SPRITE
-					null, # PORTRAIT
-					Things.GENRE_TO_TAB[newGenre], # EDITOR_TAB
+					newEditorTab, # EDITOR_TAB
 				]
-	print('Loaded objects.cfg: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 	
 	for id_number in creature_cfg["common"]["Creatures"].size():
 		if Things.DATA_CREATURE.has(id_number+1) == false:
+			
+			var newName = creature_cfg["common"]["Creatures"][id_number]
+			
+			var newSprite = null
+			if Graphics.sprite_id.has(newName):
+				newSprite = newName
+			
+			var newPortrait = null
+			if Graphics.sprite_id.has(str(newSprite) + "_PORTRAIT"):
+				newPortrait = str(newSprite) + "_PORTRAIT"
+			
 			Things.DATA_CREATURE[id_number+1] = [
-				creature_cfg["common"]["Creatures"][id_number], # NAME
-				null, # SPRITE
-				null, # PORTRAIT
+				newName, # NAME
+				newSprite, # SPRITE
 				Things.TAB_CREATURE, # EDITOR_TAB
 			]
 	
@@ -73,20 +93,26 @@ func start():
 		var id = int(section)
 		if id == 0: continue
 		if section.begins_with("door"):
+			var newName = trapdoor_cfg[section]["Name"]
+			var newSprite = null
+			if Graphics.sprite_id.has(newName):
+				newSprite = newName
 			Things.DATA_DOOR[id] = [
-				trapdoor_cfg[section]["Name"], # NAME
-				null, # SPRITE
-				null, # PORTRAIT
+				newName, # NAME
+				newSprite, # SPRITE
 				Things.TAB_MISC, # EDITOR_TAB
 			]
-		if section.begins_with("trap"):
+		elif section.begins_with("trap"):
+			var newName = trapdoor_cfg[section]["Name"]
+			var newSprite = null
+			if Graphics.sprite_id.has(newName):
+				newSprite = newName
 			Things.DATA_TRAP[id] = [
-				trapdoor_cfg[section]["Name"], # NAME
-				null, # SPRITE
-				null, # PORTRAIT
+				newName, # NAME
+				newSprite, # SPRITE
 				Things.TAB_TRAP, # EDITOR_TAB
 			]
-
+	print('Loaded things from cfg files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 
 func read_dkcfg_file(file_path) -> Dictionary: # Optimized
 	var config = {}

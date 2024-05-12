@@ -71,6 +71,7 @@ Slabset="*res://Autoload/Slabset.gd"
 Columnset="*res://Autoload/Columnset.gd"
 Version="*res://Autoload/Version.gd"
 Graphics="*res://Autoload/Graphics.gd"
+ObjectNames="*res://Autoload/ObjectNames.gd"
 
 [debug]
 

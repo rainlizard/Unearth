@@ -143,17 +143,21 @@ func update_selection_position():
 		oSelectedRect.rect_global_position = oSelectedRect.boundToItem.rect_global_position
 		oSelectedRect.rect_size = oSelectedRect.boundToItem.rect_size
 
+enum {
+	CHANGE_TO_PORTRAIT,
+	CHANGE_TO_SPRITE,
+}
 
 func _on_hovered_none(id):
 	oCenteredLabel.get_node("Label").text = ""
-	change_portrait_on_hover(id, Things.PORTRAIT)
+	change_portrait_on_hover(id, CHANGE_TO_PORTRAIT)
 
 
 func _on_hovered_over_item(id):
 	var offset = Vector2(id.rect_size.x * 0.5, id.rect_size.y * 0.5)
 	oCenteredLabel.rect_global_position = id.rect_global_position + offset
 	oCenteredLabel.get_node("Label").text = id.get_meta("grid_item_text")
-	change_portrait_on_hover(id, Things.SPRITE)
+	change_portrait_on_hover(id, CHANGE_TO_SPRITE)
 
 
 func change_portrait_on_hover(id, textureOrPortrait):
@@ -161,8 +165,8 @@ func change_portrait_on_hover(id, textureOrPortrait):
 	var subtype = id.get_meta("thingSubtype")
 	var tex
 	match textureOrPortrait:
-		Things.SPRITE: tex = Things.fetch_sprite(thingType, subtype)
-		Things.PORTRAIT: tex = Things.fetch_portrait(thingType, subtype)
+		CHANGE_TO_SPRITE: tex = Things.fetch_sprite(thingType, subtype)
+		CHANGE_TO_PORTRAIT: tex = Things.fetch_portrait(thingType, subtype)
 	if tex != null:
 		id.img_normal = tex
 
