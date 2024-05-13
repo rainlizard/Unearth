@@ -49,7 +49,7 @@ onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 onready var oOwnerSelection = Nodelist.list["oOwnerSelection"]
 onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
-onready var oFxData = Nodelist.list["oFxData"]
+onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 
 var TOTAL_TIME_TO_OPEN_MAP
 
@@ -111,7 +111,7 @@ func open_map(filePath):
 	
 	var map = filePath.get_basename()
 	
-	oFxData.start()
+	oCfgLoader.start()
 	
 	# Open all map file types
 	oCurrentMap.currentFilePaths = get_accompanying_files(map)

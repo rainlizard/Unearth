@@ -27,14 +27,7 @@ var default_data = {}
 
 
 
-#func _init():
-#	# This only takes 1ms
-#	default_data["DATA_EXTRA"] = DATA_EXTRA.duplicate(true)
-#	default_data["DATA_DOOR"] = DATA_DOOR.duplicate(true)
-#	default_data["DATA_TRAP"] = DATA_TRAP.duplicate(true)
-#	default_data["DATA_EFFECTGEN"] = DATA_EFFECTGEN.duplicate(true)
-#	default_data["DATA_CREATURE"] = DATA_CREATURE.duplicate(true)
-#	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
+
 #
 #
 #func reset_thing_data_to_default():

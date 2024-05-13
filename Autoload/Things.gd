@@ -29,6 +29,23 @@ enum TYPE {
 	EXTRA = 696969
 }
 
+var default_data = {}
+func _init():
+	# This only takes 1ms
+	default_data["DATA_EXTRA"] = DATA_EXTRA.duplicate(true)
+	default_data["DATA_DOOR"] = DATA_DOOR.duplicate(true)
+	default_data["DATA_TRAP"] = DATA_TRAP.duplicate(true)
+	default_data["DATA_EFFECTGEN"] = DATA_EFFECTGEN.duplicate(true)
+	default_data["DATA_CREATURE"] = DATA_CREATURE.duplicate(true)
+	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
+
+func reset_thing_data_to_default(): # Reset data. Takes 1ms.
+	DATA_EXTRA = default_data["DATA_EXTRA"].duplicate(true)
+	DATA_DOOR = default_data["DATA_DOOR"].duplicate(true)
+	DATA_TRAP = default_data["DATA_TRAP"].duplicate(true)
+	DATA_EFFECTGEN = default_data["DATA_EFFECTGEN"].duplicate(true)
+	DATA_CREATURE = default_data["DATA_CREATURE"].duplicate(true)
+	DATA_OBJECT = default_data["DATA_OBJECT"].duplicate(true)
 
 func fetch_sprite(thing_type, sub_type):
 	var sub_type_data = data_structure(thing_type).get(sub_type)
