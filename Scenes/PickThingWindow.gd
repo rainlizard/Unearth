@@ -102,6 +102,9 @@ func initialize_thing_grid_items():
 
 
 func add_to_category(tabNode, thingsData, thingtype, subtype):
+	var getName = Things.fetch_name(thingtype, subtype)
+	if "Dummy Trap" in getName: return
+	
 	var gridcontainer = get_grid_container_node(tabNode)
 	
 	var id = scnGridItem.instance()
@@ -124,9 +127,9 @@ func add_to_category(tabNode, thingsData, thingtype, subtype):
 	
 	
 	
-	var setText = Things.fetch_name(thingtype, subtype)
 	
-	add_item_to_grid(gridcontainer, id, setText)
+	
+	add_item_to_grid(gridcontainer, id, getName)
 	
 	# Needed for when adding custom objects
 	for i in 3:

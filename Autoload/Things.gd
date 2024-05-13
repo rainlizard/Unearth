@@ -171,7 +171,7 @@ var LIST_OF_BOXES = {
 097 : [TYPE.TRAP, 4], # Lightning Trap
 098 : [TYPE.TRAP, 5], # Word of Power Trap
 099 : [TYPE.TRAP, 6], # Lava Trap
-100 : [TYPE.TRAP, 7], # Demolition Trap
+100 : [TYPE.TRAP, 7], # Dummy Trap 2
 101 : [TYPE.TRAP, 8], # Dummy Trap 3
 102 : [TYPE.TRAP, 9], # Dummy Trap 4
 103 : [TYPE.TRAP, 10], # Dummy Trap 5
@@ -182,6 +182,7 @@ var LIST_OF_BOXES = {
 108 : [TYPE.DOOR, 3], # Iron Door
 109 : [TYPE.DOOR, 4], # Magic Door
 }
+
 
 
 var LIST_OF_GOLDPILES = [
@@ -243,6 +244,15 @@ func convert_relative_256_to_float(datnum):
 		datnum -= 65536 # Convert to signed by subtracting 2^16
 	return datnum / 256.0 # Scale it to floating-point
 
+
+func find_subtype_by_name(thingType, findName):
+	var data = data_structure(thingType)
+	for subtype_key in data:
+		var subtype_data = data[subtype_key]
+		if subtype_data and subtype_data[NAME_ID] == findName:
+			return subtype_key
+	return null
+
 var DATA_EXTRA = {
 0 : [null, null, null, null],
 1 : ["ACTIONPOINT", "ACTIONPOINT", TAB_ACTION],
@@ -262,15 +272,9 @@ var DATA_TRAP = {
 01 : ["BOULDER", "BOULDER", TAB_TRAP],
 02 : ["ALARM", "ALARM", TAB_TRAP],
 03 : ["POISON_GAS", "POISON_GAS", TAB_TRAP],
-04 : ["LIGHTNING", "LIGHTNING_TRAP", TAB_TRAP],
+04 : ["LIGHTNING", "LIGHTNING", TAB_TRAP],
 05 : ["WORD_OF_POWER", "WORD_OF_POWER", TAB_TRAP],
 06 : ["LAVA", "LAVA", TAB_TRAP],
-07 : ["TNT", "TNT", TAB_TRAP],
-08 : ["DUMMYTRAP3", null, TAB_TRAP],
-09 : ["DUMMYTRAP4", null, TAB_TRAP],
-10 : ["DUMMYTRAP5", null, TAB_TRAP],
-11 : ["DUMMYTRAP6", null, TAB_TRAP],
-12 : ["DUMMYTRAP7", null, TAB_TRAP],
 }
 
 var DATA_EFFECTGEN = {

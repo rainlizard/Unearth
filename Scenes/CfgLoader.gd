@@ -30,8 +30,6 @@ func start():
 	# Step 3: load data from local config files (map00001.objects.cfg)
 	print('Loaded things from cfg files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 
-
-
 func load_objects_data():
 	for section in objects_cfg:
 		if section.begins_with("object"):
@@ -51,28 +49,38 @@ func load_creatures_data():
 	for id_number in creature_cfg["common"]["Creatures"].size():
 		if Things.DATA_CREATURE.has(id_number+1) == false:
 			var newName = creature_cfg["common"]["Creatures"][id_number]
-			var newSprite = get_sprite(newName)
+			var newSprite = get_sprite(newName, null)
 			Things.DATA_CREATURE[id_number + 1] = [newName, newSprite, Things.TAB_CREATURE]
 
 
 func load_trapdoor_data():
 	for section in trapdoor_cfg:
 		var id = int(section)
-		if id == 0: continue
+		var trapOrDoor = -1
+		if section.begins_with("door"): trapOrDoor = Things.TYPE.DOOR
+		if section.begins_with("trap"): trapOrDoor = Things.TYPE.TRAP
+		if id == 0 or trapOrDoor == -1: continue
+		
 		var data = trapdoor_cfg[section]
 		var newName = data.get("Name", null)
-		var newSprite = get_sprite(newName)
-		if section.begins_with("door"):
+		var newSprite = get_sprite(newName, null)
+		var crateName = data.get("Crate", null)
+		if trapOrDoor == Things.TYPE.DOOR:
 			Things.DATA_DOOR[id] = [newName, newSprite, Things.TAB_MISC]
-		elif section.begins_with("trap"):
+		elif trapOrDoor == Things.TYPE.TRAP:
 			Things.DATA_TRAP[id] = [newName, newSprite, Things.TAB_TRAP]
+		
+		var crate_id_number = Things.find_subtype_by_name(Things.TYPE.OBJECT, crateName)
+		Things.LIST_OF_BOXES[crate_id_number] = [
+			trapOrDoor,
+			id,
+		]
+	#print(Things.LIST_OF_BOXES)
 
 
-func get_sprite(id, fallback = null):
-	if Graphics.sprite_id.has(id):
-		return id
-	elif fallback and Graphics.sprite_id.has(fallback):
-		return fallback
+func get_sprite(first_priority, second_priority):
+	if Graphics.sprite_id.has(first_priority): return first_priority
+	if Graphics.sprite_id.has(second_priority): return second_priority
 	return null
 
 

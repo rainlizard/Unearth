@@ -1,5 +1,120 @@
 extends Node
 
+func load_extra_images_from_harddrive():
+	var CODETIME_START = OS.get_ticks_msec()
+	var custom_images_dir = Settings.unearthdata.plus_file("custom-object-images")
+	var image_paths = get_png_files_in_dir(custom_images_dir)
+	for image_path in image_paths:
+		var texture = load(image_path)
+		if texture is Texture:
+			var image_name = image_path.get_file().get_basename().to_upper()
+			sprite_id[image_name] = texture
+		else:
+			print("Failed to load texture: ", image_path)
+	print('Loaded extra images from HDD: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+func get_png_files_in_dir(path):
+	var png_files = []
+	var dir = Directory.new()
+	if dir.open(path) == OK:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if not dir.current_is_dir() and file_name.get_extension().to_lower() == "png":
+				png_files.append(path.plus_file(file_name))
+			file_name = dir.get_next()
+	else:
+		print("An error occurred when trying to access the directory: ", path)
+	return png_files
+
+
+#func load_custom_images_into_array(DATA_ARRAY, thingtypeImageFolder):
+#	print("Loading /thing-images/" + thingtypeImageFolder + " directory ...")
+#	var arrayOfFilenames = get_png_files_in_dir(Settings.unearthdata.plus_file("thing-images").plus_file(thingtypeImageFolder))
+#	for i in arrayOfFilenames:
+#		var subtypeID = int(i.get_file().get_basename())
+#		var img = Image.new()
+#		var err = img.load(i)
+#		if err == OK:
+#			var tex = ImageTexture.new()
+#			tex.create_from_image(img)
+#			if DATA_ARRAY.has(subtypeID):
+#				DATA_ARRAY[subtypeID][TEXTURE] = tex
+
+
+#func look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName):
+#	if custom_images_list.empty() == true:
+#		custom_images_list = get_png_filenames_in_dir(Settings.unearthdata.plus_file("custom-object-images"))
+#
+#	var dir = Settings.unearthdata.plus_file("custom-object-images")
+#
+#	var uppercaseImageFilename = thingCfgName+".PNG".to_upper()
+#	var uppercasePortraitFilename = thingCfgName+"_PORTRAIT.PNG".to_upper()
+#
+#	var realImageFilename = ""
+#	var realPortraitFilename = ""
+#
+#	if custom_images_list.has(uppercaseImageFilename):
+#		 realImageFilename = custom_images_list[uppercaseImageFilename]
+#
+#	if custom_images_list.has(uppercasePortraitFilename):
+#		 realPortraitFilename = custom_images_list[uppercasePortraitFilename]
+#
+#	if realImageFilename != "":
+#		var img = Image.new()
+#		var err = img.load(dir.plus_file(realImageFilename))
+#		if err == OK:
+#			var tex = ImageTexture.new()
+#			tex.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
+#			#DATA_ARRAY[objectID][Things.TEXTURE] = tex
+#
+#	if realPortraitFilename != "":
+#		var img = Image.new()
+#		var err = img.load(dir.plus_file(realPortraitFilename))
+#		if err == OK:
+#			var tex = ImageTexture.new()
+#			tex.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
+#			#DATA_ARRAY[objectID][Things.PORTRAIT] = tex
+#
+#func get_png_filenames_in_dir(path):
+#	var dictionary = {}
+#	var dir = Directory.new()
+#	if dir.open(path) == OK:
+#		dir.list_dir_begin()
+#		var file_name = dir.get_next()
+#		while file_name != "":
+#			if dir.current_is_dir():
+#				pass
+#			else:
+#				if file_name.get_extension().to_upper() == "PNG":
+#					dictionary[file_name.to_upper().replace(" ", "_")] = file_name
+#			file_name = dir.get_next()
+#	else:
+#		print("An error occurred when trying to access the path.")
+#	return dictionary
+#
+#func get_png_files_in_dir(path):
+#	var array = []
+#	var dir = Directory.new()
+#	if dir.open(path) == OK:
+#		dir.list_dir_begin()
+#		var file_name = dir.get_next()
+#		while file_name != "":
+#			if dir.current_is_dir():
+#				pass
+#			else:
+#				if file_name.get_extension().to_upper() == "PNG":
+#					var fileNumber = file_name.get_file().get_basename()
+#					if Utils.string_has_letters(fileNumber) == false:
+#						array.append(path.plus_file(file_name))
+#			file_name = dir.get_next()
+#	else:
+#		print("An error occurred when trying to access the path.")
+#	return array
+
+
+
+
 # The keys can be integers or strings (as read from objects.cfg's AnimationID field)
 # When they're a String, they can be either read the 'Name' field or the 'AnimationID' field, whichever one is prioritized
 var sprite_id = {
