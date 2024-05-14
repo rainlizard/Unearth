@@ -78,7 +78,7 @@ func add_edit_menu_items():
 	edit_popup.add_item("Undo", 0)
 	edit_popup.add_separator()
 	edit_popup.add_item("Map columns", 1)
-	edit_popup.add_item("Custom objects", 2)
+	#edit_popup.add_item("Custom objects", 2)
 	edit_popup.add_item("Resize map", 3)
 	edit_popup.add_item("Update all slabs", 4)
 	edit_popup.add_separator()

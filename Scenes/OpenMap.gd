@@ -111,15 +111,14 @@ func open_map(filePath):
 	
 	var map = filePath.get_basename()
 	
-	oCfgLoader.start()
-	
 	# Open all map file types
 	oCurrentMap.currentFilePaths = get_accompanying_files(map)
-	
 	compressedFiles.clear()
 	for i in oCurrentMap.currentFilePaths.values():
 		if oRNC.check_for_rnc_compression(i[oCurrentMap.PATHSTRING]) == true:
 			compressedFiles.append(i[oCurrentMap.PATHSTRING])
+	
+	oCfgLoader.start(filePath)
 	
 	if compressedFiles.empty() == true:
 		# Load files

@@ -3,7 +3,7 @@ extends Node
 func load_extra_images_from_harddrive():
 	var CODETIME_START = OS.get_ticks_msec()
 	var custom_images_dir = Settings.unearthdata.plus_file("custom-object-images")
-	var image_paths = get_png_files_in_dir(custom_images_dir)
+	var image_paths = Utils.get_filetype_in_directory(custom_images_dir, "png")
 	for image_path in image_paths:
 		var texture = load(image_path)
 		if texture is Texture:
@@ -12,20 +12,6 @@ func load_extra_images_from_harddrive():
 		else:
 			print("Failed to load texture: ", image_path)
 	print('Loaded extra images from HDD: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-
-func get_png_files_in_dir(path):
-	var png_files = []
-	var dir = Directory.new()
-	if dir.open(path) == OK:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if not dir.current_is_dir() and file_name.get_extension().to_lower() == "png":
-				png_files.append(path.plus_file(file_name))
-			file_name = dir.get_next()
-	else:
-		print("An error occurred when trying to access the directory: ", path)
-	return png_files
 
 
 #func load_custom_images_into_array(DATA_ARRAY, thingtypeImageFolder):
