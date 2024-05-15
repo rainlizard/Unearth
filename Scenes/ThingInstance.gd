@@ -218,9 +218,9 @@ func set_texture_based_on_thingtype():
 		Things.TYPE.OBJECT:
 			if subtype in [49, 111,120,121,122]: # Heart Flame and Gate
 				$ThingTexture.self_modulate = "a0ffffff"
-			elif Things.LIST_OF_BOXES.has(subtype):
+			var successOrFailure = Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($ThingTexture, subtype)
+			if successOrFailure == true:
 				$ThingTexture.rect_position += Vector2(-1,9)
-				Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($ThingTexture, subtype)
 		Things.TYPE.CREATURE:
 			if tex != null:
 				#$ThingTexture.rect_position.y -= 12

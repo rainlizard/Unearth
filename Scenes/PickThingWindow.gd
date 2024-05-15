@@ -197,47 +197,41 @@ func add_item_to_grid(tabID, id, set_text):
 	id.connect("pressed",self,"pressed",[id])
 	id.rect_min_size = Vector2(grid_item_size.x * grid_window_scale, grid_item_size.y * grid_window_scale)
 	
-	#yield(get_tree(),'idle_frame')
 	if is_instance_valid(id) == true:
-		var subtype = id.get_meta("thingSubtype")
-		if Things.LIST_OF_BOXES.has(subtype):
-			add_workshop_item_sprite_overlay(id, subtype)
+		add_workshop_item_sprite_overlay(id, id.get_meta("thingSubtype"))
 
 func add_workshop_item_sprite_overlay(textureParent, subtype):
-	var itemType = Things.LIST_OF_BOXES[subtype][0]
-	var itemSubtype = Things.LIST_OF_BOXES[subtype][1]
-	
-	var workshopItemInTheBox = TextureRect.new()
-	
-	match itemType:
-		Things.TYPE.TRAP: workshopItemInTheBox.texture = Things.fetch_sprite(itemType, itemSubtype)
-		Things.TYPE.DOOR: workshopItemInTheBox.texture = Things.fetch_sprite(itemType, itemSubtype)
-	
-	workshopItemInTheBox.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	#workshopItemInTheBox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	#workshopItemInTheBox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	workshopItemInTheBox.expand = true
-	
-	# It was tricky to get them consistent with each other (in ThingPickerWindow and on map), so just did it manually.
-	if textureParent is TextureButton:
-		workshopItemInTheBox.anchor_left = 0.25
-		workshopItemInTheBox.anchor_top = 0.25
-		workshopItemInTheBox.anchor_right = 0.75
-		workshopItemInTheBox.anchor_bottom = 0.75
-	else:
-		workshopItemInTheBox.anchor_left = 0.15
-		workshopItemInTheBox.anchor_top = 0.15
-		workshopItemInTheBox.anchor_right = 0.85
-		workshopItemInTheBox.anchor_bottom = 0.85
-	
-	workshopItemInTheBox.rect_position.x += 2
-	workshopItemInTheBox.rect_position.y -= 1
-	
-	workshopItemInTheBox.modulate = Color(1,1,1,0.5)
-	workshopItemInTheBox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	
-	textureParent.add_child(workshopItemInTheBox)
+	if Things.DATA_OBJECT.has(subtype):
+		var nameID = Things.DATA_OBJECT[subtype][Things.NAME_ID]
+		if Things.LIST_OF_BOXES.has(nameID):
+			var itemData = Things.LIST_OF_BOXES[nameID]
+			var itemType = itemData[0]
+			var itemSubtype = itemData[1]
 
+			var workshopItemInTheBox = TextureRect.new()
+			workshopItemInTheBox.texture = Things.fetch_sprite(itemType, itemSubtype)
+			workshopItemInTheBox.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			workshopItemInTheBox.expand = true
+
+			if textureParent is TextureButton:
+				workshopItemInTheBox.anchor_left = 0.25
+				workshopItemInTheBox.anchor_top = 0.25
+				workshopItemInTheBox.anchor_right = 0.75
+				workshopItemInTheBox.anchor_bottom = 0.75
+			else:
+				workshopItemInTheBox.anchor_left = 0.15
+				workshopItemInTheBox.anchor_top = 0.15
+				workshopItemInTheBox.anchor_right = 0.85
+				workshopItemInTheBox.anchor_bottom = 0.85
+
+			workshopItemInTheBox.rect_position = Vector2(2, -1)
+			workshopItemInTheBox.modulate = Color(1, 1, 1, 0.5)
+			workshopItemInTheBox.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+			textureParent.add_child(workshopItemInTheBox)
+			return true
+
+	return false
 
 func current_grid_container():
 	return get_grid_container_node(oThingTabs.get_current_tab_control())

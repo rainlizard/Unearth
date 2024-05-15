@@ -19,8 +19,9 @@ enum {
 	LOAD_CFG_CAMPAIGN,
 	LOAD_CFG_CURRENT_MAP,
 }
+
 func start(mapPath):
-	if Cube.tex.empty() == true:
+	if Cube.tex.empty():
 		Cube.read_cubes_cfg()
 	
 	var CODETIME_LOADCFG_START = OS.get_ticks_msec()
@@ -29,29 +30,23 @@ func start(mapPath):
 	var campaign_cfg = load_campaign_data(mapPath)
 	
 	var config_dirs = {
-		LOAD_CFG_FXDATA : oGame.DK_FXDATA_DIRECTORY,
-		LOAD_CFG_CAMPAIGN : oGame.GAME_DIRECTORY.plus_file(campaign_cfg.get("common", {}).get("CONFIGS_LOCATION", "")),
-		LOAD_CFG_CURRENT_MAP : "" # Add the directory for LOAD_CFG_CURRENT_MAP if needed
+		LOAD_CFG_FXDATA: oGame.DK_FXDATA_DIRECTORY,
+		LOAD_CFG_CAMPAIGN: oGame.GAME_DIRECTORY.plus_file(campaign_cfg.get("common", {}).get("CONFIGS_LOCATION", "")),
+		LOAD_CFG_CURRENT_MAP: mapPath.get_basename()
 	}
-	
-	# Load data from each directory in the specified order
-	for i in [LOAD_CFG_FXDATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
-		var cfg_dir = config_dirs[i]
-		if cfg_dir == "": continue
-		
-		match i:
-			LOAD_CFG_FXDATA:      oMessage.quick("Step 1: Data loaded from /fxdata/")
-			LOAD_CFG_CAMPAIGN:    oMessage.quick("Step 2: Data loaded from campaign configs directory")
-			LOAD_CFG_CURRENT_MAP: oMessage.quick("Step 3?")
-		
-		load_objects_data(cfg_dir.plus_file("objects.cfg"))
-		load_creatures_data(cfg_dir.plus_file("creature.cfg"))
-		load_trapdoor_data(cfg_dir.plus_file("trapdoor.cfg"))
-		load_terrain_data(cfg_dir.plus_file("terrain.cfg"))
+	for cfg_type in [LOAD_CFG_FXDATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
+		var cfg_dir = config_dirs[cfg_type]
+		for file_name in ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg"]:
+			var file_path = cfg_dir.plus_file(file_name)
+			if cfg_type == LOAD_CFG_CURRENT_MAP:
+				file_path = cfg_dir + "." + file_name
+			match file_name:
+				"objects.cfg": load_objects_data(file_path)
+				"creature.cfg": load_creatures_data(file_path)
+				"trapdoor.cfg": load_trapdoor_data(file_path)
+				"terrain.cfg": load_terrain_data(file_path)
 	
 	print('Loaded things from cfg files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
-
-
 
 func load_objects_data(path):
 	var objects_cfg = Utils.read_dkcfg_file(path)
@@ -84,6 +79,7 @@ func load_trapdoor_data(path):
 	var trapdoor_cfg = Utils.read_dkcfg_file(path)
 	for section in trapdoor_cfg:
 		var id = int(section)
+		if id == 0: continue
 		var trapOrDoor = -1
 		if section.begins_with("door"):
 			trapOrDoor = Things.TYPE.DOOR
@@ -101,10 +97,7 @@ func load_trapdoor_data(path):
 			Things.DATA_DOOR[id] = [newName, newSprite, Things.TAB_MISC]
 		elif trapOrDoor == Things.TYPE.TRAP:
 			Things.DATA_TRAP[id] = [newName, newSprite, Things.TAB_TRAP]
-		
-		var crate_id_number = Things.find_subtype_by_name(Things.TYPE.OBJECT, crateName)
-		Things.LIST_OF_BOXES[crate_id_number] = [trapOrDoor, id]
-
+		Things.LIST_OF_BOXES[crateName] = [trapOrDoor, id]
 
 func load_terrain_data(path):
 	var terrain_cfg = Utils.read_dkcfg_file(path)

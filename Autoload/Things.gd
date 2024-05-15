@@ -38,6 +38,7 @@ func _init():
 	default_data["DATA_EFFECTGEN"] = DATA_EFFECTGEN.duplicate(true)
 	default_data["DATA_CREATURE"] = DATA_CREATURE.duplicate(true)
 	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
+	default_data["LIST_OF_BOXES"] = LIST_OF_BOXES.duplicate(true)
 
 func reset_thing_data_to_default(): # Reset data. Takes 1ms.
 	DATA_EXTRA = default_data["DATA_EXTRA"].duplicate(true)
@@ -46,6 +47,7 @@ func reset_thing_data_to_default(): # Reset data. Takes 1ms.
 	DATA_EFFECTGEN = default_data["DATA_EFFECTGEN"].duplicate(true)
 	DATA_CREATURE = default_data["DATA_CREATURE"].duplicate(true)
 	DATA_OBJECT = default_data["DATA_OBJECT"].duplicate(true)
+	LIST_OF_BOXES = default_data["LIST_OF_BOXES"].duplicate(true)
 
 func fetch_sprite(thing_type, sub_type):
 	var sub_type_data = data_structure(thing_type).get(sub_type)
@@ -76,7 +78,11 @@ func fetch_name(thing_type, sub_type):
 		var sub_type_data = data_structure.get(sub_type)
 		if sub_type_data:
 			var nameId = sub_type_data[NAME_ID]
-			return dictionary_of_names.get(nameId, nameId.capitalize())
+			if nameId is String:
+				return dictionary_of_names.get(nameId, nameId.capitalize())
+			elif nameId is Array: # This is to take into considersation someone accidentally using two words with spaces as an object name. (otherwise we get a crash)
+				return dictionary_of_names.get(nameId[0], nameId[0].capitalize())
+			return "Error1337"
 		else:
 			return "Unknown " + data_structure_name[thing_type] + " Subtype: " + str(sub_type)
 	else:
@@ -165,22 +171,16 @@ func data_structure(thingType):
 
 
 var LIST_OF_BOXES = {
-094 : [TYPE.TRAP, 1], # Boulder Trap
-095 : [TYPE.TRAP, 2], # Alarm Trap
-096 : [TYPE.TRAP, 3], # Poison Gas Trap
-097 : [TYPE.TRAP, 4], # Lightning Trap
-098 : [TYPE.TRAP, 5], # Word of Power Trap
-099 : [TYPE.TRAP, 6], # Lava Trap
-100 : [TYPE.TRAP, 7], # Dummy Trap 2
-101 : [TYPE.TRAP, 8], # Dummy Trap 3
-102 : [TYPE.TRAP, 9], # Dummy Trap 4
-103 : [TYPE.TRAP, 10], # Dummy Trap 5
-104 : [TYPE.TRAP, 11], # Dummy Trap 6
-105 : [TYPE.TRAP, 12], # Dummy Trap 7
-106 : [TYPE.DOOR, 1], # Wooden Door
-107 : [TYPE.DOOR, 2], # Braced Door
-108 : [TYPE.DOOR, 3], # Iron Door
-109 : [TYPE.DOOR, 4], # Magic Door
+"WRKBOX_BOULDER" : [TYPE.TRAP, 1],
+"WRKBOX_ALARM" : [TYPE.TRAP, 2],
+"WRKBOX_POISONG" : [TYPE.TRAP, 3],
+"WRKBOX_LIGHTNG" : [TYPE.TRAP, 4],
+"WRKBOX_WRDOFPW" : [TYPE.TRAP, 5],
+"WRKBOX_LAVA" : [TYPE.TRAP, 6],
+"WRKBOX_WOOD" : [TYPE.DOOR, 1],
+"WRKBOX_BRACE" : [TYPE.DOOR, 2],
+"WRKBOX_STEEL" : [TYPE.DOOR, 3],
+"WRKBOX_MAGIC" : [TYPE.DOOR, 4],
 }
 
 
