@@ -126,27 +126,41 @@ func add_item(leftString, rightString):
 			var orientIndex = Constants.listOrientations.find(int(rightString))
 			if orientIndex != -1:
 				nodeRightColumn.selected = orientIndex
-		"Name": #Creature name
+		"Unique name": #Creature name
 			nodeRightColumn = LineEdit.new()
 			nodeRightColumn.placeholder_text = "Default"
 			nodeRightColumn.placeholder_alpha = 0.33
 			nodeRightColumn.text = rightString #Utils.strip_special_chars_from_string(rightString)
 			nodeRightColumn.connect("text_changed", self, "_on_property_value_changed", [nodeRightColumn, leftString])
+			#nodeRightColumn.add_font_override("font", preload("res://Theme/StokeSmaller.tres"))
 		_:
 			nodeRightColumn = Label.new()
 			nodeRightColumn.autowrap = true
 			nodeRightColumn.rect_min_size.x = columnRightSize
-			#if name == "ColumnListData": nodeRightColumn.rect_min_size.x = columnRightSize-50
-			# This is for when highlighting something in the Thing Window
-			if rightString == "":
-				nodeRightColumn.rect_min_size.x = 0
-				nameDesc.autowrap = false
 			
 			nodeRightColumn.text = rightString
 			nodeRightColumn.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_END # To handle the other side's autowrap text
 			nodeRightColumn.align = HALIGN_LEFT
+			
+			var largest_word_width = get_largest_word_width(nodeRightColumn.text, nodeRightColumn.get_font("font", "Label"))
+			if largest_word_width >= 198: # EFFECTGENERATOR_ENTRANCE_ is slightly too large
+				nodeRightColumn.add_font_override("font", preload("res://Theme/StokeTiny.tres"))
+			elif largest_word_width >= 101: # "DARK_MISTRESS" is slightly too large
+				nodeRightColumn.add_font_override("font", preload("res://Theme/StokeSmaller.tres"))
 	
 	add_child(nodeRightColumn)
+
+
+func get_largest_word_width(text: String, font: Font) -> float:
+	var words = text.split(" ")
+	var largest_word_width = 0.0
+
+	for word in words:
+		var word_width = font.get_string_size(word).x
+		if word_width > largest_word_width:
+			largest_word_width = word_width
+
+	return largest_word_width
 
 func _on_property_value_entered(new_val, callingNode): # When pressing Enter on LineEdit, lose focus
 	oEditor.mapHasBeenEdited = true
@@ -217,7 +231,7 @@ func update_property_value(callingNode, leftString):
 		"Point range":
 			property_name = "pointRange"
 			value = clamp(float(value), 0, 255)
-		"Name":
+		"Unique name":
 			property_name = "creatureName"
 			# String, so no clamping
 		"Gold held":
@@ -329,6 +343,3 @@ func delete_children(node):
 	for n in node.get_children():
 		node.remove_child(n) #important to do this otherwise the margins get messed up
 		n.queue_free()
-
-
-

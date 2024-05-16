@@ -103,26 +103,29 @@ func light_details(id):
 
 
 func thing_details(id):
-	for i in 16:
+	for i in 17:
 		var description = null
 		var value = null
 		match i:
 			0:
-				description = "ID"
+				description = "Name"
 				value = Things.fetch_name(id.thingType, id.subtype)
 			1:
-				description = "Type"
-				value = retrieve_subtype_value(id.thingType, id.subtype)
+				description = "ID"
+				value = Things.fetch_id_string(id.thingType, id.subtype)
 			2:
+				description = "Type"
+				value = Things.data_structure_name.get(id.thingType, "Unknown") + " : " + str(id.subtype)
+			3:
 				description = "Position"
 				value = str(id.locationX)+' '+str(id.locationY)+' '+str(id.locationZ)
-			3:
+			4:
 				description = "Ownership"
 				value = Constants.ownershipNames[id.ownership]
-			4:
+			5:
 				description = "Effect range" # 9-10
 				value = id.effectRange
-			5:
+			6:
 				description = "Attached to" # 11-12
 				if id.parentTile != null:
 					var parentY = int(id.parentTile/M.ySize)
@@ -136,41 +139,41 @@ func thing_details(id):
 					value += ' (' + str(parentX) + ','+str(parentY) + ')'
 				if id.parentTile == 65535:
 					value = "Manually placed"
-			6:
+			7:
 				description = "Door orientation" # 13
 				match id.doorOrientation:
 					0: value = "E/W"
 					1: value = "N/S"
-			7:
+			8:
 				description = "Level" # 14
 				value = id.creatureLevel
-			8:
+			9:
 				description = "Gate #" # 14
 				value = id.herogateNumber
-			9:
+			10:
 				description = "Custom box" # 14
 				value = id.boxNumber
-			10:
+			11:
 				description = "Door locked" # 14
 				value = id.doorLocked
 			# FX extended fields
-			11:
+			12:
 				description = "Health %"
 				value = id.creatureInitialHealth
 				if oCurrentFormat.selected == Constants.ClassicFormat: value = null
-			12:
+			13:
 				description = "Gold held"
 				value = id.creatureGold
 				if oCurrentFormat.selected == Constants.ClassicFormat: value = null
-			13:
-				description = "Name" # Creature name
+			14:
+				description = "Unique name"
 				value = id.creatureName
 				if oCurrentFormat.selected == Constants.ClassicFormat: value = null
-			14:
+			15:
 				description = "Gold value"
 				value = id.goldValue
 				if oCurrentFormat.selected == Constants.ClassicFormat: value = null
-			15:
+			16:
 				description = "Orientation"
 				value = id.orientation
 				if oCurrentFormat.selected == Constants.ClassicFormat: value = null
@@ -209,27 +212,17 @@ func _on_thing_portrait_mouse_entered(nodeId):
 	# Name
 	value = Things.fetch_name(portraitThingType, portraitSubtype)
 	if value != null:
-		oThingListData.add_item(str(value),"")
+		oThingListData.add_item("Name", str(value))
 	
-	value = null
+	value = Things.fetch_id_string(portraitThingType, portraitSubtype)
+	if value != null:
+		oThingListData.add_item("ID", str(value))
+	
 	if portraitThingType != Things.TYPE.EXTRA:
-		value = retrieve_subtype_value(portraitThingType, portraitSubtype)
+		value = Things.data_structure_name.get(portraitThingType, "Unknown") + " : " + str(portraitSubtype)
 		if value != null:
-			oThingListData.add_item(str(value),"")
+			oThingListData.add_item("Type", str(value))	
 
-func retrieve_subtype_value(t_type, s_type):
-	match t_type:
-		Things.TYPE.NONE: return "None" + " : " + str(s_type)
-		Things.TYPE.OBJECT: return "Object" + " : " + str(s_type)
-		Things.TYPE.CREATURE: return "Creature" + " : " + str(s_type)
-		Things.TYPE.EFFECTGEN: return "EffectGen" + " : " + str(s_type)
-		Things.TYPE.TRAP: return "Trap" + " : " + str(s_type)
-		Things.TYPE.DOOR: return "Door" + " : " + str(s_type)
-		Things.TYPE.EXTRA: return null
-#			match s_type:
-#				1: return "Action point : " + str(s_type)
-#				2: return "Light : " + str(s_type)
-	return "Unknown"
 
 # Fixes an obscure issue where it would continue to show what you've highlighted in the Thing Window inside of the Properties' Thing column.
 #func _on_PropertiesTabs_tab_changed(tab):

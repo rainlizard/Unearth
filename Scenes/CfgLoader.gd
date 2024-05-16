@@ -21,12 +21,14 @@ enum {
 }
 
 func start(mapPath):
+	
 	if Cube.tex.empty():
 		Cube.read_cubes_cfg()
 	
 	var CODETIME_LOADCFG_START = OS.get_ticks_msec()
 	
 	Things.reset_thing_data_to_default()
+	
 	var campaign_cfg = load_campaign_data(mapPath)
 	
 	var config_dirs = {

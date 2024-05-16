@@ -54,7 +54,6 @@ config/name="Unearth"
 run/main_scene="res://Scenes/Main.tscn"
 boot_splash/image="Skip-loading-screen"
 config/icon="res://Art/icon/UnearthIcon256x256.png"
-config/windows_native_icon="res://Art/icon/UnearthIcon.ico"
 
 [autoload]
 

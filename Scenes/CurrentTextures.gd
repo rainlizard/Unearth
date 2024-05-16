@@ -222,12 +222,12 @@ func convert_img_to_two_texture_arrays(img):
 
 
 func set_current_texture_pack():
-	var value = oDataLevelStyle.data
 	
+	var value = oDataLevelStyle.data
 	if cachedTextures.empty() == true:
 		oMessage.big("Error", "One or more tilesets failed to load. Try pressing the [Reload tileset cache] button in File->Preferences and then reopen the map.")
 		return
-	if cachedTextures[value] == null or cachedTextures[value][0] == null or cachedTextures[value][1] == null:
+	if value < cachedTextures.size() == false or cachedTextures[value] == null or cachedTextures[value][0] == null or cachedTextures[value][1] == null:
 		oMessage.big("Error", "Unable to load tileset number " + str(value) + ". Try pressing the [Reload tileset cache] button in File->Preferences.")
 		return
 	

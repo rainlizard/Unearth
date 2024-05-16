@@ -26,8 +26,9 @@ var orientation = 0
 var goldValue = 0
 
 enum FIELDS {
-	ID
-	TYPE
+	SUBTYPE
+	NAME_ID
+	THINGTYPE
 	OWNERSHIP
 	EFFECT_RANGE
 	CREATURE_LEVEL
@@ -68,51 +69,51 @@ func update_placing_tab():
 	var availableFields = []
 	match thingType:
 		Things.TYPE.NONE:
-			availableFields = [FIELDS.ID]
+			availableFields = [FIELDS.SUBTYPE]
 		Things.TYPE.OBJECT:
-			availableFields = [FIELDS.ID, FIELDS.TYPE]
+			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE]
 			if subtype == 133: #Mysterious Box
-				availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.CUSTOM_BOX_ID]
+				availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.CUSTOM_BOX_ID]
 			if oCurrentFormat.selected != 0: # Classic format
 				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.CREATURE:
-			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.CREATURE_LEVEL]
+			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.CREATURE_LEVEL]
 			if oCurrentFormat.selected != 0: # Classic format
 				availableFields.append(FIELDS.INITIAL_HEALTH)
 				availableFields.append(FIELDS.CREATURE_GOLD)
 				availableFields.append(FIELDS.CREATURE_NAME)
 				#availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.EFFECTGEN:
-			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.EFFECT_RANGE, FIELDS.ORIENTATION]
+			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.EFFECT_RANGE, FIELDS.ORIENTATION]
 			if oCurrentFormat.selected != 0: # Classic format
 				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.TRAP:
-			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.ORIENTATION]
+			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.ORIENTATION]
 			if oCurrentFormat.selected != 0: # Classic format
 				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.DOOR:
-			availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.DOOR_LOCKED]
+			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.DOOR_LOCKED]
 		Things.TYPE.EXTRA:
 			match subtype:
 				1:
-					availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.POINT_RANGE] # Action point
+					availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.POINT_RANGE] # Action point
 				2:
-					availableFields = [FIELDS.ID, FIELDS.TYPE, FIELDS.LIGHT_RANGE, FIELDS.LIGHT_INTENSITY] # Light
+					availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.LIGHT_RANGE, FIELDS.LIGHT_INTENSITY] # Light
 	
 	for i in FIELDS.size():
 		var description = null
 		var value = null
 		if i in availableFields:
 			match i:
-				FIELDS.ID:
-					description = "ID"
+				FIELDS.SUBTYPE:
+					description = "Name"
 					value = Things.fetch_name(thingType, subtype)
-				FIELDS.TYPE:
+				FIELDS.NAME_ID:
+					description = "ID"
+					value = Things.fetch_id_string(thingType, subtype)
+				FIELDS.THINGTYPE:
 					description = "Type"
-					value = oThingDetails.retrieve_subtype_value(thingType, subtype)
-#				FIELDS.OWNERSHIP:
-#					description = "Ownership"
-#					value = Constants.ownershipNames[ownership]
+					value = Things.data_structure_name.get(thingType, "Unknown") + " : " + str(subtype)
 				FIELDS.EFFECT_RANGE:
 					description = "Effect range" # 9-10
 					value = effectRange
@@ -135,7 +136,7 @@ func update_placing_tab():
 					description = "Custom box" # 14
 					value = boxNumber
 				FIELDS.CREATURE_NAME:
-					description = "Name" #Creature name
+					description = "Unique name"
 					value = creatureName
 				FIELDS.CREATURE_GOLD:
 					description = "Gold held"

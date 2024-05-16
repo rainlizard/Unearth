@@ -194,7 +194,7 @@ func continue_load(map):
 	oScriptEditor.initialize_for_new_map()
 	oOverheadOwnership.start()
 	oScriptHelpers.start()
-
+	
 	# update_editor_data
 	if Slabset.dat.empty() == true:
 		Slabset.load_default_slabset()
@@ -204,7 +204,7 @@ func continue_load(map):
 	oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.MULTI_THREADED)
 	
 	oDataClm.count_filled_clm_entries()
-
+	
 	oTextureCache.set_current_texture_pack()
 	
 	# finalize_map_opening

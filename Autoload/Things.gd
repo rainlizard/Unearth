@@ -88,6 +88,19 @@ func fetch_name(thing_type, sub_type):
 	else:
 		return "Unknown Thingtype " + str(thing_type) + ", Subtype: " + str(sub_type)
 
+func fetch_id_string(thing_type, sub_type):
+	var data_structure = data_structure(thing_type)
+	var sub_type_data = data_structure.get(sub_type)
+	if sub_type_data:
+		var nameId = sub_type_data[NAME_ID]
+		if nameId is String:
+			return nameId
+		elif nameId is Array: # This is to take into considersation someone accidentally using two words with spaces as an object name. (otherwise we get a crash)
+			return nameId[0].capitalize()
+		return "Error1337"
+	else:
+		return "Unknown " + data_structure_name[thing_type] + " Subtype: " + str(sub_type)
+
 
 var data_structure_name = {
 	TYPE.NONE: "Empty",
