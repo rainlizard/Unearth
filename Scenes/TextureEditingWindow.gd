@@ -1,9 +1,8 @@
 extends WindowDialog
-onready var oChooseFileListFileDialog = Nodelist.list["oChooseFileListFileDialog"]
 onready var oTextureCache = Nodelist.list["oTextureCache"]
-onready var oReloadEveryLineEdit = Nodelist.list["oReloadEveryLineEdit"]
-onready var oReloaderContainer = Nodelist.list["oReloaderContainer"]
 onready var oReloaderPathLabel = Nodelist.list["oReloaderPathLabel"]
+onready var oReloaderPathPackLabel = Nodelist.list["oReloaderPathPackLabel"]
+
 onready var oExportTmapaDatDialog = Nodelist.list["oExportTmapaDatDialog"]
 onready var oReadPalette = Nodelist.list["oReadPalette"]
 onready var oChooseTmapaFileDialog = Nodelist.list["oChooseTmapaFileDialog"]
@@ -22,37 +21,28 @@ var editingImg = Image.new()
 var fileTimes = []
 var partsList = []
 var modifiedCheck = File.new()
-
+var getPackFolder = ""
 
 func _ready():
 	editingImg.create(8*32, 68*32, false, Image.FORMAT_RGB8)
-	oReloaderContainer.visible = false
 	oExportTmapaButton.disabled = true
 	oExportTmapaButton.set_tooltip("A filelist pack must be loaded first in order to export")
-
-
-func _on_ChooseFileListFileDialog_file_selected(path):
-	fileListFilePath = path
-	oReloaderPathLabel.text = path
-	
-	oReloaderContainer.visible = true
-	oExportTmapaButton.disabled = false
-	oExportTmapaButton.set_tooltip("")
-	
-	initialize_filelist()
-	
-	reloader_loop()
-
+	oReloaderPathLabel.text = ""
+	oReloaderPathPackLabel.text = ""
 
 func reloader_loop():
 	if fileListFilePath != "":
 		execute()
-	
-	var timerNumber = float(oReloadEveryLineEdit.text)
-	#print(timerNumber)
-	yield(get_tree().create_timer(timerNumber), "timeout")
-	
+	yield(get_tree().create_timer(0.25), "timeout")
 	reloader_loop()
+
+
+func _on_TextureEditingHelpButton_pressed():
+	var helptxt = ""
+	helptxt += "After you load a tileset, a bunch of .PNG files will be saved to your hard drive. Edit these files in your favourite image editor.\n"
+	helptxt += "Unearth will actively reload the textures in real-time as you edit and save those .PNGs. So any edits you make will be shown in real-time in Unearth. This applies to the 3D view too, so press Spacebar while in the 3D view to stop the camera from moving.\n"
+	helptxt += "Be aware that 'Load tileset' may overwrite your .PNGs, so be sure to press 'Save tileset' when you're done otherwise you could lose data.\n"
+	oMessage.big("Help",helptxt)
 
 
 func initialize_filelist():
@@ -86,6 +76,7 @@ func initialize_filelist():
 
 
 func execute():
+	print("execute")
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	var anyChangesWereMade = false
@@ -131,8 +122,10 @@ func execute():
 		anyChangesWereMade = true
 	
 	if anyChangesWereMade == true:
-		var tmapaNumber = get_tmapa_filename()
-		oTextureCache.load_image_into_cache(editingImg, tmapaNumber)
+		print("anyChangesWereMade")
+		var baseName = get_tmapa_filename()
+		var tmapNumber = int(baseName.to_int())
+		oTextureCache.load_image_into_cache(editingImg, tmapNumber, baseName)
 		oTextureCache.set_current_texture_pack()
 	
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
@@ -143,13 +136,17 @@ func execute():
 
 
 
-func _on_LoadFilelistButton_pressed():
-	Utils.popup_centered(oChooseFileListFileDialog)
-	oChooseFileListFileDialog.current_dir = Settings.unearth_path.plus_file("textures").plus_file("")
-	oChooseFileListFileDialog.current_path = Settings.unearth_path.plus_file("textures").plus_file("")
-	oChooseFileListFileDialog.current_file = "filelist_tmapa000.txt"
+#func _on_LoadFilelistButton_pressed():
+#	Utils.popup_centered(oChooseFileListFileDialog)
+#	oChooseFileListFileDialog.current_dir = Settings.unearth_path.plus_file("textures").plus_file("")
+#	oChooseFileListFileDialog.current_path = Settings.unearth_path.plus_file("textures").plus_file("")
+#	oChooseFileListFileDialog.current_file = "filelist_tmapa000.txt"
 
 
+func _on_ModifyTexturesButton_pressed():
+	match OS.get_name():
+		"Windows": OS.shell_open(getPackFolder.replace("/", "\\"))
+		"X11": OS.shell_open(getPackFolder)
 
 func _on_ExportTmapaButton_pressed():
 	Utils.popup_centered(oExportTmapaDatDialog)
@@ -281,6 +278,7 @@ func _on_ChooseTmapaFileDialog_file_selected(path):
 		createNewImage.unlock()
 	
 	# Save PNGs (separate loop so we're iterating once on each file, rather than every single filelist line)
+	
 	var dir = Directory.new()
 	for localPath in imageDictionary:
 		
@@ -293,17 +291,32 @@ func _on_ChooseTmapaFileDialog_file_selected(path):
 		var createNewImage = imageDictionary[localPath]
 		createNewImage.save_png(savePath)
 		oMessage.quick("Exported : textures/" + localPath)
+		
+		getPackFolder = packFolder
+	
+	oReloaderPathPackLabel.text = getPackFolder
 	
 	save_new_filelist_txt_file(flContent, numberString, outputDir) # This goes after the "make_dir_recursive" commands
-	OS.shell_open(outputDir)
-	
 	print('Exported Filelist in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func save_new_filelist_txt_file(flContent, numberString, outputDir):
 	var file = File.new()
-	file.open(outputDir.plus_file("filelist_tmapa"+numberString+".txt"), File.WRITE)
+	var path = outputDir.plus_file("filelist_tmapa"+numberString+".txt")
+	file.open(path, File.WRITE)
 	file.store_string(flContent)
 	file.close()
+	
+	fileListFilePath = path
+	oReloaderPathLabel.text = path
+	
+	oExportTmapaButton.disabled = false
+	oExportTmapaButton.set_tooltip("")
+	
+	initialize_filelist()
+	
+	reloader_loop()
+
+
 
 #	for y in 68:
 #		for x in 8:
@@ -331,3 +344,5 @@ func save_new_filelist_txt_file(flContent, numberString, outputDir):
 #			#for z in lineArray[i]:
 #			#	print(z)
 #	editingImg.unlock()
+
+

@@ -205,8 +205,8 @@ func mouse_button_on_field():
 					change_mode(MODE_SUBTILE)
 			else:
 				change_mode(MODE_TILE)
-			oPlacingSettings.set_placing_tab_and_update_it()
 			oSelection.update_paint()
+			oPlacingSettings.set_placing_tab_and_update_it()
 	
 	if Input.is_action_pressed("mouse_right"):
 		if visible == true:

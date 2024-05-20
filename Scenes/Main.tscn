@@ -5001,21 +5001,6 @@ reset_on_save = false
 anims/Flash = SubResource( 17 )
 anims/RESET = SubResource( 18 )
 
-[node name="ChooseFileListFileDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = -2004.0
-margin_top = 1631.0
-margin_right = -1324.0
-margin_bottom = 2191.0
-rect_min_size = Vector2( 250, 87.5 )
-window_title = "Open a File"
-resizable = true
-dialog_text = "Find and select filelist_tmapa*.txt (must have accompanying pack* folder)"
-mode = 0
-access = 2
-filters = PoolStringArray( "*.txt" )
-show_hidden_files = true
-
 [node name="ChooseTmapaFileDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -1278.0
@@ -5055,9 +5040,10 @@ show_hidden_files = true
 visible = true
 margin_left = -1273.0
 margin_top = 954.0
-margin_right = -741.0
-margin_bottom = 1389.0
-window_title = "Tileset editing"
+margin_right = -989.0
+margin_bottom = 1202.0
+rect_min_size = Vector2( 284, 248 )
+window_title = "Create a tileset"
 resizable = true
 script = ExtResource( 126 )
 
@@ -5069,106 +5055,111 @@ margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -10.0
 
-[node name="CreateFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_right = 512.0
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+margin_right = 264.0
+margin_bottom = 89.0
+columns = 2
+
+[node name="Label" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
+margin_top = 3.0
+margin_right = 50.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 50, 0 )
+text = "1."
+align = 1
+
+[node name="CreateFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
+margin_left = 54.0
+margin_right = 229.0
 margin_bottom = 27.0
-text = "Convert tmapa*.dat file to filelist pack"
+rect_min_size = Vector2( 175, 0 )
+size_flags_horizontal = 0
+text = "Load tileset"
 
-[node name="LoadFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+[node name="Label2" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
+margin_top = 34.0
+margin_right = 50.0
+margin_bottom = 55.0
+rect_min_size = Vector2( 50, 0 )
+text = "2."
+align = 1
+
+[node name="ModifyTexturesButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
+margin_left = 54.0
 margin_top = 31.0
-margin_right = 512.0
+margin_right = 229.0
 margin_bottom = 58.0
-text = "Load filelist pack"
+rect_min_size = Vector2( 175, 0 )
+size_flags_horizontal = 4
+text = "Modify textures"
 
-[node name="ReloaderContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+[node name="Label3" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
+margin_top = 65.0
+margin_right = 50.0
+margin_bottom = 86.0
+rect_min_size = Vector2( 50, 0 )
+text = "3."
+align = 1
+
+[node name="ExportTmapaButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
+margin_left = 54.0
 margin_top = 62.0
-margin_right = 512.0
-margin_bottom = 384.0
+margin_right = 229.0
+margin_bottom = 89.0
+rect_min_size = Vector2( 175, 0 )
+size_flags_horizontal = 0
+text = "Save tileset"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+margin_top = 93.0
+margin_right = 264.0
+margin_bottom = 105.0
+rect_min_size = Vector2( 0, 12 )
+
+[node name="Label" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+margin_top = 109.0
+margin_right = 264.0
+margin_bottom = 130.0
+text = "Currently loaded:"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+margin_top = 134.0
+margin_right = 264.0
+margin_bottom = 180.0
+scroll_vertical_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ScrollContainer"]
+margin_right = 264.0
+margin_bottom = 46.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_right = 512.0
-margin_bottom = 21.0
-scroll_vertical_enabled = false
-
-[node name="ReloaderPathLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/ScrollContainer"]
-margin_right = 14.0
+[node name="ReloaderPathLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_right = 264.0
 margin_bottom = 21.0
 text = "<>"
 
-[node name="Spacing3" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
+[node name="ReloaderPathPackLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 25.0
-margin_right = 512.0
-margin_bottom = 49.0
-rect_min_size = Vector2( 24, 24 )
+margin_right = 264.0
+margin_bottom = 46.0
+text = "<>"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_top = 53.0
-margin_right = 512.0
-margin_bottom = 84.0
-
-[node name="label" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/HBoxContainer"]
-margin_top = 5.0
-margin_right = 114.0
-margin_bottom = 26.0
-text = "Reload every"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ReloadEveryLineEdit" type="LineEdit" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/HBoxContainer"]
-margin_left = 118.0
-margin_right = 176.0
-margin_bottom = 31.0
-text = "0.25"
-script = ExtResource( 89 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label2" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer/HBoxContainer"]
-margin_left = 180.0
-margin_top = 5.0
-margin_right = 250.0
-margin_bottom = 26.0
-text = "seconds"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Spacing" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_top = 88.0
-margin_right = 512.0
-margin_bottom = 112.0
-rect_min_size = Vector2( 24, 24 )
-
-[node name="ReloaderLoopLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_top = 116.0
-margin_right = 512.0
-margin_bottom = 281.0
-text = "Now actively reloading files from filelist pack folder, this means as you edit and save those .PNGs, any changes you make will be shown realtime in Unearth (in the 3D view too).
-
-Your Tileset in Map settings has been set to the texture pack # you're editing."
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ReloaderContainer"]
-margin_top = 285.0
-margin_right = 512.0
-margin_bottom = 309.0
-rect_min_size = Vector2( 24, 24 )
-
-[node name="ExportTmapaButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_top = 388.0
-margin_right = 512.0
-margin_bottom = 415.0
-text = "Export as tmapa*.dat"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="TextureEditingHelpButton" type="TextureButton" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+margin_left = 232.0
+margin_top = 184.0
+margin_right = 264.0
+margin_bottom = 216.0
+rect_min_size = Vector2( 32, 32 )
+size_flags_horizontal = 8
+texture_normal = ExtResource( 156 )
+texture_pressed = ExtResource( 66 )
+texture_hover = ExtResource( 128 )
+expand = true
+stretch_mode = 4
 
 [node name="ColumnEditor" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -7489,12 +7480,12 @@ script = SubResource( 20 )
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor/HelpButtonPosition/UNNEEDEDScriptHelpButton" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptEditor" method="_on_ScriptHelpButton_pressed"]
-[connection signal="file_selected" from="Ui/UiSystem/ChooseFileListFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseFileListFileDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseTmapaFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseTmapaFileDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportTmapaDatDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaDatDialog_file_selected"]
-[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/CreateFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_CreateFilelistButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/LoadFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_LoadFilelistButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/CreateFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_CreateFilelistButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/ModifyTexturesButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ModifyTexturesButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/TextureEditingHelpButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_TextureEditingHelpButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ColumnEditor" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditor_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorClearUnusedButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorClearUnusedButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorSortButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorSortButton_pressed"]

@@ -18,7 +18,6 @@ var lightRange = 10
 var lightIntensity = 32
 var pointRange = 5
 var boxNumber = 0
-
 var creatureName = ""
 var creatureGold = 0
 var creatureInitialHealth = 100
@@ -55,6 +54,26 @@ func editing_mode_was_switched(modeString):
 func _on_PropertiesTabs_tab_changed(tab):
 	if tab == 1:
 		set_placing_tab_and_update_it()
+
+
+func replicate_instance_settings(node):
+	if node.get("effectRange"): effectRange = node.effectRange
+	if node.get("creatureLevel"): creatureLevel = node.creatureLevel
+	if node.get("doorLocked"): doorLocked = node.doorLocked
+	if node.get("ownership"): ownership = node.ownership
+	if node.get("lightRange"): lightRange = node.lightRange
+	if node.get("lightIntensity"): lightIntensity = node.lightIntensity
+	if node.get("pointRange"): pointRange = node.pointRange
+	if node.get("boxNumber"): boxNumber = node.boxNumber
+	
+	if node.get("creatureName"): creatureName = node.creatureName
+	if node.get("creatureName") == "": creatureName = node.creatureName
+	
+	if node.get("creatureGold"): creatureGold = node.creatureGold
+	if node.get("creatureInitialHealth"): creatureInitialHealth = node.creatureInitialHealth
+	if node.get("orientation"): orientation = node.orientation
+	if node.get("goldValue"): goldValue = node.goldValue
+
 
 func set_placing_tab_and_update_it():
 	oPropertiesTabs.current_tab = 1

@@ -160,16 +160,14 @@ func save_image_as_png(img, inputPath):
 
 
 func load_cache_filename(path):
-	var fileName = path.get_file().get_basename().to_lower()
-	
-	
-	var cachePath = Settings.unearthdata.plus_file(fileName + ".png")
-	var tmapNumber = int(fileName.to_int())
+	var baseName = path.get_file().get_basename().to_lower()
+	var tmapNumber = int(baseName.to_int())
+	var cachePath = Settings.unearthdata.plus_file(baseName + ".png")
 	
 	if File.new().file_exists(cachePath) == true:
 		var img = Image.new()
 		img.load(cachePath)
-		load_image_into_cache(img, tmapNumber, fileName)
+		load_image_into_cache(img, tmapNumber, baseName)
 		return OK
 	else:
 		print('Cache file not found: ' + cachePath)
@@ -177,16 +175,17 @@ func load_cache_filename(path):
 		return FAILED
 
 
-func load_image_into_cache(img, tmapNumber, fileName):
+func load_image_into_cache(img, tmapNumber, baseName):
+	
 	while cachedTextures.size() <= tmapNumber: # Fill all array positions, in case a tmapa00#.dat file inbetween is deleted
 		cachedTextures.append([null, null, null, null])
 	
 	var twoArrays = convert_img_to_two_texture_arrays(img)
 	
-	if fileName.begins_with("tmapa"):
+	if baseName.to_lower().begins_with("tmapa"):
 		cachedTextures[tmapNumber][0] = twoArrays[0]
 		cachedTextures[tmapNumber][1] = twoArrays[1]
-	elif fileName.begins_with("tmapb"):
+	elif baseName.to_lower().begins_with("tmapb"):
 		cachedTextures[tmapNumber][2] = twoArrays[0]
 		cachedTextures[tmapNumber][3] = twoArrays[1]
 

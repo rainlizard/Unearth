@@ -31,6 +31,7 @@ onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
 onready var oSlabSideViewer = Nodelist.list["oSlabSideViewer"]
 onready var oUseSlabOwnerCheckBox = Nodelist.list["oUseSlabOwnerCheckBox"]
+onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 
 enum {
 	CONSTRUCT_BRUSH
@@ -132,6 +133,7 @@ func update_paint():
 					paintThingType = cursorOnInstancesArray[0].thingType
 					paintSubtype = cursorOnInstancesArray[0].subtype
 					oPickThingWindow.set_selection(paintThingType, paintSubtype)
+					oPlacingSettings.replicate_instance_settings(cursorOnInstancesArray[0])
 
 
 func construct_shape_for_placement(constructType):
