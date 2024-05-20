@@ -41,7 +41,6 @@ func _on_TextureEditingHelpButton_pressed():
 	var helptxt = ""
 	helptxt += "After you load a tileset, a bunch of .PNG files will be saved to your hard drive. Edit these files in your favourite image editor.\n"
 	helptxt += "Unearth will actively reload the textures in real-time as you edit and save those .PNGs. So any edits you make will be shown in real-time in Unearth. This applies to the 3D view too, so press Spacebar while in the 3D view to stop the camera from moving.\n"
-	helptxt += "Be aware that 'Load tileset' may overwrite your .PNGs, so be sure to press 'Save tileset' when you're done otherwise you could lose data.\n"
 	oMessage.big("Help",helptxt)
 
 
@@ -213,6 +212,9 @@ func _on_ExportTmapaDatDialog_file_selected(path):
 
 
 
+var user_cancelled = false
+
+
 func _on_ChooseTmapaFileDialog_file_selected(path):
 	var sourceImg = oTextureCache.convert_tmapa_to_image(path)
 	if sourceImg == null: return
@@ -231,7 +233,6 @@ func _on_ChooseTmapaFileDialog_file_selected(path):
 	flContent = flContent.replace("subdir", "pack" + numberString)
 	flContent = flContent.replace("textures_pack_number", "textures_pack_" + numberString)
 	filelistFile.close()
-	
 	
 	var lineArray = Array(flContent.split('\n', false))
 	lineArray.pop_front() # For the array remove the first line: textures_pack_number	8	68	32	32
@@ -279,14 +280,33 @@ func _on_ChooseTmapaFileDialog_file_selected(path):
 	
 	# Save PNGs (separate loop so we're iterating once on each file, rather than every single filelist line)
 	
+	var checkForExistingFolderOnce = 0
+	
 	var dir = Directory.new()
 	for localPath in imageDictionary:
 		
 		var savePath = outputDir.plus_file(localPath)
 		var packFolder = savePath.get_base_dir()
 		
+		
 		if dir.dir_exists(packFolder) == false:
 			dir.make_dir_recursive(packFolder)
+		else:
+			if checkForExistingFolderOnce == 0:
+				var confirmDialog = ConfirmationDialog.new()
+				confirmDialog.dialog_text = "The folder of .PNGs already exists, they will be overwritten: \n" + packFolder + "\n\n If overwriting the files here causes you data loss then Cancel and go backup the folder."
+				confirmDialog.window_title = "Confirm File Replacement"
+				confirmDialog.popup_exclusive = true
+				confirmDialog.connect("confirmed", self, "_on_confirmation_confirmed")
+				confirmDialog.connect("popup_hide", self, "_on_confirmation_hide")
+				add_child(confirmDialog)
+				confirmDialog.popup_centered()
+				yield(confirmDialog, "visibility_changed")
+				yield(get_tree(),'idle_frame')
+				if user_cancelled == true:
+					return
+		
+		checkForExistingFolderOnce = 1
 		
 		var createNewImage = imageDictionary[localPath]
 		createNewImage.save_png(savePath)
@@ -298,6 +318,14 @@ func _on_ChooseTmapaFileDialog_file_selected(path):
 	
 	save_new_filelist_txt_file(flContent, numberString, outputDir) # This goes after the "make_dir_recursive" commands
 	print('Exported Filelist in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+func _on_confirmation_confirmed():
+	user_cancelled = false
+
+func _on_confirmation_hide():
+	if not user_cancelled:
+		user_cancelled = true
+
 
 func save_new_filelist_txt_file(flContent, numberString, outputDir):
 	var file = File.new()

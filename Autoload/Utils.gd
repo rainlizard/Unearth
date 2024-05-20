@@ -35,6 +35,13 @@ func string_has_letters(string):
 		return true
 	return false
 
+func load_external_texture(path):
+	var img = Image.new()
+	img.load(path)
+	var texture = ImageTexture.new()
+	texture.create_from_image(img)
+	return texture
+
 func get_filetype_in_directory(directory_path: String, file_extension: String) -> Array:
 	var files = []
 	var directory = Directory.new()

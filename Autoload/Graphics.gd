@@ -5,8 +5,8 @@ func load_extra_images_from_harddrive():
 	var custom_images_dir = Settings.unearthdata.plus_file("custom-object-images")
 	var image_paths = Utils.get_filetype_in_directory(custom_images_dir, "png")
 	for image_path in image_paths:
-		var texture = load(image_path)
-		if texture is Texture:
+		var texture = Utils.load_external_texture(image_path)
+		if texture is ImageTexture:
 			var image_name = image_path.get_file().get_basename().to_upper()
 			sprite_id[image_name] = texture
 		else:
