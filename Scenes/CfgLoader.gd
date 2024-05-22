@@ -57,13 +57,52 @@ func load_objects_data(path):
 			var id = int(section)
 			if id == 0: continue
 			if id >= 136 or id in [100, 101, 102, 103, 104, 105]: # Dummy Boxes should be overwritten
-				var data = objects_cfg[section]
-				var newName = data["Name"]
-				var animID = data["AnimationID"]
+				var objSection = objects_cfg[section]
+				var newName = objSection["Name"]
+				var animID = objSection["AnimationID"]
 				var newSprite = get_sprite(animID, newName)
-				var newGenre = data.get("Genre", null)
+				var newGenre = objSection.get("Genre", null)
 				var newEditorTab = Things.GENRE_TO_TAB[newGenre]
 				Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
+
+func load_terrain_data(path):
+	var terrain_cfg = Utils.read_dkcfg_file(path)
+	for section in terrain_cfg:
+		if section.begins_with("slab"):
+			var id = int(section)
+			if id >= 55: # Beyond Slabs.PURPLE_PATH
+				var slabSection = terrain_cfg[section]
+				
+				var setName = slabSection.get("Name", "Unknown")
+				if setName != "Unknown":
+					setName = Slabs.NAME_MAPPINGS.get(setName, setName.capitalize())
+				
+# BlockFlagsHeight
+# BlockHealthIndex
+# BlockFlags
+# NoBlockFlags #; Possible (no)block flags are: VALUABLE, IS_ROOM, UNEXPLORED, DIGGABLE, FILLED, IS_DOOR, and TAGGED_VALUABLE.
+# FillStyle # ; The type of terrain this slab fills adjacent slabs with if possible. 1 = Lava. 2 = Water.
+# Category # ; 0 = Unclaimed. 1 = Diggable dirt. 2 = Claimed path. 3 = Fortified wall. 4 = Room interior. 5 = Obstacle.
+# SlbID
+# Indestructible # ; If set to 1 the slab cannot be dug, is immune to vandalizing and eruption effect.
+# Wibble # ; The amount of distortion the slab has in normal view. The higher the value, the less distortion there is.
+# Animated
+# IsSafeLand
+# IsDiggable
+# IsOwnable
+# WlbType
+				
+				Slabs.data[id] = [
+					setName,
+					Slabs.BLOCK_SLAB,
+					Slabs.BITMASK_BLOCK,
+					Slabs.PANEL_TOP_VIEW,
+					0,
+					Slabs.TAB_MAINSLAB,
+					Slabs.WIBBLE_ON,
+					Slabs.REMEMBER_PATH,
+					Slabs.NOT_OWNABLE,
+				]
 
 
 func load_creatures_data(path):
@@ -101,8 +140,7 @@ func load_trapdoor_data(path):
 			Things.DATA_TRAP[id] = [newName, newSprite, Things.TAB_TRAP]
 		Things.LIST_OF_BOXES[crateName] = [trapOrDoor, id]
 
-func load_terrain_data(path):
-	var terrain_cfg = Utils.read_dkcfg_file(path)
+
 
 
 func get_sprite(first_priority, second_priority):

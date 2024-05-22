@@ -1,4 +1,4 @@
-[gd_scene load_steps=190 format=2]
+[gd_scene load_steps=191 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -169,6 +169,7 @@
 [ext_resource path="res://Scenes/ThreadedSaveUndo.gd" type="Script" id=167]
 [ext_resource path="res://Scenes/Guidelines.gd" type="Script" id=168]
 [ext_resource path="res://Scenes/CfgLoader.gd" type="Script" id=169]
+[ext_resource path="res://Scenes/CompareCreatureStats.gd" type="Script" id=170]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -6800,6 +6801,89 @@ allow_reselect = true
 auto_height = true
 script = ExtResource( 65 )
 
+[node name="SortCreatureStats" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = 1704.0
+margin_top = -1832.0
+margin_right = 2053.0
+margin_bottom = -886.0
+rect_min_size = Vector2( 281, 296 )
+mouse_filter = 1
+window_title = "Compare Creature Stats"
+resizable = true
+script = ExtResource( 170 )
+
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/SortCreatureStats"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SortCreatureStats/MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 329.0
+margin_bottom = 926.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer"]
+margin_right = 309.0
+margin_bottom = 27.0
+
+[node name="LeftStatsButton" type="Button" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 27.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 27, 27 )
+size_flags_horizontal = 0
+text = "<"
+
+[node name="StatsOptionButton" type="OptionButton" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 31.0
+margin_right = 278.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Sections"
+
+[node name="RightStatsButton" type="Button" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 282.0
+margin_right = 309.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 27, 27 )
+size_flags_horizontal = 0
+text = ">"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SortCreaStatsGrid" type="GridContainer" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/ScrollContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/hseparation = 20
+columns = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer"]
+margin_top = 879.0
+margin_right = 309.0
+margin_bottom = 906.0
+
+[node name="NameStatsButton" type="Button" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_right = 100.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 100, 0 )
+size_flags_horizontal = 2
+text = "Name"
+
 [node name="MapCoordinatesWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -1480.0
@@ -7556,6 +7640,10 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/ResizeApplyButton" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeApplyButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/GridDataWindow" to="Game2D/AnalyzeGrids" method="_on_GridDataWindow_visibility_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ActionPointListWindow" to="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ScrollContainer/ActionPointList" method="_on_ActionPointListWindow_visibility_changed"]
+[connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/LeftStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_LeftStatsButton_pressed"]
+[connection signal="item_selected" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/StatsOptionButton" to="Ui/UiSystem/SortCreatureStats" method="_on_StatsOptionButton_item_selected"]
+[connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/RightStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_RightStatsButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/NameStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_NameStatsButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapCoordinatesWindow" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_MapCoordinatesWindow_visibility_changed"]
 [connection signal="gui_input" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_gui_input"]
 [connection signal="resized" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_resized"]

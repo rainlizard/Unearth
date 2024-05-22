@@ -81,9 +81,6 @@ enum {
 	GEMS = 52,
 	GUARD_POST = 53,
 	PURPLE_PATH = 54,
-#	PURPLE_PATH2 = 55,
-#	PURPLE_PATH3 = 56,
-#	PURPLE_PATH4 = 57,
 	# 58 doesn't exist within 1304 entries
 	WALL_AUTOMATIC = 999,
 }
@@ -263,11 +260,6 @@ IRON_DOOR_2,
 MAGIC_DOOR_2,
 PORTAL,
 DUNGEON_HEART,
-
-#PURPLE_PATH2,
-#PURPLE_PATH3,
-#PURPLE_PATH4,
-
 EARTH_WITH_TORCH,
 WALL_WITH_TORCH,
 WALL_WITH_BANNER,
@@ -303,3 +295,9 @@ func is_door(slabID):
 		if data[slabID][BITMASK_TYPE] == BITMASK_DOOR1 or data[slabID][BITMASK_TYPE] == BITMASK_DOOR2:
 			return true
 	return false
+
+var NAME_MAPPINGS = {
+	"DOOR_SECRET" : "Secret Door",
+	"DOOR_SECRET2" : "Secret Door",
+	"HARD_FLOOR" : "Hard Floor",
+}
