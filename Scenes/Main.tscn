@@ -6836,19 +6836,19 @@ size_flags_vertical = 3
 margin_right = 309.0
 margin_bottom = 27.0
 
+[node name="StatsOptionButton" type="OptionButton" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 247.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Sections"
+
 [node name="LeftStatsButton" type="Button" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_right = 27.0
+margin_left = 251.0
+margin_right = 278.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 27, 27 )
 size_flags_horizontal = 0
 text = "<"
-
-[node name="StatsOptionButton" type="OptionButton" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_left = 31.0
-margin_right = 278.0
-margin_bottom = 27.0
-size_flags_horizontal = 3
-text = "Sections"
 
 [node name="RightStatsButton" type="Button" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer"]
 margin_left = 282.0
@@ -7640,8 +7640,8 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/ResizeApplyButton" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeApplyButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/GridDataWindow" to="Game2D/AnalyzeGrids" method="_on_GridDataWindow_visibility_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ActionPointListWindow" to="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ScrollContainer/ActionPointList" method="_on_ActionPointListWindow_visibility_changed"]
-[connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/LeftStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_LeftStatsButton_pressed"]
 [connection signal="item_selected" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/StatsOptionButton" to="Ui/UiSystem/SortCreatureStats" method="_on_StatsOptionButton_item_selected"]
+[connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/LeftStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_LeftStatsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/RightStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_RightStatsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/NameStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_NameStatsButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapCoordinatesWindow" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_MapCoordinatesWindow_visibility_changed"]
