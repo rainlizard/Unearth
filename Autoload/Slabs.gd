@@ -96,8 +96,8 @@ enum {
 	BITMASK_FLOOR = 0
 	BITMASK_BLOCK = 1
 	BITMASK_SIMPLE = 2
-	BITMASK_REINFORCED = 4
 	BITMASK_CLAIMED = 3
+	BITMASK_REINFORCED = 4
 	BITMASK_DOOR1 = 5
 	BITMASK_DOOR2 = 6
 }
@@ -200,12 +200,12 @@ var data = {
 	IRON_DOOR_1:         ["Iron Door",             FLOOR_SLAB, BITMASK_DOOR1,         PANEL_DOOR_VIEW, 3, TAB_NONE,      WIBBLE_ON,       REMEMBER_PATH,  OWNABLE], # 46
 	IRON_DOOR_2:         ["Iron Door",             FLOOR_SLAB, BITMASK_DOOR2,         PANEL_DOOR_VIEW, 3, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  OWNABLE], # 47
 	MAGIC_DOOR_1:        ["Magic Door",            FLOOR_SLAB, BITMASK_DOOR1,         PANEL_DOOR_VIEW, 3, TAB_NONE,      WIBBLE_ON,       REMEMBER_PATH,  OWNABLE], # 48
-	MAGIC_DOOR_2:        ["Magic Door",            FLOOR_SLAB, BITMASK_DOOR2,          PANEL_DOOR_VIEW, 3, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  OWNABLE], # 49
-	SLAB_50:             ["Slab 50",               FLOOR_SLAB, BITMASK_SIMPLE,         PANEL_TOP_VIEW,  3, TAB_OTHER,     WIBBLE_OFF,      REMEMBER_PATH,  OWNABLE], # 50
-	BRIDGE:              ["Bridge",                FLOOR_SLAB, BITMASK_SIMPLE,         PANEL_TOP_VIEW,  3, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  OWNABLE], # 51
-	GEMS:                ["Gems",                  BLOCK_SLAB, BITMASK_SIMPLE,         PANEL_TOP_VIEW,  3, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  NOT_OWNABLE], # 52
-	GUARD_POST:          ["Guard Post",            FLOOR_SLAB, BITMASK_SIMPLE,         PANEL_TOP_VIEW,  3, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  OWNABLE], # 53
-	PURPLE_PATH:         ["Purple Path",           FLOOR_SLAB, BITMASK_SIMPLE,         PANEL_TOP_VIEW,  0, TAB_OTHER,     WIBBLE_OFF,      REMEMBER_PATH,  NOT_OWNABLE], # 54
+	MAGIC_DOOR_2:        ["Magic Door",            FLOOR_SLAB, BITMASK_DOOR2,         PANEL_DOOR_VIEW, 3, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  OWNABLE], # 49
+	SLAB_50:             ["Slab 50",               FLOOR_SLAB, BITMASK_SIMPLE,        PANEL_TOP_VIEW,  3, TAB_OTHER,     WIBBLE_OFF,      REMEMBER_PATH,  OWNABLE], # 50
+	BRIDGE:              ["Bridge",                FLOOR_SLAB, BITMASK_SIMPLE,        PANEL_TOP_VIEW,  3, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  OWNABLE], # 51
+	GEMS:                ["Gems",                  BLOCK_SLAB, BITMASK_SIMPLE,        PANEL_TOP_VIEW,  3, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  NOT_OWNABLE], # 52
+	GUARD_POST:          ["Guard Post",            FLOOR_SLAB, BITMASK_SIMPLE,        PANEL_TOP_VIEW,  3, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  OWNABLE], # 53
+	PURPLE_PATH:         ["Purple Path",           FLOOR_SLAB, BITMASK_SIMPLE,        PANEL_TOP_VIEW,  0, TAB_OTHER,     WIBBLE_OFF,      REMEMBER_PATH,  NOT_OWNABLE], # 54
 	WALL_AUTOMATIC:      ["Wall Automatic",        BLOCK_SLAB, BITMASK_REINFORCED,    PANEL_TOP_VIEW,  0, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  OWNABLE], # 99999
 }
 var icons = {
@@ -299,5 +299,5 @@ func is_door(slabID):
 var NAME_MAPPINGS = {
 	"DOOR_SECRET" : "Secret Door",
 	"DOOR_SECRET2" : "Secret Door",
-	"HARD_FLOOR" : "Hard Floor",
+	"HARD_FLOOR" : "Bedrock",
 }

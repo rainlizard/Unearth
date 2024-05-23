@@ -66,8 +66,6 @@ func load_objects_data(path):
 				Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
 
 func load_terrain_data(path):
-	return #!!!!!!!
-	
 	var terrain_cfg = Utils.read_dkcfg_file(path)
 	for section in terrain_cfg:
 		if section.begins_with("slab"):
@@ -79,31 +77,52 @@ func load_terrain_data(path):
 				if setName != "Unknown":
 					setName = Slabs.NAME_MAPPINGS.get(setName, setName.capitalize())
 				
-# BlockFlagsHeight
-# BlockHealthIndex
-# BlockFlags
-# NoBlockFlags #; Possible (no)block flags are: VALUABLE, IS_ROOM, UNEXPLORED, DIGGABLE, FILLED, IS_DOOR, and TAGGED_VALUABLE.
-# FillStyle # ; The type of terrain this slab fills adjacent slabs with if possible. 1 = Lava. 2 = Water.
-# Category # ; 0 = Unclaimed. 1 = Diggable dirt. 2 = Claimed path. 3 = Fortified wall. 4 = Room interior. 5 = Obstacle.
-# SlbID
-# Indestructible # ; If set to 1 the slab cannot be dug, is immune to vandalizing and eruption effect.
-# Wibble # ; The amount of distortion the slab has in normal view. The higher the value, the less distortion there is.
-# Animated
-# IsSafeLand
-# IsDiggable
-# IsOwnable
-# WlbType
+				var getBlockFlags = slabSection.get("BlockFlags", [])
+				if getBlockFlags is String and getBlockFlags == "":
+					getBlockFlags = []
+				
+				var setBlockType = Slabs.FLOOR_SLAB
+				if "FILLED" in getBlockFlags or "DIGGABLE" in getBlockFlags or "VALUABLE" in getBlockFlags:
+					setBlockType = Slabs.BLOCK_SLAB
+				
+				var setIsOwnable = Slabs.NOT_OWNABLE
+				if slabSection.get("IsOwnable", 0) == 1:
+					setIsOwnable = Slabs.OWNABLE
+				
+				
+				var setBitmask = Slabs.BITMASK_FLOOR
+				
+				if slabSection.get("Animated", 0) == 1:
+					setBitmask = Slabs.BITMASK_SIMPLE
+					if "IS_DOOR" in getBlockFlags:
+						if setName.ends_with("2"):
+							setBitmask = Slabs.BITMASK_DOOR2
+						else: setBitmask = Slabs.BITMASK_DOOR1
+				else:
+					match slabSection.get("Category", 0):
+						0: # Unclaimed
+							setBitmask = Slabs.BITMASK_FLOOR
+						1: # Diggable dirt
+							setBitmask = Slabs.BITMASK_BLOCK
+						2: # Claimed path
+							setBitmask = Slabs.BITMASK_CLAIMED
+						3: # Fortified wall
+							setBitmask = Slabs.BITMASK_REINFORCED
+						4: # Room interior
+							setBitmask = Slabs.BITMASK_FLOOR
+						5: # Obstacle
+							setBitmask = Slabs.BITMASK_SIMPLE
 				
 				Slabs.data[id] = [
 					setName,
-					Slabs.BLOCK_SLAB,
-					Slabs.BITMASK_BLOCK,
-					Slabs.PANEL_TOP_VIEW,
-					0,
-					Slabs.TAB_MAINSLAB,
-					Slabs.WIBBLE_ON,
-					Slabs.REMEMBER_PATH,
-					Slabs.NOT_OWNABLE,
+					setBlockType,
+					setBitmask,
+					Slabs.PANEL_TOP_VIEW, # Affects appearance in slab window
+					0,  # Affects appearance in slab window
+					Slabs.TAB_MAINSLAB, # Good
+					slabSection.get("Wibble", 0),
+					slabSection.get("WlbType", 0),
+					setIsOwnable,
 				]
 
 
