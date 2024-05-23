@@ -1,6 +1,6 @@
 extends Node
 
-var major_minor = "0.47"
+var major_minor = "0.48"
 var patch = "0000"
 var full = ""
 var unearth_map_format_version:float = 1.05

@@ -66,6 +66,8 @@ func load_objects_data(path):
 				Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
 
 func load_terrain_data(path):
+	return #!!!!!!!
+	
 	var terrain_cfg = Utils.read_dkcfg_file(path)
 	for section in terrain_cfg:
 		if section.begins_with("slab"):

@@ -1699,7 +1699,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "View"
 align = 0
-items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Action points", null, 0, false, false, 4, 0, null, "", false, "Grid data", null, 0, false, false, 5, 0, null, "", false ]
+items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Action points", null, 0, false, false, 4, 0, null, "", false, "Grid data", null, 0, false, false, 5, 0, null, "", false, "Creature Stats", null, 0, false, false, 6, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -6809,7 +6809,7 @@ margin_right = 2053.0
 margin_bottom = -886.0
 rect_min_size = Vector2( 281, 296 )
 mouse_filter = 1
-window_title = "Compare Creature Stats"
+window_title = "Creature Stat Comparison"
 resizable = true
 script = ExtResource( 170 )
 
@@ -6859,30 +6859,43 @@ size_flags_horizontal = 0
 text = ">"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_top = 31.0
+margin_right = 309.0
+margin_bottom = 870.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="SortCreaStatsGrid" type="GridContainer" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/ScrollContainer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_right = 309.0
+margin_bottom = 839.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/hseparation = 20
 columns = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer"]
-margin_top = 879.0
+margin_top = 874.0
 margin_right = 309.0
 margin_bottom = 906.0
 
 [node name="NameStatsButton" type="Button" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2"]
 margin_right = 100.0
-margin_bottom = 27.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 100, 0 )
 size_flags_horizontal = 2
 text = "Name"
+
+[node name="CCStatsHelpButton" type="TextureButton" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 277.0
+margin_right = 309.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+size_flags_horizontal = 8
+texture_normal = ExtResource( 156 )
+texture_pressed = ExtResource( 66 )
+texture_hover = ExtResource( 128 )
+expand = true
+stretch_mode = 4
 
 [node name="MapCoordinatesWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -7640,10 +7653,12 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/ResizeApplyButton" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeApplyButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/GridDataWindow" to="Game2D/AnalyzeGrids" method="_on_GridDataWindow_visibility_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ActionPointListWindow" to="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ScrollContainer/ActionPointList" method="_on_ActionPointListWindow_visibility_changed"]
+[connection signal="visibility_changed" from="Ui/UiSystem/SortCreatureStats" to="Ui/UiSystem/SortCreatureStats" method="_on_SortCreatureStats_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/StatsOptionButton" to="Ui/UiSystem/SortCreatureStats" method="_on_StatsOptionButton_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/LeftStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_LeftStatsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/RightStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_RightStatsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/NameStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_NameStatsButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/CCStatsHelpButton" to="Ui/UiSystem/SortCreatureStats" method="_on_CCStatsHelpButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapCoordinatesWindow" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_MapCoordinatesWindow_visibility_changed"]
 [connection signal="gui_input" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_gui_input"]
 [connection signal="resized" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_resized"]

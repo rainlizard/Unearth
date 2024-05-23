@@ -2,32 +2,28 @@ extends WindowDialog
 onready var oGame = Nodelist.list["oGame"]
 onready var oSortCreaStatsGrid = Nodelist.list["oSortCreaStatsGrid"]
 onready var oStatsOptionButton = Nodelist.list["oStatsOptionButton"]
+onready var oMessage = Nodelist.list["oMessage"]
 
+var name_type = 0
 
 var all_creature_data = {}
 
 var selected_labels = []
+func _on_SortCreatureStats_visibility_changed():
+	if visible == true:
+		start()
 
-func _ready():
-	for i in 10:
-		yield(get_tree(),'idle_frame')
-	
-	var CODETIME_START = OS.get_ticks_msec()
+func start():
 	var listOfCfgs = Utils.get_filetype_in_directory(oGame.GAME_DIRECTORY.plus_file("creatrs"), "CFG")
 	for path in listOfCfgs:
 		var aaa = Utils.read_dkcfg_file(path)
 		all_creature_data[path.get_file()] = aaa
 	
-	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-	
 	populate_optionbutton()
-	
 	
 	# Default selection
 	oStatsOptionButton.select(2)
 	_on_StatsOptionButton_item_selected(2)
-	
-	Utils.popup_centered(self)
 
 func _on_StatsOptionButton_item_selected(optionButtonIndex):
 	update_list(optionButtonIndex)
@@ -41,7 +37,8 @@ func update_list(optionButtonIndex):
 	var optionButtonMeta = oStatsOptionButton.get_item_metadata(optionButtonIndex)
 	
 	for file in all_creature_data:
-		var getName = all_creature_data[file].get("attributes").get("Name")
+		var getName = figure_out_name(all_creature_data[file].get("attributes").get("Name"), file)
+		
 		for section in all_creature_data[file]:
 			if section == optionButtonMeta[0]:
 				
@@ -55,6 +52,16 @@ func update_list(optionButtonIndex):
 		if label_text in selected_labels:
 			col = Color(1.0,1.0,1.0)
 		add_entry(i[0], i[1], col)
+
+func figure_out_name(NAME_ID, file):
+	match name_type:
+		0:
+			var subtype = Things.find_subtype_by_name(Things.TYPE.CREATURE, NAME_ID)
+			return Things.fetch_name(Things.TYPE.CREATURE, subtype)
+		1:
+			return NAME_ID
+		2: 
+			return file
 
 
 func sort_list(a, b):
@@ -134,10 +141,9 @@ func _on_label_gui_input(event, l1, l2):
 
 func _on_NameStatsButton_pressed():
 	selected_labels.clear()
-	
-	
-
-
+	name_type += 1
+	if name_type >= 3: name_type = 0
+	update_list(oStatsOptionButton.selected)
 
 
 func _on_RightStatsButton_pressed():
@@ -174,3 +180,11 @@ func populate_optionbutton():
 					oStatsOptionButton.add_item(key)
 					oStatsOptionButton.set_item_metadata(idx, [section, key])
 				oStatsOptionButton.add_separator()
+
+
+func _on_CCStatsHelpButton_pressed():
+	var helptxt = ""
+	helptxt += "These files are currently only loaded from the main /creatrs/ directory, not from anywhere else."
+	oMessage.big("Help",helptxt)
+
+
