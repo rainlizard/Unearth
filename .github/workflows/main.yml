@@ -33,8 +33,8 @@ jobs:
         sed -i "s/var patch = .*/var patch = \"$PATCH\"/" Autoload/Version.gd
     - name: Setup Godot and Export Templates
       run: |
-        wget -q https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_linux_headless.64.zip
-        wget -q https://downloads.tuxfamily.org/godotengine/3.5.3/Godot_v3.5.3-stable_export_templates.tpz
+        wget -q https://github.com/godotengine/godot/releases/download/3.5.3-stable/Godot_v3.5.3-stable_linux_headless.64.zip
+        wget -q https://github.com/godotengine/godot/releases/download/3.5.3-stable/Godot_v3.5.3-stable_export_templates.tpz
         unzip -q Godot_v3.5.3-stable_linux_headless.64.zip
         unzip -q Godot_v3.5.3-stable_export_templates.tpz
         mkdir -p ~/.local/share/godot/templates/3.5.3.stable/
