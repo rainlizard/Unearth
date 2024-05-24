@@ -65,14 +65,14 @@ func load_objects_data(path):
 				var newEditorTab = Things.GENRE_TO_TAB[newGenre]
 				Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
 
+const keeperfx_edited_slabs = [Slabs.GEMS] # This is to help with backwards compatibility for previous keeperfx versions that don't have these edits.
 
 func load_terrain_data(path):
 	var terrain_cfg = Utils.read_dkcfg_file(path)
 	for section in terrain_cfg:
 		if section.begins_with("slab"):
 			var id = int(section)
-			
-			if id >= 55: # Beyond Slabs.PURPLE_PATH
+			if id >= 54 or id in keeperfx_edited_slabs:
 				var slabSection = terrain_cfg[section]
 				
 				var setName = slabSection.get("Name", "UNKNOWN")
@@ -90,7 +90,7 @@ func load_terrain_data(path):
 					setIsOwnable = Slabs.OWNABLE
 				
 				
-				var setBitmask = Slabs.BITMASK_FLOOR
+				var setBitmask = Slabs.BITMASK_GENERAL
 				
 				if slabSection.get("Animated", 0) == 1:
 					setBitmask = Slabs.BITMASK_SIMPLE
@@ -101,15 +101,15 @@ func load_terrain_data(path):
 				else:
 					match slabSection.get("Category", 0):
 						0: # Unclaimed
-							setBitmask = Slabs.BITMASK_FLOOR
+							setBitmask = Slabs.BITMASK_GENERAL
 						1: # Diggable dirt
-							setBitmask = Slabs.BITMASK_BLOCK
+							setBitmask = Slabs.BITMASK_GENERAL
 						2: # Claimed path
 							setBitmask = Slabs.BITMASK_CLAIMED
 						3: # Fortified wall
 							setBitmask = Slabs.BITMASK_REINFORCED
 						4: # Room interior
-							setBitmask = Slabs.BITMASK_FLOOR
+							setBitmask = Slabs.BITMASK_GENERAL
 						5: # Obstacle
 							setBitmask = Slabs.BITMASK_SIMPLE
 				

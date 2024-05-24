@@ -43,7 +43,7 @@ func load_file():
 			"wibble_edges": cfg.get_value(section, "wibble_edges", false),
 			"cube_data": slabCubeData,
 			"floor_data": slabFloorData,
-			"bitmask": cfg.get_value(section, "bitmask", Slabs.BITMASK_FLOOR),
+			"bitmask": cfg.get_value(section, "bitmask", Slabs.BITMASK_GENERAL),
 			"is_solid": cfg.get_value(section, "is_solid", Slabs.FLOOR_SLAB),
 			"ownable": cfg.get_value(section, "ownable", Slabs.OWNABLE),
 		}

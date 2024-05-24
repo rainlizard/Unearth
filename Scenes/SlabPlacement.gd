@@ -571,12 +571,10 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	match bitmaskType:
 		Slabs.BITMASK_REINFORCED:
 			bitmask = get_wall_bitmask(xSlab, ySlab, surrID, ownership)
-		Slabs.BITMASK_FLOOR:
+		Slabs.BITMASK_GENERAL:
 			bitmask = get_general_bitmask(slabID, ownership, surrID, surrOwner)
 		Slabs.BITMASK_CLAIMED:
 			bitmask = get_claimed_bitmask(slabID, ownership, surrID, surrOwner)
-		Slabs.BITMASK_BLOCK:
-			bitmask = get_tall_bitmask(surrID)
 		Slabs.BITMASK_SIMPLE:
 			bitmask = 1 # Always use south variation
 			modifyForLiquid = false
@@ -755,12 +753,26 @@ func set_columns(xSlab, ySlab, constructedColumns, constructedFloor):
 		var xSubtile = i - (ySubtile*3)
 		oDataClmPos.set_cell_clmpos((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, clmIndex)
 
-func get_tall_bitmask(surrID):
-	var bitmask = 0
-	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false: bitmask += 1
-	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false: bitmask += 2
-	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false: bitmask += 4
-	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false: bitmask += 8
+#func get_tall_bitmask(surrID):
+#	var bitmask = 0
+#	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false: bitmask += 1
+#	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false: bitmask += 2
+#	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false: bitmask += 4
+#	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false: bitmask += 8
+#	return bitmask
+
+func get_general_bitmask(slabID, ownership, surrID, surrOwner):
+	var bitmask = 0 # Center
+	if slabID != surrID[dir.s] or ownership != surrOwner[dir.s]: bitmask += 1
+	if slabID != surrID[dir.w] or ownership != surrOwner[dir.w]: bitmask += 2
+	if slabID != surrID[dir.n] or ownership != surrOwner[dir.n]: bitmask += 4
+	if slabID != surrID[dir.e] or ownership != surrOwner[dir.e]: bitmask += 8
+	
+	# There's two kinds of 'constructed' middle slabs. slab_center and slab_partial_center
+	if bitmask == 0:
+		if slabID != surrID[dir.se] or slabID != surrID[dir.sw] or slabID != surrID[dir.ne] or slabID != surrID[dir.nw] or ownership != surrOwner[dir.se] or ownership != surrOwner[dir.sw] or ownership != surrOwner[dir.ne] or ownership != surrOwner[dir.nw]:
+			bitmask = 500 # partial_center
+	
 	return bitmask
 
 func get_wall_bitmask(xSlab, ySlab, surrID, ownership):
@@ -788,19 +800,7 @@ func get_claimed_bitmask(slabID, ownership, surrID, surrOwner):
 	if (slabID != surrID[dir.e] and Slabs.is_door(surrID[dir.e]) == false) or ownership != surrOwner[dir.e]: bitmask += 8
 	return bitmask
 
-func get_general_bitmask(slabID, ownership, surrID, surrOwner):
-	var bitmask = 0 # Center
-	if slabID != surrID[dir.s] or ownership != surrOwner[dir.s]: bitmask += 1
-	if slabID != surrID[dir.w] or ownership != surrOwner[dir.w]: bitmask += 2
-	if slabID != surrID[dir.n] or ownership != surrOwner[dir.n]: bitmask += 4
-	if slabID != surrID[dir.e] or ownership != surrOwner[dir.e]: bitmask += 8
-	
-	# There's two kinds of 'constructed' middle slabs. slab_center and slab_partial_center
-	if bitmask == 0:
-		if slabID != surrID[dir.se] or slabID != surrID[dir.sw] or slabID != surrID[dir.ne] or slabID != surrID[dir.nw] or ownership != surrOwner[dir.se] or ownership != surrOwner[dir.sw] or ownership != surrOwner[dir.ne] or ownership != surrOwner[dir.nw]:
-			bitmask = 500 # partial_center
-	
-	return bitmask
+
 
 
 func get_surrounding_slabIDs(xSlab, ySlab):
