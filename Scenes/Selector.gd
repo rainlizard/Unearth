@@ -37,6 +37,7 @@ onready var oSlabSideViewer = Nodelist.list["oSlabSideViewer"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oOwnerSelection = Nodelist.list["oOwnerSelection"]
+onready var oSlabNameDisplay = Nodelist.list["oSlabNameDisplay"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -295,8 +296,10 @@ func update_cursor_position():
 		MODE_TILE: position = cursorTile * TILE_SIZE
 		MODE_SUBTILE: position = cursorSubtile * SUBTILE_SIZE
 
+
 func moved_to_new_tile():
 	if mode == MODE_TILE: canPlace = true
+	oSlabNameDisplay.update_text_with_id(oSelection.cursorOverSlab, false)
 
 func moved_to_new_subtile():
 	oColumnDetails.update_details()

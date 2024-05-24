@@ -143,7 +143,7 @@ func _on_SettingsYSizeLine_focus_exited():
 func _on_ResizeFillWithID_value_changed(value):
 	value = int(value)
 	if Slabs.data.has(value):
-		oResizeFillWithIDLabel.text = Slabs.data[value][Slabs.NAME]
+		oResizeFillWithIDLabel.text = Slabs.fetch_name(value)
 
 #	for pos in positionsToUpdate.keys():
 #		var scene = preload('res://t.tscn')

@@ -24,7 +24,7 @@ func _ready():
 		# Don't put the junk slabs in
 		if Slabs.data[slabID][Slabs.EDITOR_TAB] == Slabs.TAB_MAINSLAB:
 			var buttonID = Button.new()
-			buttonID.text = Slabs.data[slabID][Slabs.NAME]
+			buttonID.text = Slabs.fetch_name(slabID)
 			buttonID.toggle_mode = true
 			buttonID.group = btnGroup
 			buttonID.connect("pressed",self,"_on_slab_button_pressed",[buttonID])

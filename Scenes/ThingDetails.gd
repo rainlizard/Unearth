@@ -90,7 +90,7 @@ func light_details(id):
 					var parentX = id.parentTile - (parentY*M.xSize)
 					var hoveredCell = oDataSlab.get_cell(parentX,parentY)
 					if Slabs.data.has(hoveredCell):
-						value = Slabs.data[hoveredCell][Slabs.NAME]
+						value = Slabs.fetch_name(hoveredCell)
 					else:
 						value = ""
 					if parentX == 0 and parentY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
@@ -132,7 +132,7 @@ func thing_details(id):
 					var parentX = id.parentTile - (parentY*M.xSize)
 					var hoveredCell = oDataSlab.get_cell(parentX,parentY)
 					if Slabs.data.has(hoveredCell):
-						value = Slabs.data[hoveredCell][Slabs.NAME]
+						value = Slabs.fetch_name(hoveredCell)
 					else:
 						value = ""
 					if parentX == 0 and parentY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys

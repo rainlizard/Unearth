@@ -65,17 +65,17 @@ func load_objects_data(path):
 				var newEditorTab = Things.GENRE_TO_TAB[newGenre]
 				Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
 
+
 func load_terrain_data(path):
 	var terrain_cfg = Utils.read_dkcfg_file(path)
 	for section in terrain_cfg:
 		if section.begins_with("slab"):
 			var id = int(section)
+			
 			if id >= 55: # Beyond Slabs.PURPLE_PATH
 				var slabSection = terrain_cfg[section]
 				
-				var setName = slabSection.get("Name", "Unknown")
-				if setName != "Unknown":
-					setName = Slabs.NAME_MAPPINGS.get(setName, setName.capitalize())
+				var setName = slabSection.get("Name", "UNKNOWN")
 				
 				var getBlockFlags = slabSection.get("BlockFlags", [])
 				if getBlockFlags is String and getBlockFlags == "":

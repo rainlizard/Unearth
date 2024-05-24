@@ -72,7 +72,7 @@ func fetch_portrait(thing_type, sub_type):
 
 
 func fetch_name(thing_type, sub_type):
-	var dictionary_of_names = ObjectNames.NAME_MAPPINGS.get(thing_type)
+	var dictionary_of_names = Names.things.get(thing_type)
 	if dictionary_of_names:
 		var data_structure = data_structure(thing_type)
 		var sub_type_data = data_structure.get(sub_type)

@@ -15,7 +15,7 @@ onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 onready var oConfirmDeleteCustomSlab = Nodelist.list["oConfirmDeleteCustomSlab"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
-
+onready var oSlabNameDisplay = Nodelist.list["oSlabNameDisplay"]
 
 onready var oSelectedRect = $Clippy/SelectedRect
 onready var oCenteredLabel = $Clippy/CenteredLabel
@@ -115,7 +115,8 @@ func add_slabs():
 			id.set_meta("ID_of_slab", slabID)
 			id.panelView = Slabs.data[slabID][Slabs.PANEL_VIEW]
 			id.set_visual(columnArray)
-			add_child_to_grid(tabs[putIntoTab][GRIDCON_PATH], id, Slabs.data[slabID][Slabs.NAME])
+			var useName = Slabs.fetch_name(slabID)
+			add_child_to_grid(tabs[putIntoTab][GRIDCON_PATH], id, useName)
 	
 	custom_slab_add_new_button()
 	
@@ -189,6 +190,10 @@ func _on_hovered_over_item(id):
 			offset = Vector2(id.rect_size.x * 0.5, id.rect_size.y * 0.50)
 	oCenteredLabel.rect_global_position = id.rect_global_position + offset
 	oCenteredLabel.get_node("Label").text = id.get_meta("grid_item_text")
+	
+	if id.has_meta("ID_of_slab"):
+		var slabID = id.get_meta("ID_of_slab")
+		oSlabNameDisplay.update_text_with_id(slabID, true)
 
 
 func current_grid_container():

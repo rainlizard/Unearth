@@ -72,7 +72,7 @@ func _on_CustomSlabID_value_changed(value):
 	var slabName = "Unknown"
 	value = int(value)
 	if Slabs.data.has(value):
-		slabName = Slabs.data[value][Slabs.NAME]
+		slabName = Slabs.fetch_name(value)
 	oCustomSlabNameLabel.text = slabName
 
 
