@@ -28,6 +28,7 @@ func start(mapPath):
 	var CODETIME_LOADCFG_START = OS.get_ticks_msec()
 	
 	Things.reset_thing_data_to_default()
+	Slabs.reset_slab_data_to_default()
 	
 	var campaign_cfg = load_campaign_data(mapPath)
 	
@@ -49,6 +50,7 @@ func start(mapPath):
 				"terrain.cfg": load_terrain_data(file_path)
 	
 	print('Loaded things from cfg files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
+	print(Slabs.doorslab_data)
 
 func load_objects_data(path):
 	var objects_cfg = Utils.read_dkcfg_file(path)
@@ -72,7 +74,7 @@ func load_terrain_data(path):
 	for section in terrain_cfg:
 		if section.begins_with("slab"):
 			var id = int(section)
-			if id >= 54 or id in keeperfx_edited_slabs:
+			if id >= 55 or id in keeperfx_edited_slabs:
 				var slabSection = terrain_cfg[section]
 				
 				var setName = slabSection.get("Name", "UNKNOWN")
@@ -157,6 +159,12 @@ func load_trapdoor_data(path):
 		
 		if trapOrDoor == Things.TYPE.DOOR:
 			Things.DATA_DOOR[id] = [newName, newSprite, Things.TAB_MISC]
+			
+			var getSlabKind = data.get("SlabKind", null)
+			if getSlabKind is Array and getSlabKind.size() == 2:
+				Slabs.doorslab_data[getSlabKind[0]] = [id, Slabs.DOOR_ORIENT_EW]
+				Slabs.doorslab_data[getSlabKind[1]] = [id, Slabs.DOOR_ORIENT_NS]
+			
 		elif trapOrDoor == Things.TYPE.TRAP:
 			Things.DATA_TRAP[id] = [newName, newSprite, Things.TAB_TRAP]
 		Things.LIST_OF_BOXES[crateName] = [trapOrDoor, id]

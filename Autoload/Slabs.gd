@@ -4,6 +4,18 @@ extends Node
 
 # DISPLAYS DECORATION STUFF ON THE SIDE
 
+
+var default_data = {}
+func _init():
+	# This only takes 1ms
+	default_data["data"] = data.duplicate(true)
+	default_data["doorslab_data"] = doorslab_data.duplicate(true)
+	
+func reset_slab_data_to_default(): # Reset data. Takes 1ms.
+	data = default_data["data"].duplicate(true)
+	doorslab_data = default_data["doorslab_data"].duplicate(true)
+
+
 enum {
 	NAME
 	IS_SOLID # Whether units can walk there, and how fortified walls do their bitmask, AND for 3D generation optimization
@@ -134,18 +146,39 @@ enum {
 	DOORSLAB_THING = 0,
 	DOORSLAB_ORIENTATION = 1,
 }
+enum {
+	DOORTHING_WOOD = 1
+	DOORTHING_BRACED = 2
+	DOORTHING_STEEL = 3
+	DOORTHING_MAGIC = 4
+}
 #Slabs.door_data[slabID][DOORSLAB_THING]
 #Slabs.door_data[slabID][DOORSLAB_ORIENTATION]
-var door_data = { # Refer to Things.DATA_DOOR for door subtypes
-	WOODEN_DOOR_1 : [1, 1],
-	WOODEN_DOOR_2 : [1, 0],
-	BRACED_DOOR_1 : [2, 1],
-	BRACED_DOOR_2 : [2, 0],
-	IRON_DOOR_1 : [3, 1],
-	IRON_DOOR_2 : [3, 0],
-	MAGIC_DOOR_1 : [4, 1],
-	MAGIC_DOOR_2 : [4, 0],
+enum { # These might be backwards
+	DOOR_ORIENT_NS = 0
+	DOOR_ORIENT_EW = 1
 }
+
+func fetch_doorslab_data(slabID):
+	var slabData = Slabs.data.get(slabID)
+	if slabData:
+		return doorslab_data.get(slabData[NAME])
+
+var doorslab_data = { # Refer to Things.DATA_DOOR for door subtypes
+	"DOOR_WOODEN" : [DOORTHING_WOOD, DOOR_ORIENT_EW],
+	"DOOR_WOODEN2" : [DOORTHING_WOOD, DOOR_ORIENT_NS],
+	"DOOR_BRACE" : [DOORTHING_BRACED, DOOR_ORIENT_EW],
+	"DOOR_BRACE2" : [DOORTHING_BRACED, DOOR_ORIENT_NS],
+	"DOOR_STEEL" : [DOORTHING_STEEL, DOOR_ORIENT_EW],
+	"DOOR_STEEL2" : [DOORTHING_STEEL, DOOR_ORIENT_NS],
+	"DOOR_MAGIC" : [DOORTHING_MAGIC, DOOR_ORIENT_EW],
+	"DOOR_MAGIC2" : [DOORTHING_MAGIC, DOOR_ORIENT_NS],
+}
+
+#"DOOR_SECRET"
+#"DOOR_SECRET2"
+
+
 var fake_extra_data = {
 	# 1000: [cube_data, floor_data, recognized_as, wibble_edges]
 }

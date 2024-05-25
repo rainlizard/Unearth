@@ -28,6 +28,7 @@ const things = {
 		"BRACED" : "Braced Door",
 		"STEEL" : "Iron Door",
 		"MAGIC" : "Magic Door",
+		"SECRET" : "Secret Door",
 	},
 	TYPE.TRAP : {
 		"BOULDER" : "Boulder Trap",

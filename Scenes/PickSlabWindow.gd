@@ -81,9 +81,12 @@ func add_slabs():
 	# The rest of them are added in any order (custom slabs)
 	for slabID in Slabs.data.keys():
 		if Slabs.slabOrder.has(slabID) == false:
-			if Slabs.door_data.has(slabID) == true:
-				if Slabs.door_data[slabID][Slabs.DOORSLAB_ORIENTATION] == 0:
+			
+			var doorSlabData = Slabs.fetch_doorslab_data(slabID)
+			if doorSlabData:
+				if doorSlabData[Slabs.DOORSLAB_ORIENTATION] == 0:
 					continue
+			
 			allSlabIDs.append(slabID)
 	
 	for slabID in allSlabIDs:

@@ -87,13 +87,13 @@ func add_custom_slab(slab_dict):
 	cfg.set_value(section,"is_solid", slab_dict["is_solid"])
 	cfg.set_value(section,"ownable", slab_dict["ownable"])
 	
-	if slab_dict.has("door_thing") and slab_dict.has("door_orientation"):
-		cfg.set_value(section,"door_thing", slab_dict["door_thing"])
-		cfg.set_value(section,"door_orientation", slab_dict["door_orientation"])
-		Slabs.door_data[head_id] = [
-			slab_dict["door_thing"],
-			slab_dict["door_orientation"],
-		]
+#	if slab_dict.has("door_thing") and slab_dict.has("door_orientation"):
+#		cfg.set_value(section,"door_thing", slab_dict["door_thing"])
+#		cfg.set_value(section,"door_orientation", slab_dict["door_orientation"])
+#		Slabs.door_data[head_id] = [
+#			slab_dict["door_thing"],
+#			slab_dict["door_orientation"],
+#		]
 	
 	for i in 9:
 		if slab_dict["cube_data"].size() > 0:
@@ -108,13 +108,13 @@ func attempt_to_remove_custom_slab(header_id):
 	oPickSlabWindow.set_selection(null)
 	
 	# If it's a door then it'll have "door_data", so remove the other one too
-	if Slabs.door_data.has(header_id) == true:
-		Slabs.door_data.erase(header_id)
-		var door2_id = header_id+1
-		if Slabs.door_data.has(door2_id) == true:
-			if Slabs.door_data[door2_id][Slabs.DOORSLAB_ORIENTATION] == 0: # Second direction always has orientation of 0
-				Slabs.door_data.erase(door2_id)
-				remove_custom_slab(door2_id)
+#	if Slabs.door_data.has(header_id) == true:
+#		Slabs.door_data.erase(header_id)
+#		var door2_id = header_id+1
+#		if Slabs.door_data.has(door2_id) == true:
+#			if Slabs.door_data[door2_id][Slabs.DOORSLAB_ORIENTATION] == 0: # Second direction always has orientation of 0
+#				Slabs.door_data.erase(door2_id)
+#				remove_custom_slab(door2_id)
 	
 	remove_custom_slab(header_id)
 

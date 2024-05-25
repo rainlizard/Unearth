@@ -303,9 +303,10 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			id.doorLocked = oPlacingSettings.doorLocked
 			if newSubtype == 0:
 				id.subtype = 1 #Depending on whether it was placed via autoslab or a hand placed Thing object.
-			if Slabs.door_data.has(slabID):
-				id.subtype = Slabs.door_data[slabID][Slabs.DOORSLAB_THING]
-				id.doorOrientation = Slabs.door_data[slabID][Slabs.DOORSLAB_ORIENTATION]
+			var doorSlabData = Slabs.fetch_doorslab_data(slabID)
+			if doorSlabData:
+				id.subtype = doorSlabData[Slabs.DOORSLAB_THING]
+				id.doorOrientation = doorSlabData[Slabs.DOORSLAB_ORIENTATION]
 	
 	add_child(id)
 	#print('Thing placed in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
@@ -332,7 +333,8 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			id.locationX = locX
 			id.locationY = locY
 	elif id.thingType == Things.TYPE.DOOR:
-		if Slabs.door_data.has(slabID) == false:
+		var doorSlabData = Slabs.fetch_doorslab_data(slabID)
+		if doorSlabData == null:
 			oMessage.big("Warning","You placed a Door Thing without a Door Slab. Switch to Slab Mode and place a Door Slab for proper functionality.")
 	return id
 
