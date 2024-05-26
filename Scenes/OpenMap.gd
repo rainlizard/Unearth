@@ -195,12 +195,6 @@ func continue_load(map):
 	oOverheadOwnership.start()
 	oScriptHelpers.start()
 	
-	# update_editor_data
-	if Slabset.dat.empty() == true:
-		Slabset.load_default_slabset()
-	if Columnset.cubes.empty() == true:
-		Columnset.load_default_columnset()
-	
 	oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.MULTI_THREADED)
 	
 	oDataClm.count_filled_clm_entries()
@@ -255,7 +249,7 @@ func continue_load_openmap(map):
 		oEditor.mapHasBeenEdited = true
 		oMessage.quick("Fixed column index 0, re-save your map.")
 	oDataClm.store_default_data()
-	
+
 
 func _on_ConfirmDecompression_confirmed():
 	print('Attempting to decompress...')

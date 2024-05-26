@@ -20,23 +20,31 @@ var columnsContainingRngCubes = {}
 # map0000x.clm : 49,160 bytes. first 4 bytes contains 2048, second 4 bytes are ???, then comes the column data.
 # slabs.clm : 49,156 bytes. first 4 bytes contains 2048, then comes the column data.
 
-func load_default_columnset():
-	clear_all_column_data() # This goes here and not inside import_toml_columnset, because that function is also used for merging columnsets
+
+func import_toml_columnset(filePath):
+	var oMessage = Nodelist.list["oMessage"]
+	var cfg = ConfigFile.new()
+	var err = cfg.load(filePath)
 	
-	var CODETIME_START = OS.get_ticks_msec()
-	# Decide which one to load
-	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "COLUMNSET.TOML")
-	if filePath != "":
-		# Load /fxdata/ columnset.toml file
-		import_toml_columnset(filePath, true, false)
-	else:
-		# Load slabs.clm file
-		load_default_original_columnset()
+	if err != OK:
+		return
 	
-	store_default_data()
-	print('Created Columnset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-	update_list_of_columns_that_contain_owned_cubes()
-	update_list_of_columns_that_contain_rng_cubes()
+	for section in cfg.get_sections():
+		if section.begins_with("column"):
+			var columnIndex = int(section)
+			utilized[columnIndex] = 0 #cfg.get_value(section, "Utilized", 0)
+			permanent[columnIndex] = 1 #cfg.get_value(section, "Permanent", 0)
+			lintel[columnIndex] = cfg.get_value(section, "Lintel", 0)
+			height[columnIndex] = cfg.get_value(section, "Height", 0)
+			solidMask[columnIndex] = cfg.get_value(section, "SolidMask", 0)
+			floorTexture[columnIndex] = cfg.get_value(section, "FloorTexture", 0)
+			orientation[columnIndex] = cfg.get_value(section, "Orientation", 0)
+			cubes[columnIndex] = cfg.get_value(section, "Cubes", [0,0,0,0, 0,0,0,0])
+	
+	if "fxdata" in filePath:
+		store_default_data()
+		update_list_of_columns_that_contain_owned_cubes()
+		update_list_of_columns_that_contain_rng_cubes()
 
 func load_default_original_columnset():
 	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.CLM")
@@ -64,6 +72,10 @@ func load_default_original_columnset():
 		
 		for cubeNumber in 8:
 			cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
+	
+	store_default_data()
+	update_list_of_columns_that_contain_owned_cubes()
+	update_list_of_columns_that_contain_rng_cubes()
 
 func store_default_data():
 	default_data["utilized"] = utilized.duplicate(true)
@@ -74,31 +86,6 @@ func store_default_data():
 	default_data["height"] = height.duplicate(true)
 	default_data["cubes"] = cubes.duplicate(true)
 	default_data["floorTexture"] = floorTexture.duplicate(true)
-
-
-func import_toml_columnset(filePath, fullExport, showMessages):
-	var oMessage = Nodelist.list["oMessage"]
-	var cfg = ConfigFile.new()
-	var err = cfg.load(filePath)
-	
-	if err != OK:
-		if showMessages == true: oMessage.quick("Failed to load config file: " + str(filePath))
-		return
-	
-	for section in cfg.get_sections():
-		if section.begins_with("column"):
-			var columnIndex = int(section)
-			utilized[columnIndex] = 0 #cfg.get_value(section, "Utilized", 0)
-			permanent[columnIndex] = 1 #cfg.get_value(section, "Permanent", 0)
-			lintel[columnIndex] = cfg.get_value(section, "Lintel", 0)
-			height[columnIndex] = cfg.get_value(section, "Height", 0)
-			solidMask[columnIndex] = cfg.get_value(section, "SolidMask", 0)
-			floorTexture[columnIndex] = cfg.get_value(section, "FloorTexture", 0)
-			orientation[columnIndex] = cfg.get_value(section, "Orientation", 0)
-			cubes[columnIndex] = cfg.get_value(section, "Cubes", [0,0,0,0, 0,0,0,0])
-	
-	if showMessages == true: oMessage.quick("Merged: " + str(filePath))
-
 
 
 func export_toml_columnset(filePath, fullExport): #"res://columnset.toml"

@@ -32,80 +32,17 @@ enum dir {
 	center = 27
 }
 
-#func _ready():
-#	yield(get_tree(),'idle_frame') # Needed for this test, so that default_data is established first
-#	var CODETIME_START = OS.get_ticks_msec()
-#	import_toml_slabset("D:/AI/slabset.toml", true)
-#	print('Import Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-
-func load_default_slabset():
-	var CODETIME_START = OS.get_ticks_msec()
+func clear_all_slabset_data():
 	tng = []
 	dat = []
-	
-	# Decide which one to load
-	var filePath = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "SLABSET.TOML")
-	if filePath != "":
-		# Load slabset.toml file
-		import_toml_slabset(filePath, true, false)
-	else:
-		# Load slabs.dat and slabs.tng files
-		load_default_original_slabset()
-	
-	print('Created Slabset : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-	store_default_data()
 
-
-func load_default_original_slabset():
-	
-	var dat_buffer = oBuffers.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.DAT"))
-	var tng_buffer = oBuffers.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG"))
-	
-	var object_info = create_object_list(tng_buffer)
-	if object_info.size() == 0:
-		oMessage.quick("Failed to load objects")
-		return
-	
-	var totalSlabs = 42 + 16
-	var totalVariations = totalSlabs * 28
-	tng.resize(totalVariations)
-	dat.resize(totalVariations)
-	tng_buffer.seek(2)
-	dat_buffer.seek(2)
-	
-	for variation in dat.size():
-		tng[variation] = []
-		dat[variation] = [0,0,0, 0,0,0, 0,0,0]
-		if variation < 42*28 or (variation % 28) < 8: # Handle the longslabs and the shortslabs
-			
-			for subtile in 9:
-				dat[variation][subtile] = 65536 - dat_buffer.get_u16()
-			
-			var getObjectIndex = tng_buffer.get_u16()
-			
-			while getObjectIndex < object_info.size(): # Continue until "break"
-				var objectStuff = object_info[getObjectIndex]
-				if objectStuff[1] != variation:
-					break
-				tng[variation].append(objectStuff)
-				getObjectIndex += 1
-	
-
-
-func store_default_data():
-	default_data["dat"] = dat.duplicate(true)
-	default_data["tng"] = tng.duplicate(true)
-
-
-func import_toml_slabset(filePath, fullImport, showMessages):
+func import_toml_slabset(filePath):
 	var processed_string = preprocess_toml_file(filePath)
 	if processed_string == null:
-		if showMessages == true: oMessage.quick("Failed to open file: " + str(filePath))
 		return
 	var cfg = ConfigFile.new()
 	var err = cfg.parse(processed_string)
 	if err != OK:
-		if showMessages == true: oMessage.quick("Failed to parse config file")
 		return
 	
 	resize_dat_and_tng_based_on_file(cfg)
@@ -147,7 +84,52 @@ func import_toml_slabset(filePath, fullImport, showMessages):
 				"ThingType": getObject[obj.THING_TYPE] = int(value) #int(Things.reverse_data_structure_name.get(value, 0))
 				"Subtype": getObject[obj.THING_SUBTYPE] = int(value)
 				"EffectRange": getObject[obj.EFFECT_RANGE] = int(value)
-	if showMessages == true: oMessage.quick("Merged: " + str(filePath))
+	
+	if "fxdata" in filePath:
+		store_default_data()
+
+
+func load_default_original_slabset():
+	
+	var dat_buffer = oBuffers.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.DAT"))
+	var tng_buffer = oBuffers.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG"))
+	
+	var object_info = create_object_list(tng_buffer)
+	if object_info.size() == 0:
+		oMessage.quick("Failed to load objects")
+		return
+	
+	var totalSlabs = 42 + 16
+	var totalVariations = totalSlabs * 28
+	tng.resize(totalVariations)
+	dat.resize(totalVariations)
+	tng_buffer.seek(2)
+	dat_buffer.seek(2)
+	
+	for variation in dat.size():
+		tng[variation] = []
+		dat[variation] = [0,0,0, 0,0,0, 0,0,0]
+		if variation < 42*28 or (variation % 28) < 8: # Handle the longslabs and the shortslabs
+			
+			for subtile in 9:
+				dat[variation][subtile] = 65536 - dat_buffer.get_u16()
+			
+			var getObjectIndex = tng_buffer.get_u16()
+			
+			while getObjectIndex < object_info.size(): # Continue until "break"
+				var objectStuff = object_info[getObjectIndex]
+				if objectStuff[1] != variation:
+					break
+				tng[variation].append(objectStuff)
+				getObjectIndex += 1
+	
+	store_default_data()
+
+
+func store_default_data():
+	default_data["dat"] = dat.duplicate(true)
+	default_data["tng"] = tng.duplicate(true)
+
 
 func resize_dat_and_tng_based_on_file(cfg):
 	# Determine maximum needed size for dat and tng arrays

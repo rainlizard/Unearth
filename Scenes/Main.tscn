@@ -5664,18 +5664,31 @@ margin_bottom = 815.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer"]
 margin_right = 236.0
-margin_bottom = 703.0
+margin_bottom = 761.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer"]
 margin_right = 236.0
-margin_bottom = 703.0
+margin_bottom = 761.0
 size_flags_vertical = 3
 
-[node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_right = 236.0
-margin_bottom = 179.0
+margin_bottom = 39.0
+
+[node name="SlabsetFilenameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer4"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 227.0
+margin_bottom = 30.0
+text = "slabset.toml"
+align = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 43.0
+margin_right = 236.0
+margin_bottom = 222.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2"]
 margin_left = 9.0
@@ -5773,9 +5786,9 @@ margin_bottom = 161.0
 text = "All variations"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_top = 183.0
+margin_top = 226.0
 margin_right = 236.0
-margin_bottom = 226.0
+margin_bottom = 269.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer"]
 margin_left = 9.0
@@ -5801,9 +5814,9 @@ size_flags_vertical = 4
 columns = 3
 
 [node name="PanelContainer3" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_top = 230.0
+margin_top = 273.0
 margin_right = 236.0
-margin_bottom = 703.0
+margin_bottom = 761.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -5811,7 +5824,7 @@ size_flags_vertical = 3
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 227.0
-margin_bottom = 464.0
+margin_bottom = 479.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_right = 218.0
@@ -5841,13 +5854,13 @@ text = "Delete"
 [node name="SlabsetObjectSection" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_top = 56.0
 margin_right = 218.0
-margin_bottom = 455.0
+margin_bottom = 470.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection"]
 margin_right = 218.0
-margin_bottom = 399.0
+margin_bottom = 414.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -6022,63 +6035,35 @@ size_flags_horizontal = 9
 text = "Export slabs.dat"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer"]
-margin_top = 707.0
+margin_top = 765.0
 margin_right = 236.0
 margin_bottom = 815.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 227.0
-margin_bottom = 99.0
+margin_bottom = 41.0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer"]
-margin_right = 218.0
-margin_bottom = 21.0
-text = "Slabset"
-align = 1
-
-[node name="HBoxContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer"]
-margin_top = 25.0
-margin_right = 218.0
-margin_bottom = 90.0
-columns = 2
-
-[node name="ExportSlabsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_right = 149.0
-margin_bottom = 27.0
-size_flags_horizontal = 3
-size_flags_vertical = 0
-text = "Export"
-
-[node name="ExportImportSlabsFullCheckBox" type="CheckBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 153.0
-margin_right = 218.0
-margin_bottom = 29.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Full"
-
-[node name="ImportSlabsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_top = 33.0
-margin_right = 149.0
-margin_bottom = 60.0
-size_flags_horizontal = 3
-size_flags_vertical = 0
-text = "Import"
-
-[node name="SlabsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 186.0
-margin_top = 33.0
-margin_right = 218.0
-margin_bottom = 65.0
+[node name="SlabsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/HBoxContainer"]
+margin_right = 32.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 8
+size_flags_horizontal = 2
+size_flags_vertical = 4
 texture_normal = ExtResource( 156 )
 texture_pressed = ExtResource( 66 )
 texture_hover = ExtResource( 128 )
 expand = true
 stretch_mode = 4
+
+[node name="ExportSlabsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/HBoxContainer"]
+margin_left = 95.0
+margin_right = 218.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Save slabset"
 
 [node name="TabColumnset" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
 visible = false
@@ -6101,69 +6086,54 @@ margin_left = 1010.0
 margin_right = 1236.0
 margin_bottom = 815.0
 
-[node name="ColumnsetControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer" instance=ExtResource( 137 )]
+[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer"]
 margin_right = 226.0
-margin_bottom = 703.0
-size_flags_horizontal = 1
+margin_bottom = 39.0
 
-[node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer"]
-margin_top = 707.0
-margin_right = 226.0
-margin_bottom = 815.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2"]
+[node name="ColumnsetFilenameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 217.0
-margin_bottom = 99.0
-
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer"]
-margin_right = 208.0
-margin_bottom = 21.0
-text = "Columnset"
+margin_bottom = 30.0
+text = "columnset.toml"
 align = 1
 
-[node name="HBoxContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer"]
-margin_top = 25.0
-margin_right = 208.0
-margin_bottom = 90.0
-columns = 2
+[node name="ColumnsetControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer" instance=ExtResource( 137 )]
+margin_top = 43.0
+margin_right = 226.0
+margin_bottom = 761.0
+size_flags_horizontal = 1
 
-[node name="ExportColumnsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
-margin_right = 139.0
-margin_bottom = 27.0
-size_flags_horizontal = 3
-size_flags_vertical = 0
-text = "Export"
+[node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer"]
+margin_top = 765.0
+margin_right = 226.0
+margin_bottom = 815.0
 
-[node name="ExportImportColumnsFullCheckBox" type="CheckBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
-margin_left = 143.0
-margin_right = 208.0
-margin_bottom = 29.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Full"
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 217.0
+margin_bottom = 41.0
 
-[node name="ImportColumnsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
-margin_top = 33.0
-margin_right = 139.0
-margin_bottom = 60.0
-size_flags_horizontal = 3
-size_flags_vertical = 0
-text = "Import"
-
-[node name="ColumnsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
-margin_left = 176.0
-margin_top = 33.0
-margin_right = 208.0
-margin_bottom = 65.0
+[node name="ColumnsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/HBoxContainer"]
+margin_right = 51.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 8
+size_flags_horizontal = 3
+size_flags_vertical = 4
 texture_normal = ExtResource( 156 )
 texture_pressed = ExtResource( 66 )
 texture_hover = ExtResource( 128 )
 expand = true
 stretch_mode = 4
+
+[node name="ExportColumnsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/HBoxContainer"]
+margin_left = 55.0
+margin_right = 208.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Save columnset"
 
 [node name="NewMapWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -6401,32 +6371,6 @@ margin_bottom = 3622.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
 filters = PoolStringArray( "*.toml" )
-show_hidden_files = true
-
-[node name="ImportSlabsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = -2797.0
-margin_top = 3062.0
-margin_right = -2117.0
-margin_bottom = 3622.0
-rect_min_size = Vector2( 250, 87.5 )
-window_title = "Open a File"
-mode = 0
-access = 2
-filters = PoolStringArray( "*.toml", "*.cfg" )
-show_hidden_files = true
-
-[node name="ImportColumnsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = -2797.0
-margin_top = 3062.0
-margin_right = -2117.0
-margin_bottom = 3622.0
-rect_min_size = Vector2( 250, 87.5 )
-window_title = "Open a File"
-mode = 0
-access = 2
-filters = PoolStringArray( "*.toml", "*.cfg" )
 show_hidden_files = true
 
 [node name="ExportColumnsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
@@ -7582,12 +7526,10 @@ script = SubResource( 20 )
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjThingTypeSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjThingTypeSpinBox_value_changed"]
 [connection signal="toggled" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjIsLightCheckBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjIsLightCheckBox_toggled"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetCopyValues" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetCopyValues_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/ExportSlabsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsToml_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/ImportSlabsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportSlabsToml_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ExportColumnsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsToml_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ImportColumnsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportColumnsToml_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/ColumnsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/HBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/VBoxContainer/PanelContainer/HBoxContainer/ExportSlabsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsToml_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/HBoxContainer/ColumnsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/HBoxContainer/ExportColumnsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsToml_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/SetNewFormat" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapFormat_item_selected"]
 [connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_focus_exited"]
@@ -7604,8 +7546,6 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/ButtonNewMapOK" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonNewMapOK_pressed"]
 [connection signal="gui_input" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/QuickNoisePreview" to="Ui/UiSystem/NewMapWindow" method="_on_QuickNoisePreview_gui_input"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetTomlDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetTomlDialog_file_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/ImportSlabsetTomlDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportSlabsetTomlDialog_file_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/ImportColumnsetTomlDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ImportColumnsetTomlDialog_file_selected"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportColumnsetTomlDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsetTomlDialog_file_selected"]
 [connection signal="about_to_show" from="Ui/UiSystem/ResizeCurrentMapSize" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeCurrentMapSize_about_to_show"]
 [connection signal="focus_exited" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer/SettingsXSizeLine" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_SettingsXSizeLine_focus_exited"]

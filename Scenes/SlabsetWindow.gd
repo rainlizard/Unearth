@@ -11,15 +11,11 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oExportSlabsetDatDialog = Nodelist.list["oExportSlabsetDatDialog"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oExportColumnsetTomlDialog = Nodelist.list["oExportColumnsetTomlDialog"]
-onready var oImportColumnsetTomlDialog = Nodelist.list["oImportColumnsetTomlDialog"]
 onready var oExportSlabsetTomlDialog = Nodelist.list["oExportSlabsetTomlDialog"]
-onready var oImportSlabsetTomlDialog = Nodelist.list["oImportSlabsetTomlDialog"]
 onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
 onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oExportSlabsetClmDialog = Nodelist.list["oExportSlabsetClmDialog"]
-onready var oExportImportSlabsFullCheckBox = Nodelist.list["oExportImportSlabsFullCheckBox"]
-onready var oExportImportColumnsFullCheckBox = Nodelist.list["oExportImportColumnsFullCheckBox"]
 onready var oObjObjectIndexSpinBox = Nodelist.list["oObjObjectIndexSpinBox"]
 onready var oObjAddButton = Nodelist.list["oObjAddButton"]
 onready var oObjDeleteButton = Nodelist.list["oObjDeleteButton"]
@@ -240,44 +236,34 @@ func _on_ExportSlabsToml_pressed():
 	oExportSlabsetTomlDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
 	oExportSlabsetTomlDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
 	oExportSlabsetTomlDialog.current_file = "slabset.toml"
-func _on_ImportSlabsToml_pressed():
-	Utils.popup_centered(oImportSlabsetTomlDialog)
-	oImportSlabsetTomlDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
-	oImportSlabsetTomlDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
-	oImportSlabsetTomlDialog.current_file = "slabset.toml"
 
 func _on_ExportColumnsToml_pressed():
 	Utils.popup_centered(oExportColumnsetTomlDialog)
 	oExportColumnsetTomlDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
 	oExportColumnsetTomlDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
 	oExportColumnsetTomlDialog.current_file = "columnset.toml"
-func _on_ImportColumnsToml_pressed():
-	Utils.popup_centered(oImportColumnsetTomlDialog)
-	oImportColumnsetTomlDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
-	oImportColumnsetTomlDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
-	oImportColumnsetTomlDialog.current_file = "columnset.toml"
 
 
 func _on_ExportSlabsetTomlDialog_file_selected(filePath):
-	var fullExport = oExportImportSlabsFullCheckBox.pressed
+	var fullExport = false
 	Slabset.export_toml_slabset(filePath, fullExport)
 
-func _on_ImportSlabsetTomlDialog_file_selected(filePath):
-	var fullImport = oExportImportSlabsFullCheckBox.pressed
-	Slabset.import_toml_slabset(filePath, fullImport, true)
-	update_columns_ui()
-	update_objects_ui()
-
 func _on_ExportColumnsetTomlDialog_file_selected(filePath):
-	var fullExport = oExportImportColumnsFullCheckBox.pressed
+	var fullExport = false
 	Columnset.export_toml_columnset(filePath, fullExport)
 
-func _on_ImportColumnsetTomlDialog_file_selected(filePath):
-	var fullImport = oExportImportColumnsFullCheckBox.pressed
-	Columnset.import_toml_columnset(filePath, fullImport, true)
-	# Update columnset visuals here
-	oColumnsetVoxelView.refresh_entire_view()
 
+#func _on_ImportSlabsetTomlDialog_file_selected(filePath):
+#	var fullImport = false
+#	Slabset.import_toml_slabset(filePath, fullImport, true)
+#	update_columns_ui()
+#	update_objects_ui()
+#
+#func _on_ImportColumnsetTomlDialog_file_selected(filePath):
+#	var fullImport = false
+#	Columnset.import_toml_columnset(filePath, fullImport, true)
+#	# Update columnset visuals here
+#	oColumnsetVoxelView.refresh_entire_view()
 
 func _on_ExportSlabsetDatDialog_file_selected(filePath):
 	var buffer = StreamPeerBuffer.new()
@@ -685,10 +671,9 @@ func _on_VarRevertButton_pressed():
 
 func _on_SlabsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "Slabset is loaded from /fxdata/slabset.toml  \n"
-	helptxt += "Columnset is loaded from /fxdata/columnset.toml \n"
-	helptxt += "These sets determine the slab's appearance when placed. \n"
-	helptxt += "To mod the slabs that are placed in-game you'll need to export these files and then load them in your mappack/campaign."
+	helptxt += "slabset.toml and columnset.toml affect the appearance of slabs when they're placed. \n"
+	helptxt += "While these files are automatically loaded when you open your map, they're not automatically saved, so you will need to press this 'Save slabset' button whenever you make any changes.\n"
+	helptxt += "Also, new entries in terrain.cfg are required for adding new slabs.\n"
 	oMessage.big("Help",helptxt)
 
 func _on_ColumnsetHelpButton_pressed():

@@ -21,14 +21,19 @@ enum {
 }
 
 func start(mapPath):
-	
-	if Cube.tex.empty():
-		Cube.read_cubes_cfg()
-	
+	if Cube.tex.empty() == true: Cube.read_cubes_cfg()
 	var CODETIME_LOADCFG_START = OS.get_ticks_msec()
 	
 	Things.reset_thing_data_to_default()
 	Slabs.reset_slab_data_to_default()
+	Slabset.clear_all_slabset_data()
+	Columnset.clear_all_column_data()
+	
+	# If the .toml files can't be found, then load the slabs.clm/slabs.dat/slabs.tng files
+	if oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "COLUMNSET.TOML") == "":
+		Columnset.load_default_original_columnset() # Load slabs.clm file
+	if oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "SLABSET.TOML") == "":
+		Slabset.load_default_original_slabset() # Load slabs.dat and slabs.tng files
 	
 	var campaign_cfg = load_campaign_data(mapPath)
 	
@@ -39,7 +44,7 @@ func start(mapPath):
 	}
 	for cfg_type in [LOAD_CFG_FXDATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
 		var cfg_dir = config_dirs[cfg_type]
-		for file_name in ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg"]:
+		for file_name in ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg", "slabset.toml", "columnset.toml"]:
 			var file_path = cfg_dir.plus_file(file_name)
 			if cfg_type == LOAD_CFG_CURRENT_MAP:
 				file_path = cfg_dir + "." + file_name
@@ -48,9 +53,18 @@ func start(mapPath):
 				"creature.cfg": load_creatures_data(file_path)
 				"trapdoor.cfg": load_trapdoor_data(file_path)
 				"terrain.cfg": load_terrain_data(file_path)
+				"slabset.toml": load_slabset_data(file_path)
+				"columnset.toml": load_columnset_data(file_path)
 	
-	print('Loaded things from cfg files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
-	print(Slabs.doorslab_data)
+	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
+
+
+func load_slabset_data(file_path):
+	Slabset.import_toml_slabset(file_path)
+
+func load_columnset_data(file_path):
+	Columnset.import_toml_columnset(file_path)
+
 
 func load_objects_data(path):
 	var objects_cfg = Utils.read_dkcfg_file(path)

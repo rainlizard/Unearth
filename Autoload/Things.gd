@@ -84,7 +84,7 @@ func fetch_name(thing_type, sub_type):
 				return dictionary_of_names.get(nameId[0], nameId[0].capitalize())
 			return "Error1337"
 		else:
-			return "Unknown " + data_structure_name[thing_type] + " Subtype: " + str(sub_type)
+			return "Unknown " + data_structure_name[thing_type] + ": " + str(sub_type)
 	else:
 		return "Unknown Thingtype " + str(thing_type) + ", Subtype: " + str(sub_type)
 
@@ -99,7 +99,7 @@ func fetch_id_string(thing_type, sub_type):
 			return nameId[0].capitalize()
 		return "Error1337"
 	else:
-		return "Unknown " + data_structure_name[thing_type] + " Subtype: " + str(sub_type)
+		return "Unknown " + data_structure_name[thing_type] + ": " + str(sub_type)
 
 
 var data_structure_name = {
