@@ -58,7 +58,7 @@ func _ready():
 	
 	# Window's minimum size
 	rect_min_size = Vector2((grid_item_size.x*grid_window_scale)+11, (grid_item_size.y*grid_window_scale)+11)
-	oSlabTabs.initialize(["Main", "Other", "Custom", "Style", "Ownership"])
+	oSlabTabs.initialize(["Main", "Other", "Fake slabs", "Style", "Ownership"])
 
 func _process(delta): # It's necessary to use _process to update selection, because ScrollContainer won't fire a signal while you're scrolling.
 	update_selection_position()

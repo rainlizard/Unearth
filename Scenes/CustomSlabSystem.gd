@@ -59,6 +59,9 @@ func load_file():
 
 func add_custom_slab(slab_dict):
 	var head_id = slab_dict["header_id"]
+	
+	if head_id < 1000: return
+	
 	var section = 'slab'+str(head_id)
 	if head_id >= 1000:
 		Slabs.fake_extra_data[head_id] = [
