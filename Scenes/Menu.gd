@@ -42,6 +42,7 @@ onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oActionPointListWindow = Nodelist.list["oActionPointListWindow"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oSortCreatureStats = Nodelist.list["oSortCreatureStats"]
+onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -292,6 +293,8 @@ func _on_ViewSubmenu_Pressed(pressedID):
 		5:
 			Utils.popup_centered(oGridDataWindow)
 		6:
+			Utils.popup_centered(oConfigFilesListWindow)
+		7:
 			Utils.popup_centered(oSortCreatureStats)
 #		4:
 #			if oEditor.currentView == oEditor.VIEW_2D:

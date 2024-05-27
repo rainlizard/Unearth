@@ -1,4 +1,4 @@
-[gd_scene load_steps=190 format=2]
+[gd_scene load_steps=191 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -46,6 +46,7 @@
 [ext_resource path="res://Scenes/DataLif.gd" type="Script" id=44]
 [ext_resource path="res://Scenes/PickThingWindow.gd" type="Script" id=45]
 [ext_resource path="res://Scenes/CurrentTextures.gd" type="Script" id=46]
+[ext_resource path="res://Scenes/ConfigFilesListWindow.gd" type="Script" id=47]
 [ext_resource path="res://Scenes/Player.gd" type="Script" id=48]
 [ext_resource path="res://Scenes/GenerateTerrain.gd" type="Script" id=49]
 [ext_resource path="res://Scenes/View3D.gd" type="Script" id=50]
@@ -1700,7 +1701,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "View"
 align = 0
-items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Action points", null, 0, false, false, 4, 0, null, "", false, "Grid data", null, 0, false, false, 5, 0, null, "", false, "Creature Stats", null, 0, false, false, 6, 0, null, "", false ]
+items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Action points", null, 0, false, false, 4, 0, null, "", false, "Grid data", null, 0, false, false, 5, 0, null, "", false, "Config files", null, 0, false, false, 6, 0, null, "", false, "Creature stats", null, 0, false, false, 7, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -6717,7 +6718,7 @@ margin_right = 2053.0
 margin_bottom = -886.0
 rect_min_size = Vector2( 281, 296 )
 mouse_filter = 1
-window_title = "Creature Stat Comparison"
+window_title = "Creature stat comparison"
 resizable = true
 script = ExtResource( 170 )
 
@@ -6804,6 +6805,136 @@ texture_pressed = ExtResource( 66 )
 texture_hover = ExtResource( 128 )
 expand = true
 stretch_mode = 4
+
+[node name="ConfigFilesListWindow" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = 2184.0
+margin_top = -1832.0
+margin_right = 2885.0
+margin_bottom = -1226.0
+rect_min_size = Vector2( 281, 296 )
+mouse_filter = 1
+window_title = "Config files"
+resizable = true
+script = ExtResource( 47 )
+
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ConfigFilesListWindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 681.0
+margin_bottom = 586.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer"]
+margin_right = 661.0
+margin_bottom = 566.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_right = 661.0
+margin_bottom = 21.0
+text = "This is a list of the extra files that were loaded when you opened this map."
+autowrap = true
+
+[node name="Spacing3" type="Control" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 25.0
+margin_right = 661.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 20, 20 )
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 49.0
+margin_right = 661.0
+margin_bottom = 70.0
+custom_colors/font_color = Color( 0.4, 0.4, 0.4, 1 )
+text = "/fxdata/ config files"
+
+[node name="FileListGridA" type="GridContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 74.0
+margin_right = 661.0
+margin_bottom = 120.0
+
+[node name="Label5" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer/FileListGridA"]
+margin_right = 13.0
+margin_bottom = 21.0
+text = "A"
+
+[node name="Label6" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer/FileListGridA"]
+margin_top = 25.0
+margin_right = 13.0
+margin_bottom = 46.0
+text = "B"
+
+[node name="Spacing2" type="Control" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 124.0
+margin_right = 661.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 20, 20 )
+
+[node name="Label3" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 148.0
+margin_right = 661.0
+margin_bottom = 169.0
+custom_colors/font_color = Color( 0.4, 0.4, 0.4, 1 )
+text = "Campaign config files"
+
+[node name="FileListGridB" type="GridContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 173.0
+margin_right = 661.0
+margin_bottom = 219.0
+
+[node name="Label5" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer/FileListGridB"]
+margin_right = 13.0
+margin_bottom = 21.0
+text = "A"
+
+[node name="Label6" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer/FileListGridB"]
+margin_top = 25.0
+margin_right = 13.0
+margin_bottom = 46.0
+text = "B"
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 223.0
+margin_right = 661.0
+margin_bottom = 243.0
+rect_min_size = Vector2( 20, 20 )
+
+[node name="Label4" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 247.0
+margin_right = 661.0
+margin_bottom = 268.0
+custom_colors/font_color = Color( 0.4, 0.4, 0.4, 1 )
+text = "Local Map config files"
+
+[node name="FileListGridC" type="GridContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 272.0
+margin_right = 661.0
+margin_bottom = 318.0
+
+[node name="Label5" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer/FileListGridC"]
+margin_right = 13.0
+margin_bottom = 21.0
+text = "A"
+
+[node name="Label6" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/VBoxContainer/FileListGridC"]
+margin_top = 25.0
+margin_right = 13.0
+margin_bottom = 46.0
+text = "B"
 
 [node name="MapCoordinatesWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -7560,6 +7691,7 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/RightStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_RightStatsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/NameStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_NameStatsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/CCStatsHelpButton" to="Ui/UiSystem/SortCreatureStats" method="_on_CCStatsHelpButton_pressed"]
+[connection signal="about_to_show" from="Ui/UiSystem/ConfigFilesListWindow" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigFilesListWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapCoordinatesWindow" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_MapCoordinatesWindow_visibility_changed"]
 [connection signal="gui_input" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_gui_input"]
 [connection signal="resized" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_resized"]

@@ -1,6 +1,7 @@
 extends Node
 onready var oGame = Nodelist.list["oGame"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
 
 
 # These are dictionaries containing dictionaries.
@@ -13,6 +14,8 @@ onready var oMessage = Nodelist.list["oMessage"]
 #var creature_cfg : Dictionary
 #var trapdoor_cfg : Dictionary
 
+var paths_loaded = {}
+const files_to_load = ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg", "cubes.cfg", "slabset.toml", "columnset.toml"]
 
 enum {
 	LOAD_CFG_FXDATA,
@@ -30,7 +33,11 @@ func start(mapPath):
 	Cube.clear_all_cube_data()
 	
 	var campaign_cfg = load_campaign_data(mapPath)
-	
+	paths_loaded = {
+		LOAD_CFG_FXDATA: [],
+		LOAD_CFG_CAMPAIGN: [],
+		LOAD_CFG_CURRENT_MAP: []
+	}
 	var config_dirs = {
 		LOAD_CFG_FXDATA: oGame.DK_FXDATA_DIRECTORY,
 		LOAD_CFG_CAMPAIGN: oGame.GAME_DIRECTORY.plus_file(campaign_cfg.get("common", {}).get("CONFIGS_LOCATION", "")),
@@ -38,28 +45,44 @@ func start(mapPath):
 	}
 	for cfg_type in [LOAD_CFG_FXDATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
 		var cfg_dir = config_dirs[cfg_type]
-		for file_name in ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg", "cubes.cfg", "slabset.toml", "columnset.toml"]:
+		for i in files_to_load.size():
+			var file_name = files_to_load[i]
 			var file_path = cfg_dir.plus_file(file_name)
 			if cfg_type == LOAD_CFG_CURRENT_MAP:
 				file_path = cfg_dir + "." + file_name
-			
+		
 			if File.new().file_exists(file_path):
 				match file_name:
-					"objects.cfg": load_objects_data(file_path)
-					"creature.cfg": load_creatures_data(file_path)
-					"trapdoor.cfg": load_trapdoor_data(file_path)
-					"terrain.cfg": load_terrain_data(file_path)
-					"cubes.cfg": load_cubes_data(file_path)
-					"slabset.toml": load_slabset_data(file_path)
-					"columnset.toml": load_columnset_data(file_path)
+					"objects.cfg":
+						load_objects_data(file_path)
+					"creature.cfg":
+						load_creatures_data(file_path)
+					"trapdoor.cfg":
+						load_trapdoor_data(file_path)
+					"terrain.cfg":
+						load_terrain_data(file_path)
+					"cubes.cfg":
+						load_cubes_data(file_path)
+					"slabset.toml":
+						load_slabset_data(file_path)
+					"columnset.toml":
+						load_columnset_data(file_path)
+			
+				paths_loaded[cfg_type].resize(files_to_load.size())
+				paths_loaded[cfg_type][i] = file_path
 			else:
 				if cfg_type == LOAD_CFG_FXDATA:
 					match file_name:
-						"cubes.cfg": Cube.load_dk_original_cubes()
-						"slabset.toml": Slabset.load_default_original_slabset() # Load slabs.dat and slabs.tng files
-						"columnset.toml": Columnset.load_default_original_columnset() # Load slabs.clm file
-	
+						"cubes.cfg":
+							Cube.load_dk_original_cubes()
+						"slabset.toml":
+							Slabset.load_default_original_slabset()
+						"columnset.toml":
+							Columnset.load_default_original_columnset()
+
 	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
+	if oConfigFilesListWindow.visible == true:
+		Utils.popup_centered(oConfigFilesListWindow)
 
 func load_objects_data(path): # 10ms
 	var objects_cfg = Utils.read_dkcfg_file(path)
