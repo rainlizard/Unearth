@@ -51,6 +51,11 @@ func update_list(optionButtonIndex):
 		var label_text = str(i[0])  # Create a single string with a separator
 		if label_text in selected_labels:
 			col = Color(1.0,1.0,1.0)
+		
+		
+		if i[1] is Array:
+			i[1] = str(i[1]).replace("[", "").replace("]", "").replace(",", "").replace(" ", "  ")
+		
 		add_entry(i[0], i[1], col)
 
 func figure_out_name(NAME_ID, file):

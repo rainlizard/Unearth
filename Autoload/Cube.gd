@@ -46,57 +46,18 @@ enum {
 	SIDE_TOP = 4,
 	SIDE_BOTTOM = 5,
 }
+func clear_all_cube_data():
+	tex.clear()
+	names.clear()
 
-
-
-func get_cubescfg_modified_time():
-	var oGame = Nodelist.list["oGame"]
-	var path = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "CUBES.CFG")
-	var getModifiedTime = File.new().get_modified_time(path)
-	return getModifiedTime
-
-func _notification(what: int):
-	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
-		var oDataClm = Nodelist.list["oDataClm"]
-		if oDataClm.cubes.empty() == false: # fixes a crash when you've got no map loaded
-			if cubesCfgLastModifiedTime != get_cubescfg_modified_time():
-				var oMessage = Nodelist.list["oMessage"]
-				var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
-				var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
-				var oColumnEditor = Nodelist.list["oColumnEditor"]
-				var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
-				var oEditor = Nodelist.list["oEditor"]
-				var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
-				
-				read_cubes_cfg()
-				# Refresh the display of anything that handles cubes
-				
-				oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.SINGLE_THREADED)
-				oPickSlabWindow.add_slabs()
-				oColumnEditor._on_ColumnEditor_visibility_changed()
-				oSlabsetWindow._on_SlabsetWindow_visibility_changed()
-				if oEditor.currentView == oEditor.VIEW_3D:
-					oGenerateTerrain.start()
-				
-				oMessage.quick("Reloaded cubes.cfg")
-
-func read_cubes_cfg():
-	
-	var oGame = Nodelist.list["oGame"]
-	var path = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "CUBES.CFG")
-	if path == "":
-		load_dk_original_cubes()
-		return
-	
+func read_cubes_cfg(path):
 	var CODETIME_START = OS.get_ticks_msec()
 	var file = File.new()
 	if file.open(path, File.READ) != OK:
-		load_dk_original_cubes()
 		return
 	
 	# Important to clear these because they get reloaded
-	tex.clear()
-	names.clear()
+	clear_all_cube_data()
 	
 	cubesCfgLastModifiedTime = get_cubescfg_modified_time()
 	
@@ -122,9 +83,10 @@ func read_cubes_cfg():
 				int(componentsOfLine[7]),
 			])
 	
-	print('Cube names read in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-	
 	set_max_cubes() # Run for both read_cubes_cfg() and at the bottom of load_dk_original_cubes()
+	print('Cube names read in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+
 
 func load_dk_original_cubes():
 	tex = [
@@ -650,3 +612,35 @@ func set_max_cubes():
 	
 	oColumnEditorControls.establish_maximum_cube_field_values()
 	oColumnsetControls.establish_maximum_cube_field_values()
+
+
+func get_cubescfg_modified_time():
+	var oGame = Nodelist.list["oGame"]
+	var path = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "CUBES.CFG")
+	var getModifiedTime = File.new().get_modified_time(path)
+	return getModifiedTime
+
+#func _notification(what: int):
+#	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+#		var oDataClm = Nodelist.list["oDataClm"]
+#		if oDataClm.cubes.empty() == false: # fixes a crash when you've got no map loaded
+#			if cubesCfgLastModifiedTime != get_cubescfg_modified_time():
+#				var oMessage = Nodelist.list["oMessage"]
+#				var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
+#				var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
+#				var oColumnEditor = Nodelist.list["oColumnEditor"]
+#				var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+#				var oEditor = Nodelist.list["oEditor"]
+#				var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
+#
+#				read_cubes_cfg()
+#				# Refresh the display of anything that handles cubes
+#
+#				oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.SINGLE_THREADED)
+#				oPickSlabWindow.add_slabs()
+#				oColumnEditor._on_ColumnEditor_visibility_changed()
+#				oSlabsetWindow._on_SlabsetWindow_visibility_changed()
+#				if oEditor.currentView == oEditor.VIEW_3D:
+#					oGenerateTerrain.start()
+#
+#				oMessage.quick("Reloaded cubes.cfg")

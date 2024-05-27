@@ -22,10 +22,8 @@ var columnsContainingRngCubes = {}
 
 
 func import_toml_columnset(filePath):
-	var oMessage = Nodelist.list["oMessage"]
 	var cfg = ConfigFile.new()
 	var err = cfg.load(filePath)
-	
 	if err != OK:
 		return
 	
