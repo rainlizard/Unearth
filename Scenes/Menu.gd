@@ -32,7 +32,6 @@ onready var oUi = Nodelist.list["oUi"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
-onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
@@ -223,7 +222,8 @@ func _on_EditSubmenu_Pressed(pressedID):
 		1: # Custom columns
 			Utils.popup_centered(oColumnEditor)
 		2: # Custom objects
-			Utils.popup_centered(oAddCustomObjectWindow)
+			#Utils.popup_centered(oAddCustomObjectWindow)
+			pass
 		3: # Resize and shift
 			Utils.popup_centered(oResizeCurrentMapSize)
 		4: # Update all slabs

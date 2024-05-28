@@ -36,7 +36,6 @@ onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
-onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
 onready var oBuffers = Nodelist.list["oBuffers"]
@@ -71,7 +70,8 @@ func start():
 			#for i in 200:
 			#	yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
-			open_map("D:/Dungeon Keeper/levels/personal/map00002.slb")
+			#open_map("D:/Dungeon Keeper/levels/personal/map00002.slb")
+			open_map("D:/Dungeon Keeper/campgns/dpthshdw/map00014.slb")
 			pass
 		else:
 			# initialize a cleared map

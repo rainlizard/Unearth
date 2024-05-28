@@ -1,5 +1,4 @@
 extends Node2D
-onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]

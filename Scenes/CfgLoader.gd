@@ -51,7 +51,9 @@ func start(mapPath):
 			var file_path = cfg_dir.plus_file(file_name)
 			if cfg_type == LOAD_CFG_CURRENT_MAP:
 				file_path = cfg_dir + "." + file_name
-		
+			
+			print("CFG loader: ", file_path)
+			
 			if File.new().file_exists(file_path):
 				match file_name:
 					"objects.cfg":
@@ -95,12 +97,33 @@ func load_objects_data(path): # 10ms
 			if id == 0: continue
 			if id >= 136 or id in [100, 101, 102, 103, 104, 105]: # Dummy Boxes should be overwritten
 				var objSection = objects_cfg[section]
-				var newName = objSection["Name"]
-				var animID = objSection["AnimationID"]
-				var newSprite = get_sprite(animID, newName)
-				var newGenre = objSection.get("Genre", null)
-				var newEditorTab = Things.GENRE_TO_TAB[newGenre]
+				var newName
+				var animID
+				var newSprite
+				var newEditorTab
+				var newGenre
+				
+				if Things.DATA_OBJECT.has(id) == true: # Existing values are written by other calls to load_objects_data()  (can be from /fxdata/, campaign, local map, etc.)
+					newName = objSection.get("Name", Things.DATA_OBJECT[id][Things.NAME_ID])
+					
+					animID = objSection.get("AnimationID")
+					newSprite = get_sprite(animID, newName)
+					if newSprite == null: newSprite = Things.DATA_OBJECT[id][Things.SPRITE]
+					
+					newGenre = objSection.get("Genre")
+					newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.DATA_OBJECT[id][Things.EDITOR_TAB])
+				else:
+					newName = objSection.get("Name", "UNDEFINED_NAME")
+					
+					animID = objSection.get("AnimationID")
+					newSprite = get_sprite(animID, newName)
+					
+					newGenre = objSection.get("Genre")
+					newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.TAB_DECORATION)
+				
+				
 				Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
+
 
 var keeperfx_edited_slabs = [Slabs.GEMS] # This is to help with backwards compatibility for previous keeperfx versions that don't have these edits.
 func load_terrain_data(path): # 4ms

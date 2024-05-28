@@ -1,5 +1,4 @@
 extends WindowDialog
-onready var oAddCustomObjectWindow = Nodelist.list["oAddCustomObjectWindow"]
 onready var oDkSlabsetVoxelView = Nodelist.list["oDkSlabsetVoxelView"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oVariationInfoLabel = Nodelist.list["oVariationInfoLabel"]
@@ -33,6 +32,7 @@ onready var oObjThingTypeLabel = Nodelist.list["oObjThingTypeLabel"]
 onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
 onready var oVarButtonsApplyToAllCheckBox = Nodelist.list["oVarButtonsApplyToAllCheckBox"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
+onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 
 var clipboard = {
 	"dat": [],
@@ -214,7 +214,7 @@ func ensure_tng_array_has_space(variation):
 
 
 func _on_SlabsetCopyValues_pressed():
-	oAddCustomObjectWindow.copy_values_from_slabset_and_index_them()
+	oAddCustomSlabWindow.copy_values_from_slabset_and_index_them()
 	
 	visible = false
 	oPickSlabWindow._on_pressed_add_new_custom_slab()

@@ -1,4 +1,5 @@
 extends WindowDialog
+onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
@@ -138,6 +139,7 @@ func _on_SlabWibbleOptionButton_item_selected(index):
 		oWibbleEdgesSpacing.visible = false
 		oWibbleEdgesCheckBox.visible = false
 
+
 func copy_values_from_slabset_and_index_them():
 	for i in 9:
 		var srcClmIndex = oSlabsetWindow.columnSettersArray[i].get_node("CustomSpinBox").value
@@ -148,12 +150,14 @@ func copy_values_from_slabset_and_index_them():
 	
 	#oMessage.big("", "Columns in your map's .clm file have been found that match the columns from slabs.clm/dat. Any that weren't found were added.")
 
+
 func get_column_indexes_on_tile(cursorTile):
 	for ySubtile in 3:
 		for xSubtile in 3:
 			var newIndex = oDataClmPos.get_cell_clmpos((cursorTile.x*3)+xSubtile, (cursorTile.y*3)+ySubtile)
 			var i = (ySubtile*3) + xSubtile
 			customSlabArrayOfSpinbox[i].value = newIndex
+
 
 
 

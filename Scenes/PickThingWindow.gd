@@ -8,7 +8,6 @@ onready var oGridFunctions = Nodelist.list["oGridFunctions"]
 onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oInspector = Nodelist.list["oInspector"]
-onready var oCustomObjectSystem = Nodelist.list["oCustomObjectSystem"]
 
 enum {
 	GRIDCON_PATH
@@ -110,7 +109,6 @@ func add_to_category(tabNode, thingsData, thingtype, subtype):
 	var id = scnGridItem.instance()
 	id.img_margin = 3
 	id.connect('mouse_entered',oThingDetails,"_on_thing_portrait_mouse_entered",[id])
-	id.connect('gui_input',self,"_on_thing_portrait_gui_input",[id])
 	id.set_meta("thingSubtype", subtype)
 	id.set_meta("thingType", thingtype)
 	
@@ -299,11 +297,6 @@ func remove_all_grid_items():
 		
 		for id in get_grid_container_node(tabID).get_children():
 			id.queue_free()
-
-func _on_thing_portrait_gui_input(event, id):
-	if event.is_action_pressed("mouse_right"):
-		oPropertiesWindow.oPropertiesTabs.current_tab = 0
-		oCustomObjectSystem.remove_object(id.get_meta("thingType"), id.get_meta("thingSubtype"))
 
 func rect_changed_start_timer():
 	rectChangedTimer.start(0.2)
