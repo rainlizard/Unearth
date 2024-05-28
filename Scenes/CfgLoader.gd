@@ -126,7 +126,7 @@ func load_terrain_data(path): # 4ms
 					setIsOwnable = Slabs.OWNABLE
 				
 				
-				var setBitmask = Slabs.BITMASK_GENERAL
+				var setBitmask = Slabs.BITMASK_BLOCK
 				
 				if slabSection.get("Animated", 0) == 1:
 					setBitmask = Slabs.BITMASK_SIMPLE
@@ -137,15 +137,18 @@ func load_terrain_data(path): # 4ms
 				else:
 					match slabSection.get("Category", 0):
 						0: # Unclaimed
-							setBitmask = Slabs.BITMASK_GENERAL
+							if setBlockType == Slabs.BLOCK_SLAB:
+								setBitmask = Slabs.BITMASK_BLOCK
+							elif setBlockType == Slabs.FLOOR_SLAB:
+								setBitmask = Slabs.BITMASK_FLOOR
 						1: # Diggable dirt
-							setBitmask = Slabs.BITMASK_GENERAL
+							setBitmask = Slabs.BITMASK_BLOCK
 						2: # Claimed path
 							setBitmask = Slabs.BITMASK_CLAIMED
 						3: # Fortified wall
 							setBitmask = Slabs.BITMASK_REINFORCED
-						4: # Room interior
-							setBitmask = Slabs.BITMASK_GENERAL
+						4: # Room
+							setBitmask = Slabs.BITMASK_FLOOR
 						5: # Obstacle
 							setBitmask = Slabs.BITMASK_SIMPLE
 				

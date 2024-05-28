@@ -38,18 +38,13 @@ func _process(delta):
 	if undo_save_queued == true:
 		set_process(false)
 		while true:
-			print("a")
 			if Input.is_mouse_button_pressed(BUTTON_LEFT) or \
 				oLoadingBar.visible == true or \
 				oNewMapWindow.currently_creating_new_map == true or \
 				performing_undo == true:
-					print("b")
 					yield(get_tree(), "idle_frame")
-					print("c")
 			else:
-				print("d")
 				break
-		print("oThreadedSaveUndo.semaphore.post()")
 		oThreadedSaveUndo.semaphore.post()
 		
 		undo_save_queued = false

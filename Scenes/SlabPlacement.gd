@@ -569,12 +569,14 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	
 	var bitmask
 	match bitmaskType:
-		Slabs.BITMASK_REINFORCED:
-			bitmask = get_wall_bitmask(xSlab, ySlab, surrID, ownership)
-		Slabs.BITMASK_GENERAL:
+		Slabs.BITMASK_BLOCK:
+			bitmask = get_tall_bitmask(surrID)
+		Slabs.BITMASK_FLOOR:
 			bitmask = get_general_bitmask(slabID, ownership, surrID, surrOwner)
 		Slabs.BITMASK_CLAIMED:
 			bitmask = get_claimed_bitmask(slabID, ownership, surrID, surrOwner)
+		Slabs.BITMASK_REINFORCED:
+			bitmask = get_wall_bitmask(xSlab, ySlab, surrID, ownership)
 		Slabs.BITMASK_SIMPLE:
 			bitmask = 1 # Always use south variation
 			modifyForLiquid = false
@@ -753,13 +755,13 @@ func set_columns(xSlab, ySlab, constructedColumns, constructedFloor):
 		var xSubtile = i - (ySubtile*3)
 		oDataClmPos.set_cell_clmpos((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, clmIndex)
 
-#func get_tall_bitmask(surrID):
-#	var bitmask = 0
-#	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false: bitmask += 1
-#	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false: bitmask += 2
-#	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false: bitmask += 4
-#	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false: bitmask += 8
-#	return bitmask
+func get_tall_bitmask(surrID):
+	var bitmask = 0
+	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false: bitmask += 1
+	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false: bitmask += 2
+	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false: bitmask += 4
+	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false: bitmask += 8
+	return bitmask
 
 func get_general_bitmask(slabID, ownership, surrID, surrOwner):
 	var bitmask = 0 # Center
