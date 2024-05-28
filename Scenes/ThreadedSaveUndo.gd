@@ -24,11 +24,8 @@ func run_threaded_undo_save(_userdata):
 			var compare_state = create_state()
 			
 			# For some reason TNGFX occasionally breaks
-			if compare_state.has("TNGFX") == false:
-				oMessage.big("Undo state error 1", "TNGFX buffer broke")
-				continue
-			elif compare_state["TNGFX"] == null:
-				oMessage.big("Undo state error 2", "TNGFX buffer broke")
+			if compare_state.has("TNGFX") and compare_state["TNGFX"] == null:
+				oMessage.big("Undo state error", "TNGFX buffer broke")
 				continue
 			
 			if oUndoStates.are_states_equal(consistent_state, compare_state):
