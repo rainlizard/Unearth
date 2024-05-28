@@ -50,42 +50,22 @@ func clear_all_cube_data():
 	tex.clear()
 	names.clear()
 
-func read_cubes_cfg(path):
-	var CODETIME_START = OS.get_ticks_msec()
-	var file = File.new()
-	if file.open(path, File.READ) != OK:
-		return
-	
-	# Important to clear these because they get reloaded
-	clear_all_cube_data()
-	
-	cubesCfgLastModifiedTime = get_cubescfg_modified_time()
-	
-	var massiveString = file.get_as_text()
-	file.close()
-	
-	# Replace any tabs with spaces, so the lines can be properly split().
-	massiveString = massiveString.replace('\t', ' ')
-	
-	#while true:
-	var bigListOfLines = massiveString.split('\n',false)
-	for line in bigListOfLines:
-		var componentsOfLine = line.split(' ', false)
-		if componentsOfLine.size() >= 3 and componentsOfLine[0] == "Name":
-			names.append(componentsOfLine[2].capitalize().replace(" ",""))
-		if componentsOfLine.size() >= 8 and componentsOfLine[0] == "Textures":
-			tex.append([
-				int(componentsOfLine[2]),
-				int(componentsOfLine[3]),
-				int(componentsOfLine[4]),
-				int(componentsOfLine[5]),
-				int(componentsOfLine[6]),
-				int(componentsOfLine[7]),
-			])
-	
-	set_max_cubes() # Run for both read_cubes_cfg() and at the bottom of load_dk_original_cubes()
-	print('Cube names read in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
+func read_cubes_cfg(get_cfg_data):
+	var int_cfg_data = {}
+	for key in get_cfg_data:
+		int_cfg_data[int(key)] = get_cfg_data[key]
+	
+	var max_cube_key = int_cfg_data.keys().max()
+	
+	names.resize(max_cube_key + 1)
+	tex.resize(max_cube_key + 1)
+	
+	for cubeID in int_cfg_data:
+		names[cubeID] = int_cfg_data[cubeID].get("Name", "")
+		tex[cubeID] = int_cfg_data[cubeID].get("Textures", [])
+	
+	set_max_cubes()
 
 
 func load_dk_original_cubes():

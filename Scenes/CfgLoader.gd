@@ -44,71 +44,79 @@ func start(mapPath):
 		LOAD_CFG_CAMPAIGN: oGame.GAME_DIRECTORY.plus_file(campaign_cfg.get("common", {}).get("CONFIGS_LOCATION", "")),
 		LOAD_CFG_CURRENT_MAP: mapPath.get_basename()
 	}
-	for cfg_type in [LOAD_CFG_FXDATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
-		var cfg_dir = config_dirs[cfg_type]
-		for i in files_to_load.size():
-			var file_name = files_to_load[i]
+	
+	var file_exists = File.new()
+	
+	for i in files_to_load.size():
+		var CODETIME_START = OS.get_ticks_msec()
+		var file_name = files_to_load[i]
+		
+		var combined_cfg = {}
+		
+		for cfg_type in [LOAD_CFG_FXDATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
+			var cfg_dir = config_dirs[cfg_type]
 			var file_path = cfg_dir.plus_file(file_name)
 			if cfg_type == LOAD_CFG_CURRENT_MAP:
 				file_path = cfg_dir + "." + file_name
 			
-			print("CFG loader: ", file_path)
-			
-			if File.new().file_exists(file_path):
+			if file_exists.file_exists(file_path):
+				
+				# ALL OTHER FILES GET DEFAULTED TO BEING LOADED AS A DKCFG FILE
 				match file_name:
-					"objects.cfg":
-						load_objects_data(file_path)
-					"creature.cfg":
-						load_creatures_data(file_path)
-					"trapdoor.cfg":
-						load_trapdoor_data(file_path)
-					"terrain.cfg":
-						load_terrain_data(file_path)
-					"cubes.cfg":
-						load_cubes_data(file_path)
-					"slabset.toml":
-						load_slabset_data(file_path)
-					"columnset.toml":
-						load_columnset_data(file_path)
-			
+					"slabset.toml": Slabset.import_toml_slabset(file_path) # .toml import gets run multiple times instead of combining
+					"columnset.toml": Columnset.import_toml_columnset(file_path)
+					_:
+						var cfgData = Utils.read_dkcfg_file(file_path)
+						combined_cfg = Utils.super_merge(combined_cfg, cfgData)
+				
 				paths_loaded[cfg_type].resize(files_to_load.size())
 				paths_loaded[cfg_type][i] = file_path
 			else:
 				if cfg_type == LOAD_CFG_FXDATA:
 					match file_name:
-						"cubes.cfg":
-							Cube.load_dk_original_cubes()
-						"slabset.toml":
-							Slabset.load_default_original_slabset()
-						"columnset.toml":
-							Columnset.load_default_original_columnset()
-
+						"cubes.cfg": Cube.load_dk_original_cubes()
+						"slabset.toml": Slabset.load_default_original_slabset()
+						"columnset.toml": Columnset.load_default_original_columnset()
+		
+		#if file_name == "objects.cfg":
+		#	print(combined_cfg)
+		
+		# Only load cfg after they've been combined (they're combined so they'll automatically have fallbacks)
+		match file_name:
+			"objects.cfg": load_objects_data(combined_cfg)
+			"creature.cfg": load_creatures_data(combined_cfg)
+			"trapdoor.cfg": load_trapdoor_data(combined_cfg)
+			"terrain.cfg": load_terrain_data(combined_cfg)
+			"cubes.cfg": Cube.read_cubes_cfg(combined_cfg)
+	
 	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 	if oConfigFilesListWindow.visible == true:
 		Utils.popup_centered(oConfigFilesListWindow)
 	
 	oCustomSlabSystem.load_unearth_custom_slabs_file()
 
-func load_objects_data(path): # 10ms
-	var objects_cfg = Utils.read_dkcfg_file(path)
-	for section in objects_cfg:
+
+func load_objects_data(cfg): # 10ms
+	for section in cfg:
 		if section.begins_with("object"):
 			var id = int(section)
 			if id == 0: continue
 			if id >= 136 or id in [100, 101, 102, 103, 104, 105]: # Dummy Boxes should be overwritten
-				var objSection = objects_cfg[section]
+				var objSection = cfg[section]
 				var newName
 				var animID
 				var newSprite
 				var newEditorTab
 				var newGenre
 				
-				if Things.DATA_OBJECT.has(id) == true: # Existing values are written by other calls to load_objects_data()  (can be from /fxdata/, campaign, local map, etc.)
+				
+				if Things.DATA_OBJECT.has(id) == true:
 					newName = objSection.get("Name", Things.DATA_OBJECT[id][Things.NAME_ID])
 					
 					animID = objSection.get("AnimationID")
 					newSprite = get_sprite(animID, newName)
-					if newSprite == null: newSprite = Things.DATA_OBJECT[id][Things.SPRITE]
+					if newSprite == null:
+						newSprite = Things.DATA_OBJECT[id][Things.SPRITE]
 					
 					newGenre = objSection.get("Genre")
 					newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.DATA_OBJECT[id][Things.EDITOR_TAB])
@@ -121,18 +129,21 @@ func load_objects_data(path): # 10ms
 					newGenre = objSection.get("Genre")
 					newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.TAB_DECORATION)
 				
+				if id == 161:
+					print('-------------------------')
+					print(newGenre)
+					print('-------------------------')
 				
 				Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
 
 
 var keeperfx_edited_slabs = [Slabs.GEMS] # This is to help with backwards compatibility for previous keeperfx versions that don't have these edits.
-func load_terrain_data(path): # 4ms
-	var terrain_cfg = Utils.read_dkcfg_file(path)
-	for section in terrain_cfg:
+func load_terrain_data(cfg): # 4ms
+	for section in cfg:
 		if section.begins_with("slab"):
 			var id = int(section)
 			if id >= 55 or id in keeperfx_edited_slabs:
-				var slabSection = terrain_cfg[section]
+				var slabSection = cfg[section]
 				
 				var setName = slabSection.get("Name", "UNKNOWN")
 				
@@ -188,9 +199,8 @@ func load_terrain_data(path): # 4ms
 				]
 
 
-func load_creatures_data(path): # 3ms
-	var creature_cfg = Utils.read_dkcfg_file(path)
-	var creatures = creature_cfg.get("common", {}).get("Creatures", [])
+func load_creatures_data(cfg): # 3ms
+	var creatures = cfg.get("common", {}).get("Creatures", [])
 	for id_number in creatures.size():
 		var creature_id = id_number + 1
 		if not Things.DATA_CREATURE.has(creature_id):
@@ -198,9 +208,8 @@ func load_creatures_data(path): # 3ms
 			var newSprite = get_sprite(newName, null)
 			Things.DATA_CREATURE[creature_id] = [newName, newSprite, Things.TAB_CREATURE]
 
-func load_trapdoor_data(path): # 1ms
-	var trapdoor_cfg = Utils.read_dkcfg_file(path)
-	for section in trapdoor_cfg:
+func load_trapdoor_data(cfg): # 1ms
+	for section in cfg:
 		var id = int(section)
 		if id == 0: continue
 		var trapOrDoor = -1
@@ -211,7 +220,7 @@ func load_trapdoor_data(path): # 1ms
 		else:
 			continue
 		
-		var data = trapdoor_cfg[section]
+		var data = cfg[section]
 		var newName = data.get("Name", null)
 		var newSprite = get_sprite(newName, null)
 		var crateName = data.get("Crate", null)
@@ -247,13 +256,3 @@ func load_campaign_data(mapPath):
 			#print(oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower())
 			return cfgDictionary
 	return {}
-	
-
-func load_cubes_data(file_path): # 6ms
-	Cube.read_cubes_cfg(file_path)
-
-func load_slabset_data(file_path): # 33ms
-	Slabset.import_toml_slabset(file_path)
-
-func load_columnset_data(file_path): # 29ms
-	Columnset.import_toml_columnset(file_path)

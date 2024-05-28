@@ -70,9 +70,8 @@ func start():
 			#for i in 200:
 			#	yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
-			#open_map("D:/Dungeon Keeper/levels/personal/map00002.slb")
-			open_map("D:/Dungeon Keeper/campgns/dpthshdw/map00014.slb")
-			pass
+			open_map("D:/Dungeon Keeper/levels/personal/map00002.slb")
+			#open_map("D:/Dungeon Keeper/campgns/dpthshdw/map00014.slb")
 		else:
 			# initialize a cleared map
 			oCurrentMap.clear_map()
@@ -100,8 +99,6 @@ func open_map(filePath):
 	if oTextureCache.texturesLoadedState != oTextureCache.LOADING_SUCCESS:
 		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
 		return
-	
-	
 	
 	print("----------- Opening map ------------")
 	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
