@@ -300,7 +300,6 @@ func update_cursor_position():
 
 func moved_to_new_tile():
 	if mode == MODE_TILE: canPlace = true
-	oSlabNameDisplay.update_text_with_id(oSelection.cursorOverSlab, false)
 
 func moved_to_new_subtile():
 	oColumnDetails.update_details()

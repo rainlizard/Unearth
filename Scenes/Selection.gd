@@ -32,6 +32,7 @@ onready var oPlaceThingsAnywhere = Nodelist.list["oPlaceThingsAnywhere"]
 onready var oSlabSideViewer = Nodelist.list["oSlabSideViewer"]
 onready var oUseSlabOwnerCheckBox = Nodelist.list["oUseSlabOwnerCheckBox"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
+onready var oSlabNameDisplay = Nodelist.list["oSlabNameDisplay"]
 
 enum {
 	CONSTRUCT_BRUSH
@@ -101,6 +102,7 @@ func update_under_cursor():
 	cursorOverSlab = oSelector.get_slabID_at_pos(oSelector.cursorTile)
 	cursorOverSlabOwner = oDataOwnership.get_cellv_ownership(oSelector.cursorTile)
 	oSlabSideViewer.update_side()
+	oSlabNameDisplay.update_text_with_id(cursorOverSlab, false)
 
 func update_paint():
 	match oSelector.mode:
