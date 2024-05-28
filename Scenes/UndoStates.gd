@@ -11,12 +11,11 @@ onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oMenu = Nodelist.list["oMenu"]
 
-
-
-var is_saving_state = false
 var undo_history = []
 var max_undo_states = 256
 var performing_undo = false
+
+var undo_save_queued = false
 
 func _input(event):
 	if event.is_action_pressed("undo"):
@@ -28,22 +27,38 @@ func clear_history():
 	undo_history.clear()
 	oMenu.update_undo_availability()
 	
-	is_saving_state = false # To be sure it's executed
 	call_deferred("attempt_to_save_new_undo_state")
-	
+
 
 func attempt_to_save_new_undo_state(): # called by oEditor
-	if is_saving_state == false:
-		is_saving_state = true
-		while Input.is_mouse_button_pressed(BUTTON_LEFT) or oLoadingBar.visible == true or oNewMapWindow.currently_creating_new_map == true:
-			yield(get_tree(), "idle_frame")
+	undo_save_queued = true
+
+
+func _process(delta):
+	if undo_save_queued == true:
+		set_process(false)
+		while true:
+			print("a")
+			if Input.is_mouse_button_pressed(BUTTON_LEFT) or \
+				oLoadingBar.visible == true or \
+				oNewMapWindow.currently_creating_new_map == true or \
+				performing_undo == true:
+					print("b")
+					yield(get_tree(), "idle_frame")
+					print("c")
+			else:
+				print("d")
+				break
+		print("oThreadedSaveUndo.semaphore.post()")
 		oThreadedSaveUndo.semaphore.post()
+		
+		undo_save_queued = false
+		set_process(true)
 
 
 func on_undo_state_saved(new_state):
 	if undo_history.size() >= 1 and are_states_equal(new_state, undo_history[0]):
 		#oMessage.quick("Didn't add undo state as it is the same as the previous undo-state")
-		is_saving_state = false
 		return
 	if undo_history.size() >= max_undo_states:
 		undo_history.pop_back()
@@ -51,10 +66,7 @@ func on_undo_state_saved(new_state):
 	oMenu.update_undo_availability()
 	
 	#oMessage.quick("Undo history size: " + str(undo_history.size()) + " (test)")
-	
-	
-	is_saving_state = false
-	
+
 
 func perform_undo():
 	print("perform_undo")
@@ -65,8 +77,6 @@ func perform_undo():
 		print("Error: previous_state is not a dictionary")
 		oMessage.big("Undo state error", "previous_state is not a dictionary")
 		return
-	
-
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	performing_undo = true
@@ -98,7 +108,6 @@ func perform_undo():
 	var IDLE_FRAME_CODETIME_START = OS.get_ticks_msec()
 	yield(get_tree(), 'idle_frame')
 	print('Idle frame (after undo): ' + str(OS.get_ticks_msec() - IDLE_FRAME_CODETIME_START) + 'ms')
-	
 	performing_undo = false
 
 

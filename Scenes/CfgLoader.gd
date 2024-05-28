@@ -2,6 +2,7 @@ extends Node
 onready var oGame = Nodelist.list["oGame"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
+onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 
 
 # These are dictionaries containing dictionaries.
@@ -83,6 +84,8 @@ func start(mapPath):
 	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 	if oConfigFilesListWindow.visible == true:
 		Utils.popup_centered(oConfigFilesListWindow)
+	
+	oCustomSlabSystem.load_unearth_custom_slabs_file()
 
 func load_objects_data(path): # 10ms
 	var objects_cfg = Utils.read_dkcfg_file(path)

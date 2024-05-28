@@ -50,15 +50,13 @@ func update_full_overhead_map(threadType):
 	
 	match threadType:
 		SINGLE_THREADED:
-			overhead2d_update_rect_single_threaded(shapePositionArray)
+			if thread_currently_processing == false:
+				overhead2d_update_rect_single_threaded(shapePositionArray)
 		MULTI_THREADED:
 			mutex.lock()
-			job_queue.append(shapePositionArray)
+			job_queue.append(shapePositionArray.duplicate(true)) # This duplicate somehow fixes a crash, or maybe just helps improve a race condition
 			mutex.unlock()
-			thread_currently_processing = true
-			semaphore.post()  # Release the semaphore to signal the thread to process the job
 	print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-
 
 
 # Using a single threaded version for updating partial graphics.
@@ -71,7 +69,9 @@ func overhead2d_update_rect_single_threaded(shapePositionArray):
 
 func multi_threaded():
 	while true:
-		semaphore.wait()  # Acquire the semaphore before processing
+		if job_queue.size() == 0:
+			continue
+		thread_currently_processing = true
 		print("graphics multi_threaded start")
 		
 		mutex.lock()
@@ -79,9 +79,12 @@ func multi_threaded():
 		mutex.unlock()
 		
 		var newPixelData = PoolByteArray()
+		print("graphics multi_threaded 1")
 		var resulting_pixel_data = generate_pixel_data(newPixelData, shapePositionArray)
+		print("graphics multi_threaded 2")
 		call_deferred("thread_done", resulting_pixel_data)
 		print("graphics multi_threaded end")
+
 
 func thread_done(resulting_pixel_data):
 	if resulting_pixel_data != null:
@@ -95,9 +98,11 @@ func thread_done(resulting_pixel_data):
 	emit_signal("graphics_thread_completed")
 	
 func generate_pixel_data(pixData, shapePositionArray):
+	print("generate_pixel_data START")
 	var width = M.xSize * 3
 	var height = M.ySize * 3
 	pixData.resize(width * height * 3)  # Assuming RGB8 format
+	
 	for pos in shapePositionArray:
 		var basePosX = pos.x * 3
 		var basePosY = pos.y * 3
@@ -112,6 +117,7 @@ func generate_pixel_data(pixData, shapePositionArray):
 			pixData[pixelIndex] = cubeFace >> 16 & 255
 			pixData[pixelIndex + 1] = cubeFace >> 8 & 255
 			pixData[pixelIndex + 2] = cubeFace & 255
+	print("generate_pixel_data END")
 	return pixData
 
 

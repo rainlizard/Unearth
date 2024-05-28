@@ -5,10 +5,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 
 var cfg = ConfigFile.new()
 
-func _ready():
-	load_file()
-
-func load_file():
+func load_unearth_custom_slabs_file():
 	var filePath = Settings.unearthdata.plus_file("custom_slabs.cfg")
 	
 	var file = File.new()
@@ -104,8 +101,9 @@ func add_custom_slab(slab_dict):
 		if slab_dict["floor_data"].size() > 0:
 			cfg.set_value(section,"floor"+str(i),slab_dict["floor_data"][i])
 	
+	print("ADDED CUSTOM SLAB ", head_id)
+	
 	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
-
 
 func attempt_to_remove_custom_slab(header_id):
 	oPickSlabWindow.set_selection(null)

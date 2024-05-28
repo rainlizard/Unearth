@@ -24,15 +24,20 @@ func run_threaded_undo_save(_userdata):
 			var compare_state = create_state()
 			
 			# For some reason TNGFX occasionally breaks
-			if compare_state.has("TNGFX") and compare_state["TNGFX"] == null:
-				oMessage.big("Undo state error", "TNGFX buffer broke")
+			if compare_state.has("TNGFX") == false:
+				oMessage.big("Undo state error 1", "TNGFX buffer broke")
 				continue
+			elif compare_state["TNGFX"] == null:
+				oMessage.big("Undo state error 2", "TNGFX buffer broke")
+				continue
+			
 			if oUndoStates.are_states_equal(consistent_state, compare_state):
 				break
 		
 		# The captured state is consistent, save it as the undo state
 		oUndoStates.call_deferred("on_undo_state_saved", consistent_state)
 		print("End multi-threaded save undo state: " + str(OS.get_ticks_msec() - CODETIME_START) + "ms")
+
 
 func create_state():
 	var new_state = {}
@@ -42,4 +47,3 @@ func create_state():
 			continue
 		new_state[EXT] = oBuffers.get_buffer_for_extension(EXT, oCurrentMap.path)
 	return new_state
-

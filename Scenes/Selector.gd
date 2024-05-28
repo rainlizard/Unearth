@@ -38,6 +38,7 @@ onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oOwnerSelection = Nodelist.list["oOwnerSelection"]
 onready var oSlabNameDisplay = Nodelist.list["oSlabNameDisplay"]
+onready var oUndoStates = Nodelist.list["oUndoStates"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE

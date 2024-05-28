@@ -148,6 +148,7 @@ func write_tng():
 
 
 func write_tngfx():
+	print("write_tngfx START")
 	var buffer = StreamPeerBuffer.new()
 	var groupNames = {
 		Things.TYPE.OBJECT: "Object",
@@ -208,6 +209,8 @@ func write_tngfx():
 	
 	lines.set(1, "ThingsCount = " + str(entryNumber))
 	buffer.put_data("\n".join(lines).to_ascii())
+	
+	print("write_tngfx END")
 	return buffer
 
 
