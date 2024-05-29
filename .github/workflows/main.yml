@@ -57,9 +57,16 @@ jobs:
     - name: Download rcedit
       run: |
         wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
-    - name: Replace Icon in Windows Export with rcedit
+    - name: Set Executable Details and Replace Icon in Windows Export with rcedit
       run: |
-        wine64 rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe --set-icon Art/icon/UnearthIcon.ico
+        wine64 rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe \
+          --set-icon Art/icon/UnearthIcon.ico \
+          --set-version-string FileDescription "Unearth Editor for Dungeon Keeper" \
+          --set-file-version ${{ steps.version_info.outputs.FULL_VERSION }} \
+          --set-version-string ProductName "Unearth" \
+          --set-product-version ${{ steps.version_info.outputs.FULL_VERSION }} \
+          --set-version-string LegalCopyright "Open Source"
+    
     - name: Upload Linux Artifacts
       uses: actions/upload-artifact@v3
       with:
