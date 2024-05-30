@@ -169,9 +169,6 @@ func _on_MapBrowser_visibility_changed():
 
 
 func toggle_map_preview(togglePreview):
-	if togglePreview == false and oMapBrowser.visible == true:
-		yield(oOverheadGraphics, "graphics_thread_completed")
-	
 	oQuickMapPreview.visible = togglePreview
 	
 	# Toggle to false if currently selecting the opened map

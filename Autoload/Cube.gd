@@ -616,7 +616,7 @@ func get_cubescfg_modified_time():
 #				read_cubes_cfg()
 #				# Refresh the display of anything that handles cubes
 #
-#				oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.SINGLE_THREADED)
+#				oOverheadGraphics.update_full_overhead_map()
 #				oPickSlabWindow.add_slabs()
 #				oColumnEditor._on_ColumnEditor_visibility_changed()
 #				oSlabsetWindow._on_SlabsetWindow_visibility_changed()

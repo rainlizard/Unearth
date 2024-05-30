@@ -48,7 +48,6 @@ func start(mapPath):
 	var file_exists = File.new()
 	
 	for i in files_to_load.size():
-		var CODETIME_START = OS.get_ticks_msec()
 		var file_name = files_to_load[i]
 		
 		var combined_cfg = {}
@@ -108,7 +107,6 @@ func load_objects_data(cfg): # 10ms
 				var newSprite
 				var newEditorTab
 				var newGenre
-				
 				
 				if Things.DATA_OBJECT.has(id) == true:
 					newName = objSection.get("Name", Things.DATA_OBJECT[id][Things.NAME_ID])

@@ -10,11 +10,6 @@ onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oQuickMapPreviewDisplay = Nodelist.list["oQuickMapPreviewDisplay"]
 onready var oMessage = Nodelist.list["oMessage"]
 
-
-signal graphics_thread_completed
-
-var thread_currently_processing = false
-
 var overheadImgData = Image.new()
 var overheadTexData = ImageTexture.new()
 
@@ -26,16 +21,7 @@ var mutex = Mutex.new()
 var job_queue = []
 var pixel_data = PoolByteArray()
 
-enum {
-	SINGLE_THREADED,
-	MULTI_THREADED,
-}
-
-func _ready():
-	thread.start(self, "multi_threaded")
-
-
-func update_full_overhead_map(threadType):
+func update_full_overhead_map():
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	if arrayOfColorRects.empty() == true:
@@ -48,14 +34,8 @@ func update_full_overhead_map(threadType):
 		for xSlab in range(0, M.xSize):
 			shapePositionArray.append(Vector2(xSlab,ySlab))
 	
-	match threadType:
-		SINGLE_THREADED:
-			if thread_currently_processing == false:
-				overhead2d_update_rect_single_threaded(shapePositionArray)
-		MULTI_THREADED:
-			mutex.lock()
-			job_queue.append(shapePositionArray.duplicate(true)) # This duplicate somehow fixes a crash, or maybe just helps improve a race condition
-			mutex.unlock()
+	overhead2d_update_rect_single_threaded(shapePositionArray)
+	
 	print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 
@@ -66,36 +46,6 @@ func overhead2d_update_rect_single_threaded(shapePositionArray):
 	overheadImgData.create_from_data(M.xSize * 3, M.ySize * 3, false, Image.FORMAT_RGB8, pixel_data)
 	overheadTexData.create_from_image(overheadImgData, 0)
 
-
-func multi_threaded():
-	while true:
-		if job_queue.size() == 0:
-			continue
-		thread_currently_processing = true
-		print("graphics multi_threaded start")
-		
-		mutex.lock()
-		var shapePositionArray = job_queue.pop_front()
-		mutex.unlock()
-		
-		var newPixelData = PoolByteArray()
-		print("graphics multi_threaded 1")
-		var resulting_pixel_data = generate_pixel_data(newPixelData, shapePositionArray)
-		print("graphics multi_threaded 2")
-		call_deferred("thread_done", resulting_pixel_data)
-		print("graphics multi_threaded end")
-
-
-func thread_done(resulting_pixel_data):
-	if resulting_pixel_data != null:
-		pixel_data = resulting_pixel_data
-		overheadImgData.create_from_data(M.xSize * 3, M.ySize * 3, false, Image.FORMAT_RGB8, pixel_data)
-		overheadTexData.create_from_image(overheadImgData, 0)
-	else:
-		oMessage.quick("thread crashed")
-	
-	thread_currently_processing = false
-	emit_signal("graphics_thread_completed")
 	
 func generate_pixel_data(pixData, shapePositionArray):
 	print("generate_pixel_data START")

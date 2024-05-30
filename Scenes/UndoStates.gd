@@ -101,8 +101,9 @@ func perform_undo():
 	print('perform_undo: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
 	var IDLE_FRAME_CODETIME_START = OS.get_ticks_msec()
-	yield(get_tree(), 'idle_frame')
+	
 	print('Idle frame (after undo): ' + str(OS.get_ticks_msec() - IDLE_FRAME_CODETIME_START) + 'ms')
+	
 	performing_undo = false
 
 

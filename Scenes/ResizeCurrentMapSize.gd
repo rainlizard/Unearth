@@ -113,7 +113,7 @@ func _on_ResizeApplyButton_pressed():
 	
 	update_editor_appearance()
 	
-	oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.SINGLE_THREADED)
+	oOverheadGraphics.update_full_overhead_map()
 	
 	# I need to update every slab on the map, it's bugged otherwise, it clears a diagonal streak of objects for some reason.
 	

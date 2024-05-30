@@ -192,7 +192,7 @@ func continue_load(map):
 	oOverheadOwnership.start()
 	oScriptHelpers.start()
 	
-	oOverheadGraphics.update_full_overhead_map(oOverheadGraphics.MULTI_THREADED)
+	oOverheadGraphics.update_full_overhead_map()
 	
 	oDataClm.count_filled_clm_entries()
 	
@@ -203,13 +203,9 @@ func continue_load(map):
 
 	oMenu.add_recent(map)
 	
-	
-	
-	
 	# Update for Undo
 	
 	oDisplaySlxNumbers.update()
-	
 	
 	if oColumnEditor.visible == true:
 		oColumnEditor.visible = false
