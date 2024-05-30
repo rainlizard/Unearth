@@ -71,6 +71,7 @@ func activate(path):
 	else: # Edit
 		path = path.get_basename()
 		oOpenMap.open_map(path)
+		yield(oOverheadGraphics, "column_graphics_completed")
 		toggle_map_preview(false)
 
 func _on_DynamicMapTree_item_selected():

@@ -10,6 +10,8 @@ onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oQuickMapPreviewDisplay = Nodelist.list["oQuickMapPreviewDisplay"]
 onready var oMessage = Nodelist.list["oMessage"]
 
+signal column_graphics_completed
+
 var overheadImgData = Image.new()
 var overheadTexData = ImageTexture.new()
 
@@ -34,8 +36,9 @@ func update_full_overhead_map():
 		for xSlab in range(0, M.xSize):
 			shapePositionArray.append(Vector2(xSlab,ySlab))
 	
-	overhead2d_update_rect_single_threaded(shapePositionArray)
-	
+	for i in 2: # Helps prevent the column updating from freezing the editor so much.
+		yield(get_tree(),'idle_frame')
+	call_deferred("overhead2d_update_rect_single_threaded", shapePositionArray)
 	print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 
@@ -45,12 +48,13 @@ func overhead2d_update_rect_single_threaded(shapePositionArray):
 	pixel_data = generate_pixel_data(pixel_data, shapePositionArray)
 	overheadImgData.create_from_data(M.xSize * 3, M.ySize * 3, false, Image.FORMAT_RGB8, pixel_data)
 	overheadTexData.create_from_image(overheadImgData, 0)
+	emit_signal("column_graphics_completed")
 
-	
 func generate_pixel_data(pixData, shapePositionArray):
-	print("generate_pixel_data START")
+	var CODETIME_START = OS.get_ticks_msec()
 	var width = M.xSize * 3
 	var height = M.ySize * 3
+	
 	pixData.resize(width * height * 3)  # Assuming RGB8 format
 	
 	for pos in shapePositionArray:
@@ -67,7 +71,7 @@ func generate_pixel_data(pixData, shapePositionArray):
 			pixData[pixelIndex] = cubeFace >> 16 & 255
 			pixData[pixelIndex + 1] = cubeFace >> 8 & 255
 			pixData[pixelIndex + 2] = cubeFace & 255
-	print("generate_pixel_data END")
+	print('pixData Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return pixData
 
 

@@ -95,7 +95,7 @@ func _on_ButtonNewMapOK_pressed():
 	
 	oCurrentMap._on_ButtonNewMap_pressed()
 	
-	yield(oOverheadGraphics, "graphics_thread_completed")
+	yield(oOverheadGraphics, "column_graphics_completed")
 	
 	if Slabset.dat.empty() == true:
 		oMessage.quick("Failed loading slabset, game executable might not be correct. Set in File -> Preferences")
