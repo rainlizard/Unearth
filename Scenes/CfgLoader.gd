@@ -129,11 +129,6 @@ func load_objects_data(cfg): # 10ms
 					newGenre = objSection.get("Genre")
 					newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.TAB_DECORATION)
 				
-				if id == 161:
-					print('-------------------------')
-					print(newGenre)
-					print('-------------------------')
-				
 				Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
 
 
