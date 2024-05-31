@@ -25,6 +25,7 @@ enum {
 var currentView = VIEW_2D
 var fieldBoundary = Rect2()
 var mapHasBeenEdited = false setget set_map_has_been_edited
+var framerate_limit = 120 setget set_framerate_limit
 
 func set_map_has_been_edited(setVal):
 	if int(setVal) == oEditor.SET_EDITED_WITHOUT_SAVING_STATE: #If you save, then click Undo, it should mark as not saved but not create a new undo state when marking as edited.
@@ -71,10 +72,10 @@ func _notification(what):
 			Utils.popup_centered(oConfirmSaveBeforeQuit)
 		else:
 			get_tree().quit()
-#	elif what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
-#		Engine.target_fps = 0
-#	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
-#		Engine.target_fps = 12
+	elif what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+		Engine.target_fps = framerate_limit
+	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
+		Engine.target_fps = min(12, framerate_limit)
 
 func just_opened_editor():
 	yield(get_tree(),'idle_frame')
@@ -103,3 +104,7 @@ func update_boundaries():
 	fieldBoundary = Rect2(Vector2(1,1), Vector2(M.xSize-2,M.ySize-2)) # Position, Size
 	if oEditableBordersCheckbox.pressed == true:
 		fieldBoundary = Rect2(Vector2(0,0), Vector2(M.xSize,M.ySize))
+
+func set_framerate_limit(val):
+	Engine.target_fps = val
+	framerate_limit = val

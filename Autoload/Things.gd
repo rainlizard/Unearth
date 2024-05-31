@@ -99,7 +99,7 @@ func fetch_id_string(thing_type, sub_type):
 			return nameId[0].capitalize()
 		return "Error1337"
 	else:
-		return "Unknown " + data_structure_name[thing_type] + ": " + str(sub_type)
+		return "Unknown " + data_structure_name.get(thing_type, "Unknown") + ": " + str(sub_type)
 
 
 var data_structure_name = {

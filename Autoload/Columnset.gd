@@ -94,7 +94,7 @@ func export_toml_columnset(filePath, fullExport): #"res://columnset.toml"
 	if fullExport == false:
 		column_diffs = find_all_different_columns()
 		if column_diffs.size() == 0:
-			oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved. Did you mean to enable 'Full'?")
+			oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved.")
 			return
 	
 	var textFile = File.new()

@@ -241,7 +241,7 @@ func export_toml_slabset(filePath, fullExport): #"res://slabset.toml"
 		dat_diffs = find_all_dat_differences()
 		tng_diffs = find_all_tng_differences()
 		if tng_diffs.size() == 0 and dat_diffs.size() == 0:
-			oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved. Did you mean to enable 'Full'?")
+			oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved.")
 			return
 	
 	# Print differences for debugging

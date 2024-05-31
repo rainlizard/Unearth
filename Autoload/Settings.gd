@@ -177,8 +177,9 @@ func game_setting(doWhat,string,value):
 			if doWhat == SET: OS.vsync_enabled = value
 			if doWhat == GET: return OS.vsync_enabled
 		"framerate_limit":
-			if doWhat == SET: Engine.target_fps = value
-			if doWhat == GET: return Engine.target_fps
+			var oEditor = $'../Main/Editor'
+			if doWhat == SET: oEditor.framerate_limit = value
+			if doWhat == GET: return oEditor.framerate_limit
 		"always_decompress":
 			var oOpenMap = $'../Main/OpenMap'
 			if doWhat == SET: oOpenMap.ALWAYS_DECOMPRESS = value
