@@ -68,3 +68,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 4, 0.5 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -4, -0.5 )
 skeleton = NodePath("../..")
 script = ExtResource( 2 )
+
+[node name="AttachedObjects" type="Spatial" parent="VoxelViewport/VoxelCreator/SelectedPivotPoint/SelectedVoxelObject"]
+unique_name_in_owner = true

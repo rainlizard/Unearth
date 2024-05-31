@@ -18,6 +18,8 @@ onready var oSelectedPivotPoint = $"VoxelViewport/VoxelCreator/SelectedPivotPoin
 onready var oVoxelCameraPivotPoint = $"VoxelViewport/VoxelCameraPivotPoint"
 onready var oHighlightBase = $"VoxelViewport/VoxelCreator/HighlightBase"
 
+var scnBillboardObj = preload("res://Scenes/Billboard3DObject.tscn")
+
 export(int, "MAP_CUSTOM_SLAB", "MAP_COLUMN", "DK_SLABSET", "DK_COLUMN") var displayingType
 enum {
 	MAP_CUSTOM_SLAB
@@ -54,19 +56,47 @@ func initialize():
 	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
 		oHighlightBase.mesh.size = Vector2(2,2)
 
+
+
+
+func clear_attached_3d_objects():
+	for i in $"%AttachedObjects".get_children():
+		i.free()
+
+func add_billboard_obj(tex, pos:Vector3):
+	var id = scnBillboardObj.instance()
+	if tex == null:
+		tex = preload('res://Art/Thing.png')
+		id.pixel_size = 0.004
+	
+	id.texture = tex
+	id.translation = pos
+	#id.offset.x = tex.get_width()*0.5
+	id.offset.y = tex.get_height()*0.5
+	$"%AttachedObjects".add_child(id)
+
+
 func _input(event):
 	if is_visible_in_tree() == false: return
 
 	if displayingType == MAP_CUSTOM_SLAB:
 		return
 
-	if (event.is_action("ui_left") or event.is_action("ui_down")) and event.is_pressed():
+	if event.is_action("ui_left") and event.is_pressed():
 		get_tree().set_input_as_handled()
 		set_object(viewObject-1)
-
-	if (event.is_action("ui_right") or event.is_action("ui_up")) and event.is_pressed():
+	if event.is_action("ui_right") and event.is_pressed():
 		get_tree().set_input_as_handled()
 		set_object(viewObject+1)
+	
+	if displayingType == DK_SLABSET:
+		if event.is_action("ui_down") and event.is_pressed():
+			get_tree().set_input_as_handled()
+			oSlabsetIDSpinBox.value -= 1
+		if event.is_action("ui_up") and event.is_pressed():
+			get_tree().set_input_as_handled()
+			oSlabsetIDSpinBox.value += 1
+		
 
 
 func set_object(setVal):
@@ -262,6 +292,9 @@ func _on_VariationNumberSpinBox_value_changed(value):
 	if oAllVoxelObjects.visible == false:
 		oAllVoxelObjects.visible = true
 		do_all()
+	
+	oSelectedVoxelObject.visible = true
+	
 	skip3x3function = true
 	yield(get_tree(),'idle_frame')
 	skip3x3function = false
@@ -273,6 +306,8 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 	do_all()
 	set_object(viewObject) #for clamping the selection
 	
+	oSelectedVoxelObject.visible = true
+	
 	skip3x3function = true
 	yield(get_tree(),'idle_frame')
 	skip3x3function = false
@@ -282,3 +317,4 @@ func refresh_entire_view():
 	do_one()
 	oAllVoxelObjects.visible = true
 	oSelectedVoxelObject.visible = false
+

@@ -33,6 +33,7 @@ onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
 onready var oVarButtonsApplyToAllCheckBox = Nodelist.list["oVarButtonsApplyToAllCheckBox"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
+onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 
 var clipboard = {
 	"dat": [],
@@ -233,15 +234,15 @@ func _on_SlabsetCopyValues_pressed():
 
 func _on_ExportSlabsToml_pressed():
 	Utils.popup_centered(oExportSlabsetTomlDialog)
-	oExportSlabsetTomlDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
-	oExportSlabsetTomlDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
-	oExportSlabsetTomlDialog.current_file = "slabset.toml"
+	oExportSlabsetTomlDialog.current_dir = oCurrentMap.path.get_base_dir().plus_file("")
+	oExportSlabsetTomlDialog.current_path = oCurrentMap.path.get_base_dir().plus_file("")
+	oExportSlabsetTomlDialog.current_file = oCurrentMap.path.get_file().get_basename()+".slabset.toml"
 
 func _on_ExportColumnsToml_pressed():
 	Utils.popup_centered(oExportColumnsetTomlDialog)
-	oExportColumnsetTomlDialog.current_dir = oGame.GAME_DIRECTORY.plus_file("")
-	oExportColumnsetTomlDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
-	oExportColumnsetTomlDialog.current_file = "columnset.toml"
+	oExportColumnsetTomlDialog.current_dir = oCurrentMap.path.get_base_dir().plus_file("")
+	oExportColumnsetTomlDialog.current_path = oCurrentMap.path.get_base_dir().plus_file("")
+	oExportColumnsetTomlDialog.current_file = oCurrentMap.path.get_file().get_basename()+".columnset.toml"
 
 
 func _on_ExportSlabsetTomlDialog_file_selected(filePath):
@@ -353,12 +354,66 @@ func update_objects_ui():
 	var listOfObjects = get_list_of_objects(variation)
 	oSlabsetObjectSection.visible = !listOfObjects.empty()
 	
-	if listOfObjects.empty(): return
+	if listOfObjects.empty() == false:
+		oObjObjectIndexSpinBox.visible = listOfObjects.size() > 1 # Hide ability to switch object index if there's only one object on this variation
+		oObjObjectIndexSpinBox.value = clamp(oObjObjectIndexSpinBox.value, 0, listOfObjects.size() - 1)
+		update_object_fields(oObjObjectIndexSpinBox.value)
+		update_3D_sprite_visuals()
+	else:
+		oDkSlabsetVoxelView.clear_attached_3d_objects()
+
+var currently_updating_sprite_visuals = false # this var is for the purpose of only updating once, when called multiple times.
+func update_3D_sprite_visuals():
+	if currently_updating_sprite_visuals == true: return
+	currently_updating_sprite_visuals = true
 	
-	oObjObjectIndexSpinBox.visible = listOfObjects.size() > 1 # Hide ability to switch object index if there's only one object on this variation
-	oObjObjectIndexSpinBox.value = clamp(oObjObjectIndexSpinBox.value, 0, listOfObjects.size() - 1)
+	yield(get_tree(),'idle_frame')
 	
-	update_object_fields(oObjObjectIndexSpinBox.value)
+	var variation = get_current_variation()
+	oDkSlabsetVoxelView.clear_attached_3d_objects()
+	
+	var listOfObjects = get_list_of_objects(variation)
+	for i in listOfObjects:
+		var tex = Things.fetch_sprite(int(oObjThingTypeSpinBox.value), int(oObjSubtypeSpinBox.value))
+		if oObjIsLightCheckBox.pressed == true:
+			tex = null
+		var pos = Vector3(0,0,0)
+		match int(oObjSubtileSpinBox.value):
+			0:
+				pos.x = -1.5
+				pos.z = -1.5
+			1:
+				pos.x = -0.5
+				pos.z = -1.5
+			2:
+				pos.x = 0.5
+				pos.z = -1.5
+			3:
+				pos.x = -1.5
+				pos.z = -0.5
+			4:
+				pos.x = -0.5
+				pos.z = -0.5
+			5:
+				pos.x = 0.5
+				pos.z = -0.5
+			6:
+				pos.x = -1.5
+				pos.z = 0.5
+			7:
+				pos.x = -0.5
+				pos.z = 0.5
+			8:
+				pos.x = 0.5
+				pos.z = 0.5
+		pos.x += oObjRelativeXSpinBox.value
+		pos.z += oObjRelativeYSpinBox.value
+		pos.y += oObjRelativeZSpinBox.value
+		
+		oDkSlabsetVoxelView.add_billboard_obj(tex, pos)
+	
+	yield(get_tree(),'idle_frame')
+	currently_updating_sprite_visuals = false
 
 
 func update_object_fields(index):
@@ -397,12 +452,13 @@ func update_obj_name():
 	else:
 		var thingType = int(oObjThingTypeSpinBox.value)
 		var subtype = int(oObjSubtypeSpinBox.value)
-		oObjNameLabel.text = Things.fetch_name(thingType, subtype)
+		oObjNameLabel.text = Things.fetch_id_string(thingType, subtype)
 
 func _on_ObjAddButton_pressed():
 	var variation = get_current_variation()
 	add_new_object_to_variation(variation)
 	update_objects_ui()
+	oDkSlabsetVoxelView.update_column_view()
 
 func add_new_object_to_variation(variation):
 	#update_object_property(Slabset.obj.VARIATION, variation)
@@ -439,19 +495,23 @@ func _on_ObjDeleteButton_pressed():
 	listOfObjects.remove(objectIndex)
 	
 	update_objects_ui()
+	oDkSlabsetVoxelView.update_column_view()
 	oMessage.quick("Deleted object")
 
 func _on_ObjThingTypeSpinBox_value_changed(value:int):
+	print("_on_ObjThingTypeSpinBox_value_changed")
 	#oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name.get(value, "?")
 	#yield(get_tree(),'idle_frame')
 	update_obj_name()
 	update_object_property(Slabset.obj.THING_TYPE, value)
+	update_3D_sprite_visuals()
 
 func _on_ObjSubtypeSpinBox_value_changed(value:int):
 	value = int(value)
 	#yield(get_tree(),'idle_frame')
 	update_obj_name()
 	update_object_property(Slabset.obj.THING_SUBTYPE, value)
+	update_3D_sprite_visuals()
 
 func _on_ObjIsLightCheckBox_toggled(button_pressed:int):
 	if button_pressed == 1:
@@ -464,13 +524,15 @@ func _on_ObjIsLightCheckBox_toggled(button_pressed:int):
 		oObjThingTypeSpinBox.modulate.a = 1
 	update_obj_name()
 	update_object_property(Slabset.obj.IS_LIGHT, button_pressed)
-
+	update_3D_sprite_visuals()
 
 func _on_ObjEffectRangeSpinBox_value_changed(value:int):
 	update_object_property(Slabset.obj.EFFECT_RANGE, value)
 
+
 func _on_ObjSubtileSpinBox_value_changed(value:int):
 	update_object_property(Slabset.obj.SUBTILE, value)
+	update_3D_sprite_visuals()
 
 func round_float_to_256(f): # Calculate the nearest multiple of 1.0/256.0
 	return round(f * 256.0) / 256.0
@@ -499,13 +561,15 @@ func snap_and_update_spinbox_value(spinbox: SpinBox, property: int, float_value:
 # SpinBox value changed handlers
 func _on_ObjRelativeXSpinBox_value_changed(float_value: float): # Spinbox uses floats, it's converted to int later, inside snap_and_update_spinbox_value
 	snap_and_update_spinbox_value(oObjRelativeXSpinBox, Slabset.obj.RELATIVE_X, float_value, "_on_ObjRelativeXSpinBox_value_changed")
+	update_3D_sprite_visuals()
 
 func _on_ObjRelativeYSpinBox_value_changed(float_value: float):
 	snap_and_update_spinbox_value(oObjRelativeYSpinBox, Slabset.obj.RELATIVE_Y, float_value, "_on_ObjRelativeYSpinBox_value_changed")
+	update_3D_sprite_visuals()
 
 func _on_ObjRelativeZSpinBox_value_changed(float_value: float):
 	snap_and_update_spinbox_value(oObjRelativeZSpinBox, Slabset.obj.RELATIVE_Z, float_value, "_on_ObjRelativeZSpinBox_value_changed")
-
+	update_3D_sprite_visuals()
 
 # Helper method to update the object in Slabset.tng
 func update_object_property(the_property, new_value):

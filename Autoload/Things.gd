@@ -49,7 +49,7 @@ func reset_thing_data_to_default(): # Reset data. Takes 1ms.
 	DATA_OBJECT = default_data["DATA_OBJECT"].duplicate(true)
 	LIST_OF_BOXES = default_data["LIST_OF_BOXES"].duplicate(true)
 
-func fetch_sprite(thing_type, sub_type):
+func fetch_sprite(thing_type:int, sub_type:int):
 	var sub_type_data = data_structure(thing_type).get(sub_type)
 	if sub_type_data:
 		var sprite = Graphics.sprite_id.get(sub_type_data[SPRITE])
@@ -171,7 +171,7 @@ var GENRE_TO_TAB = {
 }
 
 
-func data_structure(thingType):
+func data_structure(thingType:int):
 	match thingType:
 		Things.TYPE.OBJECT: return DATA_OBJECT
 		Things.TYPE.CREATURE: return DATA_CREATURE

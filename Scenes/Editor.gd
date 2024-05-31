@@ -71,8 +71,6 @@ func _notification(what):
 			Utils.popup_centered(oConfirmSaveBeforeQuit)
 		else:
 			get_tree().quit()
-#		else:
-#			get_tree().quit()
 #	elif what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
 #		Engine.target_fps = 0
 #	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
