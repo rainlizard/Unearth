@@ -230,21 +230,21 @@ enum { # BitFlags
 	SKIP_COLUMNS = 1,
 	SKIP_OBJECTS = 2,
 }
-
-func export_toml_slabset(filePath, fullExport): #"res://slabset.toml"
+func export_toml_slabset(filePath):
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	# Find differences if not a full export
 	var dat_diffs = []
 	var tng_diffs = []
-	if fullExport == false:
-		dat_diffs = find_all_dat_differences()
-		tng_diffs = find_all_tng_differences()
-		if tng_diffs.size() == 0 and dat_diffs.size() == 0:
-			oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved.")
-			return
+	dat_diffs = find_all_dat_differences()
+	tng_diffs = find_all_tng_differences()
+	if tng_diffs.size() == 0 and dat_diffs.size() == 0:
+		oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved.")
+		return
 	
-	# Print differences for debugging
+	
+	
+#	# Print differences for debugging
 	for i in tng_diffs:
 		print("---------TNG differences---------")
 		print("Current: ", tng[i])
@@ -252,87 +252,84 @@ func export_toml_slabset(filePath, fullExport): #"res://slabset.toml"
 			print("Default: ", default_data["tng"][i])
 		else:
 			print("Default: Beyond array size")
+#
+#	# Print differences for debugging
+#	for i in dat_diffs:
+#		print("---------DAT differences---------")
+#		print("Current: ", dat[i])
+#		if i < default_data["dat"].size():
+#			print("Default: ", default_data["dat"][i])
+#		else:
+#			print("Default: Beyond array size")
 	
-	# Print differences for debugging
-	for i in dat_diffs:
-		print("---------DAT differences---------")
-		print("Current: ", dat[i])
-		if i < default_data["dat"].size():
-			print("Default: ", default_data["dat"][i])
-		else:
-			print("Default: Beyond array size")
+	
+	
+	var lines = PoolStringArray()
+	var totalSlabs = max(dat.size(), tng.size()) / 28
+	for slabID in totalSlabs:
+		var hasChanges = false
+		
+		# Check if there are any changes within the 28 variations
+		for variationNumber in 28:
+			var variation = slabID * 28 + variationNumber
+			if dat_diffs.has(variation) or tng_diffs.has(variation):
+				hasChanges = true
+				break
+		
+		if hasChanges == true:
+			lines.append("[slab" + str(slabID) + "]")
+			
+			for variationNumber in 28:
+				var variation = slabID * 28 + variationNumber
+				var dirText = dir_texts[variationNumber]
+				
+				lines.append("[slab" + str(slabID) + "." + dirText + "]")
+				
+				lines.append("Columns = " + str(dat[variation]))
+				
+				for object in tng[variation]:
+					lines.append("")
+					lines.append("[[slab" + str(slabID) + "." + dirText + "_objects" + "]]")
+					for z in 9:
+						var propertyName
+						var value
+						match z:
+							0:
+								propertyName = "IsLight"
+								value = object[z]
+							2:
+								propertyName = "Subtile"
+								value = object[z]
+							3:
+								propertyName = "RelativePosition"
+								value = [ object[3], object[4], object[5] ]
+							6:
+								propertyName = "ThingType"
+								value = object[z]
+							7:
+								propertyName = "Subtype"
+								value = object[z]
+							8:
+								propertyName = "EffectRange"
+								value = object[z]
+						if propertyName:
+							lines.append(propertyName + " = " + str(value))
+				if tng[variation].size() == 0:
+					lines.append("Objects = []")
+				
+				lines.append("")
+			lines.append("")
 	
 	var textFile = File.new()
 	if textFile.open(filePath, File.WRITE) != OK:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 		return
 	
-	var biggest_array = max(dat.size(), tng.size())
-	for variation in biggest_array:
-		# If both are empty then skip writing this slab
-		if (variation >= dat.size() or dat[variation] == [0,0,0, 0,0,0, 0,0,0]) and (variation >= tng.size() or tng[variation] == []):
-			continue
-		
-		# Skip differences
-		var skip = SKIP_NONE
-		if fullExport == false:
-			if dat_diffs.has(variation) == false:
-				skip += SKIP_COLUMNS
-			if tng_diffs.has(variation) == false:
-				skip += SKIP_OBJECTS
-			if skip == SKIP_COLUMNS + SKIP_OBJECTS:
-				continue # skip both
-		
-		var slabID = int(variation / 28)
-		var variationNumber = variation % 28
-		var dirText = dir_texts[variationNumber]
-		
-		if variationNumber == 0:
-			textFile.store_line("[slab" + str(slabID) + "]")
-		textFile.store_line("[slab" + str(slabID) + "." + dirText + "]")
-		
-		if skip != SKIP_COLUMNS:
-			textFile.store_line("Columns = " + str(dat[variation]))
-		
-		if skip != SKIP_OBJECTS:
-			for object in tng[variation]:
-				textFile.store_line("\r")
-				textFile.store_line("[[slab" + str(slabID) + "." + dirText + "_objects" + "]]")
-				for z in 9:
-					var propertyName
-					var value
-					# 1 = Variation, 4 = RelativeY, 5 = RelativeZ
-					match z:
-						0:
-							propertyName = "IsLight"
-							value = object[z]
-						2:
-							propertyName = "Subtile"
-							value = object[z]
-						3:
-							propertyName = "RelativePosition"
-							value = [ object[3], object[4], object[5] ]
-						6:
-							propertyName = "ThingType"
-							value = object[z]
-						7:
-							propertyName = "Subtype"
-							value = object[z]
-						8:
-							propertyName = "EffectRange"
-							value = object[z]
-					if propertyName:
-						textFile.store_line(propertyName + " = " + str(value))
-			if tng[variation].size() == 0:
-				textFile.store_line("Objects = []")
-		
-		textFile.store_line("\r")
-	
+	textFile.store_string("\n".join(lines))
 	textFile.close()
-	oMessage.quick("Saved: " + filePath)
 	
+	oMessage.quick("Saved: " + filePath)
 	print('Exported in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-
 
 
 func find_all_dat_differences():
@@ -362,10 +359,11 @@ func is_dat_variation_different(variation):
 
 
 func is_tng_variation_different(variation):
-	if variation >= tng.size() or tng[variation].empty(): # This function should not have been called
+	 #or tng[variation].empty()
+	if variation >= tng.size(): # This function should not have been called
 		return false
-	if tng[variation] == [0,0,0, 0,0,0, 0,0,0]: # If it's got nothing on it, then skip it
-		return false
+#	if tng[variation] == [0,0,0, 0,0,0, 0,0,0]: # If it's got nothing on it, then skip it
+#		return false
 	if variation >= default_data["tng"].size() or tng[variation] != default_data["tng"][variation]: # If 'default' is shorter, or the current and default elements differ
 		return true
 	return false

@@ -207,10 +207,12 @@ func set_creatureName(setval):
 	#setval = Utils.strip_special_chars_from_string(setval)
 	creatureName = setval
 
+
 func set_herogateNumber(setval):
 	data14 = null
 	herogateNumber = setval
 	$GateNumber.text = str(herogateNumber)
+
 
 func set_texture_based_on_thingtype():
 	var tex = Things.fetch_sprite(thingType, subtype)
@@ -246,10 +248,20 @@ func set_texture_based_on_thingtype():
 func set_grow_direction():
 	# Change Grow Direction so the art pokes out from the base.
 	var texpath = $ThingTexture.texture.get_path()
-	if "trapdoor_64" in texpath or "keepower_64" in texpath or "room_64" in texpath:
-		pass
-	else:
-		$ThingTexture.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	
+	# Return if we want to grow from center
+	if thingType == Things.TYPE.OBJECT:
+		if Things.DATA_OBJECT.has(subtype):
+			if Things.DATA_OBJECT[subtype][Things.EDITOR_TAB] == Things.TAB_SPELL:
+				return
+	elif thingType == Things.TYPE.TRAP:
+		return
+	elif thingType == Things.TYPE.DOOR:
+		return
+	
+	# Grow from base instead of center
+	$ThingTexture.grow_vertical = Control.GROW_DIRECTION_BEGIN
+
 
 func _on_MouseDetection_mouse_entered():
 	if oSelection.cursorOnInstancesArray.has(self) == false:
@@ -260,6 +272,7 @@ func _on_MouseDetection_mouse_entered():
 	update()
 	$TextNameLabel.modulate = Color(1,1,1,1)
 	z_index = baseZindex+1
+
 
 func _on_MouseDetection_mouse_exited():
 	if oSelection.cursorOnInstancesArray.has(self):

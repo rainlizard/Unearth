@@ -232,26 +232,30 @@ func _on_SlabsetCopyValues_pressed():
 #	oExportSlabsetClmDialog.current_path = oGame.GAME_DIRECTORY.plus_file("")
 #	oExportSlabsetClmDialog.current_file = "slabs.clm"
 
+
 func _on_ExportSlabsToml_pressed():
 	Utils.popup_centered(oExportSlabsetTomlDialog)
 	oExportSlabsetTomlDialog.current_dir = oCurrentMap.path.get_base_dir().plus_file("")
 	oExportSlabsetTomlDialog.current_path = oCurrentMap.path.get_base_dir().plus_file("")
-	oExportSlabsetTomlDialog.current_file = oCurrentMap.path.get_file().get_basename()+".slabset.toml"
+	
+	yield(get_tree(),'idle_frame') # Important if there's another toml file there
+	oExportSlabsetTomlDialog.get_line_edit().text = oCurrentMap.path.get_file().get_basename()+".slabset.toml"
+
 
 func _on_ExportColumnsToml_pressed():
 	Utils.popup_centered(oExportColumnsetTomlDialog)
 	oExportColumnsetTomlDialog.current_dir = oCurrentMap.path.get_base_dir().plus_file("")
 	oExportColumnsetTomlDialog.current_path = oCurrentMap.path.get_base_dir().plus_file("")
-	oExportColumnsetTomlDialog.current_file = oCurrentMap.path.get_file().get_basename()+".columnset.toml"
+	
+	yield(get_tree(),'idle_frame') # Important if there's another toml file there
+	oExportColumnsetTomlDialog.get_line_edit().text = oCurrentMap.path.get_file().get_basename()+".columnset.toml"
 
 
 func _on_ExportSlabsetTomlDialog_file_selected(filePath):
-	var fullExport = false
-	Slabset.export_toml_slabset(filePath, fullExport)
+	Slabset.export_toml_slabset(filePath)
 
 func _on_ExportColumnsetTomlDialog_file_selected(filePath):
-	var fullExport = false
-	Columnset.export_toml_columnset(filePath, fullExport)
+	Columnset.export_toml_columnset(filePath)
 
 
 #func _on_ImportSlabsetTomlDialog_file_selected(filePath):
