@@ -3,7 +3,14 @@ onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 
 onready var containerForLabels = $ScrollContainer/VBoxContainer
 
+# THIS SCRIPT IS USED BY BOTH SlabsetPathsLabel AND ColumnsetPathsLabel
+
 func start():
+	var fileName
+	match name:
+		"SlabsetPathsLabel": fileName = "slabset.toml"
+		"ColumnsetPathsLabel": fileName = "columnset.toml"
+	
 	for i in containerForLabels.get_children():
 		i.queue_free()
 	
@@ -11,19 +18,9 @@ func start():
 		if oCfgLoader.paths_loaded.has(cfg_type) == false:
 			continue
 		
-#		var addToGrid
-		
-#		match cfg_type:
-#			oCfgLoader.LOAD_CFG_FXDATA:
-#				addToGrid = oFileListGridA
-#			oCfgLoader.LOAD_CFG_CAMPAIGN:
-#				addToGrid = oFileListGridB
-#			oCfgLoader.LOAD_CFG_CURRENT_MAP:
-#				addToGrid = oFileListGridC
-		
 		for path in oCfgLoader.paths_loaded[cfg_type]:
 			if path:
-				if path.to_lower().ends_with("slabset.toml"):
+				if path.to_lower().ends_with(fileName):
 					add_linkbutton(path)
 
 func add_linkbutton(path):
@@ -35,3 +32,9 @@ func add_linkbutton(path):
 
 func _on_linkbutton_pressed(path):
 	OS.shell_open(path)
+
+
+#		match cfg_type:
+#			oCfgLoader.LOAD_CFG_FXDATA:
+#			oCfgLoader.LOAD_CFG_CAMPAIGN:
+#			oCfgLoader.LOAD_CFG_CURRENT_MAP:

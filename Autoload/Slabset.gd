@@ -262,7 +262,7 @@ func export_toml_slabset(filePath):
 #		else:
 #			print("Default: Beyond array size")
 	
-	
+	var list_of_modified_slabs = []
 	
 	var lines = PoolStringArray()
 	var totalSlabs = max(dat.size(), tng.size()) / 28
@@ -277,6 +277,7 @@ func export_toml_slabset(filePath):
 				break
 		
 		if hasChanges == true:
+			list_of_modified_slabs.append(slabID)
 			lines.append("[slab" + str(slabID) + "]")
 			
 			for variationNumber in 28:
@@ -329,6 +330,8 @@ func export_toml_slabset(filePath):
 	textFile.close()
 	
 	oMessage.quick("Saved: " + filePath)
+	oMessage.quick("Saved Slab IDs: " + str(list_of_modified_slabs).replace("[","").replace("]",""))
+	
 	print('Exported in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 

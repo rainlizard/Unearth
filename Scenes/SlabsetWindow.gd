@@ -35,6 +35,7 @@ onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oSlabsetPathsLabel = Nodelist.list["oSlabsetPathsLabel"]
+onready var oColumnsetPathsLabel = Nodelist.list["oColumnsetPathsLabel"]
 
 var clipboard = {
 	"dat": [],
@@ -101,6 +102,7 @@ func _on_SlabsetWindow_visibility_changed():
 		_on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 		
 		oSlabsetPathsLabel.start()
+		oColumnsetPathsLabel.start()
 		
 		yield(get_tree(),'idle_frame')
 		oDkSlabsetVoxelView.oAllVoxelObjects.visible = true

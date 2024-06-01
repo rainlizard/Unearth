@@ -5452,6 +5452,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TabSlabset" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -5510,7 +5511,7 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer"]
-margin_right = 236.0
+margin_right = 18.0
 margin_bottom = 839.0
 size_flags_vertical = 3
 
@@ -5923,13 +5924,11 @@ size_flags_vertical = 3
 scroll_vertical_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/SlabsetPathsLabel/ScrollContainer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_right = 218.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TabColumnset" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
-visible = false
+[node name="TabColumnset" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -5939,21 +5938,27 @@ margin_bottom = -12.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ColumnsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset" instance=ExtResource( 19 )]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset"]
+margin_right = 1236.0
+margin_bottom = 915.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ColumnsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer" instance=ExtResource( 19 )]
 margin_right = 1006.0
-margin_bottom = 815.0
+margin_bottom = 915.0
 displayingType = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer"]
 margin_left = 1010.0
 margin_right = 1236.0
-margin_bottom = 815.0
+margin_bottom = 915.0
 
-[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer"]
 margin_right = 226.0
 margin_bottom = 39.0
 
-[node name="ColumnsetFilenameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer"]
+[node name="ColumnsetFilenameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 217.0
@@ -5961,24 +5966,24 @@ margin_bottom = 30.0
 text = "columnset.toml"
 align = 1
 
-[node name="ColumnsetControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer" instance=ExtResource( 137 )]
+[node name="ColumnsetControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer" instance=ExtResource( 137 )]
 margin_top = 43.0
 margin_right = 226.0
-margin_bottom = 761.0
+margin_bottom = 839.0
 size_flags_horizontal = 1
 
-[node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer"]
-margin_top = 765.0
+[node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer"]
+margin_top = 843.0
 margin_right = 226.0
-margin_bottom = 815.0
+margin_bottom = 893.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 217.0
 margin_bottom = 41.0
 
-[node name="ColumnsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/HBoxContainer"]
+[node name="ColumnsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer"]
 margin_right = 51.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
@@ -5990,13 +5995,33 @@ texture_hover = ExtResource( 128 )
 expand = true
 stretch_mode = 4
 
-[node name="ExportColumnsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/HBoxContainer"]
+[node name="ExportColumnsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer"]
 margin_left = 55.0
 margin_right = 208.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "Save columnset"
+
+[node name="ColumnsetPathsLabel" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer"]
+margin_top = 897.0
+margin_right = 226.0
+margin_bottom = 915.0
+script = ExtResource( 91 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/ColumnsetPathsLabel"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 217.0
+margin_bottom = 9.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_vertical_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/ColumnsetPathsLabel/ScrollContainer"]
+margin_right = 208.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="NewMapWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -7515,8 +7540,8 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetCopyValues" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetCopyValues_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/ExportSlabsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsToml_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/HBoxContainer/ColumnsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetHelpButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/VBoxContainer/PanelContainer2/HBoxContainer/ExportColumnsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsToml_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ColumnsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ExportColumnsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsToml_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/SetNewFormat" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapFormat_item_selected"]
 [connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_focus_exited"]
