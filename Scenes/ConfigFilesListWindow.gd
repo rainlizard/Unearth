@@ -14,7 +14,6 @@ func update_everything():
 		for child in gridParent.get_children():
 			child.queue_free()
 	
-	print(oCfgLoader.paths_loaded)
 	
 	for cfg_type in [oCfgLoader.LOAD_CFG_FXDATA, oCfgLoader.LOAD_CFG_CAMPAIGN, oCfgLoader.LOAD_CFG_CURRENT_MAP]:
 		if oCfgLoader.paths_loaded.has(cfg_type) == false:

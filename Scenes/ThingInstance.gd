@@ -247,7 +247,6 @@ func set_texture_based_on_thingtype():
 
 func set_grow_direction():
 	# Change Grow Direction so the art pokes out from the base.
-	var texpath = $ThingTexture.texture.get_path()
 	
 	# Return if we want to grow from center
 	if thingType == Things.TYPE.OBJECT:

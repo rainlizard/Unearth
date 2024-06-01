@@ -75,7 +75,7 @@ func _notification(what):
 	elif what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
 		Engine.target_fps = framerate_limit
 	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
-		Engine.target_fps = min(12, framerate_limit)
+		Engine.target_fps = int(min(12, framerate_limit))
 
 func just_opened_editor():
 	yield(get_tree(),'idle_frame')
