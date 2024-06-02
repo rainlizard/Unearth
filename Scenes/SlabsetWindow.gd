@@ -516,13 +516,13 @@ func _on_ObjThingTypeSpinBox_value_changed(value:int):
 	#oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name.get(value, "?")
 	#yield(get_tree(),'idle_frame')
 	
-	var new_value = 1
-	if value == 0: new_value = 7
-	if value == 2: new_value = 7
-	if value == 6: new_value = 1
-	if value == 8: new_value = 1
+	if value in [0, 2, 7]:
+		value = 7
+	else:
+		value = 1
+	
 	oObjThingTypeSpinBox.disconnect("value_changed", self, "_on_ObjThingTypeSpinBox_value_changed")
-	oObjThingTypeSpinBox.value = new_value
+	oObjThingTypeSpinBox.value = value
 	oObjThingTypeSpinBox.connect("value_changed", self, "_on_ObjThingTypeSpinBox_value_changed")
 	
 	update_obj_name()
