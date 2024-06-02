@@ -36,6 +36,9 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oSlabsetPathsLabel = Nodelist.list["oSlabsetPathsLabel"]
 onready var oColumnsetPathsLabel = Nodelist.list["oColumnsetPathsLabel"]
 onready var oSlabsetTextSIDLabel = Nodelist.list["oSlabsetTextSIDLabel"]
+onready var oExportSlabsToml = Nodelist.list["oExportSlabsToml"]
+onready var oSlabRevertButton = Nodelist.list["oSlabRevertButton"]
+onready var oVarRevertButton = Nodelist.list["oVarRevertButton"]
 
 enum {
 	ONE_VARIATION,
@@ -191,16 +194,26 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 func update_modified_label_for_slab_id():
 	if Slabset.is_slab_edited(int(oSlabsetIDSpinBox.value)):
 		oSlabsetIDSpinBox.modulate = Color(1.4,1.4,1.7)
+		oSlabRevertButton.disabled = false
 	else:
 		oSlabsetIDSpinBox.modulate = Color(1,1,1)
+		oSlabRevertButton.disabled = true
 
 func update_modified_label_for_variation():
 	var variation = get_current_variation()
 	if Slabset.is_dat_variation_different(variation) or Slabset.is_tng_variation_different(variation):
 		oVariationNumberSpinBox.modulate = Color(1.4, 1.4, 1.7)
+		oVarRevertButton.disabled = false
 	else:
 		oVariationNumberSpinBox.modulate = Color(1, 1, 1)
+		oVarRevertButton.disabled = true
 
+func update_save_slabset_button_availability():
+	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
+	if list_of_modified_slabs.empty():
+		oExportSlabsToml.disabled = true
+	else:
+		oExportSlabsToml.disabled = false
 
 func _on_VariationNumberSpinBox_value_changed(value):
 	
@@ -377,6 +390,8 @@ func adjust_column_color_if_different(variation):
 	
 	update_modified_label_for_slab_id()
 	update_modified_label_for_variation()
+	update_save_slabset_button_availability()
+
 
 
 func update_objects_ui():
