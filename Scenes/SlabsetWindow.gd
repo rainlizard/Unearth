@@ -185,12 +185,12 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 	if Slabs.data.has(value):
 		slabName = Slabs.data[value][Slabs.NAME]
 	oSlabsetIDLabel.text = slabName
-	update_columns_ui()
+	update_column_spinboxes()
 
 func _on_VariationNumberSpinBox_value_changed(value):
-	update_columns_ui()
+	update_column_spinboxes()
 
-func update_columns_ui():
+func update_column_spinboxes():
 	var variation = get_current_variation()
 	
 	for subtile in columnSettersArray.size():
@@ -271,7 +271,7 @@ func _on_ExportColumnsetTomlDialog_file_selected(filePath):
 #func _on_ImportSlabsetTomlDialog_file_selected(filePath):
 #	var fullImport = false
 #	Slabset.import_toml_slabset(filePath, fullImport, true)
-#	update_columns_ui()
+#	update_column_spinboxes()
 #	update_objects_ui()
 #
 #func _on_ImportColumnsetTomlDialog_file_selected(filePath):
@@ -516,6 +516,7 @@ func _on_ObjThingTypeSpinBox_value_changed(value:int):
 	#oObjThingTypeSpinBox.hint_tooltip = Things.data_structure_name.get(value, "?")
 	#yield(get_tree(),'idle_frame')
 	
+	# Lock value to 1 or 7
 	if value in [0, 2, 7]:
 		value = 7
 	else:
@@ -670,7 +671,7 @@ func paste(howMany):
 			Slabset.tng[i] = clipboard["tng"][clipboard_index].duplicate(true)
 	
 	# Update the UI after pasting
-	update_columns_ui()
+	update_column_spinboxes()
 	update_objects_ui()
 	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 
@@ -707,7 +708,7 @@ func _on_VarRotateButton_pressed():
 		obj[Slabset.obj.SUBTILE] = ROTATION_MAP[obj[Slabset.obj.SUBTILE]]
 	
 	# Update the UI
-	update_columns_ui()
+	update_column_spinboxes()
 	update_objects_ui()
 	oMessage.quick("Rotated variation")
 
@@ -747,9 +748,11 @@ func revert(howMany):
 		else:
 			if variation < Slabset.tng.size():
 				Slabset.tng.remove(variation)
-	
-	update_columns_ui()  # Update UI for columns
+	update_column_spinboxes()  # Update UI for columns
 	update_objects_ui()  # Update UI for objects
+	
+	yield(get_tree(),'idle_frame')
+	oDkSlabsetVoxelView.refresh_entire_view()
 
 
 
@@ -771,7 +774,7 @@ func revert(howMany):
 #	Slabset.tng[next_free_variation] = Slabset.tng[current_variation].duplicate(true) # true for deep copy if needed
 #
 #	# Update UI to reflect the new duplicated variation
-#	update_columns_ui()  # Assuming this updates the UI with new column data
+#	update_column_spinboxes()  # Assuming this updates the UI with new column data
 #	update_objects_ui()  # Assuming this updates the UI with new things/objects
 #	oMessage.quick("Variation duplicated into SlabID: " + str(next_free_variation/28) + ", Variation: " + str(next_free_variation % 28))
 #

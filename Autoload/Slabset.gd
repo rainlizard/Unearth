@@ -230,125 +230,88 @@ enum { # BitFlags
 	SKIP_COLUMNS = 1,
 	SKIP_OBJECTS = 2,
 }
+
 func export_toml_slabset(filePath):
 	var CODETIME_START = OS.get_ticks_msec()
-	
-	# Find differences if not a full export
-	var dat_diffs = []
-	var tng_diffs = []
-	dat_diffs = find_all_dat_differences()
-	tng_diffs = find_all_tng_differences()
-	if tng_diffs.size() == 0 and dat_diffs.size() == 0:
+
+	var list_of_modified_slabs = get_all_modified_slabs()
+
+	if list_of_modified_slabs.empty():
 		oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved.")
 		return
-	
-	
-	
-#	# Print differences for debugging
-	for i in tng_diffs:
-		print("---------TNG differences---------")
-		print("Current: ", tng[i])
-		if i < default_data["tng"].size():
-			print("Default: ", default_data["tng"][i])
-		else:
-			print("Default: Beyond array size")
-#
-#	# Print differences for debugging
-#	for i in dat_diffs:
-#		print("---------DAT differences---------")
-#		print("Current: ", dat[i])
-#		if i < default_data["dat"].size():
-#			print("Default: ", default_data["dat"][i])
-#		else:
-#			print("Default: Beyond array size")
-	
-	var list_of_modified_slabs = []
-	
+
 	var lines = PoolStringArray()
-	var totalSlabs = max(dat.size(), tng.size()) / 28
-	for slabID in totalSlabs:
-		var hasChanges = false
-		
-		# Check if there are any changes within the 28 variations
+	for slabID in list_of_modified_slabs:
+		lines.append("[slab" + str(slabID) + "]")
+
 		for variationNumber in 28:
 			var variation = slabID * 28 + variationNumber
-			if dat_diffs.has(variation) or tng_diffs.has(variation):
-				hasChanges = true
-				break
-		
-		if hasChanges == true:
-			list_of_modified_slabs.append(slabID)
-			lines.append("[slab" + str(slabID) + "]")
-			
-			for variationNumber in 28:
-				var variation = slabID * 28 + variationNumber
-				var dirText = dir_texts[variationNumber]
-				
-				lines.append("[slab" + str(slabID) + "." + dirText + "]")
-				
-				lines.append("Columns = " + str(dat[variation]))
-				
-				for object in tng[variation]:
-					lines.append("")
-					lines.append("[[slab" + str(slabID) + "." + dirText + "_objects" + "]]")
-					for z in 9:
-						var propertyName
-						var value
-						match z:
-							0:
-								propertyName = "IsLight"
-								value = object[z]
-							2:
-								propertyName = "Subtile"
-								value = object[z]
-							3:
-								propertyName = "RelativePosition"
-								value = [ object[3], object[4], object[5] ]
-							6:
-								propertyName = "ThingType"
-								value = object[z]
-							7:
-								propertyName = "Subtype"
-								value = object[z]
-							8:
-								propertyName = "EffectRange"
-								value = object[z]
-						if propertyName:
-							lines.append(propertyName + " = " + str(value))
-				if tng[variation].size() == 0:
-					lines.append("Objects = []")
-				
+			var dirText = dir_texts[variationNumber]
+
+			lines.append("[slab" + str(slabID) + "." + dirText + "]")
+
+			lines.append("Columns = " + str(dat[variation]))
+
+			for object in tng[variation]:
 				lines.append("")
+				lines.append("[[slab" + str(slabID) + "." + dirText + "_objects" + "]]")
+				for z in 9:
+					var propertyName
+					var value
+					match z:
+						0:
+							propertyName = "IsLight"
+							value = object[z]
+						2:
+							propertyName = "Subtile"
+							value = object[z]
+						3:
+							propertyName = "RelativePosition"
+							value = [ object[3], object[4], object[5] ]
+						6:
+							propertyName = "ThingType"
+							value = object[z]
+						7:
+							propertyName = "Subtype"
+							value = object[z]
+						8:
+							propertyName = "EffectRange"
+							value = object[z]
+					if propertyName:
+						lines.append(propertyName + " = " + str(value))
+			if tng[variation].size() == 0:
+				lines.append("Objects = []")
+
 			lines.append("")
-	
+		lines.append("")
+
 	var textFile = File.new()
 	if textFile.open(filePath, File.WRITE) != OK:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 		return
-	
+
 	textFile.store_string("\n".join(lines))
 	textFile.close()
-	
+
 	oMessage.quick("Saved: " + filePath)
 	oMessage.quick("Saved Slab IDs: " + str(list_of_modified_slabs).replace("[","").replace("]",""))
-	
+
 	print('Exported in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
+func get_all_modified_slabs():
+	var modified_slabs = []
+	var totalSlabs = max(dat.size(), tng.size()) / 28
+	for slabID in totalSlabs:
+		if is_slab_edited(slabID):
+			modified_slabs.append(slabID)
+	return modified_slabs
 
-func find_all_dat_differences():
-	var diff_indices = []
-	for variation in dat.size():
-		if is_dat_variation_different(variation) == true:
-			diff_indices.append(variation)
-	return diff_indices
-
-
-func find_all_tng_differences():
-	var diff_indices = []
-	for variation in tng.size():
-		if is_tng_variation_different(variation) == true:
-			diff_indices.append(variation)
-	return diff_indices
+func is_slab_edited(slabID):
+	for variationNumber in 28:
+		var variation = slabID * 28 + variationNumber
+		if is_dat_variation_different(variation) or is_tng_variation_different(variation):
+			return true
+	return false
 
 
 func is_dat_variation_different(variation):
@@ -390,6 +353,21 @@ func is_tng_object_different(variation, objectIndex, objectProperty):
 		return true
 	# Compare the property values of the current and default objects.
 	return tng[variation][objectIndex][objectProperty] != default_data["tng"][variation][objectIndex][objectProperty]
+
+
+#func find_all_dat_differences():
+#	var diff_indices = []
+#	for variation in dat.size():
+#		if is_dat_variation_different(variation) == true:
+#			diff_indices.append(variation)
+#	return diff_indices
+#
+#func find_all_tng_differences():
+#	var diff_indices = []
+#	for variation in tng.size():
+#		if is_tng_variation_different(variation) == true:
+#			diff_indices.append(variation)
+#	return diff_indices
 
 
 var dir_texts = {
