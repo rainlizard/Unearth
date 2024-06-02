@@ -3,7 +3,7 @@ onready var oDkSlabsetVoxelView = Nodelist.list["oDkSlabsetVoxelView"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oVariationInfoLabel = Nodelist.list["oVariationInfoLabel"]
 onready var oSlabsetIDSpinBox = Nodelist.list["oSlabsetIDSpinBox"]
-onready var oSlabsetIDLabel = Nodelist.list["oSlabsetIDLabel"]
+onready var oSlabsetSlabNameLabel = Nodelist.list["oSlabsetSlabNameLabel"]
 onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oMessage = Nodelist.list["oMessage"]
@@ -35,6 +35,7 @@ onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oSlabsetPathsLabel = Nodelist.list["oSlabsetPathsLabel"]
 onready var oColumnsetPathsLabel = Nodelist.list["oColumnsetPathsLabel"]
+onready var oSlabsetTextSIDLabel = Nodelist.list["oSlabsetTextSIDLabel"]
 
 enum {
 	ONE_VARIATION,
@@ -184,10 +185,25 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 	value = int(value)
 	if Slabs.data.has(value):
 		slabName = Slabs.data[value][Slabs.NAME]
-	oSlabsetIDLabel.text = slabName
+	oSlabsetSlabNameLabel.text = slabName
 	update_column_spinboxes()
 
+func update_modified_label_for_slab_id():
+	if Slabset.is_slab_edited(int(oSlabsetIDSpinBox.value)):
+		oSlabsetIDSpinBox.modulate = Color(1.4,1.4,1.7)
+	else:
+		oSlabsetIDSpinBox.modulate = Color(1,1,1)
+
+func update_modified_label_for_variation():
+	var variation = get_current_variation()
+	if Slabset.is_dat_variation_different(variation) or Slabset.is_tng_variation_different(variation):
+		oVariationNumberSpinBox.modulate = Color(1.4, 1.4, 1.7)
+	else:
+		oVariationNumberSpinBox.modulate = Color(1, 1, 1)
+
+
 func _on_VariationNumberSpinBox_value_changed(value):
+	
 	update_column_spinboxes()
 
 func update_column_spinboxes():
@@ -358,6 +374,10 @@ func adjust_column_color_if_different(variation):
 		else:
 			spinbox.modulate = Color(1,1,1)
 			shortcut.modulate = Color(1,1,1)
+	
+	update_modified_label_for_slab_id()
+	update_modified_label_for_variation()
+
 
 func update_objects_ui():
 	var variation = get_current_variation()

@@ -5482,7 +5482,7 @@ size_flags_vertical = 3
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="SlabsetIDLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView/Control/VBoxContainer"]
+[node name="SlabsetSlabNameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView/Control/VBoxContainer"]
 margin_right = 933.0
 margin_bottom = 21.0
 size_flags_vertical = 1
@@ -5541,12 +5541,14 @@ margin_bottom = 71.0
 margin_right = 281.0
 margin_bottom = 31.0
 size_flags_horizontal = 11
+size_flags_vertical = 3
 columns = 2
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer"]
+[node name="SlabsetTextSIDLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer"]
 margin_top = 5.0
-margin_right = 67.0
+margin_right = 139.0
 margin_bottom = 26.0
+size_flags_horizontal = 3
 text = "Slab ID"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -5609,8 +5611,9 @@ columns = 2
 
 [node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer"]
 margin_top = 5.0
-margin_right = 89.0
+margin_right = 139.0
 margin_bottom = 26.0
+size_flags_horizontal = 3
 text = "Variation"
 __meta__ = {
 "_edit_use_anchors_": false
