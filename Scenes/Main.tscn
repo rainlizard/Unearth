@@ -5452,7 +5452,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TabSlabset" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -5469,7 +5468,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DkSlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 996.0
+margin_right = 933.0
 margin_bottom = 915.0
 displayingType = 2
 
@@ -5484,7 +5483,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="SlabsetIDLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView/Control/VBoxContainer"]
-margin_right = 996.0
+margin_right = 933.0
 margin_bottom = 21.0
 size_flags_vertical = 1
 text = "Impenetrable Rock"
@@ -5492,61 +5491,61 @@ align = 2
 
 [node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView/Control/VBoxContainer"]
 margin_top = 25.0
-margin_right = 996.0
+margin_right = 933.0
 margin_bottom = 46.0
 size_flags_vertical = 1
 text = "Variation info"
 align = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer"]
-margin_left = 1000.0
+margin_left = 937.0
 margin_right = 1236.0
 margin_bottom = 915.0
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
-margin_right = 236.0
+margin_right = 299.0
 margin_bottom = 839.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer"]
-margin_right = 18.0
+margin_right = 299.0
 margin_bottom = 839.0
 size_flags_vertical = 3
 
 [node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_right = 236.0
+margin_right = 299.0
 margin_bottom = 39.0
 
 [node name="SlabsetFilenameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer4"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 227.0
+margin_right = 290.0
 margin_bottom = 30.0
 text = "slabset.toml"
 align = 1
 
 [node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 43.0
-margin_right = 236.0
-margin_bottom = 222.0
+margin_right = 299.0
+margin_bottom = 123.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 227.0
-margin_bottom = 170.0
+margin_right = 290.0
+margin_bottom = 71.0
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
-margin_right = 218.0
-margin_bottom = 66.0
+margin_right = 281.0
+margin_bottom = 31.0
 size_flags_horizontal = 11
 columns = 2
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer"]
 margin_top = 5.0
-margin_right = 89.0
+margin_right = 67.0
 margin_bottom = 26.0
 text = "Slab ID"
 __meta__ = {
@@ -5554,8 +5553,8 @@ __meta__ = {
 }
 
 [node name="SlabsetIDSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer"]
-margin_left = 144.0
-margin_right = 218.0
+margin_left = 207.0
+margin_right = 281.0
 margin_bottom = 31.0
 mouse_filter = 1
 size_flags_horizontal = 10
@@ -5565,20 +5564,62 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer"]
-margin_top = 40.0
+[node name="GridContainer2" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+margin_top = 35.0
+margin_right = 281.0
+margin_bottom = 62.0
+columns = 3
+
+[node name="SlabCopyButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
+margin_right = 100.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Copy slab"
+
+[node name="SlabPasteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
+margin_left = 104.0
+margin_right = 207.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Paste slab"
+
+[node name="SlabRevertButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
+margin_left = 211.0
+margin_right = 281.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Revert"
+
+[node name="PanelContainer5" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_top = 127.0
+margin_right = 299.0
+margin_bottom = 238.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 290.0
+margin_bottom = 102.0
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer"]
+margin_right = 281.0
+margin_bottom = 31.0
+size_flags_horizontal = 11
+columns = 2
+
+[node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer"]
+margin_top = 5.0
 margin_right = 89.0
-margin_bottom = 61.0
+margin_bottom = 26.0
 text = "Variation"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VariationNumberSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer"]
-margin_left = 144.0
-margin_top = 35.0
-margin_right = 218.0
-margin_bottom = 66.0
+[node name="VariationNumberSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer"]
+margin_left = 207.0
+margin_right = 281.0
+margin_bottom = 31.0
 mouse_filter = 1
 size_flags_horizontal = 10
 max_value = 27.0
@@ -5587,77 +5628,72 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GridContainer2" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
-margin_top = 70.0
-margin_right = 218.0
-margin_bottom = 128.0
-columns = 2
+[node name="GridContainer2" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer"]
+margin_top = 35.0
+margin_right = 281.0
+margin_bottom = 93.0
+columns = 3
 
-[node name="VarCopyButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
-margin_right = 107.0
+[node name="VarCopyButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2"]
+margin_right = 100.0
 margin_bottom = 27.0
+rect_min_size = Vector2( 100, 0 )
 size_flags_horizontal = 3
 text = "Copy"
 
-[node name="VarPasteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
-margin_left = 111.0
-margin_right = 218.0
+[node name="VarPasteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2"]
+margin_left = 104.0
+margin_right = 207.0
 margin_bottom = 27.0
+rect_min_size = Vector2( 103, 0 )
 size_flags_horizontal = 3
 text = "Paste"
 
-[node name="VarRotateButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
+[node name="VarRevertButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2"]
+margin_left = 211.0
+margin_right = 281.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Revert"
+
+[node name="VarRotateButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2"]
 margin_top = 31.0
-margin_right = 107.0
+margin_right = 100.0
 margin_bottom = 58.0
 size_flags_horizontal = 3
 text = "Rotate"
 
-[node name="VarRevertButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
-margin_left = 111.0
-margin_top = 31.0
-margin_right = 218.0
-margin_bottom = 58.0
-size_flags_horizontal = 3
-text = "Revert"
-
-[node name="VarButtonsApplyToAllCheckBox" type="CheckBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
-margin_top = 132.0
-margin_right = 218.0
-margin_bottom = 161.0
-text = "All variations"
-
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_top = 226.0
-margin_right = 236.0
-margin_bottom = 269.0
+margin_top = 242.0
+margin_right = 299.0
+margin_bottom = 285.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 227.0
+margin_right = 290.0
 margin_bottom = 34.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 21.0
-text = "Columns"
+text = "Columnset IDs"
 align = 1
 
 [node name="GridContainerDynamicColumns3x3" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-margin_left = 109.0
+margin_left = 140.0
 margin_top = 25.0
-margin_right = 109.0
+margin_right = 140.0
 margin_bottom = 25.0
 size_flags_horizontal = 6
 size_flags_vertical = 4
 columns = 3
 
 [node name="PanelContainer3" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_top = 273.0
-margin_right = 236.0
+margin_top = 289.0
+margin_right = 299.0
 margin_bottom = 839.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -5665,68 +5701,68 @@ size_flags_vertical = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 227.0
-margin_bottom = 557.0
+margin_right = 290.0
+margin_bottom = 541.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 21.0
 text = "Objects"
 align = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_top = 25.0
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 52.0
 size_flags_horizontal = 3
 
 [node name="ObjAddButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer"]
-margin_right = 107.0
+margin_right = 138.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 text = "Add"
 
 [node name="ObjDeleteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer"]
-margin_left = 111.0
-margin_right = 218.0
+margin_left = 142.0
+margin_right = 281.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 text = "Delete"
 
 [node name="SlabsetObjectSection" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_top = 56.0
-margin_right = 218.0
-margin_bottom = 548.0
+margin_right = 281.0
+margin_bottom = 532.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection"]
-margin_right = 218.0
-margin_bottom = 492.0
+margin_right = 281.0
+margin_bottom = 476.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer"]
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 49.0
 
 [node name="GridContainer2" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 209.0
+margin_right = 272.0
 margin_bottom = 40.0
 columns = 2
 
 [node name="ObjNameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/PanelContainer/GridContainer2"]
 margin_top = 5.0
-margin_right = 98.0
+margin_right = 130.0
 margin_bottom = 26.0
 size_flags_horizontal = 3
 text = "ID"
 
 [node name="ObjObjectIndexSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/PanelContainer/GridContainer2" instance=ExtResource( 152 )]
-margin_left = 126.0
-margin_right = 200.0
+margin_left = 189.0
+margin_right = 263.0
 margin_bottom = 31.0
 size_flags_horizontal = 10
 min_value = -1.0
@@ -5734,7 +5770,7 @@ max_value = 1e+06
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer"]
 margin_top = 53.0
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 327.0
 size_flags_horizontal = 3
 columns = 2
@@ -5746,8 +5782,8 @@ margin_bottom = 26.0
 text = "ThingType"
 
 [node name="ObjThingTypeSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
-margin_left = 144.0
-margin_right = 218.0
+margin_left = 207.0
+margin_right = 281.0
 margin_bottom = 31.0
 size_flags_horizontal = 10
 max_value = 1e+06
@@ -5759,9 +5795,9 @@ margin_bottom = 61.0
 text = "Subtype"
 
 [node name="ObjSubtypeSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
-margin_left = 144.0
+margin_left = 207.0
 margin_top = 35.0
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 66.0
 size_flags_horizontal = 10
 max_value = 1e+06
@@ -5773,9 +5809,9 @@ margin_bottom = 96.0
 text = "Subtile"
 
 [node name="ObjSubtileSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
-margin_left = 144.0
+margin_left = 207.0
 margin_top = 70.0
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 101.0
 size_flags_horizontal = 10
 max_value = 8.0
@@ -5787,9 +5823,9 @@ margin_bottom = 131.0
 text = "RelativeX"
 
 [node name="ObjRelativeXSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
-margin_left = 144.0
+margin_left = 207.0
 margin_top = 105.0
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 136.0
 size_flags_horizontal = 10
 min_value = -1e+06
@@ -5803,9 +5839,9 @@ margin_bottom = 166.0
 text = "RelativeY"
 
 [node name="ObjRelativeYSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
-margin_left = 144.0
+margin_left = 207.0
 margin_top = 140.0
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 171.0
 size_flags_horizontal = 10
 min_value = -1e+06
@@ -5819,9 +5855,9 @@ margin_bottom = 201.0
 text = "RelativeZ"
 
 [node name="ObjRelativeZSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
-margin_left = 144.0
+margin_left = 207.0
 margin_top = 175.0
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 206.0
 size_flags_horizontal = 10
 min_value = -1e+06
@@ -5835,9 +5871,9 @@ margin_bottom = 236.0
 text = "EffectRange"
 
 [node name="ObjEffectRangeSpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer" instance=ExtResource( 152 )]
-margin_left = 144.0
+margin_left = 207.0
 margin_top = 210.0
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 241.0
 size_flags_horizontal = 10
 max_value = 1e+06
@@ -5848,9 +5884,9 @@ margin_right = 106.0
 margin_bottom = 274.0
 
 [node name="ObjIsLightCheckBox" type="CheckBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer"]
-margin_left = 110.0
+margin_left = 173.0
 margin_top = 245.0
-margin_right = 218.0
+margin_right = 281.0
 margin_bottom = 274.0
 size_flags_horizontal = 10
 text = "Is a light"
@@ -5879,13 +5915,13 @@ text = "Export slabs.dat"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
 margin_top = 843.0
-margin_right = 236.0
+margin_right = 299.0
 margin_bottom = 893.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 227.0
+margin_right = 290.0
 margin_bottom = 41.0
 
 [node name="SlabsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
@@ -5901,8 +5937,8 @@ expand = true
 stretch_mode = 4
 
 [node name="ExportSlabsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 95.0
-margin_right = 218.0
+margin_left = 142.0
+margin_right = 281.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -5910,25 +5946,26 @@ text = "Save slabset"
 
 [node name="SlabsetPathsLabel" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
 margin_top = 897.0
-margin_right = 236.0
+margin_right = 299.0
 margin_bottom = 915.0
 script = ExtResource( 91 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/SlabsetPathsLabel"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 227.0
+margin_right = 290.0
 margin_bottom = 9.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/SlabsetPathsLabel/ScrollContainer"]
-margin_right = 218.0
+margin_right = 281.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TabColumnset" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -7519,13 +7556,15 @@ script = SubResource( 20 )
 [connection signal="tab_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetTabs_tab_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetIDSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/VarCopyButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarCopyButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/VarPasteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarPasteButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/VarRotateButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarRotateButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/VarRevertButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarRevertButton_pressed"]
-[connection signal="toggled" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/VarButtonsApplyToAllCheckBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VarButtonsApplyToAllCheckBox_toggled"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/SlabCopyButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabCopyButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/SlabPasteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabPasteButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/SlabRevertButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabRevertButton_pressed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2/VarCopyButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarCopyButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2/VarPasteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarPasteButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2/VarRevertButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarRevertButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2/VarRotateButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarRotateButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer/ObjAddButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjAddButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer/ObjDeleteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjDeleteButton_pressed"]
 [connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/PanelContainer/GridContainer2/ObjObjectIndexSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjObjectIndexSpinBox_value_changed"]

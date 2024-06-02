@@ -30,12 +30,16 @@ onready var oSlabsetObjectSection = Nodelist.list["oSlabsetObjectSection"]
 onready var oObjSubtypeLabel = Nodelist.list["oObjSubtypeLabel"]
 onready var oObjThingTypeLabel = Nodelist.list["oObjThingTypeLabel"]
 onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
-onready var oVarButtonsApplyToAllCheckBox = Nodelist.list["oVarButtonsApplyToAllCheckBox"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oSlabsetPathsLabel = Nodelist.list["oSlabsetPathsLabel"]
 onready var oColumnsetPathsLabel = Nodelist.list["oColumnsetPathsLabel"]
+
+enum {
+	ONE_VARIATION,
+	ALL_VARIATION,
+}
 
 var clipboard = {
 	"dat": [],
@@ -600,14 +604,21 @@ func update_object_property(the_property, new_value):
 	listOfObjects[object_index][the_property] = new_value
 	adjust_object_color_if_different(variation)
 
+
+func _on_SlabCopyButton_pressed():
+	copy(ALL_VARIATION)
+
 func _on_VarCopyButton_pressed():
+	copy(ONE_VARIATION)
+
+func copy(howMany):
 	# Clear previous clipboard data
 	clipboard["dat"].clear()
 	clipboard["tng"].clear()
 	
 	var variationsToCopy = []
-	if oVarButtonsApplyToAllCheckBox.pressed == true:
-		oMessage.quick("Copied 28 variations to clipboard")
+	if howMany == ALL_VARIATION:
+		oMessage.quick("Copied all 28 variations of current slab ID to clipboard")
 		var slabBaseId = int(oSlabsetIDSpinBox.value) * 28
 		variationsToCopy.resize(28)
 		for i in 28:
@@ -624,14 +635,19 @@ func _on_VarCopyButton_pressed():
 			clipboard["tng"].append(Slabset.tng[variation].duplicate(true))
 
 
+func _on_SlabPasteButton_pressed():
+	paste(ALL_VARIATION)
 func _on_VarPasteButton_pressed():
+	paste(ONE_VARIATION)
+
+func paste(howMany):
 	if clipboard["dat"].empty() and clipboard["tng"].empty():
 		oMessage.quick("Clipboard is empty.")
 		return
 	
 	var locationsToPasteTo = []
-	if oVarButtonsApplyToAllCheckBox.pressed:
-		oMessage.quick("Pasted 28 variations")
+	if howMany == ALL_VARIATION:
+		oMessage.quick("Pasted all 28 variations to current slab ID")
 		var slab_base_id = int(oSlabsetIDSpinBox.value) * 28
 		for i in 28:
 			locationsToPasteTo.append(slab_base_id + i)
@@ -695,26 +711,45 @@ func _on_VarRotateButton_pressed():
 	update_objects_ui()
 	oMessage.quick("Rotated variation")
 
+
+
+
+func _on_SlabRevertButton_pressed():
+	revert(ALL_VARIATION)
+
 func _on_VarRevertButton_pressed():
-	var variation = get_current_variation()
-	
-	# Revert the 'dat' array for the variation if default data is available
-	if variation < Slabset.default_data["dat"].size():
-		Slabset.dat[variation] = Slabset.default_data["dat"][variation].duplicate()
+	revert(ONE_VARIATION)
+
+func revert(howMany):
+	var variationsToRevert = []
+	if howMany == ALL_VARIATION:
+		oMessage.quick("Reverted all 28 variations of current slab ID")
+		var slabBaseId = int(oSlabsetIDSpinBox.value) * 28
+		variationsToRevert.resize(28)
+		for i in 28:
+			variationsToRevert[i] = slabBaseId + i
 	else:
-		if variation < Slabset.dat.size():
-			Slabset.dat.remove(variation)
-	
-	# Revert the 'tng' array for the variation if default data is available
-	if variation < Slabset.default_data["tng"].size():
-		Slabset.tng[variation] = Slabset.default_data["tng"][variation].duplicate(true)  # deep copy if it contains objects
-	else:
-		if variation < Slabset.tng.size():
-			Slabset.tng.remove(variation)
+		oMessage.quick("Reverted current variation")
+		var current_variation = get_current_variation()
+		variationsToRevert = [current_variation]
+
+	for variation in variationsToRevert:
+		# Revert the 'dat' array for the variation if default data is available
+		if variation < Slabset.default_data["dat"].size():
+			Slabset.dat[variation] = Slabset.default_data["dat"][variation].duplicate()
+		else:
+			if variation < Slabset.dat.size():
+				Slabset.dat.remove(variation)
+		
+		# Revert the 'tng' array for the variation if default data is available
+		if variation < Slabset.default_data["tng"].size():
+			Slabset.tng[variation] = Slabset.default_data["tng"][variation].duplicate(true)  # deep copy if it contains objects
+		else:
+			if variation < Slabset.tng.size():
+				Slabset.tng.remove(variation)
 	
 	update_columns_ui()  # Update UI for columns
 	update_objects_ui()  # Update UI for objects
-	oMessage.quick("Variation reverted")
 
 
 
@@ -770,6 +805,7 @@ func _on_ColumnsetHelpButton_pressed():
 
 func _on_VarButtonsApplyToAllCheckBox_toggled(button_pressed):
 	if button_pressed == true:
-		oMessage.quick("Copy and paste buttons will affect 28 variations")
+		oMessage.quick("Copy and paste buttons will affect all variations of current slab ID")
 	else:
 		oMessage.quick("Copy and paste buttons will affect 1 variation")
+
