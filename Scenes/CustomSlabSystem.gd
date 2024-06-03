@@ -121,7 +121,7 @@ func attempt_to_remove_custom_slab(header_id):
 
 func remove_custom_slab(header_id):
 	if Slabs.data.has(header_id) == false:
-		oMessage.quick("Tried to remove a custom slab that wasn't present in the data")
+		oMessage.quick("Tried to remove a fake slab that wasn't present in the data")
 		return
 	
 	Slabs.data.erase(header_id)
@@ -133,7 +133,7 @@ func remove_custom_slab(header_id):
 	
 	cfg.save(Settings.unearthdata.plus_file("custom_slabs.cfg"))
 	
-	oMessage.quick("Removed custom slab: " + str(header_id))
+	oMessage.quick("Removed fake slab: " + str(header_id))
 
 func get_top_fake_cube_face(indexIn3x3, slabID):
 	var cubesArray = Slabs.fake_extra_data[slabID][Slabs.FAKE_CUBE_DATA][indexIn3x3]

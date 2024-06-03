@@ -12,7 +12,7 @@ onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
-onready var oConfirmDeleteCustomSlab = Nodelist.list["oConfirmDeleteCustomSlab"]
+onready var oConfirmDeleteFakeSlab = Nodelist.list["oConfirmDeleteFakeSlab"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oSlabNameDisplay = Nodelist.list["oSlabNameDisplay"]
@@ -251,14 +251,14 @@ func _on_slab_portrait_gui_input(event, id):
 		var oGridContainer = current_grid_container()
 		if oGridContainer != tabs[Slabs.TAB_CUSTOM][GRIDCON_PATH]:
 			return
-		Utils.popup_centered(oConfirmDeleteCustomSlab)
+		Utils.popup_centered(oConfirmDeleteFakeSlab)
 		var slabID = id.get_meta("ID_of_slab")
-		oConfirmDeleteCustomSlab.set_meta("ID_TO_DELETE", slabID)
+		oConfirmDeleteFakeSlab.set_meta("ID_TO_DELETE", slabID)
 		_on_hovered_none()
 
 
-func _on_ConfirmDeleteCustomSlab_confirmed():
-	var slabID = oConfirmDeleteCustomSlab.get_meta("ID_TO_DELETE")
+func _on_ConfirmDeleteFakeSlab_confirmed():
+	var slabID = oConfirmDeleteFakeSlab.get_meta("ID_TO_DELETE")
 	var gridContainer = tabs[Slabs.TAB_CUSTOM][GRIDCON_PATH]
 	for child in gridContainer.get_children():
 		if child.has_meta("ID_of_slab") and child.get_meta("ID_of_slab") == slabID:
