@@ -231,10 +231,11 @@ func initialize_rooms_available():
 		var functionVariable = i[1]
 		var defaultAvailability = i[2]
 		
-		if Slabs.icons.has(slabID):
+		var slabName = Slabs.fetch_idname(slabID)
+		if Slabs.icons.has(slabName):
 			var id = scnAvailableButton.instance()
 			id.hint_tooltip = Slabs.data[slabID][Slabs.NAME] + ' availability'
-			id.get_node("IconTextureRect").texture = Slabs.icons[slabID]
+			id.get_node("IconTextureRect").texture = Slabs.icons.get(slabName, null)
 			id.set_meta("variable", functionVariable)
 			id.set_meta("ID", slabID)
 			id.get_node("%TextEditableLabel").editable = false

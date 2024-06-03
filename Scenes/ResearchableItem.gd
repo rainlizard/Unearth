@@ -40,7 +40,8 @@ func set_magic_texture(subtype):
 
 func set_room_texture(slabID):
 	var oTextureRectIcon = $"HBoxContainer/TextureRectIcon"
-	oTextureRectIcon.texture = Slabs.icons[slabID]
+	var slabName = Slabs.fetch_idname(slabID)
+	oTextureRectIcon.texture = Slabs.icons.get(slabName, null)
 
 
 var storeSeconds = 0 # used for caculating total time of all nodes

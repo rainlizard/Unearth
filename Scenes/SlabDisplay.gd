@@ -19,8 +19,9 @@ func set_visual(columnArray):
 	var slabID = get_meta("ID_of_slab")
 	
 	$AspectRatioContainer/Icon.texture = null
-	if Slabs.icons.has(slabID):
-		$AspectRatioContainer/Icon.texture = Slabs.icons[slabID]
+	var slabName = Slabs.fetch_idname(slabID)
+	if Slabs.icons.has(slabName):
+		$AspectRatioContainer/Icon.texture = Slabs.icons.get(slabName, null)
 		if Slabs.is_door(slabID) == false:
 			$AspectRatioContainer.anchor_top -= 0.05
 			$AspectRatioContainer.anchor_bottom -= 0.05

@@ -197,6 +197,11 @@ func fetch_name(slabID):
 	else:
 		return getName
 
+func fetch_idname(slabID):
+	var slabData = data.get(slabID)
+	if slabData:
+		return slabData[NAME]
+	return ""
 
 var data = {
 00: ["HARD",                  BLOCK_SLAB, BITMASK_BLOCK,         PANEL_TOP_VIEW,  0, TAB_MAINSLAB,  WIBBLE_ON,       REMEMBER_PATH,  NOT_OWNABLE], # 0
@@ -259,25 +264,27 @@ var data = {
 
 
 var icons = {
-	BARRACKS: preload("res://dk_images/room_64/armory_std.png"),
-	BRIDGE: preload("res://dk_images/room_64/bridge_std.png"),
-	GRAVEYARD: preload("res://dk_images/room_64/graveyard_std.png"),
-	GUARD_POST: preload("res://dk_images/room_64/grdpost_std.png"),
-	HATCHERY: preload("res://dk_images/room_64/hatchery_std.png"),
-	LAIR: preload("res://dk_images/room_64/lair_std.png"),
-	PRISON: preload("res://dk_images/room_64/prison_std.png"),
-	LIBRARY: preload("res://dk_images/room_64/research_std.png"),
-	SCAVENGER_ROOM: preload("res://dk_images/room_64/scavenge_std.png"),
-	TEMPLE: preload("res://dk_images/room_64/temple_std.png"),
-	TORTURE_CHAMBER: preload("res://dk_images/room_64/torture_std.png"),
-	TRAINING_ROOM: preload("res://dk_images/room_64/training_std.png"),
-	TREASURE_ROOM: preload("res://dk_images/room_64/treasury_std.png"),
-	WORKSHOP: preload("res://dk_images/room_64/workshop_std.png"),
-	WOODEN_DOOR_2: preload("res://dk_images/trapdoor_64/door_pers_wood_std.png"),
-	BRACED_DOOR_2: preload("res://dk_images/trapdoor_64/door_pers_braced_std.png"),
-	IRON_DOOR_2: preload("res://dk_images/trapdoor_64/door_pers_iron_std.png"),
-	MAGIC_DOOR_2: preload("res://dk_images/trapdoor_64/door_pers_magic_std.png"),
-	DUNGEON_HEART: preload("res://dk_images/crucials/anim0949/r1frame01.png"), 
+"BARRACK_AREA": preload("res://dk_images/room_64/armory_std.png"),
+"BRIDGE_FRAME": preload("res://dk_images/room_64/bridge_std.png"),
+"GRAVE_AREA": preload("res://dk_images/room_64/graveyard_std.png"),
+"GUARD_AREA": preload("res://dk_images/room_64/grdpost_std.png"),
+"HATCHERY": preload("res://dk_images/room_64/hatchery_std.png"),
+"LAIR_AREA": preload("res://dk_images/room_64/lair_std.png"),
+"PRISON_AREA": preload("res://dk_images/room_64/prison_std.png"),
+"BOOK_SHELVES": preload("res://dk_images/room_64/research_std.png"),
+"SCAVENGE_AREA": preload("res://dk_images/room_64/scavenge_std.png"),
+"TEMPLE_POOL": preload("res://dk_images/room_64/temple_std.png"),
+"TORTURE_AREA": preload("res://dk_images/room_64/torture_std.png"),
+"TRAINING_AREA": preload("res://dk_images/room_64/training_std.png"),
+"TREASURY_AREA": preload("res://dk_images/room_64/treasury_std.png"),
+"WORKSHOP_AREA": preload("res://dk_images/room_64/workshop_std.png"),
+"DOOR_WOODEN2": preload("res://dk_images/trapdoor_64/door_pers_wood_std.png"),
+"DOOR_BRACE2": preload("res://dk_images/trapdoor_64/door_pers_braced_std.png"),
+"DOOR_STEEL2": preload("res://dk_images/trapdoor_64/door_pers_iron_std.png"),
+"DOOR_MAGIC2": preload("res://dk_images/trapdoor_64/door_pers_magic_std.png"),
+"HEART_PEDESTAL": preload("res://dk_images/crucials/anim0949/r1frame01.png"),
+"DOOR_SECRET": preload("res://extra_images/secret_door.png"),
+"DOOR_SECRET2": preload("res://extra_images/secret_door.png"),
 }
 
 var slabOrder = [
