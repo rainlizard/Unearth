@@ -282,18 +282,22 @@ func _on_ColumnPasteButton_pressed():
 	oMessage.quick("Pasted column from clipboard")
 	nodeVoxelView.refresh_entire_view()
 
+func revert_columns(column_ids):
+	for column_id in column_ids:
+		nodeClm.height[column_id] = nodeClm.default_data["height"][column_id]
+		nodeClm.solidMask[column_id] = nodeClm.default_data["solidMask"][column_id]
+		nodeClm.permanent[column_id] = nodeClm.default_data["permanent"][column_id]
+		nodeClm.orientation[column_id] = nodeClm.default_data["orientation"][column_id]
+		nodeClm.lintel[column_id] = nodeClm.default_data["lintel"][column_id]
+		nodeClm.floorTexture[column_id] = nodeClm.default_data["floorTexture"][column_id]
+		nodeClm.utilized[column_id] = nodeClm.default_data["utilized"][column_id]
+		nodeClm.cubes[column_id] = nodeClm.default_data["cubes"][column_id].duplicate(true)
+
 func _on_ColumnRevertButton_pressed():
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
 	var clmIndex = int(oColumnIndexSpinBox.value)
-	nodeClm.height[clmIndex] = nodeClm.default_data["height"][clmIndex]
-	nodeClm.solidMask[clmIndex] = nodeClm.default_data["solidMask"][clmIndex]
-	nodeClm.permanent[clmIndex] = nodeClm.default_data["permanent"][clmIndex]
-	nodeClm.orientation[clmIndex] = nodeClm.default_data["orientation"][clmIndex]
-	nodeClm.lintel[clmIndex] = nodeClm.default_data["lintel"][clmIndex]
-	nodeClm.floorTexture[clmIndex] = nodeClm.default_data["floorTexture"][clmIndex]
-	nodeClm.utilized[clmIndex] = nodeClm.default_data["utilized"][clmIndex]
-	nodeClm.cubes[clmIndex] = nodeClm.default_data["cubes"][clmIndex].duplicate(true)
+	revert_columns([clmIndex])
 	
 	_on_ColumnIndexSpinBox_value_changed(clmIndex)  # Refresh UI
 	oMessage.quick("Reverted column to default")
