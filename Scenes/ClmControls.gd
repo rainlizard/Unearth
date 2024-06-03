@@ -6,6 +6,7 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 
 onready var oColumnIndexSpinBox = $"%ColumnIndexSpinBox"
 onready var oGridAdvancedValues = $"%GridAdvancedValues"
@@ -233,6 +234,10 @@ func adjust_ui_color_if_different():
 		var cube_spinbox = cubeSpinBoxArray[i]
 		var cube_is_different = nodeClm["cubes"][column_index][i] != nodeClm.default_data["cubes"][column_index][i]
 		adjust_spinbox_color(cube_spinbox, cube_is_different)
+	
+	if nodeClm == Columnset:
+		oSlabsetWindow.update_save_columnset_button_availability() # Add this line
+
 
 # Function to check if a property is different from its default value
 func is_property_different(property_name, column_index):

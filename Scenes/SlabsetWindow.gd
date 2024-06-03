@@ -37,9 +37,11 @@ onready var oSlabsetPathsLabel = Nodelist.list["oSlabsetPathsLabel"]
 onready var oColumnsetPathsLabel = Nodelist.list["oColumnsetPathsLabel"]
 onready var oSlabsetTextSIDLabel = Nodelist.list["oSlabsetTextSIDLabel"]
 onready var oExportSlabsToml = Nodelist.list["oExportSlabsToml"]
+onready var oExportColumnsToml = Nodelist.list["oExportColumnsToml"]
 onready var oSlabRevertButton = Nodelist.list["oSlabRevertButton"]
 onready var oVarRevertButton = Nodelist.list["oVarRevertButton"]
 onready var oSlabsetDeleteButton = Nodelist.list["oSlabsetDeleteButton"]
+onready var oColumnsetDeleteButton = Nodelist.list["oColumnsetDeleteButton"]
 onready var oConfirmDeleteSlabsetFile = Nodelist.list["oConfirmDeleteSlabsetFile"]
 onready var oConfirmDeleteColumnsetFile = Nodelist.list["oConfirmDeleteColumnsetFile"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
@@ -92,6 +94,7 @@ func _notification(what):
 	match what:
 		NOTIFICATION_WM_FOCUS_IN:
 			update_slabset_delete_button_state()
+			update_columnset_delete_button_state()
 
 func shortcut_pressed(id):
 	var spinbox = id.get_node("CustomSpinBox")
@@ -110,6 +113,7 @@ func _on_SlabsetWindow_visibility_changed():
 		oColumnsetPathsLabel.start()
 		
 		update_slabset_delete_button_state()
+		update_columnset_delete_button_state()
 		
 		yield(get_tree(),'idle_frame')
 		oDkSlabsetVoxelView.oAllVoxelObjects.visible = true
@@ -176,6 +180,18 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 	oSlabsetSlabNameLabel.text = slabName
 	update_column_spinboxes()
 
+
+func update_columnset_delete_button_state():
+	var mapName = oCurrentMap.path.get_file().get_basename()
+	var columnsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".columnset.toml")
+
+	var dir = Directory.new()
+	if dir.file_exists(columnsetFilePath):
+		oColumnsetDeleteButton.disabled = false
+	else:
+		oColumnsetDeleteButton.disabled = true
+
+
 func update_slabset_delete_button_state():
 	var mapName = oCurrentMap.path.get_file().get_basename()
 	var slabsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".slabset.toml")
@@ -209,6 +225,13 @@ func update_save_slabset_button_availability():
 		oExportSlabsToml.disabled = true
 	else:
 		oExportSlabsToml.disabled = false
+
+func update_save_columnset_button_availability():
+	var list_of_modified_columns = Columnset.find_all_different_columns()
+	if list_of_modified_columns.empty():
+		oExportColumnsToml.disabled = true
+	else:
+		oExportColumnsToml.disabled = false
 
 func _on_VariationNumberSpinBox_value_changed(value):
 	
@@ -289,24 +312,16 @@ func _on_ExportSlabsetTomlDialog_file_selected(filePath):
 
 func _on_ExportColumnsetTomlDialog_file_selected(filePath):
 	Columnset.export_toml_columnset(filePath)
-
-
-func _on_ExportSlabsetDatDialog_file_selected(filePath):
-	var buffer = StreamPeerBuffer.new()
+	for i in 50:
+		yield(get_tree(),'idle_frame')
 	
-	buffer.put_u16(1304)
-	for slab in 1304:
-		for subtile in 9:
-			var value = 65536 - Slabset.dat[slab][subtile]
-			buffer.put_u16(value)
-	
-	var file = File.new()
-	if file.open(filePath,File.WRITE) == OK:
-		file.store_buffer(buffer.data_array)
-		file.close()
-		oMessage.quick("Saved: " + filePath)
-	else:
-		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
+	var dir = Directory.new()
+	if dir.file_exists(filePath):
+		update_columnset_delete_button_state()
+		
+		if oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].has(filePath) == false:
+			oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].append(filePath)
+			oColumnsetPathsLabel.start()
 
 
 func get_current_variation():
@@ -753,7 +768,7 @@ func _on_ColumnsetHelpButton_pressed():
 	var helptxt = ""
 	helptxt += "Be wary not to confuse the Columnset with the Map Columns. Map Columns (.clm) are the appearance of any columns that have already been placed on the map, while the Columnset (.toml) is the appearance of any new columns that are placed in the future. \n"
 	helptxt += "\n"
-	helptxt += "columnset.toml is a global file in /fxdata/ that is used by all maps in the game, but it can also be saved as a local file to a map or campaign. When you run the game, the files are merged together."
+	helptxt += "columnset.toml is a global file in /fxdata/ that is used by all maps in the game, but it can also be saved as a local file to a map or campaign. When you run the game both columnset.toml files will be loaded, but with the local file overwriting any same fields of the file in /fxdata/."
 	oMessage.big("Help",helptxt)
 
 
@@ -816,6 +831,7 @@ func _on_ConfirmDeleteSlabsetFile_confirmed():
 	else:
 		oMessage.big("Error", "The slabset file doesn't exist.")
 
+
 func _on_ConfirmDeleteColumnsetFile_confirmed():
 	var mapName = oCurrentMap.path.get_file().get_basename()
 	var columnsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".columnset.toml")
@@ -842,7 +858,8 @@ func _on_ConfirmDeleteColumnsetFile_confirmed():
 			oColumnsetControls._on_ColumnIndexSpinBox_value_changed(oColumnsetControls.oColumnIndexSpinBox.value)
 			oColumnsetControls.adjust_ui_color_if_different()
 			oColumnsetVoxelView.refresh_entire_view()
-			oColumnsetVoxelView.update_column_view()
+			
+			update_columnset_delete_button_state()
 		else:
 			oMessage.big("Error", "Failed to delete the file.")
 	else:
