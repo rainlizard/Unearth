@@ -3103,7 +3103,7 @@ margin_bottom = 409.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Revert Slabset and delete file"
-dialog_text = "Revert all slabs to default and delete map00001.slabset.toml file?"
+dialog_text = "<adjusted in code>"
 dialog_autowrap = true
 script = ExtResource( 61 )
 

@@ -40,6 +40,8 @@ onready var oExportSlabsToml = Nodelist.list["oExportSlabsToml"]
 onready var oSlabRevertButton = Nodelist.list["oSlabRevertButton"]
 onready var oVarRevertButton = Nodelist.list["oVarRevertButton"]
 onready var oSlabsetDeleteButton = Nodelist.list["oSlabsetDeleteButton"]
+onready var oConfirmDeleteSlabsetFile = Nodelist.list["oConfirmDeleteSlabsetFile"]
+onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 
 enum {
 	ONE_VARIATION,
@@ -309,9 +311,17 @@ func _on_ExportColumnsToml_pressed():
 
 func _on_ExportSlabsetTomlDialog_file_selected(filePath):
 	Slabset.export_toml_slabset(filePath)
-	for i in 100:
+	
+	for i in 50:
 		yield(get_tree(),'idle_frame')
-	update_slabset_delete_button_state()
+	
+	var dir = Directory.new()
+	if dir.file_exists(filePath):
+		update_slabset_delete_button_state()
+		
+		if oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].has(filePath) == false:
+			oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].append(filePath)
+			oSlabsetPathsLabel.start()
 
 func _on_ExportColumnsetTomlDialog_file_selected(filePath):
 	Columnset.export_toml_columnset(filePath)
@@ -840,10 +850,16 @@ func _on_VarButtonsApplyToAllCheckBox_toggled(button_pressed):
 		oMessage.quick("Copy and paste buttons will affect 1 variation")
 
 
-onready var oConfirmDeleteSlabsetFile = Nodelist.list["oConfirmDeleteSlabsetFile"]
 
 func _on_SlabsetDeleteButton_pressed():
+	oConfirmDeleteSlabsetFile.dialog_text = "Revert all slabs to default and delete this file?\n"
+	
+	var mapName = oCurrentMap.path.get_file().get_basename()
+	var slabsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".slabset.toml")
+	oConfirmDeleteSlabsetFile.dialog_text += slabsetFilePath
+	oConfirmDeleteSlabsetFile.rect_min_size.x = 800
 	Utils.popup_centered(oConfirmDeleteSlabsetFile)
+
 
 func _on_ConfirmDeleteSlabsetFile_confirmed():
 	var mapName = oCurrentMap.path.get_file().get_basename()
@@ -862,6 +878,10 @@ func _on_ConfirmDeleteSlabsetFile_confirmed():
 				for i in 28:
 					variations_to_revert.append((slabID * 28) + i)
 			revert(variations_to_revert)
+			
+			# Remove from the little box thing of currently loaded files
+			oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].erase(slabsetFilePath)
+			oSlabsetPathsLabel.start()
 			
 			# Update the UI
 			update_column_spinboxes()
