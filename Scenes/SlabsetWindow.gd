@@ -39,6 +39,7 @@ onready var oSlabsetTextSIDLabel = Nodelist.list["oSlabsetTextSIDLabel"]
 onready var oExportSlabsToml = Nodelist.list["oExportSlabsToml"]
 onready var oSlabRevertButton = Nodelist.list["oSlabRevertButton"]
 onready var oVarRevertButton = Nodelist.list["oVarRevertButton"]
+onready var oSlabsetDeleteButton = Nodelist.list["oSlabsetDeleteButton"]
 
 enum {
 	ONE_VARIATION,
@@ -96,6 +97,11 @@ func _ready():
 	
 	#variation_changed(0)
 
+func _notification(what):
+	match what:
+		NOTIFICATION_WM_FOCUS_IN:
+			update_slabset_delete_button_state()
+
 func shortcut_pressed(id):
 	var spinbox = id.get_node("CustomSpinBox")
 	var clmIndex = spinbox.value
@@ -112,9 +118,10 @@ func _on_SlabsetWindow_visibility_changed():
 		oSlabsetPathsLabel.start()
 		oColumnsetPathsLabel.start()
 		
+		update_slabset_delete_button_state()
+		
 		yield(get_tree(),'idle_frame')
 		oDkSlabsetVoxelView.oAllVoxelObjects.visible = true
-		
 	elif visible == false:
 		if is_instance_valid(oPickSlabWindow):
 			oPickSlabWindow.add_slabs()
@@ -190,6 +197,16 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 		slabName = Slabs.data[value][Slabs.NAME]
 	oSlabsetSlabNameLabel.text = slabName
 	update_column_spinboxes()
+
+func update_slabset_delete_button_state():
+	var mapName = oCurrentMap.path.get_file().get_basename()
+	var slabsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".slabset.toml")
+
+	var dir = Directory.new()
+	if dir.file_exists(slabsetFilePath):
+		oSlabsetDeleteButton.disabled = false
+	else:
+		oSlabsetDeleteButton.disabled = true
 
 func update_modified_label_for_slab_id():
 	if Slabset.is_slab_edited(int(oSlabsetIDSpinBox.value)):
@@ -292,6 +309,9 @@ func _on_ExportColumnsToml_pressed():
 
 func _on_ExportSlabsetTomlDialog_file_selected(filePath):
 	Slabset.export_toml_slabset(filePath)
+	for i in 100:
+		yield(get_tree(),'idle_frame')
+	update_slabset_delete_button_state()
 
 func _on_ExportColumnsetTomlDialog_file_selected(filePath):
 	Columnset.export_toml_columnset(filePath)
@@ -734,13 +754,22 @@ func _on_VarRotateButton_pressed():
 		new_dat.append(Slabset.dat[variation][ROTATION_MAP[i]])
 	Slabset.dat[variation] = new_dat
 	
-	# Rotate the object positions within the slab
+	# Rotate the object subtiles and relative positions within the slab
 	for obj in Slabset.tng[variation]:
-		var new_x = obj[Slabset.obj.RELATIVE_Y]
-		var new_y = -obj[Slabset.obj.RELATIVE_X]
-		obj[Slabset.obj.RELATIVE_X] = new_x
-		obj[Slabset.obj.RELATIVE_Y] = new_y
-		obj[Slabset.obj.SUBTILE] = ROTATION_MAP[obj[Slabset.obj.SUBTILE]]
+		var old_subtile = obj[Slabset.obj.SUBTILE]
+		var new_subtile = ROTATION_MAP[old_subtile]
+		obj[Slabset.obj.SUBTILE] = new_subtile
+		
+		var old_relative_x = obj[Slabset.obj.RELATIVE_X]
+		var old_relative_y = obj[Slabset.obj.RELATIVE_Y]
+		var new_relative_x = 0
+		var new_relative_y = 0
+		
+		new_relative_x = old_relative_y
+		new_relative_y = 256 - old_relative_x
+		
+		obj[Slabset.obj.RELATIVE_X] = new_relative_x
+		obj[Slabset.obj.RELATIVE_Y] = new_relative_y
 	
 	# Update the UI
 	update_column_spinboxes()
@@ -748,28 +777,23 @@ func _on_VarRotateButton_pressed():
 	oMessage.quick("Rotated variation")
 
 
-
-
 func _on_SlabRevertButton_pressed():
-	revert(ALL_VARIATION)
+	var slabID = int(oSlabsetIDSpinBox.value)
+	var variations_to_revert = []
+	for i in 28:
+		variations_to_revert.append((slabID * 28) + i)
+	revert(variations_to_revert)
+	oMessage.quick("Reverted all 28 variations of current slab ID")
+
 
 func _on_VarRevertButton_pressed():
-	revert(ONE_VARIATION)
+	var variations_to_revert = []
+	variations_to_revert.append((int(oSlabsetIDSpinBox.value) * 28) + int(oVariationNumberSpinBox.value))
+	revert(variations_to_revert)
+	oMessage.quick("Reverted current variation")
 
-func revert(howMany):
-	var variationsToRevert = []
-	if howMany == ALL_VARIATION:
-		oMessage.quick("Reverted all 28 variations of current slab ID")
-		var slabBaseId = int(oSlabsetIDSpinBox.value) * 28
-		variationsToRevert.resize(28)
-		for i in 28:
-			variationsToRevert[i] = slabBaseId + i
-	else:
-		oMessage.quick("Reverted current variation")
-		var current_variation = get_current_variation()
-		variationsToRevert = [current_variation]
-
-	for variation in variationsToRevert:
+func revert(variations_to_revert):
+	for variation in variations_to_revert:
 		# Revert the 'dat' array for the variation if default data is available
 		if variation < Slabset.default_data["dat"].size():
 			Slabset.dat[variation] = Slabset.default_data["dat"][variation].duplicate()
@@ -783,53 +807,21 @@ func revert(howMany):
 		else:
 			if variation < Slabset.tng.size():
 				Slabset.tng.remove(variation)
-	update_column_spinboxes()  # Update UI for columns
-	update_objects_ui()  # Update UI for objects
+	
+	# Update UI for columns and objects
+	update_column_spinboxes()
+	update_objects_ui()
 	
 	yield(get_tree(),'idle_frame')
 	oDkSlabsetVoxelView.refresh_entire_view()
 
 
 
-#func _on_VarDuplicateButton_pressed():
-#	# Find the next free variation space
-#	var current_variation = get_current_variation()
-#	var next_free_variation = find_next_free_variation(current_variation)
-#
-#	if next_free_variation == -1:
-#		oMessage.quick("No free variation spaces available.")
-#		return
-#
-#	# Duplicate the 'dat' for the current variation
-#	ensure_dat_array_has_space(next_free_variation)
-#	Slabset.dat[next_free_variation] = Slabset.dat[current_variation].duplicate()
-#
-#	# Duplicate the 'tng' for the current variation
-#	ensure_tng_array_has_space(next_free_variation)
-#	Slabset.tng[next_free_variation] = Slabset.tng[current_variation].duplicate(true) # true for deep copy if needed
-#
-#	# Update UI to reflect the new duplicated variation
-#	update_column_spinboxes()  # Assuming this updates the UI with new column data
-#	update_objects_ui()  # Assuming this updates the UI with new things/objects
-#	oMessage.quick("Variation duplicated into SlabID: " + str(next_free_variation/28) + ", Variation: " + str(next_free_variation % 28))
-#
-#	oSlabsetIDSpinBox.value = next_free_variation/28
-#	oVariationNumberSpinBox.value = next_free_variation % 28
-#	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
-#
-#func find_next_free_variation(current_variation):
-#	for i in range(current_variation+1, 255*28):
-#		if (i >= Slabset.dat.size() or Slabset.dat[i].empty() or Slabset.dat[i] == [0,0,0, 0,0,0, 0,0,0]) and (i >= Slabset.tng.size() or Slabset.tng[i].empty()):
-#			return i
-##		if Slabset.dat[i] == [0,0,0, 0,0,0, 0,0,0] and Slabset.tng[i].empty():
-##			return i
-#	return -1  # Return -1 if no free space is found
-
 func _on_SlabsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "slabset.toml and columnset.toml affect the appearance of slabs when they're placed. \n"
-	helptxt += "While these files are automatically loaded when you open your map, they're not automatically saved, so you will need to press this 'Save slabset' button whenever you make any changes.\n"
-	helptxt += "Also, new entries in terrain.cfg are required for adding new slabs.\n"
+	helptxt += "slabset.toml and columnset.toml affect the appearance of slabs when they're placed. When placing in Unearth AND when placing in-game. \n"
+	helptxt += "However keep in mind these files are not automatically saved by Unearth, so you will need to press this 'Save slabset' button whenever you make any changes.\n"
+	helptxt += "New entries in terrain.cfg are also required in order to add new Slab IDs to the Slabset.\n"
 	oMessage.big("Help",helptxt)
 
 func _on_ColumnsetHelpButton_pressed():
@@ -847,3 +839,36 @@ func _on_VarButtonsApplyToAllCheckBox_toggled(button_pressed):
 	else:
 		oMessage.quick("Copy and paste buttons will affect 1 variation")
 
+
+onready var oConfirmDeleteSlabsetFile = Nodelist.list["oConfirmDeleteSlabsetFile"]
+
+func _on_SlabsetDeleteButton_pressed():
+	Utils.popup_centered(oConfirmDeleteSlabsetFile)
+
+func _on_ConfirmDeleteSlabsetFile_confirmed():
+	var mapName = oCurrentMap.path.get_file().get_basename()
+	var slabsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".slabset.toml")
+
+	var dir = Directory.new()
+	if dir.file_exists(slabsetFilePath):
+		var err = dir.remove(slabsetFilePath)
+		if err == OK:
+			oMessage.quick("Deleted: " + slabsetFilePath)
+			oMessage.quick("Reverted all slabs")
+			# Revert every slab ID to its default state
+			var totalSlabs = max(Slabset.dat.size(), Slabset.tng.size()) / 28
+			var variations_to_revert = []
+			for slabID in totalSlabs:
+				for i in 28:
+					variations_to_revert.append((slabID * 28) + i)
+			revert(variations_to_revert)
+			
+			# Update the UI
+			update_column_spinboxes()
+			update_objects_ui()
+			oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
+			update_slabset_delete_button_state()
+		else:
+			oMessage.big("Error", "Failed to delete the file.")
+	else:
+		oMessage.big("Error", "The slabset file doesn't exist.")

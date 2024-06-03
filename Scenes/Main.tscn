@@ -3094,6 +3094,19 @@ dialog_text = "Delete all columns which have no presence on the map? (a utilized
 dialog_autowrap = true
 script = ExtResource( 61 )
 
+[node name="ConfirmDeleteSlabsetFile" type="ConfirmationDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -456.0
+margin_top = 304.0
+margin_right = -16.0
+margin_bottom = 409.0
+rect_min_size = Vector2( 300, 105 )
+popup_exclusive = true
+window_title = "Revert Slabset and delete file"
+dialog_text = "Revert all slabs to default and delete map00001.slabset.toml file?"
+dialog_autowrap = true
+script = ExtResource( 61 )
+
 [node name="ControlsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -2754.0
@@ -5468,7 +5481,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DkSlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 996.0
+margin_right = 905.0
 margin_bottom = 915.0
 displayingType = 2
 
@@ -5483,7 +5496,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="SlabsetSlabNameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView/Control/VBoxContainer"]
-margin_right = 996.0
+margin_right = 905.0
 margin_bottom = 21.0
 size_flags_vertical = 1
 text = "Impenetrable Rock"
@@ -5491,20 +5504,20 @@ align = 2
 
 [node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView/Control/VBoxContainer"]
 margin_top = 25.0
-margin_right = 996.0
+margin_right = 905.0
 margin_bottom = 46.0
 size_flags_vertical = 1
 text = "Variation info"
 align = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer"]
-margin_left = 1000.0
+margin_left = 909.0
 margin_right = 1236.0
 margin_bottom = 915.0
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
-margin_right = 236.0
+margin_right = 327.0
 margin_bottom = 839.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
@@ -5916,20 +5929,19 @@ text = "Export slabs.dat"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
 margin_top = 843.0
-margin_right = 236.0
+margin_right = 327.0
 margin_bottom = 893.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 227.0
+margin_right = 318.0
 margin_bottom = 41.0
 
 [node name="SlabsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 margin_right = 32.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 2
 size_flags_vertical = 4
 texture_normal = ExtResource( 156 )
 texture_pressed = ExtResource( 66 )
@@ -5937,9 +5949,17 @@ texture_hover = ExtResource( 128 )
 expand = true
 stretch_mode = 4
 
+[node name="SlabsetDeleteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+margin_left = 36.0
+margin_right = 182.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Delete & revert"
+
 [node name="ExportSlabsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 95.0
-margin_right = 218.0
+margin_left = 186.0
+margin_right = 309.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -5947,21 +5967,21 @@ text = "Save slabset"
 
 [node name="SlabsetPathsLabel" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
 margin_top = 897.0
-margin_right = 236.0
+margin_right = 327.0
 margin_bottom = 915.0
 script = ExtResource( 91 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/SlabsetPathsLabel"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 227.0
+margin_right = 318.0
 margin_bottom = 9.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/SlabsetPathsLabel/ScrollContainer"]
-margin_right = 218.0
+margin_right = 309.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -7495,6 +7515,7 @@ script = SubResource( 20 )
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmAutoGen" to="SlabPlacement" method="_on_ConfirmAutoGen_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmGenerateScript" to="Ui/UiSystem/MapSettingsWindow/MapSettingsTabs/ScriptGenerator" method="_on_ConfirmGenerateScript_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmClmClearUnused" to="Ui/UiSystem/ColumnEditor" method="_on_ConfirmClmClearUnused_confirmed"]
+[connection signal="confirmed" from="Ui/UiSystem/ConfirmDeleteSlabsetFile" to="Ui/UiSystem/SlabsetWindow" method="_on_ConfirmDeleteSlabsetFile_confirmed"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ImageAsMapDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImageAsMapDialog_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonNewMap" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonNewMap_pressed"]
@@ -7579,6 +7600,7 @@ script = SubResource( 20 )
 [connection signal="toggled" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjIsLightCheckBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjIsLightCheckBox_toggled"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetCopyValues" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetCopyValues_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetDeleteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetDeleteButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/ExportSlabsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsToml_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ColumnsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetHelpButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ExportColumnsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsToml_pressed"]
