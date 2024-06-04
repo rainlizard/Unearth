@@ -316,5 +316,6 @@ func refresh_entire_view():
 	do_all()
 	do_one()
 	oAllVoxelObjects.visible = true
-	oSelectedVoxelObject.visible = false
+	set_object(viewObject)
+	oSelectedVoxelObject.visible = true
 

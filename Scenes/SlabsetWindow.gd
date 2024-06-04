@@ -684,20 +684,26 @@ const ROTATION_MAP = {
 	6: 8, 7: 5, 8: 2
 }
 
+const OBJECT_ROTATION_MAP = {
+	0: 2, 1: 5, 2: 8,
+	3: 1, 4: 4, 5: 7,
+	6: 0, 7: 3, 8: 6
+}
+
 func _on_VarRotateButton_pressed():
 	var variation = get_current_variation()
 	ensure_dat_array_has_space(variation)
 	
 	# Rotate the 'dat' array by reassigning using the ROTATION_MAP
 	var new_dat = []
-	for i in range(9):
+	for i in 9:
 		new_dat.append(Slabset.dat[variation][ROTATION_MAP[i]])
 	Slabset.dat[variation] = new_dat
 	
 	# Rotate the object subtiles and relative positions within the slab
 	for obj in Slabset.tng[variation]:
 		var old_subtile = obj[Slabset.obj.SUBTILE]
-		var new_subtile = ROTATION_MAP[old_subtile]
+		var new_subtile = OBJECT_ROTATION_MAP[old_subtile]
 		obj[Slabset.obj.SUBTILE] = new_subtile
 		
 		var old_relative_x = obj[Slabset.obj.RELATIVE_X]
@@ -705,8 +711,8 @@ func _on_VarRotateButton_pressed():
 		var new_relative_x = 0
 		var new_relative_y = 0
 		
-		new_relative_x = old_relative_y
-		new_relative_y = 256 - old_relative_x
+		new_relative_x = 256 - old_relative_y
+		new_relative_y = old_relative_x
 		
 		obj[Slabset.obj.RELATIVE_X] = new_relative_x
 		obj[Slabset.obj.RELATIVE_Y] = new_relative_y
@@ -750,6 +756,7 @@ func revert(variations_to_revert):
 	
 	# Update UI for columns and objects
 	update_column_spinboxes()
+	
 	update_objects_ui()
 	
 	yield(get_tree(),'idle_frame')
@@ -762,6 +769,8 @@ func _on_SlabsetHelpButton_pressed():
 	helptxt += "slabset.toml and columnset.toml affect the appearance of slabs when they're placed. When placing in Unearth AND when placing in-game. \n"
 	helptxt += "However keep in mind these files are not automatically saved by Unearth, so you will need to press this 'Save slabset' button whenever you make any changes.\n"
 	helptxt += "New entries in terrain.cfg are also required in order to add new Slab IDs to the Slabset.\n"
+	helptxt += "\n"
+	helptxt += "If you set an object's RelativeX and RelativeY to be inside of a column/cube then it may not appear in-game."
 	oMessage.big("Help",helptxt)
 
 func _on_ColumnsetHelpButton_pressed():
