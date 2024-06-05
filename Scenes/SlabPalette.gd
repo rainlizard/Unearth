@@ -389,7 +389,7 @@ extends Node
 #	Slabset.dat[slabVariation + dir.ne][1] = fixUsingColumn
 
 #func edit_damaged_wall():
-#	var slabVariation = 28 * Slabs.WALL_DAMAGED
+#	var slabVariation = 28 * Slabs.WALL_UNDECORATED
 #
 #	var dmgWall1 = oDataClm.index_entry([25,82,123,120,77,0,0,0], 27)
 #	var dmgWall2 = oDataClm.index_entry([25,82,124,121,77,0,0,0], 27)

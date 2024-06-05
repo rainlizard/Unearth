@@ -478,12 +478,12 @@ func set_torch_side(xSlab, ySlab, slabID, slabsetIndexGroup, constructedColumns,
 	var torchSubtileToKeep = torchSubtileToKeepMap[torchDirection]
 	
 	#Slabs.WALL_WITH_TORCH = 5
-	#Slabs.WALL_DAMAGED = 9
+	#Slabs.WALL_UNDECORATED = 9
 	#Slabs.EARTH_WITH_TORCH = 3
 	#Slabs.EARTH = 2
 	var IdDiff
 	if slabID == Slabs.WALL_WITH_TORCH:
-		IdDiff = Slabs.WALL_WITH_TORCH - Slabs.WALL_DAMAGED
+		IdDiff = Slabs.WALL_WITH_TORCH - Slabs.WALL_UNDECORATED
 	elif slabID == Slabs.EARTH_WITH_TORCH:
 		IdDiff = Slabs.EARTH_WITH_TORCH - Slabs.EARTH
 	else:
@@ -495,6 +495,7 @@ func set_torch_side(xSlab, ySlab, slabID, slabsetIndexGroup, constructedColumns,
 	for i in 9:
 		undecoratedGroup[i] = slabsetIndexGroup[i] - variDiff
 	
+	# This code REMOVES torches, it doesn't add torches. It sets columns to the undecorated columns.
 	for subtile in [7, 3, 1, 5]:  # S W N E
 		if torchSubtileToKeep != subtile:
 			# Wall Torch Cube: 119
