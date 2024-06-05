@@ -525,7 +525,8 @@ func calculate_torch_side(xSlab:int, ySlab:int, surrID):
 		if slabAtDir == Slabs.CLAIMED_GROUND:
 			return sporadicDir
 		if Slabs.data[slabAtDir][Slabs.IS_SOLID] == false and Slabs.is_door(slabAtDir) == false:
-			return sporadicDir
+			if Slabs.rooms_that_have_walls.has(slabAtDir) == false:
+				return sporadicDir
 	
 	# Create the directions array with the preference direction first
 	var directions = []
@@ -537,7 +538,8 @@ func calculate_torch_side(xSlab:int, ySlab:int, surrID):
 	for direction in directions: # Check each direction in the array
 		var slabAtDir = surrID[direction]
 		if Slabs.data[slabAtDir][Slabs.IS_SOLID] == false and Slabs.is_door(slabAtDir) == false:
-			return direction
+			if Slabs.rooms_that_have_walls.has(slabAtDir) == false:
+				return direction
 	
 	return -1 # If all directions are solid or doors, return -1 for no torch placement
 
