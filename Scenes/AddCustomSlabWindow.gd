@@ -40,7 +40,8 @@ func _ready():
 		var spinbox = id.get_node("CustomSpinBox")
 		var shortcut = id.get_node("ButtonShortcut")
 		shortcut.connect("pressed",self,"shortcut_pressed",[id])
-		spinbox.max_value = 2047
+		spinbox.min_value = 1
+		spinbox.max_value = oDataClm.column_count-1
 		spinbox.value = 1
 		spinbox.connect("value_changed",oCustomSlabVoxelView,"_on_CustomSlabSpinBox_value_changed")
 		customSlabArrayOfSpinbox.append(spinbox)

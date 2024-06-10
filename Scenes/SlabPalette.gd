@@ -491,7 +491,7 @@ extends Node
 #	viewDKdat()
 #
 #func viewoDkClm():
-#	var numberOfClmEntries = 2048
+#	var numberOfClmEntries = column_count
 #	for entry in numberOfClmEntries:
 #		var twentyFourByteArray = oAssets.clm[entry]
 #		oDataClm.data.append(twentyFourByteArray)

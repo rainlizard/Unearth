@@ -142,7 +142,7 @@ func generation():
 								elif GENERATED_TYPE == GEN_CLM:
 									if x/2 != x/2.0 or z/2 != z/2.0: continue #skips current loop
 									clmIndex = ((z/2) * (TERRAIN_SIZE_X/2)) + (x/2)
-									if clmIndex >= 2048: clmIndex = 0
+									if clmIndex >= column_count: clmIndex = 0
 								
 								var floorID = oDataClm.floorTexture[clmIndex]
 								add_face(pos, 4, cubeID, floorID, faceCount[slabStyleValue], slabStyleValue)
@@ -183,7 +183,7 @@ func generation():
 
 
 func set_cube_id_with_column_position_data():
-	# clmIndex is a position inside the 2048 column collection
+	# clmIndex is a position inside the column_count column collection
 	# clmData is the 24 byte array.
 	# Get the cubeIDs from that array
 	
@@ -199,7 +199,7 @@ func set_cube_id_with_column_position_data():
 			blockMap[x][z] = oDataClm.cubes[clmIndex] # Warning: this is probably a reference. But it probably doesn't matter.
 
 func set_cube_id_to_clm_index():
-	# clmIndex is a position inside the 2048 column collection
+	# clmIndex is a position inside the column_count column collection
 	# clmData is the 24 byte array.
 	# "continue" skips current loop
 	
@@ -216,7 +216,7 @@ func set_cube_id_to_clm_index():
 			
 			if x/2 != x/2.0 or z/2 != z/2.0: continue
 			var clmIndex = ((z/2) * (TERRAIN_SIZE_X/2)) + (x/2)
-			if clmIndex >= 2048: clmIndex = 0
+			if clmIndex >= column_count: clmIndex = 0
 			
 			blockMap[x][z] = oDataClm.cubes[clmIndex] # Warning: this is probably a reference. But it probably doesn't matter.
 
@@ -225,7 +225,7 @@ func get_clm_index(x, z): # Used by ColumnDetails in clm view
 	if x >= TERRAIN_SIZE_X: return null
 	if z >= TERRAIN_SIZE_Z: return null
 	var clmIndex = ((z/2) * (TERRAIN_SIZE_X/2)) + (x/2)
-	if clmIndex >= 2048: clmIndex = 0
+	if clmIndex >= column_count: clmIndex = 0
 	return clmIndex
 
 

@@ -8,7 +8,6 @@ onready var oGame3D = Nodelist.list["oGame3D"]
 var blankArray = initalize_blank_array()
 
 func column_gen(genArray, x, z, clmIndex, surrClmIndex, generateBottomFace, sourceDataClm):
-	
 	var cubeArray = sourceDataClm.cubes[clmIndex]
 	for y in 8:
 		var cubeID = cubeArray[y]

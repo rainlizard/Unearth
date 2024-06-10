@@ -116,3 +116,19 @@ func update_display_fields_size():
 		displayField.rect_size = Vector2(M.xSize * 96, M.ySize * 96)
 		displayField.material.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
 
+
+#			var pixDataPerColumn = []
+#			pixDataPerColumn.resize(column_count)
+#
+#			for clmIndex in column_count:
+#				pixDataPerColumn[clmIndex] = oDataClm.get_top_cube_face(clmIndex, 0)
+#
+#			var pixelIndex = 0
+#			for y in height:
+#				for x in width:
+#					var clmIndex = oDataClmPos.get_cell_clmpos(x, y)
+#					var rgb = pixDataPerColumn[clmIndex]
+#					pixData[pixelIndex] = rgb >> 16 & 255
+#					pixData[pixelIndex + 1] = rgb >> 8 & 255
+#					pixData[pixelIndex + 2] = rgb & 255
+#					pixelIndex += 3

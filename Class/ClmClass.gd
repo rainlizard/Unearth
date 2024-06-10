@@ -51,22 +51,22 @@ func copy_column(indexSrc, indexDest):
 	self.floorTexture[indexDest] = self.floorTexture[indexSrc]
 
 func clear_all_column_data():
-	self.utilized.resize(2048)
+	self.utilized.resize(self.column_count)
 	self.utilized.fill(0)
-	self.orientation.resize(2048)
+	self.orientation.resize(self.column_count)
 	self.orientation.fill(0)
-	self.solidMask.resize(2048)
+	self.solidMask.resize(self.column_count)
 	self.solidMask.fill(0)
-	self.permanent.resize(2048)
+	self.permanent.resize(self.column_count)
 	self.permanent.fill(0)
-	self.lintel.resize(2048)
+	self.lintel.resize(self.column_count)
 	self.lintel.fill(0)
-	self.height.resize(2048)
+	self.height.resize(self.column_count)
 	self.height.fill(0)
-	self.floorTexture.resize(2048)
+	self.floorTexture.resize(self.column_count)
 	self.floorTexture.fill(0)
-	self.cubes.resize(2048)
-	for i in 2048:
+	self.cubes.resize(self.column_count)
+	for i in self.column_count:
 		self.cubes[i] = [0,0,0,0, 0,0,0,0] # Don't use fill(), that doesn't work
 	
 

@@ -2,6 +2,7 @@ extends 'res://Class/ClmClass.gd'
 onready var oGame = Nodelist.list["oGame"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 
+var column_count = 2048
 var utilized = []
 var orientation = []
 var solidMask = []
@@ -17,8 +18,8 @@ var columnsContainingOwnedCubes = {}
 var columnsContainingRngCubes = {}
 
 # Strangely, slabs.clm is missing the second 4 bytes.
-# map0000x.clm : 49,160 bytes. first 4 bytes contains 2048, second 4 bytes are ???, then comes the column data.
-# slabs.clm : 49,156 bytes. first 4 bytes contains 2048, then comes the column data.
+# map0000x.clm : 49,160 bytes. first 4 bytes contains column_count, second 4 bytes are ???, then comes the column data.
+# slabs.clm : 49,156 bytes. first 4 bytes contains column_count, then comes the column data.
 
 
 func import_toml_columnset(filePath):
@@ -102,10 +103,10 @@ func export_toml_columnset(filePath): #"res://columnset.toml"
 		return
 	
 	textFile.store_line('[common]')
-	textFile.store_line('ColumnsCount = 2048')
+	textFile.store_line('ColumnsCount = ' + str(column_count))
 	textFile.store_line('\r')
 	
-	for i in 2048:
+	for i in column_count:
 		# If this is a partial export, then skip this column if it is the same as default.
 		if column_diffs.has(i) == false:
 			continue
@@ -126,7 +127,7 @@ func export_toml_columnset(filePath): #"res://columnset.toml"
 
 func find_all_different_columns():
 	var diff_indices = []
-	for i in 2048:
+	for i in column_count:
 		if is_column_different(i):
 			diff_indices.append(i)
 	return diff_indices
@@ -160,7 +161,7 @@ func update_list_of_columns_that_contain_rng_cubes():
 		for cubeID in Cube.rngCube[key]:
 			reverseRngCubeLookup[cubeID] = key
 	
-	for clmIndex in 2048:
+	for clmIndex in column_count:
 		var rngCubeTypesInColumn = {}
 		
 		for cubeID in cubes[clmIndex]:
@@ -182,7 +183,7 @@ func update_list_of_columns_that_contain_owned_cubes():
 		for cubeID in Cube.ownedCube[key]:
 			reverseOwnedCubeLookup[cubeID] = key
 	
-	for clmIndex in 2048:  # assuming there are 2048 columns to iterate through
+	for clmIndex in column_count:
 		var ownedCubeTypesInColumn = {}
 		
 		for cubeID in cubes[clmIndex]:

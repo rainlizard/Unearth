@@ -349,14 +349,10 @@ func write_dat():
 func write_clm():
 	var buffer = StreamPeerBuffer.new()
 
-	var numberOfClmEntries = 2048
-	buffer.put_16(numberOfClmEntries)
-	buffer.put_data([0, 0])
-	buffer.put_16(oDataClm.unknownData)
-	buffer.put_data([0, 0])
-
+	buffer.put_32(oDataClm.column_count)
+	buffer.put_32(oDataClm.unknownData)
 	var data = PoolByteArray()
-	data.resize(numberOfClmEntries * 24)
+	data.resize(oDataClm.column_count * 24)
 
 	var utilized = oDataClm.utilized
 	var permanent = oDataClm.permanent
@@ -367,7 +363,7 @@ func write_clm():
 	var orientation = oDataClm.orientation
 	var cubes = oDataClm.cubes
 
-	for entry in numberOfClmEntries:
+	for entry in oDataClm.column_count:
 		var index = entry * 24
 
 		data[index] = utilized[entry] & 0xFF

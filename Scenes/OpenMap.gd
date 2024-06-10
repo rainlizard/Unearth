@@ -124,7 +124,16 @@ func open_map(filePath):
 			oDataLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
 			print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
 		
-		var formatType = 0
+		
+		# Set map format
+		if map == "": # If it's a new map, then map format is set to the format you selected on New Map window
+			oCurrentFormat.selected = oSetNewFormat.selected
+		else:
+			if oCurrentMap.currentFilePaths.has("TNGFX") == true:
+				oCurrentFormat.selected = Constants.KfxFormat
+			else:
+				oCurrentFormat.selected = Constants.ClassicFormat
+		
 		for EXT in oBuffers.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
 				
@@ -137,11 +146,6 @@ func open_map(filePath):
 					continue
 				if EXT == "LIF" and oCurrentMap.currentFilePaths.has("LOF") == true:
 					continue
-				# Set current format setting to new KFX format, if any new files are detected
-				
-				if EXT == "TNGFX": formatType = 1
-				if EXT == "APTFX": formatType = 1
-				if EXT == "LGTFX": formatType = 1
 				
 				var readPath = oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING]
 				oBuffers.read(readPath, EXT.to_upper())
@@ -163,11 +167,6 @@ func open_map(filePath):
 						for xSlab in M.xSize:
 							var slabID = oDataSlab.get_cell(xSlab, ySlab)
 							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.REMEMBER_TYPE])
-		# Set map format
-		oCurrentFormat.selected = formatType
-		# If it's a new map, then map format is set to the format you selected on New Map window
-		if map == "":
-			oCurrentFormat.selected = oSetNewFormat.selected
 		
 		continue_load(map)
 		continue_load_openmap(map)
@@ -207,9 +206,6 @@ func continue_load(map):
 	
 	oDisplaySlxNumbers.update()
 	
-	if oColumnEditor.visible == true:
-		oColumnEditor.visible = false
-		Utils.popup_centered(oColumnEditor)
 	if oResizeCurrentMapSize.visible == true:
 		oResizeCurrentMapSize._on_ResizeCurrentMapSize_about_to_show()
 	

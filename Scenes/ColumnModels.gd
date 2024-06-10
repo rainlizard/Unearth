@@ -17,12 +17,12 @@ extends Node
 #	var CODETIME_START = OS.get_ticks_msec()
 #
 #
-#	#columnModels.resize(2048)
-#	columnMeshArrays.resize(2048)
+#	#columnModels.resize(column_count)
+#	columnMeshArrays.resize(column_count)
 #
 #	tempArrays.resize(Mesh.ARRAY_MAX)
 #
-#	for idx in 2048:
+#	for idx in column_count:
 #		if oDataClm.solidMask[idx] > 0: # DON'T USE SOLID MASK LIKE THIS!!!!!!!!!!!!!!!!!!!!!!!!
 #			var faceCountPerMesh = 0
 #			tempArrays[Mesh.ARRAY_INDEX] = []
@@ -171,7 +171,7 @@ extends Node
 #	mmInstance.multimesh = mm
 #	oGame3D.add_child(mmInstance)
 	
-#	for idx in 2048:
+#	for idx in column_count:
 #		if columnModels[idx] != null:
 #			pass
 	

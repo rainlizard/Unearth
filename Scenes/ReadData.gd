@@ -14,6 +14,7 @@ onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var value # just so I don't have to initialize the var in every function
 
@@ -172,16 +173,18 @@ func new_dat():
 	oDataClmPos.initialize((M.xSize*3)+1, (M.ySize*3)+1, 0, Grid.U16)
 
 func read_clm(buffer):
+	if oCurrentFormat.selected == Constants.ClassicFormat:
+		oDataClm.column_count = 2048
+	else:
+		oDataClm.column_count = 8192
 	oDataClm.clear_all_column_data()
 	
 	buffer.seek(0)
-	var numberOfClmEntries = buffer.get_u16()
+	# Do not read column count from the .clm file, just hardcode it.  #buffer.get_32()
 	buffer.seek(4)
-	oDataClm.unknownData = 65536 - buffer.get_u16()
-	if oDataClm.unknownData == 65536: oDataClm.unknownData = 0
+	oDataClm.unknownData = oDataClm.column_count #buffer.get_32()
 	buffer.seek(8) # For reading maps
-	for entry in numberOfClmEntries:
-		
+	for entry in oDataClm.column_count:
 		oDataClm.utilized[entry] = buffer.get_u16() # 0-1
 		
 		var specialByte = buffer.get_u8() # 2
@@ -200,11 +203,11 @@ func read_clm(buffer):
 			oDataClm.cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
 
 func new_clm():
+	oDataClm.column_count = 8192
 	oDataClm.clear_all_column_data()
 	
-	var numberOfClmEntries = 2048
 	oDataClm.unknownData = 0
-	for entry in numberOfClmEntries:
+	for entry in oDataClm.column_count:
 		oDataClm.utilized[entry] = 0
 		oDataClm.permanent[entry] = 0
 		oDataClm.lintel[entry] = 0

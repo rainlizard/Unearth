@@ -13,7 +13,7 @@ func _process(delta):
 	oUniversalListData.add_item("Tile", str(oSelector.cursorTile).lstrip('(').rstrip(')'))
 	
 	oUniversalListData.add_item("Subtile", str(oSelector.cursorSubtile).lstrip('(').rstrip(')'))
-	oUniversalListData.add_item("Clm entries", str(clmEntryCount)+' / 2048')
+	oUniversalListData.add_item("Clm entries", str(clmEntryCount)+' / ' + str(oDataClm.column_count))
 
 func _on_TimerUpdateColumnEntries_timeout():
 	var newCount = oDataClm.count_filled_clm_entries()

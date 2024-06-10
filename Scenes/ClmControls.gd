@@ -67,6 +67,7 @@ func _ready():
 		"ColumnsetControls":
 			nodeClm = Columnset
 			nodeVoxelView = oColumnsetVoxelView
+			
 	
 	oColumnIndexSpinBox.connect("value_changed", nodeVoxelView, "_on_ColumnIndexSpinBox_value_changed")
 	
@@ -79,6 +80,14 @@ func _ready():
 		cubeSpinBoxArray[i].connect("mouse_exited", self, "_on_cube_mouse_exited", [i])
 	
 	oGridAdvancedValues.visible = false
+
+func just_opened():
+	match name:
+		"ColumnEditorControls":
+			oColumnIndexSpinBox.max_value = oDataClm.column_count-1
+		"ColumnsetControls":
+			oColumnIndexSpinBox.max_value = Columnset.column_count-1
+
 
 func establish_maximum_cube_field_values():
 	for i in cubeSpinBoxArray.size():

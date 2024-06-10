@@ -29,7 +29,7 @@ enum {
 }
 
 var viewObject = 0 setget set_object
-
+var column_count = 2048
 var previousObject = 0
 
 func initialize():
@@ -39,6 +39,9 @@ func initialize():
 	#if visible == true:
 	var CODETIME_START = OS.get_ticks_msec()
 	
+	if displayingType == MAP_COLUMN: column_count = oDataClm.column_count
+	if displayingType == DK_COLUMN: column_count = Columnset.column_count
+	
 	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
 		do_all()
 	if displayingType == DK_SLABSET:
@@ -46,6 +49,8 @@ func initialize():
 	
 	if displayingType == MAP_CUSTOM_SLAB:
 		oVoxelCamera.size = 10
+	
+
 	
 	do_one()
 	
@@ -101,9 +106,9 @@ func _input(event):
 
 func set_object(setVal):
 	if displayingType == DK_SLABSET:
-		setVal = clamp(setVal,0,27)
+		setVal = clamp(setVal,0, 27)
 	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
-		setVal = clamp(setVal,0,2047)
+		setVal = clamp(setVal,0, column_count-1)
 	previousObject = viewObject
 	viewObject = setVal
 	
@@ -146,12 +151,12 @@ func do_all():
 		
 		match displayingType:
 			MAP_COLUMN:
-				for clmIndex in 2048:
+				for clmIndex in column_count:
 					var x = clmIndex*2
 					var y = clmIndex*2
 					oVoxelGen.column_gen(genArray, x, y, clmIndex, surrClmIndex, true, oDataClm)
 			DK_COLUMN:
-				for clmIndex in 2048:
+				for clmIndex in column_count:
 					var x = clmIndex*2
 					var y = clmIndex*2
 					oVoxelGen.column_gen(genArray, x, y, clmIndex, surrClmIndex, true, Columnset)

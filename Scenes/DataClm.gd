@@ -5,6 +5,8 @@ onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oUniversalDetails = Nodelist.list["oUniversalDetails"]
 
+var column_count = 8192
+
 # Storing these values outside of main array so I can do array comparisons
 var utilized = []
 var orientation = []
@@ -42,7 +44,7 @@ func clm_data_exists():
 func count_filled_clm_entries():
 	var CODETIME_START = OS.get_ticks_msec()
 	var numberOfFilledEntries = 0
-	for entry in 2048:
+	for entry in column_count:
 		if cubes[entry] != [0,0,0,0, 0,0,0,0]:
 			numberOfFilledEntries += 1
 	oUniversalDetails.clmEntryCount = numberOfFilledEntries
@@ -78,7 +80,7 @@ func update_all_utilized():
 	a_column_has_changed_since_last_updating_utilized = false
 	
 	var CODETIME_START = OS.get_ticks_msec()
-	for clearIndex in 2048:
+	for clearIndex in column_count:
 		utilized[clearIndex] = 0
 	for y in (M.ySize*3):
 		for x in (M.xSize*3):
@@ -89,7 +91,7 @@ func update_all_utilized():
 
 func update_all_solid_mask():
 	var CODETIME_START = OS.get_ticks_msec()
-	for index in 2048:
+	for index in column_count:
 		solidMask[index] = calculate_solid_mask(cubes[index])
 	print('All CLM solid bitmask updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
@@ -98,7 +100,7 @@ func update_all_solid_mask():
 
 func clear_unused_entries():
 	update_all_utilized()
-	for clmIndex in 2048:
+	for clmIndex in column_count:
 		if utilized[clmIndex] == 0:
 			delete_column(clmIndex)
 
@@ -116,7 +118,7 @@ func sort_columns_by_utilized():
 	utilized[0] = 999999 # Pretend that the utilized value is maximum for column 0, so it's placed first when sorted. Set it back to 0 afterwards.
 	
 	var CODETIME_START = OS.get_ticks_msec()
-	for i in 2048:
+	for i in column_count:
 		
 		# Each column gets its own array which contains all of its column values.
 		array.append([])
@@ -133,12 +135,12 @@ func sort_columns_by_utilized():
 	
 	# Sort
 	array.sort_custom(self, "sorter_utilized")
-	for i in 2048:
+	for i in column_count:
 		var sourceIndex = array[i][0]
 		dictSrcDest[sourceIndex] = i # for swapping the column indexes easier in oDataClmPos
 	
 	# Move to new position
-	for i in 2048:
+	for i in column_count:
 		utilized[i] = array[i][1]
 		orientation[i] = array[i][2]
 		solidMask[i] = array[i][3]

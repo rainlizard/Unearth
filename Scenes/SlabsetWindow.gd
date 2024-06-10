@@ -82,7 +82,8 @@ func _ready():
 		var spinbox = id.get_node("CustomSpinBox")
 		var shortcut = id.get_node("ButtonShortcut")
 		shortcut.connect("pressed",self,"shortcut_pressed",[id])
-		spinbox.max_value = 2047
+		spinbox.min_value = 1
+		spinbox.max_value = Columnset.column_count-1
 		spinbox.connect("value_changed",oDkSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		oGridContainerDynamicColumns3x3.add_child(id)
@@ -106,6 +107,7 @@ func _on_SlabsetWindow_visibility_changed():
 	if visible == true:
 		_on_SlabsetTabs_tab_changed(oSlabsetTabs.current_tab)
 		
+		oColumnsetControls.just_opened()
 		oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 		_on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 		

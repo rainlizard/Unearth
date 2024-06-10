@@ -16,6 +16,7 @@ func _on_ColumnEditor_visibility_changed():
 	if is_instance_valid(oDataClm) == false: return
 	
 	if visible == true:
+		oColumnEditorControls.just_opened()
 		oColumnEditorVoxelView.initialize()
 		oPropertiesTabs.set_current_tab(2)
 		
@@ -23,6 +24,7 @@ func _on_ColumnEditor_visibility_changed():
 		
 		# Refresh controls
 		oColumnEditorControls._on_ColumnIndexSpinBox_value_changed(oColumnEditorControls.oColumnIndexSpinBox.value)
+		
 	else:
 		# Update "Clm entries" in properties window
 		yield(get_tree(),'idle_frame')
