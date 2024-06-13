@@ -7507,7 +7507,7 @@ script = SubResource( 20 )
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDelete" to="Ui/UiSystem/MapBrowser" method="_on_ConfirmDelete_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDiscardChanges" to="Ui/UiSystem/Menu" method="_on_ConfirmDiscardChanges_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmQuit" to="Editor" method="_on_ConfirmQuit_confirmed"]
-[connection signal="confirmed" from="Ui/UiSystem/ConfirmDeleteFakeSlab" to="Ui/UiTools/PickSlabWindow" method="_on_ConfirmDeleteCustomSlab_confirmed"]
+[connection signal="confirmed" from="Ui/UiSystem/ConfirmDeleteFakeSlab" to="Ui/UiTools/PickSlabWindow" method="_on_ConfirmDeleteFakeSlab_confirmed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitSave" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitSave_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitDontSave" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitDontSave_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitCancel" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitCancel_pressed"]

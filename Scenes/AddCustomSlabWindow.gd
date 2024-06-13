@@ -167,11 +167,6 @@ func update_type():
 	oCustomSlabVoxelView.modulate.a = 1
 
 
-func _on_SlabsetSlabCheckBox_pressed():
-	update_type()
-
-func _on_FakeSlabCheckBox_pressed():
-	update_type()
 
 
 func _on_FakeSlabHelpButton_pressed():

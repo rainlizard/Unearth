@@ -13,17 +13,12 @@ func set_txt(array):
 		$"HBoxContainer1/LineEditX".text = str(array[0])
 	if array.size() >= 2:
 		$"HBoxContainer1/LineEditY".text = str(array[1])
-	
-	
 	if array.size() >= 3:
 		$"HBoxContainer2/LineEditZ".text = str(array[2])
 	else:
 		# For Action Point, don't display Z field.
 		$"HBoxContainer2".visible = false
 		$"HBoxContainer2/LineEditZ".visible = false #Visibility is checked for oLineEditZ later on, so visibility is set for it
-
-#$LinEditX.hint_tooltip =
-
 
 func _on_LineEditX_focus_exited():
 	emit_signal("position_editor_focus_exited")

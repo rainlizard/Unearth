@@ -20,23 +20,25 @@ text = "x"
 
 [node name="LineEditX" type="LineEdit" parent="HBoxContainer1"]
 margin_left = 7.0
-margin_right = 71.0
+margin_right = 512.0
 margin_bottom = 14.0
+size_flags_horizontal = 3
 theme = ExtResource( 2 )
 custom_constants/minimum_spaces = 12
 placeholder_text = "x"
 caret_blink = true
 
 [node name="Label2" type="Label" parent="HBoxContainer1"]
-margin_left = 71.0
-margin_right = 78.0
+margin_left = 512.0
+margin_right = 519.0
 margin_bottom = 14.0
 text = "y"
 
 [node name="LineEditY" type="LineEdit" parent="HBoxContainer1"]
-margin_left = 78.0
-margin_right = 142.0
+margin_left = 519.0
+margin_right = 1024.0
 margin_bottom = 14.0
+size_flags_horizontal = 3
 theme = ExtResource( 2 )
 custom_constants/minimum_spaces = 12
 placeholder_text = "y"
