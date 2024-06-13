@@ -350,7 +350,7 @@ func write_clm():
 	var buffer = StreamPeerBuffer.new()
 
 	buffer.put_32(oDataClm.column_count)
-	buffer.put_32(oDataClm.unknownData)
+	buffer.put_32(0)
 	var data = PoolByteArray()
 	data.resize(oDataClm.column_count * 24)
 

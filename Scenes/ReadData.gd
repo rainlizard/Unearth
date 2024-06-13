@@ -182,7 +182,7 @@ func read_clm(buffer):
 	buffer.seek(0)
 	# Do not read column count from the .clm file, just hardcode it.  #buffer.get_32()
 	buffer.seek(4)
-	oDataClm.unknownData = oDataClm.column_count #buffer.get_32()
+	# Ignore second lot of 4 bytes
 	buffer.seek(8) # For reading maps
 	for entry in oDataClm.column_count:
 		oDataClm.utilized[entry] = buffer.get_u16() # 0-1
@@ -206,7 +206,6 @@ func new_clm():
 	oDataClm.column_count = 8192
 	oDataClm.clear_all_column_data()
 	
-	oDataClm.unknownData = 0
 	for entry in oDataClm.column_count:
 		oDataClm.utilized[entry] = 0
 		oDataClm.permanent[entry] = 0

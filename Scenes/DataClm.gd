@@ -31,8 +31,6 @@ func store_default_data():
 
 #var testingSpecialByte = []
 
-var unknownData #The second 4 bytes
-
 
 func clm_data_exists():
 	if cubes.empty() == true:
@@ -111,7 +109,6 @@ func clear_unused_entries():
 func sort_columns_by_utilized():
 	oMessage.quick("Sorted columns by utilized value")
 	
-	
 	var array = []
 	var dictSrcDest = {}
 	
@@ -119,28 +116,24 @@ func sort_columns_by_utilized():
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	for i in column_count:
-		
-		# Each column gets its own array which contains all of its column values.
-		array.append([])
-		
-		array[i].append(i) #[0] # Its old original index before being sorted
-		array[i].append(utilized[i]) #[1]
-		array[i].append(orientation[i]) #[2]
-		array[i].append(solidMask[i]) #[3]
-		array[i].append(permanent[i]) #[4]
-		array[i].append(lintel[i]) #[5]
-		array[i].append(height[i]) #[6]
-		array[i].append(cubes[i].duplicate(true)) #[7]
-		array[i].append(floorTexture[i]) #[8]
+		array.append([
+			i,
+			utilized[i],
+			orientation[i],
+			solidMask[i],
+			permanent[i],
+			lintel[i],
+			height[i],
+			cubes[i].duplicate(true),
+			floorTexture[i]
+		])
 	
 	# Sort
 	array.sort_custom(self, "sorter_utilized")
+	
 	for i in column_count:
 		var sourceIndex = array[i][0]
 		dictSrcDest[sourceIndex] = i # for swapping the column indexes easier in oDataClmPos
-	
-	# Move to new position
-	for i in column_count:
 		utilized[i] = array[i][1]
 		orientation[i] = array[i][2]
 		solidMask[i] = array[i][3]
@@ -149,8 +142,6 @@ func sort_columns_by_utilized():
 		height[i] = array[i][6]
 		cubes[i] = array[i][7]
 		floorTexture[i] = array[i][8]
-	
-	#print(dictionary[419])
 	
 	for y in (M.ySize*3):
 		for x in (M.xSize*3):
@@ -164,16 +155,16 @@ func sort_columns_by_utilized():
 	
 	oOverheadGraphics.overhead2d_update_rect_single_threaded(shapePositionArray)
 	
-	
 	utilized[0] = 0 # Pretend that the utilized value is maximum for column 0, so it's placed first. Set it back to 0 afterwards.
 	
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
-static func sorter_utilized(a, b): # Sort by an array value within the array
-	if a[1] > b[1]: # 1 is the utilized value of the column
-		return true
-	return false
-
+static func sorter_utilized(a, b):
+	if a[1] == b[1]:
+		if a[1] == 0:
+			return a[7] != [0,0,0,0, 0,0,0,0] or a[8] != 0
+		return false
+	return a[1] > b[1]
 
 #func find_blank_slot():
 #	var index = cubes.find([0,0,0,0, 0,0,0,0], 1) # Skip looking at index 0
