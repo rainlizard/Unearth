@@ -203,7 +203,10 @@ func read_clm(buffer):
 			oDataClm.cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
 
 func new_clm():
-	oDataClm.column_count = 8192
+	if oCurrentFormat.selected == Constants.ClassicFormat:
+		oDataClm.column_count = 2048
+	else:
+		oDataClm.column_count = 8192
 	oDataClm.clear_all_column_data()
 	
 	for entry in oDataClm.column_count:
