@@ -50,6 +50,12 @@ func overhead2d_update_rect_single_threaded(shapePositionArray):
 	overheadTexData.create_from_image(overheadImgData, 0)
 	emit_signal("column_graphics_completed")
 
+const subtile3x3 = [
+	Vector2(0,0), Vector2(1,0), Vector2(2,0),
+	Vector2(0,1), Vector2(1,1), Vector2(2,1),
+	Vector2(0,2), Vector2(1,2), Vector2(2,2)
+]
+
 func generate_pixel_data(pixData, shapePositionArray):
 	var CODETIME_START = OS.get_ticks_msec()
 	var width = M.xSize * 3
@@ -61,9 +67,9 @@ func generate_pixel_data(pixData, shapePositionArray):
 		var basePosX = pos.x * 3
 		var basePosY = pos.y * 3
 		var slabID = oDataSlab.get_cellv(pos)
-		for i in range(9):  # 3x3 subtiles
-			var x = basePosX + (i % 3)
-			var y = basePosY + (i / 3)
+		for offset in subtile3x3:  # 3x3 subtiles
+			var x = basePosX + offset.x
+			var y = basePosY + offset.y
 			var clmIndex = oDataClmPos.get_cell_clmpos(x, y)
 			var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
 			var pixelIndex = ((y * width) + x) * 3

@@ -264,18 +264,14 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			elif id.subtype == 133: # Mysterious Box
 				id.boxNumber = oPlacingSettings.boxNumber
 			elif id.subtype in [2,7]: # Torch and Unlit Torch
-				if Slabs.data[oDataSlab.get_cell(xSlab+1,ySlab)][Slabs.IS_SOLID] == true:
-					id.locationX += 0.25
-					id.parentTile = (xSlab+1) + ((ySlab) * M.xSize) # Should this be M.ySize ???
-				if Slabs.data[oDataSlab.get_cell(xSlab-1,ySlab)][Slabs.IS_SOLID] == true:
-					id.locationX -= 0.25
-					id.parentTile = (xSlab-1) + ((ySlab) * M.xSize) # Should this be M.ySize ???
-				if Slabs.data[oDataSlab.get_cell(xSlab,ySlab+1)][Slabs.IS_SOLID] == true:
-					id.locationY += 0.25
-					id.parentTile = (xSlab) + ((ySlab+1) * M.xSize) # Should this be M.ySize ???
-				if Slabs.data[oDataSlab.get_cell(xSlab,ySlab-1)][Slabs.IS_SOLID] == true:
-					id.locationY -= 0.25
-					id.parentTile = (xSlab) + ((ySlab-1) * M.xSize) # Should this be M.ySize ???
+				for direction in [Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1)]:
+					var getParentSlabX = floor((newPosition.x + direction.x) / 3)
+					var getParentSlabY = floor((newPosition.y + direction.y) / 3)
+					if Slabs.data[oDataSlab.get_cell(getParentSlabX, getParentSlabY)][Slabs.IS_SOLID] == true:
+						id.locationX += direction.x * 0.25
+						id.locationY += direction.y * 0.25
+						id.parentTile = getParentSlabX + (getParentSlabY * M.xSize)
+						break  # We only want to adjust for one solid slab
 				update_stray_torch_height(id)
 			elif id.subtype in Things.LIST_OF_GOLDPILES:
 				match id.subtype:
