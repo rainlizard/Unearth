@@ -351,7 +351,7 @@ func read_tng(buffer):
 		match id.thingType:
 			Things.TYPE.OBJECT:
 				id.parentTile = id.data11_12
-				if id.subtype == 49: # Hero Gate
+				if id.subtype in Things.LIST_OF_HEROGATES: # Hero Gate
 					id.herogateNumber = id.data14
 				elif id.subtype == 133: # Mysterious Box
 					id.boxNumber = id.data14
@@ -415,7 +415,7 @@ func read_tngfx(buffer):
 			match id.thingType:
 				Things.TYPE.OBJECT:
 					id.parentTile = c.get_value(section, "ParentTile")
-					if id.subtype == 49: # Hero Gate
+					if id.subtype in Things.LIST_OF_HEROGATES: # Hero Gate
 						id.herogateNumber = c.get_value(section, "HerogateNumber")
 					elif id.subtype == 133: # Mysterious Box
 						id.boxNumber = c.get_value(section, "CustomBox")
