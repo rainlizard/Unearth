@@ -182,6 +182,7 @@ var sprite_id = {
 "STEEL" : preload("res://dk_images/trapdoor_64/door_pers_iron_std.png"),
 "MAGIC" : preload("res://dk_images/trapdoor_64/door_pers_magic_std.png"),
 "SECRET" : preload("res://extra_images/secret_door.png"),
+"MIDAS" : preload("res://extra_images/midas_door.png"),
 # EffectGens
 "EFFECTGENERATOR_LAVA" : preload("res://edited_images/GUIEDIT-1/PIC27.png"),
 "EFFECTGENERATOR_DRIPPING_WATER" : preload("res://edited_images/GUIEDIT-1/PIC28.png"),
