@@ -102,9 +102,8 @@ func read_slx(buffer):
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
 			value = buffer.get_u8()
-			var lower4bits = value & 0x0F
 			# Red value will be used to store the slx value
-			oDataSlx.slxImgData.set_pixel(xSlab, ySlab, Color8(lower4bits,0,0,255))
+			oDataSlx.slxImgData.set_pixel(xSlab, ySlab, Color8(value,0,0,255))
 	oDataSlx.slxImgData.unlock()
 	
 	oDataSlx.slxTexData.create_from_image(oDataSlx.slxImgData, 0)
