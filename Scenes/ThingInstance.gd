@@ -71,7 +71,7 @@ func _enter_tree():
 				add_to_group("TreasuryGold")
 			elif subtype in Things.LIST_OF_SPELLBOOKS:
 				add_to_group("Spellbook")
-			elif subtype == 49:
+			elif subtype in Things.LIST_OF_HEROGATES:
 				add_to_group("HeroGate")
 				yield(get_tree(),'idle_frame')
 				if oActionPointList:
