@@ -113,6 +113,7 @@ func createDisplayField(setMap, showStyle):
 	mat.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
 	mat.set_shader_param("viewTextures", overheadTexData)
 	mat.set_shader_param("slxData", oDataSlx.slxTexData)
+	mat.set_shader_param("slabIdData", oDataSlab.idTexData)
 	
 	arrayOfColorRects.append(displayField)
 	oGame2D.add_child_below_node(self, displayField)

@@ -29,6 +29,7 @@ const things = {
 		"STEEL" : "Iron Door",
 		"MAGIC" : "Magic Door",
 		"SECRET" : "Secret Door",
+		"MIDAS" : "Midas Door",
 	},
 	TYPE.TRAP : {
 		"BOULDER" : "Boulder Trap",
@@ -327,6 +328,8 @@ const slabs = {
 "PURPLE_PATH": "Purple Path",
 "DOOR_SECRET" : "Secret Door",
 "DOOR_SECRET2" : "Secret Door",
+"DOOR_MIDAS" : "Midas Door",
+"DOOR_MIDAS2" : "Midas Door",
 "HARD_FLOOR" : "Bedrock",
 "AUTOMATIC_WALL" : "Wall Automatic",
 };

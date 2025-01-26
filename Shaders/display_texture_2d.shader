@@ -15,12 +15,15 @@ const vec2 oneTileSize = vec2(32,32);
 const float TEXTURE_ANIMATION_SPEED = 12.0;
 uniform int showOnlySpecificStyle = 77777;
 uniform sampler2D slxData;
+uniform sampler2D slabIdData;
 uniform sampler2DArray dkTextureMap_Split_A1;
 uniform sampler2DArray dkTextureMap_Split_A2;
 uniform sampler2DArray dkTextureMap_Split_B1;
 uniform sampler2DArray dkTextureMap_Split_B2;
 
 uniform vec2 fieldSizeInSubtiles = vec2(0.0, 0.0);
+
+const float DARKENING_FACTOR = 0.35;
 
 // Exact same function as in Godot Source Code
 float calc_mip_level(vec2 texture_coord) {
@@ -62,6 +65,9 @@ void fragment() {
 		discard;
 	}
 	
+	// Get the slab ID
+	int slabId = int(texelGet(slabIdData, ivec2(slabX, slabY), 0).r * 255.0);
+	
 	int index = getIndex(ivec2(subtileX,subtileY));
 	if (index >= 544 && index < 1000) { // 544 is the index where the TexAnims start (544 - 999)
 		int frame = int(mod(TIME * TEXTURE_ANIMATION_SPEED, 8));
@@ -71,14 +77,22 @@ void fragment() {
 	vec2 resolutionOfField = fieldSizeInSubtiles * oneTileSize;
 	float mipmapLevel = calc_mip_level(UV * resolutionOfField);
 	
+	vec4 finalColor;
 	if (index < 272) { // Splitting the TextureArray into 2, so that it will work on older PCs.
-		COLOR = textureLod(dkTextureMap_Split_A1, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index)), mipmapLevel);
+		finalColor = textureLod(dkTextureMap_Split_A1, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index)), mipmapLevel);
 	} else if (index < 544){
-		COLOR = textureLod(dkTextureMap_Split_A2, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-272)), mipmapLevel);
+		finalColor = textureLod(dkTextureMap_Split_A2, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-272)), mipmapLevel);
 	} else if (index < 1272){
-		COLOR = textureLod(dkTextureMap_Split_B1, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-1000)), mipmapLevel);
+		finalColor = textureLod(dkTextureMap_Split_B1, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-1000)), mipmapLevel);
 	} else {
-		COLOR = textureLod(dkTextureMap_Split_B2, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-1272)), mipmapLevel);
+		finalColor = textureLod(dkTextureMap_Split_B2, vec3((UV.x * fieldSizeInSubtiles.x)-float(subtileX), (UV.y * fieldSizeInSubtiles.y)-float(subtileY), float(index-1272)), mipmapLevel);
+	}
+	
+	// Apply darkening if slabId is 57
+	if (slabId == 57) {
+		COLOR = vec4(finalColor.rgb * (1.0-DARKENING_FACTOR), finalColor.a);
+	} else {
+		COLOR = finalColor;
 	}
 }
 

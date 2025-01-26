@@ -45,6 +45,8 @@ func set_floortexture(floorTextureValue):
 	
 	oTooltipPic.material.set_shader_param("showOnlySpecificStyle", 0)
 	oTooltipPic.material.set_shader_param("slxData", preload("res://Shaders/Black3x3.png"))
+	#oTooltipPic.material.set_shader_param("slabIdData", preload("res://Shaders/Bedrock3x3.png"))
+	oTooltipPic.material.set_shader_param("slabIdData", preload("res://Shaders/Black3x3.png"))
 	oTooltipPic.material.set_shader_param("fieldSizeInSubtiles", Vector2(1, 1))
 	oTooltipPic.material.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
 	oTooltipPic.material.set_shader_param("viewTextures", dataTexture)

@@ -73,6 +73,10 @@ func set_visual(columnArray):
 	material.set_shader_param("fieldSizeInSubtiles", Vector2(3, 3))
 	material.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
 	material.set_shader_param("viewTextures", dataTexture)
+	if slabID == 57:
+		material.set_shader_param("slabIdData", preload("res://Shaders/Bedrock3x3.png"))
+	else:
+		material.set_shader_param("slabIdData", preload("res://Shaders/Black3x3.png"))
 
 #func _process(delta):
 #	print(material.get_shader_param("dkTextureMap_Split_A"))

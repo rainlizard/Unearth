@@ -153,9 +153,11 @@ func new_txt():
 func read_slb(buffer):
 	oDataSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
 	oDataSlab.buffer.set_data_array(buffer.data_array)
+	oDataSlab.initialize_img()
 
 func new_slb():
 	oDataSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
+	oDataSlab.initialize_img()
 
 func read_own(buffer):
 	oDataOwnership.initialize((M.xSize*3)+1, (M.ySize*3)+1, 5, Grid.U8)

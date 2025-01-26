@@ -285,6 +285,8 @@ var icons = {
 "HEART_PEDESTAL": preload("res://dk_images/crucials/anim0949/r1frame01.png"),
 "DOOR_SECRET": preload("res://extra_images/secret_door.png"),
 "DOOR_SECRET2": preload("res://extra_images/secret_door.png"),
+"DOOR_MIDAS": preload("res://extra_images/midas_door.png"),
+"DOOR_MIDAS2": preload("res://extra_images/midas_door.png"),
 }
 
 var slabOrder = [
