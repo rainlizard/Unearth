@@ -5,7 +5,6 @@ var dataImage = Image.new()
 var dataTexture = ImageTexture.new()
 
 #var columns = [0,0,0, 0,0,0, 0,0,0]
-var panelView = Slabs.PANEL_TOP_VIEW
 func _ready():
 	add_to_group("SlabDisplay") #Important for when changing texture pack
 	var iconSize = 0.35
@@ -35,31 +34,41 @@ func set_visual(columnArray):
 	dataTexture.create_from_image(dataImage, 0)
 	
 	dataImage.lock()
-	if panelView == Slabs.PANEL_TOP_VIEW:
-		for y in 3:
-			for x in 3:
-				var cubeFace = 0
-				if slabID >= 1000:
-					# Fake slab
-					if Slabs.fake_extra_data.has(slabID) == true:
-						var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
-						cubeFace = oCustomSlabSystem.get_top_fake_cube_face((y*3) + x, slabID)
-				else:
-					# Slabset slab (normal slab)
-					cubeFace = Columnset.get_top_cube_face(columnArray[(y*3) + x], slabID)
-				
-				dataImage.set_pixel(x, y, Color8(cubeFace >> 16 & 255, cubeFace >> 8 & 255, cubeFace & 255))
+	for y in 3:
+		for x in 3:
+			var cubeFace = 0
+			if slabID >= 1000:
+				# Fake slab
+				if Slabs.fake_extra_data.has(slabID) == true:
+					var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
+					cubeFace = oCustomSlabSystem.get_top_fake_cube_face((y*3) + x, slabID)
+			else:
+				# Slabset slab (normal slab)
+				cubeFace = Columnset.get_top_cube_face(columnArray[(y*3) + x], slabID)
+			
+			dataImage.set_pixel(x, y, Color8(cubeFace >> 16 & 255, cubeFace >> 8 & 255, cubeFace & 255))
 	
-	if panelView == Slabs.PANEL_SIDE_VIEW or panelView == Slabs.PANEL_DOOR_VIEW:
-		var y = 2
-		if panelView == Slabs.PANEL_DOOR_VIEW: y = 1
+	# Handle side view for doors and other tab slabs
+	var isOtherTab = Slabs.data[slabID][Slabs.EDITOR_TAB] == Slabs.TAB_OTHER
+	var isDoor = Slabs.is_door(slabID)
+	
+	if (isOtherTab and slabID < 50) or isDoor:
+		var y
+		var sideViewZoffset
 		
-		var sideViewZoffset = Slabs.data[slabID][Slabs.SIDE_VIEW_Z_OFFSET]
+		if isOtherTab:
+			y = 2
+			sideViewZoffset = 4
+		elif isDoor:
+			y = 1
+			sideViewZoffset = 3
+			if slabID == 56: #SecretDoor2
+				y = 0
+				sideViewZoffset = 3
 		
 		for x in 3:
 			for z in range(0, 3):
 				var clmIndex = columnArray[(y*3) + x]
-				
 				var cubeID = Columnset.cubes[clmIndex][sideViewZoffset-z]
 				var cubeFace = Cube.tex[cubeID][Cube.SIDE_SOUTH]
 				dataImage.set_pixel(x, z, Color8(cubeFace >> 16 & 255, cubeFace >> 8 & 255, cubeFace & 255))

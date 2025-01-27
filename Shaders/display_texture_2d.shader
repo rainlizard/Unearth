@@ -23,7 +23,7 @@ uniform sampler2DArray dkTextureMap_Split_B2;
 
 uniform vec2 fieldSizeInSubtiles = vec2(0.0, 0.0);
 
-const float DARKENING_FACTOR = 0.35;
+const float DARKENING_FACTOR = 0.333;
 
 // Exact same function as in Godot Source Code
 float calc_mip_level(vec2 texture_coord) {

@@ -71,8 +71,6 @@ func add_custom_slab(slab_dict):
 		slab_dict["name"],
 		slab_dict["is_solid"],
 		slab_dict["bitmask"],
-		Slabs.PANEL_TOP_VIEW,
-		0, # SIDE_VIEW_Z_OFFSET
 		Slabs.TAB_CUSTOM,
 		slab_dict["wibble_type"],
 		slab_dict["liquid_type"],

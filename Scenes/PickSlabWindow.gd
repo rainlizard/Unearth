@@ -84,7 +84,7 @@ func add_slabs():
 			
 			var doorSlabData = Slabs.fetch_doorslab_data(slabID)
 			if doorSlabData:
-				if doorSlabData[Slabs.DOORSLAB_ORIENTATION] == 0:
+				if doorSlabData[Slabs.DOORSLAB_ORIENTATION] == 1:
 					continue
 			
 			allSlabIDs.append(slabID)
@@ -116,7 +116,6 @@ func add_slabs():
 						# Fake Slab
 						pass
 			id.set_meta("ID_of_slab", slabID)
-			id.panelView = Slabs.data[slabID][Slabs.PANEL_VIEW]
 			id.set_visual(columnArray)
 			var useName = Slabs.fetch_name(slabID)
 			add_child_to_grid(tabs[putIntoTab][GRIDCON_PATH], id, useName)

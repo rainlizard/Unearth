@@ -183,8 +183,6 @@ func load_terrain_data(cfg): # 4ms
 					setName,
 					setBlockType,
 					setBitmask,
-					Slabs.PANEL_TOP_VIEW, # Affects appearance in slab window
-					0,  # Affects appearance in slab window
 					Slabs.TAB_MAINSLAB, # Good
 					slabSection.get("Wibble", 0),
 					slabSection.get("WlbType", 0),
