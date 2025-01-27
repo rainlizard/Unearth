@@ -9,6 +9,7 @@ onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oQuickMapPreviewDisplay = Nodelist.list["oQuickMapPreviewDisplay"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 
 signal column_graphics_completed
 
@@ -110,7 +111,7 @@ func createDisplayField(setMap, showStyle):
 	
 	mat.set_shader_param("showOnlySpecificStyle", showStyle)
 	mat.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
-	mat.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
+	mat.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
 	mat.set_shader_param("viewTextures", overheadTexData)
 	mat.set_shader_param("slxData", oDataSlx.slxTexData)
 	mat.set_shader_param("slabIdData", oDataSlab.idTexData)

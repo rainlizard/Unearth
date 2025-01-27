@@ -15,6 +15,8 @@ onready var oGame3D = Nodelist.list["oGame3D"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
 onready var oMapProperties = Nodelist.list["oMapProperties"]
+onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
+
 
 const IMAGE_FORMAT = Image.FORMAT_RGB8
 
@@ -95,7 +97,8 @@ func start():
 	# This is important to do here if updating textures while a map is already open
 	if oDataSlab.get_cell(0,0) != -1:
 		set_current_texture_pack()
-
+	
+	oTextureAnimation.generate_animation_database()
 
 func scan_dk_data_directory():
 	var path = oGame.DK_DATA_DIRECTORY

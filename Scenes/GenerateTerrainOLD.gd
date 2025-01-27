@@ -243,7 +243,7 @@ func create_surface_materials():
 		mat.set_shader_param("dkTextureMap_Split_A2", oTextureCache.cachedTextures[map][1])
 		mat.set_shader_param("dkTextureMap_Split_B1", oTextureCache.cachedTextures[map][2])
 		mat.set_shader_param("dkTextureMap_Split_B2", oTextureCache.cachedTextures[map][3])
-		mat.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
+		mat.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
 		
 		materialArray.append(mat)
 

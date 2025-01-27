@@ -77,10 +77,12 @@ func set_visual(columnArray):
 	
 	dataTexture.set_data(dataImage)
 	
+	var oTextureAnimation = Nodelist.list["oTextureAnimation"]
+	
 	material.set_shader_param("showOnlySpecificStyle", 0)
 	material.set_shader_param("slxData", preload("res://Shaders/Black3x3.png"))
 	material.set_shader_param("fieldSizeInSubtiles", Vector2(3, 3))
-	material.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
+	material.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
 	material.set_shader_param("viewTextures", dataTexture)
 	if slabID == 57:
 		material.set_shader_param("slabIdData", preload("res://Shaders/Bedrock3x3.png"))

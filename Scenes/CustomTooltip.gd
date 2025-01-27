@@ -1,4 +1,5 @@
 extends Control
+onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 
 var offset = Vector2(0,-35)
 
@@ -48,5 +49,5 @@ func set_floortexture(floorTextureValue):
 	#oTooltipPic.material.set_shader_param("slabIdData", preload("res://Shaders/Bedrock3x3.png"))
 	oTooltipPic.material.set_shader_param("slabIdData", preload("res://Shaders/Black3x3.png"))
 	oTooltipPic.material.set_shader_param("fieldSizeInSubtiles", Vector2(1, 1))
-	oTooltipPic.material.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
+	oTooltipPic.material.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
 	oTooltipPic.material.set_shader_param("viewTextures", dataTexture)

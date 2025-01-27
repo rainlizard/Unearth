@@ -28,12 +28,12 @@ vec4 texelGet ( sampler2D tg_tex, ivec2 tg_coord, int tg_lod ) {
 	return texture(tg_tex, tg_getpos, float(tg_lod));
 }
 
-int getAnimationFrame(int frame, int index){
-	// y coordinate = Animated Texture index
+int getAnimationFrame(int frame, int index) {
 	// x coordinate = frame number
+	// y coordinate = Animated Texture index
 	ivec2 coords = ivec2(frame, index);
-	vec3 value = texelGet(animationDatabase, coords, 0).rgb * vec3(255.0,255.0,255.0);
-	return int(value.r+value.g+value.b);
+	vec3 value = texelGet(animationDatabase, coords, 0).rgb;
+	return (int(value.r * 255.0) << 16) | (int(value.g * 255.0) << 8) | int(value.b * 255.0);
 }
 
 int getIndex(vec2 uv2) {

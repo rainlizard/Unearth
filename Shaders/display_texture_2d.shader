@@ -40,13 +40,11 @@ vec4 texelGet ( sampler2D tg_tex, ivec2 tg_coord, int tg_lod ) {
 }
 
 int getAnimationFrame(int frame, int index) {
-	// y coordinate = Animated Texture index
 	// x coordinate = frame number
-	
+	// y coordinate = Animated Texture index
 	ivec2 coords = ivec2(frame, index);
-	
-	vec3 value = texelGet(animationDatabase, coords, 0).rgb * vec3(255.0,255.0,255.0);
-	return int(value.r+value.g+value.b);
+	vec3 value = texelGet(animationDatabase, coords, 0).rgb;
+	return (int(value.r * 255.0) << 16) | (int(value.g * 255.0) << 8) | int(value.b * 255.0);
 }
 
 // Convert RGB values to one integer

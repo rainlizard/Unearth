@@ -1,4 +1,4 @@
-[gd_scene load_steps=190 format=2]
+[gd_scene load_steps=191 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -91,6 +91,7 @@
 [ext_resource path="res://Scenes/LineEditFloat.gd" type="Script" id=89]
 [ext_resource path="res://Scenes/SlabNameDisplay.gd" type="Script" id=90]
 [ext_resource path="res://Scenes/SlabsetPathsLabel.gd" type="Script" id=91]
+[ext_resource path="res://Scenes/TextureAnimation.gd" type="Script" id=92]
 [ext_resource path="res://Scenes/SlabOwnerCheckBox.gd" type="Script" id=93]
 [ext_resource path="res://Scenes/Inspector.gd" type="Script" id=94]
 [ext_resource path="res://Shaders/cursorMat.tres" type="Material" id=95]
@@ -341,6 +342,9 @@ script = ExtResource( 46 )
 
 [node name="ReadPalette" type="Node" parent="TextureCache"]
 script = ExtResource( 75 )
+
+[node name="TextureAnimation" type="Node" parent="TextureCache"]
+script = ExtResource( 92 )
 
 [node name="SlabPlacement" type="Node" parent="."]
 script = ExtResource( 2 )

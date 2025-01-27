@@ -2,6 +2,7 @@ extends Spatial
 onready var oCamera3D = $'Player/Head/Camera3D'
 onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
+onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 
 var materialArray = []
 
@@ -22,7 +23,7 @@ func create_material(map):
 	mat.set_shader_param("dkTextureMap_Split_A2", oTextureCache.cachedTextures[map][1])
 	mat.set_shader_param("dkTextureMap_Split_B1", oTextureCache.cachedTextures[map][2])
 	mat.set_shader_param("dkTextureMap_Split_B2", oTextureCache.cachedTextures[map][3])
-	mat.set_shader_param("animationDatabase", preload("res://Shaders/textureanimationdatabase.png"))
+	mat.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
 	return mat
 
 func enable_or_disable_mipmaps_on_all_materials(enabled): # set to 0 or 1
