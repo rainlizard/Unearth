@@ -97,8 +97,6 @@ func start():
 	# This is important to do here if updating textures while a map is already open
 	if oDataSlab.get_cell(0,0) != -1:
 		set_current_texture_pack()
-	
-	oTextureAnimation.generate_animation_database()
 
 func scan_dk_data_directory():
 	var path = oGame.DK_DATA_DIRECTORY

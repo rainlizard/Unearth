@@ -5,11 +5,10 @@ onready var oMessage = Nodelist.list["oMessage"]
 
 var animation_database_texture = preload("res://Shaders/textureanimationdatabase.png")
 
-func generate_animation_database():
+func generate_animation_database(file_path):
 	# Load TOML file
 	var file = File.new()
-	if file.open(oGame.DK_FXDATA_DIRECTORY.plus_file("textureanim.toml"), File.READ) != OK:
-		oMessage.big("error","couldn't find textureanim.toml")
+	if file.open(file_path, File.READ) != OK:
 		return
 	
 	# Create image for animation database

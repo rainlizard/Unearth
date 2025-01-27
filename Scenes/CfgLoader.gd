@@ -3,7 +3,7 @@ onready var oGame = Nodelist.list["oGame"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
-
+onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 
 # These are dictionaries containing dictionaries.
 # objects_cfg["section_name"]["key"] will return the "value"
@@ -16,7 +16,7 @@ onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 #var trapdoor_cfg : Dictionary
 
 var paths_loaded = {}
-const files_to_load = ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg", "cubes.cfg", "slabset.toml", "columnset.toml"]
+const files_to_load = ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg", "cubes.cfg", "slabset.toml", "columnset.toml", "textureanim.toml"]
 
 enum {
 	LOAD_CFG_FXDATA,
@@ -64,6 +64,7 @@ func start(mapPath):
 				match file_name:
 					"slabset.toml": Slabset.import_toml_slabset(file_path) # .toml import gets run multiple times instead of combining
 					"columnset.toml": Columnset.import_toml_columnset(file_path)
+					"textureanim.toml": oTextureAnimation.generate_animation_database(file_path)
 					_:
 						var cfgData = Utils.read_dkcfg_file(file_path)
 						combined_cfg = Utils.super_merge(combined_cfg, cfgData)
