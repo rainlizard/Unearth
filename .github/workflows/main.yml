@@ -57,11 +57,22 @@ jobs:
         sudo apt-get install -y wine wine64
     - name: Verify Wine Installation
       run: |
-        if ! command -v wine64 &> /dev/null; then
-          echo "ERROR: wine64 is not installed or not in PATH"
+        echo "=== Checking PATH ==="
+        echo $PATH
+        echo "=== Checking /usr/bin ==="
+        ls -la /usr/bin/wine*
+        echo "=== Checking which wine ==="
+        which wine || echo "wine not found"
+        echo "=== Checking which wine64 ==="
+        which wine64 || echo "wine64 not found"
+        echo "=== Checking installed packages ==="
+        dpkg -l | grep -i wine
+        
+        if ! command -v wine &> /dev/null; then
+          echo "ERROR: wine is not installed or not in PATH"
           exit 1
         fi
-        wine64 --version
+        wine --version
     - name: Download rcedit
       run: |
         wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
