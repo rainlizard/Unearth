@@ -16,7 +16,7 @@ onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 #var trapdoor_cfg : Dictionary
 
 var paths_loaded = {}
-const files_to_load = ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg", "cubes.cfg", "slabset.toml", "columnset.toml", "textureanim.toml"]
+const files_to_load = ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg", "cubes.cfg", "slabset.toml", "columnset.toml", "textureanim.toml", "effects.toml"]
 
 enum {
 	LOAD_CFG_FXDATA,
@@ -65,6 +65,7 @@ func start(mapPath):
 					"slabset.toml": Slabset.import_toml_slabset(file_path) # .toml import gets run multiple times instead of combining
 					"columnset.toml": Columnset.import_toml_columnset(file_path)
 					"textureanim.toml": oTextureAnimation.generate_animation_database(file_path)
+					"effects.toml": load_effects_data(file_path)
 					_:
 						var cfgData = Utils.read_dkcfg_file(file_path)
 						combined_cfg = Utils.super_merge(combined_cfg, cfgData)
@@ -273,3 +274,16 @@ func load_campaign_data(mapPath):
 			#print(oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower())
 			return cfgDictionary
 	return {}
+
+func load_effects_data(file_path):
+	var cfg = ConfigFile.new()
+	var err = cfg.load(file_path)
+	if err != OK:
+		return
+	
+	for section in cfg.get_sections():
+		if section.begins_with("effectGenerator"):
+			var id = int(section.trim_prefix("effectGenerator"))
+			var effectName = cfg.get_value(section, "Name", "UNDEFINED_NAME")
+			
+			Things.DATA_EFFECTGEN[id] = [effectName, effectName, "EFFECTGEN"]
