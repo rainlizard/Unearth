@@ -131,7 +131,6 @@ func load_objects_data(cfg): # 10ms
 			var newName
 			var animID
 			var newSprite
-			var newEditorTab
 			var newGenre
 			
 			if Things.DATA_OBJECT.has(id) == true:
@@ -143,7 +142,6 @@ func load_objects_data(cfg): # 10ms
 					newSprite = Things.DATA_OBJECT[id][Things.SPRITE]
 				
 				newGenre = objSection.get("Genre")
-				newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.DATA_OBJECT[id][Things.EDITOR_TAB])
 				if newGenre == "SPELLBOOK":
 					Things.LIST_OF_SPELLBOOKS.append(id)
 				if newGenre == "HEROGATE":
@@ -154,9 +152,8 @@ func load_objects_data(cfg): # 10ms
 				newSprite = get_sprite(animID, newName)
 				
 				newGenre = objSection.get("Genre")
-				newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.TAB_DECORATION)
 			
-			Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
+			Things.DATA_OBJECT[id] = [newName, newSprite, newGenre]
 
 
 var keeperfx_edited_slabs = [Slabs.GEMS] # This is to help with backwards compatibility for previous keeperfx versions that don't have these edits.
@@ -226,7 +223,7 @@ func load_creatures_data(cfg): # 3ms
 		if not Things.DATA_CREATURE.has(creature_id):
 			var newName = creatures[id_number]
 			var newSprite = get_sprite(newName, null)
-			Things.DATA_CREATURE[creature_id] = [newName, newSprite, Things.TAB_CREATURE]
+			Things.DATA_CREATURE[creature_id] = [newName, newSprite, "CREATURE"]
 
 func load_trapdoor_data(cfg): # 1ms
 	for section in cfg:
@@ -246,7 +243,7 @@ func load_trapdoor_data(cfg): # 1ms
 		var crateName = data.get("Crate", null)
 		
 		if trapOrDoor == Things.TYPE.DOOR:
-			Things.DATA_DOOR[id] = [newName, newSprite, Things.TAB_MISC]
+			Things.DATA_DOOR[id] = [newName, newSprite]
 			
 			var getSlabKind = data.get("SlabKind", null)
 			if getSlabKind is Array and getSlabKind.size() == 2:
@@ -254,7 +251,7 @@ func load_trapdoor_data(cfg): # 1ms
 				Slabs.doorslab_data[getSlabKind[1]] = [id, Slabs.DOOR_ORIENT_NS]
 			
 		elif trapOrDoor == Things.TYPE.TRAP:
-			Things.DATA_TRAP[id] = [newName, newSprite, Things.TAB_TRAP]
+			Things.DATA_TRAP[id] = [newName, newSprite]
 		Things.LIST_OF_BOXES[crateName] = [trapOrDoor, id]
 
 func get_sprite(first_priority, second_priority):

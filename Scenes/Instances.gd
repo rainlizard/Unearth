@@ -481,7 +481,7 @@ func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
 func set_collectibles_ownership(id, slabID, slabOwnership):
 	if id.thingType == Things.TYPE.OBJECT:
 		if Things.DATA_OBJECT.has(id.subtype):
-			var genre = Things.DATA_OBJECT[id.subtype][Things.EDITOR_TAB]
+			var genre = Things.DATA_OBJECT[id.subtype][Things.GENRE]
 			if Things.collectible_belonging.has(genre):
 				if slabID == Things.collectible_belonging[genre]:
 					id.ownership = slabOwnership

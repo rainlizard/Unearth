@@ -75,6 +75,9 @@ func clear_map():
 	# "LOF" # Do this last in case other functions rely on the old map size
 	oDataLof.clear_all()
 	
+	Things.LIST_OF_SPELLBOOKS.clear()
+	Things.LIST_OF_HEROGATES.clear()
+	
 	if oColumnEditor.visible == true:
 		oColumnEditor.visible = false
 	

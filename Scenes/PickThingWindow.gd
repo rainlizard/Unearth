@@ -14,19 +14,34 @@ enum {
 	ICON_PATH
 }
 
+enum { # I only used the official DK keeperfx categories as a guide rather than strict adherence. What strict adherence gets you is all the egg objects classified as Furniture, while Chicken sits alone in its own Food category.
+	TAB_ACTION
+	TAB_CREATURE
+	TAB_GOLD
+	TAB_TRAP
+	TAB_SPELL
+	TAB_SPECIAL
+	TAB_BOX
+	TAB_LAIR
+	TAB_EFFECTGEN
+	TAB_FURNITURE
+	TAB_DECORATION
+	TAB_MISC
+}
+
 onready var tabs = {
-	Things.TAB_CREATURE: [oThingTabs.get_node("TabFolder/Creature"),"res://edited_images/icon_creature.png"],
-	Things.TAB_SPELL: [oThingTabs.get_node("TabFolder/Spell"),"res://edited_images/icon_book.png"],
-	Things.TAB_TRAP: [oThingTabs.get_node("TabFolder/Trap"),"res://dk_images/traps_doors/anim0845/r1frame04.png"],
-	Things.TAB_BOX: [oThingTabs.get_node("TabFolder/Box"),"res://dk_images/traps_doors/anim0116/r1frame12.png"],
-	Things.TAB_SPECIAL: [oThingTabs.get_node("TabFolder/Special"),"res://dk_images/trapdoor_64/bonus_box_std.png"],
-	Things.TAB_GOLD: [oThingTabs.get_node("TabFolder/Gold"),"res://dk_images/symbols_64/creatr_stat_gold_std.png"], #"res://dk_images/valuables/gold_hoard1_fp/r1frame03.png" #"res://dk_images/valuables/gold_hoard2_fp/r1frame02.png" #"res://dk_images/valuables/gold_hoard4_fp/r1frame01.png"
-	Things.TAB_DECORATION: [oThingTabs.get_node("TabFolder/Decoration"),"res://dk_images/statues/anim0906/r1frame01.png"],
-	Things.TAB_ACTION: [oThingTabs.get_node("TabFolder/Action"),"res://dk_images/guisymbols_64/sym_fight.png"], #"res://Art/ActionPoint.png"
-	Things.TAB_EFFECTGEN: [oThingTabs.get_node("TabFolder/Effect"),"res://edited_images/icon_effect.png"],
-	Things.TAB_FURNITURE: [oThingTabs.get_node("TabFolder/Furniture"),"res://dk_images/furniture/workshop_machine_fp/r1frame01.png"], #"res://dk_images/furniture/training_machine_fp/r1frame09.png"
-	Things.TAB_LAIR: [oThingTabs.get_node("TabFolder/Lair"),"res://dk_images/room_64/lair_std.png"],
-	Things.TAB_MISC: [oThingTabs.get_node("TabFolder/Misc"),"res://dk_images/rpanel_64/tab_crtr_wandr_std.png"],
+	TAB_CREATURE: [oThingTabs.get_node("TabFolder/Creature"),"res://edited_images/icon_creature.png"],
+	TAB_SPELL: [oThingTabs.get_node("TabFolder/Spell"),"res://edited_images/icon_book.png"],
+	TAB_TRAP: [oThingTabs.get_node("TabFolder/Trap"),"res://dk_images/traps_doors/anim0845/r1frame04.png"],
+	TAB_BOX: [oThingTabs.get_node("TabFolder/Box"),"res://dk_images/traps_doors/anim0116/r1frame12.png"],
+	TAB_SPECIAL: [oThingTabs.get_node("TabFolder/Special"),"res://dk_images/trapdoor_64/bonus_box_std.png"],
+	TAB_GOLD: [oThingTabs.get_node("TabFolder/Gold"),"res://dk_images/symbols_64/creatr_stat_gold_std.png"], #"res://dk_images/valuables/gold_hoard1_fp/r1frame03.png" #"res://dk_images/valuables/gold_hoard2_fp/r1frame02.png" #"res://dk_images/valuables/gold_hoard4_fp/r1frame01.png"
+	TAB_DECORATION: [oThingTabs.get_node("TabFolder/Decoration"),"res://dk_images/statues/anim0906/r1frame01.png"],
+	TAB_ACTION: [oThingTabs.get_node("TabFolder/Action"),"res://dk_images/guisymbols_64/sym_fight.png"], #"res://Art/ActionPoint.png"
+	TAB_EFFECTGEN: [oThingTabs.get_node("TabFolder/Effect"),"res://edited_images/icon_effect.png"],
+	TAB_FURNITURE: [oThingTabs.get_node("TabFolder/Furniture"),"res://dk_images/furniture/workshop_machine_fp/r1frame01.png"], #"res://dk_images/furniture/training_machine_fp/r1frame09.png"
+	TAB_LAIR: [oThingTabs.get_node("TabFolder/Lair"),"res://dk_images/room_64/lair_std.png"],
+	TAB_MISC: [oThingTabs.get_node("TabFolder/Misc"),"res://dk_images/rpanel_64/tab_crtr_wandr_std.png"],
 }
 
 export var grid_item_size : Vector2
@@ -58,7 +73,6 @@ func _ready():
 	
 	oThingTabs.initialize([])
 
-
 func initialize_thing_grid_items():
 	yield(get_tree(),'idle_frame') # Needed for loading animation IDs from call_deferred in Things singleton
 	var CODETIME_START = OS.get_ticks_msec()
@@ -68,37 +82,82 @@ func initialize_thing_grid_items():
 		match thingCategory:
 			Things.TYPE.OBJECT:
 				for subtype in Things.DATA_OBJECT:
-					var putIntoTab = Things.DATA_OBJECT[subtype][Things.EDITOR_TAB]
-					if putIntoTab != null:
+					if subtype != 0:
+						var genre = Things.DATA_OBJECT[subtype][Things.GENRE]
+						var putIntoTab
+						match genre:
+							"DECORATION": putIntoTab = TAB_DECORATION
+							"EFFECT": putIntoTab = TAB_EFFECTGEN
+							"FOOD": putIntoTab = TAB_FURNITURE
+							"FURNITURE": putIntoTab = TAB_FURNITURE
+							"LAIR_TOTEM": putIntoTab = TAB_LAIR
+							"POWER": putIntoTab = TAB_MISC
+							"SPECIALBOX": putIntoTab = TAB_SPECIAL
+							"SPELLBOOK": putIntoTab = TAB_SPELL
+							"TREASURE_HOARD": putIntoTab = TAB_GOLD
+							"VALUABLE": putIntoTab = TAB_GOLD
+							"WORKSHOPBOX": putIntoTab = TAB_BOX
+							"HEROGATE": putIntoTab = TAB_ACTION
+							_: putIntoTab = TAB_DECORATION
+						
+						# Check if this subtype needs to be recategorized
+						if recategorization.has(subtype):
+							if putIntoTab == recategorization[subtype][0]:
+								putIntoTab = recategorization[subtype][1]
+						
 						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_OBJECT, thingCategory, subtype)
 			Things.TYPE.CREATURE:
 				for subtype in Things.DATA_CREATURE:
-					var putIntoTab = Things.DATA_CREATURE[subtype][Things.EDITOR_TAB]
-					if putIntoTab != null:
+					if subtype != 0:
+						var putIntoTab = TAB_CREATURE
 						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_CREATURE, thingCategory, subtype)
 			Things.TYPE.TRAP:
 				for subtype in Things.DATA_TRAP:
-					var putIntoTab = Things.DATA_TRAP[subtype][Things.EDITOR_TAB]
-					if putIntoTab != null:
+					if subtype != 0:
+						var putIntoTab = TAB_TRAP
 						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_TRAP, thingCategory, subtype)
 			Things.TYPE.DOOR:
 				for subtype in Things.DATA_DOOR:
-					var putIntoTab = Things.DATA_DOOR[subtype][Things.EDITOR_TAB]
-					if putIntoTab != null:
+					if subtype != 0:
+						var putIntoTab = TAB_MISC
 						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_DOOR, thingCategory, subtype)
 			Things.TYPE.EFFECTGEN:
 				for subtype in Things.DATA_EFFECTGEN:
-					var putIntoTab = Things.DATA_EFFECTGEN[subtype][Things.EDITOR_TAB]
-					if putIntoTab != null:
+					if subtype != 0:
+						var putIntoTab = TAB_EFFECTGEN
 						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EFFECTGEN, thingCategory, subtype)
 			Things.TYPE.EXTRA:
 				for subtype in Things.DATA_EXTRA:
-					var putIntoTab = Things.DATA_EXTRA[subtype][Things.EDITOR_TAB]
-					if putIntoTab != null:
+					if subtype != 0:
+						var putIntoTab
+						match subtype:
+							1: putIntoTab = TAB_ACTION # Action Point
+							2: putIntoTab = TAB_EFFECTGEN # Light
 						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EXTRA, thingCategory, subtype)
 	
 	print('Initialized Things window: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
+# Hardcoded recategorization for tabs
+var recategorization = {
+002 : [TAB_FURNITURE, TAB_DECORATION], #TORCH
+004 : [TAB_FURNITURE, TAB_DECORATION], #TEMPLE_STATUE
+007 : [TAB_FURNITURE, TAB_DECORATION], #TORCHUN
+009 : [TAB_FURNITURE, TAB_MISC], #CHICKEN_GRW
+010 : [TAB_FURNITURE, TAB_MISC], #CHICKEN_MAT
+025 : [TAB_DECORATION, TAB_MISC], #ROOM_FLAG
+028 : [TAB_FURNITURE, TAB_DECORATION], #CANDLESTCK
+030 : [TAB_FURNITURE, TAB_DECORATION], #STATUE_HORNY
+033 : [TAB_FURNITURE, TAB_DECORATION], #TEMPLE_SPANGLE
+040 : [TAB_FURNITURE, TAB_MISC], #CHICKEN_STB
+041 : [TAB_FURNITURE, TAB_MISC], #CHICKEN_WOB
+042 : [TAB_FURNITURE, TAB_MISC], #CHICKEN_CRK
+044 : [TAB_FURNITURE, TAB_MISC], #SPINNING_KEY
+050 : [TAB_EFFECTGEN, TAB_MISC], #SPINNING_KEY2
+051 : [TAB_EFFECTGEN, TAB_MISC], #ARMOUR
+110 : [TAB_BOX, TAB_MISC], #WRKBOX_ITEM
+112 : [TAB_EFFECTGEN, TAB_MISC], #DISEASE
+128 : [TAB_EFFECTGEN, TAB_MISC], #SPINNCOIN
+}
 
 func add_to_category(tabNode, thingsData, thingtype, subtype):
 	var getName = Things.fetch_name(thingtype, subtype)
@@ -122,10 +181,6 @@ func add_to_category(tabNode, thingsData, thingtype, subtype):
 			id.img_normal = textureTex
 		else:
 			id.img_normal = preload('res://Art/ThingDarkened.png')
-	
-	
-	
-	
 	
 	add_item_to_grid(gridcontainer, id, getName)
 	

@@ -251,7 +251,7 @@ func set_grow_direction():
 	# Return if we want to grow from center
 	if thingType == Things.TYPE.OBJECT:
 		if Things.DATA_OBJECT.has(subtype):
-			if Things.DATA_OBJECT[subtype][Things.EDITOR_TAB] == Things.TAB_SPELL:
+			if Things.DATA_OBJECT[subtype][Things.GENRE] == "SPELLBOOK":
 				return
 	elif thingType == Things.TYPE.TRAP:
 		return

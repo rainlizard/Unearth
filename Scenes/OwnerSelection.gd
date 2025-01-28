@@ -122,7 +122,7 @@ func set_selection(value):
 func update_ownership_options():
 	match oSelector.mode:
 		oSelector.MODE_SUBTILE:
-			var is_collectible = oSelection.paintThingType == Things.TYPE.OBJECT and oSelection.paintSubtype in Things.DATA_OBJECT and Things.DATA_OBJECT[oSelection.paintSubtype][Things.EDITOR_TAB] in Things.collectible_belonging
+			var is_collectible = oSelection.paintThingType == Things.TYPE.OBJECT and oSelection.paintSubtype in Things.DATA_OBJECT and Things.DATA_OBJECT[oSelection.paintSubtype][Things.GENRE] in Things.collectible_belonging
 			oCollectibleLabel.visible = is_collectible
 			oUseSlabOwnerCheckBox.visible = !is_collectible
 			ownership_available = (!is_collectible and !oUseSlabOwnerCheckBox.pressed)
