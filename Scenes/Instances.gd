@@ -259,7 +259,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			id.parentTile = 65535 # "None"
 			id.orientation = oPlacingSettings.orientation
 			
-			if id.subtype == 49: # Hero Gate
+			if id.subtype in Things.LIST_OF_HEROGATES: # Hero Gate
 				id.herogateNumber = get_free_hero_gate_number() #originalInstance.herogateNumber
 			elif id.subtype == 133: # Mysterious Box
 				id.boxNumber = oPlacingSettings.boxNumber

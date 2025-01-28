@@ -95,40 +95,68 @@ func start(mapPath):
 	
 	oCustomSlabSystem.load_unearth_custom_slabs_file()
 
+var LIST_OF_OBJECTS_WITH_HARDCODED_SPRITES = [
+"SPELLBOOK_HOE",
+"SPELLBOOK_IMP",
+"SPELLBOOK_OBEY",
+"SPELLBOOK_SLAP",
+"SPELLBOOK_SOE",
+"SPELLBOOK_CTA",
+"SPELLBOOK_CAVI",
+"SPELLBOOK_HEAL",
+"SPELLBOOK_HLDAUD",
+"SPELLBOOK_LIGHTN",
+"SPELLBOOK_SPDC",
+"SPELLBOOK_PROT",
+"SPELLBOOK_CONCL",
+"SPELLBOOK_DISEASE",
+"SPELLBOOK_CHKN",
+"SPELLBOOK_DWAL",
+"SPELLBOOK_TBMB",
+"SPELLBOOK_ARMG",
+"SPELLBOOK_POSS",
+"SPELLBOOK_RBND",
+"SPELLBOOK_FRZ",
+"SPELLBOOK_SLOW",
+"SPELLBOOK_FLGT",
+"SPELLBOOK_VSN",
+]
 
 func load_objects_data(cfg): # 10ms
 	for section in cfg:
 		if section.begins_with("object"):
 			var id = int(section)
 			if id == 0: continue
-			if id >= 136 or id in [100, 101, 102, 103, 104, 105]: # Dummy Boxes should be overwritten
-				var objSection = cfg[section]
-				var newName
-				var animID
-				var newSprite
-				var newEditorTab
-				var newGenre
+			var objSection = cfg[section]
+			var newName
+			var animID
+			var newSprite
+			var newEditorTab
+			var newGenre
+			
+			if Things.DATA_OBJECT.has(id) == true:
+				newName = objSection.get("Name", Things.DATA_OBJECT[id][Things.NAME_ID])
 				
-				if Things.DATA_OBJECT.has(id) == true:
-					newName = objSection.get("Name", Things.DATA_OBJECT[id][Things.NAME_ID])
-					
-					animID = objSection.get("AnimationID")
-					newSprite = get_sprite(animID, newName)
-					if newSprite == null:
-						newSprite = Things.DATA_OBJECT[id][Things.SPRITE]
-					
-					newGenre = objSection.get("Genre")
-					newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.DATA_OBJECT[id][Things.EDITOR_TAB])
-				else:
-					newName = objSection.get("Name", "UNDEFINED_NAME")
-					
-					animID = objSection.get("AnimationID")
-					newSprite = get_sprite(animID, newName)
-					
-					newGenre = objSection.get("Genre")
-					newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.TAB_DECORATION)
+				animID = objSection.get("AnimationID")
+				newSprite = get_sprite(animID, newName)
+				if newSprite == null or newName in LIST_OF_OBJECTS_WITH_HARDCODED_SPRITES:
+					newSprite = Things.DATA_OBJECT[id][Things.SPRITE]
 				
-				Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
+				newGenre = objSection.get("Genre")
+				newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.DATA_OBJECT[id][Things.EDITOR_TAB])
+				if newGenre == "SPELLBOOK":
+					Things.LIST_OF_SPELLBOOKS.append(id)
+				if newGenre == "HEROGATE":
+					Things.LIST_OF_HEROGATES.append(id)
+			else:
+				newName = objSection.get("Name", "UNDEFINED_NAME")
+				animID = objSection.get("AnimationID")
+				newSprite = get_sprite(animID, newName)
+				
+				newGenre = objSection.get("Genre")
+				newEditorTab = Things.GENRE_TO_TAB.get(newGenre, Things.TAB_DECORATION)
+			
+			Things.DATA_OBJECT[id] = [newName, newSprite, newEditorTab]
 
 
 var keeperfx_edited_slabs = [Slabs.GEMS] # This is to help with backwards compatibility for previous keeperfx versions that don't have these edits.
