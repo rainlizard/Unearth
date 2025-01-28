@@ -200,6 +200,7 @@ const things = {
 		"WRKBOX_STEEL" : "Box: Iron Door",
 		"WRKBOX_MAGIC" : "Box: Magic Door",
 		"WRKBOX_ITEM" : "Workshop Item",
+		"WRKBOX_MIDAS" : "Box: Midas Door",
 		"HEARTFLAME_RED" : "Red Heart Flame",
 		"DISEASE" : "Disease Effect",
 		"SCAVENGE_EYE" : "Scavenger Eye",
