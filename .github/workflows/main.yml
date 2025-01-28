@@ -52,33 +52,14 @@ jobs:
 
     - name: Install Wine
       run: |
-        sudo dpkg --add-architecture i386
         sudo apt-get update
-        sudo apt-get install -y wine wine64
-    - name: Verify Wine Installation
-      run: |
-        echo "=== Checking PATH ==="
-        echo $PATH
-        echo "=== Checking /usr/bin ==="
-        ls -la /usr/bin/wine*
-        echo "=== Checking which wine ==="
-        which wine || echo "wine not found"
-        echo "=== Checking which wine64 ==="
-        which wine64 || echo "wine64 not found"
-        echo "=== Checking installed packages ==="
-        dpkg -l | grep -i wine
-        
-        if ! command -v wine &> /dev/null; then
-          echo "ERROR: wine is not installed or not in PATH"
-          exit 1
-        fi
-        wine --version
+        sudo apt-get install -y wine
     - name: Download rcedit
       run: |
         wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
     - name: Set Executable Details and Replace Icon in Windows Export with rcedit
       run: |
-        wine64 rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe \
+        wine rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe \
           --set-icon Art/icon/UnearthIcon.ico \
           --set-version-string FileDescription "Unearth Editor for Dungeon Keeper" \
           --set-file-version ${{ steps.version_info.outputs.FULL_VERSION }} \
