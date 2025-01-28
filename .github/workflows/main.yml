@@ -52,13 +52,15 @@ jobs:
 
     - name: Install Wine
       run: |
-        sudo dpkg --add-architecture i386
         sudo apt-get update
-        sudo apt-get install -y wine64 wine
-        sudo ldconfig
-        which wine64
+        sudo apt-get install -y wine64
+    - name: Verify Wine Installation
+      run: |
+        if ! command -v wine64 &> /dev/null; then
+          echo "ERROR: wine64 is not installed or not in PATH"
+          exit 1
+        fi
         wine64 --version
-        sleep 5  # Give the system a moment to fully register the wine64 command
     - name: Download rcedit
       run: |
         wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
