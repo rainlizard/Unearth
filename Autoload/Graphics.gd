@@ -13,97 +13,30 @@ func load_extra_images_from_harddrive():
 			print("Failed to load texture: ", image_path)
 	print('Loaded extra images from HDD: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
-
-#func load_custom_images_into_array(DATA_ARRAY, thingtypeImageFolder):
-#	print("Loading /thing-images/" + thingtypeImageFolder + " directory ...")
-#	var arrayOfFilenames = get_png_files_in_dir(Settings.unearthdata.plus_file("thing-images").plus_file(thingtypeImageFolder))
-#	for i in arrayOfFilenames:
-#		var subtypeID = int(i.get_file().get_basename())
-#		var img = Image.new()
-#		var err = img.load(i)
-#		if err == OK:
-#			var tex = ImageTexture.new()
-#			tex.create_from_image(img)
-#			if DATA_ARRAY.has(subtypeID):
-#				DATA_ARRAY[subtypeID][TEXTURE] = tex
-
-
-#func look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName):
-#	if custom_images_list.empty() == true:
-#		custom_images_list = get_png_filenames_in_dir(Settings.unearthdata.plus_file("custom-object-images"))
-#
-#	var dir = Settings.unearthdata.plus_file("custom-object-images")
-#
-#	var uppercaseImageFilename = thingCfgName+".PNG".to_upper()
-#	var uppercasePortraitFilename = thingCfgName+"_PORTRAIT.PNG".to_upper()
-#
-#	var realImageFilename = ""
-#	var realPortraitFilename = ""
-#
-#	if custom_images_list.has(uppercaseImageFilename):
-#		 realImageFilename = custom_images_list[uppercaseImageFilename]
-#
-#	if custom_images_list.has(uppercasePortraitFilename):
-#		 realPortraitFilename = custom_images_list[uppercasePortraitFilename]
-#
-#	if realImageFilename != "":
-#		var img = Image.new()
-#		var err = img.load(dir.plus_file(realImageFilename))
-#		if err == OK:
-#			var tex = ImageTexture.new()
-#			tex.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
-#			#DATA_ARRAY[objectID][Things.TEXTURE] = tex
-#
-#	if realPortraitFilename != "":
-#		var img = Image.new()
-#		var err = img.load(dir.plus_file(realPortraitFilename))
-#		if err == OK:
-#			var tex = ImageTexture.new()
-#			tex.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
-#			#DATA_ARRAY[objectID][Things.PORTRAIT] = tex
-#
-#func get_png_filenames_in_dir(path):
-#	var dictionary = {}
-#	var dir = Directory.new()
-#	if dir.open(path) == OK:
-#		dir.list_dir_begin()
-#		var file_name = dir.get_next()
-#		while file_name != "":
-#			if dir.current_is_dir():
-#				pass
-#			else:
-#				if file_name.get_extension().to_upper() == "PNG":
-#					dictionary[file_name.to_upper().replace(" ", "_")] = file_name
-#			file_name = dir.get_next()
-#	else:
-#		print("An error occurred when trying to access the path.")
-#	return dictionary
-#
-#func get_png_files_in_dir(path):
-#	var array = []
-#	var dir = Directory.new()
-#	if dir.open(path) == OK:
-#		dir.list_dir_begin()
-#		var file_name = dir.get_next()
-#		while file_name != "":
-#			if dir.current_is_dir():
-#				pass
-#			else:
-#				if file_name.get_extension().to_upper() == "PNG":
-#					var fileNumber = file_name.get_file().get_basename()
-#					if Utils.string_has_letters(fileNumber) == false:
-#						array.append(path.plus_file(file_name))
-#			file_name = dir.get_next()
-#	else:
-#		print("An error occurred when trying to access the path.")
-#	return array
-
-
-
-
 # The keys can be integers or strings (as read from objects.cfg's AnimationID field)
 # When they're a String, they can be either read the 'Name' field or the 'AnimationID' field, whichever one is prioritized
 var sprite_id = {
+# Spellbook objects
+"SPELLBOOK_ARMG" : preload("res://dk_images/keepower_64/armagedn_std.png"),
+"SPELLBOOK_POSS" : preload("res://dk_images/keepower_64/possess_std.png"),
+"SPELLBOOK_HOE" : preload("res://edited_images/icon_handofevil.png"),
+"SPELLBOOK_IMP" : preload("res://dk_images/keepower_64/imp_std.png"),
+"SPELLBOOK_OBEY" : preload("res://edited_images/mustobey.png"),
+"SPELLBOOK_SLAP" : preload("res://edited_images/icon_slap.png"),
+"SPELLBOOK_SOE" : preload("res://dk_images/keepower_64/sight_std.png"),
+"SPELLBOOK_CTA" : preload("res://dk_images/keepower_64/cta_std.png"),
+"SPELLBOOK_CAVI" : preload("res://dk_images/keepower_64/cavein_std.png"),
+"SPELLBOOK_HEAL" : preload("res://dk_images/keepower_64/heal_std.png"),
+"SPELLBOOK_HLDAUD" : preload("res://dk_images/keepower_64/holdaud_std.png"),
+"SPELLBOOK_LIGHTN" : preload("res://dk_images/keepower_64/lightng_std.png"),
+"SPELLBOOK_SPDC" : preload("res://dk_images/keepower_64/speed_std.png"),
+"SPELLBOOK_PROT" : preload("res://dk_images/keepower_64/armor_std.png"),
+"SPELLBOOK_CONCL" : preload("res://dk_images/keepower_64/conceal_std.png"),
+"SPELLBOOK_DISEASE" : preload("res://dk_images/keepower_64/disease_std.png"),
+"SPELLBOOK_CHKN" : preload("res://dk_images/keepower_64/chicken_std.png"),
+"SPELLBOOK_DWAL" : preload("res://dk_images/keepower_64/dstwall_std.png"),
+"SPELLBOOK_TBMB" : preload("res://edited_images/timebomb.png"),
+# Objects
 046 : preload("res://dk_images/furniture/torture_machine_tp/r1frame01.png"),
 098 : preload("res://dk_images/furniture/workshop_machine_tp/AnimWorkshopMachine.tres"),
 100 : preload("res://dk_images/furniture/flagpole_empty_tp/r1frame01.png"),
@@ -172,7 +105,6 @@ var sprite_id = {
 952 : preload("res://dk_images/statues/anim0954/r1frame01.png"),
 958 : preload("res://dk_images/statues/anim0960/r1frame01.png"),
 962 : preload("res://dk_images/other/anim0963/r1frame01.png"),
-
 # Extras
 "ACTIONPOINT" : preload("res://Art/ActionPoint.png"),
 "LIGHT" : preload("res://edited_images/GUIEDIT-1/PIC26.png"),
@@ -197,26 +129,6 @@ var sprite_id = {
 "WORD_OF_POWER" : preload("res://dk_images/trapdoor_64/trap_wop_std.png"),
 "LAVA" : preload("res://dk_images/trapdoor_64/trap_lava_std.png"),
 "TNT" : preload("res://extra_images/tnt.png"),
-# Spellbooks
-"SPELLBOOK_ARMG" : preload("res://dk_images/keepower_64/armagedn_std.png"),
-"SPELLBOOK_POSS" : preload("res://dk_images/keepower_64/possess_std.png"),
-"SPELLBOOK_HOE" : preload("res://edited_images/icon_handofevil.png"),
-"SPELLBOOK_IMP" : preload("res://dk_images/keepower_64/imp_std.png"),
-"SPELLBOOK_OBEY" : preload("res://edited_images/mustobey.png"),
-"SPELLBOOK_SLAP" : preload("res://edited_images/icon_slap.png"),
-"SPELLBOOK_SOE" : preload("res://dk_images/keepower_64/sight_std.png"),
-"SPELLBOOK_CTA" : preload("res://dk_images/keepower_64/cta_std.png"),
-"SPELLBOOK_CAVI" : preload("res://dk_images/keepower_64/cavein_std.png"),
-"SPELLBOOK_HEAL" : preload("res://dk_images/keepower_64/heal_std.png"),
-"SPELLBOOK_HLDAUD" : preload("res://dk_images/keepower_64/holdaud_std.png"),
-"SPELLBOOK_LIGHTN" : preload("res://dk_images/keepower_64/lightng_std.png"),
-"SPELLBOOK_SPDC" : preload("res://dk_images/keepower_64/speed_std.png"),
-"SPELLBOOK_PROT" : preload("res://dk_images/keepower_64/armor_std.png"),
-"SPELLBOOK_CONCL" : preload("res://dk_images/keepower_64/conceal_std.png"),
-"SPELLBOOK_DISEASE" : preload("res://dk_images/keepower_64/disease_std.png"),
-"SPELLBOOK_CHKN" : preload("res://dk_images/keepower_64/chicken_std.png"),
-"SPELLBOOK_DWAL" : preload("res://dk_images/keepower_64/dstwall_std.png"),
-"SPELLBOOK_TBMB" : preload("res://edited_images/timebomb.png"),
 # Decorations/Furniture
 "BANNER" : preload("res://extra_images/banner.png"),
 "FERN" : preload("res://extra_images/fern.png"),
@@ -319,3 +231,89 @@ var sprite_id = {
 "TIME_MAGE" : preload("res://extra_images/time_mage.png"),
 "TIME_MAGE_PORTRAIT" : preload("res://extra_images/time_mage_portrait.png"),
 }
+
+
+#func load_custom_images_into_array(DATA_ARRAY, thingtypeImageFolder):
+#	print("Loading /thing-images/" + thingtypeImageFolder + " directory ...")
+#	var arrayOfFilenames = get_png_files_in_dir(Settings.unearthdata.plus_file("thing-images").plus_file(thingtypeImageFolder))
+#	for i in arrayOfFilenames:
+#		var subtypeID = int(i.get_file().get_basename())
+#		var img = Image.new()
+#		var err = img.load(i)
+#		if err == OK:
+#			var tex = ImageTexture.new()
+#			tex.create_from_image(img)
+#			if DATA_ARRAY.has(subtypeID):
+#				DATA_ARRAY[subtypeID][TEXTURE] = tex
+
+
+#func look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName):
+#	if custom_images_list.empty() == true:
+#		custom_images_list = get_png_filenames_in_dir(Settings.unearthdata.plus_file("custom-object-images"))
+#
+#	var dir = Settings.unearthdata.plus_file("custom-object-images")
+#
+#	var uppercaseImageFilename = thingCfgName+".PNG".to_upper()
+#	var uppercasePortraitFilename = thingCfgName+"_PORTRAIT.PNG".to_upper()
+#
+#	var realImageFilename = ""
+#	var realPortraitFilename = ""
+#
+#	if custom_images_list.has(uppercaseImageFilename):
+#		 realImageFilename = custom_images_list[uppercaseImageFilename]
+#
+#	if custom_images_list.has(uppercasePortraitFilename):
+#		 realPortraitFilename = custom_images_list[uppercasePortraitFilename]
+#
+#	if realImageFilename != "":
+#		var img = Image.new()
+#		var err = img.load(dir.plus_file(realImageFilename))
+#		if err == OK:
+#			var tex = ImageTexture.new()
+#			tex.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
+#			#DATA_ARRAY[objectID][Things.TEXTURE] = tex
+#
+#	if realPortraitFilename != "":
+#		var img = Image.new()
+#		var err = img.load(dir.plus_file(realPortraitFilename))
+#		if err == OK:
+#			var tex = ImageTexture.new()
+#			tex.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
+#			#DATA_ARRAY[objectID][Things.PORTRAIT] = tex
+#
+#func get_png_filenames_in_dir(path):
+#	var dictionary = {}
+#	var dir = Directory.new()
+#	if dir.open(path) == OK:
+#		dir.list_dir_begin()
+#		var file_name = dir.get_next()
+#		while file_name != "":
+#			if dir.current_is_dir():
+#				pass
+#			else:
+#				if file_name.get_extension().to_upper() == "PNG":
+#					dictionary[file_name.to_upper().replace(" ", "_")] = file_name
+#			file_name = dir.get_next()
+#	else:
+#		print("An error occurred when trying to access the path.")
+#	return dictionary
+#
+#func get_png_files_in_dir(path):
+#	var array = []
+#	var dir = Directory.new()
+#	if dir.open(path) == OK:
+#		dir.list_dir_begin()
+#		var file_name = dir.get_next()
+#		while file_name != "":
+#			if dir.current_is_dir():
+#				pass
+#			else:
+#				if file_name.get_extension().to_upper() == "PNG":
+#					var fileNumber = file_name.get_file().get_basename()
+#					if Utils.string_has_letters(fileNumber) == false:
+#						array.append(path.plus_file(file_name))
+#			file_name = dir.get_next()
+#	else:
+#		print("An error occurred when trying to access the path.")
+#	return array
+

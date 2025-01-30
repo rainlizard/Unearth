@@ -97,33 +97,6 @@ func start(mapPath):
 	
 	oCustomSlabSystem.load_unearth_custom_slabs_file()
 
-var LIST_OF_OBJECTS_WITH_HARDCODED_SPRITES = [
-"SPELLBOOK_HOE",
-"SPELLBOOK_IMP",
-"SPELLBOOK_OBEY",
-"SPELLBOOK_SLAP",
-"SPELLBOOK_SOE",
-"SPELLBOOK_CTA",
-"SPELLBOOK_CAVI",
-"SPELLBOOK_HEAL",
-"SPELLBOOK_HLDAUD",
-"SPELLBOOK_LIGHTN",
-"SPELLBOOK_SPDC",
-"SPELLBOOK_PROT",
-"SPELLBOOK_CONCL",
-"SPELLBOOK_DISEASE",
-"SPELLBOOK_CHKN",
-"SPELLBOOK_DWAL",
-"SPELLBOOK_TBMB",
-"SPELLBOOK_ARMG",
-"SPELLBOOK_POSS",
-"SPELLBOOK_RBND",
-"SPELLBOOK_FRZ",
-"SPELLBOOK_SLOW",
-"SPELLBOOK_FLGT",
-"SPELLBOOK_VSN",
-]
-
 func load_objects_data(cfg): # 10ms
 	for section in cfg:
 		if section.begins_with("object"):
@@ -140,7 +113,7 @@ func load_objects_data(cfg): # 10ms
 				
 				animID = objSection.get("AnimationID")
 				newSprite = get_sprite(animID, newName)
-				if newSprite == null or newName in LIST_OF_OBJECTS_WITH_HARDCODED_SPRITES:
+				if newSprite == null or int(animID) == 777: # 777 is the AnimationID for all spellbooks in objects.cfg, which unearth uses separate sprites for
 					newSprite = Things.DATA_OBJECT[id][Things.SPRITE]
 				
 				newGenre = objSection.get("Genre")
