@@ -112,8 +112,8 @@ func load_objects_data(cfg): # 10ms
 				newName = objSection.get("Name", Things.DATA_OBJECT[id][Things.NAME_ID])
 				
 				animID = objSection.get("AnimationID")
-				newSprite = get_sprite(animID, newName)
-				if newSprite == null or int(animID) == 777: # 777 is the AnimationID for all spellbooks in objects.cfg, which unearth uses separate sprites for
+				newSprite = get_sprite(newName, animID)
+				if newSprite == null:
 					newSprite = Things.DATA_OBJECT[id][Things.SPRITE]
 				
 				newGenre = objSection.get("Genre")
@@ -124,7 +124,7 @@ func load_objects_data(cfg): # 10ms
 			else:
 				newName = objSection.get("Name", "UNDEFINED_NAME")
 				animID = objSection.get("AnimationID")
-				newSprite = get_sprite(animID, newName)
+				newSprite = get_sprite(newName, animID)
 				
 				newGenre = objSection.get("Genre")
 			
@@ -196,7 +196,7 @@ func load_creatures_data(cfg): # 3ms
 		var creature_id = id_number + 1
 		if not Things.DATA_CREATURE.has(creature_id):
 			var newName = creatures[id_number]
-			var newSprite = get_sprite(newName, null)
+			var newSprite = get_sprite(newName, -1)
 			Things.DATA_CREATURE[creature_id] = [newName, newSprite, "CREATURE"]
 
 func load_trapdoor_data(cfg): # 1ms
@@ -213,7 +213,7 @@ func load_trapdoor_data(cfg): # 1ms
 		
 		var data = cfg[section]
 		var newName = data.get("Name", null)
-		var newSprite = get_sprite(newName, null)
+		var newSprite = get_sprite(newName, -1)
 		var crateName = data.get("Crate", null)
 		
 		if trapOrDoor == Things.TYPE.DOOR:
@@ -228,11 +228,13 @@ func load_trapdoor_data(cfg): # 1ms
 			Things.DATA_TRAP[id] = [newName, newSprite]
 		Things.LIST_OF_BOXES[crateName] = [trapOrDoor, id]
 
-func get_sprite(first_priority, second_priority):
-	if Graphics.sprite_id.has(first_priority): return first_priority
-	if Graphics.sprite_id.has(second_priority): return second_priority
+func get_sprite(newName, animID):
+	if int(animID) == 777: # 777 is the AnimationID for all spellbooks in objects.cfg, which unearth uses separate sprites for
+		if Graphics.sprite_id.has(newName): return newName
+	
+	if Graphics.sprite_id.has(animID): return animID
+	if Graphics.sprite_id.has(newName): return newName
 	return null
-
 
 func load_campaign_data(mapPath):
 	var levelsDirPath = mapPath.get_base_dir().get_base_dir()

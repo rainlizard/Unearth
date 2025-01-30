@@ -36,6 +36,12 @@ var sprite_id = {
 "SPELLBOOK_CHKN" : preload("res://dk_images/keepower_64/chicken_std.png"),
 "SPELLBOOK_DWAL" : preload("res://dk_images/keepower_64/dstwall_std.png"),
 "SPELLBOOK_TBMB" : preload("res://edited_images/timebomb.png"),
+"SPELLBOOK_RBND" : preload("res://dk_images/crspell_64/rebound_std.png"),
+"SPELLBOOK_FRZ" : preload("res://edited_images/freeze.png"),
+"SPELLBOOK_SLOW" : preload("res://dk_images/crspell_64/slowdn_std.png"),
+"SPELLBOOK_FLGT" : preload("res://dk_images/crspell_64/flight_std.png"),
+"SPELLBOOK_VSN" : preload("res://edited_images/vision.png"),
+"SPELLBOOK_TUNLR" : preload("res://edited_images/tunlr.png"),
 # Objects
 046 : preload("res://dk_images/furniture/torture_machine_tp/r1frame01.png"),
 098 : preload("res://dk_images/furniture/workshop_machine_tp/AnimWorkshopMachine.tres"),

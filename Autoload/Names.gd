@@ -267,7 +267,8 @@ const things = {
 		"SPELLBOOK_FRZ" : "Freeze",
 		"SPELLBOOK_SLOW" : "Slow",
 		"SPELLBOOK_FLGT" : "Flight",
-		"SPELLBOOK_VSN" : "Vision"
+		"SPELLBOOK_VSN" : "Vision",
+		"SPELLBOOK_TUNLR" : "Create Tunneller"
 	}
 }
 
