@@ -83,12 +83,13 @@ func start(mapPath):
 		#	print(combined_cfg)
 		
 		# Only load cfg after they've been combined (they're combined so they'll automatically have fallbacks)
-		match file_name:
-			"objects.cfg": load_objects_data(combined_cfg)
-			"creature.cfg": load_creatures_data(combined_cfg)
-			"trapdoor.cfg": load_trapdoor_data(combined_cfg)
-			"terrain.cfg": load_terrain_data(combined_cfg)
-			"cubes.cfg": Cube.read_cubes_cfg(combined_cfg)
+		if combined_cfg.empty() == false: # It can be empty if the file wasn't found
+			match file_name:
+				"objects.cfg": load_objects_data(combined_cfg)
+				"creature.cfg": load_creatures_data(combined_cfg)
+				"trapdoor.cfg": load_trapdoor_data(combined_cfg)
+				"terrain.cfg": load_terrain_data(combined_cfg)
+				"cubes.cfg": Cube.read_cubes_cfg(combined_cfg)
 	
 	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 	if oConfigFilesListWindow.visible == true:
@@ -167,6 +168,10 @@ func load_terrain_data(cfg): # 4ms
 				
 				var setName = slabSection.get("Name", "UNKNOWN")
 				
+				var setIsOwnable = Slabs.NOT_OWNABLE
+				if slabSection.get("IsOwnable", 0) == 1:
+					setIsOwnable = Slabs.OWNABLE
+				
 				var getBlockFlags = slabSection.get("BlockFlags", [])
 				if getBlockFlags is String and getBlockFlags == "":
 					getBlockFlags = []
@@ -174,11 +179,6 @@ func load_terrain_data(cfg): # 4ms
 				var setBlockType = Slabs.FLOOR_SLAB
 				if "FILLED" in getBlockFlags or "DIGGABLE" in getBlockFlags or "VALUABLE" in getBlockFlags:
 					setBlockType = Slabs.BLOCK_SLAB
-				
-				var setIsOwnable = Slabs.NOT_OWNABLE
-				if slabSection.get("IsOwnable", 0) == 1:
-					setIsOwnable = Slabs.OWNABLE
-				
 				
 				var setBitmask = Slabs.BITMASK_BLOCK
 				

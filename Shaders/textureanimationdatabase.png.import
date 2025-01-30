@@ -14,7 +14,7 @@ dest_files=[ "res://.import/textureanimationdatabase.png-309c52c412ecadf644122e0
 
 [params]
 
-compress/mode=3
+compress/mode=0
 compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
