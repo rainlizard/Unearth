@@ -29,6 +29,8 @@ const rngCube = {
 	"Earth" : [1,2,3],
 	"ClaimedGround" : [126,127,128],
 	"Gold" : [49,50,51],
+	"DenseGold" : [482,483,484],
+	"IntermediateGold" : [488,489,490],
 	"GoldNearLava" : [52,53,54],
 	"PathClean" : [25,26,27],
 	"PathWithStones" : [28,29],

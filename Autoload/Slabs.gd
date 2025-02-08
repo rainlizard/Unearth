@@ -92,6 +92,7 @@ enum {
 	GUARD_POST = 53,
 	PURPLE_PATH = 54,
 	# 58 doesn't exist within 1304 entries
+	DENSE_GOLD = 60,
 	WALL_AUTOMATIC = 999,
 }
 

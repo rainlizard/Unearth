@@ -1085,6 +1085,50 @@ func update_wibble(xSlab, ySlab, slabID, includeNearby):
 
 const blankCubes = [0,0,0,0,0,0,0,0]
 
+func has_neighbor_of_type(surrID, slabType):
+	return {
+		dir.n: surrID[dir.n] == slabType,
+		dir.s: surrID[dir.s] == slabType,
+		dir.e: surrID[dir.e] == slabType,
+		dir.w: surrID[dir.w] == slabType,
+		dir.ne: surrID[dir.ne] == slabType,
+		dir.nw: surrID[dir.nw] == slabType,
+		dir.se: surrID[dir.se] == slabType,
+		dir.sw: surrID[dir.sw] == slabType
+	}
+
+func randomize_gold_transition(constructedSlabData, surrID, neighborType):
+	var constructedColumns = constructedSlabData[0]
+	var neighbors = has_neighbor_of_type(surrID, neighborType)
+	
+	# Define which columns correspond to each side and corner
+	var sideColumns = {
+		dir.n: [0, 1, 2],    # Top row
+		dir.s: [6, 7, 8],    # Bottom row
+		dir.w: [0, 3, 6],    # Left column
+		dir.e: [2, 5, 8],    # Right column
+		dir.nw: [0],         # Northwest corner
+		dir.ne: [2],         # Northeast corner
+		dir.sw: [6],         # Southwest corner
+		dir.se: [8]          # Southeast corner
+	}
+	
+	# Track which columns have been modified to avoid double-modifying corners
+	var modifiedColumns = {}
+	
+	# Only modify columns adjacent to neighbor type
+	for side in sideColumns:
+		if neighbors[side]:
+			for columnIndex in sideColumns[side]:
+				# Skip if this column was already modified
+				if modifiedColumns.has(columnIndex):
+					continue
+				
+				if Random.chance_int(50):
+					for j in range(2, 5): # Cubes 2-4 are gold cubes
+						constructedColumns[columnIndex][j] = Random.choose(Cube.rngCube["IntermediateGold"])
+					
+					modifiedColumns[columnIndex] = true
 
 func make_frail(constructedSlabData, slabID, surrID):
 	match slabID:
@@ -1095,23 +1139,27 @@ func make_frail(constructedSlabData, slabID, surrID):
 				frail_condition(constructedSlabData, slabID, surrID, Slabs.WATER, false)
 				frail_condition(constructedSlabData, slabID, surrID, Slabs.LAVA, false)
 		Slabs.GOLD:
+			if has_neighbor_of_type(surrID, Slabs.DENSE_GOLD).values().has(true):
+				randomize_gold_transition(constructedSlabData, surrID, Slabs.DENSE_GOLD)
+			
 			if oRoundGoldNearPath.pressed == true:
 				frail_condition(constructedSlabData, slabID, surrID, Slabs.PATH, false)
 			if oRoundGoldNearLiquid.pressed == true:
-				# Only solo blocks are adjusted for gold. Because there's already frailness going on by default
 				frail_condition(constructedSlabData, slabID, surrID, Slabs.WATER, true)
 				frail_condition(constructedSlabData, slabID, surrID, Slabs.LAVA, true)
+		Slabs.DENSE_GOLD:
+			if has_neighbor_of_type(surrID, Slabs.GOLD).values().has(true):
+				randomize_gold_transition(constructedSlabData, surrID, Slabs.GOLD)
 		Slabs.EARTH:
 			if oRoundEarthNearPath.pressed == true:
 				frail_condition(constructedSlabData, slabID, surrID, Slabs.PATH, false)
 			if oRoundEarthNearLiquid.pressed == true:
-				# Only solo blocks are adjusted for earth. Because there's already frailness going on by default
 				frail_condition(constructedSlabData, slabID, surrID, Slabs.WATER, true)
 				frail_condition(constructedSlabData, slabID, surrID, Slabs.LAVA, true)
 		Slabs.PATH:
 			if oRoundPathNearLiquid.pressed == true:
-				frail_condition(constructedSlabData, slabID, surrID, Slabs.WATER, false) # This plays better than the inversion of it. (WATER->PATH VS PATH->WATER)
-				frail_condition(constructedSlabData, slabID, surrID, Slabs.LAVA, false) # This plays better than the inversion of it. (LAVA->PATH VS PATH->LAVA)
+				frail_condition(constructedSlabData, slabID, surrID, Slabs.WATER, false)
+				frail_condition(constructedSlabData, slabID, surrID, Slabs.LAVA, false)
 		Slabs.LAVA:
 			if oRoundWaterNearLava.pressed == true:
 				frail_condition(constructedSlabData, slabID, surrID, Slabs.WATER, false)
@@ -1213,6 +1261,14 @@ func frail_fill_corner(slabID, index, constructedColumns, constructedFloor):
 			constructedColumns[index][2] = Random.choose(Cube.rngCube["Gold"])
 			constructedColumns[index][3] = Random.choose(Cube.rngCube["Gold"])
 			constructedColumns[index][4] = Random.choose(Cube.rngCube["Gold"])
+		Slabs.DENSE_GOLD:
+			constructedFloor[index] = 27
+			constructedColumns[index] = blankCubes.duplicate(true)
+			constructedColumns[index][0] = 25
+			constructedColumns[index][1] = Random.choose(Cube.rngCube["DenseGold"])
+			constructedColumns[index][2] = Random.choose(Cube.rngCube["DenseGold"])
+			constructedColumns[index][3] = Random.choose(Cube.rngCube["DenseGold"])
+			constructedColumns[index][4] = Random.choose(Cube.rngCube["DenseGold"])
 		Slabs.ROCK:
 			constructedFloor[index] = 29
 			constructedColumns[index] = blankCubes.duplicate(true)
