@@ -169,10 +169,12 @@ var LIST_OF_BOXES = {
 var LIST_OF_GOLDPILES = [
 	3, 6, 43, 128, 136
 ]
-
-
 var LIST_OF_SPELLBOOKS = [ ]
 var LIST_OF_HEROGATES = [ ]
+
+func clear_dynamic_lists():
+	LIST_OF_SPELLBOOKS.clear()
+	LIST_OF_HEROGATES.clear()
 
 enum SPELLBOOK {
 	HAND = 11

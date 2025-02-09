@@ -27,6 +27,7 @@ enum {
 func start(mapPath):
 	var CODETIME_LOADCFG_START = OS.get_ticks_msec()
 	
+	Things.clear_dynamic_lists()
 	Things.reset_thing_data_to_default()
 	Slabs.reset_slab_data_to_default()
 	Slabset.clear_all_slabset_data()

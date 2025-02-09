@@ -51,7 +51,7 @@ func set_path_and_title(newpath):
 	
 	oGame.reconstruct_command_line() # Always update command line whenever the path changes
 
-func clear_map():
+func clear_map(): # Remember, "Undo" calls this
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	var allInst = get_tree().get_nodes_in_group("Instance")
@@ -74,9 +74,6 @@ func clear_map():
 	
 	# "LOF" # Do this last in case other functions rely on the old map size
 	oDataLof.clear_all()
-	
-	Things.LIST_OF_SPELLBOOKS.clear()
-	Things.LIST_OF_HEROGATES.clear()
 	
 	if oColumnEditor.visible == true:
 		oColumnEditor.visible = false
