@@ -1125,8 +1125,11 @@ func randomize_gold_transition(constructedSlabData, surrID, neighborType):
 					continue
 				
 				if Random.chance_int(50):
-					for j in range(2, 5): # Cubes 2-4 are gold cubes
-						constructedColumns[columnIndex][j] = Random.choose(Cube.rngCube["IntermediateGold"])
+					var currentCube = constructedColumns[columnIndex][4]
+					if currentCube in Cube.rngCube["GoldNearLava"] or currentCube in Cube.rngCube["DenseGoldNearLava"]:
+						constructedColumns[columnIndex][4] = Random.choose(Cube.rngCube["IntermediateGoldNearLava"])
+					else:
+						constructedColumns[columnIndex][4] = Random.choose(Cube.rngCube["IntermediateGold"])
 					
 					modifiedColumns[columnIndex] = true
 
