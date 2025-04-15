@@ -1084,6 +1084,8 @@ func update_wibble(xSlab, ySlab, slabID, includeNearby):
 			oDataWibble.set_cellv(sePos, myWibble)
 
 const blankCubes = [0,0,0,0,0,0,0,0]
+const waterFloor = 545
+const lavaFloors = [546, 547]
 
 func has_neighbor_of_type(surrID, slabType):
 	return {
@@ -1099,39 +1101,51 @@ func has_neighbor_of_type(surrID, slabType):
 
 func randomize_gold_transition(constructedSlabData, surrID, neighborType):
 	var constructedColumns = constructedSlabData[0]
+	var constructedFloor = constructedSlabData[1]
 	var neighbors = has_neighbor_of_type(surrID, neighborType)
-	
-	# Define which columns correspond to each side and corner
-	var sideColumns = {
-		dir.n: [0, 1, 2],    # Top row
-		dir.s: [6, 7, 8],    # Bottom row
-		dir.w: [0, 3, 6],    # Left column
-		dir.e: [2, 5, 8],    # Right column
-		dir.nw: [0],         # Northwest corner
-		dir.ne: [2],         # Northeast corner
-		dir.sw: [6],         # Southwest corner
-		dir.se: [8]          # Southeast corner
+
+	var side_to_columns = {
+		dir.n: [0, 1, 2], dir.s: [6, 7, 8], dir.w: [0, 3, 6], dir.e: [2, 5, 8],
+		dir.nw: [0], dir.ne: [2], dir.sw: [6], dir.se: [8]
 	}
-	
-	# Track which columns have been modified to avoid double-modifying corners
+
+	var currentSlabNearLava = false
+	for i in 8:
+		if surrID[i] == Slabs.LAVA:
+			currentSlabNearLava = true
+			break
+
+	var all_gold_types = Cube.rngCube.get("GoldNearLava", []) + \
+						 Cube.rngCube.get("DenseGoldNearLava", []) + \
+						 Cube.rngCube.get("Gold", []) + \
+						 Cube.rngCube.get("DenseGold", [])
+
 	var modifiedColumns = {}
-	
-	# Only modify columns adjacent to neighbor type
-	for side in sideColumns:
-		if neighbors[side]:
-			for columnIndex in sideColumns[side]:
-				# Skip if this column was already modified
-				if modifiedColumns.has(columnIndex):
+
+	for side_direction in range(8):
+		if neighbors[side_direction]:
+			var columns_to_check = side_to_columns.get(side_direction, [])
+
+			for columnIndex in columns_to_check:
+				if columnIndex == 4 or modifiedColumns.has(columnIndex):
 					continue
-				
-				if Random.chance_int(50):
+
+				var floorTex = constructedFloor[columnIndex]
+				var isClearedByLiquid = (floorTex == waterFloor or floorTex in lavaFloors) and constructedColumns[columnIndex] == blankCubes
+
+				if not isClearedByLiquid and Random.chance_int(50):
 					var currentCube = constructedColumns[columnIndex][4]
-					if currentCube in Cube.rngCube["GoldNearLava"] or currentCube in Cube.rngCube["DenseGoldNearLava"]:
-						constructedColumns[columnIndex][4] = Random.choose(Cube.rngCube["IntermediateGoldNearLava"])
-					else:
-						constructedColumns[columnIndex][4] = Random.choose(Cube.rngCube["IntermediateGold"])
-					
-					modifiedColumns[columnIndex] = true
+
+					if currentCube in all_gold_types:
+						var replacementSet = Cube.rngCube.get("IntermediateGold", [])
+						var intermediateLavaSet = Cube.rngCube.get("IntermediateGoldNearLava", [])
+						if currentSlabNearLava and intermediateLavaSet.size() > 0:
+							replacementSet = intermediateLavaSet
+
+						if replacementSet.size() > 0:
+							constructedColumns[columnIndex][4] = Random.choose(replacementSet)
+
+				modifiedColumns[columnIndex] = true
 
 func make_frail(constructedSlabData, slabID, surrID):
 	match slabID:
