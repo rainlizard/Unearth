@@ -168,6 +168,8 @@ var sprite_id = {
 "ROCK_PILLAR" : preload("res://extra_images/rock_pillar.png"),
 "ROCK_PILLAR_SMALL" : preload("res://extra_images/rock.png"),
 "DRUID_LAIR" : preload("res://extra_images/lair_druid.png"),
+"MAIDEN_LAIR" : preload("res://extra_images/lair_maiden.png"),
+"SPIDERLING_LAIR" : preload("res://extra_images/lair_spiderling.png"),
 # Creatures
 "POWER_SIGHT" : preload("res://dk_images/magic_fogs/anim0854/AnimCastedSight.tres"),
 "WIZARD" : preload("res://edited_images/creatr_icon_64/wizrd_std.png"),
@@ -236,6 +238,10 @@ var sprite_id = {
 "DRUID_PORTRAIT" : preload("res://extra_images/druid_portrait.png"),
 "TIME_MAGE" : preload("res://extra_images/time_mage.png"),
 "TIME_MAGE_PORTRAIT" : preload("res://extra_images/time_mage_portrait.png"),
+"MAIDEN" : preload("res://extra_images/maiden.png"),
+"MAIDEN_PORTRAIT" : preload("res://extra_images/maiden_portrait.png"),
+"SPIDERLING" : preload("res://extra_images/spiderling.png"),
+"SPIDERLING_PORTRAIT" : preload("res://extra_images/spiderling_portrait.png"),
 }
 
 
