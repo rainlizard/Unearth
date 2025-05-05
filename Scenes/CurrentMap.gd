@@ -25,6 +25,7 @@ onready var oMenu = Nodelist.list["oMenu"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
+onready var oDataLua = Nodelist.list["oDataLua"]
 
 var path = ""
 var currentFilePaths = {} # [0] = pathString,  [1] = modified date
@@ -67,8 +68,6 @@ func clear_map(): # Remember, "Undo" calls this
 	oDataLevelStyle.data = 0
 	# 3D
 	oGenerateTerrain.clear()
-	#"TXT"
-	oDataScript.data = ""
 	
 	oScriptHelpers.clear()
 	

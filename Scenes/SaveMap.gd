@@ -6,6 +6,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oDataScript = Nodelist.list["oDataScript"]
+onready var oDataLua = Nodelist.list["oDataLua"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
@@ -44,7 +45,7 @@ func save_map(filePath): # auto opens other files
 	else:
 		print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 		
-		if oDataScript.data == "":
+		if oDataScript.data == "" and oDataLua.data == "":
 			oMessage.big("Warning", "Your map has no script. Use the Script Generator in Map Settings to give your map basic functionality.")
 		
 		oMessage.quick('Saved map')

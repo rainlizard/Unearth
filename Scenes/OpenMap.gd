@@ -138,14 +138,10 @@ func open_map(filePath):
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
 				
 				# Don't bother reading original formats if KFX format files have been found
-				if EXT == "TNG" and oCurrentMap.currentFilePaths.has("TNGFX") == true:
-					continue
-				if EXT == "APT" and oCurrentMap.currentFilePaths.has("APTFX") == true:
-					continue
-				if EXT == "LGT" and oCurrentMap.currentFilePaths.has("LGTFX") == true:
-					continue
-				if EXT == "LIF" and oCurrentMap.currentFilePaths.has("LOF") == true:
-					continue
+				if EXT == "TNG" and oCurrentMap.currentFilePaths.has("TNGFX") == true: continue
+				if EXT == "APT" and oCurrentMap.currentFilePaths.has("APTFX") == true: continue
+				if EXT == "LGT" and oCurrentMap.currentFilePaths.has("LGTFX") == true: continue
+				if EXT == "LIF" and oCurrentMap.currentFilePaths.has("LOF") == true: continue
 				
 				var readPath = oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING]
 				oBuffers.read(readPath, EXT.to_upper())

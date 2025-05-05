@@ -1,4 +1,4 @@
-[gd_scene load_steps=191 format=2]
+[gd_scene load_steps=192 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -170,6 +170,7 @@
 [ext_resource path="res://Scenes/Guidelines.gd" type="Script" id=168]
 [ext_resource path="res://Scenes/CfgLoader.gd" type="Script" id=169]
 [ext_resource path="res://Scenes/CompareCreatureStats.gd" type="Script" id=170]
+[ext_resource path="res://Scenes/DataLua.gd" type="Script" id=171]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -390,6 +391,9 @@ script = ExtResource( 44 )
 
 [node name="DataScript" type="Node" parent="CurrentMap"]
 script = ExtResource( 117 )
+
+[node name="DataLua" type="Node" parent="CurrentMap"]
+script = ExtResource( 171 )
 
 [node name="DataLof" type="Node" parent="CurrentMap"]
 script = ExtResource( 141 )

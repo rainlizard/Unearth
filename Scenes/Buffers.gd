@@ -36,6 +36,7 @@ const FILE_TYPES = [
 	"SLX",
 	"WLB",
 	"TXT",
+	"LUA",
 	"UNE",
 ]
 
@@ -58,6 +59,7 @@ func new_blank(EXT):
 		"SLX" : oReadData.new_slx()
 		"WLB" : oReadData.new_wlb()
 		"TXT" : oReadData.new_txt()
+		"LUA" : oReadData.new_lua()
 		"UNE" : oReadData.new_une()
 
 func read(filePath, EXT):
@@ -91,6 +93,7 @@ func read_buffer_for_extension(buffer, EXT):
 		"SLX" : oReadData.read_slx(buffer)
 		"WLB" : oReadData.read_wlb(buffer)
 		"TXT" : oReadData.read_txt(buffer)
+		"LUA" : oReadData.read_lua(buffer)
 		"UNE" : oReadData.read_une(buffer)
 
 func file_path_to_buffer(filePath):
@@ -137,6 +140,7 @@ func get_buffer_for_extension(EXT, filePath):
 		"SLX": return oWriteData.write_slx()
 		"WLB": return oWriteData.write_wlb()
 		"TXT": return oWriteData.write_txt()
+		"LUA": return oWriteData.write_lua()
 		"UNE": return oWriteData.write_une()
 
 func should_process_file_type(EXT):

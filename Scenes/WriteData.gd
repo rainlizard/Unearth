@@ -14,6 +14,7 @@ onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oDataLua = Nodelist.list["oDataLua"]
 
 var value # just so I don't have to initialize the var in every function
 
@@ -64,6 +65,14 @@ func write_txt():
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	var scriptBytes = value.to_ascii()
 	buffer.put_data(scriptBytes)
+	return buffer
+
+func write_lua():
+	var buffer = StreamPeerBuffer.new()
+	value = oDataLua.data
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
+	var luaBytes = value.to_utf8() # Use UTF8 for Lua as well
+	buffer.put_data(luaBytes)
 	return buffer
 
 func write_une():

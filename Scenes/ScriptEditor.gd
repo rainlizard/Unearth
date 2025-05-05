@@ -94,20 +94,44 @@ func update_texteditor():
 
 func _notification(what: int):
 	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
-		check_if_txt_file_has_been_modified()
+		check_if_txt_file_has_been_modified() # Check for TXT file changes
+		check_if_lua_file_has_been_modified() # Check for LUA file changes
 
 
 func check_if_txt_file_has_been_modified():
-	if oCurrentMap.currentFilePaths.has("TXT"):
-		var filePath = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
-		var getModifiedTime = File.new().get_modified_time(filePath)
-		if oCurrentMap.currentFilePaths["TXT"][oCurrentMap.MODIFIED_DATE] != getModifiedTime:
-			oMessage.quick("Script reloaded from file.") #"Script was reloaded from file."
-			oCurrentMap.currentFilePaths["TXT"][oCurrentMap.MODIFIED_DATE] = getModifiedTime
-			# Reload
-			oBuffers.read(filePath, "TXT")
+	var file_type = "TXT"
+	if oCurrentMap.currentFilePaths.has(file_type):
+		var file_info = oCurrentMap.currentFilePaths[file_type]
+		var file_path = file_info[oCurrentMap.PATHSTRING]
+		var stored_modified_time = file_info[oCurrentMap.MODIFIED_DATE]
+		var current_modified_time = File.new().get_modified_time(file_path)
+
+		if stored_modified_time != current_modified_time:
+			oMessage.quick("Script reloaded from file.")
+			file_info[oCurrentMap.MODIFIED_DATE] = current_modified_time
+			
+			# Reload the TXT buffer
+			oBuffers.read(file_path, file_type)
+			
+			# Update the main script editor
 			update_texteditor()
 			set_script_as_edited(false)
+
+
+func check_if_lua_file_has_been_modified():
+	var file_type = "LUA"
+	if oCurrentMap.currentFilePaths.has(file_type):
+		var file_info = oCurrentMap.currentFilePaths[file_type]
+		var file_path = file_info[oCurrentMap.PATHSTRING]
+		var stored_modified_time = file_info[oCurrentMap.MODIFIED_DATE]
+		var current_modified_time = File.new().get_modified_time(file_path)
+
+		if stored_modified_time != current_modified_time:
+			oMessage.quick("Lua script reloaded from file.")
+			file_info[oCurrentMap.MODIFIED_DATE] = current_modified_time
+			
+			# Reload the LUA buffer
+			oBuffers.read(file_path, file_type)
 
 
 func _on_ScriptTextEdit_visibility_changed():

@@ -15,6 +15,7 @@ onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oDataLua = Nodelist.list["oDataLua"]
 
 var value # just so I don't have to initialize the var in every function
 
@@ -148,7 +149,15 @@ func read_txt(buffer):
 	value = value.replace(char(0x200B), "") # Remove zero width spaces
 	oDataScript.data = value
 func new_txt():
-	pass
+	oDataScript.data = ""
+
+func read_lua(buffer):
+	buffer.seek(0)
+	value = buffer.get_string(buffer.get_size())
+	value = value.replace(char(0x200B), "") # Remove zero width spaces
+	oDataLua.data = value
+func new_lua():
+	oDataLua.data = ""
 
 func read_slb(buffer):
 	oDataSlab.initialize(M.xSize, M.ySize, 0, Grid.U16)
