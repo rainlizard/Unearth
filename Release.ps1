@@ -10,8 +10,27 @@ $commitCount = git rev-list --count HEAD
 # Construct the full version
 $fullVersion = "$majorMinorVersion.$commitCount"
 
+# Prompt for changelog
+Write-Host "Paste your changelog below for version $fullVersion."
+Write-Host "Press Enter on an empty line when finished:"
+$changelogLines = @()
+while ($true) {
+    $line = Read-Host
+    # Check if the line is null (Ctrl+Z in console) or empty
+    if ($line -eq $null -or [string]::IsNullOrWhiteSpace($line)) {
+        break
+    }
+    $changelogLines += $line
+}
+$changelog = $changelogLines -join "`n"
+
+# Construct the tag message
+# The first line is the title, followed by a blank line, then the body (changelog)
+$tagMessage = "Release $fullVersion`n`n$changelog"
+
 # Create the Git tag
-git tag -a "$fullVersion" -m "Release $fullVersion"
+# Use -m with the multi-line message. PowerShell should handle passing it correctly.
+git tag -a "$fullVersion" -m $tagMessage
 
 # Push the tag to the remote repository
 git push origin "$fullVersion"
