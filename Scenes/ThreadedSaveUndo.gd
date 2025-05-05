@@ -42,5 +42,8 @@ func create_state():
 		#print("Undo processing: ", EXT)
 		if oBuffers.should_process_file_type(EXT) == false:
 			continue
+		# Skip saving script files in the undo state
+		if EXT == "TXT" or EXT == "LUA":
+			continue
 		new_state[EXT] = oBuffers.get_buffer_for_extension(EXT, oCurrentMap.path)
 	return new_state

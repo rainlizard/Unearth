@@ -10,6 +10,8 @@ onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oMenu = Nodelist.list["oMenu"]
+onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
+
 
 var undo_history = []
 var max_undo_states = 256
@@ -64,6 +66,7 @@ func on_undo_state_saved(new_state):
 
 
 func perform_undo():
+	if oMapSettingsWindow.visible == true: return
 	print("perform_undo")
 	if performing_undo == true or undo_history.size() <= 1:
 		return
