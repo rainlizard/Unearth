@@ -22,7 +22,6 @@ onready var oDoorsAvailable = Nodelist.list["oDoorsAvailable"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oGeneratorContainer = Nodelist.list["oGeneratorContainer"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
-onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
 onready var oConfirmGenerateScript = Nodelist.list["oConfirmGenerateScript"]
 onready var oKeeperFXScriptCheckBox = Nodelist.list["oKeeperFXScriptCheckBox"]
 onready var oResearchables = Nodelist.list["oResearchables"]
@@ -33,6 +32,8 @@ onready var oPurpleAICheckBox = Nodelist.list["oPurpleAICheckBox"]
 onready var oBlackAICheckBox = Nodelist.list["oBlackAICheckBox"]
 onready var oOrangeAICheckBox = Nodelist.list["oOrangeAICheckBox"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oScriptEditorWindow = Nodelist.list["oScriptEditorWindow"]
+onready var oScriptGeneratorWindow = Nodelist.list["oScriptGeneratorWindow"]
 
 var scnAvailableButton = preload('res://Scenes/AvailableButton.tscn')
 
@@ -364,8 +365,9 @@ func _on_OrangeAICheckBox_toggled(button_pressed):
 
 
 func _on_GenerateScriptButton_pressed():
-	oMapSettingsTabs.current_tab = 2
+	Utils.popup_centered(oScriptEditorWindow)
 	Utils.popup_centered(oConfirmGenerateScript)
+	oScriptGeneratorWindow.hide()
 
 func _on_ConfirmGenerateScript_confirmed():
 	oScriptTextEdit.text = ""

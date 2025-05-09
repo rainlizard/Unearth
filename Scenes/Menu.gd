@@ -42,6 +42,7 @@ onready var oActionPointListWindow = Nodelist.list["oActionPointListWindow"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oSortCreatureStats = Nodelist.list["oSortCreatureStats"]
 onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
+onready var oConfirmOpenWhichScript = Nodelist.list["oConfirmOpenWhichScript"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -271,13 +272,26 @@ func _on_ViewSubmenu_Pressed(pressedID):
 			else:
 				oMessage.quick("No map path detected. Try saving first.")
 		1: # Open script file
-			if oCurrentMap.path != "":
-				var pathToTryAndOpen = oCurrentMap.path + '.txt'
-				var err = OS.shell_open(pathToTryAndOpen)
-				if err != OK:
-					oMessage.quick("Could not open: " + pathToTryAndOpen)
-			else:
+			if oCurrentMap.path == "":
 				oMessage.quick("No map path detected. Try saving first.")
+			else:
+				var lua_enabled = oCurrentMap.LuaScript_enabled
+				var dk_enabled = oCurrentMap.DKScript_enabled
+
+				if lua_enabled and dk_enabled:
+					Utils.popup_centered(oConfirmOpenWhichScript)
+				elif lua_enabled:
+					var pathToTryAndOpen = oCurrentMap.path + ".lua"
+					var err = OS.shell_open(pathToTryAndOpen)
+					if err != OK:
+						oMessage.quick("Could not open: " + pathToTryAndOpen)
+				elif dk_enabled:
+					var pathToTryAndOpen = oCurrentMap.path + ".txt"
+					var err = OS.shell_open(pathToTryAndOpen)
+					if err != OK:
+						oMessage.quick("Could not open: " + pathToTryAndOpen)
+				else: 
+					oMessage.quick("No script available for this map.")
 		2: # Open log file
 			var pathToTryAndOpen = oGame.get_precise_filepath(oGame.GAME_DIRECTORY, "KEEPERFX.LOG")
 			var err = OS.shell_open(pathToTryAndOpen)

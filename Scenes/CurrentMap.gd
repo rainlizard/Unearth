@@ -29,6 +29,9 @@ onready var oDataLua = Nodelist.list["oDataLua"]
 
 var path = ""
 var currentFilePaths = {} # [0] = pathString,  [1] = modified date
+var DKScript_enabled = false
+var LuaScript_enabled = false
+
 
 enum {
 	PATHSTRING

@@ -32,6 +32,9 @@ onready var oHBoxLandView = Nodelist.list["oHBoxLandView"]
 onready var oHBoxNameID = Nodelist.list["oHBoxNameID"]
 onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
+onready var oDKScriptFileSection = Nodelist.list["oDKScriptFileSection"]
+onready var oLuaScriptFileSection = Nodelist.list["oLuaScriptFileSection"]
+onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 
 const kind_options = {
 	"Solo" : "FREE",
@@ -66,6 +69,15 @@ func _ready():
 		oOptionsOptionButton.add_item(stringKind)
 		oOptionsOptionButton.selected = 0
 
+func _notification(what):
+	match what:
+		NOTIFICATION_WM_FOCUS_IN:
+			_update_lof_path_button()
+			if is_instance_valid(oDKScriptFileSection):
+				oDKScriptFileSection.update_file_status()
+			if is_instance_valid(oLuaScriptFileSection):
+				oLuaScriptFileSection.update_file_status()
+
 func _on_MapProperties_visibility_changed():
 	if is_instance_valid(oDungeonStyleList) == false: return
 	if visible == true:
@@ -97,6 +109,12 @@ func _on_MapProperties_visibility_changed():
 		set_format_selection(oCurrentFormat.selected)
 		
 		update_section_visibility()
+		_update_lof_path_button()
+		
+		if is_instance_valid(oDKScriptFileSection):
+			oDKScriptFileSection.update_file_status()
+		if is_instance_valid(oLuaScriptFileSection):
+			oLuaScriptFileSection.update_file_status()
 
 func _on_MapFormatSetting_item_selected(index):
 	# Clicked using mouse
@@ -267,3 +285,32 @@ func update_section_visibility():
 
 func _on_OpenMapCoordButton_pressed():
 	Utils.popup_centered(oMapCoordinatesWindow)
+
+onready var oLofPathLinkButton = Nodelist.list["oLofPathLinkButton"]
+
+func _on_LofPathLinkButton_pressed():
+	var err = OS.shell_open(oLofPathLinkButton.hint_tooltip)
+	if err != OK:
+		oMessage.quick("Error: " + str(err))
+
+func _update_lof_path_button():
+	if not is_instance_valid(oLofPathLinkButton):
+		return
+
+	if is_instance_valid(oCurrentMap) and oCurrentMap.currentFilePaths != null:
+		if oCurrentMap.currentFilePaths.has("LOF"):
+			var lof_path_data = oCurrentMap.currentFilePaths["LOF"]
+			var lof_full_path = lof_path_data[oCurrentMap.PATHSTRING]
+			
+			if lof_full_path != "" and File.new().file_exists(lof_full_path):
+				oLofPathLinkButton.text = lof_full_path.get_file()
+				oLofPathLinkButton.hint_tooltip = lof_full_path
+			else:
+				oLofPathLinkButton.text = "N/A (.lof missing)"
+				oLofPathLinkButton.hint_tooltip = "Expected .lof file not found on disk: " + lof_full_path
+		else:
+			oLofPathLinkButton.text = "N/A (No .lof)"
+			oLofPathLinkButton.hint_tooltip = "No .lof file associated with the current map in currentFilePaths."
+	else:
+		oLofPathLinkButton.text = "N/A"
+		oLofPathLinkButton.hint_tooltip = "Map not loaded or currentFilePaths is not available."

@@ -1,14 +1,14 @@
-extends Control
+extends PanelContainer
 onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oScriptEmptyStatus = Nodelist.list["oScriptEmptyStatus"]
+onready var oScriptEditorStatusLabel = Nodelist.list["oScriptEditorStatusLabel"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
 onready var oUi = Nodelist.list["oUi"]
-onready var oMapSettingsTabs = Nodelist.list["oMapSettingsTabs"]
 onready var oBuffers = Nodelist.list["oBuffers"]
+onready var oScriptEditorWindow = Nodelist.list["oScriptEditorWindow"]
 
 var scriptHasBeenEditedInUnearth = false
 
@@ -46,10 +46,10 @@ func set_script_as_edited(edited):
 	scriptHasBeenEditedInUnearth = edited
 	match edited:
 		true:
-			oMapSettingsTabs.set_tab_title(2, "Edit Script *")
+			oScriptEditorWindow.window_title = "Edit DKScript *"
 			oEditor.mapHasBeenEdited = true
 		false:
-			oMapSettingsTabs.set_tab_title(2, "Edit Script")
+			oScriptEditorWindow.window_title = "Edit DKScript"
 
 
 func set_script_data(value):
@@ -59,9 +59,14 @@ func set_script_data(value):
 
 func update_empty_script_status():
 	if oScriptTextEdit.text == "":
-		oScriptEmptyStatus.visible = true
+		oScriptEditorStatusLabel.text = "Your script file is empty!"
 	else:
-		oScriptEmptyStatus.visible = false
+		var script_file_path = "No script file loaded"
+		if oCurrentMap.currentFilePaths.has("TXT"):
+			script_file_path = oCurrentMap.currentFilePaths["TXT"][oCurrentMap.PATHSTRING]
+		else:
+			script_file_path = oCurrentMap.path + '.txt'
+		oScriptEditorStatusLabel.text = script_file_path
 
 
 func load_generated_text(setWithString):
@@ -201,3 +206,7 @@ func _input(event):
 	if event is InputEventMouseButton and (event.is_pressed()):
 		if Rect2( oScriptTextEdit.rect_global_position, oScriptTextEdit.rect_size ).has_point(oScriptTextEdit.get_global_mouse_position()) == false:
 			oScriptTextEdit.release_focus()
+
+
+func _on_ScriptEditorCloseButton_pressed():
+	oScriptEditorWindow.hide()

@@ -17,6 +17,7 @@ textures
 # Mono-specific ignores
 .mono/
 .vs/
+.cursor/
 data_*/
 
 

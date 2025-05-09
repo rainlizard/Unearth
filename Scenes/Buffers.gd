@@ -150,6 +150,14 @@ func should_process_file_type(EXT):
 	elif oCurrentFormat.selected == Constants.KfxFormat:
 		if ["LIF", "TNG", "APT", "LGT"].has(EXT):
 			return false
+	
+	# Only save script files if they are enabled in the current map configuration
+	if EXT == "TXT":
+		if oCurrentMap.DKScript_enabled == false:
+			return false
+	elif EXT == "LUA":
+		if oCurrentMap.LuaScript_enabled == false:
+			return false
 	return true
 
 func resize_all_data_structures(new_width, new_height):
