@@ -124,18 +124,20 @@ func discover_disk_script(keyExtensionUppercase: String) -> String:
 			return precisePathOnDisk
 	return ""
 
-func show_script_interface(scriptPath: String, keyExtensionUppercase: String):
-	if scriptPath == "":
-		return
+func show_script_interface(displayText: String, tooltipText: String, keyExtensionUppercase: String):
 	header_vbox.visible = true
-	path_link_node.text = scriptPath.get_file()
-	path_link_node.hint_tooltip = scriptPath
-	path_link_node.visible = true
 	path_separator_node.visible = true
 	hbox_create_node.visible = false
 	hbox_delete_node.visible = true
-	if keyExtensionUppercase == "TXT":
+
+	path_link_node.visible = true
+	path_link_node.text = displayText
+	path_link_node.hint_tooltip = tooltipText
+		
+	if keyExtensionUppercase == "TXT": # Generate button only for TXT scripts
 		hbox_generate_node.visible = true
+	else:
+		hbox_generate_node.visible = false
 
 func record_script_entry(operatedFilePath: String, fileKeyExtensionUppercase: String, intendedToExist: bool):
 	if is_instance_valid(oCurrentMap) == false or oCurrentMap.currentFilePaths == null or fileKeyExtensionUppercase == "":
@@ -145,12 +147,15 @@ func record_script_entry(operatedFilePath: String, fileKeyExtensionUppercase: St
 	var file = File.new()
 	if intendedToExist and operatedFilePath != "" and file.file_exists(operatedFilePath):
 		scriptIsActive = true
+	
 	if scriptIsActive:
 		var modifiedTime = file.get_modified_time(operatedFilePath)
 		oCurrentMap.currentFilePaths[fileKeyExtensionUppercase] = [operatedFilePath, modifiedTime]
 	elif oCurrentMap.currentFilePaths.has(fileKeyExtensionUppercase):
 		oCurrentMap.currentFilePaths.erase(fileKeyExtensionUppercase)
-	set_script_flag(fileKeyExtensionUppercase, scriptIsActive)
+	
+	if operatedFilePath != "":
+		set_script_flag(fileKeyExtensionUppercase, scriptIsActive)
 
 func update_file_status():
 	reset_user_display()
@@ -159,10 +164,36 @@ func update_file_status():
 	if baseExtension != "":
 		var keyExtensionUppercase = baseExtension.to_upper()
 		if get_script_flag(keyExtensionUppercase):
-			var scriptPathValue = resolve_script_path(keyExtensionUppercase)
-			if scriptPathValue != "" and get_script_flag(keyExtensionUppercase):
-				show_script_interface(scriptPathValue, keyExtensionUppercase)
-				finalAlpha = 1.0
+			var scriptPathOnDisk = resolve_script_path(keyExtensionUppercase)
+			
+			var displayText = ""
+			var tooltipText = ""
+
+			if scriptPathOnDisk != "":
+				displayText = scriptPathOnDisk.get_file()
+				tooltipText = scriptPathOnDisk
+			else:
+				var basenameForDisplay = "untitled"
+				if is_instance_valid(oCurrentMap):
+					if oCurrentMap.path != "":
+						basenameForDisplay = oCurrentMap.path.get_file().get_basename()
+					else:
+						if oCurrentMap.has_meta("map_default_id_for_filename") and oCurrentMap.get_meta("map_default_id_for_filename") != "":
+							basenameForDisplay = oCurrentMap.get_meta("map_default_id_for_filename")
+						else:
+							if baseExtension == "txt":
+								basenameForDisplay = "Unsaved DKScript"
+							elif baseExtension == "lua":
+								basenameForDisplay = "Unsaved LuaScript"
+							else:
+								basenameForDisplay = "Unsaved Script"
+				
+				displayText = basenameForDisplay
+				tooltipText = "Script for '" + displayText + "'. File not on disk. Save map to write it."
+			
+			show_script_interface(displayText, tooltipText, keyExtensionUppercase)
+			finalAlpha = 1.0
+			
 	self_modulate.a = finalAlpha
 	if is_instance_valid(create_label_node):
 		create_label_node.self_modulate.a = finalAlpha
@@ -188,36 +219,37 @@ func write_file_content(targetPath: String, content: String) -> bool:
 		oMessage.quick("Error writing file '" + targetPath.get_file() + "'. Code: " + str(err))
 		return false
 
-func can_start_task(isInvalidCondition: bool, specificIssueMessage: String, taskName: String) -> bool:
-	if isInvalidCondition:
-		oMessage.quick(specificIssueMessage + " Cannot " + taskName + " script.")
+func start_file_task(taskName: String) -> void:
+	if is_instance_valid(oCurrentMap) == false or oCurrentMap.is_inside_tree() == false:
+		oMessage.quick("Map instance not valid. Cannot " + taskName + " script.")
 		update_file_status()
-		return true
-	return false
-
-func start_file_task(taskFunction: FuncRef, taskName: String) -> void:
-	if can_start_task(
-		is_instance_valid(oCurrentMap) == false or oCurrentMap.is_inside_tree() == false or oCurrentMap.path == "",
-		"Map not loaded or path not set.",
-		taskName
-	): return
+		return
 
 	var baseExtension = self.script_file_extension
-	if can_start_task(
-		baseExtension == "",
-		"Script extension not identified for this section.",
-		taskName
-	): return
+	if baseExtension == "":
+		oMessage.quick("Script extension not identified for this section. Cannot " + taskName + " script.")
+		update_file_status()
+		return
 
-	var mapBaseDirectory = get_map_directory()
-	var mapFilenameBasename = get_map_basename()
-	if can_start_task(
-		mapBaseDirectory == "" or mapFilenameBasename == "",
-		"Map path or filename is invalid.",
-		taskName
-	): return
+	var mapIsSaved = oCurrentMap.path != ""
+	var mapBaseDirectory = ""
+	var mapFilenameBasename = ""
 
-	taskFunction.call_func(mapBaseDirectory, mapFilenameBasename, baseExtension)
+	if mapIsSaved:
+		mapBaseDirectory = get_map_directory()
+		mapFilenameBasename = get_map_basename()
+		if mapBaseDirectory == "" or mapFilenameBasename == "":
+			oMessage.quick("Map path or filename is invalid, though map appears saved. Cannot " + taskName + " script.")
+			update_file_status()
+			return
+	# If !mapIsSaved, mapBaseDirectory and mapFilenameBasename remain ""
+
+	match taskName:
+		"create":
+			make_empty_file(mapBaseDirectory, mapFilenameBasename, baseExtension, mapIsSaved)
+		"generate":
+			make_templated_file(mapBaseDirectory, mapFilenameBasename, baseExtension)
+	
 	update_file_status()
 
 func perform_write_action(mapBaseDirectory: String, mapFilenameBasename: String, baseExtension: String, content: String, successVerb: String) -> bool:
@@ -267,8 +299,9 @@ func perform_write_action(mapBaseDirectory: String, mapFilenameBasename: String,
 			record_script_entry(pathForOperation, keyExtensionForMapPaths, false)
 			return false
 
-func make_empty_file(mapBaseDirectory: String, mapFilenameBasename: String, baseExtension: String) -> bool:
+func make_empty_file(mapBaseDirectory: String, mapFilenameBasename: String, baseExtension: String, mapIsSaved: bool) -> bool:
 	var content = ""
+	var keyExtensionForMapPaths = baseExtension.to_upper()
 	if baseExtension == "lua":
 		var mapName = "--insert map name--"
 		if is_instance_valid(oDataMapName) and oDataMapName.data != "":
@@ -302,15 +335,24 @@ function Register_triggers()
 
 end
 """ % [mapName, authorName]
-	var successVerb = "Created"
-	var success = perform_write_action(mapBaseDirectory, mapFilenameBasename, baseExtension, content, successVerb)
-	if success and baseExtension == "lua":
-		if is_instance_valid(Nodelist.list["oDataLua"]):
-			Nodelist.list["oDataLua"].data = content
-	return success
+
+	if mapIsSaved:
+		var successVerb = "Created"
+		var success = perform_write_action(mapBaseDirectory, mapFilenameBasename, baseExtension, content, successVerb)
+		if success and baseExtension == "lua":
+			if is_instance_valid(Nodelist.list["oDataLua"]):
+				Nodelist.list["oDataLua"].data = content
+		return success
+	else:
+		oMessage.quick("Created " + keyExtensionForMapPaths + " script in memory (map not saved).")
+		set_script_flag(keyExtensionForMapPaths, true)
+		if baseExtension == "lua":
+			if is_instance_valid(Nodelist.list["oDataLua"]):
+				Nodelist.list["oDataLua"].data = content
+		return true
 
 func _on_CreateButton_pressed():
-	start_file_task(funcref(self, "make_empty_file"), "create")
+	start_file_task("create")
 
 func _on_DeleteButton_pressed():
 	oConfirmScriptDeletion.set_meta("requesting_script_section_id", get_instance_id())
@@ -347,7 +389,7 @@ func make_templated_file(mapBaseDirectory: String, mapFilenameBasename: String, 
 	return true
 
 func _on_GenerateButton_pressed():
-	start_file_task(funcref(self, "make_templated_file"), "generate")
+	start_file_task("generate")
 
 func _on_PathLinkButton_pressed():
 	match name:

@@ -35,6 +35,7 @@ onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oDKScriptFileSection = Nodelist.list["oDKScriptFileSection"]
 onready var oLuaScriptFileSection = Nodelist.list["oLuaScriptFileSection"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oLofPathLinkButton = Nodelist.list["oLofPathLinkButton"]
 
 const kind_options = {
 	"Solo" : "FREE",
@@ -286,8 +287,6 @@ func update_section_visibility():
 func _on_OpenMapCoordButton_pressed():
 	Utils.popup_centered(oMapCoordinatesWindow)
 
-onready var oLofPathLinkButton = Nodelist.list["oLofPathLinkButton"]
-
 func _on_LofPathLinkButton_pressed():
 	var err = OS.shell_open(oLofPathLinkButton.hint_tooltip)
 	if err != OK:
@@ -297,20 +296,51 @@ func _update_lof_path_button():
 	if not is_instance_valid(oLofPathLinkButton):
 		return
 
-	if is_instance_valid(oCurrentMap) and oCurrentMap.currentFilePaths != null:
-		if oCurrentMap.currentFilePaths.has("LOF"):
-			var lof_path_data = oCurrentMap.currentFilePaths["LOF"]
-			var lof_full_path = lof_path_data[oCurrentMap.PATHSTRING]
-			
-			if lof_full_path != "" and File.new().file_exists(lof_full_path):
-				oLofPathLinkButton.text = lof_full_path.get_file()
-				oLofPathLinkButton.hint_tooltip = lof_full_path
-			else:
-				oLofPathLinkButton.text = "N/A (.lof missing)"
-				oLofPathLinkButton.hint_tooltip = "Expected .lof file not found on disk: " + lof_full_path
-		else:
-			oLofPathLinkButton.text = "N/A (No .lof)"
-			oLofPathLinkButton.hint_tooltip = "No .lof file associated with the current map in currentFilePaths."
-	else:
+	if not is_instance_valid(oCurrentMap):
 		oLofPathLinkButton.text = "N/A"
-		oLofPathLinkButton.hint_tooltip = "Map not loaded or currentFilePaths is not available."
+		oLofPathLinkButton.hint_tooltip = "Map not loaded."
+		return
+
+	# Case 1: Map is not saved yet
+	if oCurrentMap.path == "": # An empty path indicates an unsaved map
+		oLofPathLinkButton.text = "Unsaved LOF"
+		var mapDisplayName = ""
+		if is_instance_valid(oDataMapName) and oDataMapName.data != null and oDataMapName.data != "":
+			mapDisplayName = oDataMapName.data
+		elif oCurrentMap.has_meta("map_default_id_for_filename") and oCurrentMap.get_meta("map_default_id_for_filename") != "":
+			mapDisplayName = oCurrentMap.get_meta("map_default_id_for_filename")
+		elif oCurrentMap.name != null and oCurrentMap.name != "" and not oCurrentMap.name.begins_with("@"):
+			mapDisplayName = oCurrentMap.name
+		else:
+			mapDisplayName = "current map" # Neutral placeholder if no other name is found
+		oLofPathLinkButton.hint_tooltip = ".lof file for '" + mapDisplayName + "'. Not on disk. Save map to write it."
+		return
+
+	# Case 2: Map is saved. Check its data (currentFilePaths).
+	if oCurrentMap.currentFilePaths == null:
+		oLofPathLinkButton.text = "N/A" # Or consider "Data Error"
+		oLofPathLinkButton.hint_tooltip = "Map data (file paths registry) is missing for this saved map."
+		return
+
+	if oCurrentMap.currentFilePaths.has("LOF"):
+		var lof_path_data = oCurrentMap.currentFilePaths["LOF"]
+		# Ensure lof_path_data is an array and oCurrentMap.PATHSTRING is a valid index (typically 0)
+		if typeof(lof_path_data) == TYPE_ARRAY and lof_path_data.size() > oCurrentMap.PATHSTRING:
+			var lof_full_path = lof_path_data[oCurrentMap.PATHSTRING]
+
+			if lof_full_path != null and typeof(lof_full_path) == TYPE_STRING and lof_full_path != "":
+				if File.new().file_exists(lof_full_path):
+					oLofPathLinkButton.text = lof_full_path.get_file()
+					oLofPathLinkButton.hint_tooltip = lof_full_path
+				else: # LOF path in data, but file not found on disk
+					oLofPathLinkButton.text = "Missing LOF"
+					oLofPathLinkButton.hint_tooltip = "Expected .lof file not found on disk: " + lof_full_path
+			else: # Path string in data is invalid (null, not string, or empty)
+				oLofPathLinkButton.text = "Missing LOF"
+				oLofPathLinkButton.hint_tooltip = ".lof file path is malformed or empty in map data."
+		else: # Data for "LOF" key is not the expected array format [path, mod_time]
+			oLofPathLinkButton.text = "Missing LOF" # Or "Data Error"
+			oLofPathLinkButton.hint_tooltip = ".lof file data format is unexpected in map data."
+	else: # No "LOF" key in currentFilePaths for a saved map
+		oLofPathLinkButton.text = "Missing LOF"
+		oLofPathLinkButton.hint_tooltip = "No .lof file is associated with this saved map."
