@@ -374,7 +374,7 @@ func game_setting(doWhat,string,value):
 			if doWhat == SET: oDamagedWallLineEdit.text = value
 			if doWhat == GET: return oDamagedWallLineEdit.text
 		"recently_opened":
-			var oMenu = $'../Main/Ui/UiSystem/Menu'
+			var oMenu = $'../Main/Ui/UiTop/Menu'
 			if doWhat == SET: oMenu.initialize_recently_opened(value)
 			if doWhat == GET: return oMenu.recentlyOpened
 		"placing_tutorial":

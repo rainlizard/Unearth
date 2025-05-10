@@ -1648,139 +1648,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 17 )
 
-[node name="Menu" type="PanelContainer" parent="Ui/UiSystem"]
-self_modulate = Color( 0.831373, 0.831373, 0.831373, 1 )
-margin_right = 431.0
-margin_bottom = 35.0
-script = ExtResource( 71 )
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/Menu"]
-margin_left = 9.0
-margin_top = 9.0
-margin_right = 471.0
-margin_bottom = 36.0
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MenuButtonFile" type="MenuButton" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-margin_right = 46.0
-margin_bottom = 27.0
-custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
-custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
-text = "File"
-align = 0
-items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Open recent", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Save map", null, 0, false, false, 4, 0, null, "", false, "Save map as", null, 0, false, false, 5, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Reload map", null, 0, false, false, 6, 0, null, "", false, "Image to map", null, 0, false, false, 7, 0, null, "", false, "Export preview", null, 0, false, false, 8, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Preferences", null, 0, false, false, 9, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Exit", null, 0, false, false, 10, 0, null, "", false ]
-switch_on_hover = true
-
-[node name="VSeparator1" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
-margin_left = 50.0
-margin_right = 54.0
-margin_bottom = 27.0
-
-[node name="MenuButtonEdit" type="MenuButton" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-margin_left = 58.0
-margin_right = 107.0
-margin_bottom = 27.0
-custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
-custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
-text = "Edit"
-align = 0
-switch_on_hover = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VSeparator2" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
-margin_left = 111.0
-margin_right = 115.0
-margin_bottom = 27.0
-
-[node name="MenuButtonView" type="MenuButton" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-margin_left = 119.0
-margin_right = 176.0
-margin_bottom = 27.0
-custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
-custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
-text = "View"
-align = 0
-items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Action points", null, 0, false, false, 4, 0, null, "", false, "Grid data", null, 0, false, false, 5, 0, null, "", false, "Config files", null, 0, false, false, 6, 0, null, "", false, "Creature stats", null, 0, false, false, 7, 0, null, "", false ]
-switch_on_hover = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VSeparator3" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
-margin_left = 180.0
-margin_right = 184.0
-margin_bottom = 27.0
-
-[node name="MenuButtonSettings" type="MenuButton" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-margin_left = 188.0
-margin_right = 315.0
-margin_bottom = 27.0
-custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
-custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
-text = "Map settings"
-align = 0
-switch_on_hover = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VSeparator4" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
-margin_left = 319.0
-margin_right = 323.0
-margin_bottom = 27.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MenuButtonHelp" type="MenuButton" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-margin_left = 327.0
-margin_right = 381.0
-margin_bottom = 27.0
-custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
-custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
-text = "Help"
-align = 0
-items = [ "KeeperFX script commands", null, 0, false, false, 0, 0, null, "", false, "Old script commands", null, 0, false, false, 1, 0, null, "", false, "Creating a new campaign", null, 0, false, false, 2, 0, null, "", false, "KeeperFX file format reference", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Controls", null, 0, false, false, 4, 0, null, "", false, "About", null, 0, false, false, 5, 0, null, "", false ]
-switch_on_hover = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VSeparator5" type="VSeparator" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
-margin_left = 385.0
-margin_right = 389.0
-margin_bottom = 27.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MenuPlayButton" type="MenuButton" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-margin_left = 393.0
-margin_right = 446.0
-margin_bottom = 27.0
-custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
-custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
-text = "Play"
-align = 0
-switch_on_hover = true
-
-[node name="Spacing3" type="ColorRect" parent="Ui/UiSystem/Menu/HBoxContainer2"]
-margin_left = 450.0
-margin_right = 462.0
-margin_bottom = 27.0
-rect_min_size = Vector2( 12, 12 )
-color = Color( 1, 1, 1, 0 )
-
 [node name="EditingMode" type="Control" parent="Ui/UiSystem"]
 anchor_left = 0.5
 anchor_right = 0.5
@@ -4463,14 +4330,15 @@ rect_min_size = Vector2( 125, 0 )
 rect_pivot_offset = Vector2( -2008, 305 )
 text = "Close"
 
-[node name="ScriptEditorStatusLabel" type="Label" parent="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer"]
-margin_left = 129.0
-margin_top = 3.0
-margin_right = 1173.0
-margin_bottom = 24.0
-size_flags_horizontal = 11
+[node name="ScriptEditorStatusLabel" type="LinkButton" parent="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer"]
+margin_left = 541.0
+margin_right = 761.0
+margin_bottom = 27.0
+size_flags_horizontal = 6
+custom_colors/font_color = Color( 1, 1, 1, 0.627451 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
 text = "Your script file is empty!"
-align = 1
+underline = 2
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer"]
 margin_left = 1177.0
@@ -7161,6 +7029,146 @@ access = 2
 filters = PoolStringArray( "*.png" )
 show_hidden_files = true
 
+[node name="UiTop" type="Control" parent="Ui"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 17 )
+
+[node name="Menu" type="PanelContainer" parent="Ui/UiTop"]
+self_modulate = Color( 0.831373, 0.831373, 0.831373, 1 )
+margin_right = 480.0
+margin_bottom = 45.0
+script = ExtResource( 71 )
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiTop/Menu"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 471.0
+margin_bottom = 36.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuButtonFile" type="MenuButton" parent="Ui/UiTop/Menu/HBoxContainer2"]
+margin_right = 46.0
+margin_bottom = 27.0
+custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
+text = "File"
+align = 0
+items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Open recent", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Save map", null, 0, false, false, 4, 0, null, "", false, "Save map as", null, 0, false, false, 5, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Reload map", null, 0, false, false, 6, 0, null, "", false, "Image to map", null, 0, false, false, 7, 0, null, "", false, "Export preview", null, 0, false, false, 8, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Preferences", null, 0, false, false, 9, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Exit", null, 0, false, false, 10, 0, null, "", false ]
+switch_on_hover = true
+
+[node name="VSeparator1" type="VSeparator" parent="Ui/UiTop/Menu/HBoxContainer2"]
+modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
+margin_left = 50.0
+margin_right = 54.0
+margin_bottom = 27.0
+
+[node name="MenuButtonEdit" type="MenuButton" parent="Ui/UiTop/Menu/HBoxContainer2"]
+margin_left = 58.0
+margin_right = 107.0
+margin_bottom = 27.0
+custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
+text = "Edit"
+align = 0
+switch_on_hover = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VSeparator2" type="VSeparator" parent="Ui/UiTop/Menu/HBoxContainer2"]
+modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
+margin_left = 111.0
+margin_right = 115.0
+margin_bottom = 27.0
+
+[node name="MenuButtonView" type="MenuButton" parent="Ui/UiTop/Menu/HBoxContainer2"]
+margin_left = 119.0
+margin_right = 176.0
+margin_bottom = 27.0
+custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
+text = "View"
+align = 0
+items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Action points", null, 0, false, false, 4, 0, null, "", false, "Grid data", null, 0, false, false, 5, 0, null, "", false, "Config files", null, 0, false, false, 6, 0, null, "", false, "Creature stats", null, 0, false, false, 7, 0, null, "", false ]
+switch_on_hover = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VSeparator3" type="VSeparator" parent="Ui/UiTop/Menu/HBoxContainer2"]
+modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
+margin_left = 180.0
+margin_right = 184.0
+margin_bottom = 27.0
+
+[node name="MenuButtonSettings" type="MenuButton" parent="Ui/UiTop/Menu/HBoxContainer2"]
+margin_left = 188.0
+margin_right = 315.0
+margin_bottom = 27.0
+custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
+text = "Map settings"
+align = 0
+switch_on_hover = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VSeparator4" type="VSeparator" parent="Ui/UiTop/Menu/HBoxContainer2"]
+modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
+margin_left = 319.0
+margin_right = 323.0
+margin_bottom = 27.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuButtonHelp" type="MenuButton" parent="Ui/UiTop/Menu/HBoxContainer2"]
+margin_left = 327.0
+margin_right = 381.0
+margin_bottom = 27.0
+custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
+text = "Help"
+align = 0
+items = [ "KeeperFX script commands", null, 0, false, false, 0, 0, null, "", false, "Old script commands", null, 0, false, false, 1, 0, null, "", false, "Creating a new campaign", null, 0, false, false, 2, 0, null, "", false, "KeeperFX file format reference", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Controls", null, 0, false, false, 4, 0, null, "", false, "About", null, 0, false, false, 5, 0, null, "", false ]
+switch_on_hover = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VSeparator5" type="VSeparator" parent="Ui/UiTop/Menu/HBoxContainer2"]
+modulate = Color( 0.278431, 0.278431, 0.278431, 1 )
+margin_left = 385.0
+margin_right = 389.0
+margin_bottom = 27.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuPlayButton" type="MenuButton" parent="Ui/UiTop/Menu/HBoxContainer2"]
+margin_left = 393.0
+margin_right = 446.0
+margin_bottom = 27.0
+custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
+custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
+text = "Play"
+align = 0
+switch_on_hover = true
+
+[node name="Spacing3" type="ColorRect" parent="Ui/UiTop/Menu/HBoxContainer2"]
+margin_left = 450.0
+margin_right = 462.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 12, 12 )
+color = Color( 1, 1, 1, 0 )
+
 [node name="UiMessages" type="Control" parent="Ui"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -7641,9 +7649,6 @@ script = SubResource( 20 )
 [connection signal="gui_input" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer/MirrorColor3" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_MirrorColor3_gui_input"]
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer/SplitDirectionButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions" method="_on_SplitDirectionButton_pressed"]
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/PlacingTipsButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_PlacingTipsButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonSettings" to="Ui/UiSystem/Menu" method="_on_MenuButtonSettings_pressed"]
-[connection signal="about_to_show" from="Ui/UiSystem/Menu/HBoxContainer2/MenuButtonHelp" to="Ui/UiSystem/Menu" method="_on_MenuButtonHelp_about_to_show"]
-[connection signal="pressed" from="Ui/UiSystem/Menu/HBoxContainer2/MenuPlayButton" to="Ui/UiSystem/Menu" method="_on_PlayButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/EditingMode/PanelContainer/HBoxContainer/ModeSwitchButton" to="Ui/UiSystem/EditingMode" method="_on_ModeSwitchButton_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/MapBrowser" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowser_about_to_show"]
 [connection signal="item_rect_changed" from="Ui/UiSystem/MapBrowser" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowser_item_rect_changed"]
@@ -7664,7 +7669,7 @@ script = SubResource( 20 )
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDecompression" to="OpenMap" method="_on_ConfirmDecompression_confirmed"]
 [connection signal="item_rect_changed" from="Ui/UiSystem/ConfirmDecompression" to="Ui/UiSystem/ConfirmDecompression" method="_on_ConfirmDecompression_item_rect_changed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDelete" to="Ui/UiSystem/MapBrowser" method="_on_ConfirmDelete_confirmed"]
-[connection signal="confirmed" from="Ui/UiSystem/ConfirmDiscardChanges" to="Ui/UiSystem/Menu" method="_on_ConfirmDiscardChanges_confirmed"]
+[connection signal="confirmed" from="Ui/UiSystem/ConfirmDiscardChanges" to="Ui/UiTop/Menu" method="_on_ConfirmDiscardChanges_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmQuit" to="Editor" method="_on_ConfirmQuit_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDeleteFakeSlab" to="Ui/UiTools/PickSlabWindow" method="_on_ConfirmDeleteFakeSlab_confirmed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmSaveBeforeQuit/VBoxContainer/HBoxContainer/ButtonConfirmExitSave" to="Ui/UiSystem/ConfirmSaveBeforeQuit" method="_on_ButtonConfirmExitSave_pressed"]
@@ -7734,6 +7739,7 @@ script = SubResource( 20 )
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxNameID/NameIDLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_NameIDLineEdit_text_changed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseTmapaFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseTmapaFileDialog_file_selected"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer/ScriptEditorCloseButton" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptEditorCloseButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer/ScriptEditorStatusLabel" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptEditorStatusLabel_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/HelpButtonPosition/UNNEEDEDScriptHelpButton" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptHelpButton_pressed"]
@@ -7835,6 +7841,9 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/HBoxContainer/ChangeImageCoordButton" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_ChangeImageCoordButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/HBoxContainer/CloseMapCoordButton" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_CloseMapCoordButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseLandviewImageFileDialog" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_ChooseLandviewImageFileDialog_file_selected"]
+[connection signal="pressed" from="Ui/UiTop/Menu/HBoxContainer2/MenuButtonSettings" to="Ui/UiTop/Menu" method="_on_MenuButtonSettings_pressed"]
+[connection signal="about_to_show" from="Ui/UiTop/Menu/HBoxContainer2/MenuButtonHelp" to="Ui/UiTop/Menu" method="_on_MenuButtonHelp_about_to_show"]
+[connection signal="pressed" from="Ui/UiTop/Menu/HBoxContainer2/MenuPlayButton" to="Ui/UiTop/Menu" method="_on_PlayButton_pressed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]
 [connection signal="about_to_show" from="Ui/UiPreviewExporter/ExportPreview" to="Ui/UiPreviewExporter/ExportPreview" method="_on_ExportPreview_about_to_show"]
 [connection signal="hide" from="Ui/UiPreviewExporter/ExportPreview" to="Ui/UiPreviewExporter/ExportPreview" method="_on_ExportPreview_hide"]

@@ -16,6 +16,8 @@ onready var header_label_node = get_node("%HeaderLabel")
 onready var create_label_node = get_node("%CreateLabel")
 onready var delete_label_node = get_node("%DeleteLabel")
 onready var oScriptGeneratorWindow = Nodelist.list["oScriptGeneratorWindow"]
+onready var oDataMapName = Nodelist.list["oDataMapName"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 
 var script_file_extension: String = ""
 
@@ -224,15 +226,41 @@ func perform_write_action(mapBaseDirectory: String, mapFilenameBasename: String,
 		return false
 	var pathForOperation = select_script_path(mapBaseDirectory, intendedTargetPath)
 	var keyExtensionForMapPaths = baseExtension.to_upper()
-	var file = File.new()
+	var fileUtil = File.new()
 
-	if file.file_exists(pathForOperation):
-		oMessage.quick("Using existing " + baseExtension.to_upper() + " script file: " + pathForOperation.get_file())
-		record_script_entry(pathForOperation, keyExtensionForMapPaths, true)
-		return true
+	if fileUtil.file_exists(pathForOperation):
+		if baseExtension == "lua":
+			var existingFile = File.new()
+			var existingContent = ""
+			var err = existingFile.open(pathForOperation, File.READ)
+
+			if err == OK:
+				existingContent = existingFile.get_as_text()
+				existingFile.close()
+
+				if existingContent.strip_edges(true, true) == "":
+					if write_file_content(pathForOperation, content):
+						oMessage.quick(successVerb + " (populated blank) " + baseExtension.to_upper() + " script: " + pathForOperation.get_file())
+						record_script_entry(pathForOperation, keyExtensionForMapPaths, true)
+						return true
+					else:
+						record_script_entry(pathForOperation, keyExtensionForMapPaths, true) 
+						return false 
+				else:
+					oMessage.quick("Using existing non-blank " + baseExtension.to_upper() + " script file: " + pathForOperation.get_file())
+					record_script_entry(pathForOperation, keyExtensionForMapPaths, true)
+					return true
+			else:
+				oMessage.quick("Could not read existing " + baseExtension.to_upper() + " file to check content: " + pathForOperation.get_file() + ". Code: " + str(err))
+				record_script_entry(pathForOperation, keyExtensionForMapPaths, true) 
+				return true 
+		else:
+			oMessage.quick("Using existing " + baseExtension.to_upper() + " script file: " + pathForOperation.get_file())
+			record_script_entry(pathForOperation, keyExtensionForMapPaths, true)
+			return true
 	else:
 		if write_file_content(pathForOperation, content):
-			oMessage.quick(successVerb + " script file: " + pathForOperation.get_file())
+			oMessage.quick(successVerb + " " + baseExtension.to_upper() + " script file: " + pathForOperation.get_file())
 			record_script_entry(pathForOperation, keyExtensionForMapPaths, true)
 			return true
 		else:
@@ -241,8 +269,45 @@ func perform_write_action(mapBaseDirectory: String, mapFilenameBasename: String,
 
 func make_empty_file(mapBaseDirectory: String, mapFilenameBasename: String, baseExtension: String) -> bool:
 	var content = ""
+	if baseExtension == "lua":
+		var mapName = "--insert map name--"
+		if is_instance_valid(oDataMapName) and oDataMapName.data != "":
+			mapName = oDataMapName.data
+		
+		var authorName = "--insert author--"
+		if is_instance_valid(oDataLof) and oDataLof.AUTHOR != "":
+			authorName = oDataLof.AUTHOR
+			
+		content = """-- ********************************************
+--
+--        %s
+--        by %s
+--
+-- ********************************************
+
+
+--will get called when the game starts
+function OnGameStart()
+	Setup()
+	Setup_triggers()
+end
+
+--here we setup things 
+function Setup()
+
+end
+
+--here we setup the triggers, these can be found in fxdata/lua/triggers/Events.lua
+function Register_triggers()
+
+end
+""" % [mapName, authorName]
 	var successVerb = "Created"
-	return perform_write_action(mapBaseDirectory, mapFilenameBasename, baseExtension, content, successVerb)
+	var success = perform_write_action(mapBaseDirectory, mapFilenameBasename, baseExtension, content, successVerb)
+	if success and baseExtension == "lua":
+		if is_instance_valid(Nodelist.list["oDataLua"]):
+			Nodelist.list["oDataLua"].data = content
+	return success
 
 func _on_CreateButton_pressed():
 	start_file_task(funcref(self, "make_empty_file"), "create")

@@ -26,6 +26,7 @@ onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oColumnEditor = Nodelist.list["oColumnEditor"]
 onready var oDataLua = Nodelist.list["oDataLua"]
+onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 
 var path = ""
 var currentFilePaths = {} # [0] = pathString,  [1] = modified date
@@ -81,4 +82,43 @@ func clear_map(): # Remember, "Undo" calls this
 		oColumnEditor.visible = false
 	
 	print('Cleared map in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+
+func _notification(what: int):
+	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+		check_script_file_modifications()
+
+func check_script_file_modifications():
+	if DKScript_enabled and currentFilePaths.has("TXT"):
+		var file_info = currentFilePaths["TXT"]
+		var file_path = file_info[PATHSTRING]
+		var stored_modified_time = file_info[MODIFIED_DATE]
+		var current_modified_time = File.new().get_modified_time(file_path)
+
+		if stored_modified_time != current_modified_time:
+			file_info[MODIFIED_DATE] = current_modified_time
+			var file = File.new()
+			if file.file_exists(file_path):
+				var err = file.open(file_path, File.READ)
+				if err == OK:
+					oDataScript.data = file.get_as_text()
+					file.close()
+					oMessage.quick("Script reloaded from file.")
+					oScriptEditor.update_texteditor()
+					oScriptEditor.set_script_as_edited(false)
+
+	if LuaScript_enabled and currentFilePaths.has("LUA"):
+		var file_info = currentFilePaths["LUA"]
+		var file_path = file_info[PATHSTRING]
+		var stored_modified_time = file_info[MODIFIED_DATE]
+		var current_modified_time = File.new().get_modified_time(file_path)
+
+		if stored_modified_time != current_modified_time:
+			file_info[MODIFIED_DATE] = current_modified_time
+			var file = File.new()
+			if file.file_exists(file_path):
+				var err = file.open(file_path, File.READ)
+				if err == OK:
+					oDataLua.data = file.get_as_text()
+					file.close()
+					oMessage.quick("Lua script reloaded from file.")
 
