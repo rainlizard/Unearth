@@ -289,8 +289,8 @@ func _on_OpenMapCoordButton_pressed():
 
 func _on_LofPathLinkButton_pressed():
 	var err = OS.shell_open(oLofPathLinkButton.hint_tooltip)
-	if err != OK:
-		oMessage.quick("Error: " + str(err))
+	if err == ERR_FILE_NOT_FOUND:
+		oMessage.quick("File not found, you may need to save the map first")
 
 func _update_lof_path_button():
 	if not is_instance_valid(oLofPathLinkButton):
@@ -313,7 +313,7 @@ func _update_lof_path_button():
 			mapDisplayName = oCurrentMap.name
 		else:
 			mapDisplayName = "current map" # Neutral placeholder if no other name is found
-		oLofPathLinkButton.hint_tooltip = ".lof file for '" + mapDisplayName + "'. Not on disk. Save map to write it."
+		oLofPathLinkButton.hint_tooltip = ".lof file for '" + mapDisplayName + "'. Not on disk, save map to write it."
 		return
 
 	# Case 2: Map is saved. Check its data (currentFilePaths).

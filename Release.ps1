@@ -24,16 +24,18 @@ while ($true) {
 }
 $changelog = $changelogLines -join "`n"
 
-# Construct the tag message
-# The first line is the title, followed by a blank line, then the body (changelog)
-$tagMessage = "Release $fullVersion`n`n$changelog"
+# Construct the release title
+$releaseTitle = "Release $fullVersion"
 
-# Create the Git tag
-# Use -m with the multi-line message. PowerShell should handle passing it correctly.
-git tag -a "$fullVersion" -m $tagMessage
+# Create the Git tag (annotated with title only, or could be lightweight: git tag "$fullVersion")
+git tag -a "$fullVersion" -m $releaseTitle
 
 # Push the tag to the remote repository
 git push origin "$fullVersion"
+
+# Create the release on GitHub using GitHub CLI
+# This will populate the title and the "Describe this release" field (notes)
+gh release create "$fullVersion" --title $releaseTitle --notes $changelog
 
 # Display the message
 Write-Host "GitHub Actions are now running. Please wait 5 minutes, and a release will be created on GitHub and itch.io."

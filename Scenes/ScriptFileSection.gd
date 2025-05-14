@@ -189,7 +189,7 @@ func update_file_status():
 								basenameForDisplay = "Unsaved Script"
 				
 				displayText = basenameForDisplay
-				tooltipText = "Script for '" + displayText + "'. File not on disk. Save map to write it."
+				tooltipText = "Script for '" + displayText + "'. File not on disk, save map to write it."
 			
 			show_script_interface(displayText, tooltipText, keyExtensionUppercase)
 			finalAlpha = 1.0
