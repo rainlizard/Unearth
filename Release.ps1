@@ -25,7 +25,7 @@ while ($true) {
 $changelog = $changelogLines -join "`n"
 
 # Construct the release title
-$releaseTitle = "Release $fullVersion"
+$releaseTitle = "$fullVersion"
 
 # Create the Git tag (annotated with title only, or could be lightweight: git tag "$fullVersion")
 git tag -a "$fullVersion" -m $releaseTitle
