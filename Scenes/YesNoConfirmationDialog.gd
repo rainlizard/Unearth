@@ -8,6 +8,7 @@ func _ready():
 func _on_about_to_show():
 	yield(get_tree(),'idle_frame')
 	get_ok().grab_focus()
+	rect_size.y = 0 # For when changing label text
 
 func _input(event):
 	if visible == false: return

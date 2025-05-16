@@ -1,4 +1,4 @@
-[gd_scene load_steps=194 format=2]
+[gd_scene load_steps=193 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -34,7 +34,6 @@
 [ext_resource path="res://Scenes/WriteData.gd" type="Script" id=32]
 [ext_resource path="res://Scenes/Message.gd" type="Script" id=33]
 [ext_resource path="res://Scenes/SlabSideViewer.gd" type="Script" id=34]
-[ext_resource path="res://Scenes/ConfirmDecompression.gd" type="Script" id=35]
 [ext_resource path="res://Shaders/FlashNeutralRooms.gdshader" type="Shader" id=36]
 [ext_resource path="res://Scenes/Editor.gd" type="Script" id=37]
 [ext_resource path="res://Scenes/DataClmPos.gd" type="Script" id=38]
@@ -1971,21 +1970,11 @@ margin_top = -160.0
 margin_right = 505.0
 margin_bottom = -90.0
 rect_min_size = Vector2( 300, 105 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 popup_exclusive = true
 window_title = "Confirm decompress"
-script = ExtResource( 35 )
-
-[node name="CheckBox" type="CheckBox" parent="Ui/UiSystem/ConfirmDecompression"]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 441.0
-margin_bottom = 62.0
-size_flags_horizontal = 6
-size_flags_vertical = 6
-text = "Always decompress"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource( 61 )
 
 [node name="ConfirmDelete" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true
@@ -7666,9 +7655,7 @@ script = SubResource( 20 )
 [connection signal="file_selected" from="Ui/UiSystem/ChooseDkExe" to="Ui/UiSystem/PreferencesWindow" method="_on_ChooseDkExe_file_selected"]
 [connection signal="dir_selected" from="Ui/UiSystem/ChooseDefaultSaveFolder" to="Ui/UiSystem/ChooseDefaultSaveFolder" method="_on_ChooseDefaultSaveFolder_dir_selected"]
 [connection signal="dir_selected" from="Ui/UiSystem/ChooseDefaultSaveFolder" to="Ui/UiSystem/PreferencesWindow" method="_on_ChooseDefaultSaveFolder_dir_selected"]
-[connection signal="about_to_show" from="Ui/UiSystem/ConfirmDecompression" to="Ui/UiSystem/ConfirmDecompression" method="_on_ConfirmDecompression_about_to_show"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDecompression" to="OpenMap" method="_on_ConfirmDecompression_confirmed"]
-[connection signal="item_rect_changed" from="Ui/UiSystem/ConfirmDecompression" to="Ui/UiSystem/ConfirmDecompression" method="_on_ConfirmDecompression_item_rect_changed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDelete" to="Ui/UiSystem/MapBrowser" method="_on_ConfirmDelete_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDiscardChanges" to="Ui/UiTop/Menu" method="_on_ConfirmDiscardChanges_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmQuit" to="Editor" method="_on_ConfirmQuit_confirmed"]
