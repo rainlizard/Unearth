@@ -145,8 +145,11 @@ func mirror_deletion_of_instance(instanceBeingDeleted):
 						kill_instance(getNodeAtMirroredPosition)
 
 func placement_is_obstructed(thingType, placeSubtile):
+	placeSubtile = Vector2(floor(placeSubtile.x), floor(placeSubtile.y))
 	var detectTerrainHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(placeSubtile.x,placeSubtile.y)]
 	if oPlaceThingsAnywhere.pressed == false and detectTerrainHeight >= 5 and thingType != Things.TYPE.EXTRA: # Lights and Action Points can always be placed anywhere
+		if oMirrorPlacementCheckBox.pressed == true:
+			oMessage.quick("Symmetrical placement obstructed at subtile " + str(placeSubtile))
 		return true
 	return false
 
@@ -297,6 +300,9 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 		Things.TYPE.DOOR:
 			id.index = get_free_index_number()
 			id.doorLocked = oPlacingSettings.doorLocked
+			if oPlaceLockedCheckBox.visible == true:
+				id.doorLocked = int(oPlaceLockedCheckBox.pressed)
+			
 			if newSubtype == 0:
 				id.subtype = 1 #Depending on whether it was placed via autoslab or a hand placed Thing object.
 			var doorSlabData = Slabs.fetch_doorslab_data(slabID)

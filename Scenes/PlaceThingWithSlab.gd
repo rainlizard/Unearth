@@ -54,20 +54,15 @@ func get_object(variation, subtile):
 
 func create_door_thing(xSlab, ySlab, ownership):
 	var createAtPos = Vector3((xSlab*3)+1.5, (ySlab*3)+1.5, 5)
-	var rememberLockedState = 0
 	
-	var doorID = oInstances.get_node_on_subtile(createAtPos.x, createAtPos.y, "Door")
-	if is_instance_valid(doorID):
-		rememberLockedState = doorID.doorLocked
-		oInstances.kill_instance(doorID)
+	var existingDoorNode = oInstances.get_node_on_subtile(createAtPos.x, createAtPos.y, "Door")
+	var newDoorNode = oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership)
+
+	if is_instance_valid(existingDoorNode):
+		oInstances.kill_instance(existingDoorNode)
+		newDoorNode.doorLocked = existingDoorNode.doorLocked
 	
-	var id = oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership)
-	id.doorLocked = rememberLockedState
-	
-	if oPlaceLockedCheckBox.visible and oSelector.cursorTile == Vector2(xSlab, ySlab):
-		id.doorLocked = 1 if oPlaceLockedCheckBox.pressed else 0
-	
-	id.update_spinning_key()
+	newDoorNode.update_spinning_key()
 
 func prison_bar_bitmask(slabID, surrID):
 	var subtiles_with_bars = []
