@@ -27,6 +27,7 @@ const topMargin = 69
 
 var optionButtonIsOpened = false
 var mouseOnUi = false
+var _is_handling_drag = false
 
 var listOfWindowDialogs = []
 
@@ -36,29 +37,42 @@ func _ready():
 			if potentialWindow is WindowDialog:
 				listOfWindowDialogs.append(potentialWindow)
 	
+	get_viewport().connect("size_changed", self, "_on_viewport_size_changed") # Connect viewport resize handler
+
 	for i in 10: # Important to wait here, so the viewport size/resolution doesn't affect window positions
 		yield(get_tree(),'idle_frame')
-	for i in listOfWindowDialogs:
-		i.connect("item_rect_changed",self,"_on_any_window_was_dragged",[i])
-		_on_any_window_was_dragged(i)
+	
+	_on_viewport_size_changed()
+	
+	for windowNode in listOfWindowDialogs:
+		windowNode.connect("item_rect_changed",self,"_on_any_window_was_dragged",[windowNode])
+
+func _clamp_window_position(theWindow, currentViewSize):
+	if theWindow.rect_position.x > currentViewSize.x - theWindow.rect_size.x:
+		theWindow.rect_position.x = currentViewSize.x - theWindow.rect_size.x
+	if theWindow.rect_position.y > currentViewSize.y - theWindow.rect_size.y:
+		theWindow.rect_position.y = currentViewSize.y - theWindow.rect_size.y
+	if theWindow.rect_position.x < 0:
+		theWindow.rect_position.x = 0
+	if theWindow.rect_position.y < topMargin:
+		theWindow.rect_position.y = topMargin
 
 func _on_any_window_was_dragged(callingNode):
-	callingNode.disconnect("item_rect_changed",self,"_on_any_window_was_dragged") # Fixes a Stack Overflow under certain circumstances
+	if _is_handling_drag:
+		return
+	_is_handling_drag = true
 	
-	var viewSize = get_viewport().size/Settings.UI_SCALE
-	callingNode.rect_size.x = clamp(callingNode.rect_size.x, 0, viewSize.x)
-	callingNode.rect_size.y = clamp(callingNode.rect_size.y, 0, viewSize.y-topMargin)
+	var viewSize = get_viewport().size / Settings.UI_SCALE
+	_clamp_window_position(callingNode, viewSize)
 	
-	# Don't use clamp for rect_position, prioritize the window being above 0,0 by checking that last
-	if callingNode.rect_position.x > viewSize.x-callingNode.rect_size.x:
-		callingNode.rect_position.x = viewSize.x-callingNode.rect_size.x
-	if callingNode.rect_position.y > viewSize.y-callingNode.rect_size.y:
-		callingNode.rect_position.y = viewSize.y-callingNode.rect_size.y
-	if callingNode.rect_position.x < 0:
-		callingNode.rect_position.x = 0
-	if callingNode.rect_position.y < topMargin:
-		callingNode.rect_position.y = topMargin
-	callingNode.connect("item_rect_changed",self,"_on_any_window_was_dragged", [callingNode])
+	_is_handling_drag = false
+
+func _on_viewport_size_changed():
+	var currentViewSize = get_viewport().size / Settings.UI_SCALE
+	for windowNode in listOfWindowDialogs:
+		windowNode.rect_size.x = clamp(windowNode.rect_size.x, 0, currentViewSize.x)
+		windowNode.rect_size.y = clamp(windowNode.rect_size.y, 0, currentViewSize.y - topMargin)
+		_clamp_window_position(windowNode, currentViewSize)
 
 func _input(event):
 	if event is InputEventMouseMotion:
