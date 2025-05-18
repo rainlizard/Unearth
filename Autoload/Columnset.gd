@@ -46,7 +46,7 @@ func import_toml_columnset(filePath):
 		update_list_of_columns_that_contain_rng_cubes()
 
 func load_default_original_columnset():
-	var filePath = oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.CLM")
+	var filePath = Utils.case_insensitive_file(oGame.DK_DATA_DIRECTORY, "SLABS", "CLM")
 	var buffer = oBuffers.file_path_to_buffer(filePath)
 	
 	buffer.seek(0)

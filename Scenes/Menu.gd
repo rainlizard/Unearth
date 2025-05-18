@@ -122,36 +122,50 @@ func initialize_recently_opened(value):
 
 var tdir = Directory.new()
 
+func find_cased_file_path(basePathString: String, fileExtensions: Array) -> String:
+	var dirPath = basePathString.get_base_dir()
+	var baseFileNameWithoutExt = basePathString.get_file()
+	var d = Directory.new()
+	if d.open(dirPath) != OK:
+		return ""
+	d.list_dir_begin()
+	var entry = d.get_next()
+	while entry != "":
+		if d.current_is_dir() == false:
+			for ext in fileExtensions:
+				var targetFileNameWithExt = baseFileNameWithoutExt + ext
+				if entry.to_lower() == targetFileNameWithExt.to_lower():
+					d.list_dir_end()
+					return dirPath.plus_file(entry)
+		entry = d.get_next()
+	d.list_dir_end()
+	return ""
+
 func populate_recently_opened():
 	recentlyOpenedPopupMenu.clear()
-	
-	for i in range(recentlyOpened.size() - 1, -1, -1): # iterate in reverse
-		var filePath = recentlyOpened[i].get_basename()
-		if tdir.file_exists(filePath + ".slb") == false and tdir.file_exists(filePath + ".SLB") == false:
+	for i in range(recentlyOpened.size() - 1, -1, -1):
+		var mapPathKey = recentlyOpened[i]
+		var actualSlbFile = Utils.case_insensitive_file(mapPathKey.get_base_dir(), mapPathKey.get_file(), ".slb")
+		if actualSlbFile == "":
 			recentlyOpened.remove(i)
-	
 	for i in recentlyOpened.size():
-		var filePath = recentlyOpened[i].get_basename()
-		
-		filePath = filePath.replace("\\", "/")
-		var mapName = ""
-		
-		if tdir.file_exists(filePath + ".lof"):
-			mapName = oDataLof.lof_name_text(filePath + ".lof")
-		elif tdir.file_exists(filePath + ".LOF"):
-			mapName = oDataLof.lof_name_text(filePath + ".LOF")
-		elif tdir.file_exists(filePath + ".lif"):
-			mapName = oDataMapName.lif_name_text(filePath + '.lif')
-		elif tdir.file_exists(filePath + ".LIF"):
-			mapName = oDataMapName.lif_name_text(filePath + '.LIF')
+		var mapPathKey = recentlyOpened[i]
+		var mapFileName = mapPathKey.get_file()
+		var mapDisplayName = ""
+		var actualLofFile = Utils.case_insensitive_file(mapPathKey.get_base_dir(), mapPathKey.get_file(), ".lof")
+		var actualLifFile = ""
+		if actualLofFile != "":
+			mapDisplayName = oDataLof.lof_name_text(actualLofFile)
 		else:
-			mapName = oDataMapName.get_special_lif_text(filePath)
-		
-		# Trim game directory from path to make it look nicer
-		var baseDir = oGame.GAME_DIRECTORY.replace('\\','/')
-		
-		recentlyOpenedPopupMenu.add_item(mapName + ' - ' + filePath.trim_prefix(baseDir), i)
-		recentlyOpenedPopupMenu.set_item_metadata(i, filePath)
+			actualLifFile = Utils.case_insensitive_file(mapPathKey.get_base_dir(), mapPathKey.get_file(), ".lif")
+			if actualLifFile != "":
+				mapDisplayName = oDataMapName.lif_name_text(actualLifFile)
+			else:
+				mapDisplayName = oDataMapName.get_special_lif_text(mapFileName)
+		var displayPath = mapPathKey
+		var gameBaseDir = oGame.GAME_DIRECTORY.replace('\\','/')
+		recentlyOpenedPopupMenu.add_item(mapDisplayName + ' - ' + displayPath.trim_prefix(gameBaseDir), i)
+		recentlyOpenedPopupMenu.set_item_metadata(i, mapPathKey)
 
 func _process(delta):
 	constantly_monitor_play_button_state()
@@ -281,22 +295,35 @@ func _on_ViewSubmenu_Pressed(pressedID):
 				if lua_enabled and dk_enabled:
 					Utils.popup_centered(oConfirmOpenWhichScript)
 				elif lua_enabled:
-					var pathToTryAndOpen = oCurrentMap.path + ".lua"
-					var err = OS.shell_open(pathToTryAndOpen)
-					if err != OK:
-						oMessage.quick("Could not open: " + pathToTryAndOpen)
+					var scriptPathBasename = oCurrentMap.path.get_file()
+					var scriptDir = oCurrentMap.path.get_base_dir()
+					var pathToTryAndOpen = Utils.case_insensitive_file(scriptDir, scriptPathBasename, ".lua")
+					if pathToTryAndOpen != "":
+						var err = OS.shell_open(pathToTryAndOpen)
+						if err != OK:
+							oMessage.quick("Could not open: " + pathToTryAndOpen)
+					else:
+						oMessage.quick("Could not find script file: " + scriptPathBasename + ".lua")
 				elif dk_enabled:
-					var pathToTryAndOpen = oCurrentMap.path + ".txt"
-					var err = OS.shell_open(pathToTryAndOpen)
-					if err != OK:
-						oMessage.quick("Could not open: " + pathToTryAndOpen)
+					var scriptPathBasename = oCurrentMap.path.get_file()
+					var scriptDir = oCurrentMap.path.get_base_dir()
+					var pathToTryAndOpen = Utils.case_insensitive_file(scriptDir, scriptPathBasename, ".txt")
+					if pathToTryAndOpen != "":
+						var err = OS.shell_open(pathToTryAndOpen)
+						if err != OK:
+							oMessage.quick("Could not open: " + pathToTryAndOpen)
+					else:
+						oMessage.quick("Could not find script file: " + scriptPathBasename + ".txt")
 				else: 
 					oMessage.quick("No script available for this map.")
 		2: # Open log file
-			var pathToTryAndOpen = oGame.get_precise_filepath(oGame.GAME_DIRECTORY, "KEEPERFX.LOG")
-			var err = OS.shell_open(pathToTryAndOpen)
-			if err != OK:
-				oMessage.quick("Could not open: " + pathToTryAndOpen)
+			var pathToTryAndOpen = Utils.case_insensitive_file(oGame.GAME_DIRECTORY, "KEEPERFX", ".log")
+			if pathToTryAndOpen != "":
+				var err = OS.shell_open(pathToTryAndOpen)
+				if err != OK:
+					oMessage.quick("Could not open: " + pathToTryAndOpen)
+			else:
+				oMessage.quick("Could not find KEEPERFX.LOG")
 		3:
 			if oEditor.currentView == oEditor.VIEW_2D:
 				oEditor.set_view_3d()

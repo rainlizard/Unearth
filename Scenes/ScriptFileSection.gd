@@ -72,10 +72,7 @@ func reset_user_display():
 	hbox_generate_node.visible = false
 
 func find_precise_path(baseDirectory: String, filename: String) -> String:
-	if is_instance_valid(oGame) == false:
-		oMessage.quick("Warning: oGame not available for precise path lookup of " + filename + " in " + baseDirectory)
-		return ""
-	return oGame.get_precise_filepath(baseDirectory, filename)
+	return Utils.case_insensitive_file(baseDirectory, filename.get_basename(), filename.get_extension())
 
 func resolve_script_path(keyExtensionUppercase: String) -> String:
 	if map_state_valid() == false:
@@ -134,7 +131,7 @@ func show_script_interface(displayText: String, tooltipText: String, keyExtensio
 	path_link_node.text = displayText
 	path_link_node.hint_tooltip = tooltipText
 		
-	if keyExtensionUppercase == "TXT": # Generate button only for TXT scripts
+	if keyExtensionUppercase == "TXT":
 		hbox_generate_node.visible = true
 	else:
 		hbox_generate_node.visible = false
@@ -199,10 +196,7 @@ func update_file_status():
 		create_label_node.self_modulate.a = finalAlpha
 
 func select_script_path(baseDirectory: String, intendedPath: String) -> String:
-	if is_instance_valid(oGame) == false:
-		oMessage.quick("Warning: oGame not available for precise path check. Using intended: " + intendedPath.get_file())
-		return intendedPath
-	var precisePath = oGame.get_precise_filepath(baseDirectory, intendedPath.get_file())
+	var precisePath = Utils.case_insensitive_file(baseDirectory, intendedPath.get_file().get_basename(), intendedPath.get_extension())
 	if precisePath != "" and precisePath != intendedPath:
 		oMessage.quick("Using existing file with different case: " + precisePath.get_file())
 		return precisePath
@@ -242,8 +236,6 @@ func start_file_task(taskName: String) -> void:
 			oMessage.quick("Map path or filename is invalid, though map appears saved. Cannot " + taskName + " script.")
 			update_file_status()
 			return
-	# If !mapIsSaved, mapBaseDirectory and mapFilenameBasename remain ""
-
 	match taskName:
 		"create":
 			make_empty_file(mapBaseDirectory, mapFilenameBasename, baseExtension, mapIsSaved)

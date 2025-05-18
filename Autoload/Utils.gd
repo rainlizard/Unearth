@@ -214,3 +214,30 @@ func _recursive_log_named_nodes(targetNode, linePrefix, isLastSibling):
 		else:
 			childRecursivePrefix += "┃  " # Align with parent's "┠╴"
 		_recursive_log_named_nodes(currentChild, childRecursivePrefix, index == childCount - 1)
+
+func case_insensitive_file(directoryPath: String, baseFileName: String, targetExtension: String) -> String:
+	var d = Directory.new()
+	if d.open(directoryPath) != OK:
+		printerr("Utils.case_insensitive_file: Could not open directory: ", directoryPath)
+		return ""
+	
+	d.list_dir_begin(true, false)
+	var entryName = d.get_next()
+
+	var lowerExt = targetExtension
+	if lowerExt != "" and lowerExt.begins_with(".") == false:
+		lowerExt = "." + lowerExt
+	lowerExt = lowerExt.to_lower()
+
+	var lowerBaseName = baseFileName.to_lower()
+	var targetFileNameLower = lowerBaseName + lowerExt
+
+	while entryName != "":
+		if d.current_is_dir() == false:
+			if entryName.to_lower() == targetFileNameLower:
+				d.list_dir_end()
+				return directoryPath.plus_file(entryName)
+		entryName = d.get_next()
+	
+	d.list_dir_end()
+	return ""

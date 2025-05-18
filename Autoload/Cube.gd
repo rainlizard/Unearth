@@ -600,7 +600,7 @@ func set_max_cubes():
 
 func get_cubescfg_modified_time():
 	var oGame = Nodelist.list["oGame"]
-	var path = oGame.get_precise_filepath(oGame.DK_FXDATA_DIRECTORY, "CUBES.CFG")
+	var path = Utils.case_insensitive_file(oGame.DK_FXDATA_DIRECTORY, "CUBES", "CFG")
 	var getModifiedTime = File.new().get_modified_time(path)
 	return getModifiedTime
 

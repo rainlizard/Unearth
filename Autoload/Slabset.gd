@@ -91,8 +91,8 @@ func import_toml_slabset(filePath):
 
 func load_default_original_slabset():
 	
-	var dat_buffer = oBuffers.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.DAT"))
-	var tng_buffer = oBuffers.file_path_to_buffer(oGame.get_precise_filepath(oGame.DK_DATA_DIRECTORY, "SLABS.TNG"))
+	var dat_buffer = oBuffers.file_path_to_buffer(Utils.case_insensitive_file(oGame.DK_DATA_DIRECTORY, "SLABS", "DAT"))
+	var tng_buffer = oBuffers.file_path_to_buffer(Utils.case_insensitive_file(oGame.DK_DATA_DIRECTORY, "SLABS", "TNG"))
 	
 	var object_info = create_object_list(tng_buffer)
 	if object_info.size() == 0:

@@ -46,7 +46,7 @@ func save_map(filePath):
 		
 		if File.new().file_exists(saveToFilePath):
 			var modTime = File.new().get_modified_time(saveToFilePath)
-			var precise_path = oGame.get_precise_filepath(map_base_dir, saveToFilePath.get_file())
+			var precise_path = Utils.case_insensitive_file(map_base_dir, saveToFilePath.get_file().get_basename(), saveToFilePath.get_extension())
 			oCurrentMap.currentFilePaths[EXT] = [precise_path if precise_path else saveToFilePath, modTime]
 		elif oCurrentMap.currentFilePaths.has(EXT):
 			var path_info = oCurrentMap.currentFilePaths[EXT]
@@ -80,7 +80,7 @@ func delete_script_file(map_filename_no_ext, map_base_dir, script_key, file_ext,
 		if typeof(path_info) == TYPE_ARRAY and path_info.size() > oCurrentMap.PATHSTRING:
 			path_to_delete = path_info[oCurrentMap.PATHSTRING]
 	if path_to_delete == "" or not File.new().file_exists(path_to_delete):
-		path_to_delete = oGame.get_precise_filepath(map_base_dir, script_target_filename)
+		path_to_delete = Utils.case_insensitive_file(map_base_dir, script_target_filename.get_basename(), script_target_filename.get_extension())
 	if path_to_delete == "" or not File.new().file_exists(path_to_delete):
 		return
 

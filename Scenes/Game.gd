@@ -174,18 +174,6 @@ func test_write_permissions():
 			oMessage.big("Error", "There are no write permissions for your Dungeon Keeper directory. Maybe try moving your Dungeon Keeper folder elsewhere, then choose the executable again.")
 	return err
 
-func get_precise_filepath(lookInDirectory, lookForFileName):
-	var dir = Directory.new()
-	if dir.open(lookInDirectory) == OK:
-		dir.list_dir_begin(true, false)
-		var fileName = dir.get_next()
-		while fileName != "":
-			if dir.current_is_dir() == false:
-				if fileName.to_upper() == lookForFileName.to_upper(): # Get file regardless of case (case insensitive)
-					return lookInDirectory.plus_file(fileName)
-			fileName = dir.get_next()
-	return ""
-
 func set_keeperfx_version():
 	var output = []
 
