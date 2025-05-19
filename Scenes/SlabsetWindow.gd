@@ -45,6 +45,8 @@ onready var oColumnsetDeleteButton = Nodelist.list["oColumnsetDeleteButton"]
 onready var oConfirmDeleteSlabsetFile = Nodelist.list["oConfirmDeleteSlabsetFile"]
 onready var oConfirmDeleteColumnsetFile = Nodelist.list["oConfirmDeleteColumnsetFile"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
+onready var oModifiedListLabel = Nodelist.list["oModifiedListLabel"]
+onready var oModifiedListPanelContainer = Nodelist.list["oModifiedListPanelContainer"]
 
 enum {
 	ONE_VARIATION,
@@ -223,6 +225,12 @@ func update_modified_label_for_variation():
 
 func update_save_slabset_button_availability():
 	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
+	oModifiedListLabel.text = str(list_of_modified_slabs).replace("[","").replace("]","")
+	if oModifiedListLabel.text == "":
+		oModifiedListPanelContainer.modulate = Color(1, 1, 1, 1)
+		oModifiedListLabel.text = "No modified slabs"
+	else:
+		oModifiedListPanelContainer.modulate = Color(1.4, 1.4, 1.7, 1.0)
 	if list_of_modified_slabs.empty():
 		oExportSlabsToml.disabled = true
 	else:
@@ -609,6 +617,9 @@ func update_object_property(the_property, new_value):
 		return # Invalid index, nothing to update
 	listOfObjects[object_index][the_property] = new_value
 	adjust_object_color_if_different(variation)
+	update_modified_label_for_slab_id()
+	update_modified_label_for_variation()
+	update_save_slabset_button_availability()
 
 
 func _on_SlabCopyButton_pressed():
