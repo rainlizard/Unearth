@@ -82,7 +82,7 @@ func _ready():
 		var spinbox = id.get_node("CustomSpinBox")
 		var shortcut = id.get_node("ButtonShortcut")
 		shortcut.connect("pressed",self,"shortcut_pressed",[id])
-		spinbox.min_value = 1
+		spinbox.min_value = 0
 		spinbox.max_value = Columnset.column_count-1
 		spinbox.connect("value_changed",oDkSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
