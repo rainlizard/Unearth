@@ -86,22 +86,25 @@ func read_dkcfg_file(file_path) -> Dictionary:
 				var key = line.substr(0, delimiter_pos).strip_edges()
 				var value = line.substr(delimiter_pos + 1).strip_edges()
 				
-				var items = value.split(" ")
-				if items.size() > 1:
-					var construct_new_value_array = []
-					for item in items:
-						item = item.strip_edges()
-						if not item.empty(): # This handles having multiple spaces in a row
-							if item.is_valid_integer():
-								construct_new_value_array.append(int(item))
-							else:
-								construct_new_value_array.append(item)
-					config[current_section][key] = construct_new_value_array
+				if key == "Name": # Ensure "Name" field is always treated as a single string
+					config[current_section][key] = value
 				else:
-					if value.is_valid_integer():
-						config[current_section][key] = int(value)
+					var items = value.split(" ")
+					if items.size() > 1:
+						var construct_new_value_array = []
+						for item in items:
+							item = item.strip_edges()
+							if not item.empty(): # This handles having multiple spaces in a row
+								if item.is_valid_integer():
+									construct_new_value_array.append(int(item))
+								else:
+									construct_new_value_array.append(item)
+						config[current_section][key] = construct_new_value_array
 					else:
-						config[current_section][key] = value
+						if value.is_valid_integer():
+							config[current_section][key] = int(value)
+						else:
+							config[current_section][key] = value
 	
 	print('Read ' + file_path.get_file() + ' dkcfg in : ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	

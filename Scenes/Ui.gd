@@ -44,6 +44,9 @@ func wait_until_windows_are_positioned():
 		yield(get_tree(),'idle_frame')
 	for window in listOfWindowDialogs:
 		window.connect("item_rect_changed",self,"_on_any_window_was_dragged",[window])
+		window.connect("visibility_changed", self, "_on_window_dialog_became_visible", [window])
+		window.connect("resized", self, "_on_window_dialog_became_visible", [window])
+	get_viewport().connect("size_changed", self, "_on_viewport_size_changed")
 
 func setup_focus_key():
 	InputMap.action_add_event("ui_focus_next", tabKeyInputEvent)
@@ -54,6 +57,29 @@ func find_window_dialogs():
 			if potentialWindow is WindowDialog:
 				listOfWindowDialogs.append(potentialWindow)
 
+func _on_any_window_was_dragged(callingNode):
+	if _is_handling_drag:
+		return
+	_is_handling_drag = true
+	var viewSize = get_viewport().size / Settings.UI_SCALE
+	_clamp_window_position(callingNode, viewSize)
+	_is_handling_drag = false
+
+func _on_viewport_size_changed():
+	var currentViewSize = get_viewport().size / Settings.UI_SCALE
+	for windowNode in listOfWindowDialogs:
+		_adjust_window_size_to_viewport(windowNode, currentViewSize)
+
+func _on_window_dialog_became_visible(dialogNode):
+	if dialogNode.visible == true:
+		var currentViewSize = get_viewport().size / Settings.UI_SCALE
+		_adjust_window_size_to_viewport(dialogNode, currentViewSize)
+
+func _adjust_window_size_to_viewport(windowNode, currentViewSize):
+	windowNode.rect_size.x = clamp(windowNode.rect_size.x, 0, currentViewSize.x)
+	windowNode.rect_size.y = clamp(windowNode.rect_size.y, 0, currentViewSize.y - topMargin)
+	_clamp_window_position(windowNode, currentViewSize)
+
 func _clamp_window_position(theWindow, currentViewSize):
 	if theWindow.rect_position.x > currentViewSize.x - theWindow.rect_size.x:
 		theWindow.rect_position.x = currentViewSize.x - theWindow.rect_size.x
@@ -63,23 +89,6 @@ func _clamp_window_position(theWindow, currentViewSize):
 		theWindow.rect_position.x = 0
 	if theWindow.rect_position.y < topMargin:
 		theWindow.rect_position.y = topMargin
-
-func _on_any_window_was_dragged(callingNode):
-	if _is_handling_drag:
-		return
-	_is_handling_drag = true
-	
-	var viewSize = get_viewport().size / Settings.UI_SCALE
-	_clamp_window_position(callingNode, viewSize)
-	
-	_is_handling_drag = false
-
-func _on_viewport_size_changed():
-	var currentViewSize = get_viewport().size / Settings.UI_SCALE
-	for windowNode in listOfWindowDialogs:
-		windowNode.rect_size.x = clamp(windowNode.rect_size.x, 0, currentViewSize.x)
-		windowNode.rect_size.y = clamp(windowNode.rect_size.y, 0, currentViewSize.y - topMargin)
-		_clamp_window_position(windowNode, currentViewSize)
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -171,6 +180,7 @@ func switch_to_1st_person():
 func set_ui_scale(setVal):
 	Settings.UI_SCALE = Vector2(setVal,setVal)
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(1024,576), setVal)
+
 
 func _on_gui_focus_changed(newlyFocusedControl):
 	if is_instance_valid(oPropertiesWindow) == false:
