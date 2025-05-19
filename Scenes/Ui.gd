@@ -93,31 +93,12 @@ func _clamp_window_position(theWindow, currentViewSize):
 func _input(event):
 	if event is InputEventMouseMotion:
 		mouseOnUi = true
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
-		process_unfocused_click()
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		mouseOnUi = false
 		if optionButtonIsOpened == true:
 			mouseOnUi = true
-
-func process_unfocused_click():
-	if is_instance_valid(oPropertiesWindow) == false:
-		return
-	var focusedControl = oPropertiesWindow.get_focus_owner()
-	if focusedControl != null:
-		if is_instance_valid(focusedControl):
-			call_deferred("check_release_focus", focusedControl)
-
-func check_release_focus(controlToCheck):
-	if is_instance_valid(controlToCheck) == false:
-		return
-	if is_instance_valid(oPropertiesWindow) == false:
-		return
-	var currentFocusOwner = oPropertiesWindow.get_focus_owner()
-	if currentFocusOwner == controlToCheck:
-		controlToCheck.release_focus()
 
 func update_theme_colour(val):
 	var col = Constants.windowTitleCol[val]
