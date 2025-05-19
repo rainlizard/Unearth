@@ -91,6 +91,10 @@ func _ready():
 		oGridContainerDynamicColumns3x3.add_child(id)
 		columnSettersArray.append(id)
 	
+	oObjRelativeXSpinBox.step = 1.0 / 256.0
+	oObjRelativeYSpinBox.step = 1.0 / 256.0
+	oObjRelativeZSpinBox.step = 1.0 / 256.0
+	
 	oDkSlabsetVoxelView.initialize()
 
 func _notification(what):
