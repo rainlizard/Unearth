@@ -43,7 +43,7 @@ var baseZindex = 0
 var creatureGold = null
 var creatureInitialHealth = null
 var creatureName = null setget set_creatureName
-var orientation = null
+var orientation = null setget set_orientation
 var goldValue = null
 
 func _enter_tree():
@@ -208,6 +208,9 @@ func set_creatureName(setval):
 	#setval = Utils.strip_special_chars_from_string(setval)
 	creatureName = setval
 
+func set_orientation(setval):
+	rotation_degrees = (setval/2047.0) * 360
+	orientation = setval
 
 func set_herogateNumber(setval):
 	data14 = null
