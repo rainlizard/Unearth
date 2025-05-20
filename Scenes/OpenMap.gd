@@ -165,7 +165,7 @@ func open_map(filePath):
 					for ySlab in M.ySize:
 						for xSlab in M.xSize:
 							var slabID = oDataSlab.get_cell(xSlab, ySlab)
-							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.REMEMBER_TYPE])
+							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
 		
 		continue_load(map)
 		continue_load_openmap(map)

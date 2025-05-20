@@ -169,24 +169,15 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 		else:
 			oDataFakeSlab.set_cellv(pos, slabID)
 		
-		match slabID:
-			Slabs.BRIDGE:
-				if oBridgesOnlyOnLiquidCheckbox.pressed == true:
-					match oDataSlab.get_cellv(pos):
-						Slabs.WATER, Slabs.LAVA, Slabs.BRIDGE:
-							pass
-						_:
-							removeFromShape.append(pos) # This prevents ownership from changing if placing a bridge on something that's not liquid (or another bridge)
-				if removeFromShape.has(pos) == false:
-					oDataSlab.set_cellv(pos, slabID)
-#			Slabs.EARTH:
-#				var autoEarthID = try_upgrade_to_torch_slab(pos.x, pos.y, slabID)
-#				oDataSlab.set_cellv(pos, autoEarthID)
-#			Slabs.WALL_AUTOMATIC:
-#				var autoWallID = auto_wall(pos.x, pos.y, slabID)
-#				oDataSlab.set_cellv(pos, autoWallID)
-			_:
-				oDataSlab.set_cellv(pos, slabID)
+		if Slabs.data.has(slabID) and Slabs.data[slabID][Slabs.LIQUID_TYPE] == Slabs.WLB_BRIDGE and oBridgesOnlyOnLiquidCheckbox.pressed:
+			var currentSlabOnPos = oDataSlab.get_cellv(pos)
+			var isUnderlyingSlabLiquid = currentSlabOnPos == Slabs.WATER or currentSlabOnPos == Slabs.LAVA
+			var isUnderlyingSlabBridge = Slabs.data.has(currentSlabOnPos) and Slabs.data[currentSlabOnPos][Slabs.LIQUID_TYPE] == Slabs.WLB_BRIDGE
+			if isUnderlyingSlabLiquid == false and isUnderlyingSlabBridge == false:
+				removeFromShape.append(pos)
+		
+		if removeFromShape.has(pos) == false:
+			oDataSlab.set_cellv(pos, slabID)
 		
 		if oFortifyCheckBox.pressed == true:
 			# The "ownership != 5" ensures that we don't accidentally spread those difficult-to-see neutral fortified walls
@@ -369,8 +360,8 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 	# WIB (wibble)
 	update_wibble(xSlab, ySlab, slabID, false)
 	# WLB (Water Lava Block)
-	if slabID != Slabs.BRIDGE:
-		oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.REMEMBER_TYPE])
+	if Slabs.data[slabID][Slabs.LIQUID_TYPE] != Slabs.WLB_BRIDGE:
+		oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
 	
 	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
 	place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
@@ -383,8 +374,8 @@ func slab_place_fake(xSlab, ySlab, slabID, ownership, surrID):
 	update_wibble(xSlab, ySlab, slabID, wibbleEdges)
 	
 	# WLB (Water Lava Block)
-	if recognizedAsID != Slabs.BRIDGE:
-		var liquidValue = Slabs.data[slabID][Slabs.REMEMBER_TYPE]
+	if Slabs.data[recognizedAsID][Slabs.LIQUID_TYPE] != Slabs.WLB_BRIDGE:
+		var liquidValue = Slabs.data[slabID][Slabs.LIQUID_TYPE]
 		oDataLiquid.set_cell(xSlab, ySlab, liquidValue)
 	
 	var constructedColumns = Slabs.fake_extra_data[slabID][Slabs.FAKE_CUBE_DATA]

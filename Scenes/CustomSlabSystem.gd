@@ -35,7 +35,7 @@ func load_unearth_custom_slabs_file():
 			"header_id": int(section.trim_prefix("slab")),
 			"name": cfg.get_value(section, "name", "Unknown"),
 			"recognized_as": cfg.get_value(section, "recognized_as", Slabs.ROCK),
-			"liquid_type": cfg.get_value(section, "liquid_type", Slabs.REMEMBER_PATH),
+			"liquid_type": cfg.get_value(section, "liquid_type", Slabs.LIQUID_TYPE),
 			"wibble_type": cfg.get_value(section, "wibble_type", Slabs.WIBBLE_ON),
 			"wibble_edges": cfg.get_value(section, "wibble_edges", false),
 			"cube_data": slabCubeData,
