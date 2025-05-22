@@ -222,8 +222,13 @@ func set_texture_based_on_thingtype():
 	var tex = Things.fetch_sprite(thingType, subtype)
 	match thingType:
 		Things.TYPE.OBJECT:
-			if subtype in [49, 111,120,121,122]: # Heart Flame and Gate
-				$ThingTexture.self_modulate = "a0ffffff"
+			if subtype == 49: # Gate
+				$ThingTexture.material = preload("res://Shaders/HeroGateMaterial.tres")
+			
+			var object_data = Things.DATA_OBJECT.get(subtype)
+			if object_data and object_data[Things.NAME_ID] is String and object_data[Things.NAME_ID].begins_with("HEARTFLAME_"):
+				$ThingTexture.material = preload("res://Shaders/FlameMaterial.tres")
+			
 			var successOrFailure = Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($ThingTexture, subtype)
 			if successOrFailure == true:
 				$ThingTexture.rect_position += Vector2(-1,9)
