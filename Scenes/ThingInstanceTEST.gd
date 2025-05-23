@@ -1,7 +1,0 @@
-extends Thing
-
-func _on_MouseDetection_mouse_entered():
-	print('???????')
-
-func _on_MouseDetection_mouse_exited():
-	print('???????')
