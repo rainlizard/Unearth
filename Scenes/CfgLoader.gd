@@ -34,63 +34,101 @@ func start(mapPath):
 	Columnset.clear_all_column_data()
 	Cube.clear_all_cube_data()
 	
-	var campaign_cfg = load_campaign_data(mapPath)
+	var campaign_cfg_data = load_campaign_data(mapPath)
 	paths_loaded = {
 		LOAD_CFG_FXDATA: [],
 		LOAD_CFG_CAMPAIGN: [],
 		LOAD_CFG_CURRENT_MAP: []
 	}
+	paths_loaded[LOAD_CFG_CAMPAIGN].resize(files_to_load.size())
+	paths_loaded[LOAD_CFG_CURRENT_MAP].resize(files_to_load.size())
+
 	var config_dirs = {
 		LOAD_CFG_FXDATA: oGame.DK_FXDATA_DIRECTORY,
-		LOAD_CFG_CAMPAIGN: oGame.GAME_DIRECTORY.plus_file(campaign_cfg.get("common", {}).get("CONFIGS_LOCATION", "")),
+		LOAD_CFG_CAMPAIGN: oGame.GAME_DIRECTORY.plus_file(campaign_cfg_data.get("common", {}).get("CONFIGS_LOCATION", "")),
 		LOAD_CFG_CURRENT_MAP: mapPath.get_basename()
 	}
 	
-	var file_exists = File.new()
-	
+	var file_exists_checker = File.new()
+
+	var fxdata_path_dir = config_dirs[LOAD_CFG_FXDATA]
+	if fxdata_path_dir != "" and Directory.new().dir_exists(fxdata_path_dir):
+		var fxdata_cfg_files = Utils.get_filetype_in_directory(fxdata_path_dir, "cfg")
+		var fxdata_toml_files = Utils.get_filetype_in_directory(fxdata_path_dir, "toml")
+		paths_loaded[LOAD_CFG_FXDATA] = fxdata_cfg_files + fxdata_toml_files
+		paths_loaded[LOAD_CFG_FXDATA].sort()
+	else:
+		print("Warning: DK_FXDATA_DIRECTORY is not set or invalid: ", fxdata_path_dir)
+
 	for i in files_to_load.size():
-		var file_name = files_to_load[i]
+		var file_name_from_list = files_to_load[i]
+		var combined_cfg_for_this_file = {} 
 		
-		var combined_cfg = {}
+		var fxdata_file_path = config_dirs[LOAD_CFG_FXDATA].plus_file(file_name_from_list)
+		var campaign_file_path = config_dirs[LOAD_CFG_CAMPAIGN].plus_file(file_name_from_list)
+		var map_specific_file_path = config_dirs[LOAD_CFG_CURRENT_MAP] + "." + file_name_from_list
+
+		var found_in_fxdata = false
+		var found_in_campaign = false
+		var found_in_map = false
+
+		if config_dirs[LOAD_CFG_FXDATA] != "" and file_exists_checker.file_exists(fxdata_file_path):
+			found_in_fxdata = true
+			match file_name_from_list:
+				"slabset.toml": Slabset.import_toml_slabset(fxdata_file_path)
+				"columnset.toml": Columnset.import_toml_columnset(fxdata_file_path)
+				"textureanim.toml": oTextureAnimation.generate_animation_database(fxdata_file_path)
+				"effects.toml": load_effects_data(fxdata_file_path)
+				_: 
+					if file_name_from_list.get_extension().to_lower() == "cfg":
+						var cfgData = Utils.read_dkcfg_file(fxdata_file_path)
+						combined_cfg_for_this_file = Utils.super_merge(combined_cfg_for_this_file, cfgData)
 		
-		for cfg_type in [LOAD_CFG_FXDATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
-			var cfg_dir = config_dirs[cfg_type]
-			var file_path = cfg_dir.plus_file(file_name)
-			if cfg_type == LOAD_CFG_CURRENT_MAP:
-				file_path = cfg_dir + "." + file_name
-			
-			if file_exists.file_exists(file_path):
-				
-				# ALL OTHER FILES GET DEFAULTED TO BEING LOADED AS A DKCFG FILE
-				match file_name:
-					"slabset.toml": Slabset.import_toml_slabset(file_path) # .toml import gets run multiple times instead of combining
-					"columnset.toml": Columnset.import_toml_columnset(file_path)
-					"textureanim.toml": oTextureAnimation.generate_animation_database(file_path)
-					"effects.toml": load_effects_data(file_path)
-					_:
-						var cfgData = Utils.read_dkcfg_file(file_path)
-						combined_cfg = Utils.super_merge(combined_cfg, cfgData)
-				
-				paths_loaded[cfg_type].resize(files_to_load.size())
-				paths_loaded[cfg_type][i] = file_path
-			else:
-				if cfg_type == LOAD_CFG_FXDATA:
-					match file_name:
-						"cubes.cfg": Cube.load_dk_original_cubes()
-						"slabset.toml": Slabset.load_default_original_slabset()
-						"columnset.toml": Columnset.load_default_original_columnset()
+		if config_dirs[LOAD_CFG_CAMPAIGN] != "" and file_exists_checker.file_exists(campaign_file_path):
+			found_in_campaign = true
+			paths_loaded[LOAD_CFG_CAMPAIGN][i] = campaign_file_path
+			match file_name_from_list:
+				"slabset.toml": Slabset.import_toml_slabset(campaign_file_path)
+				"columnset.toml": Columnset.import_toml_columnset(campaign_file_path)
+				"textureanim.toml": oTextureAnimation.generate_animation_database(campaign_file_path)
+				"effects.toml": load_effects_data(campaign_file_path)
+				_:
+					if file_name_from_list.get_extension().to_lower() == "cfg":
+						var cfgData = Utils.read_dkcfg_file(campaign_file_path)
+						combined_cfg_for_this_file = Utils.super_merge(combined_cfg_for_this_file, cfgData)
+
+		if config_dirs[LOAD_CFG_CURRENT_MAP] != "" and file_exists_checker.file_exists(map_specific_file_path):
+			found_in_map = true
+			paths_loaded[LOAD_CFG_CURRENT_MAP][i] = map_specific_file_path
+			match file_name_from_list:
+				"slabset.toml": Slabset.import_toml_slabset(map_specific_file_path)
+				"columnset.toml": Columnset.import_toml_columnset(map_specific_file_path)
+				"textureanim.toml": oTextureAnimation.generate_animation_database(map_specific_file_path)
+				"effects.toml": load_effects_data(map_specific_file_path)
+				_:
+					if file_name_from_list.get_extension().to_lower() == "cfg":
+						var cfgData = Utils.read_dkcfg_file(map_specific_file_path)
+						combined_cfg_for_this_file = Utils.super_merge(combined_cfg_for_this_file, cfgData)
 		
-		#if file_name == "objects.cfg":
-		#	print(combined_cfg)
+		if not found_in_fxdata and not found_in_campaign and not found_in_map:
+			match file_name_from_list:
+				"cubes.cfg": Cube.load_dk_original_cubes()
+				"slabset.toml": Slabset.load_default_original_slabset()
+				"columnset.toml": Columnset.load_default_original_columnset()
 		
-		# Only load cfg after they've been combined (they're combined so they'll automatically have fallbacks)
-		if combined_cfg.empty() == false: # It can be empty if the file wasn't found
-			match file_name:
-				"objects.cfg": load_objects_data(combined_cfg)
-				"creature.cfg": load_creatures_data(combined_cfg)
-				"trapdoor.cfg": load_trapdoor_data(combined_cfg)
-				"terrain.cfg": load_terrain_data(combined_cfg)
-				"cubes.cfg": Cube.read_cubes_cfg(combined_cfg)
+		if combined_cfg_for_this_file.empty() == false:
+			if file_name_from_list.get_extension().to_lower() == "cfg":
+				match file_name_from_list:
+					"objects.cfg": load_objects_data(combined_cfg_for_this_file)
+					"creature.cfg": load_creatures_data(combined_cfg_for_this_file)
+					"trapdoor.cfg": load_trapdoor_data(combined_cfg_for_this_file)
+					"terrain.cfg": load_terrain_data(combined_cfg_for_this_file)
+					"cubes.cfg": Cube.read_cubes_cfg(combined_cfg_for_this_file)
+
+	for fx_path in paths_loaded[LOAD_CFG_FXDATA]:
+		var fx_file_name = fx_path.get_file()
+		if not fx_file_name in files_to_load:
+			pass
 	
 	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 	if oConfigFilesListWindow.visible == true:
