@@ -50,15 +50,17 @@ func reset_thing_data_to_default(): # Reset data. Takes 1ms.
 	LIST_OF_BOXES = default_data["LIST_OF_BOXES"].duplicate(true)
 
 func fetch_sprite(thing_type:int, sub_type:int):
-	var sub_type_data = data_structure(thing_type).get(sub_type)
+	var data_structure_dictionary = data_structure(thing_type)
+	var sub_type_data:Array = data_structure_dictionary.get(sub_type)
 	if sub_type_data:
 		var sprite = Graphics.sprite_id.get(sub_type_data[SPRITE])
 		if sprite:
 			return sprite
-		match sub_type_data[GENRE]:
-			"SPECIALBOX":  return Graphics.sprite_id.get(901, null)
-			"SPELLBOOK":   return Graphics.sprite_id.get(777, null)
-			"WORKSHOPBOX": return Graphics.sprite_id.get(114, null)
+		if sub_type_data.size() >= 3:
+			match sub_type_data[GENRE]:
+				"SPECIALBOX":  return Graphics.sprite_id.get(901, null)
+				"SPELLBOOK":   return Graphics.sprite_id.get(777, null)
+				"WORKSHOPBOX": return Graphics.sprite_id.get(114, null)
 	return null
 
 

@@ -166,13 +166,13 @@ func set_ownership(setval):
 	ownership = setval
 	
 	if ownership == 5 and thingType != Things.TYPE.CREATURE: # If the object has no ownership don't apply the material or else it'll flash.
-		$ThingTexture.material = null
+		$"%ThingTexture".material = null
 	else:
 		if ownership == 255:
 			print('For some reason ownership 255 at '+str(locationX)+' - '+str(locationY))
 			return
 			
-		$ThingTexture.material = Nodelist.list["oInstanceOwnership"].materialInstanceOwnership[ownership]
+		$"%ThingTexture".material = Nodelist.list["oInstanceOwnership"].materialInstanceOwnership[ownership]
 
 func set_effectRange(setval):
 	data9 = null
@@ -209,7 +209,7 @@ func set_creatureName(setval):
 	creatureName = setval
 
 func set_orientation(setval):
-	rotation_degrees = (setval/2047.0) * 360
+	$RotationPoint.rotation_degrees = (setval/2047.0) * 360
 	orientation = setval
 
 func set_herogateNumber(setval):
@@ -223,25 +223,25 @@ func set_texture_based_on_thingtype():
 	match thingType:
 		Things.TYPE.OBJECT:
 			if subtype == 49: # Gate
-				$ThingTexture.material = preload("res://Shaders/HeroGateMaterial.tres")
+				$"%ThingTexture".material = preload("res://Shaders/HeroGateMaterial.tres")
 			
 			var object_data = Things.DATA_OBJECT.get(subtype)
 			if object_data and object_data[Things.NAME_ID] is String and object_data[Things.NAME_ID].begins_with("HEARTFLAME_"):
-				$ThingTexture.material = preload("res://Shaders/FlameMaterial.tres")
+				$"%ThingTexture".material = preload("res://Shaders/FlameMaterial.tres")
 			
-			var successOrFailure = Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($ThingTexture, subtype)
+			var successOrFailure = Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($"%ThingTexture", subtype)
 			if successOrFailure == true:
-				$ThingTexture.rect_position += Vector2(-1,9)
+				$"%ThingTexture".rect_position += Vector2(-1,9)
 		Things.TYPE.CREATURE:
 			if tex != null:
-				#$ThingTexture.rect_position.y -= 12
-				$ThingTexture.rect_scale = Vector2(1.5,1.5)
+				#$"%ThingTexture".rect_position.y -= 12
+				$"%ThingTexture".rect_scale = Vector2(1.5,1.5)
 	if tex != null:
-		$ThingTexture.texture = tex
+		$"%ThingTexture".texture = tex
 	else:
-		$ThingTexture.texture = preload('res://Art/Thing.png')
-		$ThingTexture.expand = true
-		$ThingTexture.rect_scale = Vector2(0.5,0.5)
+		$"%ThingTexture".texture = preload('res://Art/Thing.png')
+		$"%ThingTexture".expand = true
+		$"%ThingTexture".rect_scale = Vector2(0.5,0.5)
 		$TextNameLabel.visible = true
 		yield(get_tree(),'idle_frame')
 		
@@ -268,7 +268,7 @@ func set_grow_direction():
 		return
 	
 	# Grow from base instead of center
-	$ThingTexture.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	$"%ThingTexture".grow_vertical = Control.GROW_DIRECTION_BEGIN
 
 
 func _on_MouseDetection_mouse_entered():
@@ -358,31 +358,31 @@ func _on_VisibilityNotifier2D_screen_exited():
 
 #func _ready():
 #	oCreatureTextureRect.visible = false
-#	$ThingTexture.visible = true
+#	$"%ThingTexture".visible = true
 #
 #	match get_type():
 #		TYPE.NONE: pass
 #		TYPE.ITEM:
 #			var tex = DATA_OBJECT[get_subtype()][TEXTURE]
-#			if tex != null: $ThingTexture.texture = tex
+#			if tex != null: $"%ThingTexture".texture = tex
 #		TYPE.CREATURE:
-#			$ThingTexture.visible = false
+#			$"%ThingTexture".visible = false
 #			oCreatureTextureRect.visible = true
 #			oCreatureTextureRect.texture = DATA_CREATURE[get_subtype()][TEXTURE]
 #			oCreatureTextureRect.material = oInstanceOwnership.materialInstanceOwnership[get_ownership()]
 #			oCreatureLevel.frame = data[CREATURE_LEVEL]
 #		TYPE.EFFECT:
 #			var tex = DATA_EFFECTGEN[get_subtype()][TEXTURE]
-#			if tex != null: $ThingTexture.texture = tex
+#			if tex != null: $"%ThingTexture".texture = tex
 #		TYPE.TRAP:
 #			var tex = DATA_TRAP[get_subtype()][TEXTURE]
-#			if tex != null: $ThingTexture.texture = tex
+#			if tex != null: $"%ThingTexture".texture = tex
 #		TYPE.DOOR:
 #			var tex = DATA_DOOR[get_subtype()][TEXTURE]
-#			if tex != null: $ThingTexture.texture = tex
+#			if tex != null: $"%ThingTexture".texture = tex
 #
-#	if $ThingTexture.texture == null:
-#		$ThingTexture.modulate = col
+#	if $"%ThingTexture".texture == null:
+#		$"%ThingTexture".modulate = col
 #
 #func setOwnership():
 #	var value = data[OWNERSHIP]
