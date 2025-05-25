@@ -55,6 +55,10 @@ func _enter_tree():
 	
 	load_default_kfx_values()
 	
+	var oCamera2D = Nodelist.list["oCamera2D"]
+	oCamera2D.connect("zoom_level_changed",self,"_on_zoom_level_changed")
+	_on_zoom_level_changed(oCamera2D.zoom)
+	
 	match thingType:
 		Things.TYPE.TRAP:
 			add_to_group("Trap")
@@ -77,12 +81,9 @@ func _enter_tree():
 				yield(get_tree(),'idle_frame')
 				if oActionPointList:
 					oActionPointList.update_ap_list()
-					
+		
 		Things.TYPE.CREATURE:
 			add_to_group("Creature")
-			var oCamera2D = Nodelist.list["oCamera2D"]
-			oCamera2D.connect("zoom_level_changed",self,"_on_zoom_level_changed")
-			_on_zoom_level_changed(oCamera2D.zoom)
 		Things.TYPE.EFFECTGEN:
 			add_to_group("EffectGen")
 
@@ -150,17 +151,30 @@ func set_location_z(setVal):
 
 
 func _on_zoom_level_changed(zoom):
-	var oUi = Nodelist.list["oUi"]
-	var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
-	var inventScale = Vector2()
-	inventScale.x = clamp(zoom.x, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
-	inventScale.y = clamp(zoom.y, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
-	if zoom.x > oUi.FONT_SIZE_CR_LVL_MAX or oQuickMapPreview.visible == true:
-		$CreatureLevel.self_modulate = Color(0,0,0,0)
-	else:
-		$CreatureLevel.self_modulate = Color(1,1,1,1)
-	
-	$CreatureLevel.scale = inventScale * oUi.FONT_SIZE_CR_LVL_BASE * 1.5
+	match thingType:
+		Things.TYPE.CREATURE:
+			var oUi = Nodelist.list["oUi"]
+			var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
+			var inventScale = Vector2()
+			inventScale.x = clamp(zoom.x, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
+			inventScale.y = clamp(zoom.y, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
+			if zoom.x > oUi.FONT_SIZE_CR_LVL_MAX or oQuickMapPreview.visible == true:
+				$CreatureLevel.self_modulate = Color(0,0,0,0)
+			else:
+				$CreatureLevel.self_modulate = Color(1,1,1,1)
+			$CreatureLevel.scale = inventScale * oUi.FONT_SIZE_CR_LVL_BASE * 1.5
+		_:
+			var oUi = Nodelist.list["oUi"]
+			var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
+			var inventScale = Vector2()
+			inventScale.x = clamp(zoom.x, 1.0, oUi.FACING_ARROW_SIZE_MAX)
+			inventScale.y = clamp(zoom.y, 1.0, oUi.FACING_ARROW_SIZE_MAX)
+			if zoom.x > oUi.FACING_ARROW_SIZE_MAX or oQuickMapPreview.visible == true:
+				$WhiteArrow.self_modulate = Color(0,0,0,0)
+			else:
+				$WhiteArrow.self_modulate = Color(1,1,1,1)
+			$WhiteArrow.scale = inventScale * oUi.FACING_ARROW_SIZE_BASE * 0.05
+
 
 func set_ownership(setval):
 	ownership = setval
@@ -209,7 +223,11 @@ func set_creatureName(setval):
 	creatureName = setval
 
 func set_orientation(setval):
-	$RotationPoint.rotation_degrees = (setval/2047.0) * 360
+	if setval != 0:
+		$WhiteArrow.visible = true
+		$WhiteArrow.rotation_degrees = (setval/2047.0) * 360
+	else:
+		$WhiteArrow.visible = false
 	orientation = setval
 
 func set_herogateNumber(setval):

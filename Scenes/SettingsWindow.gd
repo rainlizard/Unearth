@@ -22,6 +22,8 @@ onready var oCreatureLevelFontSizeScale = Nodelist.list["oCreatureLevelFontSizeS
 onready var oCreatureLevelFontSizeMaxZoom = Nodelist.list["oCreatureLevelFontSizeMaxZoom"]
 onready var oSciptIconScale = Nodelist.list["oSciptIconScale"]
 onready var oSciptIconMaxZoom = Nodelist.list["oSciptIconMaxZoom"]
+onready var oFacingArrowScale = Nodelist.list["oFacingArrowScale"]
+onready var oFacingArrowMaxZoom = Nodelist.list["oFacingArrowMaxZoom"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oUiScale = Nodelist.list["oUiScale"]
@@ -81,6 +83,8 @@ func _on_SettingsWindow_about_to_show():
 	oCreatureLevelFontSizeMaxZoom.update_appearance(Settings.get_setting("font_size_creature_level_max"))
 	oSciptIconScale.update_appearance(Settings.get_setting("script_icon_scale"))
 	oSciptIconMaxZoom.update_appearance(Settings.get_setting("script_icon_max"))
+	oFacingArrowScale.update_appearance(Settings.get_setting("facing_arrow_scale"))
+	oFacingArrowMaxZoom.update_appearance(Settings.get_setting("facing_arrow_max"))
 	oEditorFontSize.update_appearance(Settings.get_setting("editor_font_size"))
 	oScriptEditorFontSize.update_appearance(Settings.get_setting("script_editor_font_size"))
 	oCheckBoxNewMapAutoOpensMapSettings.pressed = Settings.get_setting("auto_open_map_settings")
@@ -165,6 +169,12 @@ func edited_SciptIconScale(new_text):
 
 func edited_SciptIconMaxZoom(new_text):
 	Settings.set_setting("script_icon_max", float(new_text))
+
+func edited_FacingArrowScale(new_text):
+	Settings.set_setting("facing_arrow_scale", float(new_text))
+
+func edited_FacingArrowMaxZoom(new_text):
+	Settings.set_setting("facing_arrow_max", float(new_text))
 
 func edited_ThingWindowScale(new_text):
 	Settings.set_setting("thing_window_scale", float(new_text))

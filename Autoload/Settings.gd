@@ -39,6 +39,8 @@ var listOfSettings = [
 	"font_size_creature_level_max",
 	"script_icon_scale",
 	"script_icon_max",
+	"facing_arrow_scale",
+	"facing_arrow_max",
 	"slab_window_size",
 	"slab_window_position",
 	"slab_window_scale",
@@ -256,6 +258,14 @@ func game_setting(doWhat,string,value):
 			var oScriptHelpers = $'../Main/Game2D/ScriptHelpers'
 			if doWhat == SET: oScriptHelpers.SCRIPT_ICON_SIZE_MAX = value
 			if doWhat == GET: return oScriptHelpers.SCRIPT_ICON_SIZE_MAX
+		"facing_arrow_scale":
+			var oUi = $'../Main/Ui'
+			if doWhat == SET: oUi.FACING_ARROW_SIZE_BASE = value
+			if doWhat == GET: return oUi.FACING_ARROW_SIZE_BASE
+		"facing_arrow_max":
+			var oUi = $'../Main/Ui'
+			if doWhat == SET: oUi.FACING_ARROW_SIZE_MAX = value
+			if doWhat == GET: return oUi.FACING_ARROW_SIZE_MAX
 		"slab_window_size":
 			var oPickSlabWindow = $'../Main/Ui/UiTools/PickSlabWindow'
 			if doWhat == SET: oPickSlabWindow.rect_size = value

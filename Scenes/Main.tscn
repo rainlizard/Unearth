@@ -2689,7 +2689,7 @@ scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera"]
 margin_right = 544.0
-margin_bottom = 480.0
+margin_bottom = 550.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -2803,6 +2803,26 @@ margin_top = 329.0
 margin_right = 532.0
 margin_bottom = 360.0
 settingText = "Script icon max zoom"
+maximum_value = 80.0
+
+[node name="FacingArrowScale" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 294.0
+margin_right = 532.0
+margin_bottom = 325.0
+settingText = "Orientation arrow scale"
+maximum_value = 10.0
+
+[node name="FacingArrowMaxZoom" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 329.0
+margin_right = 532.0
+margin_bottom = 360.0
+settingText = "Orientation arrow max zoom"
 maximum_value = 80.0
 
 [node name="HSeparator2" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]

@@ -24,6 +24,8 @@ var tabKeyInputEvent = InputEventKey.new()
 
 var FONT_SIZE_CR_LVL_BASE := 1.00 setget set_FONT_SIZE_CR_LVL_BASE
 var FONT_SIZE_CR_LVL_MAX := 8.00 setget set_FONT_SIZE_CR_LVL_MAX
+var FACING_ARROW_SIZE_MAX := 0.75 setget set_FACING_ARROW_SIZE_MAX
+var FACING_ARROW_SIZE_BASE := 1.00 setget set_FACING_ARROW_SIZE_BASE
 
 const topMargin = 69
 
@@ -115,6 +117,15 @@ func set_FONT_SIZE_CR_LVL_BASE(setVal):
 func set_FONT_SIZE_CR_LVL_MAX(setVal):
 	FONT_SIZE_CR_LVL_MAX = setVal
 	oCamera2D.emit_signal("zoom_level_changed", oCamera2D.zoom)
+
+func set_FACING_ARROW_SIZE_MAX(setVal):
+	FACING_ARROW_SIZE_MAX = setVal
+	oCamera2D.emit_signal("zoom_level_changed", oCamera2D.zoom)
+
+func set_FACING_ARROW_SIZE_BASE(setVal):
+	FACING_ARROW_SIZE_BASE = setVal
+	oCamera2D.emit_signal("zoom_level_changed", oCamera2D.zoom)
+
 
 func show_tools():
 	if oDataSlab.get_cell(0,0) == TileMap.INVALID_CELL:
