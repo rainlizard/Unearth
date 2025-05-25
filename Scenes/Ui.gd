@@ -24,7 +24,7 @@ var tabKeyInputEvent = InputEventKey.new()
 
 var FONT_SIZE_CR_LVL_BASE := 1.00 setget set_FONT_SIZE_CR_LVL_BASE
 var FONT_SIZE_CR_LVL_MAX := 8.00 setget set_FONT_SIZE_CR_LVL_MAX
-var FACING_ARROW_SIZE_MAX := 0.75 setget set_FACING_ARROW_SIZE_MAX
+var FACING_ARROW_SIZE_MAX := 1.00 setget set_FACING_ARROW_SIZE_MAX
 var FACING_ARROW_SIZE_BASE := 1.00 setget set_FACING_ARROW_SIZE_BASE
 
 const topMargin = 69

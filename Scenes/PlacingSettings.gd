@@ -56,23 +56,18 @@ func _on_PropertiesTabs_tab_changed(tab):
 		set_placing_tab_and_update_it()
 
 
-func replicate_instance_settings(node):
-	if node.get("effectRange"): effectRange = node.effectRange
-	if node.get("creatureLevel"): creatureLevel = node.creatureLevel
-	if node.get("doorLocked"): doorLocked = node.doorLocked
-	if node.get("ownership"): ownership = node.ownership
-	if node.get("lightRange"): lightRange = node.lightRange
-	if node.get("lightIntensity"): lightIntensity = node.lightIntensity
-	if node.get("pointRange"): pointRange = node.pointRange
-	if node.get("boxNumber"): boxNumber = node.boxNumber
+func replicate_instance_settings(aNode):
+	var propertiesToReplicate = [
+		"effectRange", "creatureLevel", "doorLocked", "ownership",
+		"lightRange", "lightIntensity", "pointRange", "boxNumber",
+		"creatureName", "creatureGold", "creatureInitialHealth",
+		"orientation", "goldValue"
+	]
 	
-	if node.get("creatureName"): creatureName = node.creatureName
-	if node.get("creatureName") == "": creatureName = node.creatureName
-	
-	if node.get("creatureGold"): creatureGold = node.creatureGold
-	if node.get("creatureInitialHealth"): creatureInitialHealth = node.creatureInitialHealth
-	if node.get("orientation"): orientation = node.orientation
-	if node.get("goldValue"): goldValue = node.goldValue
+	for propertyName in propertiesToReplicate:
+		var valueFromNode = aNode.get(propertyName)
+		if valueFromNode != null:
+			set(propertyName, valueFromNode)
 
 
 func set_placing_tab_and_update_it():
