@@ -1,6 +1,8 @@
 extends Node2D
 onready var oTextureCache = Nodelist.list["oTextureCache"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
+onready var oUi = Nodelist.list["oUi"]
+
 
 func _enter_tree():
 	print("Unearth v"+Version.full)
@@ -20,6 +22,12 @@ func _ready():
 #	$Editor._on_ButtonViewType_pressed()
 
 func initialize_window_settings():
+	if Settings.cfg_has_setting("ui_scale") == false:
+		var desktopResolution = OS.get_screen_size()
+		var scaleValue = desktopResolution.x / 1920.0
+		scaleValue = round(scaleValue * 100.0) / 100.0
+		oUi.set_ui_scale(scaleValue)
+
 	#var vp = get_viewport()
 	
 	OS.window_borderless = false
