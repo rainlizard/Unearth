@@ -314,7 +314,7 @@ func make_empty_file(mapBaseDirectory: String, mapFilenameBasename: String, base
 --will get called when the game starts
 function OnGameStart()
 	Setup()
-	Setup_triggers()
+	SetupTriggers()
 end
 
 --here we setup things 
@@ -323,7 +323,7 @@ function Setup()
 end
 
 --here we setup the triggers, these can be found in fxdata/lua/triggers/Events.lua
-function Register_triggers()
+function SetupTriggers()
 
 end
 """ % [mapName, authorName]
