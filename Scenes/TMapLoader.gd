@@ -159,8 +159,6 @@ func start():
 			printerr("Failed to create L8 image from DAT: ", pathStr)
 			continue
 		
-		l8Image.generate_mipmaps()
-		
 		cache_loaded_image(l8Image, tmapNumber, tmapType)
 		newRememberedPaths[pathStr] = tmapaDatDictionary[pathStr]
 	

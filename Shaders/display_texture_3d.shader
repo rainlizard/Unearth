@@ -1,31 +1,23 @@
 shader_type spatial;
-render_mode blend_mix, cull_back, depth_draw_opaque, skip_vertex_transform; //for the sake of performance avoid enabling transparency on all your terrain.
-uniform sampler2DArray dkTextureMap_Split_A1;
-uniform sampler2DArray dkTextureMap_Split_A2;
-uniform sampler2DArray dkTextureMap_Split_B1;
-uniform sampler2DArray dkTextureMap_Split_B2;
+render_mode blend_mix, cull_back, depth_draw_opaque, skip_vertex_transform;
 
-uniform int use_mipmaps = 1;
-
-uniform bool useFullSizeMap = true;
+uniform sampler2D tmap_A_top:hint_albedo;
+uniform sampler2D tmap_A_bottom:hint_albedo;
+uniform sampler2D tmap_B_top:hint_albedo;
+uniform sampler2D tmap_B_bottom:hint_albedo;
+uniform sampler2D palette_texture:hint_albedo;
 uniform sampler2D animationDatabase;
 varying vec4 worldPos;
-const vec2 oneTileSize = vec2(32,32);
-
 const float TEXTURE_ANIMATION_SPEED = 12.0;
-
-// Exact same code as in Godot Source Code
-float calc_mip_level(vec2 texture_coord) {
-	vec2 dx = dFdx(texture_coord);
-	vec2 dy = dFdy(texture_coord);
-	float delta_max_sqr = max(dot(dx, dx), dot(dy, dy));
-	return max(0.0, 0.5 * log2(delta_max_sqr));
-}
+const vec2 TILE_DIMENSIONS = vec2(32.0, 32.0);
+const vec2 L8_ATLAS_PIXEL_DIMS = vec2(256.0, 1088.0);
+const float TILES_PER_L8_ATLAS_ROW = L8_ATLAS_PIXEL_DIMS.x / TILE_DIMENSIONS.x;
+const float TILES_PER_L8_ATLAS_COLUMN_HALF = L8_ATLAS_PIXEL_DIMS.y / TILE_DIMENSIONS.y;
 
 vec4 texelGet ( sampler2D tg_tex, ivec2 tg_coord, int tg_lod ) {
 	vec2 tg_texel = 1.0 / vec2(textureSize(tg_tex, 0));
 	vec2 tg_getpos = (vec2(tg_coord) * tg_texel) + (tg_texel * 0.5);
-	return texture(tg_tex, tg_getpos, float(tg_lod));
+	return textureLod(tg_tex, tg_getpos, float(tg_lod));
 }
 
 int getAnimationFrame(int frame, int index) {
@@ -42,9 +34,16 @@ int getIndex(vec2 uv2) {
 	return (int(uv2.x + 0.5) << 16) | int(uv2.y + 0.5);
 }
 
+float sample_tile_from_l8_atlas(sampler2D l8AtlasTexture, int tileIndex, vec2 localTileUV) {
+	float tileFloat = float(tileIndex);
+	vec2 tileAtlasCoords = vec2(mod(tileFloat, TILES_PER_L8_ATLAS_ROW), floor(tileFloat / TILES_PER_L8_ATLAS_ROW));
+	vec2 finalAtlasUV = (tileAtlasCoords + localTileUV) / vec2(TILES_PER_L8_ATLAS_ROW, TILES_PER_L8_ATLAS_COLUMN_HALF);
+	return textureLod(l8AtlasTexture, finalAtlasUV,0.0).r;
+}
+
 void vertex() {
-	worldPos = WORLD_MATRIX * vec4(VERTEX, 1.0); //required when using skip_vertex_transform
-	VERTEX = (INV_CAMERA_MATRIX * worldPos).xyz; //required when using skip_vertex_transform
+	worldPos = WORLD_MATRIX * vec4(VERTEX, 1.0);
+	VERTEX = (INV_CAMERA_MATRIX * worldPos).xyz;
 }
 
 void fragment() {
@@ -52,89 +51,26 @@ void fragment() {
 	// Adding 0.5 so the int() floor will be correct.
 	int index = getIndex(UV2);
 	
-	if (index >= 544 && index < 1000) { // 544 is the index where the TexAnims start (544 - 999)
-		int frame = int(mod(TIME * TEXTURE_ANIMATION_SPEED, 8));
+	if (index >= 544 && index < 1000) {
+		int frame = int(mod(TIME * TEXTURE_ANIMATION_SPEED, 8.0)); // Ensure 8.0 for float mod
 		index = getAnimationFrame(frame, (index-544) );
 	}
 	
-	//mipmapLevel 0.0 is way sharper
-	float mipmapLevel = calc_mip_level(UV * vec2(8.0,68.0)) * float(use_mipmaps);
-	
-	if (index < 272) { // Splitting the TextureArray into 2, so that it will work on older PCs.
-		ALBEDO = textureLod(dkTextureMap_Split_A1, vec3(UV.x, UV.y, float(index)), mipmapLevel).rgb;
+	float paletteIndexValue;
+	if (index < 272) {
+		paletteIndexValue = sample_tile_from_l8_atlas(tmap_A_top, index, UV);
 	} else if (index < 544) {
-		ALBEDO = textureLod(dkTextureMap_Split_A2, vec3(UV.x, UV.y, float(index-272)), mipmapLevel).rgb;
-	} else if (index < 1272) { // Splitting the TextureArray into 2, so that it will work on older PCs.
-		ALBEDO = textureLod(dkTextureMap_Split_B1, vec3(UV.x, UV.y, float(index-1000)), mipmapLevel).rgb;
-	} else  {
-		ALBEDO = textureLod(dkTextureMap_Split_B2, vec3(UV.x, UV.y, float(index-1272)), mipmapLevel).rgb;
+		paletteIndexValue = sample_tile_from_l8_atlas(tmap_A_bottom, index - 272, UV);
+	} else if (index >= 1000 && index < 1272) {
+		paletteIndexValue = sample_tile_from_l8_atlas(tmap_B_top, index - 1000, UV);
+	} else if (index >= 1272 && index < 1544) {
+		paletteIndexValue = sample_tile_from_l8_atlas(tmap_B_bottom, index - 1272, UV);
+	} else {
+		discard; 
 	}
 	
-	// Forces the shader to convert albedo from sRGB space to linear space. A problem when using the same TextureArray while mixing 2D and 3D shaders and displaying both 2D and 3D at the same time.
-	ALBEDO = mix(pow((ALBEDO + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),ALBEDO * (1.0 / 12.92),lessThan(ALBEDO,vec3(0.04045)));
+	int finalPaletteLookupIndex = int(paletteIndexValue * 255.0 + 0.5);
+	vec3 maincol = texelFetch(palette_texture, ivec2(finalPaletteLookupIndex, 0), 0).rgb;
+	
+	ALBEDO = maincol;
 }
-
-//shader_type spatial;
-//render_mode blend_mix, cull_back, depth_draw_opaque, skip_vertex_transform; //for the sake of performance avoid enabling transparency on all your terrain.
-//uniform sampler2DArray dkTextureMap_A : hint_albedo;
-//uniform sampler2DArray dkTextureMap_B : hint_albedo;
-//uniform sampler2DArray dkTextureMap_Full : hint_albedo;
-//uniform bool useFullSizeMap = true;
-//uniform sampler2D animationDatabase;
-//varying vec4 worldPos;
-//const float TEXTURE_ANIMATION_SPEED = 12.0;
-//
-//
-//// Exact same code as in Godot Source Code
-//float calc_mip_level(vec2 texture_coord) {
-//	vec2 dx = dFdx(texture_coord);
-//	vec2 dy = dFdy(texture_coord);
-//	float delta_max_sqr = max(dot(dx, dx), dot(dy, dy));
-//	return max(0.0, 0.5 * log2(delta_max_sqr));
-//}
-//
-//vec4 texelGet ( sampler2D tg_tex, ivec2 tg_coord, int tg_lod ) {
-//	vec2 tg_texel = 1.0 / vec2(textureSize(tg_tex, 0));
-//	vec2 tg_getpos = (vec2(tg_coord) * tg_texel) + (tg_texel * 0.5);
-//	return texture(tg_tex, tg_getpos, float(tg_lod));
-//}
-//
-//int getAnimationFrame(int frame, int index){
-//	// y coordinate = Animated Texture index
-//	// x coordinate = frame number
-//	ivec2 coords = ivec2(frame, index);
-//	vec3 value = texelGet(animationDatabase, coords, 0).rgb * vec3(255.0,255.0,255.0);
-//	return int(value.r+value.g+value.b);
-//}
-//
-//void vertex() {
-//	worldPos = WORLD_MATRIX * vec4(VERTEX, 1.0); //required when using skip_vertex_transform
-//	VERTEX = (INV_CAMERA_MATRIX * worldPos).xyz; //required when using skip_vertex_transform
-//}
-//
-//void fragment() {
-//	// This is a bit of a hack, but allows us to store the texture index within the mesh as UV2.
-//	// Adding 0.5 so the int() floor will be correct.
-//	int index = int(UV2.x+0.5);
-//
-//	float mipmapLevel = calc_mip_level(UV * vec2(8.0,68.0)); // This number is texturearray slices
-//
-//	if (index >= 544) { // 544 is the index where the TexAnims start (544 - 585)
-//		int frame = int(mod(TIME * TEXTURE_ANIMATION_SPEED, 8));
-//		index = getAnimationFrame(frame, (index-544) );
-//	}
-//
-//	if (useFullSizeMap == true) {
-//		ALBEDO = textureLod(dkTextureMap_Full, vec3(UV.x, UV.y, float(index)), mipmapLevel).rgb;
-//	} else {
-//		if (index < 272) { // Splitting the TextureArray into 2, so that it will work on older PCs.
-//			ALBEDO = textureLod(dkTextureMap_A, vec3(UV.x, UV.y, float(index)), mipmapLevel).rgb;
-//		} else {
-//			ALBEDO = textureLod(dkTextureMap_B, vec3(UV.x, UV.y, float(index-272)), mipmapLevel).rgb;
-//		}
-//	}
-//	// Forces the shader to convert albedo from sRGB space to linear space.
-//	// I've been having trouble when using FORMAT_RGB8 texture maps, switching between 2D and 3D mode would make the game darker or brighter.
-//	// I switched to using FORMAT_RGBF, and now I have to use the below line for the correct color space. It costs like 10fps
-//	ALBEDO = mix(pow((ALBEDO + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),ALBEDO * (1.0 / 12.92),lessThan(ALBEDO,vec3(0.04045)));
-//}
