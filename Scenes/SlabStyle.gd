@@ -1,6 +1,6 @@
 extends PanelContainer
 onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
-onready var oTextureCache = Nodelist.list["oTextureCache"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 
@@ -13,7 +13,7 @@ func initialize_grid_items():
 		oDisplaySlxNumbers.update_grid()
 	var oGridContainer = current_grid_container()
 #	# Add children
-	for i in oTextureCache.cachedTextures.size()+1: # +1 is for "Default"
+	for i in oTMapLoader.cachedTextures.size()+1: # +1 is for "Default"
 		var btnId = scnSlabStyleButton.instance()
 		btnId.connect("pressed", self, "_on_SlabStyleButtonPressed", [btnId,i])
 		
@@ -69,10 +69,10 @@ func current_grid_container():
 #		setStyle = oDataLevelStyle.data
 #	else:
 #		setStyle = setval-1
-#	oTextureCache.assign_textures_to_slab_window(setStyle)
+#	oTMapLoader.assign_textures_to_slab_window(setStyle)
 
 #	if visible == false:
-#		if is_instance_valid(oTextureCache):
-#			oTextureCache.assign_textures_to_slab_window(oDataLevelStyle.data)
+#		if is_instance_valid(oTMapLoader):
+#			oTMapLoader.assign_textures_to_slab_window(oDataLevelStyle.data)
 #		return
 

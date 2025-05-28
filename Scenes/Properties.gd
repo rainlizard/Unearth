@@ -1,5 +1,5 @@
 extends MarginContainer
-onready var oTextureCache = Nodelist.list["oTextureCache"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oDungeonStyleList = Nodelist.list["oDungeonStyleList"]
@@ -139,7 +139,7 @@ func set_format_selection(setFormat):
 
 func refresh_dungeon_style_options():
 	oDungeonStyleList.clear()
-	for i in oTextureCache.cachedTextures.size():
+	for i in oTMapLoader.cachedTextures.size():
 		var aaa
 		if Constants.TEXTURE_MAP_NAMES.has(i) == true:
 			aaa = Constants.TEXTURE_MAP_NAMES[i]
@@ -148,13 +148,13 @@ func refresh_dungeon_style_options():
 		oDungeonStyleList.add_item(aaa,i)
 	
 	# Select the correct one when loading map
-	if oDataLevelStyle.data <= oTextureCache.cachedTextures.size():
+	if oDataLevelStyle.data <= oTMapLoader.cachedTextures.size():
 		oDungeonStyleList.selected = oDataLevelStyle.data
 
 func _on_DungeonStyleList_item_selected(value):
 	oEditor.mapHasBeenEdited = true
 	oDataLevelStyle.data = value
-	oTextureCache.set_current_texture_pack()
+	oTMapLoader.apply_texture_pack()
 	oMessage.quick("Loaded : ".plus_file("unearthdata").plus_file("tmapa" + str(value).pad_zeros(3) + ".png"))
 
 func _on_MapNameLineEdit_text_changed(new_text):

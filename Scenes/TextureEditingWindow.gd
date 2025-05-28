@@ -1,5 +1,5 @@
 extends WindowDialog
-onready var oTextureCache = Nodelist.list["oTextureCache"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oReloaderPathLabel = Nodelist.list["oReloaderPathLabel"]
 onready var oReloaderPathPackLabel = Nodelist.list["oReloaderPathPackLabel"]
 
@@ -69,7 +69,7 @@ func initialize_filelist():
 	var fn = get_tmapa_filename()
 	if oDataLevelStyle.data != int(fn):
 		oDataLevelStyle.data = int(fn)
-		oTextureCache.set_current_texture_pack()
+		oTMapLoader.apply_texture_pack()
 		oEditor.mapHasBeenEdited = true
 		oMessage.quick("Changed map's Tileset to show what you're currently editing")
 
@@ -124,8 +124,8 @@ func execute():
 		print("anyChangesWereMade")
 		var baseName = get_tmapa_filename()
 		var tmapNumber = int(baseName.to_int())
-		oTextureCache.load_image_into_cache(editingImg, tmapNumber, baseName)
-		oTextureCache.set_current_texture_pack()
+		oTMapLoader.load_image_into_cache(editingImg, tmapNumber, baseName)
+		oTMapLoader.apply_texture_pack()
 	
 	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
@@ -178,7 +178,7 @@ func get_tmapa_filename():
 
 func _on_ExportTmapaDatDialog_file_selected(path):
 	var buffer = StreamPeerBuffer.new()
-	#print(oTextureCache.paletteData)
+	#print(oTMapLoader.paletteData)
 	var CODETIME_START = OS.get_ticks_msec()
 	
 	editingImg.lock()
@@ -216,7 +216,7 @@ var user_cancelled = false
 
 
 func _on_ChooseTmapaFileDialog_file_selected(path):
-	var sourceImg = oTextureCache.convert_tmapa_to_image(path)
+	var sourceImg = oTMapLoader.convert_tmapa_to_image(path)
 	if sourceImg == null: return
 	var CODETIME_START = OS.get_ticks_msec()
 	

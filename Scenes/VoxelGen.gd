@@ -1,7 +1,7 @@
 extends Node
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oTerrainMesh = Nodelist.list["oTerrainMesh"]
-onready var oTextureCache = Nodelist.list["oTextureCache"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oGame3D = Nodelist.list["oGame3D"]
 

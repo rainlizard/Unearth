@@ -4,12 +4,13 @@ onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
-onready var oTextureCache = Nodelist.list["oTextureCache"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oQuickMapPreviewDisplay = Nodelist.list["oQuickMapPreviewDisplay"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
+onready var oReadPalette = Nodelist.list["oReadPalette"]
 
 signal column_graphics_completed
 
@@ -86,11 +87,11 @@ func initialize_display_fields():
 	arrayOfColorRects.clear() # just in case
 	
 	# Default
-	if oTextureCache.cachedTextures.size() > 0:
+	if oTMapLoader.cachedTextures.size() > 0:
 		createDisplayField(oDataLevelStyle.data, 0) # 0 means "Show Default Style"
 	
 	# Slab styles
-	for map in oTextureCache.cachedTextures.size():
+	for map in oTMapLoader.cachedTextures.size():
 		createDisplayField(map, map+1)
 
 func createDisplayField(setMap, showStyle):
@@ -104,10 +105,10 @@ func createDisplayField(setMap, showStyle):
 	displayField.material = mat
 	
 	if showStyle != 0: # Do not change the texturemap for default style
-		mat.set_shader_param("dkTextureMap_Split_A1", oTextureCache.cachedTextures[setMap][0])
-		mat.set_shader_param("dkTextureMap_Split_A2", oTextureCache.cachedTextures[setMap][1])
-		mat.set_shader_param("dkTextureMap_Split_B1", oTextureCache.cachedTextures[setMap][2])
-		mat.set_shader_param("dkTextureMap_Split_B2", oTextureCache.cachedTextures[setMap][3])
+		mat.set_shader_param("tmap_A_top", oTMapLoader.cachedTextures[setMap][0])
+		mat.set_shader_param("tmap_A_bottom", oTMapLoader.cachedTextures[setMap][1])
+		mat.set_shader_param("tmap_B_top", oTMapLoader.cachedTextures[setMap][2])
+		mat.set_shader_param("tmap_B_bottom", oTMapLoader.cachedTextures[setMap][3])
 	
 	mat.set_shader_param("showOnlySpecificStyle", showStyle)
 	mat.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
@@ -115,28 +116,13 @@ func createDisplayField(setMap, showStyle):
 	mat.set_shader_param("viewTextures", overheadTexData)
 	mat.set_shader_param("slxData", oDataSlx.slxTexData)
 	mat.set_shader_param("slabIdData", oDataSlab.idTexData)
+	mat.set_shader_param("palette_texture", oReadPalette.palette_image_texture)
 	
 	arrayOfColorRects.append(displayField)
+	
 	oGame2D.add_child_below_node(self, displayField)
 
 func update_display_fields_size():
 	for displayField in arrayOfColorRects:
 		displayField.rect_size = Vector2(M.xSize * 96, M.ySize * 96)
 		displayField.material.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
-
-
-#			var pixDataPerColumn = []
-#			pixDataPerColumn.resize(column_count)
-#
-#			for clmIndex in column_count:
-#				pixDataPerColumn[clmIndex] = oDataClm.get_top_cube_face(clmIndex, 0)
-#
-#			var pixelIndex = 0
-#			for y in height:
-#				for x in width:
-#					var clmIndex = oDataClmPos.get_cell_clmpos(x, y)
-#					var rgb = pixDataPerColumn[clmIndex]
-#					pixData[pixelIndex] = rgb >> 16 & 255
-#					pixData[pixelIndex + 1] = rgb >> 8 & 255
-#					pixData[pixelIndex + 2] = rgb & 255
-#					pixelIndex += 3

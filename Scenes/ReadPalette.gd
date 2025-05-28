@@ -1,33 +1,71 @@
 extends Node
 onready var oBuffers = Nodelist.list["oBuffers"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 var dictionary = {} # Just two different ways to read the palette, for speed.
 
-func read_palette(path):
-	var array = []
-	array.resize(256)
-	
-	var buffer = oBuffers.file_path_to_buffer(path)
+var palette_data_array: Array = []
+var flat_palette_bytes: PoolByteArray = PoolByteArray()
+var palette_entry_count: int = 0
+var palette_image_texture: ImageTexture = null
+
+func initialize_palette_resources(paletteFilePath: String) -> bool:
+	palette_data_array = _read_colors_from_file(paletteFilePath)
+	if palette_data_array.empty():
+		printerr("Failed to load palette data from: ", paletteFilePath)
+		if palette_image_texture == null:
+			oMessage.big("Error", "Palette data (" + paletteFilePath.get_file() + ") could not be loaded.")
+		palette_image_texture = null
+		flat_palette_bytes = PoolByteArray()
+		palette_entry_count = 0
+		return false
+	flat_palette_bytes.resize(palette_data_array.size() * 3)
+	palette_entry_count = palette_data_array.size()
+	var byteIndex = 0
+	for colorObject in palette_data_array:
+		var colorValue: Color = colorObject
+		flat_palette_bytes[byteIndex] = colorValue.r8
+		flat_palette_bytes[byteIndex + 1] = colorValue.g8
+		flat_palette_bytes[byteIndex + 2] = colorValue.b8
+		byteIndex += 3
+	var paletteImage = Image.new()
+	paletteImage.create_from_data(palette_entry_count, 1, false, Image.FORMAT_RGB8, flat_palette_bytes)
+	var tempPaletteTexture = ImageTexture.new()
+	tempPaletteTexture.create_from_image(paletteImage, 0)
+	if tempPaletteTexture == null or tempPaletteTexture.get_width() == 0:
+		printerr("Failed to create palette texture from data in: ", paletteFilePath)
+		oMessage.big("Error", "Palette texture could not be created from " + paletteFilePath.get_file() + ". Tilesets may not display correctly.")
+		palette_image_texture = null
+		return false
+	palette_image_texture = tempPaletteTexture
+	return true
+
+func _read_colors_from_file(filePath: String) -> Array:
+	var dataArray = []
+	dataArray.resize(256)
+	var buffer = oBuffers.file_path_to_buffer(filePath)
 	if buffer.get_size() > 0:
-		for i in 256: # File has a size of 768 bytes but we get 3 values each loop
-			# Multiply by 4 because colors are 0-63 instead of 0-255
-			var R = buffer.get_u8()*4
-			var G = buffer.get_u8()*4
-			var B = buffer.get_u8()*4
-			array[i] = Color8(R,G,B)
-			dictionary[Color8(R,G,B)] = i
+		if buffer.get_size() < 768:
+			printerr("Palette file '", filePath, "' is smaller than expected (768 bytes). Actual size: ", buffer.get_size())
+			oMessage.big("Error", "Palette file (" + filePath.get_file() + ") is corrupted or incomplete.")
+			return []
+		for i in 256:
+			var rComponent = buffer.get_u8() * 4
+			var gComponent = buffer.get_u8() * 4
+			var bComponent = buffer.get_u8() * 4
+			dataArray[i] = Color8(rComponent, gComponent, bComponent)
+			dictionary[Color8(rComponent, gComponent, bComponent)] = i
 	else:
-		print('No palette file found')
-		return array
-	return array
+		printerr("No palette file found or buffer empty for: ", filePath)
+		oMessage.big("Error", "Palette file (" + filePath.get_file() + ") not found or is empty.")
+		return []
+	return dataArray
 
+func get_palette_texture() -> ImageTexture:
+	return palette_image_texture
 
+func get_palette_data() -> Array:
+	return palette_data_array
 
-
-
-	
-	
-#	var save_file = File.new()
-#	save_file.open("res://paletteReadableArray.txt", File.WRITE)
-#	save_file.store_string(str(array))
-#	save_file.close()
+func getpalette_entry_count() -> int:
+	return palette_entry_count

@@ -12,7 +12,7 @@ onready var oOverheadOwnership = Nodelist.list["oOverheadOwnership"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oDataClm = Nodelist.list["oDataClm"]
-onready var oTextureCache = Nodelist.list["oTextureCache"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oUiTools = Nodelist.list["oUiTools"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
@@ -50,6 +50,7 @@ onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 
+
 var TOTAL_TIME_TO_OPEN_MAP
 
 var compressedFiles = []
@@ -71,7 +72,7 @@ func start():
 			#	yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
 			open_map("C:/Games/Dungeon Keeper/levels/personal/map00001.slb")
-			#open_map("D:/Dungeon Keeper/campgns/dpthshdw/map00014.slb")
+			#open_map("C:/Games/Dungeon Keeper/campgns/dk2/map00200.slb")
 		else:
 			# initialize a cleared map
 			oCurrentMap.clear_map()
@@ -96,9 +97,9 @@ func open_map(filePath):
 		return
 	
 	# Prevent opening any maps under any circumstance if textures haven't been loaded. (Fix to launching via file association)
-	if oTextureCache.texturesLoadedState != oTextureCache.LOADING_SUCCESS:
-		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
-		return
+#	if oTMapLoader.texturesLoadedState != oTMapLoader.LOADING_SUCCESS:
+#		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
+#		return
 	
 	print("----------- Opening map ------------")
 	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
@@ -190,11 +191,11 @@ func continue_load(map):
 	oOverheadOwnership.start()
 	oScriptHelpers.start()
 	
-	oOverheadGraphics.update_full_overhead_map()
+	oTMapLoader.start()
+	oOverheadGraphics.update_full_overhead_map() # 'Display fields' are created for each texture loaded
+	oTMapLoader.apply_texture_pack()
 	
 	oDataClm.count_filled_clm_entries()
-	
-	oTextureCache.set_current_texture_pack()
 	
 	# finalize_map_opening
 	oEditor.set_view_2d()

@@ -18,7 +18,14 @@ onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 var paths_loaded = {}
 const files_to_load = ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg", "cubes.cfg", "slabset.toml", "columnset.toml", "textureanim.toml", "effects.toml"]
 
+var tmap_files_info_for_loader = {
+	"data": {},
+	"campaign": {},
+	"map": {}
+}
+
 enum {
+	LOAD_CFG_DATA,
 	LOAD_CFG_FXDATA,
 	LOAD_CFG_CAMPAIGN,
 	LOAD_CFG_CURRENT_MAP,
@@ -34,6 +41,8 @@ func start(mapPath):
 	Columnset.clear_all_column_data()
 	Cube.clear_all_cube_data()
 	
+	tmap_files_info_for_loader = { "data": {}, "campaign": {}, "map": {} } # Reset before populating
+	
 	var campaign_cfg_data = load_campaign_data(mapPath)
 	paths_loaded = {
 		LOAD_CFG_FXDATA: [],
@@ -44,6 +53,7 @@ func start(mapPath):
 	paths_loaded[LOAD_CFG_CURRENT_MAP].resize(files_to_load.size())
 
 	var config_dirs = {
+		LOAD_CFG_DATA: oGame.DK_DATA_DIRECTORY,
 		LOAD_CFG_FXDATA: oGame.DK_FXDATA_DIRECTORY,
 		LOAD_CFG_CAMPAIGN: oGame.GAME_DIRECTORY.plus_file(campaign_cfg_data.get("common", {}).get("CONFIGS_LOCATION", "")),
 		LOAD_CFG_CURRENT_MAP: mapPath.get_basename()
@@ -125,6 +135,8 @@ func start(mapPath):
 					"terrain.cfg": load_terrain_data(combined_cfg_for_this_file)
 					"cubes.cfg": Cube.read_cubes_cfg(combined_cfg_for_this_file)
 
+	populate_tmap_files_info(config_dirs)
+	
 	for fx_path in paths_loaded[LOAD_CFG_FXDATA]:
 		var fx_file_name = fx_path.get_file()
 		if not fx_file_name in files_to_load:
@@ -135,6 +147,35 @@ func start(mapPath):
 		Utils.popup_centered(oConfigFilesListWindow)
 	
 	oCustomSlabSystem.load_unearth_custom_slabs_file()
+
+func populate_tmap_files_info(config_dirs_lookup):
+	var file_checker = File.new() # For checking existence and getting modified time
+
+	for load_source_enum_val in config_dirs_lookup:
+		var dir_path_str = config_dirs_lookup[load_source_enum_val]
+		if dir_path_str == "" or Directory.new().dir_exists(dir_path_str) == false:
+			continue
+
+		var source_key_for_dict = ""
+		match load_source_enum_val:
+			LOAD_CFG_DATA: source_key_for_dict = "data"
+			LOAD_CFG_CAMPAIGN: source_key_for_dict = "campaign"
+			LOAD_CFG_CURRENT_MAP: source_key_for_dict = "map"
+		
+		if source_key_for_dict == "":
+			continue
+
+		var dat_files_in_dir_array = Utils.get_filetype_in_directory(dir_path_str, "dat")
+		for file_full_path_str in dat_files_in_dir_array:
+			var file_name_only_lower = file_full_path_str.get_file().to_lower()
+			
+			if (file_name_only_lower.begins_with("tmapa") or file_name_only_lower.begins_with("tmapb")) and \
+			   file_name_only_lower.begins_with("tmapanim") == false:
+				# Utils.get_filetype_in_directory should ideally return only existing files.
+				# Explicit check might be redundant but safe.
+				if file_checker.file_exists(file_full_path_str):
+					var modified_time = file_checker.get_modified_time(file_full_path_str)
+					tmap_files_info_for_loader[source_key_for_dict][file_full_path_str] = modified_time
 
 func load_objects_data(cfg): # 10ms
 	for section in cfg:

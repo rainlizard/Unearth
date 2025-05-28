@@ -44,7 +44,7 @@
 [ext_resource path="res://Scenes/Floor.gd" type="Script" id=43]
 [ext_resource path="res://Scenes/DataLif.gd" type="Script" id=44]
 [ext_resource path="res://Scenes/PickThingWindow.gd" type="Script" id=45]
-[ext_resource path="res://Scenes/CurrentTextures.gd" type="Script" id=46]
+[ext_resource path="res://Scenes/TMapLoader.gd" type="Script" id=46]
 [ext_resource path="res://Scenes/ConfigFilesListWindow.gd" type="Script" id=47]
 [ext_resource path="res://Scenes/Player.gd" type="Script" id=48]
 [ext_resource path="res://Scenes/GenerateTerrain.gd" type="Script" id=49]
@@ -339,13 +339,13 @@ script = ExtResource( 30 )
 [node name="CfgLoader" type="Node" parent="."]
 script = ExtResource( 169 )
 
-[node name="TextureCache" type="Node" parent="."]
+[node name="TMapLoader" type="Node" parent="."]
 script = ExtResource( 46 )
 
-[node name="ReadPalette" type="Node" parent="TextureCache"]
+[node name="ReadPalette" type="Node" parent="TMapLoader"]
 script = ExtResource( 75 )
 
-[node name="TextureAnimation" type="Node" parent="TextureCache"]
+[node name="TextureAnimation" type="Node" parent="TMapLoader"]
 script = ExtResource( 92 )
 
 [node name="SlabPlacement" type="Node" parent="."]
@@ -7805,7 +7805,7 @@ script = SubResource( 20 )
 [connection signal="about_to_show" from="Ui/UiSystem/PreferencesWindow" to="Ui/UiSystem/PreferencesWindow" method="_on_SettingsWindow_about_to_show"]
 [connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/PreferencesWindow" method="_on_SetDirButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer/CmdLineDkCommands" to="Game" method="_on_CmdLineDkCommands_text_changed"]
-[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ReloadTextureMapsButton" to="TextureCache" method="_on_ReloadTextureMapsButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ReloadTextureMapsButton" to="TMapLoader" method="_on_ReloadTextureMapsButton_pressed"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
 [connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer/WaterEffectPercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_WaterEffectPercent_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_LavaEffectPercent_value_changed"]

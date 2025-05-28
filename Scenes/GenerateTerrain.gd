@@ -4,7 +4,7 @@ onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oTerrainMesh = Nodelist.list["oTerrainMesh"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
-onready var oTextureCache = Nodelist.list["oTextureCache"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 
 signal terrain3D_finished_generating
@@ -70,7 +70,7 @@ func loading_bar_end():
 
 func initialize_array_of_arrays():
 	var arrayOfArrays = []
-	var numberOfSlabStyles = oTextureCache.cachedTextures.size()+1
+	var numberOfSlabStyles = oTMapLoader.cachedTextures.size()+1
 	for i in numberOfSlabStyles:
 		arrayOfArrays.append(oVoxelGen.blankArray.duplicate(true))
 	return arrayOfArrays

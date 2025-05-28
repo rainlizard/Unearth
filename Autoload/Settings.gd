@@ -162,9 +162,9 @@ func read_all():
 func game_setting(doWhat,string,value):
 	match string:
 		"REMEMBER_TMAPA_PATHS":
-			var oTextureCache = $'../Main/TextureCache'
-			if doWhat == SET: oTextureCache.LOAD_TMAPA_PATHS_FROM_SETTINGS(value)
-			if doWhat == GET: return oTextureCache.REMEMBER_TMAPA_PATHS
+			var oTMapLoader = $'../Main/TMapLoader'
+			if doWhat == SET: oTMapLoader.load_remembered_paths(value)
+			if doWhat == GET: return oTMapLoader.REMEMBER_TMAPA_PATHS
 		"executable_path":
 			var oGame = $'../Main/Game'
 			if doWhat == SET: oGame.set_paths(value)

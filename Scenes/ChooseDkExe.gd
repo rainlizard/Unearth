@@ -1,5 +1,5 @@
 extends FileDialog
-onready var oTextureCache = Nodelist.list["oTextureCache"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oKeeperFXDetection = Nodelist.list["oKeeperFXDetection"]
@@ -12,6 +12,6 @@ func _on_ChooseDkExe_file_selected(path):
 	
 	var err = oGame.test_write_permissions()
 	if err == OK:
-		oTextureCache.start() # Run this again, important for first-time users, because the path has now been set.
+		oTMapLoader.start() # Run this again, important for first-time users, because the path has now been set.
 	
 	oMapBrowser.popup()

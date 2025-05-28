@@ -1,7 +1,8 @@
 extends Node2D
-onready var oTextureCache = Nodelist.list["oTextureCache"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oOpenMap = Nodelist.list["oOpenMap"]
 
 
 func _enter_tree():
@@ -12,9 +13,8 @@ func _ready():
 	Nodelist.done()
 	Settings.initialize_settings()
 	initialize_window_settings()
-	$TextureCache.start() # Needs to be run after Settings initialized so that the GAME_DIRECTORY is correctly set
 	Graphics.load_extra_images_from_harddrive()
-	$OpenMap.start()
+	oOpenMap.start()
 	
 	# Auto switch to 3D while devving
 #	for i in 2:
