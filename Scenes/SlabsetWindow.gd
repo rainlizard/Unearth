@@ -47,6 +47,7 @@ onready var oConfirmDeleteColumnsetFile = Nodelist.list["oConfirmDeleteColumnset
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oModifiedListLabel = Nodelist.list["oModifiedListLabel"]
 onready var oModifiedListPanelContainer = Nodelist.list["oModifiedListPanelContainer"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 
 enum {
 	ONE_VARIATION,

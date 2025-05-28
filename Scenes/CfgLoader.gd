@@ -18,12 +18,6 @@ onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 var paths_loaded = {}
 const files_to_load = ["objects.cfg", "creature.cfg", "trapdoor.cfg", "terrain.cfg", "cubes.cfg", "slabset.toml", "columnset.toml", "textureanim.toml", "effects.toml"]
 
-var tmap_files_info_for_loader = {
-	"data": {},
-	"campaign": {},
-	"map": {}
-}
-
 enum {
 	LOAD_CFG_DATA,
 	LOAD_CFG_FXDATA,
@@ -40,28 +34,39 @@ func start(mapPath):
 	Slabset.clear_all_slabset_data()
 	Columnset.clear_all_column_data()
 	Cube.clear_all_cube_data()
+	var campaign_cfg_data = configure_paths_and_load_campaign(mapPath)
+	var config_dirs = get_config_directories(mapPath, campaign_cfg_data)
+	load_fxdata_directory_files(config_dirs[LOAD_CFG_FXDATA])
+	process_configuration_files(config_dirs)
+	load_dat_files(config_dirs)
 	
-	tmap_files_info_for_loader = { "data": {}, "campaign": {}, "map": {} } # Reset before populating
+	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
+	if oConfigFilesListWindow.visible == true:
+		Utils.popup_centered(oConfigFilesListWindow)
 	
-	var campaign_cfg_data = load_campaign_data(mapPath)
+	oCustomSlabSystem.load_unearth_custom_slabs_file()
+
+
+func configure_paths_and_load_campaign(mapPath):
 	paths_loaded = {
+		LOAD_CFG_DATA: [],
 		LOAD_CFG_FXDATA: [],
 		LOAD_CFG_CAMPAIGN: [],
 		LOAD_CFG_CURRENT_MAP: []
 	}
-	paths_loaded[LOAD_CFG_CAMPAIGN].resize(files_to_load.size())
-	paths_loaded[LOAD_CFG_CURRENT_MAP].resize(files_to_load.size())
+	return load_campaign_boss_file(mapPath)
 
-	var config_dirs = {
+
+func get_config_directories(mapPath, campaign_cfg_data):
+	return {
 		LOAD_CFG_DATA: oGame.DK_DATA_DIRECTORY,
 		LOAD_CFG_FXDATA: oGame.DK_FXDATA_DIRECTORY,
 		LOAD_CFG_CAMPAIGN: oGame.GAME_DIRECTORY.plus_file(campaign_cfg_data.get("common", {}).get("CONFIGS_LOCATION", "")),
 		LOAD_CFG_CURRENT_MAP: mapPath.get_basename()
 	}
-	
-	var file_exists_checker = File.new()
 
-	var fxdata_path_dir = config_dirs[LOAD_CFG_FXDATA]
+
+func load_fxdata_directory_files(fxdata_path_dir):
 	if fxdata_path_dir != "" and Directory.new().dir_exists(fxdata_path_dir):
 		var fxdata_cfg_files = Utils.get_filetype_in_directory(fxdata_path_dir, "cfg")
 		var fxdata_toml_files = Utils.get_filetype_in_directory(fxdata_path_dir, "toml")
@@ -70,9 +75,12 @@ func start(mapPath):
 	else:
 		print("Warning: DK_FXDATA_DIRECTORY is not set or invalid: ", fxdata_path_dir)
 
+
+func process_configuration_files(config_dirs):
+	var file_exists_checker = File.new()
 	for i in files_to_load.size():
 		var file_name_from_list = files_to_load[i]
-		var combined_cfg_for_this_file = {} 
+		var combined_cfg_for_this_file = {}
 		
 		var fxdata_file_path = config_dirs[LOAD_CFG_FXDATA].plus_file(file_name_from_list)
 		var campaign_file_path = config_dirs[LOAD_CFG_CAMPAIGN].plus_file(file_name_from_list)
@@ -96,7 +104,7 @@ func start(mapPath):
 		
 		if config_dirs[LOAD_CFG_CAMPAIGN] != "" and file_exists_checker.file_exists(campaign_file_path):
 			found_in_campaign = true
-			paths_loaded[LOAD_CFG_CAMPAIGN][i] = campaign_file_path
+			paths_loaded[LOAD_CFG_CAMPAIGN].append(campaign_file_path)
 			match file_name_from_list:
 				"slabset.toml": Slabset.import_toml_slabset(campaign_file_path)
 				"columnset.toml": Columnset.import_toml_columnset(campaign_file_path)
@@ -109,7 +117,7 @@ func start(mapPath):
 
 		if config_dirs[LOAD_CFG_CURRENT_MAP] != "" and file_exists_checker.file_exists(map_specific_file_path):
 			found_in_map = true
-			paths_loaded[LOAD_CFG_CURRENT_MAP][i] = map_specific_file_path
+			paths_loaded[LOAD_CFG_CURRENT_MAP].append(map_specific_file_path)
 			match file_name_from_list:
 				"slabset.toml": Slabset.import_toml_slabset(map_specific_file_path)
 				"columnset.toml": Columnset.import_toml_columnset(map_specific_file_path)
@@ -135,47 +143,25 @@ func start(mapPath):
 					"terrain.cfg": load_terrain_data(combined_cfg_for_this_file)
 					"cubes.cfg": Cube.read_cubes_cfg(combined_cfg_for_this_file)
 
-	populate_tmap_files_info(config_dirs)
-	
-	for fx_path in paths_loaded[LOAD_CFG_FXDATA]:
-		var fx_file_name = fx_path.get_file()
-		if not fx_file_name in files_to_load:
-			pass
-	
-	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
-	if oConfigFilesListWindow.visible == true:
-		Utils.popup_centered(oConfigFilesListWindow)
-	
-	oCustomSlabSystem.load_unearth_custom_slabs_file()
 
-func populate_tmap_files_info(config_dirs_lookup):
-	var file_checker = File.new() # For checking existence and getting modified time
-
-	for load_source_enum_val in config_dirs_lookup:
-		var dir_path_str = config_dirs_lookup[load_source_enum_val]
+func load_dat_files(config_dirs):
+	var file_exists_checker = File.new()
+	for load_source_enum_val in [LOAD_CFG_DATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
+		var dir_path_str = config_dirs.get(load_source_enum_val, "")
 		if dir_path_str == "" or Directory.new().dir_exists(dir_path_str) == false:
 			continue
-
-		var source_key_for_dict = ""
-		match load_source_enum_val:
-			LOAD_CFG_DATA: source_key_for_dict = "data"
-			LOAD_CFG_CAMPAIGN: source_key_for_dict = "campaign"
-			LOAD_CFG_CURRENT_MAP: source_key_for_dict = "map"
-		
-		if source_key_for_dict == "":
-			continue
-
+	
 		var dat_files_in_dir_array = Utils.get_filetype_in_directory(dir_path_str, "dat")
+		if paths_loaded.has(load_source_enum_val) == false:
+			paths_loaded[load_source_enum_val] = []
+
 		for file_full_path_str in dat_files_in_dir_array:
 			var file_name_only_lower = file_full_path_str.get_file().to_lower()
-			
 			if (file_name_only_lower.begins_with("tmapa") or file_name_only_lower.begins_with("tmapb")) and \
 			   file_name_only_lower.begins_with("tmapanim") == false:
-				# Utils.get_filetype_in_directory should ideally return only existing files.
-				# Explicit check might be redundant but safe.
-				if file_checker.file_exists(file_full_path_str):
-					var modified_time = file_checker.get_modified_time(file_full_path_str)
-					tmap_files_info_for_loader[source_key_for_dict][file_full_path_str] = modified_time
+				if file_exists_checker.file_exists(file_full_path_str):
+					paths_loaded[load_source_enum_val].append(file_full_path_str)
+		paths_loaded[load_source_enum_val].sort()
 
 func load_objects_data(cfg): # 10ms
 	for section in cfg:
@@ -316,7 +302,7 @@ func get_sprite(newName, animID):
 	if Graphics.sprite_id.has(newName): return newName
 	return null
 
-func load_campaign_data(mapPath):
+func load_campaign_boss_file(mapPath):
 	var levelsDirPath = mapPath.get_base_dir().get_base_dir()
 	var parentDirFolderName = levelsDirPath.get_file()
 	if parentDirFolderName != "levels" and parentDirFolderName != "campgns":

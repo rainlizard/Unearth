@@ -178,18 +178,18 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 		
 		if removeFromShape.has(pos) == false:
 			oDataSlab.set_cellv(pos, slabID)
-		
-		if oFortifyCheckBox.pressed == true:
-			# The "ownership != 5" ensures that we don't accidentally spread those difficult-to-see neutral fortified walls
-			if ownership != 5 and \
-			Slabs.data.has(slabID) and \
-			Slabs.data[slabID][Slabs.IS_OWNABLE] == true and \
-			slabID != Slabs.WALL_AUTOMATIC and \
-			Slabs.auto_wall_updates_these.has(slabID) == false:
-				surroundingPositions[Vector2(pos.x - 1, pos.y)] = 1
-				surroundingPositions[Vector2(pos.x + 1, pos.y)] = 1
-				surroundingPositions[Vector2(pos.x, pos.y - 1)] = 2
-				surroundingPositions[Vector2(pos.x, pos.y + 1)] = 2
+			if oFortifyCheckBox.pressed == true:
+				# The "ownership != 5" ensures that we don't accidentally spread those difficult-to-see neutral fortified walls
+				# The "removeFromShape.has(pos) == false" check is for when you place a bridge in a spot you can't place it in
+				if ownership != 5 and \
+				Slabs.data.has(slabID) and \
+				Slabs.data[slabID][Slabs.IS_OWNABLE] == true and \
+				slabID != Slabs.WALL_AUTOMATIC and \
+				Slabs.auto_wall_updates_these.has(slabID) == false:
+					surroundingPositions[Vector2(pos.x - 1, pos.y)] = 1
+					surroundingPositions[Vector2(pos.x + 1, pos.y)] = 1
+					surroundingPositions[Vector2(pos.x, pos.y - 1)] = 2
+					surroundingPositions[Vector2(pos.x, pos.y + 1)] = 2
 	
 	# Fortify any walls that surround the shape
 	for doPos in surroundingPositions.keys():

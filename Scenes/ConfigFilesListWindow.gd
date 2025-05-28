@@ -3,23 +3,27 @@ onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oVBoxContainerConfigLocalMap = Nodelist.list["oVBoxContainerConfigLocalMap"]
 onready var oVBoxContainerConfigFxdata = Nodelist.list["oVBoxContainerConfigFxdata"]
 onready var oVBoxContainerConfigCampaign = Nodelist.list["oVBoxContainerConfigCampaign"]
+onready var oVBoxContainerConfigData = Nodelist.list["oVBoxContainerConfigData"]
+
 
 func _on_ConfigFilesListWindow_about_to_show():
 	update_everything()
 
 func update_everything():
 	print("update_everything")
-	for container in [oVBoxContainerConfigFxdata, oVBoxContainerConfigCampaign, oVBoxContainerConfigLocalMap]:
+	for container in [oVBoxContainerConfigData, oVBoxContainerConfigFxdata, oVBoxContainerConfigCampaign, oVBoxContainerConfigLocalMap]:
 		for child in container.get_children():
 			child.queue_free()
 	
-	for cfg_type in [oCfgLoader.LOAD_CFG_FXDATA, oCfgLoader.LOAD_CFG_CAMPAIGN, oCfgLoader.LOAD_CFG_CURRENT_MAP]:
+	for cfg_type in [oCfgLoader.LOAD_CFG_DATA, oCfgLoader.LOAD_CFG_FXDATA, oCfgLoader.LOAD_CFG_CAMPAIGN, oCfgLoader.LOAD_CFG_CURRENT_MAP]:
 		if oCfgLoader.paths_loaded.has(cfg_type) == false:
 			continue
 		
 		var addToGrid
 		
 		match cfg_type:
+			oCfgLoader.LOAD_CFG_DATA:
+				addToGrid = oVBoxContainerConfigData
 			oCfgLoader.LOAD_CFG_FXDATA:
 				addToGrid = oVBoxContainerConfigFxdata
 			oCfgLoader.LOAD_CFG_CAMPAIGN:

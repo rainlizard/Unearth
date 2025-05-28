@@ -34,11 +34,14 @@ int getIndex(vec2 uv2) {
 	return (int(uv2.x + 0.5) << 16) | int(uv2.y + 0.5);
 }
 
-float sample_tile_from_l8_atlas(sampler2D l8AtlasTexture, int tileIndex, vec2 localTileUV) {
+vec3 calculate_pixel(sampler2D l8AtlasTexture, int tileIndex, vec2 localTileUV) {
 	float tileFloat = float(tileIndex);
 	vec2 tileAtlasCoords = vec2(mod(tileFloat, TILES_PER_L8_ATLAS_ROW), floor(tileFloat / TILES_PER_L8_ATLAS_ROW));
 	vec2 finalAtlasUV = (tileAtlasCoords + localTileUV) / vec2(TILES_PER_L8_ATLAS_ROW, TILES_PER_L8_ATLAS_COLUMN_HALF);
-	return textureLod(l8AtlasTexture, finalAtlasUV,0.0).r;
+	float paletteIndexValue = textureLod(l8AtlasTexture, finalAtlasUV, 0.0).r;
+	int finalPaletteLookupIndex = int(paletteIndexValue * 255.0 + 0.5);
+	vec3 maincol = texelFetch(palette_texture, ivec2(finalPaletteLookupIndex, 0), 0).rgb;
+	return maincol;
 }
 
 void vertex() {
@@ -56,21 +59,18 @@ void fragment() {
 		index = getAnimationFrame(frame, (index-544) );
 	}
 	
-	float paletteIndexValue;
+	vec3 maincol;
 	if (index < 272) {
-		paletteIndexValue = sample_tile_from_l8_atlas(tmap_A_top, index, UV);
+		maincol = calculate_pixel(tmap_A_top, index, UV);
 	} else if (index < 544) {
-		paletteIndexValue = sample_tile_from_l8_atlas(tmap_A_bottom, index - 272, UV);
+		maincol = calculate_pixel(tmap_A_bottom, index - 272, UV);
 	} else if (index >= 1000 && index < 1272) {
-		paletteIndexValue = sample_tile_from_l8_atlas(tmap_B_top, index - 1000, UV);
+		maincol = calculate_pixel(tmap_B_top, index - 1000, UV);
 	} else if (index >= 1272 && index < 1544) {
-		paletteIndexValue = sample_tile_from_l8_atlas(tmap_B_bottom, index - 1272, UV);
+		maincol = calculate_pixel(tmap_B_bottom, index - 1272, UV);
 	} else {
-		discard; 
+		discard;
 	}
-	
-	int finalPaletteLookupIndex = int(paletteIndexValue * 255.0 + 0.5);
-	vec3 maincol = texelFetch(palette_texture, ivec2(finalPaletteLookupIndex, 0), 0).rgb;
 	
 	ALBEDO = maincol;
 }

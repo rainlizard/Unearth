@@ -31,27 +31,6 @@ var cachedTextures = []
 var texturesLoadedState = LOADING_NOT_STARTED
 
 
-func _notification(what: int):
-	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
-		if texturesLoadedState == LOADING_IN_PROGRESS:
-			return
-
-		var needsLoad = false
-		if texturesLoadedState == LOADING_NOT_STARTED:
-			print("Texture loading: Initial load or previous error, queueing full load.")
-			needsLoad = true
-		elif texturesLoadedState == LOADING_SUCCESS:
-			var currentTmapDataHash = get_effective_tmap_data_from_cfgloader().hash()
-			if rememberedTmapaPaths.hash() != currentTmapDataHash:
-				print("Texture loading: DAT file changes detected (via CfgLoader), queueing full reload.")
-				oMessage.quick("Tile data changed, reloading.")
-				needsLoad = true
-		
-		if needsLoad:
-			rememberedTmapaPaths.clear()
-			start()
-
-
 func finish_load_ui():
 	for i in 100:
 		yield(get_tree(), 'idle_frame')
@@ -95,23 +74,45 @@ func get_effective_tmap_data_from_cfgloader() -> Dictionary:
 		printerr("CfgLoader not available.")
 		return {}
 
-	var effectiveSourcesByIdentifier = {} 
-	var cfgLoaderTmapsBySourceType = oCfgLoader.tmap_files_info_for_loader
-	
-	var sourceTypesInOrder = ["data", "campaign", "map"]
+	var effectiveSourcesByIdentifier = {}
+	var cfgLoaderPathsLoaded = oCfgLoader.paths_loaded # Get the modified paths_loaded
 
-	for sourceType in sourceTypesInOrder:
-		var tmapsForSource = cfgLoaderTmapsBySourceType.get(sourceType, {})
-		for pathStrKey in tmapsForSource:
-			var modTimeVal = tmapsForSource[pathStrKey]
+	var sourceTypesWithEnum = [
+		{"sourceType": "data", "enumKey": oCfgLoader.LOAD_CFG_DATA},
+		{"sourceType": "campaign", "enumKey": oCfgLoader.LOAD_CFG_CAMPAIGN},
+		{"sourceType": "map", "enumKey": oCfgLoader.LOAD_CFG_CURRENT_MAP}
+	]
+	
+	var fileChecker = File.new() # To get modified times
+
+	for sourceInfo in sourceTypesWithEnum:
+		var enumKey = sourceInfo.enumKey
+		if cfgLoaderPathsLoaded.has(enumKey) == false:
+			continue
+
+		var pathsList = cfgLoaderPathsLoaded[enumKey]
+		for pathStrKey in pathsList:
+			if pathStrKey == null:
+				continue
+			if pathStrKey.get_extension().to_lower() != "dat": # Only process .dat files
+				continue
+
 			var parsedTmapDetails = parse_tmap_path_details(pathStrKey)
 			if parsedTmapDetails != null:
 				var tmapIdentifierKey = [parsedTmapDetails.number, parsedTmapDetails.type]
-				effectiveSourcesByIdentifier[tmapIdentifierKey] = { "path": pathStrKey, "modifiedTime": modTimeVal } # Renamed key
+				var modTimeVal = 0
+				if fileChecker.file_exists(pathStrKey):
+					modTimeVal = fileChecker.get_modified_time(pathStrKey)
+				else:
+					printerr("TMapLoader: File path from CfgLoader does not exist, cannot get mod time: ", pathStrKey)
+					continue
+
+				effectiveSourcesByIdentifier[tmapIdentifierKey] = { "path": pathStrKey, "modifiedTime": modTimeVal }
+	
 	var finalTmapDataDictionary = {}
 	for tmapIdentifierKeyArray in effectiveSourcesByIdentifier:
 		var tmapDataEntry = effectiveSourcesByIdentifier[tmapIdentifierKeyArray]
-		finalTmapDataDictionary[tmapDataEntry.path] = tmapDataEntry.modifiedTime # Adjusted to use renamed key
+		finalTmapDataDictionary[tmapDataEntry.path] = tmapDataEntry.modifiedTime
 	return finalTmapDataDictionary
 
 

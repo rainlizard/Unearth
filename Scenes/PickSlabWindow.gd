@@ -124,7 +124,11 @@ func add_slabs():
 	
 	if visible == true:
 		set_selection(oSelection.paintSlab) # Default initial selection
+	
 	print('add_slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	
+	if is_instance_valid(oTMapLoader):
+		oTMapLoader.apply_texture_pack()
 
 func custom_slab_add_new_button():
 	var scene = preload('res://Scenes/GenericGridItem.tscn')

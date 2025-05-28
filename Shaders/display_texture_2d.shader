@@ -48,11 +48,13 @@ int getIndex(ivec2 coords) {
 	return (int(value.r * 255.0) << 16) | (int(value.g * 255.0) << 8) | int(value.b * 255.0);
 }
 
-float sampleTile(sampler2D tex, int tileIndex, vec2 localUV) {
+vec4 calculate_pixel(sampler2D tex, int tileIndex, vec2 localUV) {
 	float tile = float(tileIndex);
 	vec2 coords = vec2(mod(tile, TILES_PER_L8_ATLAS_ROW), floor(tile / TILES_PER_L8_ATLAS_ROW));
 	vec2 atlasUV = (coords + localUV) / vec2(TILES_PER_L8_ATLAS_ROW, TILES_PER_L8_ATLAS_COLUMN_HALF);
-	return textureLod(tex, atlasUV, calc_mip_level(atlasUV)).r;
+	float palIndex = textureLod(tex, atlasUV, calc_mip_level(atlasUV)).r;
+	int idx = int(palIndex * 255.0 + 0.5);
+	return texelGet(palette_texture, ivec2(idx, 0), 0);
 }
 
 void fragment() {
@@ -73,27 +75,25 @@ void fragment() {
 		index = getAnimationFrame(frame, index - 544);
 	}
 	
-	float palIndex;
 	vec2 localUV = vec2(
 		(UV.x * fieldSizeInSubtiles.x) - float(subtileX),
 		(UV.y * fieldSizeInSubtiles.y) - float(subtileY)
 	);
-
+	
+	vec2 scr = UV/L8_ATLAS_PIXEL_DIMS; //SCREEN_PIXEL_SIZE;
+	vec4 finalColor;
 	if (index < 272) {
-		palIndex = sampleTile(tmap_A_top, index, localUV);
+		finalColor = calculate_pixel(tmap_A_top, index, localUV);
 	} else if (index < 544) {
-		palIndex = sampleTile(tmap_A_bottom, index - 272, localUV);
+		finalColor = calculate_pixel(tmap_A_bottom, index - 272, localUV);
 	} else if (index >= 1000 && index < 1272) {
-		palIndex = sampleTile(tmap_B_top, index - 1000, localUV);
+		finalColor = calculate_pixel(tmap_B_top, index - 1000, localUV);
 	} else if (index >= 1272 && index < 1544) {
-		palIndex = sampleTile(tmap_B_bottom, index - 1272, localUV);
+		finalColor = calculate_pixel(tmap_B_bottom, index - 1272, localUV);
 	} else {
 		discard;
 	}
-
-	int idx = int(palIndex * 255.0 + 0.5);
-	vec4 finalColor = texelGet(palette_texture, ivec2(idx,0), 0);
-
+	
 	if (slabId == 57) {
 		COLOR = vec4(finalColor.rgb * (1.0-DARKENING_FACTOR), finalColor.a);
 	} else {
