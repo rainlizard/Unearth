@@ -295,6 +295,7 @@ func load_trapdoor_data(cfg): # 1ms
 		Things.LIST_OF_BOXES[crateName] = [trapOrDoor, id]
 
 func get_sprite(newName, animID):
+	if animID == null: return null
 	if int(animID) == 777: # 777 is the AnimationID for all spellbooks in objects.cfg, which unearth uses separate sprites for
 		if Graphics.sprite_id.has(newName): return newName
 	

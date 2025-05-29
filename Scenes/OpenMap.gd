@@ -71,7 +71,8 @@ func start():
 			#for i in 200:
 			#	yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
-			open_map("C:/Games/Dungeon Keeper/levels/personal/map00001.slb")
+			open_map("C:/Games/Dungeon Keeper/levels/classic/map00254.slb")
+			#open_map("C:/Games/Dungeon Keeper/levels/personal/map00001.slb")
 			#open_map("C:/Games/Dungeon Keeper/campgns/dk2/map00200.slb")
 		else:
 			# initialize a cleared map
@@ -221,7 +222,6 @@ func continue_load_openmap(map):
 	oOnlyOwnership.update_grid_items()
 	oDynamicMapTree.highlight_current_map()
 	oCurrentMap.set_path_and_title(map)
-	oCamera2D.reset_camera(M.xSize, M.ySize)
 	oUndoStates.clear_history()
 	oGuidelines.update()
 	oMapSettingsWindow.visible = false
@@ -238,6 +238,10 @@ func continue_load_openmap(map):
 		oEditor.mapHasBeenEdited = true
 		oMessage.quick("Fixed column index 0, re-save your map.")
 	oDataClm.store_default_data()
+	
+	for i in 3:
+		yield(get_tree(),'idle_frame')
+	oCamera2D.reset_camera(M.xSize, M.ySize)
 
 
 func _on_ConfirmDecompression_confirmed():

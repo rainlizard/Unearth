@@ -18,7 +18,7 @@ onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 const TMAP_IMAGE_WIDTH: int = 256
 const TMAP_IMAGE_HEIGHT: int = 2176
 const TMAP_HALF_HEIGHT: int = TMAP_IMAGE_HEIGHT / 2
-const TEXTURE_FLAGS = Texture.FLAG_MIPMAPS + Texture.FLAG_REPEAT + Texture.FLAG_ANISOTROPIC_FILTER
+const TEXTURE_FLAGS = Texture.FLAG_REPEAT + Texture.FLAG_ANISOTROPIC_FILTER
 
 enum {
 	LOADING_NOT_STARTED,

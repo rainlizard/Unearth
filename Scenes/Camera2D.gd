@@ -25,9 +25,6 @@ var middleMousePanning = false
 
 var mouseInWindow = true
 
-func _ready():
-	reset_camera(M.xSize, M.ySize)
-
 func reset_camera(x, y):
 	# Add 2 units for the border
 	x += 2

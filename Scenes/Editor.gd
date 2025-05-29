@@ -37,6 +37,7 @@ func set_map_has_been_edited(setVal):
 
 
 func _ready():
+	get_viewport().msaa = Viewport.MSAA_8X # default setting
 	get_tree().set_auto_accept_quit(false)
 	just_opened_editor()
 
