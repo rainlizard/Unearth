@@ -3,6 +3,8 @@ onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
+onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oTMapNames = Nodelist.list["oTMapNames"]
 
 var scnSlabStyleButton = preload("res://Scenes/SlabStyleButton.tscn")
 var paintSlabStyle = 0 setget set_paintSlabStyle
@@ -27,8 +29,8 @@ func initialize_grid_items():
 		else:
 			var val = i-1
 			btnId.text = str(val) #"tmapa" + str(i).pad_zeros(3) + ".dat"
-			if Constants.TEXTURE_MAP_NAMES.has(val) == true:
-				btnId.set_meta("grid_item_text", Constants.TEXTURE_MAP_NAMES[val])
+			if oTMapNames.texture_map_names.has(val) == true:
+				btnId.set_meta("grid_item_text", oTMapNames.texture_map_names[val])
 			else:
 				btnId.set_meta("grid_item_text", "")
 		

@@ -49,6 +49,7 @@ onready var oOwnerSelection = Nodelist.list["oOwnerSelection"]
 onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
+onready var oTMapNames = Nodelist.list["oTMapNames"]
 
 
 var TOTAL_TIME_TO_OPEN_MAP
@@ -193,6 +194,7 @@ func continue_load(map):
 	oScriptHelpers.start()
 	
 	oTMapLoader.start()
+	oTMapNames.update_texture_map_names() # Update names after tmap loader has started
 	oOverheadGraphics.update_full_overhead_map() # 'Display fields' are created for each texture loaded
 	oTMapLoader.apply_texture_pack()
 	

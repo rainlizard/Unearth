@@ -27,21 +27,3 @@ enum {
 
 const ClassicFormat = 0
 const KfxFormat = 1
-
-
-const TEXTURE_MAP_NAMES = {
-0: "Standard",
-1: "Ancient",
-2: "Winter",
-3: "Snake Key",
-4: "Stone Face",
-5: "Voluptuous", #"Big Breasts"
-6: "Rough Ancient",
-7: "Skull Relief",
-8: "Desert Tomb",
-9: "Gypsum",
-10: "Lilac Stone",
-11: "Swamp Serpent",
-12: "Lava Cavern",
-13: "Laterite Cavern",
-}

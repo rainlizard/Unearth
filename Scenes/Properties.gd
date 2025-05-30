@@ -37,6 +37,7 @@ onready var oLuaScriptFileSection = Nodelist.list["oLuaScriptFileSection"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oLofPathLinkButton = Nodelist.list["oLofPathLinkButton"]
 onready var oGame = Nodelist.list["oGame"]
+onready var oTMapNames = Nodelist.list["oTMapNames"]
 
 const kind_options = {
 	"Solo" : "FREE",
@@ -140,34 +141,23 @@ func set_format_selection(setFormat):
 
 func refresh_dungeon_style_options():
 	oDungeonStyleList.clear()
-	if is_instance_valid(oTMapLoader) == false or oTMapLoader.rememberedTmapaPaths == null or is_instance_valid(oGame) == false:
+	if oTMapLoader.rememberedTmapaPaths == null:
 		return
 
 	var tmapDataByNumber = {}
 	for pathStr in oTMapLoader.rememberedTmapaPaths.keys():
 		var parsedDetails = oTMapLoader.parse_tmap_path_details(pathStr)
 		if parsedDetails != null and parsedDetails.type == "tmapa" and parsedDetails.number >= 0:
-			var sourceType = "campaign"
-			if pathStr.begins_with(oGame.DK_DATA_DIRECTORY):
-				sourceType = "data"
-			elif is_instance_valid(oCurrentMap) and oCurrentMap.path != "" and pathStr.begins_with(oCurrentMap.path.get_base_dir()):
-				sourceType = "map"
-			tmapDataByNumber[parsedDetails.number] = {"path": pathStr, "source": sourceType, "filename": pathStr.get_file()}
+			tmapDataByNumber[parsedDetails.number] = {"path": pathStr}
 
 	var textureCount = oTMapLoader.cachedTextures.size() if oTMapLoader.cachedTextures != null else 0
 
 	for i in range(textureCount):
-		var itemText = Constants.TEXTURE_MAP_NAMES.get(i, "Untitled")
+		var itemText = oTMapNames.texture_map_names.get(i, "Untitled " + str(i))
 		var itemMetadata = null
 
 		if tmapDataByNumber.has(i):
-			var tmapInfo = tmapDataByNumber[i]
-			itemMetadata = tmapInfo.path
-			var filename = tmapInfo.filename
-			if tmapInfo.source == "data":
-				itemText = Constants.TEXTURE_MAP_NAMES.get(i, "/data/" + filename)
-			else:
-				itemText = "/" + tmapInfo.path.get_base_dir().get_file() + "/" + filename
+			itemMetadata = tmapDataByNumber[i].path
 		
 		oDungeonStyleList.add_item(itemText, i)
 		if itemMetadata != null:
@@ -178,7 +168,8 @@ func refresh_dungeon_style_options():
 		if selectedStyleIndex < 0 or selectedStyleIndex >= oDungeonStyleList.get_item_count():
 			selectedStyleIndex = 0
 		oDungeonStyleList.selected = selectedStyleIndex
-
+		oDataLevelStyle.data = selectedStyleIndex
+		oTMapLoader.apply_texture_pack()
 
 func _on_DungeonStyleList_item_selected(selectedIndex):
 	oEditor.mapHasBeenEdited = true
@@ -192,8 +183,8 @@ func _on_DungeonStyleList_item_selected(selectedIndex):
 			messageText = "Selected tileset: " + metadata
 		else:
 			var defaultFilename = "tmapa" + str(selectedIndex).pad_zeros(3) + ".dat"
-			if Constants.TEXTURE_MAP_NAMES.has(selectedIndex):
-				messageText = Constants.TEXTURE_MAP_NAMES[selectedIndex] + " (" + defaultFilename + ")"
+			if oTMapNames.texture_map_names.has(selectedIndex):
+				messageText = oTMapNames.texture_map_names[selectedIndex] + " (" + defaultFilename + ")"
 			else:
 				messageText = "Loaded: " + defaultFilename
 	
