@@ -2,7 +2,6 @@ extends WindowDialog
 onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oReloaderPathLabel = Nodelist.list["oReloaderPathLabel"]
 onready var oReloaderPathPackLabel = Nodelist.list["oReloaderPathPackLabel"]
-
 onready var oExportTmapaDatDialog = Nodelist.list["oExportTmapaDatDialog"]
 onready var oReadPalette = Nodelist.list["oReadPalette"]
 onready var oChooseTmapaFileDialog = Nodelist.list["oChooseTmapaFileDialog"]
@@ -14,7 +13,6 @@ onready var oMapProperties = Nodelist.list["oMapProperties"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oEditor = Nodelist.list["oEditor"]
 
-
 var filelistfile = File.new()
 var fileListFilePath = ""
 var editingImg = Image.new()
@@ -23,12 +21,14 @@ var partsList = []
 var modifiedCheck = File.new()
 var getPackFolder = ""
 
+
 func _ready():
-	editingImg.create(8*32, 68*32, false, Image.FORMAT_RGB8)
+	editingImg.create(8*32, 68*32, false, Image.FORMAT_L8)
 	oExportTmapaButton.disabled = true
 	oExportTmapaButton.set_tooltip("A filelist pack must be loaded first in order to export")
 	oReloaderPathLabel.text = ""
 	oReloaderPathPackLabel.text = ""
+
 
 func reloader_loop():
 	if fileListFilePath != "":
@@ -38,120 +38,184 @@ func reloader_loop():
 
 
 func _on_TextureEditingHelpButton_pressed():
-	var helptxt = ""
-	helptxt += "After you load a tileset, a bunch of .PNG files will be saved to your hard drive. Edit these files in your favourite image editor.\n"
-	helptxt += "Unearth will actively reload the textures in real-time as you edit and save those .PNGs. So any edits you make will be shown in real-time in Unearth. This applies to the 3D view too, so press Spacebar while in the 3D view to stop the camera from moving.\n"
-	oMessage.big("Help",helptxt)
+	var helptxt = """After you load a tileset, a bunch of .PNG files will be saved to your hard drive. Edit these files in your favourite image editor.
+Unearth will actively reload the textures in real-time as you edit and save those .PNGs. So any edits you make will be shown in real-time in Unearth. This applies to the 3D view too, so press Spacebar while in the 3D view to stop the camera from moving."""
+	oMessage.big("Help", helptxt)
 
 
 func initialize_filelist():
 	partsList.clear()
-	
 	if filelistfile.open(fileListFilePath, File.READ) != OK: return
-	
 	var flContent = filelistfile.get_as_text()
 	filelistfile.close()
-	
 	partsList = Array(flContent.split('\n', false))
-	partsList.pop_front() # remove the first line: textures_pack_000	8	68	32	32
-	
+	if partsList.empty() == false:
+		partsList.pop_front()
+	var validParts = []
 	for i in partsList.size():
-		partsList[i] = Array(partsList[i].split('\t', false))
-		#print(partsList[i].size())
-	
-	# Initialize fileTimes
-	if fileTimes.size() < partsList.size():
-		fileTimes.resize(partsList.size()) # This is bigger than it needs to be but that doesn't matter
-		for i in fileTimes.size():
-			fileTimes[i] = -1
-	
-	# Change current map's Tileset setting if it's a different one
-	var fn = get_tmapa_filename()
-	if oDataLevelStyle.data != int(fn):
+		var originalLine = partsList[i]
+		var line_data = originalLine.split('\t', false)
+		if line_data.size() >= 5:
+			validParts.append(line_data)
+		else:
+			validParts.append([]) 
+			printerr("Invalid line in filelist (line ", i+2, "): '", originalLine, "' - Marked as invalid.")
+	partsList = validParts
+	if fileTimes.size() != partsList.size():
+		fileTimes.resize(partsList.size())
+		fileTimes.fill(-1)
+	var fn = get_tmapa_filename_number_string()
+	if fn != null and oDataLevelStyle.data != int(fn):
 		oDataLevelStyle.data = int(fn)
 		oTMapLoader.apply_texture_pack()
 		oEditor.mapHasBeenEdited = true
 		oMessage.quick("Changed map's Tileset to show what you're currently editing")
 
 
+func _find_closest_palette_index(targetColor: Color, paletteArray: Array) -> int:
+	if paletteArray.empty():
+		printerr("Palette is empty in _find_closest_palette_index.")
+		return 0
+	var closestIndex = 0
+	var minDistanceSq = -1.0
+	for i in paletteArray.size():
+		var palColor: Color = paletteArray[i]
+		var dr = palColor.r - targetColor.r
+		var dg = palColor.g - targetColor.g
+		var db = palColor.b - targetColor.b
+		var currentDistanceSq = dr*dr + dg*dg + db*db
+		if minDistanceSq < 0.0 or currentDistanceSq < minDistanceSq:
+			minDistanceSq = currentDistanceSq
+			closestIndex = i
+			if minDistanceSq == 0.0:
+				break
+	return closestIndex
+
+
+func _convert_rgb_image_to_l8(rgb_image: Image) -> Image:
+	if rgb_image == null or rgb_image.is_empty():
+		printerr("Input RGB image is null or empty for L8 conversion.")
+		return null
+	var localPaletteArray: Array = oReadPalette.get_palette_data()
+	if localPaletteArray.empty():
+		printerr("Palette data is empty, cannot convert RGB to L8.")
+		return null
+	var l8_image = Image.new()
+	l8_image.create(rgb_image.get_width(), rgb_image.get_height(), false, Image.FORMAT_L8)
+	var colorToIndexCache = {}
+	rgb_image.lock()
+	l8_image.lock()
+	for y_coord in rgb_image.get_height():
+		for x_coord in rgb_image.get_width():
+			var rgb_color = rgb_image.get_pixel(x_coord, y_coord)
+			var palette_index: int
+			if colorToIndexCache.has(rgb_color):
+				palette_index = colorToIndexCache[rgb_color]
+			else:
+				palette_index = _find_closest_palette_index(rgb_color, localPaletteArray)
+				colorToIndexCache[rgb_color] = palette_index
+			var gray_value = float(palette_index) / 255.0
+			l8_image.set_pixel(x_coord, y_coord, Color(gray_value, gray_value, gray_value))
+	rgb_image.unlock()
+	l8_image.unlock()
+	return l8_image
+
+
 func execute():
-	print("execute")
-	var CODETIME_START = OS.get_ticks_msec()
-	
 	var anyChangesWereMade = false
 	var imgLoader = Image.new()
 	var baseDir = fileListFilePath.get_base_dir()
-	var partsModified = []
-	
-	
+	var partsModifiedIndices = []
 	for i in partsList.size():
+		if partsList[i].empty(): continue
 		var path = baseDir.plus_file(partsList[i][0])
-		if modifiedCheck.get_modified_time(path) != fileTimes[i]:
-			partsModified.append(i)
-	
-	
-	for i in partsModified:
-		var path = baseDir.plus_file(partsList[i][0])
-		fileTimes[i] = modifiedCheck.get_modified_time(path) # Must be in a separate loop to the if check for modified time
-		
-		#print("A FILE WAS CHANGED")
-		
-		var x = int(partsList[i][1])
-		var y = int(partsList[i][2])
-		var w = int(partsList[i][3])
-		var h = int(partsList[i][4])
-		imgLoader.load(path)
-		imgLoader.convert(Image.FORMAT_RGB8)
-		
-		var destY = i/8
-		var destX = i-(destY*8)
-		
-		var destination = Vector2(destX*32,destY*32)
+		if modifiedCheck.file_exists(path) and modifiedCheck.get_modified_time(path) != fileTimes[i]:
+			partsModifiedIndices.append(i)
+	if partsModifiedIndices.empty() == false:
 		editingImg.lock()
-		imgLoader.lock()
-		for pixelY in imgLoader.get_height(): # This is different than using the w and h variables
-			for pixelX in imgLoader.get_width():
-				var col = imgLoader.get_pixel(pixelX,pixelY)
-				if oReadPalette.dictionary.has(col) == false:
-					imgLoader.set_pixel(pixelX,pixelY, Color(255,0,255))
-		
-		editingImg.blit_rect(imgLoader,Rect2(x,y,w,h), destination)
-		imgLoader.unlock()
+		for i in partsModifiedIndices:
+			var part_data = partsList[i]
+			var path = baseDir.plus_file(part_data[0])
+			fileTimes[i] = modifiedCheck.get_modified_time(path)
+			if imgLoader.load(path) != OK:
+				printerr("Failed to load image: ", path)
+				continue
+			imgLoader.convert(Image.FORMAT_RGB8)
+			var src_rect_in_png = Rect2(int(part_data[1]), int(part_data[2]), int(part_data[3]), int(part_data[4]))
+			var tile_sub_image_rgb = imgLoader.get_rect(src_rect_in_png)
+			if tile_sub_image_rgb == null or tile_sub_image_rgb.is_empty():
+				printerr("Failed to get_rect from ", path, " with rect ", src_rect_in_png)
+				continue
+			var tile_sub_image_l8 = _convert_rgb_image_to_l8(tile_sub_image_rgb)
+			if tile_sub_image_l8 == null or tile_sub_image_l8.is_empty():
+				printerr("Failed to convert tile to L8 from: ", path)
+				continue
+			var dest_tile_x = i % 8
+			var dest_tile_y = i / 8
+			var destination_coords = Vector2(dest_tile_x * 32, dest_tile_y * 32)
+			editingImg.blit_rect(tile_sub_image_l8, Rect2(0,0, tile_sub_image_l8.get_width(), tile_sub_image_l8.get_height()), destination_coords)
+			anyChangesWereMade = true
 		editingImg.unlock()
-		anyChangesWereMade = true
-	
-	if anyChangesWereMade == true:
-		print("anyChangesWereMade")
-		var baseName = get_tmapa_filename()
-		var tmapNumber = int(baseName.to_int())
-		oTMapLoader.load_image_into_cache(editingImg, tmapNumber, baseName)
-		oTMapLoader.apply_texture_pack()
-	
-	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-
-#	var imgTex = ImageTexture.new()
-#	imgTex.create_from_image(img,0)
-#	$"../TextureRect".texture = imgTex
+	if anyChangesWereMade:
+		var tmapa_full_filename = get_tmapa_filename_from_path(fileListFilePath)
+		if tmapa_full_filename != null:
+			var tmap_number = int(tmapa_full_filename.trim_prefix("tmapa"))
+			oTMapLoader.cache_loaded_image(editingImg, tmap_number, "tmapa")
+			oTMapLoader.apply_texture_pack()
 
 
+func get_tmapa_filename_from_path(full_path_argument: String):
+	var filename = full_path_argument.get_file()
+	if filename.begins_with("filelist_tmapa") and filename.ends_with(".txt"):
+		return filename.trim_prefix("filelist_").trim_suffix(".txt")
+	return null
 
-#func _on_LoadFilelistButton_pressed():
-#	Utils.popup_centered(oChooseFileListFileDialog)
-#	oChooseFileListFileDialog.current_dir = Settings.unearth_path.plus_file("textures").plus_file("")
-#	oChooseFileListFileDialog.current_path = Settings.unearth_path.plus_file("textures").plus_file("")
-#	oChooseFileListFileDialog.current_file = "filelist_tmapa000.txt"
+
+func get_tmapa_filename_number_string():
+	if fileListFilePath.empty(): return null
+	var tmapa_file_part = get_tmapa_filename_from_path(fileListFilePath)
+	if tmapa_file_part != null and tmapa_file_part.begins_with("tmapa"):
+		return tmapa_file_part.trim_prefix("tmapa")
+	return null
+
+
+func _on_ExportTmapaDatDialog_file_selected(path_argument: String):
+	var buffer = StreamPeerBuffer.new()
+	if editingImg.is_empty() or editingImg.get_format() != Image.FORMAT_L8:
+		oMessage.big("Error", "Cannot export. Internal image is not in L8 format or is empty.")
+		return
+	editingImg.lock()
+	for y_coord in editingImg.get_height():
+		for x_coord in editingImg.get_width():
+			var pixel_color = editingImg.get_pixel(x_coord, y_coord)
+			var palette_index = int(pixel_color.r * 255.0 + 0.5)
+			buffer.put_8(palette_index)
+	editingImg.unlock()
+	var file = File.new()
+	if file.open(path_argument, File.WRITE) == OK:
+		file.store_buffer(buffer.data_array)
+		file.close()
+		oMessage.quick("Exported : " + path_argument.get_file())
+	else:
+		oMessage.big("Error", "Failed to open file for writing: " + path_argument)
 
 
 func _on_ModifyTexturesButton_pressed():
 	match OS.get_name():
 		"Windows": OS.shell_open(getPackFolder.replace("/", "\\"))
-		"X11": OS.shell_open(getPackFolder)
+		"X11", "OSX": OS.shell_open(getPackFolder)
+
 
 func _on_ExportTmapaButton_pressed():
 	Utils.popup_centered(oExportTmapaDatDialog)
 	oExportTmapaDatDialog.current_dir = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oExportTmapaDatDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
-	oExportTmapaDatDialog.current_file = get_tmapa_filename()+".dat"
+	var tmapa_filename = get_tmapa_filename_from_path(fileListFilePath)
+	if tmapa_filename != null:
+		oExportTmapaDatDialog.current_file = tmapa_filename + ".dat"
+	else:
+		oExportTmapaDatDialog.current_file = "tmapa000.dat"
+
 
 func _on_CreateFilelistButton_pressed():
 	Utils.popup_centered(oChooseTmapaFileDialog)
@@ -159,218 +223,142 @@ func _on_CreateFilelistButton_pressed():
 	oChooseTmapaFileDialog.current_path = oGame.DK_DATA_DIRECTORY.plus_file("")
 	oChooseTmapaFileDialog.current_file = "tmapa000.dat"
 
-#	yield(get_tree(),'idle_frame')
-#	print(oChooseFileListFileDialog.get_vbox().get_child(2).get_child(0))
-#	var tree = oChooseFileListFileDialog.get_vbox().get_child(2).get_child(0)
-#	tree.visible = false
-#	for i in 100:
-#		tree.visible = false
-#		yield(get_tree(),'idle_frame')
-#	var treeSelected = tree.get_selected()
-#	var get_selected_column = tree.get_selected_column()
-#	var get_edited = tree.get_edited()
-#	tree.scroll_to_item(treeSelected)
 
-
-func get_tmapa_filename():
-	return fileListFilePath.right(fileListFilePath.length()-12).to_lower().trim_suffix(".txt")
-
-
-func _on_ExportTmapaDatDialog_file_selected(path):
-	var buffer = StreamPeerBuffer.new()
-	#print(oTMapLoader.paletteData)
-	var CODETIME_START = OS.get_ticks_msec()
-	
-	editingImg.lock()
-
-	for y in 68*32:
-		for x in 8*32:
-			var col = editingImg.get_pixel(x,y)
-			var R = floor(col.r8/4.0)*4
-			var G = floor(col.g8/4.0)*4
-			var B = floor(col.b8/4.0)*4
-			
-			var roundedCol = Color8(R,G,B)
-			
-			var paletteIndex = 255 # Purple should show easier as an issue to debug
-			if oReadPalette.dictionary.has(roundedCol) == true:
-				paletteIndex = oReadPalette.dictionary[roundedCol]
-#			else:
-#				print(str(roundedCol.r) + ', '+str(roundedCol.g) + ', '+str(roundedCol.b) + ', '+str(roundedCol.a))
-			
-			buffer.put_8(paletteIndex)
-	editingImg.unlock()
-	
-	var file = File.new()
-	file.open(path,File.WRITE)
-	file.store_buffer(buffer.data_array)
-	file.close()
-	
-	oMessage.quick("Exported : " + path)
-	
-	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-
-
-
-var user_cancelled = false
-
-
-func _on_ChooseTmapaFileDialog_file_selected(path):
-	var sourceImg = oTMapLoader.convert_tmapa_to_image(path)
-	if sourceImg == null: return
-	var CODETIME_START = OS.get_ticks_msec()
-	
-	var outputDir = Settings.unearth_path.plus_file("textures")
-	
-	var filelistFile = File.new()
-	if filelistFile.open(Settings.unearthdata.plus_file("exportfilelist.txt"), File.READ) != OK:
+func _on_ChooseTmapaFileDialog_file_selected(path_argument: String):
+	var source_rgb_image = _convert_dat_to_rgb_image(path_argument)
+	if source_rgb_image == null or source_rgb_image.is_empty():
+		oMessage.big("Error", "Failed to load or convert TMAPA.DAT to image.")
 		return
-	
-	# Split the Filelist into usable arrays
-	
-	var flContent = filelistFile.get_as_text()
-	var numberString = path.get_file().get_basename().trim_prefix('tmapa')
-	flContent = flContent.replace("subdir", "pack" + numberString)
-	flContent = flContent.replace("textures_pack_number", "textures_pack_" + numberString)
-	filelistFile.close()
-	
-	var lineArray = Array(flContent.split('\n', false))
-	lineArray.pop_front() # For the array remove the first line: textures_pack_number	8	68	32	32
-	
-	for i in lineArray.size():
-		lineArray[i] = Array(lineArray[i].split('\t', false))
-	
-	# The strings can be out of order, so create a dictionary that looks like this - "subdir/earth_standard.png" : []
-	# Calculate the maxWidth and maxHeight by figuring out the largest destination positions that are in the list for each string
+	var CODETIME_START = OS.get_ticks_msec()
+	var outputDir = ""
+	if OS.has_feature('editor'):
+		outputDir = OS.get_user_data_dir().plus_file("UnearthEditorTextureCache")
+	else:
+		outputDir = Settings.unearth_path.plus_file("textures")
+	var filelistTemplateFile = File.new()
+	if filelistTemplateFile.open(Settings.unearthdata.plus_file("exportfilelist.txt"), File.READ) != OK:
+		oMessage.big("Error", "Could not open exportfilelist.txt template.")
+		return
+	var flContent = filelistTemplateFile.get_as_text()
+	filelistTemplateFile.close()
+	var dat_basename = path_argument.get_file().get_basename()
+	var number_string_from_dat = dat_basename.trim_prefix('tmapa').trim_suffix('.dat')
+	flContent = flContent.replace("subdir", "pack" + number_string_from_dat)
+	flContent = flContent.replace("textures_pack_number", "textures_pack_" + number_string_from_dat)
+	var raw_lines = Array(flContent.split('\n', false))
+	if raw_lines.empty() == false:
+		raw_lines.pop_front()
+	var parsedLineArray = []
+	for i in raw_lines.size():
+		var items = Array(raw_lines[i].split('\t', false))
+		if items.size() >=5:
+			parsedLineArray.append({"data": items, "original_index": parsedLineArray.size()})
 	var imageDictionary = {}
-	for i in lineArray.size():
-		var localPath = lineArray[i][0]
-		var posX = int(lineArray[i][1])+32
-		var posY = int(lineArray[i][2])+32
-		
+	for i_idx in parsedLineArray.size():
+		var line_item = parsedLineArray[i_idx]
+		var line_data_array = line_item["data"]
+		var original_flat_index = line_item["original_index"]
+		var localPath = line_data_array[0]
+		var posX = int(line_data_array[1]) + int(line_data_array[3])
+		var posY = int(line_data_array[2]) + int(line_data_array[4])
 		if imageDictionary.has(localPath) == false:
-			imageDictionary[localPath] = [0, 0]
-		
-		imageDictionary[localPath][0] = max(posX, imageDictionary[localPath][0])
-		imageDictionary[localPath][1] = max(posY, imageDictionary[localPath][1])
-	
-	
-	# Replace the width and height array with an Image.
-	for i in imageDictionary:
+			imageDictionary[localPath] = {"max_x":0, "max_y":0, "image_obj":null, "tiles_info":[]}
+		imageDictionary[localPath]["max_x"] = max(posX, imageDictionary[localPath]["max_x"])
+		imageDictionary[localPath]["max_y"] = max(posY, imageDictionary[localPath]["max_y"])
+		imageDictionary[localPath]["tiles_info"].append({
+			"line_data": line_data_array, 
+			"source_flat_index": original_flat_index 
+		})
+	for localPath in imageDictionary:
+		var img_data = imageDictionary[localPath]
 		var createNewImage = Image.new()
-		var w = imageDictionary[i][0]
-		var h = imageDictionary[i][1]
-		createNewImage.create(w,h,false,Image.FORMAT_RGB8)
-		imageDictionary[i] = createNewImage
-	
-	# Make images
-	for i in lineArray.size():
-		var sourceTileY = i / 8
-		var sourceTileX = i - (sourceTileY * 8)
-		
-		var localPath = lineArray[i][0]
-		var destX = lineArray[i][1]
-		var destY = lineArray[i][2]
-#		var width = lineArray[i][3]
-#		var height = lineArray[i][4]
-		var createNewImage = imageDictionary[localPath]
-		createNewImage.lock()
-		createNewImage.blit_rect(sourceImg, Rect2(sourceTileX*32,sourceTileY*32, 32,32), Vector2(destX, destY))
-		createNewImage.unlock()
-	
-	# Save PNGs (separate loop so we're iterating once on each file, rather than every single filelist line)
-	
-	var checkForExistingFolderOnce = 0
-	
+		createNewImage.create(img_data["max_x"], img_data["max_y"], false, Image.FORMAT_RGB8)
+		img_data["image_obj"] = createNewImage
+	source_rgb_image.lock()
+	for localPath in imageDictionary:
+		var img_data = imageDictionary[localPath]
+		var current_png_image:Image = img_data["image_obj"]
+		current_png_image.lock()
+		for tile_entry in img_data["tiles_info"]:
+			var line_data_array = tile_entry["line_data"]
+			var source_tile_flat_index = tile_entry["source_flat_index"]
+			var source_tile_y = source_tile_flat_index / 8
+			var source_tile_x = source_tile_flat_index % 8
+			var dest_x_in_png = int(line_data_array[1])
+			var dest_y_in_png = int(line_data_array[2])
+			current_png_image.blit_rect(source_rgb_image, Rect2(source_tile_x*32, source_tile_y*32, 32,32), Vector2(dest_x_in_png, dest_y_in_png))
+		current_png_image.unlock()
+	source_rgb_image.unlock()
+	var promptedForOverwrite = false
 	var dir = Directory.new()
 	for localPath in imageDictionary:
-		
 		var savePath = outputDir.plus_file(localPath)
 		var packFolder = savePath.get_base_dir()
-		
-		
 		if dir.dir_exists(packFolder) == false:
 			dir.make_dir_recursive(packFolder)
 		else:
-			if checkForExistingFolderOnce == 0:
+			if promptedForOverwrite == false:
 				var confirmDialog = ConfirmationDialog.new()
 				confirmDialog.dialog_text = "The folder of .PNGs already exists, they will be overwritten: \n" + packFolder + "\n\n If overwriting the files here causes you data loss then Cancel and go backup the folder."
 				confirmDialog.window_title = "Confirm File Replacement"
 				confirmDialog.popup_exclusive = true
-				confirmDialog.connect("confirmed", self, "_on_confirmation_confirmed")
-				confirmDialog.connect("popup_hide", self, "_on_confirmation_hide")
 				add_child(confirmDialog)
 				confirmDialog.popup_centered()
 				yield(confirmDialog, "visibility_changed")
 				yield(get_tree(),'idle_frame')
-				if user_cancelled == true:
-					return
-		
-		checkForExistingFolderOnce = 1
-		
-		var createNewImage = imageDictionary[localPath]
-		createNewImage.save_png(savePath)
-		oMessage.quick("Exported : textures/" + localPath)
-		
+				promptedForOverwrite = true
+		var image_to_save: Image = imageDictionary[localPath]["image_obj"]
+		if image_to_save != null and image_to_save is Image:
+			var err_code = image_to_save.save_png(savePath)
+			if err_code == OK:
+				oMessage.quick("Exported : textures/" + localPath)
+			else:
+				printerr("Failed to save PNG: ", savePath, " Error code: ", err_code)
+				oMessage.big("Error", "Failed to save PNG: " + localPath)
+		else:
+			printerr("Cannot save PNG, image_obj is null or not an Image for path: ", localPath, ". Object is: ", image_to_save)
 		getPackFolder = packFolder
-	
 	oReloaderPathPackLabel.text = getPackFolder
-	
-	save_new_filelist_txt_file(flContent, numberString, outputDir) # This goes after the "make_dir_recursive" commands
+	save_new_filelist_txt_file(flContent, number_string_from_dat, outputDir)
 	print('Exported Filelist in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-
-func _on_confirmation_confirmed():
-	user_cancelled = false
-
-func _on_confirmation_hide():
-	if not user_cancelled:
-		user_cancelled = true
-
-
-func save_new_filelist_txt_file(flContent, numberString, outputDir):
-	var file = File.new()
-	var path = outputDir.plus_file("filelist_tmapa"+numberString+".txt")
-	file.open(path, File.WRITE)
-	file.store_string(flContent)
-	file.close()
-	
-	fileListFilePath = path
-	oReloaderPathLabel.text = path
-	
-	oExportTmapaButton.disabled = false
-	oExportTmapaButton.set_tooltip("")
-	
-	initialize_filelist()
-	
 	reloader_loop()
 
 
-
-#	for y in 68:
-#		for x in 8:
-#
-#			pass
-#editingImg.lock()
-#	var imgLoader = Image.new()
-#	var CODETIME_START = OS.get_ticks_msec()
-#	for i in lineArray.size():
-#		#if i == 40:
-#			#print(lineArray[i])
-#			var path = lineArray[i][0]
-#			var x = lineArray[i][1]
-#			var y = lineArray[i][2]
-#			var width = lineArray[i][3]
-#			var height = lineArray[i][4]
-#			imgLoader.load(baseDir.plus_file(path))
-#
-#			var destY = i/8
-#			var destX = i-(destY*8)
-#
-#			var destination = Vector2(destX*32,destY*32)
-#
-#			editingImg.blit_rect(imgLoader,Rect2(x,y,width,height), destination)
-#			#for z in lineArray[i]:
-#			#	print(z)
-#	editingImg.unlock()
+func save_new_filelist_txt_file(flContentArgument: String, numberStringArgument: String, outputDirArgument: String):
+	var file = File.new()
+	var path = outputDirArgument.plus_file("filelist_tmapa"+numberStringArgument+".txt")
+	if file.open(path, File.WRITE) == OK:
+		file.store_string(flContentArgument)
+		file.close()
+		fileListFilePath = path
+		oReloaderPathLabel.text = path
+		oExportTmapaButton.disabled = false
+		oExportTmapaButton.set_tooltip("")
+		initialize_filelist()
+	else:
+		oMessage.big("Error", "Could not write new filelist: " + path)
 
 
+func _convert_dat_to_rgb_image(dat_path_argument: String) -> Image:
+	var l8_full_image: Image = oTMapLoader.create_l8_image(dat_path_argument)
+	if l8_full_image == null or l8_full_image.is_empty():
+		printerr("Failed to create L8 image from DAT in _convert_dat_to_rgb_image: ", dat_path_argument)
+		return null
+	var rgb_full_image = Image.new()
+	rgb_full_image.create(l8_full_image.get_width(), l8_full_image.get_height(), false, Image.FORMAT_RGB8)
+	var palette_colors: Array = oReadPalette.get_palette_data()
+	if palette_colors.empty():
+		printerr("Palette array is empty. Cannot convert L8 to RGB in _convert_dat_to_rgb_image.")
+		return null
+	l8_full_image.lock()
+	rgb_full_image.lock()
+	for y_px in l8_full_image.get_height():
+		for x_px in l8_full_image.get_width():
+			var palette_index = int(l8_full_image.get_pixel(x_px, y_px).r * 255.0 + 0.5)
+			if palette_index >= 0 and palette_index < palette_colors.size():
+				rgb_full_image.set_pixel(x_px, y_px, palette_colors[palette_index])
+			else:
+				rgb_full_image.set_pixel(x_px, y_px, Color(1,0,1))
+	l8_full_image.unlock()
+	rgb_full_image.unlock()
+	return rgb_full_image
