@@ -303,9 +303,16 @@ func _on_ChooseTmapaFileDialog_file_selected(path_argument: String):
 				confirmDialog.window_title = "Confirm File Replacement"
 				confirmDialog.popup_exclusive = true
 				add_child(confirmDialog)
+				var confirmationHolder = [false]
+				confirmDialog.connect("confirmed", self, "mark_dialog_confirmed", [confirmationHolder, 0])
 				confirmDialog.popup_centered()
-				yield(confirmDialog, "visibility_changed")
-				yield(get_tree(),'idle_frame')
+				yield(confirmDialog, "popup_hide")
+				yield(get_tree(), "idle_frame")
+				var userConfirmed = confirmationHolder[0]
+				confirmDialog.queue_free() # Clean up dialog
+				if userConfirmed == false:
+					oMessage.quick("Cancelled")
+					return # Exit this function, stopping further processing
 				promptedForOverwrite = true
 		var image_to_save: Image = imageDictionary[localPath]["image_obj"]
 		if image_to_save != null and image_to_save is Image:
@@ -362,3 +369,7 @@ func _convert_dat_to_rgb_image(dat_path_argument: String) -> Image:
 	l8_full_image.unlock()
 	rgb_full_image.unlock()
 	return rgb_full_image
+
+
+func mark_dialog_confirmed(arrayReference: Array, valueIndex: int):
+	arrayReference[valueIndex] = true
