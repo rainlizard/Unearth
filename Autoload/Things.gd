@@ -51,7 +51,7 @@ func reset_thing_data_to_default(): # Reset data. Takes 1ms.
 
 func fetch_sprite(thing_type:int, sub_type:int):
 	var data_structure_dictionary = data_structure(thing_type)
-	var sub_type_data:Array = data_structure_dictionary.get(sub_type)
+	var sub_type_data = data_structure_dictionary.get(sub_type)
 	if sub_type_data:
 		var sprite = Graphics.sprite_id.get(sub_type_data[SPRITE])
 		if sprite:

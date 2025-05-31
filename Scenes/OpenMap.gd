@@ -50,6 +50,7 @@ onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oTMapNames = Nodelist.list["oTMapNames"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 
 
 var TOTAL_TIME_TO_OPEN_MAP
@@ -227,6 +228,7 @@ func continue_load_openmap(map):
 	oUndoStates.clear_history()
 	oGuidelines.update()
 	oMapSettingsWindow.visible = false
+	oSlabsetWindow.visible = false
 	if map == "":
 		oMessage.quick('New map')
 	else:
