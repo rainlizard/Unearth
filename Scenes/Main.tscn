@@ -329,6 +329,7 @@ func text_changed(newText):
 "
 
 [node name="Main" type="Node2D"]
+position = Vector2( -1, 0 )
 script = ExtResource( 7 )
 
 [node name="Editor" type="Node" parent="."]

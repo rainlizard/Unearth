@@ -103,7 +103,7 @@ void fragment() {
 	int originalSubtileY = int(fieldSizeInSubtiles.y * UV.y);
 	int originalSlabX = int(float(originalSubtileX)/3.0);
 	int originalSlabY = int(float(originalSubtileY)/3.0);
-	if (showOnlySpecificStyle != 77777 && showOnlySpecificStyle != int(texelGet(slxData, ivec2(originalSlabX, originalSlabY), 0).r * 255.0)) {
+	if (showOnlySpecificStyle != int(texelGet(slxData, ivec2(originalSlabX, originalSlabY), 0).r * 255.0)) {
 		discard;
 	}
 	vec2 uv_dx = dFdx(UV);

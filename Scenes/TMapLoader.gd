@@ -268,7 +268,6 @@ func apply_texture_pack():
 	var tmapABottomTex: ImageTexture = currentPack[1]
 	var tmapBTopTex: ImageTexture = currentPack[2]
 	var tmapBBottomTex: ImageTexture = currentPack[3]
-	
 	if tmapATopTex == null or tmapABottomTex == null:
 		oMessage.big("Error", "TMAPA textures for tileset " + str(tilesetIndex) + " are missing.")
 		return
@@ -277,15 +276,13 @@ func apply_texture_pack():
 		var blankTexture = _create_blank_half_texture()
 		if tmapBTopTex == null: tmapBTopTex = blankTexture
 		if tmapBBottomTex == null: tmapBBottomTex = blankTexture
-	
 	var shaderParameters = {
 		"tmap_A_top": tmapATopTex, "tmap_A_bottom": tmapABottomTex,
 		"tmap_B_top": tmapBTopTex, "tmap_B_bottom": tmapBBottomTex,
 		"palette_texture": localPaletteTexture
 	}
-
-	for rect in oOverheadGraphics.arrayOfColorRects:
-		_apply_shader_parameters(rect.get_material() as ShaderMaterial, shaderParameters)
+	if oOverheadGraphics.arrayOfColorRects.size() > 0:
+		_apply_shader_parameters(oOverheadGraphics.arrayOfColorRects[0].get_material() as ShaderMaterial, shaderParameters)
 	if oGame3D.materialArray.size() > 0:
 		_apply_shader_parameters(oGame3D.materialArray[0] as ShaderMaterial, shaderParameters)
 	for nodeID in get_tree().get_nodes_in_group("VoxelViewer"):
