@@ -10,6 +10,8 @@ func quick(string):
 	$VBoxContainer.add_child(id)
 
 func big(windowTitle, dialogText):
+	for i in 2:
+		yield(get_tree(),'idle_frame') # Fixes a problem where error messages are off center when they popup too early
 	
 	# Do not show big message if one already exists (which has the same message)
 	for i in oUiMessages.get_children():

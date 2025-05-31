@@ -51,19 +51,29 @@ func load_remembered_paths(dictionaryFromSettings):
 func parse_tmap_path_details(filePath: String):
 	var baseNameLower = filePath.get_file().get_basename().to_lower()
 	var tmapType = ""
-	var prefixLength = 0
+	var numberStr = ""
 
-	if baseNameLower.begins_with("tmapa"):
-		tmapType = "tmapa"
-		prefixLength = "tmapa".length()
-	elif baseNameLower.begins_with("tmapb"):
-		tmapType = "tmapb"
-		prefixLength = "tmapb".length()
-	else:
-		return null
+	var coreTypes = ["tmapa", "tmapb"]
+	for core_type_str in coreTypes:
+		# Check for format: mapname.tmapaNUMBER or mapname.tmapbNUMBER
+		var patternWithDot = "." + core_type_str
+		var dotIndex = baseNameLower.rfind(patternWithDot)
+		if dotIndex != -1:
+			var potentialNumber = baseNameLower.substr(dotIndex + patternWithDot.length())
+			if potentialNumber.is_valid_integer():
+				tmapType = core_type_str
+				numberStr = potentialNumber
+				break 
+		
+		# Check for format: tmapaNUMBER or tmapbNUMBER (at the beginning)
+		if baseNameLower.begins_with(core_type_str):
+			var potentialNumber = baseNameLower.substr(core_type_str.length())
+			if potentialNumber.is_valid_integer():
+				tmapType = core_type_str
+				numberStr = potentialNumber
+				break 
 
-	var numberStr = baseNameLower.substr(prefixLength, baseNameLower.length() - prefixLength)
-	if numberStr.is_valid_integer():
+	if tmapType != "" and numberStr != "" and numberStr.is_valid_integer():
 		return { "number": int(numberStr), "type": tmapType }
 	else:
 		return null
@@ -270,7 +280,7 @@ func apply_texture_pack():
 		oMessage.big("Error", "TMAPA textures for tileset " + str(tilesetIndex) + " are missing.")
 		return
 	if tmapBTopTex == null or tmapBBottomTex == null:
-		print("Warning: TMAPB images for tileset " + str(tilesetIndex) + " are missing. Using blank.")
+		oMessage.big("Error", "TMAPB textures for tileset " + str(tilesetIndex) + " are missing.")
 		var blankTexture = _create_blank_half_texture()
 		if tmapBTopTex == null: tmapBTopTex = blankTexture
 		if tmapBBottomTex == null: tmapBBottomTex = blankTexture

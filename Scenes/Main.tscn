@@ -6961,14 +6961,15 @@ size_flags_vertical = 3
 margin_right = 250.0
 margin_bottom = 39.0
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer4/PanelContainer3"]
-margin_left = 9.0
+[node name="ConfigLinkData" type="LinkButton" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer4/PanelContainer3"]
+margin_left = 96.0
 margin_top = 9.0
-margin_right = 241.0
+margin_right = 153.0
 margin_bottom = 30.0
+size_flags_horizontal = 6
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "/data/"
-align = 1
+underline = 1
 
 [node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer4"]
 margin_top = 43.0
@@ -7000,14 +7001,16 @@ size_flags_vertical = 3
 margin_right = 250.0
 margin_bottom = 39.0
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer/PanelContainer3"]
-margin_left = 9.0
+[node name="ConfigLinkFxData" type="LinkButton" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer/PanelContainer3"]
+margin_left = 87.0
 margin_top = 9.0
-margin_right = 241.0
+margin_right = 162.0
 margin_bottom = 30.0
+focus_mode = 2
+size_flags_horizontal = 6
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "/fxdata/"
-align = 1
+underline = 1
 
 [node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer"]
 margin_top = 43.0
@@ -7038,14 +7041,16 @@ rect_min_size = Vector2( 250, 0 )
 margin_right = 250.0
 margin_bottom = 39.0
 
-[node name="Label3" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer2/PanelContainer3"]
-margin_left = 9.0
+[node name="ConfigLinkCampaign" type="LinkButton" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer2/PanelContainer3"]
+margin_left = 78.0
 margin_top = 9.0
-margin_right = 241.0
+margin_right = 171.0
 margin_bottom = 30.0
+focus_mode = 2
+size_flags_horizontal = 6
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Campaign"
-align = 1
+underline = 1
 
 [node name="PanelContainer5" type="PanelContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer2"]
 margin_top = 43.0
@@ -7076,14 +7081,16 @@ rect_min_size = Vector2( 250, 0 )
 margin_right = 250.0
 margin_bottom = 39.0
 
-[node name="Label4" type="Label" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer3/PanelContainer3"]
-margin_left = 9.0
+[node name="ConfigLinkLocalMap" type="LinkButton" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer3/PanelContainer3"]
+margin_left = 79.0
 margin_top = 9.0
-margin_right = 241.0
+margin_right = 171.0
 margin_bottom = 30.0
+focus_mode = 2
+size_flags_horizontal = 6
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Local map"
-align = 1
+underline = 1
 
 [node name="PanelContainer6" type="PanelContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer3"]
 margin_top = 43.0
@@ -7404,9 +7411,6 @@ anchor_right = 0.5
 anchor_bottom = 0.8
 mouse_filter = 2
 script = ExtResource( 33 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiMessages/Message"]
 grow_horizontal = 2
@@ -8002,6 +8006,10 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/NameStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_NameStatsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/CCStatsHelpButton" to="Ui/UiSystem/SortCreatureStats" method="_on_CCStatsHelpButton_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/ConfigFilesListWindow" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigFilesListWindow_about_to_show"]
+[connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer4/PanelContainer3/ConfigLinkData" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkData_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer/PanelContainer3/ConfigLinkFxData" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkFxData_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer2/PanelContainer3/ConfigLinkCampaign" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkCampaign_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer3/PanelContainer3/ConfigLinkLocalMap" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkLocalMap_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapCoordinatesWindow" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_MapCoordinatesWindow_visibility_changed"]
 [connection signal="gui_input" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_gui_input"]
 [connection signal="resized" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_resized"]

@@ -1,52 +1,116 @@
 extends WindowDialog
+
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oVBoxContainerConfigLocalMap = Nodelist.list["oVBoxContainerConfigLocalMap"]
 onready var oVBoxContainerConfigFxdata = Nodelist.list["oVBoxContainerConfigFxdata"]
 onready var oVBoxContainerConfigCampaign = Nodelist.list["oVBoxContainerConfigCampaign"]
 onready var oVBoxContainerConfigData = Nodelist.list["oVBoxContainerConfigData"]
+onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oGame = Nodelist.list["oGame"]
 
 
 func _on_ConfigFilesListWindow_about_to_show():
 	update_everything()
 
+
 func update_everything():
 	print("update_everything")
-	for container in [oVBoxContainerConfigData, oVBoxContainerConfigFxdata, oVBoxContainerConfigCampaign, oVBoxContainerConfigLocalMap]:
-		for child in container.get_children():
-			child.queue_free()
-	
-	for cfg_type in [oCfgLoader.LOAD_CFG_DATA, oCfgLoader.LOAD_CFG_FXDATA, oCfgLoader.LOAD_CFG_CAMPAIGN, oCfgLoader.LOAD_CFG_CURRENT_MAP]:
-		if oCfgLoader.paths_loaded.has(cfg_type) == false:
+	for currentContainer in [oVBoxContainerConfigData, oVBoxContainerConfigFxdata, oVBoxContainerConfigCampaign, oVBoxContainerConfigLocalMap]:
+		for childNode in currentContainer.get_children():
+			childNode.queue_free()
+	for configType in [oCfgLoader.LOAD_CFG_DATA, oCfgLoader.LOAD_CFG_FXDATA, oCfgLoader.LOAD_CFG_CAMPAIGN, oCfgLoader.LOAD_CFG_CURRENT_MAP]:
+		if oCfgLoader.paths_loaded.has(configType) == false:
 			continue
-		
-		var addToGrid
-		
-		match cfg_type:
+		var targetGrid
+		match configType:
 			oCfgLoader.LOAD_CFG_DATA:
-				addToGrid = oVBoxContainerConfigData
+				targetGrid = oVBoxContainerConfigData
 			oCfgLoader.LOAD_CFG_FXDATA:
-				addToGrid = oVBoxContainerConfigFxdata
+				targetGrid = oVBoxContainerConfigFxdata
 			oCfgLoader.LOAD_CFG_CAMPAIGN:
-				addToGrid = oVBoxContainerConfigCampaign
+				targetGrid = oVBoxContainerConfigCampaign
 			oCfgLoader.LOAD_CFG_CURRENT_MAP:
-				addToGrid = oVBoxContainerConfigLocalMap
-		
-		for path in oCfgLoader.paths_loaded[cfg_type]:
-			if path:
-				add_linkbutton(path, addToGrid)
+				targetGrid = oVBoxContainerConfigLocalMap
+		for filePath in oCfgLoader.paths_loaded[configType]:
+			if filePath:
+				add_linkbutton(filePath, targetGrid)
 
 
-func add_linkbutton(path, addToGrid):
-	var id = LinkButton.new()
-	id.connect("pressed", self, "_on_linkbutton_pressed", [path])
-	id.underline = LinkButton.UNDERLINE_MODE_ON_HOVER
-	id.text = path.get_file()
-	id.hint_tooltip = path
-	addToGrid.add_child(id)
-	
-	var hsepID = HSeparator.new()
-	addToGrid.add_child(hsepID)
-	
+func add_linkbutton(filePath, targetGrid):
+	var linkButtonNode = LinkButton.new()
+	linkButtonNode.connect("pressed", self, "_on_linkbutton_pressed", [filePath])
+	linkButtonNode.underline = LinkButton.UNDERLINE_MODE_ON_HOVER
+	linkButtonNode.text = filePath.get_file()
+	linkButtonNode.hint_tooltip = filePath
+	targetGrid.add_child(linkButtonNode)
+	var horizontalSeparatorNode = HSeparator.new()
+	targetGrid.add_child(horizontalSeparatorNode)
 
-func _on_linkbutton_pressed(path):
-	OS.shell_open(path)
+
+func _on_linkbutton_pressed(filePath):
+	OS.shell_open(filePath)
+
+
+func get_campaign_main_data(mapPathArgument):
+	if mapPathArgument == "" or mapPathArgument == null:
+		return {}
+	var levelsDirectoryPath = mapPathArgument.get_base_dir().get_base_dir()
+	var parentDirectoryName = levelsDirectoryPath.get_file()
+	if parentDirectoryName != "levels" and parentDirectoryName != "campgns":
+		return {}
+	var listOfCampaignFiles = Utils.get_filetype_in_directory(levelsDirectoryPath, "cfg")
+	for campaignFilePath in listOfCampaignFiles:
+		var configData = Utils.read_dkcfg_file(campaignFilePath)
+		var levelsLocation = configData.get("common", {}).get("LEVELS_LOCATION", null)
+		if levelsLocation and oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower() == mapPathArgument.get_base_dir().to_lower():
+			return configData
+	return {}
+
+
+func try_open_directory(directoryPath, logDescription):
+	if directoryPath == null or directoryPath == "":
+		print(logDescription + " path is not set or empty.")
+		return false
+	var directoryAccess = Directory.new()
+	if directoryAccess.dir_exists(directoryPath):
+		OS.shell_open(directoryPath)
+		return true
+	else:
+		print(logDescription + " directory does not exist: " + directoryPath)
+		return false
+
+
+func _on_ConfigLinkLocalMap_pressed():
+	if oCurrentMap.path != "" and oCurrentMap.path != null:
+		var mapDirectory = oCurrentMap.path.get_base_dir()
+		try_open_directory(mapDirectory, "Local map")
+	else:
+		print("No map loaded, cannot open local map directory.")
+
+
+func _on_ConfigLinkFxData_pressed():
+	try_open_directory(oGame.DK_FXDATA_DIRECTORY, "FXData")
+
+
+func _on_ConfigLinkData_pressed():
+	try_open_directory(oGame.DK_DATA_DIRECTORY, "Data")
+
+
+func _on_ConfigLinkCampaign_pressed():
+	var determinedCampaignConfigPath = ""
+	if oCurrentMap.path != "" and oCurrentMap.path != null:
+		var campaignData = get_campaign_main_data(oCurrentMap.path)
+		var configsLocation = campaignData.get("common", {}).get("CONFIGS_LOCATION", "")
+		if configsLocation != "":
+			determinedCampaignConfigPath = oGame.GAME_DIRECTORY.plus_file(configsLocation)
+		else:
+			print("Campaign 'CONFIGS_LOCATION' is empty, using main game directory.")
+			determinedCampaignConfigPath = oGame.GAME_DIRECTORY
+	else:
+		print("No map loaded, using main game directory for campaign.")
+		determinedCampaignConfigPath = oGame.GAME_DIRECTORY
+
+	var openedSuccessfully = try_open_directory(determinedCampaignConfigPath, "Determined campaign")
+	if openedSuccessfully == false and determinedCampaignConfigPath != oGame.GAME_DIRECTORY:
+		print("Fallback: Trying main game directory for campaign.")
+		try_open_directory(oGame.GAME_DIRECTORY, "Main game (as campaign fallback)")
