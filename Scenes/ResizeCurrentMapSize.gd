@@ -92,7 +92,7 @@ onready var oDataSlab = Nodelist.list["oDataSlab"]
 # The main function that calls all the helper functions
 func _on_ResizeApplyButton_pressed():
 	if oCurrentFormat.selected == Constants.ClassicFormat:
-		oMessage.big("Error", "Cannot resize your map, because is in Classic format. Switch to KFX format first.")
+		oMessage.big("Error", "Cannot resize map because it's in Classic format. Switch to KFX format first.")
 		return
 	
 	var newWidth = int(oSettingsXSizeLine.text)

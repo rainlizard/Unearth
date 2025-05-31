@@ -4,6 +4,8 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+
 
 # These are dictionaries containing dictionaries.
 # objects_cfg["section_name"]["key"] will return the "value"
@@ -41,19 +43,34 @@ func start(mapPath):
 
 
 func process_configuration_files(mapPath):
+	
+	if oCurrentFormat.selected == Constants.ClassicFormat:
+		# Use unearth defaults
+		Cube.load_dk_original_cubes()
+		Slabset.load_default_original_slabset()
+		Columnset.load_default_original_columnset()
+	
 	clear_paths()
+	
 	var config_dirs = get_config_directories(mapPath)
 	var files_to_load = build_list_of_files_to_load(config_dirs, mapPath)
 	for file_name_from_list in files_to_load:
+		
+		var combined_cfg_data = {}
+		var found = 0
+		
 		for load_cfg_type in [LOAD_CFG_DATA, LOAD_CFG_FXDATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
-			var base_path = config_dirs[load_cfg_type]
-			var determined_path = base_path.plus_file(file_name_from_list) if load_cfg_type != LOAD_CFG_CURRENT_MAP else base_path + "." + file_name_from_list
+			var check_path
+			if load_cfg_type == LOAD_CFG_CURRENT_MAP:
+				check_path = config_dirs[load_cfg_type] + "." + file_name_from_list
+			else:
+				check_path = config_dirs[load_cfg_type].plus_file(file_name_from_list)
+			
 			var actual_filepath = ""
-			if file_exists_checker.file_exists(determined_path):
-				actual_filepath = determined_path
+			if file_exists_checker.file_exists(check_path):
+				actual_filepath = check_path
 				paths_loaded[load_cfg_type].append(actual_filepath)
 			
-			var combined_cfg_data = {}
 			if actual_filepath != "":
 				var ext = file_name_from_list.get_extension().to_lower()
 				if ext == "toml":
@@ -63,22 +80,16 @@ func process_configuration_files(mapPath):
 						"textureanim.toml": oTextureAnimation.generate_animation_database(actual_filepath)
 						"effects.toml": load_effects_data(actual_filepath)
 				elif ext == "cfg":
-					combined_cfg_data = Utils.read_dkcfg_file(actual_filepath)
-			else:
-				# Use unearth defaults
-				match file_name_from_list:
-					"cubes.cfg": Cube.load_dk_original_cubes()
-					"slabset.toml": Slabset.load_default_original_slabset()
-					"columnset.toml": Columnset.load_default_original_columnset()
-			
-			# Load it
-			if combined_cfg_data:
-				match file_name_from_list:
-					"objects.cfg": load_objects_data(combined_cfg_data)
-					"creature.cfg": load_creatures_data(combined_cfg_data)
-					"trapdoor.cfg": load_trapdoor_data(combined_cfg_data)
-					"terrain.cfg": load_terrain_data(combined_cfg_data)
-					"cubes.cfg": Cube.read_cubes_cfg(combined_cfg_data)
+					var cfgData = Utils.read_dkcfg_file(actual_filepath)
+					combined_cfg_data = Utils.super_merge(combined_cfg_data, cfgData)
+		# Load it
+		if combined_cfg_data.empty() == false:
+			match file_name_from_list:
+				"objects.cfg": load_objects_data(combined_cfg_data)
+				"creature.cfg": load_creatures_data(combined_cfg_data)
+				"trapdoor.cfg": load_trapdoor_data(combined_cfg_data)
+				"terrain.cfg": load_terrain_data(combined_cfg_data)
+				"cubes.cfg": Cube.read_cubes_cfg(combined_cfg_data)
 
 
 func clear_paths():
@@ -114,17 +125,17 @@ func build_list_of_files_to_load(config_dirs, mapPath):
 
 func get_all_texture_map_files(config_dirs, mapPath):
 	var merged_files = {} # Use a dictionary so duplicate filenames will be merged
-	var look_for_tmapas = Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_DATA], "dat")
-	look_for_tmapas += Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_CAMPAIGN], "dat")
-	for fullPath in look_for_tmapas:
+	var look_for_tmaps = Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_DATA], "dat")
+	look_for_tmaps += Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_CAMPAIGN], "dat")
+	for fullPath in look_for_tmaps:
 		if "tmap" in fullPath.to_lower():
 			merged_files[fullPath.get_file()] = true
 	
-	var look_for_tmapas2 = Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_CURRENT_MAP].get_base_dir(), "dat")
-	for fullPath in look_for_tmapas2:
+	var look_for_tmaps2 = Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_CURRENT_MAP].get_base_dir(), "dat")
+	for fullPath in look_for_tmaps2:
 		if "tmap" in fullPath.to_lower():
-			var tmapa_ending_filename_part = fullPath.get_file().substr(fullPath.get_file().find(".") + 1)
-			merged_files[tmapa_ending_filename_part] = true
+			var tmap_ending_filename_part = fullPath.get_file().substr(fullPath.get_file().find(".") + 1)
+			merged_files[tmap_ending_filename_part] = true
 	merged_files = merged_files.keys()
 	
 	return merged_files
