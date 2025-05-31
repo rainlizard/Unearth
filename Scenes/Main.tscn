@@ -2313,21 +2313,10 @@ margin_right = 544.0
 margin_bottom = 188.0
 rect_min_size = Vector2( 0, 20 )
 
-[node name="ReloadTextureMapsButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 192.0
-margin_right = 188.0
-margin_bottom = 219.0
-hint_tooltip = "Reads tmapa00x.dat files from Dungeon Keeper's /data/ directory and then recreates cache files in Unearth's /unearthdata/ directory."
-size_flags_horizontal = 2
-text = "Reload tileset cache"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 223.0
+margin_top = 192.0
 margin_right = 544.0
-margin_bottom = 252.0
+margin_bottom = 221.0
 text = "Always decompress maps"
 
 [node name="TabPlacements" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
@@ -7852,7 +7841,6 @@ script = SubResource( 20 )
 [connection signal="about_to_show" from="Ui/UiSystem/PreferencesWindow" to="Ui/UiSystem/PreferencesWindow" method="_on_SettingsWindow_about_to_show"]
 [connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/PreferencesWindow" method="_on_SetDirButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer/CmdLineDkCommands" to="Game" method="_on_CmdLineDkCommands_text_changed"]
-[connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ReloadTextureMapsButton" to="TMapLoader" method="_on_ReloadTextureMapsButton_pressed"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
 [connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer/WaterEffectPercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_WaterEffectPercent_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_LavaEffectPercent_value_changed"]

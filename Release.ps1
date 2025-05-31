@@ -28,9 +28,11 @@ $changelog = $changelogLines -join "`n"
 # The first line is the title, followed by a blank line, then the body (changelog)
 $tagMessage = "Release $fullVersion`n`n$changelog"
 
-# Create the Git tag
-# Use -m with the multi-line message. PowerShell should handle passing it correctly.
-git tag -a "$fullVersion" -m $tagMessage
+# Create the Git tag using a temp file so multiline messages work
+$tempFile = New-TemporaryFile
+$tagMessage | Out-File -FilePath $tempFile -Encoding utf8
+git tag -a "$fullVersion" -F $tempFile
+Remove-Item $tempFile
 
 # Push the tag to the remote repository
 git push origin "$fullVersion"
@@ -39,7 +41,7 @@ git push origin "$fullVersion"
 Write-Host "GitHub Actions are now running. Please wait 5 minutes, and a release will be created on GitHub and itch.io."
 
 # Pause the script execution
-Write-Host "Press any key to continue..."
-$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+Write-Host "Press Enter to continue..."
+Read-Host > $null
 
 # NOTE: in github desktop click "Pull origin" before running this, in order to be sure the commits count is correct.

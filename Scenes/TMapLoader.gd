@@ -37,13 +37,6 @@ func finish_load_ui():
 	oMapProperties._on_MapProperties_visibility_changed()
 
 
-func _on_ReloadTextureMapsButton_pressed():
-	if texturesLoadedState != LOADING_IN_PROGRESS:
-		oMessage.quick("Reloading tilesets")
-		rememberedTmapaPaths.clear()
-		start()
-
-
 func load_remembered_paths(dictionaryFromSettings):
 	rememberedTmapaPaths = dictionaryFromSettings
 
