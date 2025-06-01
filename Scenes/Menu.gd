@@ -273,6 +273,8 @@ func _on_HelpSubmenu_Pressed(pressedID):
 		4:
 			Utils.popup_centered(oControlsWindow)
 		5:
+			OS.shell_open("https://github.com/rainlizard/Unearth/issues/new")
+		6:
 			Utils.popup_centered(oAboutWindow)
 
 func _on_ViewSubmenu_Pressed(pressedID):
