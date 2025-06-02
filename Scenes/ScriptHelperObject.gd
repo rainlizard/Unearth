@@ -2,6 +2,7 @@ extends Node2D
 onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oUi = Nodelist.list["oUi"]
 
 
 # Declare member variables here. Examples:
@@ -29,6 +30,7 @@ func _on_zoom_level_changed(zoom):
 
 
 func _on_MouseDetection_mouse_entered():
+	if oUi.mouseOnUi == true: return
 	oCustomTooltip.set_text(get_meta('line'))
 
 func _on_MouseDetection_mouse_exited():

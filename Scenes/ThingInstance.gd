@@ -6,6 +6,7 @@ onready var oInstances = Nodelist.list["oInstances"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oActionPointList = Nodelist.list["oActionPointList"]
+onready var oUi = Nodelist.list["oUi"]
 
 #onready var oSelection = $'../../Selector/Selection'
 #onready var oInstanceOwnership = $'../../OverheadOwnership/InstanceOwnership'
@@ -290,6 +291,7 @@ func set_grow_direction():
 
 
 func _on_MouseDetection_mouse_entered():
+	if oUi.mouseOnUi == true: return
 	if oSelection.cursorOnInstancesArray.has(self) == false:
 		oSelection.cursorOnInstancesArray.append(self)
 	

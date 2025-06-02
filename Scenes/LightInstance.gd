@@ -2,6 +2,7 @@ extends Node2D
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
+onready var oUi = Nodelist.list["oUi"]
 
 var ownership = 5 # Not used by Dungeon Keeper, this is just to make it easy for the editor.
 var thingType = Things.TYPE.EXTRA
@@ -66,6 +67,7 @@ func _draw():
 		draw_arc(Vector2(0,0), (lightRange * 32)+16, 0, PI*2, 64, Color(1,1,0.5,1), 4, false)
 
 func _on_MouseDetection_mouse_entered():
+	if oUi.mouseOnUi == true: return
 	if oSelection.cursorOnInstancesArray.has(self) == false:
 		oSelection.cursorOnInstancesArray.append(self)
 	oSelection.clean_up_cursor_array()
