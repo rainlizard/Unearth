@@ -132,41 +132,76 @@ func execute():
 		if modifiedCheck.file_exists(path) and modifiedCheck.get_modified_time(path) != fileTimes[i]:
 			partsModifiedIndices.append(i)
 	if partsModifiedIndices.empty() == false:
-		editingImg.lock()
-		for i in partsModifiedIndices:
-			var part_data = partsList[i]
-			var path = baseDir.plus_file(part_data[0])
-			fileTimes[i] = modifiedCheck.get_modified_time(path)
-			if imgLoader.load(path) != OK:
-				printerr("Failed to load image: ", path)
-				continue
-			imgLoader.convert(Image.FORMAT_RGB8)
-			var src_rect_in_png = Rect2(int(part_data[1]), int(part_data[2]), int(part_data[3]), int(part_data[4]))
-			var tile_sub_image_rgb = imgLoader.get_rect(src_rect_in_png)
-			if tile_sub_image_rgb == null or tile_sub_image_rgb.is_empty():
-				printerr("Failed to get_rect from ", path, " with rect ", src_rect_in_png)
-				continue
-			var tile_sub_image_l8 = _convert_rgb_image_to_l8(tile_sub_image_rgb)
-			if tile_sub_image_l8 == null or tile_sub_image_l8.is_empty():
-				printerr("Failed to convert tile to L8 from: ", path)
-				continue
-			var dest_tile_x = i % 8
-			var dest_tile_y = i / 8
-			var destination_coords = Vector2(dest_tile_x * 32, dest_tile_y * 32)
-			editingImg.blit_rect(tile_sub_image_l8, Rect2(0,0, tile_sub_image_l8.get_width(), tile_sub_image_l8.get_height()), destination_coords)
-			anyChangesWereMade = true
-		editingImg.unlock()
+		var tmap_filename = get_tmapa_filename_from_path(fileListFilePath)
+		var is_tmapb = tmap_filename != null and tmap_filename.begins_with("tmapb")
+		
+		if is_tmapb:
+			execute_tmapb_reloading(partsModifiedIndices, baseDir, imgLoader)
+		else:
+			execute_tmapa_reloading(partsModifiedIndices, baseDir, imgLoader)
+		anyChangesWereMade = true
 	if anyChangesWereMade:
 		var tmapa_full_filename = get_tmapa_filename_from_path(fileListFilePath)
 		if tmapa_full_filename != null:
-			var tmap_number = int(tmapa_full_filename.trim_prefix("tmapa"))
-			oTMapLoader.cache_loaded_image(editingImg, tmap_number, "tmapa")
+			var tmap_number_str = tmapa_full_filename.trim_prefix("tmapa").trim_prefix("tmapb")
+			var tmap_number = int(tmap_number_str)
+			var tmap_type = "tmapa" if tmapa_full_filename.begins_with("tmapa") else "tmapb"
+			oTMapLoader.cache_loaded_image(editingImg, tmap_number, tmap_type)
 			oTMapLoader.apply_texture_pack()
+
+
+func execute_tmapa_reloading(partsModifiedIndices: Array, baseDir: String, imgLoader: Image):
+	editingImg.lock()
+	for i in partsModifiedIndices:
+		var part_data = partsList[i]
+		var path = baseDir.plus_file(part_data[0])
+		fileTimes[i] = modifiedCheck.get_modified_time(path)
+		if imgLoader.load(path) != OK:
+			printerr("Failed to load image: ", path)
+			continue
+		imgLoader.convert(Image.FORMAT_RGB8)
+		var src_rect_in_png = Rect2(int(part_data[1]), int(part_data[2]), int(part_data[3]), int(part_data[4]))
+		var tile_sub_image_rgb = imgLoader.get_rect(src_rect_in_png)
+		if tile_sub_image_rgb == null or tile_sub_image_rgb.is_empty():
+			printerr("Failed to get_rect from ", path, " with rect ", src_rect_in_png)
+			continue
+		var tile_sub_image_l8 = _convert_rgb_image_to_l8(tile_sub_image_rgb)
+		if tile_sub_image_l8 == null or tile_sub_image_l8.is_empty():
+			printerr("Failed to convert tile to L8 from: ", path)
+			continue
+		var dest_tile_x = i % 8
+		var dest_tile_y = i / 8
+		var destination_coords = Vector2(dest_tile_x * 32, dest_tile_y * 32)
+		editingImg.blit_rect(tile_sub_image_l8, Rect2(0,0, tile_sub_image_l8.get_width(), tile_sub_image_l8.get_height()), destination_coords)
+	editingImg.unlock()
+
+
+func execute_tmapb_reloading(partsModifiedIndices: Array, baseDir: String, imgLoader: Image):
+	for i in partsModifiedIndices:
+		var part_data = partsList[i]
+		var path = baseDir.plus_file(part_data[0])
+		fileTimes[i] = modifiedCheck.get_modified_time(path)
+		if imgLoader.load(path) != OK:
+			printerr("Failed to load image: ", path)
+			continue
+		imgLoader.convert(Image.FORMAT_RGB8)
+		var src_rect_in_png = Rect2(int(part_data[1]), int(part_data[2]), int(part_data[3]), int(part_data[4]))
+		var tile_sub_image_rgb = imgLoader.get_rect(src_rect_in_png)
+		if tile_sub_image_rgb == null or tile_sub_image_rgb.is_empty():
+			printerr("Failed to get_rect from ", path, " with rect ", src_rect_in_png)
+			continue
+		var tile_sub_image_l8 = _convert_rgb_image_to_l8(tile_sub_image_rgb)
+		if tile_sub_image_l8 == null or tile_sub_image_l8.is_empty():
+			printerr("Failed to convert tile to L8 from: ", path)
+			continue
+		editingImg.lock()
+		editingImg.blit_rect(tile_sub_image_l8, Rect2(0,0, tile_sub_image_l8.get_width(), tile_sub_image_l8.get_height()), Vector2(int(part_data[1]), int(part_data[2])))
+		editingImg.unlock()
 
 
 func get_tmapa_filename_from_path(full_path_argument: String):
 	var filename = full_path_argument.get_file()
-	if filename.begins_with("filelist_tmapa") and filename.ends_with(".txt"):
+	if (filename.begins_with("filelist_tmapa") or filename.begins_with("filelist_tmapb")) and filename.ends_with(".txt"):
 		return filename.trim_prefix("filelist_").trim_suffix(".txt")
 	return null
 
@@ -174,8 +209,8 @@ func get_tmapa_filename_from_path(full_path_argument: String):
 func get_tmapa_filename_number_string():
 	if fileListFilePath.empty(): return null
 	var tmapa_file_part = get_tmapa_filename_from_path(fileListFilePath)
-	if tmapa_file_part != null and tmapa_file_part.begins_with("tmapa"):
-		return tmapa_file_part.trim_prefix("tmapa")
+	if tmapa_file_part != null and (tmapa_file_part.begins_with("tmapa") or tmapa_file_part.begins_with("tmapb")):
+		return tmapa_file_part.trim_prefix("tmapa").trim_prefix("tmapb")
 	return null
 
 
@@ -229,6 +264,73 @@ func _on_ChooseTmapaFileDialog_file_selected(path_argument: String):
 	if source_rgb_image == null or source_rgb_image.is_empty():
 		oMessage.big("Error", "Failed to load or convert TMAPA.DAT to image.")
 		return
+	
+	var dat_basename = path_argument.get_file().get_basename()
+	var number_string_from_dat = dat_basename.trim_prefix('tmapa').trim_prefix('tmapb')
+	var is_tmapb_file = dat_basename.begins_with('tmapb')
+	
+	if is_tmapb_file:
+		handle_tmapb_export(source_rgb_image, number_string_from_dat, path_argument)
+	else:
+		handle_tmapa_export(source_rgb_image, number_string_from_dat, path_argument)
+
+
+func handle_tmapb_export(sourceRgbImage: Image, numberStringArgument: String, pathArgument: String):
+	var CODETIME_START = OS.get_ticks_msec()
+	var outputDir = ""
+	if OS.has_feature('editor'):
+		outputDir = OS.get_user_data_dir().plus_file("UnearthEditorTextureCache")
+	else:
+		outputDir = Settings.unearth_path.plus_file("textures")
+	
+	var dir = Directory.new()
+	var packFolder = outputDir.plus_file("tmapb" + numberStringArgument)
+	
+	if dir.dir_exists(packFolder):
+		var confirmDialog = ConfirmationDialog.new()
+		confirmDialog.dialog_text = "The folder already exists, files will be overwritten: \n" + packFolder + "\n\n If overwriting the files here causes you data loss then Cancel and go backup the folder."
+		confirmDialog.window_title = "Confirm File Replacement"
+		confirmDialog.popup_exclusive = true
+		add_child(confirmDialog)
+		var confirmationHolder = [false]
+		confirmDialog.connect("confirmed", self, "mark_dialog_confirmed", [confirmationHolder, 0])
+		confirmDialog.popup_centered()
+		yield(confirmDialog, "popup_hide")
+		yield(get_tree(), "idle_frame")
+		var userConfirmed = confirmationHolder[0]
+		confirmDialog.queue_free()
+		if userConfirmed == false:
+			oMessage.quick("Cancelled")
+			return
+	else:
+		dir.make_dir_recursive(packFolder)
+	
+	editingImg = Image.new()
+	editingImg.create(256, 2176, false, Image.FORMAT_L8)
+	editingImg.fill(Color(0, 0, 0))
+	var sourceL8Image = _convert_rgb_image_to_l8(sourceRgbImage)
+	if sourceL8Image != null and sourceL8Image.is_empty() == false:
+		editingImg.blit_rect(sourceL8Image, Rect2(0, 0, sourceL8Image.get_width(), sourceL8Image.get_height()), Vector2(0, 0))
+	
+	var pngPath = packFolder.plus_file("tmapb" + numberStringArgument + ".png")
+	var err_code = sourceRgbImage.save_png(pngPath)
+	if err_code == OK:
+		oMessage.quick("Exported : tmapb" + numberStringArgument + ".png")
+	else:
+		printerr("Failed to save PNG: ", pngPath, " Error code: ", err_code)
+		oMessage.big("Error", "Failed to save PNG: tmapb" + numberStringArgument + ".png")
+		return
+	
+	getPackFolder = packFolder
+	oReloaderPathPackLabel.text = getPackFolder
+	
+	var filelistContent = "tmapb" + numberStringArgument + ".png\t0\t0\t256\t2176"
+	save_new_filelist_txt_file(filelistContent, numberStringArgument, outputDir, "tmapb")
+	print('Exported TMAPB Filelist in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	reloader_loop()
+
+
+func handle_tmapa_export(sourceRgbImage: Image, numberStringArgument: String, pathArgument: String):
 	var CODETIME_START = OS.get_ticks_msec()
 	var outputDir = ""
 	if OS.has_feature('editor'):
@@ -241,10 +343,8 @@ func _on_ChooseTmapaFileDialog_file_selected(path_argument: String):
 		return
 	var flContent = filelistTemplateFile.get_as_text()
 	filelistTemplateFile.close()
-	var dat_basename = path_argument.get_file().get_basename()
-	var number_string_from_dat = dat_basename.trim_prefix('tmapa').trim_suffix('.dat')
-	flContent = flContent.replace("subdir", "pack" + number_string_from_dat)
-	flContent = flContent.replace("textures_pack_number", "textures_pack_" + number_string_from_dat)
+	flContent = flContent.replace("subdir", "tmapa" + numberStringArgument)
+	flContent = flContent.replace("textures_pack_number", "textures_pack_" + numberStringArgument)
 	var raw_lines = Array(flContent.split('\n', false))
 	if raw_lines.empty() == false:
 		raw_lines.pop_front()
@@ -274,7 +374,7 @@ func _on_ChooseTmapaFileDialog_file_selected(path_argument: String):
 		var createNewImage = Image.new()
 		createNewImage.create(img_data["max_x"], img_data["max_y"], false, Image.FORMAT_RGB8)
 		img_data["image_obj"] = createNewImage
-	source_rgb_image.lock()
+	sourceRgbImage.lock()
 	for localPath in imageDictionary:
 		var img_data = imageDictionary[localPath]
 		var current_png_image:Image = img_data["image_obj"]
@@ -286,9 +386,9 @@ func _on_ChooseTmapaFileDialog_file_selected(path_argument: String):
 			var source_tile_x = source_tile_flat_index % 8
 			var dest_x_in_png = int(line_data_array[1])
 			var dest_y_in_png = int(line_data_array[2])
-			current_png_image.blit_rect(source_rgb_image, Rect2(source_tile_x*32, source_tile_y*32, 32,32), Vector2(dest_x_in_png, dest_y_in_png))
+			current_png_image.blit_rect(sourceRgbImage, Rect2(source_tile_x*32, source_tile_y*32, 32,32), Vector2(dest_x_in_png, dest_y_in_png))
 		current_png_image.unlock()
-	source_rgb_image.unlock()
+	sourceRgbImage.unlock()
 	var promptedForOverwrite = false
 	var dir = Directory.new()
 	for localPath in imageDictionary:
@@ -309,10 +409,10 @@ func _on_ChooseTmapaFileDialog_file_selected(path_argument: String):
 				yield(confirmDialog, "popup_hide")
 				yield(get_tree(), "idle_frame")
 				var userConfirmed = confirmationHolder[0]
-				confirmDialog.queue_free() # Clean up dialog
+				confirmDialog.queue_free()
 				if userConfirmed == false:
 					oMessage.quick("Cancelled")
-					return # Exit this function, stopping further processing
+					return
 				promptedForOverwrite = true
 		var image_to_save: Image = imageDictionary[localPath]["image_obj"]
 		if image_to_save != null and image_to_save is Image:
@@ -326,14 +426,14 @@ func _on_ChooseTmapaFileDialog_file_selected(path_argument: String):
 			printerr("Cannot save PNG, image_obj is null or not an Image for path: ", localPath, ". Object is: ", image_to_save)
 		getPackFolder = packFolder
 	oReloaderPathPackLabel.text = getPackFolder
-	save_new_filelist_txt_file(flContent, number_string_from_dat, outputDir)
+	save_new_filelist_txt_file(flContent, numberStringArgument, outputDir, "tmapa")
 	print('Exported Filelist in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	reloader_loop()
 
 
-func save_new_filelist_txt_file(flContentArgument: String, numberStringArgument: String, outputDirArgument: String):
+func save_new_filelist_txt_file(flContentArgument: String, numberStringArgument: String, outputDirArgument: String, tmapTypeArgument: String = "tmapa"):
 	var file = File.new()
-	var path = outputDirArgument.plus_file("filelist_tmapa"+numberStringArgument+".txt")
+	var path = outputDirArgument.plus_file("filelist_" + tmapTypeArgument + numberStringArgument + ".txt")
 	if file.open(path, File.WRITE) == OK:
 		file.store_string(flContentArgument)
 		file.close()

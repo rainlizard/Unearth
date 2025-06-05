@@ -192,17 +192,35 @@ func create_l8_image(tmapDatPath: String) -> Image:
 			return null
 		l8ByteArray = file.get_buffer(file.get_len())
 		file.close()
-	var expectedL8Size = TMAP_IMAGE_WIDTH * TMAP_IMAGE_HEIGHT
-	if l8ByteArray.size() != expectedL8Size:
-		if l8ByteArray.size() > expectedL8Size:
-			printerr("TMAP data too large for " + tmapDatPath + ". Expected " + str(expectedL8Size) + ", got " + str(l8ByteArray.size()) + ". Truncating.")
-		# Ensure correct size, padding with zeros if smaller, truncating if larger.
-		l8ByteArray.resize(expectedL8Size) 
+	
+	var actualDataSize = l8ByteArray.size()
+	var maxExpectedSize = TMAP_IMAGE_WIDTH * TMAP_IMAGE_HEIGHT
+	
+	if actualDataSize > maxExpectedSize:
+		printerr("TMAP data too large for " + tmapDatPath + ". Expected max " + str(maxExpectedSize) + ", got " + str(actualDataSize) + ". Truncating to expected size.")
+		l8ByteArray.resize(maxExpectedSize)
+		actualDataSize = maxExpectedSize
+	
+	var actualHeight = actualDataSize / TMAP_IMAGE_WIDTH
+	if actualDataSize % TMAP_IMAGE_WIDTH != 0:
+		actualHeight += 1
+		var paddedSize = actualHeight * TMAP_IMAGE_WIDTH
+		l8ByteArray.resize(paddedSize)
+		actualDataSize = paddedSize
+	
 	var img = Image.new()
-	img.create_from_data(TMAP_IMAGE_WIDTH, TMAP_IMAGE_HEIGHT, false, Image.FORMAT_L8, l8ByteArray)
+	img.create_from_data(TMAP_IMAGE_WIDTH, actualHeight, false, Image.FORMAT_L8, l8ByteArray)
 	if img == null or img.is_empty():
 		printerr("Failed to create L8 image from TMAP data: ", tmapDatPath)
 		return null
+	
+	if actualHeight < TMAP_IMAGE_HEIGHT:
+		var fullSizeImage = Image.new()
+		fullSizeImage.create(TMAP_IMAGE_WIDTH, TMAP_IMAGE_HEIGHT, false, Image.FORMAT_L8)
+		fullSizeImage.fill(Color(0, 0, 0))
+		fullSizeImage.blit_rect(img, Rect2(0, 0, img.get_width(), img.get_height()), Vector2(0, 0))
+		return fullSizeImage
+	
 	return img
 
 
@@ -270,7 +288,9 @@ func apply_texture_pack():
 	var tmapBBottomTex: ImageTexture = currentPack[3]
 	if tmapATopTex == null or tmapABottomTex == null:
 		oMessage.big("Error", "TMAPA textures for tileset " + str(tilesetIndex) + " are missing.")
-		return
+		var blankTexture = _create_blank_half_texture()
+		if tmapBTopTex == null: tmapBTopTex = blankTexture
+		if tmapBBottomTex == null: tmapBBottomTex = blankTexture
 	if tmapBTopTex == null or tmapBBottomTex == null:
 		oMessage.big("Error", "TMAPB textures for tileset " + str(tilesetIndex) + " are missing.")
 		var blankTexture = _create_blank_half_texture()

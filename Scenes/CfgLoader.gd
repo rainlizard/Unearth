@@ -57,7 +57,6 @@ func process_configuration_files(mapPath):
 	for file_name_from_list in files_to_load:
 		
 		var combined_cfg_data = {}
-		var found = 0
 		
 		for load_cfg_type in [LOAD_CFG_DATA, LOAD_CFG_FXDATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
 			var check_path
