@@ -30,7 +30,6 @@ var rememberedTmapaPaths = {}
 var cachedTextures = []
 var texturesLoadedState = LOADING_NOT_STARTED
 
-
 func finish_load_ui():
 	for i in 100:
 		yield(get_tree(), 'idle_frame')
@@ -268,6 +267,7 @@ func _apply_shader_parameters(material: ShaderMaterial, shaderParameters: Dictio
 		for paramName in shaderParameters:
 			material.set_shader_param(paramName, shaderParameters[paramName])
 
+var alreadyShowedErrorOnce = false
 
 func apply_texture_pack():
 	var tilesetIndex = oDataLevelStyle.data
@@ -292,7 +292,9 @@ func apply_texture_pack():
 		if tmapBTopTex == null: tmapBTopTex = blankTexture
 		if tmapBBottomTex == null: tmapBBottomTex = blankTexture
 	if tmapBTopTex == null or tmapBBottomTex == null:
-		oMessage.big("Error", "TMAPB textures for tileset " + str(tilesetIndex) + " are missing.")
+		if alreadyShowedErrorOnce == false:
+			alreadyShowedErrorOnce = true
+			oMessage.quick("Warning: TMAPB textures for tileset " + str(tilesetIndex) + " are missing.")
 		var blankTexture = _create_blank_half_texture()
 		if tmapBTopTex == null: tmapBTopTex = blankTexture
 		if tmapBBottomTex == null: tmapBBottomTex = blankTexture
