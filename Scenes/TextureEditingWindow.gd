@@ -1,6 +1,5 @@
 extends WindowDialog
 onready var oTMapLoader = Nodelist.list["oTMapLoader"]
-onready var oReloaderPathLabel = Nodelist.list["oReloaderPathLabel"]
 onready var oReloaderPathPackLabel = Nodelist.list["oReloaderPathPackLabel"]
 onready var oExportTmapaDatDialog = Nodelist.list["oExportTmapaDatDialog"]
 onready var oReadPalette = Nodelist.list["oReadPalette"]
@@ -18,6 +17,10 @@ const ExportFilelist = preload("res://Scenes/exportfilelist.gd")
 
 var filelistfile = File.new()
 var fileListFilePath = ""
+var originalDatDir = ""
+var originalDatPath = ""
+var originalDatFilename = ""
+
 var editingImg = Image.new()
 var fileTimes = []
 var partsList = []
@@ -31,7 +34,6 @@ func _ready():
 	editingImg.create(8*32, 68*32, false, Image.FORMAT_L8)
 	oExportTmapaButton.disabled = true
 	oExportTmapaButton.set_tooltip("A filelist pack must be loaded first in order to export")
-	oReloaderPathLabel.text = ""
 	oReloaderPathPackLabel.text = ""
 
 
@@ -42,8 +44,8 @@ func reloader_loop():
 
 
 func _on_TextureEditingHelpButton_pressed():
-	var helptxt = """After you load a tileset, a bunch of .PNG files will be saved to your hard drive. Edit these files in your favourite image editor.
-Unearth will actively reload the textures in real-time as you edit and save those .PNGs. So any edits you make will be shown in real-time in Unearth. This applies to the 3D view too, so press Spacebar while in the 3D view to stop the camera from moving."""
+	var helptxt = """After you load a tileset, a bunch of .PNG files will be saved to your hard drive, edit these files in your favourite image editor.
+Unearth will actively reload the textures in real-time as you edit and save those .PNGs. So any edits you make will be shown in real-time in Unearth. This applies to the 3D view too, you can press Spacebar while in the 3D view to stop the camera from moving."""
 	oMessage.big("Help", helptxt)
 
 
@@ -217,14 +219,9 @@ func _on_ModifyTexturesButton_pressed():
 
 func _on_ExportTmapaButton_pressed():
 	Utils.popup_centered(oExportTmapaDatDialog)
-	oExportTmapaDatDialog.current_dir = oGame.DK_DATA_DIRECTORY
-	oExportTmapaDatDialog.current_path = oGame.DK_DATA_DIRECTORY
-	var tmapaFilename = get_tmap_number_string()
-	if tmapaFilename != null:
-		var prefix = "tmapb" if fileListFilePath.begins_with("tmapb") else "tmapa"
-		oExportTmapaDatDialog.current_file = prefix + tmapaFilename + ".dat"
-	else:
-		oExportTmapaDatDialog.current_file = "tmapa" + str(oDataLevelStyle.data).pad_zeros(3) + ".dat"
+	oExportTmapaDatDialog.current_dir = originalDatDir
+	oExportTmapaDatDialog.current_path = originalDatPath
+	oExportTmapaDatDialog.current_file = originalDatFilename
 
 
 func _on_CreateFilelistButton_pressed():
@@ -264,6 +261,9 @@ func _on_ChooseTmapaFileDialog_file_selected(pathArgument: String):
 	if sourceRgbImage == null or sourceRgbImage.is_empty():
 		oMessage.big("Error", "Failed to load or convert TMAPA.DAT to image.")
 		return
+	originalDatFilename = pathArgument.get_file()
+	originalDatDir = pathArgument.get_base_dir().plus_file("")
+	originalDatPath = pathArgument.get_base_dir().plus_file("")
 	var datBasename = pathArgument.get_file().get_basename()
 	var numberStringFromDat = datBasename.trim_prefix('tmapa').trim_prefix('tmapb')
 	var isTmapbFile = datBasename.begins_with('tmapb')
@@ -408,7 +408,6 @@ func setup_reloader(fileListName: String, packFolder: String, filelistContent: S
 	getOpenFolder = openFolder if openFolder != "" else packFolder
 	oReloaderPathPackLabel.text = getPackFolder
 	fileListFilePath = fileListName
-	oReloaderPathLabel.text = "Using hardcoded " + fileListName + " data"
 	oExportTmapaButton.disabled = false
 	oExportTmapaButton.set_tooltip("")
 	initialize_filelist(filelistContent)

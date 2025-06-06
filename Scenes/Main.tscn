@@ -1921,10 +1921,10 @@ script = ExtResource( 52 )
 
 [node name="ChooseDkExe" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = 1258.0
+margin_left = 2002.0
 margin_top = 504.0
-margin_right = 1874.0
-margin_bottom = 1011.0
+margin_right = 3002.0
+margin_bottom = 1066.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Select game executable (keeperfx.exe, keeper.exe)"
@@ -1939,10 +1939,10 @@ script = ExtResource( 67 )
 
 [node name="ChooseDefaultSaveFolder" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = 1258.0
-margin_top = 1136.0
-margin_right = 1787.0
-margin_bottom = 1561.0
+margin_left = 3098.0
+margin_top = 488.0
+margin_right = 4098.0
+margin_bottom = 1050.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Choose default directory for \"Save as\""
@@ -2957,10 +2957,10 @@ __meta__ = {
 
 [node name="FileDialogSaveAs" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -2006.0
-margin_top = 2227.0
-margin_right = -1326.0
-margin_bottom = 2787.0
+margin_left = 2000.0
+margin_top = 2700.0
+margin_right = 3000.0
+margin_bottom = 3262.0
 rect_min_size = Vector2( 250, 87.5 )
 popup_exclusive = true
 window_title = "Save as"
@@ -2973,10 +2973,10 @@ script = ExtResource( 51 )
 
 [node name="FileDialogOpen" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -2751.0
-margin_top = 1631.0
-margin_right = -2075.0
-margin_bottom = 2175.0
+margin_left = 2000.0
+margin_top = 2000.0
+margin_right = 3000.0
+margin_bottom = 2562.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
 window_title = "Open"
@@ -2987,9 +2987,6 @@ access = 2
 filters = PoolStringArray( "*.slb" )
 show_hidden_files = true
 script = ExtResource( 74 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ConfirmAutoGen" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true
@@ -3687,8 +3684,11 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ChooseMapImageFileDialog" type="FileDialog" parent="Ui/UiSystem"]
-margin_right = 638.0
-margin_bottom = 538.0
+visible = true
+margin_left = 2000.0
+margin_top = 4000.0
+margin_right = 3000.0
+margin_bottom = 4562.0
 rect_min_size = Vector2( 300, 105 )
 window_title = "Select a .png image"
 resizable = true
@@ -4262,10 +4262,10 @@ anims/RESET = SubResource( 18 )
 
 [node name="ChooseTmapaFileDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -1278.0
-margin_top = 2226.0
-margin_right = -598.0
-margin_bottom = 2786.0
+margin_left = 4156.0
+margin_top = 1992.0
+margin_right = 5156.0
+margin_bottom = 2554.0
 rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 resizable = true
@@ -4911,16 +4911,14 @@ text = "Generate script"
 
 [node name="ExportTmapaDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -1278.0
-margin_top = 1626.0
-margin_right = -598.0
-margin_bottom = 2186.0
+margin_left = 2000.0
+margin_top = 1368.0
+margin_right = 3000.0
+margin_bottom = 1930.0
 rect_min_size = Vector2( 250, 87.5 )
 resizable = true
-dialog_text = "Any colours used that aren't in the DK palette will be set as bright purple.
-"
 access = 2
-filters = PoolStringArray( "*.dat" )
+filters = PoolStringArray( "*tmap*.dat" )
 show_hidden_files = true
 
 [node name="TextureEditingWindow" type="WindowDialog" parent="Ui/UiSystem"]
@@ -5015,31 +5013,25 @@ text = "Currently loaded:"
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_top = 134.0
 margin_right = 264.0
-margin_bottom = 180.0
+margin_bottom = 155.0
 scroll_vertical_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ScrollContainer"]
 margin_right = 264.0
-margin_bottom = 46.0
+margin_bottom = 21.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ReloaderPathLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ReloaderPathPackLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_right = 264.0
 margin_bottom = 21.0
 text = "<>"
 
-[node name="ReloaderPathPackLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_top = 25.0
-margin_right = 264.0
-margin_bottom = 46.0
-text = "<>"
-
 [node name="TextureEditingHelpButton" type="TextureButton" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_left = 232.0
-margin_top = 184.0
+margin_top = 159.0
 margin_right = 264.0
-margin_bottom = 216.0
+margin_bottom = 191.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 8
 texture_normal = ExtResource( 156 )
@@ -6368,10 +6360,10 @@ stretch_mode = 6
 
 [node name="ExportSlabsetDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -3731.0
-margin_top = 2286.0
-margin_right = -3051.0
-margin_bottom = 2846.0
+margin_left = 2000.0
+margin_top = 3300.0
+margin_right = 3000.0
+margin_bottom = 3862.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
 filters = PoolStringArray( "*.dat" )
@@ -6379,10 +6371,10 @@ show_hidden_files = true
 
 [node name="ExportSlabsetClmDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -3724.0
-margin_top = 2905.0
-margin_right = -3044.0
-margin_bottom = 3465.0
+margin_left = 2000.0
+margin_top = 4600.0
+margin_right = 3000.0
+margin_bottom = 5162.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
 filters = PoolStringArray( "*.clm" )
@@ -6390,10 +6382,10 @@ show_hidden_files = true
 
 [node name="ExportSlabsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -2797.0
-margin_top = 3062.0
-margin_right = -2117.0
-margin_bottom = 3622.0
+margin_left = 3100.0
+margin_top = 2700.0
+margin_right = 4100.0
+margin_bottom = 3262.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
 filters = PoolStringArray( "*.toml" )
@@ -6401,10 +6393,10 @@ show_hidden_files = true
 
 [node name="ExportColumnsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -2834.0
-margin_top = 2262.0
-margin_right = -2154.0
-margin_bottom = 2822.0
+margin_left = 3100.0
+margin_top = 2000.0
+margin_right = 4100.0
+margin_bottom = 2562.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
 filters = PoolStringArray( "*.toml" )
@@ -7357,8 +7349,11 @@ size_flags_horizontal = 4
 text = "Close"
 
 [node name="ChooseLandviewImageFileDialog" type="FileDialog" parent="Ui/UiSystem"]
-margin_right = 638.0
-margin_bottom = 538.0
+visible = true
+margin_left = 3100.0
+margin_top = 1368.0
+margin_right = 4100.0
+margin_bottom = 1930.0
 rect_min_size = Vector2( 300, 105 )
 window_title = "Select a .png image"
 resizable = true
@@ -7843,10 +7838,10 @@ text = "Save .png file"
 
 [node name="ExportPreviewPngDialog" type="FileDialog" parent="Ui/UiPreviewExporter"]
 visible = true
-margin_left = -2834.0
-margin_top = 2262.0
-margin_right = -2154.0
-margin_bottom = 2822.0
+margin_left = 2000.0
+margin_top = 5200.0
+margin_right = 3000.0
+margin_bottom = 5762.0
 rect_min_size = Vector2( 250, 87.5 )
 access = 2
 filters = PoolStringArray( "*.png" )
