@@ -1,4 +1,7 @@
-﻿textures_pack_number	8	68	32	32
+extends Node
+
+var string = """
+textures_pack_number	8	68	32	32
 subdir/filler_black.png	0	0	32	32
 subdir/filler_purple.png	0	0	32	32
 subdir/earth_standard.png	0	32	32	32
@@ -543,3 +546,4 @@ subdir/player_ensigns.png	96	0	32	32
 subdir/player_ensigns.png	128	0	32	32
 subdir/player_ensigns.png	160	0	32	32
 subdir/gems_standard.png	96	0	32	32
+"""

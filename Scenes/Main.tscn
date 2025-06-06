@@ -4269,17 +4269,12 @@ margin_bottom = 2786.0
 rect_min_size = Vector2( 250, 87.5 )
 window_title = "Open a File"
 resizable = true
-dialog_text = "Select a tmapa*.dat file.
-Outputs filelist_tmapa*.txt and pack* folder containing .PNGs, both into a \"textures\" folder next to Unearth.exe
-"
+dialog_text = "Select a tmap*.dat file. Editable .PNGs will be extracted from this dat file."
 dialog_autowrap = true
 mode = 0
 access = 2
-filters = PoolStringArray( "*.dat" )
+filters = PoolStringArray( "*tmap*.dat" )
 show_hidden_files = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ScriptEditorWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
