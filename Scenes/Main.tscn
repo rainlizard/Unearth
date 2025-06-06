@@ -1,4 +1,4 @@
-[gd_scene load_steps=194 format=2]
+[gd_scene load_steps=198 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -125,7 +125,7 @@
 [ext_resource path="res://Scenes/LineEditInteger.gd" type="Script" id=123]
 [ext_resource path="res://Scenes/ScriptEditor.gd" type="Script" id=124]
 [ext_resource path="res://Scenes/ScriptWindow.gd" type="Script" id=125]
-[ext_resource path="res://Scenes/TextureEditingWindow.gd" type="Script" id=126]
+[ext_resource path="res://Scenes/TeditWindow.gd" type="Script" id=126]
 [ext_resource path="res://Scenes/CustomSlabSystem.gd" type="Script" id=127]
 [ext_resource path="res://Art/HelpIconHover.png" type="Texture" id=128]
 [ext_resource path="res://Scenes/CustomTooltip.gd" type="Script" id=129]
@@ -173,6 +173,10 @@
 [ext_resource path="res://Scenes/DataLua.gd" type="Script" id=171]
 [ext_resource path="res://Scenes/ScriptFileSection.tscn" type="PackedScene" id=172]
 [ext_resource path="res://Scenes/ConfirmOpenWhichScript.gd" type="Script" id=173]
+[ext_resource path="res://Scenes/TeditLoadDAT.gd" type="Script" id=174]
+[ext_resource path="res://Scenes/TeditSavePNG.gd" type="Script" id=175]
+[ext_resource path="res://Scenes/TeditLiveReloadPNG.gd" type="Script" id=176]
+[ext_resource path="res://Scenes/TeditSaveDAT.gd" type="Script" id=177]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -4260,7 +4264,7 @@ reset_on_save = false
 anims/Flash = SubResource( 17 )
 anims/RESET = SubResource( 18 )
 
-[node name="ChooseTmapaFileDialog" type="FileDialog" parent="Ui/UiSystem"]
+[node name="ChooseTmapFileDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 4156.0
 margin_top = 1992.0
@@ -4909,7 +4913,7 @@ margin_right = 844.0
 margin_bottom = 27.0
 text = "Generate script"
 
-[node name="ExportTmapaDatDialog" type="FileDialog" parent="Ui/UiSystem"]
+[node name="ExportTmapDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 2000.0
 margin_top = 1368.0
@@ -4928,9 +4932,21 @@ margin_top = 954.0
 margin_right = -989.0
 margin_bottom = 1202.0
 rect_min_size = Vector2( 284, 248 )
-window_title = "Create a tileset"
+window_title = "Edit tilesets"
 resizable = true
 script = ExtResource( 126 )
+
+[node name="TeditLoadDAT" type="Node" parent="Ui/UiSystem/TextureEditingWindow"]
+script = ExtResource( 174 )
+
+[node name="TeditSavePNG" type="Node" parent="Ui/UiSystem/TextureEditingWindow"]
+script = ExtResource( 175 )
+
+[node name="TeditLiveReloadPNG" type="Node" parent="Ui/UiSystem/TextureEditingWindow"]
+script = ExtResource( 176 )
+
+[node name="TeditSaveDAT" type="Node" parent="Ui/UiSystem/TextureEditingWindow"]
+script = ExtResource( 177 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow"]
 anchor_right = 1.0
@@ -4986,7 +5002,7 @@ rect_min_size = Vector2( 50, 0 )
 text = "3."
 align = 1
 
-[node name="ExportTmapaButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
+[node name="ExportTmapButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
 margin_left = 54.0
 margin_top = 62.0
 margin_right = 229.0
@@ -8067,7 +8083,7 @@ script = SubResource( 20 )
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignZoom/EnsignZoomLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_EnsignZoomLineEdit_text_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxOptions/OptionsOptionButton" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_OptionsOptionButton_item_selected"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxNameID/NameIDLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_NameIDLineEdit_text_changed"]
-[connection signal="file_selected" from="Ui/UiSystem/ChooseTmapaFileDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ChooseTmapaFileDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ChooseTmapFileDialog" to="Ui/UiSystem/TextureEditingWindow/TeditLoadDAT" method="_on_ChooseTmapFileDialog_file_selected"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer/ScriptEditorCloseButton" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptEditorCloseButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer/ScriptEditorStatusLabel" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptEditorStatusLabel_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
@@ -8086,10 +8102,10 @@ script = SubResource( 20 )
 [connection signal="value_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockLevelSpinBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_WarlockLevelSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/HBoxContainer4/SendToClipboardButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_SendToClipboardButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/HBoxContainer4/GenerateScriptButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_GenerateScriptButton_pressed"]
-[connection signal="file_selected" from="Ui/UiSystem/ExportTmapaDatDialog" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaDatDialog_file_selected"]
+[connection signal="file_selected" from="Ui/UiSystem/ExportTmapDatDialog" to="Ui/UiSystem/TextureEditingWindow/TeditSaveDAT" method="_on_ExportTmapDatDialog_file_selected"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/CreateFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_CreateFilelistButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/ModifyTexturesButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ModifyTexturesButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/ExportTmapaButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapaButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/ExportTmapButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/TextureEditingHelpButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_TextureEditingHelpButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ColumnEditor" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditor_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorClearUnusedButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorClearUnusedButton_pressed"]
