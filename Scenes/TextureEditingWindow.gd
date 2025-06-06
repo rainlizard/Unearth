@@ -12,11 +12,12 @@ onready var oMapProperties = Nodelist.list["oMapProperties"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
+onready var oTEScrollContainer = Nodelist.list["oTEScrollContainer"]
 
 const ExportFilelist = preload("res://Scenes/exportfilelist.gd")
 
-var filelistfile = File.new()
-var fileListFilePath = ""
+var packFile = File.new()
+var packFilePath = ""
 var originalDatDir = ""
 var originalDatPath = ""
 var originalDatFilename = ""
@@ -38,7 +39,7 @@ func _ready():
 
 
 func reloader_loop():
-	if fileListFilePath != "": execute()
+	if packFilePath != "": execute()
 	yield(get_tree().create_timer(0.25), "timeout")
 	reloader_loop()
 
@@ -49,7 +50,7 @@ Unearth will actively reload the textures in real-time as you edit and save thos
 	oMessage.big("Help", helptxt)
 
 
-func initialize_filelist(contentString: String = ""):
+func initialize_pack(contentString: String = ""):
 	partsList.clear()
 	var flContent = contentString if contentString != "" else get_file_content()
 	if flContent == "": return
@@ -63,7 +64,7 @@ func initialize_filelist(contentString: String = ""):
 			validParts.append(lineData)
 		else:
 			validParts.append([])
-			printerr("Invalid line in filelist (line ", i+2, "): '", originalLine, "' - Marked as invalid.")
+			printerr("Invalid line in pack (line ", i+2, "): '", originalLine, "' - Marked as invalid.")
 	partsList = validParts
 	if fileTimes.size() != partsList.size():
 		fileTimes.resize(partsList.size())
@@ -74,12 +75,15 @@ func initialize_filelist(contentString: String = ""):
 		oTMapLoader.apply_texture_pack()
 		oEditor.mapHasBeenEdited = true
 		oMessage.quick("Changed map's Tileset to show what you're currently editing")
-
+	
+	
+	yield(get_tree(),'idle_frame')
+	oTEScrollContainer.scroll_horizontal = 1000000
 
 func get_file_content() -> String:
-	if filelistfile.open(fileListFilePath, File.READ) != OK: return ""
-	var content = filelistfile.get_as_text()
-	filelistfile.close()
+	if packFile.open(packFilePath, File.READ) != OK: return ""
+	var content = packFile.get_as_text()
+	packFile.close()
 	return content
 
 
@@ -126,7 +130,7 @@ func convert_rgb_image_to_l8(rgbImage: Image) -> Image:
 func execute():
 	var partsModifiedIndices = get_modified_parts(getPackFolder)
 	if partsModifiedIndices.empty(): return
-	var isTmapb = fileListFilePath.begins_with("tmapb")
+	var isTmapb = packFilePath.to_lower().begins_with("tmapb")
 	process_modified_parts(partsModifiedIndices, getPackFolder, isTmapb)
 	var tmapNumberStr = get_tmap_number_string()
 	if tmapNumberStr != null:
@@ -172,7 +176,16 @@ func process_modified_parts(partsModifiedIndices: Array, baseDir: String, isTmap
 
 
 func get_tmap_number_string():
-	return fileListFilePath.substr(5) if fileListFilePath.begins_with("tmapa") or fileListFilePath.begins_with("tmapb") else null
+	var lowerPath = packFilePath.to_lower()
+	var filename = packFilePath.get_file().to_lower()
+	var tmapaIndex = filename.find("tmapa")
+	var tmapbIndex = filename.find("tmapb")
+	if tmapaIndex != -1:
+		return filename.substr(tmapaIndex + 5)
+	elif tmapbIndex != -1:
+		return filename.substr(tmapbIndex + 5)
+	else:
+		return null
 
 
 func get_output_directory() -> String:
@@ -238,19 +251,22 @@ func find_best_tmapa_file() -> Array:
 	if oCfgLoader.paths_loaded.has(oCfgLoader.LOAD_CFG_CURRENT_MAP):
 		for filePath in oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP]:
 			if filePath.ends_with("dat"):
-				if "tmapa" in filePath or "tmapb" in filePath:
+				var lowerPath = filePath.to_lower()
+				if "tmapa" in lowerPath or "tmapb" in lowerPath:
 					return filePath
 	
 	if oCfgLoader.paths_loaded.has(oCfgLoader.LOAD_CFG_CAMPAIGN):
 		for filePath in oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CAMPAIGN]:
 			if filePath.ends_with("dat"):
-				if "tmapa" in filePath or "tmapb" in filePath:
+				var lowerPath = filePath.to_lower()
+				if "tmapa" in lowerPath or "tmapb" in lowerPath:
 					return filePath
 	
 	if oCfgLoader.paths_loaded.has(oCfgLoader.LOAD_CFG_DATA):
 		for filePath in oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_DATA]:
 			if filePath.ends_with("dat"):
-				if "tmapa" in filePath or "tmapb" in filePath:
+				var lowerPath = filePath.to_lower()
+				if "tmapa" in lowerPath or "tmapb" in lowerPath:
 					return filePath
 	
 	return oGame.DK_DATA_DIRECTORY
@@ -265,29 +281,49 @@ func _on_ChooseTmapaFileDialog_file_selected(pathArgument: String):
 	originalDatDir = pathArgument.get_base_dir().plus_file("")
 	originalDatPath = pathArgument.get_base_dir().plus_file("")
 	var datBasename = pathArgument.get_file().get_basename()
-	var numberStringFromDat = datBasename.trim_prefix('tmapa').trim_prefix('tmapb')
-	var isTmapbFile = datBasename.begins_with('tmapb')
-	handle_export(sourceRgbImage, numberStringFromDat, isTmapbFile)
+	var isTmapbFile = datBasename.to_lower().find('.tmapb') != -1
+	var mapType = 'tmapb' if isTmapbFile else 'tmapa'
+	var mapTypeWithDot = '.' + mapType
+	var mapTypeIndex = datBasename.to_lower().find(mapTypeWithDot)
+	
+	var folderNameString = ""
+	if mapTypeIndex != -1:
+		var mapName = datBasename.substr(0, mapTypeIndex)
+		var numberPart = datBasename.substr(mapTypeIndex + mapTypeWithDot.length())
+		folderNameString = mapName + "_" + mapType + numberPart
+	else:
+		folderNameString = datBasename
+	
+	handle_export(sourceRgbImage, folderNameString, isTmapbFile)
 
 
-func handle_export(sourceRgbImage: Image, numberString: String, isTmapb: bool):
+func handle_export(sourceRgbImage: Image, folderNameString: String, isTmapb: bool):
 	var codeTimeStart = OS.get_ticks_msec()
 	if isTmapb:
-		handle_tmapb_export(sourceRgbImage, numberString)
+		handle_tmapb_export(sourceRgbImage, folderNameString)
 	else:
-		handle_tmapa_export(sourceRgbImage, numberString)
-	print('Exported Filelist in: ' + str(OS.get_ticks_msec() - codeTimeStart) + 'ms')
+		handle_tmapa_export(sourceRgbImage, folderNameString)
+	print('Exported Pack in: ' + str(OS.get_ticks_msec() - codeTimeStart) + 'ms')
 	reloader_loop()
 
 
-func handle_tmapa_export(sourceRgbImage: Image, numberString: String):
+func handle_tmapa_export(sourceRgbImage: Image, folderNameString: String):
 	var outputDir = get_output_directory()
-	var filelistName = "tmapa" + numberString
-	var filelistContent = ExportFilelist.new().string.replace("subdir", filelistName).replace("textures_pack_number", "textures_pack_" + numberString)
-	var imageDictionary = build_image_dictionary(filelistContent)
+	var packFolderName = folderNameString
+	
+	var texturePackNumber = ""
+	if "_" in folderNameString:
+		var parts = folderNameString.split("_")
+		if parts.size() > 1:
+			texturePackNumber = parts[1]
+	else:
+		texturePackNumber = folderNameString
+	
+	var packContent = ExportFilelist.new().string.replace("subdir", packFolderName).replace("textures_pack_number", "textures_pack_" + texturePackNumber)
+	var imageDictionary = build_image_dictionary(packContent)
 	var uniqueDirectories = get_unique_directories(imageDictionary, outputDir)
 	if check_directories_exist(uniqueDirectories):
-		var message = "The folder of .PNGs already exists, they will be overwritten: \n" + outputDir + "\n\n If overwriting the files here causes you data loss then Cancel and go backup the folder."
+		var message = "The folder of .PNGs already exists, they will be overwritten: \n" + outputDir.plus_file(packFolderName) + "\n\n If overwriting the files here causes you data loss then Cancel and go backup the folder."
 		var userConfirmed = yield(show_confirmation_dialog(message), "completed")
 		if userConfirmed == false:
 			oMessage.quick("Cancelled")
@@ -295,13 +331,13 @@ func handle_tmapa_export(sourceRgbImage: Image, numberString: String):
 	create_directories(uniqueDirectories)
 	create_images_from_dictionary(imageDictionary, sourceRgbImage)
 	save_images_to_disk(imageDictionary, outputDir)
-	setup_reloader(filelistName, outputDir, filelistContent, outputDir.plus_file(filelistName))
+	setup_reloader(packFolderName, outputDir, packContent, outputDir.plus_file(packFolderName))
 
 
-func handle_tmapb_export(sourceRgbImage: Image, numberString: String):
+func handle_tmapb_export(sourceRgbImage: Image, folderNameString: String):
 	var outputDir = get_output_directory()
-	var filelistName = "tmapb" + numberString
-	var packFolder = outputDir.plus_file(filelistName)
+	var packFolderName = folderNameString
+	var packFolder = outputDir.plus_file(packFolderName)
 	var uniqueDirectories = {packFolder: true}
 	if check_directories_exist(uniqueDirectories):
 		var message = "The folder of .PNGs already exists, they will be overwritten: \n" + packFolder + "\n\n If overwriting the files here causes you data loss then Cancel and go backup the folder."
@@ -310,22 +346,22 @@ func handle_tmapb_export(sourceRgbImage: Image, numberString: String):
 			oMessage.quick("Cancelled")
 			return
 	create_directories(uniqueDirectories)
-	var pngPath = packFolder.plus_file(filelistName + ".png")
+	var pngPath = packFolder.plus_file(packFolderName + ".png")
 	var errCode = sourceRgbImage.save_png(pngPath)
 	if errCode == OK:
-		oMessage.quick("Exported : " + filelistName + ".png")
+		oMessage.quick("Exported : " + packFolderName + ".png")
 	else:
 		printerr("Failed to save PNG: ", pngPath, " Error code: ", errCode)
-		oMessage.big("Error", "Failed to save PNG: " + filelistName + ".png")
+		oMessage.big("Error", "Failed to save PNG: " + packFolderName + ".png")
 		return
-	var filelistContent = filelistName + ".png\t0\t0\t256\t2176"
+	var packContent = packFolderName + ".png\t0\t0\t256\t2176"
 	editingImg = Image.new()
 	editingImg.create(256, 2176, false, Image.FORMAT_L8)
 	editingImg.fill(Color(0, 0, 0))
 	var sourceL8Image = convert_rgb_image_to_l8(sourceRgbImage)
 	if sourceL8Image != null and sourceL8Image.is_empty() == false:
 		editingImg.blit_rect(sourceL8Image, Rect2(0, 0, sourceL8Image.get_width(), sourceL8Image.get_height()), Vector2(0, 0))
-	setup_reloader(filelistName, packFolder, filelistContent, packFolder)
+	setup_reloader(packFolderName, packFolder, packContent, packFolder)
 
 
 func build_image_dictionary(flContent: String) -> Dictionary:
@@ -403,14 +439,14 @@ func save_images_to_disk(imageDictionary: Dictionary, outputDir: String):
 			printerr("Cannot save PNG, image_obj is null or not an Image for path: ", localPath, ". Object is: ", imageToSave)
 
 
-func setup_reloader(fileListName: String, packFolder: String, filelistContent: String, openFolder: String = ""):
+func setup_reloader(packFolderName: String, packFolder: String, packContent: String, openFolder: String = ""):
 	getPackFolder = packFolder
 	getOpenFolder = openFolder if openFolder != "" else packFolder
-	oReloaderPathPackLabel.text = getPackFolder
-	fileListFilePath = fileListName
+	oReloaderPathPackLabel.text = getPackFolder.plus_file(packFolderName)
+	packFilePath = oReloaderPathPackLabel.text
 	oExportTmapaButton.disabled = false
 	oExportTmapaButton.set_tooltip("")
-	initialize_filelist(filelistContent)
+	initialize_pack(packContent)
 
 
 func convert_dat_to_rgb_image(datPathArgument: String) -> Image:

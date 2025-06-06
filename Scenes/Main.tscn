@@ -5010,19 +5010,19 @@ margin_right = 264.0
 margin_bottom = 130.0
 text = "Currently loaded:"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
+[node name="TEScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
 margin_top = 134.0
 margin_right = 264.0
 margin_bottom = 155.0
 scroll_vertical_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/TEScrollContainer"]
 margin_right = 264.0
 margin_bottom = 21.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ReloaderPathPackLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ReloaderPathPackLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/TEScrollContainer/VBoxContainer"]
 margin_right = 264.0
 margin_bottom = 21.0
 text = "<>"
