@@ -100,7 +100,7 @@ func process_modified_parts(partsModifiedIndices: Array, baseDir: String, isTmap
 		if tileSubImageL8 == null or tileSubImageL8.is_empty():
 			printerr("Failed to convert tile to L8 from: ", path)
 			continue
-		var destinationCoords = Vector2(int(partData[1]), int(partData[2])) if isTmapb else Vector2((partIndex % 8) * 32, (partIndex / 8) * 32)
+		var destinationCoords = Vector2((partIndex % 8) * 32, (partIndex / 8) * 32)
 		editingImg.lock()
 		editingImg.blit_rect(tileSubImageL8, Rect2(0,0, tileSubImageL8.get_width(), tileSubImageL8.get_height()), destinationCoords)
 		editingImg.unlock()

@@ -1,7 +1,7 @@
 extends Node
 
-var string = """
-textures_pack_number	8	68	32	32
+const string_a = """
+textures_pack_000	8	68	32	32
 filler_black.png	0	0	32	32
 filler_purple.png	0	0	32	32
 earth_standard.png	0	32	32	32
@@ -546,4 +546,83 @@ player_ensigns.png	96	0	32	32
 player_ensigns.png	128	0	32	32
 player_ensigns.png	160	0	32	32
 gems_standard.png	96	0	32	32
+"""
+
+const string_b = """
+textures_pack_000	8	5	32	32
+filler_black.png	0	0	32	32
+player_brick_drape.png	0	160	32	32
+player_brick_drape.png	32	160	32	32
+player_brick_drape.png	64	160	32	32
+player_brick_drape.png	0	192	32	32
+player_brick_drape.png	32	192	32	32
+player_brick_drape.png	64	192	32	32
+player_brick_drape.png	0	224	32	32
+player_brick_drape.png	32	224	32	32
+player_brick_drape.png	64	224	32	32
+player_gemstones.png	192	0	32	32
+player_gemstones.png	224	0	32	32
+player_ensigns.png	192	0	32	32
+player_ensigns.png	224	0	32	32
+player_ensigns.png	256	0	32	32
+player_earth_marks.png	192	0	32	32
+player_earth_marks.png	224	0	32	32
+player_earth_marks.png	256	0	32	32
+player_ground_colors.png	192	0	32	32
+player_ground_colors.png	224	0	32	32
+player_ground_colors.png	256	0	32	32
+gems_near_lava.png	0	0	32	32
+gems_near_lava.png	32	0	32	32
+gems_near_lava.png	64	0	32	32
+gems_near_lava.png	96	0	32	32
+door_midas1.png	0	0	32	32
+door_midas1.png	32	0	32	32
+door_midas1.png	64	0	32	32
+door_midas1.png	0	32	32	32
+door_midas1.png	32	32	32	32
+door_midas1.png	64	32	32	32
+door_midas1.png	0	64	32	32
+door_midas1.png	32	64	32	32
+door_midas1.png	64	64	32	32
+door_midas2.png	0	32	32	32
+door_midas2.png	32	32	32	32
+door_midas2.png	64	32	32	32
+door_midas3.png	0	32	32	32
+door_midas3.png	32	32	32	32
+door_midas3.png	64	32	32	32
+door_midas4.png	0	32	32	32
+door_midas4.png	32	32	32	32
+door_midas4.png	64	32	32	32
+gold_dense.png	0	0	32	32
+gold_dense.png	32	0	32	32
+gold_dense.png	64	0	32	32
+gold_dense.png	96	0	32	32
+gold_dense.png	0	32	32	32
+gold_dense.png	32	32	32	32
+gold_dense.png	64	32	32	32
+gold_dense.png	96	32	32	32
+gold_dense.png	0	64	32	32
+gold_dense.png	32	64	32	32
+gold_dense.png	64	64	32	32
+gold_dense.png	96	64	32	32
+gold_dense_near_lava.png	0	0	32	32
+gold_dense_near_lava.png	32	0	32	32
+gold_dense_near_lava.png	64	0	32	32
+gold_dense_near_lava.png	96	0	32	32
+gold_intermediate.png	0	0	32	32
+gold_intermediate.png	32	0	32	32
+gold_intermediate.png	64	0	32	32
+gold_intermediate.png	96	0	32	32
+gold_intermediate.png	0	32	32	32
+gold_intermediate.png	32	32	32	32
+gold_intermediate.png	64	32	32	32
+gold_intermediate.png	96	32	32	32
+gold_intermediate.png	0	64	32	32
+gold_intermediate.png	32	64	32	32
+gold_intermediate.png	64	64	32	32
+gold_intermediate.png	96	64	32	32
+gold_intermediate_near_lava.png	0	0	32	32
+gold_intermediate_near_lava.png	32	0	32	32
+gold_intermediate_near_lava.png	64	0	32	32
+gold_intermediate_near_lava.png	96	0	32	32
 """

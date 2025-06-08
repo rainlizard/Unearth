@@ -78,10 +78,7 @@ func generate_folder_name(pathArgument: String) -> String:
 
 func export_texture_pack(sourceRgbImage: Image, folderNameString: String, isTmapbFile: bool):
 	var codeTimeStart = OS.get_ticks_msec()
-	if isTmapbFile:
-		oTeditSavePNG.handle_tmapb_export(sourceRgbImage, folderNameString)
-	else:
-		oTeditSavePNG.handle_tmapa_export(sourceRgbImage, folderNameString)
+	oTeditSavePNG.handle_tmap_export(sourceRgbImage, folderNameString)
 
 
 func store_original_dat_info(pathArgument: String):

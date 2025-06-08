@@ -10,7 +10,7 @@ var packFolder = ""
 var openFolder = ""
 
 
-func handle_tmapa_export(sourceRgbImage: Image, folderNameString: String):
+func handle_tmap_export(sourceRgbImage: Image, folderNameString: String):
 	var outputDir = get_output_directory()
 	var packFolderName = folderNameString
 	var texturePackNumber = ""
@@ -20,7 +20,14 @@ func handle_tmapa_export(sourceRgbImage: Image, folderNameString: String):
 			texturePackNumber = parts[1]
 	else:
 		texturePackNumber = folderNameString
-	var packContent = ExportFilelist.new().string.replace("textures_pack_number", "textures_pack_" + texturePackNumber)
+	
+	var isTmapbFile = folderNameString.to_lower().find("tmapb") != -1
+	var packContent = ""
+	if isTmapbFile:
+		packContent = ExportFilelist.new().string_b.replace("textures_pack_000", "textures_pack_" + texturePackNumber)
+	else:
+		packContent = ExportFilelist.new().string_a.replace("textures_pack_000", "textures_pack_" + texturePackNumber)
+	
 	var imageDictionary = build_image_dictionary(packContent)
 	var packFolderPath = outputDir.plus_file(packFolderName)
 	var uniqueDirectories = get_unique_directories(imageDictionary, packFolderPath)
@@ -34,28 +41,6 @@ func handle_tmapa_export(sourceRgbImage: Image, folderNameString: String):
 	create_directories(uniqueDirectories)
 	create_images_from_dictionary(imageDictionary, sourceRgbImage)
 	save_images_to_disk(imageDictionary, packFolderPath)
-	setup_reloader(packFolderName, packFolderPath, packContent, packFolderPath)
-
-
-func handle_tmapb_export(sourceRgbImage: Image, folderNameString: String):
-	var outputDir = get_output_directory()
-	var packFolderName = folderNameString
-	var packFolderPath = outputDir.plus_file(packFolderName)
-	var uniqueDirectories = {packFolderPath: true}
-	if check_directories_exist(uniqueDirectories):
-		var message = "The folder of .PNGs already exists, they will be overwritten: \n" + packFolderPath + "\n\n If overwriting the files here causes you data loss then Cancel and go backup the folder."
-		var userConfirmed = yield(oTextureEditingWindow.show_confirmation_dialog(message), "completed")
-		if userConfirmed == false:
-			oMessage.quick("Cancelled")
-			return
-	create_directories(uniqueDirectories)
-	var pngPath = packFolderPath.plus_file(packFolderName + ".png")
-	var errCode = sourceRgbImage.save_png(pngPath)
-	if errCode != OK:
-		printerr("Failed to save PNG: ", pngPath, " Error code: ", errCode)
-		oMessage.big("Error", "Failed to save PNG: " + packFolderName + ".png")
-		return
-	var packContent = packFolderName + ".png\t0\t0\t256\t2176"
 	setup_reloader(packFolderName, packFolderPath, packContent, packFolderPath)
 
 
