@@ -11,8 +11,8 @@ $commitCount = git rev-list --count HEAD
 $fullVersion = "$majorMinorVersion.$commitCount"
 
 # Prompt for changelog
-Write-Host "Paste your changelog below for version $fullVersion."
-Write-Host "Press Enter on an empty line when finished:"
+Write-Host "Reminder: you may want to manually edit Autoload/Version.gd first!"
+Write-Host "Paste your changelog below for version $fullVersion. Press Enter on an empty line when finished:"
 $changelogLines = @()
 while ($true) {
     $line = Read-Host
