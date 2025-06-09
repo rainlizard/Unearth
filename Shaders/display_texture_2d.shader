@@ -130,10 +130,6 @@ vec4 apply_supersampling(vec2 baseUV) {
 		for (int y = 0; y < supersampling_level; y++) {
 			vec2 offset = vec2(offset_start + float(x) * step_size, offset_start + float(y) * step_size);
 			vec2 sample_uv = baseUV + offset.x * uv_dx + offset.y * uv_dy;
-			
-			// Clamp to safe bounds within the tile to prevent bleeding
-			sample_uv = clamp(sample_uv, safe_min, safe_max);
-			
 			finalColor += get_sampled_color(sample_uv);
 		}
 	}
