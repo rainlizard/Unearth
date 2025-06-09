@@ -2,7 +2,7 @@ extends WindowDialog
 onready var oGame = Nodelist.list["oGame"]
 onready var oSetDirPath = Nodelist.list["oSetDirPath"]
 onready var oCheckBoxVsync = Nodelist.list["oCheckBoxVsync"]
-onready var oMenuMSAA = Nodelist.list["oMenuMSAA"]
+onready var oMSAA = Nodelist.list["oMSAA"]
 onready var oCheckBoxAlwaysDecompress = Nodelist.list["oCheckBoxAlwaysDecompress"]
 onready var oChooseDkExe = Nodelist.list["oChooseDkExe"]
 onready var oCmdLineDkCommands = Nodelist.list["oCmdLineDkCommands"]
@@ -28,6 +28,7 @@ onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oUiScale = Nodelist.list["oUiScale"]
 onready var oFramerateLimit = Nodelist.list["oFramerateLimit"]
+onready var oSSAA = Nodelist.list["oSSAA"]
 onready var oOwnerAlpha = Nodelist.list["oOwnerAlpha"]
 onready var oScriptEditorFontSize = Nodelist.list["oScriptEditorFontSize"]
 onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
@@ -60,7 +61,9 @@ func _on_ButtonSettings_pressed():
 func _on_SettingsWindow_about_to_show():
 	oSetDirPath.text = Settings.get_setting("executable_path")
 	oCheckBoxVsync.pressed = Settings.get_setting("vsync")
-	oMenuMSAA.text = oMenuMSAA.dropdown.get_item_text(Settings.get_setting("msaa"))
+	var msaa_enum = Settings.get_setting("msaa")
+	var msaa_slider_value = msaa_enum_to_slider_value(msaa_enum)
+	oMSAA.update_appearance(msaa_slider_value)
 	oCheckBoxAlwaysDecompress.pressed = Settings.get_setting("always_decompress")
 	oCmdLineDkCommands.text = Settings.get_setting("dk_commands")
 	
@@ -73,6 +76,7 @@ func _on_SettingsWindow_about_to_show():
 	oMouseSensitivity.update_appearance(Settings.get_setting("mouse_sensitivity"))
 	oFieldOfView.update_appearance(Settings.get_setting("fov"))
 	oFramerateLimit.update_appearance(Settings.get_setting("framerate_limit"))
+	oSSAA.update_appearance(Settings.get_setting("ssaa"))
 	oCheckBoxDisplay3dInfo.pressed = Settings.get_setting("display_3d_info")
 	oUiScale.update_appearance(Settings.get_setting("ui_scale"))
 	oSlabWindowScale.update_appearance(Settings.get_setting("slab_window_scale"))
@@ -100,9 +104,6 @@ func _on_SetDirButton_pressed():
 
 func _on_ChooseDkExe_file_selected(path):
 	oSetDirPath.text = path
-
-func menu_msaa_index_pressed(index):
-	Settings.set_setting("msaa", index)
 
 func _on_CloseButton_pressed():
 	hide()
@@ -137,6 +138,9 @@ func edited_FieldOfView(new_text):
 
 func edited_FramerateLimit(new_text):
 	Settings.set_setting("framerate_limit", int(new_text))
+
+func edited_SSAA(new_text):
+	Settings.set_setting("ssaa", int(new_text))
 
 func edited_UiScale(new_text):
 	if float(new_text) < 0.5: return # don't allow, otherwise you can't navigate
@@ -193,3 +197,44 @@ func _on_CheckBoxDisplay3dInfo_toggled(button_pressed):
 
 func _on_CheckBoxNewMapAutoOpensMapSettings_toggled(button_pressed):
 	Settings.set_setting("auto_open_map_settings", button_pressed)
+
+func edited_MSAA(new_text):
+	var slider_value = int(new_text)
+	var snapped_slider_value = snap_msaa_slider_value(slider_value)
+	var msaa_enum_value = slider_value_to_msaa_enum(snapped_slider_value)
+	
+	if snapped_slider_value != slider_value:
+		oMSAA.update_appearance(snapped_slider_value)
+	
+	Settings.set_setting("msaa", msaa_enum_value)
+
+func snap_msaa_slider_value(value):
+	var valid_slider_values = [1, 2, 4, 8, 16]
+	var closest_value = valid_slider_values[0]
+	var min_distance = abs(value - closest_value)
+	
+	for valid_value in valid_slider_values:
+		var distance = abs(value - valid_value)
+		if distance < min_distance:
+			min_distance = distance
+			closest_value = valid_value
+	
+	return closest_value
+
+func slider_value_to_msaa_enum(slider_value):
+	match slider_value:
+		1: return 0
+		2: return 1
+		4: return 2
+		8: return 3
+		16: return 4
+		_: return 0
+
+func msaa_enum_to_slider_value(enum_value):
+	match enum_value:
+		0: return 1
+		1: return 2
+		2: return 4
+		3: return 8
+		4: return 16
+		_: return 1

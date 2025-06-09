@@ -7,6 +7,7 @@ uniform sampler2D tmap_B_top:hint_albedo;
 uniform sampler2D tmap_B_bottom:hint_albedo;
 uniform sampler2D palette_texture:hint_albedo;
 uniform sampler2D animationDatabase;
+uniform int supersampling_level = 4;
 varying vec4 worldPos;
 const float TEXTURE_ANIMATION_SPEED = 12.0;
 const vec2 TILE_DIMENSIONS = vec2(32.0, 32.0);
@@ -21,14 +22,6 @@ float calc_mip_level(vec2 texture_coord) {
 	return max(0.0, 0.5 * log2(delta_max_sqr));
 }
 
-vec2 calculate_adjusted_uv(vec2 localUV, float mipLevelVal) {
-	float filterRadiusTexels = exp2(mipLevelVal) * 0.001;
-	float texelWidthInLocalUv = 1.0 / TILE_DIMENSIONS.x;
-	float insetAmountUv = filterRadiusTexels * texelWidthInLocalUv;
-	insetAmountUv = min(insetAmountUv, 0.5);
-	return mix(vec2(insetAmountUv), vec2(1.0 - insetAmountUv), localUV);
-}
-
 vec4 texelGet ( sampler2D tg_tex, ivec2 tg_coord, int tg_lod ) {
 	vec2 tg_texel = 1.0 / vec2(textureSize(tg_tex, 0));
 	vec2 tg_getpos = (vec2(tg_coord) * tg_texel) + (tg_texel * 0.5);
@@ -37,8 +30,23 @@ vec4 texelGet ( sampler2D tg_tex, ivec2 tg_coord, int tg_lod ) {
 
 vec4 get_atlas_tile_color_3d(sampler2D l8AtlasTexture, vec2 atlasTileCoordinates, vec2 samplingLocalUV, float mipLevelVal) {
 	vec2 atlasTileDimensionsInverse = vec2(1.0 / TILES_PER_L8_ATLAS_ROW, 1.0 / TILES_PER_L8_ATLAS_COLUMN_HALF);
-	vec2 finalAtlasUV = (atlasTileCoordinates + samplingLocalUV) * atlasTileDimensionsInverse;
-	float paletteIndexValue = textureLod(l8AtlasTexture, finalAtlasUV, mipLevelVal).r;
+	vec2 clampedUV = clamp(samplingLocalUV, vec2(0.0), vec2(1.0));
+	vec2 finalAtlasUV = (atlasTileCoordinates + clampedUV) * atlasTileDimensionsInverse;
+	
+	// Clamp mip level to prevent excessive blurring that causes bleeding
+	float clampedMipLevel = min(mipLevelVal, 3.0);
+	
+	// For higher mip levels, use manual filtering to prevent bleeding
+	if (mipLevelVal > 2.0) {
+		vec2 texelSize = atlasTileDimensionsInverse / TILE_DIMENSIONS;
+		vec2 tileCenter = (atlasTileCoordinates + vec2(0.5)) * atlasTileDimensionsInverse;
+		vec2 offsetFromCenter = finalAtlasUV - tileCenter;
+		float maxOffset = 0.4 / max(TILES_PER_L8_ATLAS_ROW, TILES_PER_L8_ATLAS_COLUMN_HALF);
+		offsetFromCenter = clamp(offsetFromCenter, vec2(-maxOffset), vec2(maxOffset));
+		finalAtlasUV = tileCenter + offsetFromCenter;
+	}
+	
+	float paletteIndexValue = textureLod(l8AtlasTexture, finalAtlasUV, clampedMipLevel).r;
 	int paletteLookupIndex = int(paletteIndexValue * 255.0 + 0.5);
 	return texelGet(palette_texture, ivec2(paletteLookupIndex, 0), 0);
 }
@@ -62,8 +70,7 @@ vec4 calculate_pixel_3d(sampler2D l8AtlasTexture, int tileIndex, vec2 localTileU
 	vec2 atlasTileDimensionsInverse = vec2(1.0 / TILES_PER_L8_ATLAS_ROW, 1.0 / TILES_PER_L8_ATLAS_COLUMN_HALF);
 	vec2 originalAtlasUV = (tileAtlasCoords + localTileUV_orig) * atlasTileDimensionsInverse;
 	float mipLevel = calc_mip_level(originalAtlasUV);
-	vec2 adjustedSamplingLocalUV = calculate_adjusted_uv(localTileUV_orig, mipLevel);
-	return get_atlas_tile_color_3d(l8AtlasTexture, tileAtlasCoords, adjustedSamplingLocalUV, mipLevel);
+	return get_atlas_tile_color_3d(l8AtlasTexture, tileAtlasCoords, localTileUV_orig, mipLevel);
 }
 
 vec4 get_sampled_color_3d(vec2 currentUv, vec2 currentUv2) {
@@ -87,26 +94,45 @@ vec4 get_sampled_color_3d(vec2 currentUv, vec2 currentUv2) {
 	return sampleColor;
 }
 
+vec4 apply_supersampling(vec2 baseUV, vec2 uv2Value) {
+	if (supersampling_level == 1) {
+		return get_sampled_color_3d(baseUV, uv2Value);
+	}
+	vec4 finalColor = vec4(0.0);
+	vec2 uv_dx = dFdx(baseUV);
+	vec2 uv_dy = dFdy(baseUV);
+	float step_size = 1.0 / float(supersampling_level);
+	float offset_start = -0.5 + step_size * 0.5;
+	
+	// Calculate safe sampling bounds to prevent bleeding
+	float safe_margin = 0.02; // 2% margin from tile edges
+	vec2 safe_min = vec2(safe_margin);
+	vec2 safe_max = vec2(1.0 - safe_margin);
+	
+	for (int x = 0; x < supersampling_level; x++) {
+		for (int y = 0; y < supersampling_level; y++) {
+			vec2 offset = vec2(offset_start + float(x) * step_size, offset_start + float(y) * step_size);
+			vec2 sample_uv = baseUV + offset.x * uv_dx + offset.y * uv_dy;
+			
+			// Clamp to safe bounds within the tile to prevent bleeding
+			sample_uv = clamp(sample_uv, safe_min, safe_max);
+			
+			finalColor += get_sampled_color_3d(sample_uv, uv2Value);
+		}
+	}
+	return finalColor / float(supersampling_level * supersampling_level);
+}
+
 void vertex() {
 	worldPos = WORLD_MATRIX * vec4(VERTEX, 1.0);
 	VERTEX = (INV_CAMERA_MATRIX * worldPos).xyz;
 }
 
 void fragment() {
-	vec2 uv_dx = dFdx(UV);
-	vec2 uv_dy = dFdy(UV);
-	vec2 offset1 = -0.25 * uv_dx - 0.25 * uv_dy;
-	vec2 offset2 =  0.25 * uv_dx - 0.25 * uv_dy;
-	vec2 offset3 = -0.25 * uv_dx + 0.25 * uv_dy;
-	vec2 offset4 =  0.25 * uv_dx + 0.25 * uv_dy;
-	vec4 color1 = get_sampled_color_3d(UV + offset1, UV2);
-	vec4 color2 = get_sampled_color_3d(UV + offset2, UV2);
-	vec4 color3 = get_sampled_color_3d(UV + offset3, UV2);
-	vec4 color4 = get_sampled_color_3d(UV + offset4, UV2);
-	vec4 averagedFinalColor = (color1 + color2 + color3 + color4) * 0.25;
-	if (averagedFinalColor.a < 0.001) {
+	vec4 finalColor = apply_supersampling(UV, UV2);
+	if (finalColor.a < 0.001) {
 		discard;
 	}
-	ALBEDO = averagedFinalColor.rgb;
+	ALBEDO = finalColor.rgb;
 	ALPHA = 1.0;
 }

@@ -40,8 +40,13 @@ func create_material(map):
 
 	mat.set_shader_param("palette_texture", oReadPalette.get_palette_texture())
 	mat.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
+	mat.set_shader_param("supersampling_level", Settings.get_setting("ssaa"))
 	return mat
 
 func enable_or_disable_mipmaps_on_all_materials(enabled):
 	for mat in materialArray:
 		mat.set_shader_param("use_mipmaps", enabled)
+
+func update_ssaa_level(level):
+	for mat in materialArray:
+		mat.set_shader_param("supersampling_level", level)

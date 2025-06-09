@@ -97,14 +97,13 @@ func initialize_display_fields():
 func createDisplayField(setMap, showStyle):
 	var displayField = ColorRect.new()
 	displayField.rect_size = Vector2(M.xSize * 96, M.ySize * 96)
-	#displayField.visible = false # FPS is only saved when setting visible to false. FPS is not saved by making image transparent
 	displayField.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	var mat = ShaderMaterial.new()
 	mat.shader = preload("res://Shaders/display_texture_2d.shader")
 	displayField.material = mat
 	
-	if showStyle != 0: # Do not change the texturemap for default style
+	if showStyle != 0:
 		mat.set_shader_param("tmap_A_top", oTMapLoader.cachedTextures[setMap][0])
 		mat.set_shader_param("tmap_A_bottom", oTMapLoader.cachedTextures[setMap][1])
 		mat.set_shader_param("tmap_B_top", oTMapLoader.cachedTextures[setMap][2])
@@ -117,12 +116,16 @@ func createDisplayField(setMap, showStyle):
 	mat.set_shader_param("slxData", oDataSlx.slxTexData)
 	mat.set_shader_param("slabIdData", oDataSlab.idTexData)
 	mat.set_shader_param("palette_texture", oReadPalette.palette_image_texture)
+	mat.set_shader_param("supersampling_level", Settings.get_setting("ssaa"))
 	
 	arrayOfColorRects.append(displayField)
-	
 	oGame2D.add_child_below_node(self, displayField)
 
 func update_display_fields_size():
 	for displayField in arrayOfColorRects:
 		displayField.rect_size = Vector2(M.xSize * 96, M.ySize * 96)
 		displayField.material.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
+
+func update_ssaa_level(level):
+	for displayField in arrayOfColorRects:
+		displayField.material.set_shader_param("supersampling_level", level)

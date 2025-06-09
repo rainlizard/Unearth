@@ -20,6 +20,7 @@ var listOfSettings = [
 	"file_viewer_window_position",
 	"vsync",
 	"framerate_limit",
+	"ssaa",
 	"always_decompress",
 	"msaa",
 	"dk_commands",
@@ -184,11 +185,16 @@ func game_setting(doWhat,string,value):
 			var oEditor = $'../Main/Editor'
 			if doWhat == SET: oEditor.framerate_limit = value
 			if doWhat == GET: return oEditor.framerate_limit
+		"ssaa":
+			var oEditor = $'../Main/Editor'
+			if doWhat == SET: oEditor.ssaa_level = value
+			if doWhat == GET: return oEditor.ssaa_level
 		"always_decompress":
 			var oOpenMap = $'../Main/OpenMap'
 			if doWhat == SET: oOpenMap.ALWAYS_DECOMPRESS = value
 			if doWhat == GET: return oOpenMap.ALWAYS_DECOMPRESS
 		"msaa":
+			
 			var oViewport = get_viewport()
 			if doWhat == SET: oViewport.msaa = value
 			if doWhat == GET: return oViewport.msaa

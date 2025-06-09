@@ -1,4 +1,4 @@
-[gd_scene load_steps=198 format=2]
+[gd_scene load_steps=196 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -62,7 +62,6 @@
 [ext_resource path="res://Scenes/SourceMapTree.gd" type="Script" id=60]
 [ext_resource path="res://Scenes/YesNoConfirmationDialog.gd" type="Script" id=61]
 [ext_resource path="res://Scenes/SettingsWindow.gd" type="Script" id=62]
-[ext_resource path="res://Scenes/OptionButtonMSAA.gd" type="Script" id=63]
 [ext_resource path="res://Scenes/OverheadGraphics.gd" type="Script" id=64]
 [ext_resource path="res://Scenes/ActionPointList.gd" type="Script" id=65]
 [ext_resource path="res://Art/HelpIconPressed.png" type="Texture" id=66]
@@ -267,9 +266,6 @@ script/source = "extends FileDialog
 func _on_ChooseDefaultSaveFolder_dir_selected(dir_path):
 	Settings.set_setting(\"save_path\", dir_path.plus_file(''))
 "
-
-[sub_resource type="Theme" id=13]
-PopupMenu/icons/asdf = null
 
 [sub_resource type="ShaderMaterial" id=14]
 shader = ExtResource( 106 )
@@ -2890,6 +2886,30 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="SSAA" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 208.0
+margin_right = 544.0
+margin_bottom = 239.0
+settingText = "SSAA"
+slider_step = 1.0
+minimum_value = 1.0
+maximum_value = 16.0
+
+[node name="MSAA" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 208.0
+margin_right = 544.0
+margin_bottom = 239.0
+settingText = "MSAA"
+slider_step = 1.0
+minimum_value = 1.0
+maximum_value = 16.0
+
 [node name="FramerateLimit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -2906,18 +2926,6 @@ margin_top = 243.0
 margin_right = 544.0
 margin_bottom = 272.0
 text = "Vsync"
-
-[node name="MenuMSAA" type="MenuButton" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer"]
-margin_top = 276.0
-margin_right = 66.0
-margin_bottom = 303.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme = SubResource( 13 )
-text = "MSAA"
-flat = false
-align = 0
-script = ExtResource( 63 )
 
 [node name="CheckBoxDisplayFPS" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer"]
 margin_top = 307.0

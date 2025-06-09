@@ -26,6 +26,7 @@ var currentView = VIEW_2D
 var fieldBoundary = Rect2()
 var mapHasBeenEdited = false setget set_map_has_been_edited
 var framerate_limit = 120 setget set_framerate_limit
+var ssaa_level = 4 setget set_ssaa_level
 
 func set_map_has_been_edited(setVal):
 	if int(setVal) == oEditor.SET_EDITED_WITHOUT_SAVING_STATE: #If you save, then click Undo, it should mark as not saved but not create a new undo state when marking as edited.
@@ -37,7 +38,7 @@ func set_map_has_been_edited(setVal):
 
 
 func _ready():
-	get_viewport().msaa = Viewport.MSAA_8X # default setting
+	get_viewport().msaa = Viewport.MSAA_4X # default setting
 	get_tree().set_auto_accept_quit(false)
 	just_opened_editor()
 
@@ -109,3 +110,12 @@ func update_boundaries():
 func set_framerate_limit(val):
 	Engine.target_fps = val
 	framerate_limit = val
+
+func set_ssaa_level(val):
+	ssaa_level = val
+	var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
+	var oGame3D = Nodelist.list["oGame3D"]
+	if oOverheadGraphics != null:
+		oOverheadGraphics.update_ssaa_level(val)
+	if oGame3D != null:
+		oGame3D.update_ssaa_level(val)
