@@ -29,15 +29,19 @@ onready var oCamera2D = $'../../Game2D/Camera2D'
 	#rememberOrthogonal.transform
 
 func switch_camera_type(type):
-	velocity = Vector3(0,0,0) # stop moving
-	if type == 1: # 3D 1st person perspective
+	velocity = Vector3(0,0,0)
+	if type == 1:
 		if rememberPerspective == [null,null,null]:
 			oHead.rotation_degrees = Vector3(0,0,0)
+			var camera2dPos = oCamera2D.offset
+			var mapToWorldScale = 1.0 / 32.0
+			translation.x = camera2dPos.x * mapToWorldScale
+			translation.z = camera2dPos.y * mapToWorldScale
+			translation.y = 5.0
 		else:
 			transform = rememberPerspective[0]
 			oHead.transform = rememberPerspective[1]
 			oCamera3D.transform = rememberPerspective[2]
-
 		oCamera3D.set_perspective(oCamera3D.fov, 0.01, 8192)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
