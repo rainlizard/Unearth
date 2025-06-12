@@ -18,10 +18,5 @@ textures
 .mono/
 .vs/
 .cursor/
+userinput.py
 data_*/
-
-
-
-
-
-

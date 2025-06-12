@@ -60,7 +60,7 @@ func index_entry(cubeArray, setFloorID):
 		orientation[index] = 0
 		solidMask[index] = calculate_solid_mask(cubeArray)
 		permanent[index] = 1 # Does this affect whether columns get reset?
-		lintel[index] = 0
+		lintel[index] = calculate_lintel(cubeArray)
 		height[index] = get_height_from_bottom(cubeArray)
 		cubes[index] = cubeArray
 		floorTexture[index] = setFloorID
@@ -93,8 +93,20 @@ func update_all_solid_mask():
 		solidMask[index] = calculate_solid_mask(cubes[index])
 	print('All CLM solid bitmask updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-
-
+func calculate_lintel(cubeArray):
+	var holeCount = 0
+	# Scan from top to bottom (index 7 to 0)
+	for cubeNumber in range(7, -1, -1):
+		if cubeArray[cubeNumber] == 0:
+			holeCount += 1
+			if holeCount == 2:
+				# Found the 2nd hole, return the position of the cube above it
+				# The cube above this hole is at cubeNumber + 1
+				var cubePosition = cubeNumber + 1
+				var reversedCubePosition = 7 - cubePosition
+				return reversedCubePosition
+	# If we don't find a 2nd hole, return 0 as default
+	return 0
 
 func clear_unused_entries():
 	update_all_utilized()
