@@ -1,4 +1,4 @@
-[gd_scene load_steps=196 format=2]
+[gd_scene load_steps=197 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -176,6 +176,7 @@
 [ext_resource path="res://Scenes/TeditSavePNG.gd" type="Script" id=175]
 [ext_resource path="res://Scenes/TeditLiveReloadPNG.gd" type="Script" id=176]
 [ext_resource path="res://Scenes/TeditSaveDAT.gd" type="Script" id=177]
+[ext_resource path="res://Scenes/ChangelogWindow.gd" type="Script" id=178]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -7114,14 +7115,15 @@ text = "test"
 
 [node name="ChangelogWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = 3544.0
-margin_top = -2168.0
-margin_right = 4824.0
-margin_bottom = -1448.0
+margin_left = 3632.0
+margin_top = -2328.0
+margin_right = 4912.0
+margin_bottom = -1048.0
 rect_min_size = Vector2( 360, 360 )
 mouse_filter = 1
 window_title = "Changelog"
 resizable = true
+script = ExtResource( 178 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ChangelogWindow"]
 anchor_right = 1.0
@@ -7129,56 +7131,27 @@ anchor_bottom = 1.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/margin_right = 20
-custom_constants/margin_top = 20
-custom_constants/margin_left = 20
-custom_constants/margin_bottom = 20
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer"]
-margin_left = 20.0
-margin_top = 20.0
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1270.0
+margin_bottom = 1270.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/VBoxContainer"]
 margin_right = 1260.0
-margin_bottom = 700.0
+margin_bottom = 1224.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="ChangelogMainVBox" type="VBoxContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer"]
-margin_right = 1240.0
-margin_bottom = 680.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="VBoxContainer4" type="VBoxContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox"]
-margin_right = 1240.0
-margin_bottom = 126.0
-size_flags_horizontal = 3
-
-[node name="PanelContainer3" type="PanelContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer4"]
-margin_right = 1240.0
-margin_bottom = 39.0
-
-[node name="Label" type="Label" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer4/PanelContainer3"]
-margin_left = 585.0
-margin_top = 9.0
-margin_right = 655.0
-margin_bottom = 30.0
-focus_mode = 2
-size_flags_horizontal = 6
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "Version"
-
-[node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer4"]
-margin_top = 43.0
-margin_right = 1240.0
-margin_bottom = 126.0
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="MarginContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer4/PanelContainer4"]
-margin_left = 9.0
-margin_top = 9.0
-margin_right = 1231.0
-margin_bottom = 74.0
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/VBoxContainer/ScrollContainer"]
+margin_right = 1260.0
+margin_bottom = 1224.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 10
@@ -7186,111 +7159,25 @@ custom_constants/margin_top = 10
 custom_constants/margin_left = 10
 custom_constants/margin_bottom = 10
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer4/PanelContainer4/VBoxContainer"]
+[node name="ChangelogMainVBox" type="VBoxContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 1212.0
-margin_bottom = 55.0
+margin_right = 1250.0
+margin_bottom = 1214.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test "
-autowrap = true
 
-[node name="VBoxContainer5" type="VBoxContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox"]
-margin_top = 130.0
-margin_right = 1240.0
-margin_bottom = 256.0
-size_flags_horizontal = 3
+[node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/VBoxContainer"]
+margin_top = 1228.0
+margin_right = 1260.0
+margin_bottom = 1229.0
 
-[node name="PanelContainer3" type="PanelContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer5"]
-margin_right = 1240.0
-margin_bottom = 39.0
-
-[node name="Label" type="Label" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer5/PanelContainer3"]
-margin_left = 585.0
-margin_top = 9.0
-margin_right = 655.0
-margin_bottom = 30.0
-focus_mode = 2
-size_flags_horizontal = 6
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "Version"
-
-[node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer5"]
-margin_top = 43.0
-margin_right = 1240.0
-margin_bottom = 126.0
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="MarginContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer5/PanelContainer4"]
-margin_left = 9.0
-margin_top = 9.0
-margin_right = 1231.0
-margin_bottom = 74.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_constants/margin_right = 10
-custom_constants/margin_top = 10
-custom_constants/margin_left = 10
-custom_constants/margin_bottom = 10
-
-[node name="Label2" type="Label" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer5/PanelContainer4/VBoxContainer"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 1212.0
-margin_bottom = 55.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test "
-autowrap = true
-
-[node name="VBoxContainer6" type="VBoxContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox"]
-margin_top = 260.0
-margin_right = 1240.0
-margin_bottom = 386.0
-size_flags_horizontal = 3
-
-[node name="PanelContainer3" type="PanelContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer6"]
-margin_right = 1240.0
-margin_bottom = 39.0
-
-[node name="Label" type="Label" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer6/PanelContainer3"]
-margin_left = 585.0
-margin_top = 9.0
-margin_right = 655.0
-margin_bottom = 30.0
-focus_mode = 2
-size_flags_horizontal = 6
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "Version"
-
-[node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer6"]
-margin_top = 43.0
-margin_right = 1240.0
-margin_bottom = 126.0
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="MarginContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer6/PanelContainer4"]
-margin_left = 9.0
-margin_top = 9.0
-margin_right = 1231.0
-margin_bottom = 74.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_constants/margin_right = 10
-custom_constants/margin_top = 10
-custom_constants/margin_left = 10
-custom_constants/margin_bottom = 10
-
-[node name="Label2" type="Label" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/ScrollContainer/ChangelogMainVBox/VBoxContainer6/PanelContainer4/VBoxContainer"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 1212.0
-margin_bottom = 55.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test "
-autowrap = true
+[node name="CloseButton" type="Button" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/VBoxContainer"]
+margin_top = 1233.0
+margin_right = 61.0
+margin_bottom = 1260.0
+size_flags_horizontal = 2
+text = "Close"
 
 [node name="MapCoordinatesWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -8193,6 +8080,7 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer/PanelContainer3/ConfigLinkFxData" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkFxData_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer2/PanelContainer3/ConfigLinkCampaign" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkCampaign_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer3/PanelContainer3/ConfigLinkLocalMap" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkLocalMap_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ChangelogWindow/MarginContainer/VBoxContainer/CloseButton" to="Ui/UiSystem/ChangelogWindow" method="_on_CloseButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapCoordinatesWindow" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_MapCoordinatesWindow_visibility_changed"]
 [connection signal="gui_input" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_gui_input"]
 [connection signal="resized" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_resized"]

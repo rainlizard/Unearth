@@ -49,6 +49,7 @@ var listOfSettings = [
 	"thing_window_position",
 	"thing_window_scale",
 	"script_editor_font_size",
+	"last_changelog_displayed",
 	
 #	"owner_window_size",
 #	"owner_window_position",
@@ -427,6 +428,9 @@ func game_setting(doWhat,string,value):
 			var oFortifyCheckBox = $"../Main/Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/FortifyCheckBox"
 			if doWhat == SET: oFortifyCheckBox.pressed = value
 			if doWhat == GET: return oFortifyCheckBox.pressed
+		"last_changelog_displayed":
+			if doWhat == SET: write_cfg("last_changelog_displayed", value)
+			if doWhat == GET: return read_cfg("last_changelog_displayed")
 
 func delete_settings():
 	var dir = Directory.new()
