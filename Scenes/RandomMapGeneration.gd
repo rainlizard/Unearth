@@ -116,9 +116,6 @@ func place_four_imps_on_claimed_ground(centerX, centerY, playerOwnership, oInsta
 		oInstances.place_new_thing(Things.TYPE.CREATURE, 23, impPosition, playerOwnership)
 
 
-
-
-
 func symmetry_supports_player_count(symmetryType, playerCount):
 	match symmetryType:
 		1, 2:
@@ -157,6 +154,65 @@ func clear_occupied_coordinates():
 	occupiedCoordinates.clear()
 
 
+func calculate_available_radius_for_angle(mapSizeX, mapSizeY, imageData, angle):
+	var centerX = mapSizeX * 0.5
+	var centerY = mapSizeY * 0.5
+	var maxTestRadius = min(mapSizeX, mapSizeY) * 0.45
+	var borderWidth = oNoiseDistance.value
+	if borderWidth <= 0.1:
+		return (min(mapSizeX, mapSizeY) - 8) * 0.5
+	imageData.lock()
+	var availableRadius = 0.0
+	for testRadius in range(5, int(maxTestRadius), 2):
+		var testX = int(centerX + cos(angle) * testRadius)
+		var testY = int(centerY + sin(angle) * testRadius)
+		var testPos = Vector2(testX, testY)
+		testPos.x = clamp(testPos.x, 2, mapSizeX - 3)
+		testPos.y = clamp(testPos.y, 2, mapSizeY - 3)
+		if check_valid_player_position_unlocked(testPos, imageData):
+			availableRadius = testRadius
+	imageData.unlock()
+	return availableRadius
+
+
+func calculate_available_radius(mapSizeX, mapSizeY, imageData):
+	var centerX = mapSizeX * 0.5
+	var centerY = mapSizeY * 0.5
+	var maxTestRadius = min(mapSizeX, mapSizeY) * 0.45
+	var availableRadius = 0.0
+	var borderWidth = oNoiseDistance.value
+	if borderWidth <= 0.1:
+		return (min(mapSizeX, mapSizeY) - 8) * 0.5
+	imageData.lock()
+	for testRadius in range(5, int(maxTestRadius), 2):
+		var validPositions = 0
+		var totalTests = 8
+		for i in range(totalTests):
+			var angle = (i * 2 * PI) / totalTests
+			var testX = int(centerX + cos(angle) * testRadius)
+			var testY = int(centerY + sin(angle) * testRadius)
+			var testPos = Vector2(testX, testY)
+			testPos.x = clamp(testPos.x, 2, mapSizeX - 3)
+			testPos.y = clamp(testPos.y, 2, mapSizeY - 3)
+			if check_valid_player_position_unlocked(testPos, imageData):
+				validPositions += 1
+		if validPositions >= totalTests * 0.5:
+			availableRadius = testRadius
+	imageData.unlock()
+	return availableRadius
+
+
+func check_valid_player_position_unlocked(centerPos, imageData):
+	for dy in range(-2, 3):
+		for dx in range(-2, 3):
+			var x = centerPos.x + dx
+			var y = centerPos.y + dy
+			if x >= 0 and x < imageData.get_width() and y >= 0 and y < imageData.get_height():
+				if imageData.get_pixel(x, y) == impenetrableColour:
+					return false
+	return true
+
+
 func place_players_in_pizza_slices(mapSizeX, mapSizeY, imageData):
 	var playerCount = int(oPlayerCount.value)
 	var centerX = mapSizeX * 0.5
@@ -165,47 +221,82 @@ func place_players_in_pizza_slices(mapSizeX, mapSizeY, imageData):
 	var randomnessValue = oPlayerRandomness.value
 	var angleStep = 2 * PI / playerCount
 	var randomRotation = rand_range(0, 2 * PI)
+	var globalMaxRadius = (min(mapSizeX, mapSizeY) - 5) * 0.5
 	for playerIndex in range(playerCount):
 		var angle = playerIndex * angleStep + randomRotation
-		var baseRadius = radiusValue * (min(mapSizeX, mapSizeY) - 1) * 0.5
+		var availableRadius = calculate_available_radius_for_angle(mapSizeX, mapSizeY, imageData, angle)
+		var effectiveMaxRadius
+		if randomnessValue >= 0.5:
+			effectiveMaxRadius = globalMaxRadius
+		else:
+			effectiveMaxRadius = min(globalMaxRadius, availableRadius) if availableRadius > 0 else globalMaxRadius * 0.3
+		var baseRadius = radiusValue * effectiveMaxRadius
 		var baseX = int(centerX + cos(angle) * baseRadius)
 		var baseY = int(centerY + sin(angle) * baseRadius)
 		var basePos = Vector2(baseX, baseY)
-		basePos.x = clamp(basePos.x, 5, mapSizeX - 6)
-		basePos.y = clamp(basePos.y, 5, mapSizeY - 6)
+		basePos.x = clamp(basePos.x, 2, mapSizeX - 3)
+		basePos.y = clamp(basePos.y, 2, mapSizeY - 3)
+		var playerPlaced = false
 		if randomnessValue == 0.0:
 			if check_valid_player_position(basePos, imageData) and check_coordinates_available(basePos):
 				playerPositions.append(basePos)
 				mark_coordinates_as_occupied(basePos)
+				playerPlaced = true
 			else:
 				var fallbackPos = find_nearest_valid_position(basePos, mapSizeX, mapSizeY, imageData)
 				if fallbackPos != Vector2(-1, -1) and check_coordinates_available(fallbackPos):
 					playerPositions.append(fallbackPos)
 					mark_coordinates_as_occupied(fallbackPos)
+					playerPlaced = true
 				else:
 					fallbackPos = find_valid_position_in_slice_with_randomness(angle, angleStep, randomnessValue, mapSizeX, mapSizeY, imageData)
 					if fallbackPos != Vector2(-1, -1):
 						playerPositions.append(fallbackPos)
 						mark_coordinates_as_occupied(fallbackPos)
-					else:
-						oMessage.quick("Not enough room to place player")
+						playerPlaced = true
 		else:
 			var fallbackPos = find_valid_position_in_slice_with_randomness(angle, angleStep, randomnessValue, mapSizeX, mapSizeY, imageData)
 			if fallbackPos != Vector2(-1, -1):
 				playerPositions.append(fallbackPos)
 				mark_coordinates_as_occupied(fallbackPos)
+				playerPlaced = true
+		if playerPlaced == false:
+			var spiralPos = find_position_with_spiral_search(centerX, centerY, mapSizeX, mapSizeY, imageData)
+			if spiralPos != Vector2(-1, -1):
+				playerPositions.append(spiralPos)
+				mark_coordinates_as_occupied(spiralPos)
 			else:
 				oMessage.quick("Not enough room to place player")
+
+
+func find_position_with_spiral_search(centerX, centerY, mapSizeX, mapSizeY, imageData):
+	var maxSearchRadius = min(mapSizeX, mapSizeY) * 0.4
+	for radius in range(5, int(maxSearchRadius), 3):
+		var angleSteps = max(8, int(radius * 0.5))
+		for i in range(angleSteps):
+			var angle = (i * 2 * PI) / angleSteps
+			var testX = int(centerX + cos(angle) * radius)
+			var testY = int(centerY + sin(angle) * radius)
+			var testPos = Vector2(testX, testY)
+			testPos.x = clamp(testPos.x, 2, mapSizeX - 3)
+			testPos.y = clamp(testPos.y, 2, mapSizeY - 3)
+			if check_valid_player_position(testPos, imageData) and check_coordinates_available(testPos):
+				return testPos
+	return Vector2(-1, -1)
 
 
 func find_valid_position_in_slice_with_randomness(centerAngle, angleRange, randomnessValue, mapSizeX, mapSizeY, imageData):
 	var centerX = mapSizeX * 0.5
 	var centerY = mapSizeY * 0.5
 	var radiusValue = oPlayerRadius.value
-	var maxRadius = (min(mapSizeX, mapSizeY) - 1) * 0.5
-	var baseRadius = radiusValue * maxRadius
-	var sliceStartAngle = centerAngle - angleRange * 0.4
-	var sliceEndAngle = centerAngle + angleRange * 0.4
+	var availableRadius = calculate_available_radius_for_angle(mapSizeX, mapSizeY, imageData, centerAngle)
+	var maxRadius = (min(mapSizeX, mapSizeY) - 5) * 0.5
+	var effectiveMaxRadius
+	if randomnessValue >= 0.5:
+		effectiveMaxRadius = maxRadius
+	else:
+		effectiveMaxRadius = min(maxRadius, availableRadius) if availableRadius > 0 else maxRadius * 0.3
+	var baseRadius = radiusValue * effectiveMaxRadius
 	var attempts = 100
 	for attempt in range(attempts):
 		var testPos
@@ -215,12 +306,15 @@ func find_valid_position_in_slice_with_randomness(centerAngle, angleRange, rando
 			testPos = Vector2(testX, testY)
 		else:
 			var angle = lerp(centerAngle, centerAngle + rand_range(-angleRange * 0.4, angleRange * 0.4), randomnessValue)
-			var radius = lerp(baseRadius, rand_range(0, maxRadius), randomnessValue)
+			var angleAvailableRadius = calculate_available_radius_for_angle(mapSizeX, mapSizeY, imageData, angle)
+			var angleEffectiveMaxRadius = min(maxRadius, angleAvailableRadius) if angleAvailableRadius > 0 else maxRadius * 0.3
+			var randomRadius = rand_range(0, maxRadius)
+			var radius = lerp(baseRadius, randomRadius, randomnessValue)
 			var testX = int(centerX + cos(angle) * radius)
 			var testY = int(centerY + sin(angle) * radius)
 			testPos = Vector2(testX, testY)
-		testPos.x = clamp(testPos.x, 5, mapSizeX - 6)
-		testPos.y = clamp(testPos.y, 5, mapSizeY - 6)
+		testPos.x = clamp(testPos.x, 2, mapSizeX - 3)
+		testPos.y = clamp(testPos.y, 2, mapSizeY - 3)
 		if check_valid_player_position(testPos, imageData) and check_coordinates_available(testPos):
 			return testPos
 	return Vector2(-1, -1)
@@ -252,14 +346,14 @@ func place_players_with_symmetry(mapSizeX, mapSizeY, imageData):
 		var randomX = rand_range(margin + 2, mapSizeX - margin - 3)
 		var randomY = rand_range(margin + 2, mapSizeY - margin - 3)
 		var basePosition = Vector2(int(randomX), int(randomY))
-		if basePosition.x > 4 and basePosition.x < mapSizeX - 5 and basePosition.y > 4 and basePosition.y < mapSizeY - 5:
+		if basePosition.x > 1 and basePosition.x < mapSizeX - 2 and basePosition.y > 1 and basePosition.y < mapSizeY - 2:
 			if check_valid_player_position(basePosition, imageData) and check_coordinates_available(basePosition):
 				var mirroredPositions = get_mirrored_positions(basePosition, mapSizeX, mapSizeY)
 				var positionsToPlace = min(playerCount, mirroredPositions.size())
 				var validPositions = []
 				for i in range(positionsToPlace):
 					var pos = mirroredPositions[i]
-					if pos.x > 4 and pos.x < mapSizeX - 5 and pos.y > 4 and pos.y < mapSizeY - 5:
+					if pos.x > 1 and pos.x < mapSizeX - 2 and pos.y > 1 and pos.y < mapSizeY - 2:
 						if check_valid_player_position(pos, imageData) and check_coordinates_available(pos):
 							validPositions.append(pos)
 				if validPositions.size() >= playerCount:
@@ -315,7 +409,7 @@ func place_players_randomly(mapSizeX, mapSizeY, imageData):
 			var randomX = rand_range(margin + 2, mapSizeX - margin - 3)
 			var randomY = rand_range(margin + 2, mapSizeY - margin - 3)
 			var testPos = Vector2(int(randomX), int(randomY))
-			if testPos.x > 4 and testPos.x < mapSizeX - 5 and testPos.y > 4 and testPos.y < mapSizeY - 5:
+			if testPos.x > 1 and testPos.x < mapSizeX - 2 and testPos.y > 1 and testPos.y < mapSizeY - 2:
 				if check_valid_player_position(testPos, imageData) and check_coordinates_available(testPos):
 					playerPositions.append(testPos)
 					mark_coordinates_as_occupied(testPos)
@@ -352,7 +446,7 @@ func find_nearest_valid_position(originalPos, mapSizeX, mapSizeY, imageData):
 			for dx in range(-searchRadius, searchRadius + 1):
 				if abs(dx) == searchRadius or abs(dy) == searchRadius:
 					var testPos = Vector2(originalPos.x + dx, originalPos.y + dy)
-					if testPos.x > 4 and testPos.x < mapSizeX - 5 and testPos.y > 4 and testPos.y < mapSizeY - 5:
+					if testPos.x > 1 and testPos.x < mapSizeX - 2 and testPos.y > 1 and testPos.y < mapSizeY - 2:
 						if check_valid_player_position(testPos, imageData):
 							return testPos
 		searchRadius += 1
@@ -361,8 +455,8 @@ func find_nearest_valid_position(originalPos, mapSizeX, mapSizeY, imageData):
 
 
 func find_any_valid_position(mapSizeX, mapSizeY, imageData):
-	for y in range(5, mapSizeY - 5):
-		for x in range(5, mapSizeX - 5):
+	for y in range(2, mapSizeY - 2):
+		for x in range(2, mapSizeX - 2):
 			var testPos = Vector2(x, y)
 			if check_valid_player_position(testPos, imageData):
 				return testPos
@@ -370,8 +464,8 @@ func find_any_valid_position(mapSizeX, mapSizeY, imageData):
 
 
 func find_valid_position_without_overlap(mapSizeX, mapSizeY, imageData):
-	for y in range(5, mapSizeY - 5):
-		for x in range(5, mapSizeX - 5):
+	for y in range(2, mapSizeY - 2):
+		for x in range(2, mapSizeX - 2):
 			var testPos = Vector2(x, y)
 			if check_valid_player_position(testPos, imageData) and check_coordinates_available(testPos):
 				return testPos
@@ -404,7 +498,7 @@ func draw_players_in_preview(imageData):
 
 func update_border_image_with_noise(imageData, textureData):
 	var NOISECODETIME = OS.get_ticks_msec()
-	var borderDist = (oNoiseDistance.max_value - oNoiseDistance.value)
+	var borderDist = oNoiseDistance.value
 	noise.period = (oNoisePeriod.max_value - oNoisePeriod.value) + (0.01)
 	noise.persistence = (oNoisePersistence.max_value - oNoisePersistence.value)
 	noise.lacunarity = oNoiseLacunarity.value

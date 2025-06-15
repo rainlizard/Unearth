@@ -6190,6 +6190,9 @@ window_title = "New map"
 resizable = true
 script = ExtResource( 134 )
 
+[node name="RandomMapGeneration" type="Node" parent="Ui/UiSystem/NewMapWindow"]
+script = ExtResource( 63 )
+
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/NewMapWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -6329,10 +6332,10 @@ margin_bottom = 349.0
 margin_top = 0.0
 margin_right = 305.0
 margin_bottom = 41.0
-label_setting = "Distance"
+label_setting = "Width"
 max_value = 5.0
 step = 0.01
-value = 3.95
+value = 1.05
 
 [node name="NoisePeriod" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 45.0
@@ -6420,7 +6423,7 @@ margin_bottom = 86.0
 label_setting = "Radius"
 max_value = 1.0
 step = 0.01
-value = 0.66
+value = 0.75
 
 [node name="PlayerRandomness" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions" instance=ExtResource( 135 )]
 margin_top = 90.0
@@ -6451,9 +6454,6 @@ size_flags_horizontal = 7
 size_flags_vertical = 7
 expand = true
 stretch_mode = 6
-
-[node name="RandomMapGeneration" type="Node" parent="Ui/UiSystem/NewMapWindow"]
-script = ExtResource( 63 )
 
 [node name="ExportSlabsetDatDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
