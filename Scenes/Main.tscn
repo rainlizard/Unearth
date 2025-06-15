@@ -3083,7 +3083,7 @@ script = ExtResource( 61 )
 visible = true
 margin_left = -2754.0
 margin_top = 720.0
-margin_right = -1623.0
+margin_right = -1615.0
 margin_bottom = 1243.0
 window_title = "Controls"
 
@@ -5234,7 +5234,7 @@ margin_bottom = 56.0
 hint_tooltip = ".slb value"
 mouse_filter = 1
 size_flags_vertical = 0
-text = "Slab ID"
+text = "Masquerade as"
 
 [node name="CustomSlabID" type="SpinBox" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]
 margin_left = 255.0
@@ -7384,7 +7384,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "Help"
 align = 0
-items = [ "KeeperFX script commands", null, 0, false, false, 0, 0, null, "", false, "Old script commands", null, 0, false, false, 1, 0, null, "", false, "Creating a new campaign", null, 0, false, false, 2, 0, null, "", false, "KeeperFX file format reference", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Controls", null, 0, false, false, 4, 0, null, "", false, "Report bugs & submit suggestions", null, 0, false, false, 5, 0, null, "", false, "About", null, 0, false, false, 6, 0, null, "", false ]
+items = [ "KeeperFX script commands", null, 0, false, false, 0, 0, null, "", false, "Old script commands", null, 0, false, false, 1, 0, null, "", false, "Creating a new campaign", null, 0, false, false, 2, 0, null, "", false, "KeeperFX file format reference", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Controls", null, 0, false, false, 4, 0, null, "", false, "Changelog", null, 0, false, false, 5, 0, null, "", false, "Report bugs & submit suggestions", null, 0, false, false, 6, 0, null, "", false, "About", null, 0, false, false, 7, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false

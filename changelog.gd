@@ -1,6 +1,13 @@
 extends Node
 
 const string = """
+0.57.000 - ?/?/2025
+- Fixed visual artifacts in 3D view
+- Added SSAA setting to Preferences -> Graphics
+- 3D view starts at current 2D position
+- Fake slabs: Changed "Slab ID" text to "Masquerade as"
+- Lintel is calculated for columns, fixing a bug where portals had a hole in them in the in-game map view. (if you still have this bug you'll need to click 'Clear unused' in the column editor)
+- Added Changelog window
 0.56.725 - 8/6/2025
 - TmapB tilesets can now be edited
 - Refactored texture editing code

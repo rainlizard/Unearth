@@ -43,6 +43,7 @@ onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oSortCreatureStats = Nodelist.list["oSortCreatureStats"]
 onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
 onready var oConfirmOpenWhichScript = Nodelist.list["oConfirmOpenWhichScript"]
+onready var oChangelogWindow = Nodelist.list["oChangelogWindow"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -273,8 +274,10 @@ func _on_HelpSubmenu_Pressed(pressedID):
 		4:
 			Utils.popup_centered(oControlsWindow)
 		5:
-			OS.shell_open("https://github.com/rainlizard/Unearth/issues/new")
+			Utils.popup_centered(oChangelogWindow)
 		6:
+			OS.shell_open("https://github.com/rainlizard/Unearth/issues/new")
+		7:
 			Utils.popup_centered(oAboutWindow)
 
 func _on_ViewSubmenu_Pressed(pressedID):
