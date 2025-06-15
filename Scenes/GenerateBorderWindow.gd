@@ -2,10 +2,6 @@ extends WindowDialog
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
-onready var oNoiseOctaves = Nodelist.list["oNoiseOctaves"]
-onready var oNoisePeriod = Nodelist.list["oNoisePeriod"]
-onready var oNoisePersistence = Nodelist.list["oNoisePersistence"]
-onready var oNoiseLacunarity = Nodelist.list["oNoiseLacunarity"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oQuickNoisePreview = Nodelist.list["oQuickNoisePreview"]
@@ -19,25 +15,22 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oCheckBoxNewMapBorder = Nodelist.list["oCheckBoxNewMapBorder"]
 onready var oNewMapSymmetricalBorder = Nodelist.list["oNewMapSymmetricalBorder"]
-onready var oNoiseDistance = Nodelist.list["oNoiseDistance"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
+onready var oNewMapPlayerOptions = Nodelist.list["oNewMapPlayerOptions"]
+onready var oRandomMapGeneration = Nodelist.list["oRandomMapGeneration"]
+onready var oPlayerRadius = Nodelist.list["oPlayerRadius"]
+onready var oPlayerRandomness = Nodelist.list["oPlayerRandomness"]
+onready var oPlacePlayersCheckBox = Nodelist.list["oPlacePlayersCheckBox"]
 
 var currently_creating_new_map = false
 
-var noise = OpenSimplexNoise.new()
 var imageData = Image.new()
 var textureData = ImageTexture.new()
 
-const earthColour = Color8(255,255,255,255)#Color8(36,24,0,255)
-const impenetrableColour = Color8(0,0,0,255)
-
-var algorithmType = 0
-
 func _ready():
-	randomize()
-	noise.seed = randi()
+	pass
 
 func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
@@ -113,10 +106,10 @@ func _on_ButtonNewMapOK_pressed():
 	
 	if oNewMapNoiseOptions.visible == true:
 		# Border
-		overwrite_map_with_border_values()
+		oRandomMapGeneration.overwrite_map_with_border_values(imageData)
 	else:
 		# Blank
-		overwrite_map_with_blank_values()
+		oRandomMapGeneration.overwrite_map_with_blank_values()
 	
 	visible = false # Close New Map window after pressing OK button
 	
@@ -128,24 +121,9 @@ func _on_ButtonNewMapOK_pressed():
 	
 	currently_creating_new_map = false
 
-func overwrite_map_with_blank_values():
-	for y in range(1, M.ySize-1):
-		for x in range(1, M.xSize-1):
-			oDataSlab.set_cell(x, y, Slabs.EARTH)
 
-func overwrite_map_with_border_values():
-	imageData.lock()
-	for y in range(1, M.ySize-1):
-		for x in range(1, M.xSize-1):
-			match imageData.get_pixel(x,y):
-				impenetrableColour: oDataSlab.set_cell(x, y, Slabs.ROCK)
-				earthColour: oDataSlab.set_cell(x, y, Slabs.EARTH)
-	imageData.unlock()
-	
 
 func _on_NoisePersistence_sliderChanged():
-	# Constantly reset the timer to max time while dragging the slider
-	# When timer ends, update the visual
 	oNoiseUpdateTimer.start(0.01)
 func _on_NoisePeriod_sliderChanged():
 	oNoiseUpdateTimer.start(0.01)
@@ -158,9 +136,9 @@ func _on_NoiseDistance_sliderChanged():
 
 func _on_NoiseAlgTypeCheckBox_toggled(button_pressed):
 	if button_pressed == true:
-		algorithmType = 0
+		oRandomMapGeneration.algorithmType = 0
 	else:
-		algorithmType = 1
+		oRandomMapGeneration.algorithmType = 1
 	oNoiseUpdateTimer.start(0.01)
 
 func _on_YSizeLine_focus_exited():
@@ -182,83 +160,17 @@ func _on_NoiseUpdateTimer_timeout():
 
 func update_border_image_with_noise():
 	if oCheckBoxNewMapBorder.pressed == false: return
-	
-	var NOISECODETIME = OS.get_ticks_msec()
-	noise.octaves = oNoiseOctaves.value
-	noise.period = oNoisePeriod.value
-	noise.persistence = oNoisePersistence.value
-	noise.lacunarity = oNoiseLacunarity.value
-	var borderDist = oNoiseDistance.value
-	
-	var fullMapSize = Vector2(oXSizeLine.text.to_int()-1, oYSizeLine.text.to_int()-1)
-	var halfMapSize = Vector2(fullMapSize.x * 0.5, fullMapSize.y * 0.5)
-	
-	var floodFillTileMap = TileMap.new()
-	
-	var aspectRatio = Vector2()
-	if fullMapSize.x < fullMapSize.y:
-		aspectRatio.x = max(fullMapSize.x,1.0) / max(fullMapSize.y,1.0)
-		aspectRatio.y = 1.0
-	else:
-		aspectRatio.x = 1.0
-		aspectRatio.y = max(fullMapSize.y,1.0) / max(fullMapSize.x,1.0)
-	
-	
-	
-	var edgeDist = Vector2()
-	match algorithmType:
-		0:
-			for x in range(1, fullMapSize.x):
-				for y in range(1, fullMapSize.y):
-					edgeDist.x = (abs(x-halfMapSize.x) / halfMapSize.x) * borderDist
-					edgeDist.y = (abs(y-halfMapSize.y) / halfMapSize.y) * borderDist
-					var n = 1.0-abs(noise.get_noise_2d( (x/fullMapSize.x)*aspectRatio.x, (y/fullMapSize.y)*aspectRatio.y ))
-					if n > edgeDist.x and n > edgeDist.y:
-						floodFillTileMap.set_cell(x,y,1)
-		1:
-			for x in range(1, fullMapSize.x):
-				for y in range(1, fullMapSize.y):
-					edgeDist.x = (abs(x-halfMapSize.x) / halfMapSize.x) * borderDist
-					edgeDist.y = (abs(y-halfMapSize.y) / halfMapSize.y) * borderDist
-					var n = 1.0-noise.get_noise_2d( (x/fullMapSize.x)*aspectRatio.x, (y/fullMapSize.y)*aspectRatio.y )
-					if n > edgeDist.x and n > edgeDist.y:
-						floodFillTileMap.set_cell(x,y,1)
-	
-	var coordsToCheck = [Vector2(halfMapSize.x,halfMapSize.y)]
-	
-	imageData.fill(impenetrableColour)
-	imageData.lock()
-	
-	while coordsToCheck.size() > 0:
-		var coord = coordsToCheck.pop_back()
-		if floodFillTileMap.get_cellv(coord) == 1:
-			floodFillTileMap.set_cellv(coord, 0)
-			
-			imageData.set_pixelv(coord, earthColour)
-			
-			coordsToCheck.append(coord + Vector2(0,1))
-			coordsToCheck.append(coord + Vector2(0,-1))
-			coordsToCheck.append(coord + Vector2(1,0))
-			coordsToCheck.append(coord + Vector2(-1,0))
-	
-	imageData.unlock()
-	
+	oRandomMapGeneration.update_border_image_with_noise(imageData, textureData)
 	apply_symmetry()
+	oRandomMapGeneration.place_players_automatically(imageData)
+	oRandomMapGeneration.draw_players_in_preview(imageData)
 	textureData.set_data(imageData)
-	
-	print('Border image time: ' + str(OS.get_ticks_msec() - NOISECODETIME) + 'ms')
 
 func update_border_image_with_blank():
-	imageData.fill(earthColour)
-	imageData.lock()
-	
-	var fullMapSize = Vector2(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
-	
-	for x in fullMapSize.x:
-		for y in fullMapSize.y:
-			if x == 0 or x == fullMapSize.x-1 or y == 0 or y == fullMapSize.y-1:
-				imageData.set_pixel(x,y, impenetrableColour)
-	imageData.unlock()
+	oRandomMapGeneration.update_border_image_with_blank(imageData, textureData)
+	apply_symmetry()
+	oRandomMapGeneration.place_players_automatically(imageData)
+	oRandomMapGeneration.draw_players_in_preview(imageData)
 	textureData.set_data(imageData)
 
 
@@ -291,7 +203,7 @@ func _on_NewMapFormat_item_selected(index):
 func _on_QuickNoisePreview_gui_input(event):
 	if event is InputEventMouseButton and event.is_pressed():
 		if event.button_index == BUTTON_LEFT:
-			noise.seed = randi()
+			oRandomMapGeneration.noise.seed = randi()
 			update_border_image_with_noise()
 
 
@@ -301,6 +213,8 @@ func _on_NewMapSymmetricalBorder_item_selected(index):
 
 func apply_symmetry():
 	if oNewMapSymmetricalBorder.selected == 0: return
+	
+	print("apply_symmetry")
 	
 	var w = imageData.get_width()
 	var h = imageData.get_height()
@@ -363,7 +277,7 @@ func apply_symmetry():
 			
 			if half_w != half_w_ceil or half_h != half_h_ceil:
 				imageData.lock()
-				imageData.set_pixel(half_w, half_h, Color(1,1,1,1))
+				imageData.set_pixel(half_w, half_h, oRandomMapGeneration.earthColour)
 				imageData.unlock()
 	
 	
@@ -373,17 +287,46 @@ func apply_symmetry():
 		for x in range(0, w):
 			if imageData.get_pixel(x,y) == Color(1,0,0,1):
 				
-				if imageData.get_pixel(x, max(y-1,0)) == Color(1,1,1,1) and imageData.get_pixel(x, min(y+1,h-1)) == Color(1,1,1,1):
-					imageData.set_pixel(x, y, Color(1,1,1,1))
+				if imageData.get_pixel(x, max(y-1,0)) == oRandomMapGeneration.earthColour and imageData.get_pixel(x, min(y+1,h-1)) == oRandomMapGeneration.earthColour:
+					imageData.set_pixel(x, y, oRandomMapGeneration.earthColour)
 					continue
-				if imageData.get_pixel(max(x-1,0), y) == Color(1,1,1,1) and imageData.get_pixel(min(x+1,w-1), y) == Color(1,1,1,1):
-					imageData.set_pixel(x, y, Color(1,1,1,1))
+				if imageData.get_pixel(max(x-1,0), y) == oRandomMapGeneration.earthColour and imageData.get_pixel(min(x+1,w-1), y) == oRandomMapGeneration.earthColour:
+					imageData.set_pixel(x, y, oRandomMapGeneration.earthColour)
 					continue
 				
-				imageData.set_pixel(x, y, Color(0,0,0,1))
+				imageData.set_pixel(x, y, oRandomMapGeneration.impenetrableColour)
 	
 	imageData.unlock()
 
 
-func _on_ResizeApplyButton_pressed():
-	pass # Replace with function body.
+func _on_PlacePlayersCheckBox_toggled(button_pressed):
+	if oCheckBoxNewMapBorder.pressed == true:
+		update_border_image_with_noise()
+	else:
+		update_border_image_with_blank()
+	oNewMapPlayerOptions.visible = button_pressed
+
+func _on_PlayerCount_sliderChanged():
+	if oCheckBoxNewMapBorder.pressed == true:
+		update_border_image_with_noise()
+	else:
+		update_border_image_with_blank()
+	
+
+func _on_PlayersZonedCheckBox_toggled(button_pressed):
+	if oCheckBoxNewMapBorder.pressed == true:
+		update_border_image_with_noise()
+	else:
+		update_border_image_with_blank()
+
+func _on_PlayerRadius_sliderChanged():
+	if oCheckBoxNewMapBorder.pressed == true:
+		update_border_image_with_noise()
+	else:
+		update_border_image_with_blank()
+
+func _on_PlayerRandomness_sliderChanged():
+	if oCheckBoxNewMapBorder.pressed == true:
+		update_border_image_with_noise()
+	else:
+		update_border_image_with_blank()

@@ -28,12 +28,11 @@ func update_ownership_head_icons():
 		iconSize = Vector2(42, 42)
 		setMargin = 1
 	else:
-		owner_order = [0,1,2,3,6,7,8,4,5]
+		owner_order = [0,1,2,3,4,6,7,8,5]
 		oOwnershipGridContainer.columns = 5
 		#oOwnershipGridContainer.set("custom_constants/hseparation", 10) #16
 		iconSize = Vector2(46, 46) #Vector2(51, 51)
 		setMargin = 1
-		
 	
 	for i in owner_order:
 		var id = gridItemScene.instance()

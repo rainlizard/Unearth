@@ -3,8 +3,15 @@ onready var oUiMessages = Nodelist.list["oUiMessages"]
 
 var scnQuickMsg = preload('res://Scenes/QuickMsgInstance.tscn')
 var scnBigMsg = preload('res://Scenes/BigMessageInstance.tscn')
+var recentMessages = {}
 
 func quick(string):
+	var currentTime = OS.get_ticks_msec() / 1000.0
+	if recentMessages.has(string):
+		var lastTime = recentMessages[string]
+		if currentTime - lastTime < 3.0:
+			return
+	recentMessages[string] = currentTime
 	var id = scnQuickMsg.instance()
 	id.show_then_fade(string)
 	$VBoxContainer.add_child(id)

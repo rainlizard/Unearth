@@ -8,6 +8,8 @@ const string = """
 - Fake slabs: Changed "Slab ID" text to "Masquerade as"
 - Lintel is calculated for columns, fixing a bug where portals had a hole in them in the in-game map view. (if you still have this bug you'll need to click 'Clear unused' in the column editor)
 - Added Changelog window
+- Reversed some noise values in the New Map window so that increasing the sliders represents "more" and decreasing the sliders represents "less"
+- Spam protection for Quick messages
 0.56.725 - 8/6/2025
 - TmapB tilesets can now be edited
 - Refactored texture editing code

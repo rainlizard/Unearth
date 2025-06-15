@@ -75,3 +75,4 @@ func initialize_window_settings():
 #	mipmapImage.create_from_data(new_width, new_height, false, img.get_format(), buffer)
 #	assert (mipmapImage.get_size() == Vector2(new_width, new_height))
 #	return mipmapImage
+
