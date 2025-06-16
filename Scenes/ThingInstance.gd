@@ -154,8 +154,8 @@ func set_location_z(setVal):
 func _on_zoom_level_changed(zoom):
 	match thingType:
 		Things.TYPE.CREATURE:
-			var oUi = Nodelist.list["oUi"]
 			var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
+			var oUi = Nodelist.list["oUi"]
 			var inventScale = Vector2()
 			inventScale.x = clamp(zoom.x, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
 			inventScale.y = clamp(zoom.y, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
@@ -165,16 +165,16 @@ func _on_zoom_level_changed(zoom):
 				$CreatureLevel.self_modulate = Color(1,1,1,1)
 			$CreatureLevel.scale = inventScale * oUi.FONT_SIZE_CR_LVL_BASE * 1.5
 		_:
-			var oUi = Nodelist.list["oUi"]
-			var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
+			var oUiii = Nodelist.list["oUi"]
+			var oQuickMapPreviewww = Nodelist.list["oQuickMapPreview"]
 			var inventScale = Vector2()
-			inventScale.x = clamp(zoom.x, 1.0, oUi.FACING_ARROW_SIZE_MAX)
-			inventScale.y = clamp(zoom.y, 1.0, oUi.FACING_ARROW_SIZE_MAX)
-			if zoom.x > oUi.FACING_ARROW_SIZE_MAX or oQuickMapPreview.visible == true:
+			inventScale.x = clamp(zoom.x, 1.0, oUiii.FACING_ARROW_SIZE_MAX)
+			inventScale.y = clamp(zoom.y, 1.0, oUiii.FACING_ARROW_SIZE_MAX)
+			if zoom.x > oUiii.FACING_ARROW_SIZE_MAX or oQuickMapPreviewww.visible == true:
 				$WhiteArrow.self_modulate = Color(0,0,0,0)
 			else:
 				$WhiteArrow.self_modulate = Color(1,1,1,1)
-			$WhiteArrow.scale = inventScale * oUi.FACING_ARROW_SIZE_BASE * 0.05
+			$WhiteArrow.scale = inventScale * oUiii.FACING_ARROW_SIZE_BASE * 0.05
 
 
 func set_ownership(setval):

@@ -19,10 +19,14 @@ onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oNewMapPlayerOptions = Nodelist.list["oNewMapPlayerOptions"]
-onready var oRandomMapGeneration = Nodelist.list["oRandomMapGeneration"]
-onready var oPlayerRadius = Nodelist.list["oPlayerRadius"]
-onready var oPlayerRandomness = Nodelist.list["oPlayerRandomness"]
+onready var oRandomBorder = Nodelist.list["oRandomBorder"]
+onready var oPlayerDistance = Nodelist.list["oPlayerDistance"]
 onready var oPlacePlayersCheckBox = Nodelist.list["oPlacePlayersCheckBox"]
+onready var oPlayerCount = Nodelist.list["oPlayerCount"]
+onready var oRandomPlayers = Nodelist.list["oRandomPlayers"]
+onready var oRandomPlayersPizza = Nodelist.list["oRandomPlayersPizza"]
+onready var oLinearDistanceCheckBox = Nodelist.list["oLinearDistanceCheckBox"]
+onready var oPlayerPositioning = Nodelist.list["oPlayerPositioning"]
 
 var currently_creating_new_map = false
 
@@ -51,13 +55,15 @@ func _on_NewMapWindow_visibility_changed():
 	
 	reinit_noise_preview()
 	
+	_on_NewMapSymmetricalBorder_item_selected(oNewMapSymmetricalBorder.selected)
+	
 	_on_CheckBoxNewMapBorder_pressed()
 
 
 func reinit_noise_preview():
 	var sizeX = oXSizeLine.text.to_int()
 	var sizeY = oYSizeLine.text.to_int()
-	imageData.create(sizeX, sizeY, false, Image.FORMAT_RGB8)
+	imageData.create(sizeX, sizeY, false, Image.FORMAT_RGBA8)
 	textureData.create_from_image(imageData, 0)
 	oQuickNoisePreview.texture = textureData
 	
@@ -106,10 +112,11 @@ func _on_ButtonNewMapOK_pressed():
 	
 	if oNewMapNoiseOptions.visible == true:
 		# Border
-		oRandomMapGeneration.overwrite_map_with_border_values(imageData)
+		oRandomBorder.convert_pixels_to_slabs(imageData)
+		oRandomPlayers.place_objects()
 	else:
 		# Blank
-		oRandomMapGeneration.overwrite_map_with_blank_values()
+		oRandomBorder.fill_entire_map_with_earth()
 	
 	visible = false # Close New Map window after pressing OK button
 	
@@ -136,9 +143,9 @@ func _on_NoiseDistance_sliderChanged():
 
 func _on_NoiseAlgTypeCheckBox_toggled(button_pressed):
 	if button_pressed == true:
-		oRandomMapGeneration.algorithmType = 0
+		oRandomBorder.algorithmType = 0
 	else:
-		oRandomMapGeneration.algorithmType = 1
+		oRandomBorder.algorithmType = 1
 	oNoiseUpdateTimer.start(0.01)
 
 func _on_YSizeLine_focus_exited():
@@ -160,17 +167,37 @@ func _on_NoiseUpdateTimer_timeout():
 
 func update_border_image_with_noise():
 	if oCheckBoxNewMapBorder.pressed == false: return
-	oRandomMapGeneration.update_border_image_with_noise(imageData, textureData)
-	apply_symmetry()
-	oRandomMapGeneration.place_players_automatically(imageData)
-	oRandomMapGeneration.draw_players_in_preview(imageData)
+	oRandomBorder.update_border_image_with_noise(imageData, textureData)
+	if oNewMapSymmetricalBorder.selected == 6:
+		apply_symmetry()
+		oRandomPlayers.place_players_automatically(imageData)
+		oRandomPlayers.draw_potential_player_positions(imageData)
+	elif oNewMapSymmetricalBorder.selected == 0:
+		oRandomPlayers.place_players_automatically(imageData)
+		oRandomPlayers.draw_potential_player_positions(imageData)
+	else:
+		oRandomPlayers.place_players_automatically(imageData)
+		oRandomPlayers.draw_potential_player_positions(imageData)
+		apply_symmetry()
+	oRandomBorder.remove_isolated_earth_slabs(imageData)
+	oRandomPlayers.convert_potential_positions_to_colored_players(imageData)
 	textureData.set_data(imageData)
 
 func update_border_image_with_blank():
-	oRandomMapGeneration.update_border_image_with_blank(imageData, textureData)
-	apply_symmetry()
-	oRandomMapGeneration.place_players_automatically(imageData)
-	oRandomMapGeneration.draw_players_in_preview(imageData)
+	oRandomBorder.update_border_image_with_blank(imageData, textureData)
+	if oNewMapSymmetricalBorder.selected == 6:
+		apply_symmetry()
+		oRandomPlayers.place_players_automatically(imageData)
+		oRandomPlayers.draw_potential_player_positions(imageData)
+	elif oNewMapSymmetricalBorder.selected == 0:
+		oRandomPlayers.place_players_automatically(imageData)
+		oRandomPlayers.draw_potential_player_positions(imageData)
+	else:
+		oRandomPlayers.place_players_automatically(imageData)
+		oRandomPlayers.draw_potential_player_positions(imageData)
+		apply_symmetry()
+	oRandomBorder.remove_isolated_earth_slabs(imageData)
+	oRandomPlayers.convert_potential_positions_to_colored_players(imageData)
 	textureData.set_data(imageData)
 
 
@@ -192,29 +219,46 @@ func _on_NewMapFormat_item_selected(index):
 		_on_YSizeLine_focus_exited()
 		oXSizeLine.hint_tooltip = "Map size can only be changed if KFX format is used."
 		oYSizeLine.hint_tooltip = "Map size can only be changed if KFX format is used."
+		oPlayerCount.max_value = 4.0
+		if oPlayerCount.value > 4:
+			oPlayerCount.value = 4
 	elif index == 1:
 		oXSizeLine.editable = true
 		oYSizeLine.editable = true
 		oXSizeLine.hint_tooltip = ""
 		oYSizeLine.hint_tooltip = ""
+		oPlayerCount.max_value = 8.0
 	
 
 
 func _on_QuickNoisePreview_gui_input(event):
 	if event is InputEventMouseButton and event.is_pressed():
 		if event.button_index == BUTTON_LEFT:
-			oRandomMapGeneration.noise.seed = randi()
+			oRandomBorder.noise.seed = randi()
 			update_border_image_with_noise()
 
 
 
 func _on_NewMapSymmetricalBorder_item_selected(index):
-	update_border_image_with_noise()
+	if index == 0 or index == 5 or index == 6:
+		oLinearDistanceCheckBox.visible = false
+		#oLinearDistanceCheckBox.disabled = true
+		#oLinearDistanceCheckBox.self_modulate.a = 0.0
+	else:
+		oLinearDistanceCheckBox.visible = true
+		#oLinearDistanceCheckBox.disabled = false
+		#oLinearDistanceCheckBox.self_modulate.a = 1.0
+	
+	if index == 0 or index == 6:
+		oPlayerPositioning.visible = false
+		#oPlayerPositioning.modulate.a = 0.0
+	else:
+		#oPlayerPositioning.modulate.a = 1.0
+		oPlayerPositioning.visible = true
+	_on_PlayerCount_sliderChanged()
 
 func apply_symmetry():
 	if oNewMapSymmetricalBorder.selected == 0: return
-	
-	print("apply_symmetry")
 	
 	var w = imageData.get_width()
 	var h = imageData.get_height()
@@ -277,9 +321,10 @@ func apply_symmetry():
 			
 			if half_w != half_w_ceil or half_h != half_h_ceil:
 				imageData.lock()
-				imageData.set_pixel(half_w, half_h, oRandomMapGeneration.earthColour)
+				imageData.set_pixel(half_w, half_h, oRandomBorder.earthColour)
 				imageData.unlock()
-	
+		6: # pizza symmetry, insert code here
+			oRandomPlayersPizza.apply_pizza_symmetry(imageData)
 	
 	imageData.lock()
 	
@@ -287,14 +332,14 @@ func apply_symmetry():
 		for x in range(0, w):
 			if imageData.get_pixel(x,y) == Color(1,0,0,1):
 				
-				if imageData.get_pixel(x, max(y-1,0)) == oRandomMapGeneration.earthColour and imageData.get_pixel(x, min(y+1,h-1)) == oRandomMapGeneration.earthColour:
-					imageData.set_pixel(x, y, oRandomMapGeneration.earthColour)
+				if imageData.get_pixel(x, max(y-1,0)) == oRandomBorder.earthColour and imageData.get_pixel(x, min(y+1,h-1)) == oRandomBorder.earthColour:
+					imageData.set_pixel(x, y, oRandomBorder.earthColour)
 					continue
-				if imageData.get_pixel(max(x-1,0), y) == oRandomMapGeneration.earthColour and imageData.get_pixel(min(x+1,w-1), y) == oRandomMapGeneration.earthColour:
-					imageData.set_pixel(x, y, oRandomMapGeneration.earthColour)
+				if imageData.get_pixel(max(x-1,0), y) == oRandomBorder.earthColour and imageData.get_pixel(min(x+1,w-1), y) == oRandomBorder.earthColour:
+					imageData.set_pixel(x, y, oRandomBorder.earthColour)
 					continue
 				
-				imageData.set_pixel(x, y, oRandomMapGeneration.impenetrableColour)
+				imageData.set_pixel(x, y, oRandomBorder.impenetrableColour)
 	
 	imageData.unlock()
 
@@ -307,6 +352,29 @@ func _on_PlacePlayersCheckBox_toggled(button_pressed):
 	oNewMapPlayerOptions.visible = button_pressed
 
 func _on_PlayerCount_sliderChanged():
+	if oCurrentFormat.selected == Constants.ClassicFormat:
+		if oPlayerCount.value > 4:
+			oPlayerCount.value = 4
+		return
+	
+	var currentSymmetry = oNewMapSymmetricalBorder.selected
+	match currentSymmetry:
+		1, 2, 3, 4: # Vertical or horizontal symmetry
+			if not (oPlayerCount.value in [2, 4, 6, 8]):
+				var validValues = [2, 4, 6, 8]
+				var closestValue = validValues[0]
+				var smallestDiff = abs(oPlayerCount.value - validValues[0])
+				for validValue in validValues:
+					var diff = abs(oPlayerCount.value - validValue)
+					if diff < smallestDiff:
+						smallestDiff = diff
+						closestValue = validValue
+				oPlayerCount.value = closestValue
+		5: # 4-way symmetry
+			oPlayerCount.value = 4
+		6: # Pizza symmetry - no constraints, any player count is valid
+			pass
+	
 	if oCheckBoxNewMapBorder.pressed == true:
 		update_border_image_with_noise()
 	else:
@@ -319,13 +387,19 @@ func _on_PlayersZonedCheckBox_toggled(button_pressed):
 	else:
 		update_border_image_with_blank()
 
-func _on_PlayerRadius_sliderChanged():
+func _on_PlayerDistance_sliderChanged():
 	if oCheckBoxNewMapBorder.pressed == true:
 		update_border_image_with_noise()
 	else:
 		update_border_image_with_blank()
 
-func _on_PlayerRandomness_sliderChanged():
+func _on_PlayerPositioning_sliderChanged():
+	if oCheckBoxNewMapBorder.pressed == true:
+		update_border_image_with_noise()
+	else:
+		update_border_image_with_blank()
+
+func _on_LinearDistanceCheckBox_toggled(button_pressed):
 	if oCheckBoxNewMapBorder.pressed == true:
 		update_border_image_with_noise()
 	else:

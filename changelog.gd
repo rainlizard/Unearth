@@ -2,14 +2,16 @@ extends Node
 
 const string = """
 0.57.000 - ?/?/2025
+- New map window: added player placement
+- New map window: added pizza symmetry option
+- Added Changelog window
 - Fixed visual artifacts in 3D view
 - Added SSAA setting to Preferences -> Graphics
 - 3D view starts at current 2D position
-- Fake slabs: Changed "Slab ID" text to "Masquerade as"
 - Lintel is calculated for columns, fixing a bug where portals had a hole in them in the in-game map view. (if you still have this bug you'll need to click 'Clear unused' in the column editor)
-- Added Changelog window
-- Reversed some noise values in the New Map window so that increasing the sliders represents "more" and decreasing the sliders represents "less"
-- Spam protection for Quick messages
+- Fake slabs: Changed "Slab ID" text to "Masquerade as"
+- Spam protection for duplicate messages
+- Fixed some console errors (potentially solves a crash)
 0.56.725 - 8/6/2025
 - TmapB tilesets can now be edited
 - Refactored texture editing code

@@ -15,7 +15,8 @@ onready var oConfirmSaveBeforeQuit = Nodelist.list["oConfirmSaveBeforeQuit"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oEditor = Nodelist.list["oEditor"]
-
+onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
+	
 enum {
 	VIEW_2D = 0
 	VIEW_3D = 1
@@ -113,8 +114,6 @@ func set_framerate_limit(val):
 
 func set_ssaa_level(val):
 	ssaa_level = val
-	var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
-	var oGame3D = Nodelist.list["oGame3D"]
 	if oOverheadGraphics != null:
 		oOverheadGraphics.update_ssaa_level(val)
 	if oGame3D != null:

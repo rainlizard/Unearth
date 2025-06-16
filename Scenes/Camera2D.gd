@@ -16,7 +16,7 @@ var SMOOTH_PAN_ENABLED = false
 var MOUSE_EDGE_PANNING = true
 var DIRECTIONAL_PAN_SPEED = 2250
 
-var desired_zoom = Vector2(0,0)
+var desired_zoom = Vector2(0.001, 0.001)
 var desired_offset = Vector2(0,0)
 var panDirectionKeyboard = Vector2(0,0)
 var panDirectionMouse = Vector2(0,0)
@@ -53,20 +53,13 @@ func reset_camera(x, y):
 		id._on_zoom_level_changed(zoom)
 
 
-
-
-
-
-
 func _process(delta):
 	if OS.is_window_focused() == false: return
 	if current == false: return #View is 3D
 	
 	if zoom != desired_zoom:
-		zoom = lerp(zoom, desired_zoom, clamp(SMOOTHING_RATE * delta, 0.0, 1.0))
+		zoom = lerp(zoom, desired_zoom, clamp(SMOOTHING_RATE * delta, 0, 1.0))
 		emit_signal("zoom_level_changed", zoom)
-	
-	
 	
 	desired_offset += panDirectionMouse * DIRECTIONAL_PAN_SPEED * (zoom/Settings.UI_SCALE.x) * delta
 	desired_offset += panDirectionKeyboard * DIRECTIONAL_PAN_SPEED * (zoom/Settings.UI_SCALE.x) * delta
@@ -173,6 +166,8 @@ func zoom_camera(zoom_factor, mouse_position):
 	var previous_zoom = desired_zoom
 	
 	desired_zoom += desired_zoom * zoom_factor
+	desired_zoom.x = max(0.001, desired_zoom.x)
+	desired_zoom.y = max(0.001, desired_zoom.y)
 	desired_offset += ((viewport_size * 0.5) - mouse_position) * (desired_zoom-previous_zoom)
 
 func _notification(blah):
