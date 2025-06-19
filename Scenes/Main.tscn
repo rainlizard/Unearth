@@ -8173,6 +8173,7 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer/PanelContainer3/ConfigLinkFxData" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkFxData_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer2/PanelContainer3/ConfigLinkCampaign" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkCampaign_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer3/PanelContainer3/ConfigLinkLocalMap" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkLocalMap_pressed"]
+[connection signal="about_to_show" from="Ui/UiSystem/ChangelogWindow" to="Ui/UiSystem/ChangelogWindow" method="_on_ChangelogWindow_about_to_show"]
 [connection signal="pressed" from="Ui/UiSystem/ChangelogWindow/MarginContainer/VBoxContainer/CloseButton" to="Ui/UiSystem/ChangelogWindow" method="_on_CloseButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapCoordinatesWindow" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_MapCoordinatesWindow_visibility_changed"]
 [connection signal="gui_input" from="Ui/UiSystem/MapCoordinatesWindow/MarginContainer/VBoxContainer/LandviewAspectRatioContainer/LandviewImage" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_LandviewImage_gui_input"]

@@ -10,14 +10,13 @@ func _ready():
 	for i in 50:
 		yield(get_tree(),'idle_frame')
 	
-	var CODETIME_START = OS.get_ticks_msec()
 	var sections = parse_changelog_file()
 	if sections.size() > 0:
 		show_changelog_if_needed(sections)
-	print('Changelog codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 
 func parse_changelog_file():
+	var CODETIME_START = OS.get_ticks_msec()
 	var sections = []
 	var text = txt
 	var current_version = ""
@@ -53,6 +52,7 @@ func parse_changelog_file():
 			"date": current_date,
 			"body": current_body.join("\n")
 		})
+	print('Parse changelog: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return sections
 
 
@@ -69,12 +69,6 @@ func show_changelog_if_needed(sections):
 	if last_displayed == current_version:
 		should_display = false
 	if should_display == true:
-		for section in sections:
-			var section_node = scene.instance()
-			oChangelogMainVBox.add_child(section_node)
-			section_node.set_name_text(section.version)
-			section_node.set_date_text(section.date)
-			section_node.set_body_text(section.body)
 		Utils.popup_centered(self)
 	else:
 		visible = false
@@ -84,3 +78,18 @@ func show_changelog_if_needed(sections):
 
 func _on_CloseButton_pressed():
 	visible = false
+
+
+func _on_ChangelogWindow_about_to_show():
+	var CODETIME_START = OS.get_ticks_msec()
+	for child in oChangelogMainVBox.get_children():
+		child.queue_free()
+	
+	var sections = parse_changelog_file()
+	for section in sections:
+		var section_node = scene.instance()
+		oChangelogMainVBox.add_child(section_node)
+		section_node.set_name_text(section.version)
+		section_node.set_date_text(section.date)
+		section_node.set_body_text(section.body)
+	print('Created changelog window: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')

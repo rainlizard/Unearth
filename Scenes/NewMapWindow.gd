@@ -11,7 +11,6 @@ onready var oXSizeLine = Nodelist.list["oXSizeLine"]
 onready var oYSizeLine = Nodelist.list["oYSizeLine"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
-onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oCheckBoxNewMapBorder = Nodelist.list["oCheckBoxNewMapBorder"]
 onready var oNewMapSymmetricalBorder = Nodelist.list["oNewMapSymmetricalBorder"]
@@ -46,12 +45,12 @@ func _on_NewMapWindow_visibility_changed():
 	
 	# Default to KFX format
 	
-	if oGame.running_keeperfx() == false:# or kfxOutOfDate == true:
-		oSetNewFormat.selected = 0 # Set default format to Classic format, for newbies who don't know what KeeperFX is
-		_on_NewMapFormat_item_selected(0)
+	if oGame.running_keeperfx() == false: # or kfxOutOfDate == true:
+		oSetNewFormat.selected = Constants.ClassicFormat # Set default format to Classic format, for newbies who don't know what KeeperFX is
+		_on_NewMapFormat_item_selected(Constants.ClassicFormat)
 	else:
-		oSetNewFormat.selected = 1 # Set default format to KFX format
-		_on_NewMapFormat_item_selected(1)
+		oSetNewFormat.selected = Constants.KfxFormat # Set default format to KFX format
+		_on_NewMapFormat_item_selected(Constants.KfxFormat)
 	
 	reinit_noise_preview()
 	
@@ -210,7 +209,7 @@ func _on_CheckBoxNewMapBorder_pressed():
 		update_border_image_with_blank()
 
 func _on_NewMapFormat_item_selected(index):
-	if index == 0:
+	if index == Constants.ClassicFormat:
 		oXSizeLine.editable = false
 		oYSizeLine.editable = false
 		oXSizeLine.text = "85"
@@ -222,7 +221,7 @@ func _on_NewMapFormat_item_selected(index):
 		oPlayerCount.max_value = 4.0
 		if oPlayerCount.value > 4:
 			oPlayerCount.value = 4
-	elif index == 1:
+	elif index == Constants.KfxFormat:
 		oXSizeLine.editable = true
 		oYSizeLine.editable = true
 		oXSizeLine.hint_tooltip = ""
@@ -352,11 +351,6 @@ func _on_PlacePlayersCheckBox_toggled(button_pressed):
 	oNewMapPlayerOptions.visible = button_pressed
 
 func _on_PlayerCount_sliderChanged():
-	if oCurrentFormat.selected == Constants.ClassicFormat:
-		if oPlayerCount.value > 4:
-			oPlayerCount.value = 4
-		return
-	
 	var currentSymmetry = oNewMapSymmetricalBorder.selected
 	match currentSymmetry:
 		1, 2, 3, 4: # Vertical or horizontal symmetry
@@ -374,6 +368,10 @@ func _on_PlayerCount_sliderChanged():
 			oPlayerCount.value = 4
 		6: # Pizza symmetry - no constraints, any player count is valid
 			pass
+	
+	if oSetNewFormat.selected == Constants.ClassicFormat:
+		if oPlayerCount.value > 4:
+			oPlayerCount.value = 4
 	
 	if oCheckBoxNewMapBorder.pressed == true:
 		update_border_image_with_noise()
