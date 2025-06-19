@@ -37,7 +37,6 @@ jobs:
           if (found) exit
           if (!found) {
             found=1
-            print $0
             next
           }
         }

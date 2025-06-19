@@ -14,7 +14,7 @@ $fullVersion = "$majorMinorVersion.$commitCount"
 $currentDate = Get-Date -Format "d/M/yyyy"
 
 Write-Host "Reminder: you may want to manually edit Autoload/Version.gd first!"
-Write-Host "Reminder: changelog.gd should have <version> - <date> written for the top version, so it can be replaced by this script."
+Write-Host "Reminder: changelog.gd should have <version> - <date> written for the top version, so it can be edited by this script."
 Write-Host "Creating release for version $fullVersion"
 Write-Host "Press Enter to continue or Ctrl+C to cancel..."
 Read-Host
@@ -30,7 +30,7 @@ $updatedChangelog | Out-File -FilePath "changelog.gd" -Encoding utf8 -NoNewline
 
 # Stage and commit the changelog changes
 git add changelog.gd
-git commit -m "Update changelog for release $fullVersion"
+git commit -m "Release $fullVersion"
 
 # Verify the commit count matches our expectation
 $actualCommitCount = git rev-list --count HEAD
