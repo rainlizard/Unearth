@@ -1,7 +1,7 @@
 ﻿extends Node
 
 const string = """
-<version> - <date>
+0.57.739 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement
 - New map window: added pizza symmetry option
