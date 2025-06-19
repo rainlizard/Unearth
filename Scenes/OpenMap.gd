@@ -117,6 +117,15 @@ func open_map(filePath):
 	oCurrentMap.DKScript_enabled = oCurrentMap.currentFilePaths.has("TXT")
 	oCurrentMap.LuaScript_enabled = oCurrentMap.currentFilePaths.has("LUA")
 	
+	# Set map format early so CfgLoader knows which format to use
+	if map == "": # If it's a new map, then map format is set to the format you selected on New Map window
+		oCurrentFormat.selected = oSetNewFormat.selected
+	else:
+		if oCurrentMap.currentFilePaths.has("TNGFX") == true:
+			oCurrentFormat.selected = Constants.KfxFormat
+		else:
+			oCurrentFormat.selected = Constants.ClassicFormat
+	
 	compressedFiles.clear()
 	for i in oCurrentMap.currentFilePaths.values():
 		if oRNC.check_for_rnc_compression(i[oCurrentMap.PATHSTRING]) == true:
@@ -130,16 +139,6 @@ func open_map(filePath):
 		if oNewMapWindow.visible == true:
 			oDataLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
 			print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
-		
-		
-		# Set map format
-		if map == "": # If it's a new map, then map format is set to the format you selected on New Map window
-			oCurrentFormat.selected = oSetNewFormat.selected
-		else:
-			if oCurrentMap.currentFilePaths.has("TNGFX") == true:
-				oCurrentFormat.selected = Constants.KfxFormat
-			else:
-				oCurrentFormat.selected = Constants.ClassicFormat
 		
 		for EXT in oBuffers.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
