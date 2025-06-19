@@ -1,10 +1,10 @@
-extends Node
+﻿extends Node
 
 const string = """
-0.57.000 - ?/?/2025
+0.57.7361 - 19/6/2025
+- Added Changelog window
 - New map window: added player placement
 - New map window: added pizza symmetry option
-- Added Changelog window
 - Fixed visual artifacts in 3D view
 - Added SSAA setting to Preferences -> Graphics
 - 3D view starts at current 2D position
@@ -12,6 +12,7 @@ const string = """
 - Fake slabs: Changed "Slab ID" text to "Masquerade as"
 - Spam protection for duplicate messages
 - Fixed some console errors (potentially solves a crash)
+- Fixed 'failed to load objects' error
 0.56.725 - 8/6/2025
 - TmapB tilesets can now be edited
 - Refactored texture editing code
