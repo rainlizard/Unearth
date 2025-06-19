@@ -27,6 +27,34 @@ jobs:
         FULL_VERSION="$MAJOR_MINOR.$PATCH"
         echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_OUTPUT
         echo "PATCH=$PATCH" >> $GITHUB_ENV
+    
+    - name: Extract Changelog
+      if: startsWith(github.ref, 'refs/tags/')
+      id: changelog
+      run: |
+        # Extract the latest changelog entry from changelog.gd
+        CHANGELOG=$(awk '/^[0-9]+\.[0-9]+\.[0-9]+ - / {
+          if (found) exit
+          if (!found) {
+            found=1
+            print $0
+            next
+          }
+        }
+        found && /^[0-9]+\.[0-9]+\.[0-9]+ - / {
+          exit
+        }
+        found {
+          print $0
+        }' changelog.gd | sed 's/^- /• /' | head -n -1)
+        
+        # Save changelog to output using heredoc to handle multiline content
+        {
+          echo 'CHANGELOG_CONTENT<<EOF'
+          echo "$CHANGELOG"
+          echo 'EOF'
+        } >> $GITHUB_OUTPUT
+
     - name: Update Version in Godot Script
       run: |
         sed -i "s/var patch = .*/var patch = \"$PATCH\"/" Autoload/Version.gd
@@ -115,6 +143,7 @@ jobs:
       with:
         tag_name: ${{ steps.version_info.outputs.FULL_VERSION }}
         release_name: ${{ steps.version_info.outputs.FULL_VERSION }}
+        body: ${{ steps.changelog.outputs.CHANGELOG_CONTENT }}
         draft: false
         prerelease: false
 
