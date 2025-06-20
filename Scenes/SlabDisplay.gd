@@ -44,7 +44,7 @@ func set_visual(columnArray):
 					cubeFace = oCustomSlabSystem.get_top_fake_cube_face((y*3) + x, slabID)
 			else:
 				# Slabset slab (normal slab)
-				cubeFace = Columnset.get_top_cube_face(columnArray[(y*3) + x], slabID)
+				cubeFace = Columnset.get_top_cube_face(columnArray[(y*3) + x])
 			
 			dataImage.set_pixel(x, y, Color8(cubeFace >> 16 & 255, cubeFace >> 8 & 255, cubeFace & 255))
 	

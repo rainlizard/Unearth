@@ -34,18 +34,20 @@ func update_full_overhead_map():
 		update_display_fields_size()
 	
 	var shapePositionArray = []
+	var totalPositions = M.xSize * M.ySize
+	shapePositionArray.resize(totalPositions)
+	var index = 0
 	for ySlab in range(0, M.ySize):
 		for xSlab in range(0, M.xSize):
-			shapePositionArray.append(Vector2(xSlab,ySlab))
+			shapePositionArray[index] = Vector2(xSlab, ySlab)
+			index += 1
 	
-	for i in 2: # Helps prevent the column updating from freezing the editor so much.
-		yield(get_tree(),'idle_frame')
+#	for i in 2: # Helps prevent the column updating from freezing the editor so much.
+#		yield(get_tree(),'idle_frame')
 	call_deferred("overhead2d_update_rect_single_threaded", shapePositionArray)
 	print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 
-# Using a single threaded version for updating partial graphics.
-# and a multi-threaded version for updating the entire map's graphics.
 func overhead2d_update_rect_single_threaded(shapePositionArray):
 	pixel_data = generate_pixel_data(pixel_data, shapePositionArray)
 	overheadImgData.create_from_data(M.xSize * 3, M.ySize * 3, false, Image.FORMAT_RGB8, pixel_data)
@@ -62,25 +64,58 @@ func generate_pixel_data(pixData, shapePositionArray):
 	var CODETIME_START = OS.get_ticks_msec()
 	var width = M.xSize * 3
 	var height = M.ySize * 3
+	pixData.resize(width * height * 3)
+	var clmPosBuffer = oDataClmPos.buffer
+	var clmPosWidth = oDataClmPos.width
+	var clmCubes = oDataClm.cubes
+	var clmFloorTexture = oDataClm.floorTexture
+	var cubeTex = Cube.tex
+	var cubeCount = Cube.CUBES_COUNT
+	var sideTop = Cube.SIDE_TOP
+	var widthBytes = width * 3
 	
-	pixData.resize(width * height * 3)  # Assuming RGB8 format
+	var columnFaceCache = []
+	columnFaceCache.resize(oDataClm.column_count)
+	columnFaceCache.fill(-1)
 	
-	for pos in shapePositionArray:
+	var posIndex = 0
+	var totalPositions = shapePositionArray.size()
+	while posIndex < totalPositions:
+		var pos = shapePositionArray[posIndex]
 		var basePosX = pos.x * 3
 		var basePosY = pos.y * 3
-		var slabID = oDataSlab.get_cellv(pos)
-		for offset in subtile3x3:  # 3x3 subtiles
-			var x = basePosX + offset.x
-			var y = basePosY + offset.y
-			var clmIndex = oDataClmPos.get_cell_clmpos(x, y)
-			var cubeFace = oDataClm.get_top_cube_face(clmIndex, slabID)
-			var pixelIndex = ((y * width) + x) * 3
-
-			pixData[pixelIndex] = cubeFace >> 16 & 255
-			pixData[pixelIndex + 1] = cubeFace >> 8 & 255
-			pixData[pixelIndex + 2] = cubeFace & 255
+		var baseSeekPos = basePosY * clmPosWidth + basePosX
+		var basePixelIndex = basePosY * widthBytes + basePosX * 3
+		
+		for offsetY in range(3):
+			var rowSeekPos = baseSeekPos + offsetY * clmPosWidth
+			var rowPixelIndex = basePixelIndex + offsetY * widthBytes
+			for offsetX in range(3):
+				var seekPos = (rowSeekPos + offsetX) * 2
+				clmPosBuffer.seek(seekPos)
+				var clmIndex = abs(clmPosBuffer.get_16())
+				
+				var cubeFace = columnFaceCache[clmIndex]
+				if cubeFace == -1:
+					var cubeArray = clmCubes[clmIndex]
+					cubeFace = clmFloorTexture[clmIndex]
+					for i in range(7, -1, -1):
+						var cubeID = cubeArray[i]
+						if cubeID != 0:
+							cubeFace = cubeTex[cubeID][sideTop] if cubeID <= cubeCount else 1
+							break
+					columnFaceCache[clmIndex] = cubeFace
+				
+				var pixelIdx = rowPixelIndex + offsetX * 3
+				pixData[pixelIdx] = (cubeFace >> 16) & 0xFF
+				pixData[pixelIdx + 1] = (cubeFace >> 8) & 0xFF
+				pixData[pixelIdx + 2] = cubeFace & 0xFF
+		
+		posIndex += 1
+	
 	print('pixData Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return pixData
+
 
 
 func initialize_display_fields():
