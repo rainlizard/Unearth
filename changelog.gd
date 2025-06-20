@@ -1,6 +1,8 @@
-﻿extends Node
+extends Node
 
 const string = """
+<version> - <date>
+- In overhead 2D view, always display highest cube of a column (previously it was relying on the "height" value which lead to confusion)
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

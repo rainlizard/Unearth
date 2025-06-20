@@ -97,13 +97,47 @@ func find_cubearray_index(cubeArray, floorID):
 	return -1
 
 func get_top_cube_face(index, slabID):
-	var get_height = self.height[index]
-	if slabID == Slabs.PORTAL:
-		get_height = get_highest_cube_height(self.cubes[index])
-	if get_height == 0:
-		return self.floorTexture[index]
-	else:
-		var cubeID = self.cubes[index][get_height-1] #get_height
+	var cubeArray = self.cubes[index]
+	# Find highest cube directly without function call overhead
+	if cubeArray[7] != 0:
+		var cubeID = cubeArray[7]
 		if cubeID > Cube.CUBES_COUNT:
 			return 1
 		return Cube.tex[cubeID][Cube.SIDE_TOP]
+	elif cubeArray[6] != 0:
+		var cubeID = cubeArray[6]
+		if cubeID > Cube.CUBES_COUNT:
+			return 1
+		return Cube.tex[cubeID][Cube.SIDE_TOP]
+	elif cubeArray[5] != 0:
+		var cubeID = cubeArray[5]
+		if cubeID > Cube.CUBES_COUNT:
+			return 1
+		return Cube.tex[cubeID][Cube.SIDE_TOP]
+	elif cubeArray[4] != 0:
+		var cubeID = cubeArray[4]
+		if cubeID > Cube.CUBES_COUNT:
+			return 1
+		return Cube.tex[cubeID][Cube.SIDE_TOP]
+	elif cubeArray[3] != 0:
+		var cubeID = cubeArray[3]
+		if cubeID > Cube.CUBES_COUNT:
+			return 1
+		return Cube.tex[cubeID][Cube.SIDE_TOP]
+	elif cubeArray[2] != 0:
+		var cubeID = cubeArray[2]
+		if cubeID > Cube.CUBES_COUNT:
+			return 1
+		return Cube.tex[cubeID][Cube.SIDE_TOP]
+	elif cubeArray[1] != 0:
+		var cubeID = cubeArray[1]
+		if cubeID > Cube.CUBES_COUNT:
+			return 1
+		return Cube.tex[cubeID][Cube.SIDE_TOP]
+	elif cubeArray[0] != 0:
+		var cubeID = cubeArray[0]
+		if cubeID > Cube.CUBES_COUNT:
+			return 1
+		return Cube.tex[cubeID][Cube.SIDE_TOP]
+	else:
+		return self.floorTexture[index]
