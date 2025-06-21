@@ -6,10 +6,10 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oColumnListData = Nodelist.list["oColumnListData"]
-onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
+onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oUi = Nodelist.list["oUi"]
-onready var oColumnEditor = Nodelist.list["oColumnEditor"]
+onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 
 var currentlyLookingAtNode = null
 var instanceType = 0
@@ -40,9 +40,9 @@ func update_details():
 #				oColumnListData.clear()
 #				return
 	
-#	if oColumnEditor.visible == true:
-#		if oColumnEditorVoxelView.visible == true:
-#			entryIndex = oColumnEditorVoxelView.viewObject
+#	if oTabClmEditor.visible == true:
+#		if oClmEditorVoxelView.visible == true:
+#			entryIndex = oClmEditorVoxelView.viewObject
 #		if oCustomSlabVoxelView.visible == true:
 #			if is_instance_valid(get_focus_owner()):
 #				if is_instance_valid(get_focus_owner().get_parent()):

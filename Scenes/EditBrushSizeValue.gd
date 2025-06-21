@@ -3,7 +3,7 @@ onready var oInspector = Nodelist.list["oInspector"]
 onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
-onready var oColumnEditor = Nodelist.list["oColumnEditor"]
+onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oEditingTools = Nodelist.list["oEditingTools"]
@@ -26,7 +26,7 @@ func _input(event):
 			return
 		if oMapSettingsWindow.visible == true: return
 		if oMapBrowser.visible == true: return
-		if oColumnEditor.visible == true: return
+		if oTabClmEditor.visible == true: return
 		if oSlabsetWindow.visible == true: return
 		if oSelector.mode == oSelector.MODE_SUBTILE: return
 		

@@ -68,7 +68,7 @@ func index_entry(cubeArray, setFloorID):
 		oTimerUpdateColumnEntries.start()
 		return index
 
-	oMessage.big("Error", "Clm entries are full. Try the 'Clear Unused' button in the Map Columns window.")
+	oMessage.big("Error", "Clm entries are full. Try the 'Clear Unused' button in the CLM data window.")
 	return 0
 
 var a_column_has_changed_since_last_updating_utilized = false

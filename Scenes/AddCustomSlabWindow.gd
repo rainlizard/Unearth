@@ -1,6 +1,6 @@
 extends WindowDialog
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
-onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
+onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oGridContainerCustomColumns3x3 = Nodelist.list["oGridContainerCustomColumns3x3"]
 onready var oCustomSlabID = Nodelist.list["oCustomSlabID"]
@@ -15,10 +15,10 @@ onready var oSlabWibbleOptionButton = Nodelist.list["oSlabWibbleOptionButton"]
 onready var oSlabLiquidOptionButton = Nodelist.list["oSlabLiquidOptionButton"]
 onready var oWibbleEdgesCheckBox = Nodelist.list["oWibbleEdgesCheckBox"]
 onready var oWibbleEdgesSpacing = Nodelist.list["oWibbleEdgesSpacing"]
-onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
+onready var oClmEditorControls = Nodelist.list["oClmEditorControls"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
-onready var oColumnEditor = Nodelist.list["oColumnEditor"]
+onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 onready var oFakeCustomColumnsPanelContainer = Nodelist.list["oFakeCustomColumnsPanelContainer"]
 onready var oSlabBitmaskOptionButton = Nodelist.list["oSlabBitmaskOptionButton"]
 onready var oSlabIsSolidOptionButton = Nodelist.list["oSlabIsSolidOptionButton"]
@@ -66,8 +66,8 @@ func shortcut_pressed(id):
 	var spinbox = id.get_node("CustomSpinBox")
 	var clmIndex = spinbox.value
 	
-	Utils.popup_centered(oColumnEditor)
-	oColumnEditorControls.oColumnIndexSpinBox.value = clmIndex
+	Utils.popup_centered(oTabClmEditor)
+	oClmEditorControls.oColumnIndexSpinBox.value = clmIndex
 
 
 func _on_CustomSlabID_value_changed(value):

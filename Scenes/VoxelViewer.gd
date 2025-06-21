@@ -8,7 +8,7 @@ onready var oSlabsetIDSpinBox = Nodelist.list["oSlabsetIDSpinBox"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
-onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
+onready var oClmEditorControls = Nodelist.list["oClmEditorControls"]
 
 
 onready var oVoxelCamera = $"VoxelViewport/VoxelCameraPivotPoint/VoxelCamera"
@@ -125,7 +125,7 @@ func set_object(setVal):
 		pass
 	
 	if displayingType == MAP_COLUMN:
-		oColumnEditorControls.oColumnIndexSpinBox.value = setVal
+		oClmEditorControls.oColumnIndexSpinBox.value = setVal
 		oColumnDetails.update_details()
 	if displayingType == DK_COLUMN:
 		oColumnsetControls.oColumnIndexSpinBox.value = setVal
@@ -273,9 +273,9 @@ func _on_ColumnIndexSpinBox_value_changed(value):
 	
 	match displayingType:
 		MAP_COLUMN:
-			oColumnEditorControls.oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
+			oClmEditorControls.oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 			set_object(value)
-			oColumnEditorControls.oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
+			oClmEditorControls.oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 		DK_COLUMN:
 			oColumnsetControls.oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 			set_object(value)

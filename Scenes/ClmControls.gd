@@ -4,7 +4,7 @@ onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
-onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
+onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 
@@ -61,9 +61,9 @@ var clipboard = {
 
 func _ready():
 	match name:
-		"ColumnEditorControls":
+		"ClmEditorControls":
 			nodeClm = oDataClm
-			nodeVoxelView = oColumnEditorVoxelView
+			nodeVoxelView = oClmEditorVoxelView
 		"ColumnsetControls":
 			nodeClm = Columnset
 			nodeVoxelView = oColumnsetVoxelView

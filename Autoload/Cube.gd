@@ -589,12 +589,12 @@ func load_dk_original_cubes():
 	set_max_cubes()
 
 func set_max_cubes():
-	var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
+	var oClmEditorControls = Nodelist.list["oClmEditorControls"]
 	var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 	
 	CUBES_COUNT = Cube.tex.size()-1
 	
-	oColumnEditorControls.establish_maximum_cube_field_values()
+	oClmEditorControls.establish_maximum_cube_field_values()
 	oColumnsetControls.establish_maximum_cube_field_values()
 
 
@@ -612,7 +612,7 @@ func get_cubescfg_modified_time():
 #				var oMessage = Nodelist.list["oMessage"]
 #				var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 #				var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
-#				var oColumnEditor = Nodelist.list["oColumnEditor"]
+#				var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 #				var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 #				var oEditor = Nodelist.list["oEditor"]
 #				var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
@@ -622,7 +622,7 @@ func get_cubescfg_modified_time():
 #
 #				oOverheadGraphics.update_full_overhead_map()
 #				oPickSlabWindow.add_slabs()
-#				oColumnEditor._on_ColumnEditor_visibility_changed()
+#				oTabClmEditor._on_ColumnEditor_visibility_changed()
 #				oSlabsetWindow._on_SlabsetWindow_visibility_changed()
 #				if oEditor.currentView == oEditor.VIEW_3D:
 #					oGenerateTerrain.start()

@@ -1,12 +1,12 @@
-extends WindowDialog
+extends VBoxContainer
 onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
-onready var oColumnEditorVoxelView = Nodelist.list["oColumnEditorVoxelView"]
+onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oAllVoxelObjects = Nodelist.list["oAllVoxelObjects"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataClm = Nodelist.list["oDataClm"]
-onready var oColumnEditorControls = Nodelist.list["oColumnEditorControls"]
+onready var oClmEditorControls = Nodelist.list["oClmEditorControls"]
 onready var oConfirmClmClearUnused = Nodelist.list["oConfirmClmClearUnused"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oMapClmFilenameLabel = Nodelist.list["oMapClmFilenameLabel"]
@@ -16,14 +16,14 @@ func _on_ColumnEditor_visibility_changed():
 	if is_instance_valid(oDataClm) == false: return
 	
 	if visible == true:
-		oColumnEditorControls.just_opened()
-		oColumnEditorVoxelView.initialize()
+		oClmEditorControls.just_opened()
+		oClmEditorVoxelView.initialize()
 		oPropertiesTabs.set_current_tab(2)
 		
 		oMapClmFilenameLabel.text = oCurrentMap.path.get_file().get_basename() + ".clm"
 		
 		# Refresh controls
-		oColumnEditorControls._on_ColumnIndexSpinBox_value_changed(oColumnEditorControls.oColumnIndexSpinBox.value)
+		oClmEditorControls._on_ColumnIndexSpinBox_value_changed(oClmEditorControls.oColumnIndexSpinBox.value)
 		
 	else:
 		# Update "Clm entries" in properties window
@@ -48,9 +48,9 @@ func _on_ConfirmClmClearUnused_confirmed():
 	oDataClm.clear_unused_entries()
 	
 	# Refresh voxel view
-	oColumnEditorVoxelView.refresh_entire_view()
+	oClmEditorVoxelView.refresh_entire_view()
 	# Refresh controls
-	oColumnEditorControls._on_ColumnIndexSpinBox_value_changed(oColumnEditorControls.oColumnIndexSpinBox.value)
+	oClmEditorControls._on_ColumnIndexSpinBox_value_changed(oClmEditorControls.oColumnIndexSpinBox.value)
 	
 	# Refresh "Clm entries" in Properties window
 	oDataClm.count_filled_clm_entries()
@@ -60,6 +60,6 @@ func _on_ColumnEditorSortButton_pressed():
 	oDataClm.sort_columns_by_utilized()
 	
 	# Refresh voxel view
-	oColumnEditorVoxelView.refresh_entire_view()
+	oClmEditorVoxelView.refresh_entire_view()
 	# Refresh controls
-	oColumnEditorControls._on_ColumnIndexSpinBox_value_changed(oColumnEditorControls.oColumnIndexSpinBox.value)
+	oClmEditorControls._on_ColumnIndexSpinBox_value_changed(oClmEditorControls.oColumnIndexSpinBox.value)

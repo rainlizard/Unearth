@@ -24,7 +24,7 @@ onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oInstances = Nodelist.list["oInstances"]
-onready var oColumnEditor = Nodelist.list["oColumnEditor"]
+onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 onready var oDataLua = Nodelist.list["oDataLua"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 
@@ -78,8 +78,8 @@ func clear_map(): # Remember, "Undo" calls this
 	# "LOF" # Do this last in case other functions rely on the old map size
 	oDataLof.clear_all()
 	
-	if oColumnEditor.visible == true:
-		oColumnEditor.visible = false
+	if oTabClmEditor.visible == true:
+		oTabClmEditor.visible = false
 	
 	print('Cleared map in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 

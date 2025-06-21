@@ -26,7 +26,7 @@ onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oTextureEditingWindow = Nodelist.list["oTextureEditingWindow"]
 onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oConfirmDiscardChanges = Nodelist.list["oConfirmDiscardChanges"]
-onready var oColumnEditor = Nodelist.list["oColumnEditor"]
+onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
@@ -85,7 +85,6 @@ func add_edit_menu_items():
 	edit_popup.add_item("Resize map", 3)
 	edit_popup.add_separator()
 	edit_popup.add_item("Slabset", 6)
-	edit_popup.add_item("Map columns", 1)
 	edit_popup.add_item("Edit tilesets", 5)
 
 func update_undo_availability():
@@ -236,7 +235,7 @@ func _on_EditSubmenu_Pressed(pressedID):
 		0: # Undo
 			oUndoStates.perform_undo()
 		1: # Custom columns
-			Utils.popup_centered(oColumnEditor)
+			Utils.popup_centered(oTabClmEditor)
 		2: # Custom objects
 			#Utils.popup_centered(oAddCustomObjectWindow)
 			pass

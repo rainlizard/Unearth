@@ -79,6 +79,7 @@ var columnSettersArray = []
 func _ready():
 	oSlabsetTabs.set_tab_title(0, "Slabset") #slabs.dat
 	oSlabsetTabs.set_tab_title(1, "Columnset") #slabs.clm
+	oSlabsetTabs.set_tab_title(2, "CLM data") #map.clm
 	
 	for number in 9:
 		var id = scnColumnSetter.instance()
@@ -804,7 +805,7 @@ func _on_SlabsetHelpButton_pressed():
 
 func _on_ColumnsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "Be wary not to confuse the Columnset with the Map Columns. Map Columns (.clm) are the appearance of any columns that have already been placed on the map, while the Columnset (.toml) is the appearance of any new columns that are placed in the future. \n"
+	helptxt += "Be wary not to confuse the Columnset with the CLM data. CLM data (.clm) are the appearance of any columns that have already been placed on the map, while the Columnset (.toml) is the appearance of any new columns that are placed in the future. \n"
 	helptxt += "\n"
 	helptxt += "columnset.toml is a global file in /fxdata/ that is used by all maps in the game, but it can also be saved as a local file to a map or campaign. When you run the game both columnset.toml files will be loaded, but with the local file overwriting any same fields of the file in /fxdata/."
 	oMessage.big("Help",helptxt)

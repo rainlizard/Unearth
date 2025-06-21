@@ -5068,91 +5068,6 @@ texture_hover = ExtResource( 128 )
 expand = true
 stretch_mode = 4
 
-[node name="ColumnEditor" type="WindowDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = -4310.0
-margin_top = -1481.0
-margin_right = -3030.0
-margin_bottom = -719.0
-window_title = "Map columns"
-resizable = true
-script = ExtResource( 28 )
-
-[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ColumnEditor"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-custom_constants/margin_right = 10
-custom_constants/margin_top = 10
-custom_constants/margin_left = 10
-custom_constants/margin_bottom = 10
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/MarginContainer"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 1270.0
-margin_bottom = 752.0
-
-[node name="ColumnEditorVoxelView" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 1030.0
-margin_bottom = 742.0
-displayingType = 1
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer"]
-margin_left = 1034.0
-margin_right = 1260.0
-margin_bottom = 742.0
-
-[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_right = 226.0
-margin_bottom = 39.0
-
-[node name="MapClmFilenameLabel" type="Label" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer"]
-margin_left = 9.0
-margin_top = 9.0
-margin_right = 217.0
-margin_bottom = 30.0
-text = "map00001.clm"
-align = 1
-
-[node name="ColumnEditorControls" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2" instance=ExtResource( 137 )]
-margin_top = 43.0
-margin_right = 226.0
-margin_bottom = 706.0
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 710.0
-margin_right = 226.0
-margin_bottom = 742.0
-size_flags_horizontal = 3
-
-[node name="ColumnEditorClearUnusedButton" type="Button" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
-margin_right = 130.0
-margin_bottom = 27.0
-size_flags_horizontal = 11
-size_flags_vertical = 0
-text = "Clear unused"
-
-[node name="ColumnEditorSortButton" type="Button" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
-margin_left = 134.0
-margin_right = 190.0
-margin_bottom = 27.0
-size_flags_horizontal = 11
-size_flags_vertical = 0
-text = "Sort"
-
-[node name="ColumnEditorHelpButton" type="TextureButton" parent="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
-margin_left = 194.0
-margin_right = 226.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture_normal = ExtResource( 156 )
-texture_pressed = ExtResource( 66 )
-texture_hover = ExtResource( 128 )
-expand = true
-stretch_mode = 4
-
 [node name="AddCustomSlabWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -1595.0
@@ -5456,11 +5371,11 @@ margin_bottom = 78.0
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/FakeCustomColumnsPanelContainer/VBoxContainer"]
-margin_left = 105.0
-margin_right = 224.0
+margin_left = 122.0
+margin_right = 207.0
 margin_bottom = 21.0
 size_flags_horizontal = 4
-text = "Map columns"
+text = "CLM data"
 align = 1
 
 [node name="GridContainerCustomColumns3x3" type="GridContainer" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/FakeCustomColumnsPanelContainer/VBoxContainer"]
@@ -6127,39 +6042,38 @@ margin_right = 217.0
 margin_bottom = 72.0
 columns = 2
 
-[node name="Spacing" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer"]
-margin_right = 51.0
-margin_bottom = 27.0
-
 [node name="ColumnsetDeleteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer"]
-margin_left = 55.0
-margin_right = 208.0
+margin_right = 172.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "Delete & revert"
 
-[node name="ColumnsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer"]
+[node name="Spacing" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer"]
+margin_left = 176.0
+margin_right = 208.0
+margin_bottom = 27.0
+
+[node name="ExportColumnsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer"]
 margin_top = 31.0
-margin_right = 51.0
+margin_right = 172.0
+margin_bottom = 58.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Save columnset"
+
+[node name="ColumnsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer"]
+margin_left = 176.0
+margin_top = 31.0
+margin_right = 208.0
 margin_bottom = 63.0
 rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 3
 size_flags_vertical = 4
 texture_normal = ExtResource( 156 )
 texture_pressed = ExtResource( 66 )
 texture_hover = ExtResource( 128 )
 expand = true
 stretch_mode = 4
-
-[node name="ExportColumnsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer"]
-margin_left = 55.0
-margin_top = 31.0
-margin_right = 208.0
-margin_bottom = 58.0
-size_flags_horizontal = 3
-size_flags_vertical = 0
-text = "Save columnset"
 
 [node name="ColumnsetPathsLabel" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer"]
 margin_top = 897.0
@@ -6180,6 +6094,83 @@ scroll_vertical_enabled = false
 margin_right = 208.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="TabClmEditor" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 43.0
+margin_right = -12.0
+margin_bottom = -12.0
+script = ExtResource( 28 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor"]
+margin_right = 1236.0
+margin_bottom = 915.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ClmEditorVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer" instance=ExtResource( 19 )]
+margin_right = 1006.0
+margin_bottom = 915.0
+displayingType = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer"]
+margin_left = 1010.0
+margin_right = 1236.0
+margin_bottom = 915.0
+
+[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2"]
+margin_right = 226.0
+margin_bottom = 39.0
+
+[node name="MapClmFilenameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/PanelContainer"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 217.0
+margin_bottom = 30.0
+text = "map00001.clm"
+align = 1
+
+[node name="ClmEditorControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2" instance=ExtResource( 137 )]
+margin_top = 43.0
+margin_right = 226.0
+margin_bottom = 879.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2"]
+margin_top = 883.0
+margin_right = 226.0
+margin_bottom = 915.0
+size_flags_horizontal = 3
+
+[node name="ColumnEditorClearUnusedButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/HBoxContainer2"]
+margin_right = 130.0
+margin_bottom = 27.0
+size_flags_horizontal = 11
+size_flags_vertical = 0
+text = "Clear unused"
+
+[node name="ColumnEditorSortButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/HBoxContainer2"]
+margin_left = 134.0
+margin_right = 190.0
+margin_bottom = 27.0
+size_flags_horizontal = 11
+size_flags_vertical = 0
+text = "Sort"
+
+[node name="ColumnEditorHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/HBoxContainer2"]
+margin_left = 194.0
+margin_right = 226.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource( 156 )
+texture_pressed = ExtResource( 66 )
+texture_hover = ExtResource( 128 )
+expand = true
+stretch_mode = 4
 
 [node name="NewMapWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -8038,7 +8029,7 @@ script = SubResource( 20 )
 [connection signal="visibility_changed" from="Ui/UiSystem/FileDialogOpen" to="Ui/UiSystem/FileDialogOpen" method="_on_FileDialogOpen_visibility_changed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmAutoGen" to="SlabPlacement" method="_on_ConfirmAutoGen_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmGenerateScript" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_ConfirmGenerateScript_confirmed"]
-[connection signal="confirmed" from="Ui/UiSystem/ConfirmClmClearUnused" to="Ui/UiSystem/ColumnEditor" method="_on_ConfirmClmClearUnused_confirmed"]
+[connection signal="confirmed" from="Ui/UiSystem/ConfirmClmClearUnused" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" method="_on_ConfirmClmClearUnused_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDeleteSlabsetFile" to="Ui/UiSystem/SlabsetWindow" method="_on_ConfirmDeleteSlabsetFile_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmDeleteColumnsetFile" to="Ui/UiSystem/SlabsetWindow" method="_on_ConfirmDeleteColumnsetFile_confirmed"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
@@ -8090,10 +8081,6 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/ModifyTexturesButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ModifyTexturesButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/ExportTmapButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/TextureEditingHelpButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_TextureEditingHelpButton_pressed"]
-[connection signal="visibility_changed" from="Ui/UiSystem/ColumnEditor" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditor_visibility_changed"]
-[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorClearUnusedButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorClearUnusedButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorSortButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorSortButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ColumnEditor/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorHelpButton" to="Ui/UiSystem/ColumnEditor" method="_on_ColumnEditorHelpButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/AddCustomSlabWindow" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_AddCustomSlabWindow_visibility_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/CustomSlabID" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_CustomSlabID_value_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/SlabBitmaskOptionButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabBitmaskOptionButton_item_selected"]
@@ -8131,8 +8118,12 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetDeleteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetDeleteButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/ExportSlabsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsToml_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer/ColumnsetDeleteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetDeleteButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer/ColumnsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetHelpButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer/ExportColumnsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsToml_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer/ColumnsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetHelpButton_pressed"]
+[connection signal="visibility_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" method="_on_ColumnEditor_visibility_changed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorClearUnusedButton" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" method="_on_ColumnEditorClearUnusedButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorSortButton" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" method="_on_ColumnEditorSortButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorHelpButton" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" method="_on_ColumnEditorHelpButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer3/SetNewFormat" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapFormat_item_selected"]
 [connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_focus_exited"]
