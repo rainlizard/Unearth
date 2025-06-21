@@ -5,6 +5,7 @@ const string = """
 - In overhead 2D view, always display highest cube of a column (previously it was relying on the "height" value which lead to confusion)
 - Some small optimizations to overhead 2D graphics
 - Fixed an issue where viewing certain Slabset variations would cause them to be marked as modified
+- Slabset window's "Near water" & "Near lava" text replaced with "Room face variation" on certain slabIDs like LAIR_WALL
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

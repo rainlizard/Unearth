@@ -24,6 +24,7 @@ onready var oSlabBitmaskOptionButton = Nodelist.list["oSlabBitmaskOptionButton"]
 onready var oSlabIsSolidOptionButton = Nodelist.list["oSlabIsSolidOptionButton"]
 onready var oSlabOwnableOptionButton = Nodelist.list["oSlabOwnableOptionButton"]
 onready var oPassageLabel = Nodelist.list["oPassageLabel"]
+onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
 
 onready var oCustomDoorThingLabel = Nodelist.list["oCustomDoorThingLabel"]
 onready var oCustomDoorThing = Nodelist.list["oCustomDoorThing"]
@@ -66,7 +67,9 @@ func shortcut_pressed(id):
 	var spinbox = id.get_node("CustomSpinBox")
 	var clmIndex = spinbox.value
 	
-	Utils.popup_centered(oTabClmEditor)
+	Utils.popup_centered(oSlabsetWindow)
+	oSlabsetTabs.current_tab = 2
+	
 	oClmEditorControls.oColumnIndexSpinBox.value = clmIndex
 
 

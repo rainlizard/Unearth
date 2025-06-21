@@ -148,13 +148,8 @@ func _on_SlabsetTabs_tab_changed(tab):
 
 func variation_changed(localVariation):
 	localVariation = int(localVariation)
-	
-	#var slabID = oSlabsetIDSpinBox.value
-	#variation
+	var slabID = int(oSlabsetIDSpinBox.value)
 	var constructString = ""
-	#var byte = (slabID * 28) + localVariation
-	#constructString += "Byte " + str(byte) + ' - ' + str(byte)
-	#constructString += '\n'
 	
 	if localVariation != 27:
 		match localVariation % 9:
@@ -172,12 +167,20 @@ func variation_changed(localVariation):
 	
 	constructString += '\n'
 	
+	var isRoomWall = Slabs.rooms_that_have_walls.has(slabID - 1)
+	
 	if localVariation < 9:
 		constructString += ""
 	elif localVariation < 18:
-		constructString += "Near lava"
+		if isRoomWall:
+			constructString += "Room face variation"
+		else:
+			constructString += "Near lava"
 	elif localVariation < 27:
-		constructString += "Near water"
+		if isRoomWall:
+			constructString += "Room face variation"
+		else:
+			constructString += "Near water"
 	
 	oVariationInfoLabel.text = constructString
 	update_objects_ui()
