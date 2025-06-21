@@ -459,9 +459,20 @@ func update_object_fields(index):
 	oObjIsLightCheckBox.pressed = bool(obj[0])
 	oObjEffectRangeSpinBox.value = obj[8]
 	oObjSubtileSpinBox.value = obj[2]
+	
+	# Disconnect coordinate spinboxes to prevent triggering value_changed signals
+	oObjRelativeXSpinBox.disconnect("value_changed", self, "_on_ObjRelativeXSpinBox_value_changed")
+	oObjRelativeYSpinBox.disconnect("value_changed", self, "_on_ObjRelativeYSpinBox_value_changed")
+	oObjRelativeZSpinBox.disconnect("value_changed", self, "_on_ObjRelativeZSpinBox_value_changed")
+	
 	oObjRelativeXSpinBox.value = obj[3] / 256.0
 	oObjRelativeYSpinBox.value = obj[4] / 256.0
 	oObjRelativeZSpinBox.value = obj[5] / 256.0
+	
+	# Reconnect coordinate spinboxes
+	oObjRelativeXSpinBox.connect("value_changed", self, "_on_ObjRelativeXSpinBox_value_changed")
+	oObjRelativeYSpinBox.connect("value_changed", self, "_on_ObjRelativeYSpinBox_value_changed")
+	oObjRelativeZSpinBox.connect("value_changed", self, "_on_ObjRelativeZSpinBox_value_changed")
 
 func _on_ObjObjectIndexSpinBox_value_changed(value):
 	var variation = get_current_variation()
