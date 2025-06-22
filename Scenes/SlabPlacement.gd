@@ -464,10 +464,15 @@ func try_upgrade_to_torch_slab(xSlab:int, ySlab:int, currentSlabID, surrID):
 
 # Torch sides: S:0, W:1, N:2, E:3, None:-1
 # Torch subtiles: S:7, W:3, N:1, E:5, None:-1
-const torchSubtileToKeepMap = {0:7, 1:3, 2:1, 3:5, -1:-1}
+const DIRECTION_NAMES = ["South", "West", "North", "East", "South West", "North West", "North East", "South East", "All direction"]
+const TORCH_SUBTILE_MAP = {0:7, 1:3, 2:1, 3:5, -1:-1}
+const BLANK_CUBES = [0,0,0,0,0,0,0,0]
+const WATER_FLOOR = 545
+const LAVA_FLOORS = [546, 547]
+
 func set_torch_side(xSlab, ySlab, slabID, slabsetIndexGroup, constructedColumns, bitmask, surrID):
 	var torchDirection = calculate_torch_side(xSlab, ySlab, surrID)
-	var torchSubtileToKeep = torchSubtileToKeepMap[torchDirection]
+	var torchSubtileToKeep = TORCH_SUBTILE_MAP[torchDirection]
 	
 	#Slabs.WALL_WITH_TORCH = 5
 	#Slabs.WALL_UNDECORATED = 9
@@ -1075,9 +1080,7 @@ func update_wibble(xSlab, ySlab, slabID, includeNearby):
 		if seCheck == myWibble and sCheck == myWibble and eCheck == myWibble:
 			oDataWibble.set_cellv(sePos, myWibble)
 
-const blankCubes = [0,0,0,0,0,0,0,0]
-const waterFloor = 545
-const lavaFloors = [546, 547]
+
 
 func has_neighbor_of_type(surrID, slabType):
 	return {
@@ -1123,7 +1126,7 @@ func randomize_gold_transition(constructedSlabData, surrID, neighborType):
 					continue
 
 				var floorTex = constructedFloor[columnIndex]
-				var isClearedByLiquid = (floorTex == waterFloor or floorTex in lavaFloors) and constructedColumns[columnIndex] == blankCubes
+				var isClearedByLiquid = (floorTex == WATER_FLOOR or floorTex in LAVA_FLOORS) and constructedColumns[columnIndex] == BLANK_CUBES
 
 				if not isClearedByLiquid and Random.chance_int(50):
 					var currentCube = constructedColumns[columnIndex][4]
@@ -1240,23 +1243,23 @@ func frail_condition(constructedSlabData, slabID, surrID, frailCornerType, onlyA
 func frail_fill_corner(slabID, index, constructedColumns, constructedFloor):
 	match slabID:
 		Slabs.WATER:
-			constructedFloor[index] = 545
-			constructedColumns[index] = blankCubes.duplicate(true)
+			constructedFloor[index] = WATER_FLOOR
+			constructedColumns[index] = BLANK_CUBES.duplicate(true)
 		Slabs.LAVA:
-			constructedFloor[index] = Random.choose([546,547]) # Lava floor
-			constructedColumns[index] = blankCubes.duplicate(true)
+			constructedFloor[index] = Random.choose(LAVA_FLOORS)
+			constructedColumns[index] = BLANK_CUBES.duplicate(true)
 		Slabs.PATH:
 			constructedFloor[index] = 207
-			constructedColumns[index] = blankCubes.duplicate(true)
+			constructedColumns[index] = BLANK_CUBES.duplicate(true)
 			if Cube.stoneRatio < randf():
-				constructedColumns[index] = blankCubes.duplicate(true)
+				constructedColumns[index] = BLANK_CUBES.duplicate(true)
 				constructedColumns[index][0] = Random.choose(Cube.rngCube["PathClean"])
 			else:
-				constructedColumns[index] = blankCubes.duplicate(true)
+				constructedColumns[index] = BLANK_CUBES.duplicate(true)
 				constructedColumns[index][0] = Random.choose(Cube.rngCube["PathWithStones"])
 		Slabs.EARTH:
 			constructedFloor[index] = 27
-			constructedColumns[index] = blankCubes.duplicate(true)
+			constructedColumns[index] = BLANK_CUBES.duplicate(true)
 			constructedColumns[index][0] = 25 # No need to randomize the path cube, it's not visible and the game overwrites it anyway.
 			constructedColumns[index][1] = Random.choose(Cube.rngCube["Earth"])
 			constructedColumns[index][2] = Random.choose(Cube.rngCube["Earth"])
@@ -1264,7 +1267,7 @@ func frail_fill_corner(slabID, index, constructedColumns, constructedFloor):
 			constructedColumns[index][4] = 5
 		Slabs.GOLD:
 			constructedFloor[index] = 27
-			constructedColumns[index] = blankCubes.duplicate(true)
+			constructedColumns[index] = BLANK_CUBES.duplicate(true)
 			constructedColumns[index][0] = 25
 			constructedColumns[index][1] = Random.choose(Cube.rngCube["Gold"])
 			constructedColumns[index][2] = Random.choose(Cube.rngCube["Gold"])
@@ -1272,7 +1275,7 @@ func frail_fill_corner(slabID, index, constructedColumns, constructedFloor):
 			constructedColumns[index][4] = Random.choose(Cube.rngCube["Gold"])
 		Slabs.DENSE_GOLD:
 			constructedFloor[index] = 27
-			constructedColumns[index] = blankCubes.duplicate(true)
+			constructedColumns[index] = BLANK_CUBES.duplicate(true)
 			constructedColumns[index][0] = 25
 			constructedColumns[index][1] = Random.choose(Cube.rngCube["DenseGold"])
 			constructedColumns[index][2] = Random.choose(Cube.rngCube["DenseGold"])
@@ -1280,7 +1283,7 @@ func frail_fill_corner(slabID, index, constructedColumns, constructedFloor):
 			constructedColumns[index][4] = Random.choose(Cube.rngCube["DenseGold"])
 		Slabs.ROCK:
 			constructedFloor[index] = 29
-			constructedColumns[index] = blankCubes.duplicate(true)
+			constructedColumns[index] = BLANK_CUBES.duplicate(true)
 			constructedColumns[index][0] = 45
 			constructedColumns[index][1] = 45
 			constructedColumns[index][2] = 44

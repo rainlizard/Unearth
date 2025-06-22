@@ -10,6 +10,9 @@ onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
 onready var oCustomSlabVoxelView = Nodelist.list["oCustomSlabVoxelView"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
+onready var oDataSlab = Nodelist.list["oDataSlab"]
+onready var oDataOwnership = Nodelist.list["oDataOwnership"]
+onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 
 var currentlyLookingAtNode = null
 var instanceType = 0
@@ -18,116 +21,82 @@ func _ready():
 	get_parent().set_tab_title(2, "Column")
 
 func update_details():
-	if visible == false: return
-	if oDataClm.cubes.size() == 0: return
-	
+	if visible == false or oDataClm.cubes.size() == 0: return
 	oColumnListData.clear()
 	
 	var pos = Vector2()
 	var entryIndex = 0
+	var columnsetIndex = 0
+	var slabVariation = ""
 	
 	if oEditor.currentView == oEditor.VIEW_2D and oUi.mouseOnUi == false:
 		pos = oSelector.cursorSubtile
-		entryIndex = oDataClmPos.get_cell_clmpos(pos.x,pos.y)
-#	elif oEditor.currentView == oEditor.VIEW_3D:
-#		if oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_MAP:
-#			pos = Vector2(oSelector3D.translation.x, oSelector3D.translation.z)
-#			entryIndex = oDataClmPos.get_cell(pos.x, pos.y)
-#
-#		elif oGenerateTerrain.GENERATED_TYPE == oGenerateTerrain.GEN_CLM:
-#			entryIndex = oGenerateTerrain.get_clm_index(oSelector3D.translation.x, oSelector3D.translation.z)
-#			if entryIndex == null:
-#				oColumnListData.clear()
-#				return
+		entryIndex = oDataClmPos.get_cell_clmpos(pos.x, pos.y)
+		var tilePos = Vector2(floor(pos.x / 3), floor(pos.y / 3))
+		var subtileIndex = (int(pos.y) % 3) * 3 + (int(pos.x) % 3)
+		var slabID = oSelector.get_slabID_at_pos(tilePos)
+		
+		if Slabs.data.has(slabID) and slabID < 1000:
+			var ownership = oDataOwnership.get_cellv_ownership(tilePos)
+			var surrID = oSlabPlacement.get_surrounding_slabIDs(tilePos.x, tilePos.y)
+			var surrOwner = oSlabPlacement.get_surrounding_ownership(tilePos.x, tilePos.y)
+			var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
+			
+			var bitmask = get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner, tilePos)
+			var slabsetIndexGroup = oSlabPlacement.make_slab(slabID * 28, bitmask)
+			
+			if bitmaskType == Slabs.BITMASK_REINFORCED:
+				oSlabPlacement.modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slabID)
+			else:
+				oSlabPlacement.modify_for_liquid(slabsetIndexGroup, surrID, slabID)
+			
+			var variation = slabsetIndexGroup[subtileIndex] / 9
+			columnsetIndex = Slabset.fetch_columnset_index(variation, subtileIndex)
+			slabVariation = get_variation_description(variation, bitmaskType, surrID)
 	
-#	if oTabClmEditor.visible == true:
-#		if oClmEditorVoxelView.visible == true:
-#			entryIndex = oClmEditorVoxelView.viewObject
-#		if oCustomSlabVoxelView.visible == true:
-#			if is_instance_valid(get_focus_owner()):
-#				if is_instance_valid(get_focus_owner().get_parent()):
-#					if get_focus_owner().get_parent() is SpinBox:
-#						entryIndex = get_focus_owner().get_parent().value
+	var data = [
+		["Variation", slabVariation if slabVariation != "" else "N/A"],
+		["Columnset", columnsetIndex],
+		["Clm data", entryIndex],
+		["Utilized", oDataClm.utilized[entryIndex]],
+		["Orient", oDataClm.orientation[entryIndex]],
+		["Solid mask", oDataClm.solidMask[entryIndex]],
+		["Permanent", oDataClm.permanent[entryIndex]],
+		["Lintel", oDataClm.lintel[entryIndex]],
+		["Height", oDataClm.height[entryIndex]]
+	]
 	
-	for i in 16:
-		var description
-		var value
-		match i:
-			0:
-				description = "Clm index"
-				value = entryIndex
-			1:
-				description = "Utilized"
-				value = oDataClm.utilized[entryIndex]
-			2:
-				description = "Orient"
-				value = oDataClm.orientation[entryIndex]
-			3:
-				description = "Solid mask"
-				value = oDataClm.solidMask[entryIndex]
-			4:
-				description = "Permanent"
-				value = oDataClm.permanent[entryIndex]
-			5:
-				description = "Lintel"
-				value = oDataClm.lintel[entryIndex]
-			6:
-				description = "Height"
-				value = oDataClm.height[entryIndex]
-			7:
-				description = "Cube 8"
-				var cubeNumber = oDataClm.cubes[entryIndex][7]
-				value = str(cubeNumber)
-				if cubeNumber < Cube.names.size():
-					value += ' : '+ Cube.names[cubeNumber]
-			8:
-				description = "Cube 7"
-				var cubeNumber = oDataClm.cubes[entryIndex][6]
-				value = str(cubeNumber)
-				if cubeNumber < Cube.names.size():
-					value += ' : '+ Cube.names[cubeNumber]
-			9:
-				description = "Cube 6"
-				var cubeNumber = oDataClm.cubes[entryIndex][5]
-				value = str(cubeNumber)
-				if cubeNumber < Cube.names.size():
-					value += ' : '+ Cube.names[cubeNumber]
-			10:
-				description = "Cube 5"
-				var cubeNumber = oDataClm.cubes[entryIndex][4]
-				value = str(cubeNumber)
-				if cubeNumber < Cube.names.size():
-					value += ' : '+ Cube.names[cubeNumber]
-			11:
-				description = "Cube 4"
-				var cubeNumber = oDataClm.cubes[entryIndex][3]
-				value = str(cubeNumber)
-				if cubeNumber < Cube.names.size():
-					value += ' : '+ Cube.names[cubeNumber]
-			12:
-				description = "Cube 3"
-				var cubeNumber = oDataClm.cubes[entryIndex][2]
-				value = str(cubeNumber)
-				if cubeNumber < Cube.names.size():
-					value += ' : '+ Cube.names[cubeNumber]
-			13:
-				description = "Cube 2"
-				var cubeNumber = oDataClm.cubes[entryIndex][1]
-				value = str(cubeNumber)
-				if cubeNumber < Cube.names.size():
-					value += ' : '+ Cube.names[cubeNumber]
-			14:
-				description = "Cube 1"
-				var cubeNumber = oDataClm.cubes[entryIndex][0]
-				value = str(cubeNumber)
-				if cubeNumber < Cube.names.size():
-					value += ' : '+ Cube.names[cubeNumber]
-			15:
-				description = "Floor texture"
-				value = oDataClm.floorTexture[entryIndex]
-#			16:
-#				description = "Special byte"
-#				value = oDataClm.testingSpecialByte[entryIndex]
-		if value != null:
-			oColumnListData.add_item(description, str(value))
-			#oDisplay.add_item([description, str(value)],[HALIGN_LEFT,HALIGN_RIGHT])
+	for i in range(8):
+		var cubeIndex = 7 - i
+		var cubeNumber = oDataClm.cubes[entryIndex][cubeIndex]
+		var cubeName = Cube.names[cubeNumber] if cubeNumber < Cube.names.size() else ""
+		data.append(["Cube " + str(i + 1), str(cubeNumber) + (" : " + cubeName if cubeName != "" else "")])
+	
+	data.append(["Floor texture", oDataClm.floorTexture[entryIndex]])
+	
+	for item in data:
+		if item[1] != null:
+			oColumnListData.add_item(item[0], str(item[1]))
+
+func get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner, tilePos):
+	match bitmaskType:
+		Slabs.BITMASK_BLOCK: return oSlabPlacement.get_tall_bitmask(surrID)
+		Slabs.BITMASK_FLOOR: return oSlabPlacement.get_general_bitmask(slabID, ownership, surrID, surrOwner)
+		Slabs.BITMASK_CLAIMED: return oSlabPlacement.get_claimed_bitmask(slabID, ownership, surrID, surrOwner)
+		Slabs.BITMASK_REINFORCED: return oSlabPlacement.get_wall_bitmask(tilePos.x, tilePos.y, surrID, ownership)
+		_: return 1
+
+func get_variation_description(variation, bitmaskType, surrID):
+	var localVariation = variation % 28
+	if localVariation == 27: return "Center"
+	
+	var baseDescription = oSlabPlacement.DIRECTION_NAMES[localVariation % 9]
+	
+	if localVariation >= 9 and localVariation < 18:
+		var hasRoomFace = bitmaskType == Slabs.BITMASK_REINFORCED and (Slabs.rooms_that_have_walls.has(surrID[0]) or Slabs.rooms_that_have_walls.has(surrID[1]) or Slabs.rooms_that_have_walls.has(surrID[2]) or Slabs.rooms_that_have_walls.has(surrID[3]))
+		return baseDescription + (" (room face)" if hasRoomFace else " (near lava)")
+	elif localVariation >= 18 and localVariation < 27:
+		var hasRoomFace = bitmaskType == Slabs.BITMASK_REINFORCED and (Slabs.rooms_that_have_walls.has(surrID[0]) or Slabs.rooms_that_have_walls.has(surrID[1]) or Slabs.rooms_that_have_walls.has(surrID[2]) or Slabs.rooms_that_have_walls.has(surrID[3]))
+		return baseDescription + (" (room face)" if hasRoomFace else " (near water)")
+	
+	return baseDescription

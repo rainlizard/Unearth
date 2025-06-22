@@ -173,12 +173,12 @@ func variation_changed(localVariation):
 		constructString += ""
 	elif localVariation < 18:
 		if isRoomWall:
-			constructString += "Room face variation"
+			constructString += "Room face"
 		else:
 			constructString += "Near lava"
 	elif localVariation < 27:
 		if isRoomWall:
-			constructString += "Room face variation"
+			constructString += "Room face"
 		else:
 			constructString += "Near water"
 	
