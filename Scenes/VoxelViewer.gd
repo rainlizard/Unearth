@@ -109,7 +109,7 @@ func set_object(setVal):
 	if displayingType == DK_SLABSET:
 		setVal = clamp(setVal,0, 27)
 	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
-		setVal = clamp(setVal,0, column_count-1)
+		setVal = clamp(setVal,1, column_count-1)
 	previousObject = viewObject
 	viewObject = setVal
 	
@@ -139,6 +139,7 @@ func set_object(setVal):
 		oColumnDetails.update_details()
 	if displayingType == DK_COLUMN:
 		oColumnsetControls.oColumnIndexSpinBox.value = setVal
+		oColumnDetails.update_details()
 	
 	 # Reset camera back
 	oVoxelCameraPivotPoint.rotation_degrees.z = -28.125

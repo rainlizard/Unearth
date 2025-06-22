@@ -44,10 +44,26 @@ func set_floortexture(floorTextureValue):
 	dataImage.unlock()
 	dataTexture.set_data(dataImage)
 	
+	# Get required texture resources
+	var oTMapLoader = Nodelist.list["oTMapLoader"]
+	var oReadPalette = Nodelist.list["oReadPalette"]
+	var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
+	
 	oTooltipPic.material.set_shader_param("showOnlySpecificStyle", 0)
 	oTooltipPic.material.set_shader_param("slxData", preload("res://Shaders/Black3x3.png"))
-	#oTooltipPic.material.set_shader_param("slabIdData", preload("res://Shaders/Bedrock3x3.png"))
 	oTooltipPic.material.set_shader_param("slabIdData", preload("res://Shaders/Black3x3.png"))
 	oTooltipPic.material.set_shader_param("fieldSizeInSubtiles", Vector2(1, 1))
 	oTooltipPic.material.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
 	oTooltipPic.material.set_shader_param("viewTextures", dataTexture)
+	
+	if oTMapLoader.cachedTextures.size() > 0 and oDataLevelStyle.data >= 0 and oDataLevelStyle.data < oTMapLoader.cachedTextures.size():
+		var currentPack = oTMapLoader.cachedTextures[oDataLevelStyle.data]
+		if currentPack != null:
+			oTooltipPic.material.set_shader_param("tmap_A_top", currentPack[0])
+			oTooltipPic.material.set_shader_param("tmap_A_bottom", currentPack[1])
+			oTooltipPic.material.set_shader_param("tmap_B_top", currentPack[2])
+			oTooltipPic.material.set_shader_param("tmap_B_bottom", currentPack[3])
+	
+	var paletteTexture = oReadPalette.get_palette_texture()
+	if paletteTexture != null:
+		oTooltipPic.material.set_shader_param("palette_texture", paletteTexture)

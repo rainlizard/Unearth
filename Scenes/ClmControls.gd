@@ -46,6 +46,7 @@ onready var cubeSpinBoxArray = [
 
 var nodeClm
 var nodeVoxelView
+var isMouseOverFloorTexture = false
 
 # Clipboard for column data
 var clipboard = {
@@ -85,25 +86,34 @@ func _ready():
 func just_opened():
 	match name:
 		"ClmEditorControls":
+			nodeVoxelView.disable_camera_animation = true
+			oColumnIndexSpinBox.min_value = 1
 			oColumnIndexSpinBox.max_value = oDataClm.column_count-1
 			if oColumnIndexSpinBox.value == 0:
-				nodeVoxelView.disable_camera_animation = true
 				oColumnIndexSpinBox.value = 1
-				nodeVoxelView.disable_camera_animation = false
+			nodeVoxelView.disable_camera_animation = false
 		"ColumnsetControls":
+			nodeVoxelView.disable_camera_animation = true
+			oColumnIndexSpinBox.min_value = 1
 			oColumnIndexSpinBox.max_value = Columnset.column_count-1
+			if oColumnIndexSpinBox.value == 0:
+				oColumnIndexSpinBox.value = 1
+			nodeVoxelView.disable_camera_animation = false
 	update_clm_editing_state()
 
 func update_clm_editing_state():
-	if name != "ClmEditorControls":
-		return
-	
-	var allowEditing = Settings.get_setting("allow_clm_data_editing")
-	if allowEditing == null or not Settings.haveInitializedAllSettings:
-		allowEditing = false
-	
 	var currentColumn = int(oColumnIndexSpinBox.value)
-	var canEditCurrentColumn = allowEditing and currentColumn != 0
+	var canEditCurrentColumn = true
+	
+	# For CLM Editor, check both the setting and column 0 restriction
+	if name == "ClmEditorControls":
+		var allowEditing = Settings.get_setting("allow_clm_data_editing")
+		if allowEditing == null or not Settings.haveInitializedAllSettings:
+			allowEditing = false
+		canEditCurrentColumn = allowEditing and currentColumn != 0
+	# For Columnset, only check column 0 restriction
+	elif name == "ColumnsetControls":
+		canEditCurrentColumn = currentColumn != 0
 	
 	oHeightSpinBox.editable = canEditCurrentColumn
 	oSolidMaskSpinBox.editable = canEditCurrentColumn
@@ -118,17 +128,27 @@ func update_clm_editing_state():
 	oColumnRevertButton.disabled = not canEditCurrentColumn
 	oColumnCopyButton.disabled = not canEditCurrentColumn
 	oColumnPasteButton.disabled = not canEditCurrentColumn
-	oColumnFirstUnusedButton.disabled = not allowEditing
+	
+	# First unused button logic depends on the context
+	if name == "ClmEditorControls":
+		var allowEditing = Settings.get_setting("allow_clm_data_editing")
+		if allowEditing == null or not Settings.haveInitializedAllSettings:
+			allowEditing = false
+		oColumnFirstUnusedButton.disabled = not allowEditing
+	elif name == "ColumnsetControls":
+		oColumnFirstUnusedButton.disabled = false
 
 func establish_maximum_cube_field_values():
 	for i in cubeSpinBoxArray.size():
 		cubeSpinBoxArray[i].max_value = Cube.CUBES_COUNT
 
 func _on_floortexture_mouse_entered():
+	isMouseOverFloorTexture = true
 	oCustomTooltip.set_floortexture(oFloorTextureSpinBox.value)
 
 
 func _on_floortexture_mouse_exited():
+	isMouseOverFloorTexture = false
 	oCustomTooltip.set_text("")
 
 
@@ -194,13 +214,20 @@ func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
 
 func _on_FloorTextureSpinBox_value_changed(value):
 	var clmIndex = int(oColumnIndexSpinBox.value)
+	
+	# Update tooltip regardless of column index if mouse is over floor texture
+	if isMouseOverFloorTexture:
+		oCustomTooltip.set_floortexture(value)
+	
+	# Column 0 is reserved and cannot be edited
 	if clmIndex == 0:
 		return
+		
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
 	nodeClm.floorTexture[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
-	_on_floortexture_mouse_entered() # Update tooltip
+	
 	adjust_ui_color_if_different()
 
 func _on_LintelSpinBox_value_changed(value):
