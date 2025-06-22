@@ -80,14 +80,45 @@ func _ready():
 		cubeSpinBoxArray[i].connect("mouse_exited", self, "_on_cube_mouse_exited", [i])
 	
 	oGridAdvancedValues.visible = false
+	update_clm_editing_state()
 
 func just_opened():
 	match name:
-		"ColumnEditorControls":
+		"ClmEditorControls":
 			oColumnIndexSpinBox.max_value = oDataClm.column_count-1
+			if oColumnIndexSpinBox.value == 0:
+				nodeVoxelView.disable_camera_animation = true
+				oColumnIndexSpinBox.value = 1
+				nodeVoxelView.disable_camera_animation = false
 		"ColumnsetControls":
 			oColumnIndexSpinBox.max_value = Columnset.column_count-1
+	update_clm_editing_state()
 
+func update_clm_editing_state():
+	if name != "ClmEditorControls":
+		return
+	
+	var allowEditing = Settings.get_setting("allow_clm_data_editing")
+	if allowEditing == null or not Settings.haveInitializedAllSettings:
+		allowEditing = false
+	
+	var currentColumn = int(oColumnIndexSpinBox.value)
+	var canEditCurrentColumn = allowEditing and currentColumn != 0
+	
+	oHeightSpinBox.editable = canEditCurrentColumn
+	oSolidMaskSpinBox.editable = canEditCurrentColumn
+	oPermanentSpinBox.editable = canEditCurrentColumn
+	oOrientationSpinBox.editable = canEditCurrentColumn
+	oLintelSpinBox.editable = canEditCurrentColumn
+	oFloorTextureSpinBox.editable = canEditCurrentColumn
+	
+	for cubeSpinBox in cubeSpinBoxArray:
+		cubeSpinBox.editable = canEditCurrentColumn
+	
+	oColumnRevertButton.disabled = not canEditCurrentColumn
+	oColumnCopyButton.disabled = not canEditCurrentColumn
+	oColumnPasteButton.disabled = not canEditCurrentColumn
+	oColumnFirstUnusedButton.disabled = not allowEditing
 
 func establish_maximum_cube_field_values():
 	for i in cubeSpinBoxArray.size():
@@ -144,11 +175,14 @@ func _on_ColumnIndexSpinBox_value_changed(value):
 	
 	oCustomTooltip.visible = false # Tooltip becomes incorrect when changing column index so just turn it off until you hover your mouse over it again
 	adjust_ui_color_if_different()
+	update_clm_editing_state()
 
 func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	if clmIndex == 0:
+		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.cubes[clmIndex][cubeNumber] = int(value)
 	nodeVoxelView.update_column_view()
 	
@@ -159,50 +193,62 @@ func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
 	adjust_ui_color_if_different()
 
 func _on_FloorTextureSpinBox_value_changed(value):
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	if clmIndex == 0:
+		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.floorTexture[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	_on_floortexture_mouse_entered() # Update tooltip
 	adjust_ui_color_if_different()
 
 func _on_LintelSpinBox_value_changed(value):
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	if clmIndex == 0:
+		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.lintel[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
 
 func _on_PermanentSpinBox_value_changed(value):
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	if clmIndex == 0:
+		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.permanent[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
 
 func _on_OrientationSpinBox_value_changed(value):
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	if clmIndex == 0:
+		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.orientation[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
 
 func _on_HeightSpinBox_value_changed(value):
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	if clmIndex == 0:
+		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.height[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
 
 func _on_SolidMaskSpinBox_value_changed(value):
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	if clmIndex == 0:
+		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-	var clmIndex = int(oColumnIndexSpinBox.value)
 	nodeClm.solidMask[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
@@ -278,10 +324,14 @@ func _on_ColumnPasteButton_pressed():
 	if clipboard["cubes"].empty():
 		oMessage.quick("Clipboard is empty. Copy a column first.")
 		return
-	if nodeClm == oDataClm:
-		oEditor.mapHasBeenEdited = true
 	
 	var clmIndex = int(oColumnIndexSpinBox.value)
+	if clmIndex == 0:
+		oMessage.quick("Cannot paste to column 0")
+		return
+		
+	if nodeClm == oDataClm:
+		oEditor.mapHasBeenEdited = true
 	
 	nodeClm.height[clmIndex] = clipboard["height"]
 	nodeClm.solidMask[clmIndex] = clipboard["solidMask"]
@@ -308,9 +358,13 @@ func revert_columns(column_ids):
 		nodeClm.cubes[column_id] = nodeClm.default_data["cubes"][column_id].duplicate(true)
 
 func _on_ColumnRevertButton_pressed():
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	if clmIndex == 0:
+		oMessage.quick("Cannot revert column 0")
+		return
+		
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-	var clmIndex = int(oColumnIndexSpinBox.value)
 	revert_columns([clmIndex])
 	
 	_on_ColumnIndexSpinBox_value_changed(clmIndex)  # Refresh UI

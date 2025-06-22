@@ -31,6 +31,7 @@ enum {
 var viewObject = 0 setget set_object
 var column_count = 2048
 var previousObject = 0
+var disable_camera_animation = false
 
 func initialize():
 	if is_instance_valid(oDataClm) == false: return
@@ -113,7 +114,16 @@ func set_object(setVal):
 	viewObject = setVal
 	
 	# Speed up camera movement speed if you change the object value by a lot, to get there quicker
-	oVoxelCamera.cameraShiftSpeed = clamp(0.02 * abs(previousObject-viewObject), 0.02, 0.3)
+	if disable_camera_animation:
+		# Set camera position directly without animation
+		if displayingType == DK_SLABSET:
+			oVoxelCameraPivotPoint.translation.z = viewObject*4
+			oVoxelCameraPivotPoint.translation.x = viewObject*4
+		else:
+			oVoxelCameraPivotPoint.translation.z = viewObject*2
+			oVoxelCameraPivotPoint.translation.x = viewObject*2
+	else:
+		oVoxelCamera.cameraShiftSpeed = clamp(0.02 * abs(previousObject-viewObject), 0.02, 0.3)
 	
 	do_one()
 	

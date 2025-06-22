@@ -81,6 +81,7 @@ var listOfSettings = [
 	"auto_open_map_settings",
 	"fortify",
 	"automatic_torch_slabs",
+	"allow_clm_data_editing",
 	# These four are read inside Viewport script
 #	"editor_window_position",
 #	"editor_window_size",
@@ -431,6 +432,10 @@ func game_setting(doWhat,string,value):
 		"last_changelog_displayed":
 			if doWhat == SET: write_cfg("last_changelog_displayed", value)
 			if doWhat == GET: return read_cfg("last_changelog_displayed")
+		"allow_clm_data_editing":
+			var oAllowCLMDataEditingCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/AllowCLMDataEditingCheckbox'
+			if doWhat == SET: oAllowCLMDataEditingCheckbox.pressed = value
+			if doWhat == GET: return oAllowCLMDataEditingCheckbox.pressed
 
 func delete_settings():
 	var dir = Directory.new()

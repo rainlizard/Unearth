@@ -10,6 +10,8 @@ onready var oClmEditorControls = Nodelist.list["oClmEditorControls"]
 onready var oConfirmClmClearUnused = Nodelist.list["oConfirmClmClearUnused"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oMapClmFilenameLabel = Nodelist.list["oMapClmFilenameLabel"]
+onready var oColumnEditorClearUnusedButton = Nodelist.list["oColumnEditorClearUnusedButton"]
+onready var oColumnEditorSortButton = Nodelist.list["oColumnEditorSortButton"]
 
 # When re-opening window or opening for first time
 func _on_ColumnEditor_visibility_changed():
@@ -25,18 +27,28 @@ func _on_ColumnEditor_visibility_changed():
 		# Refresh controls
 		oClmEditorControls._on_ColumnIndexSpinBox_value_changed(oClmEditorControls.oColumnIndexSpinBox.value)
 		
+		update_clm_editing_buttons()
+		
 	else:
 		# Update "Clm entries" in properties window
 		yield(get_tree(),'idle_frame')
 		oDataClm.count_filled_clm_entries()
 
+func update_clm_editing_buttons():
+	var allowEditing = Settings.get_setting("allow_clm_data_editing")
+	if allowEditing == null or not Settings.haveInitializedAllSettings:
+		allowEditing = false
+	
+	oColumnEditorClearUnusedButton.disabled = not allowEditing
+	oColumnEditorSortButton.disabled = not allowEditing
+
 func _on_ColumnEditorHelpButton_pressed():
 	var helptxt = ""
+	helptxt += "- To edit CLM data, enable 'Allow CLM data editing' in Preferences > UI."
+	helptxt += '\n'
 	helptxt += "- Use middle mouse to zoom in and out, left click and drag to rotate view. You can use the arrow keys to switch between columns faster and also use arrow keys while a field's selected to navigate cubes faster." #Holding left click on a field's little arrows while moving the mouse up or down provides speedy navigation too.
 	helptxt += '\n'
 	helptxt += "- If your column has multiple gaps then some of the top/bottom cube faces may not display in-game."
-	helptxt += '\n'
-	helptxt += "- Don't edit column 0's cubes, leave it blank."
 	oMessage.big("Help",helptxt)
 
 

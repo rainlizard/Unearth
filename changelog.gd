@@ -6,6 +6,8 @@ const string = """
 - Some small optimizations to overhead 2D graphics
 - Fixed an issue where viewing certain Slabset variations would cause them to be marked as modified
 - Slabset window's "Near water" & "Near lava" text replaced with "Room face variation" on certain slabIDs like LAIR_WALL
+- Added preference "Allow CLM data editing" which is disabled by default
+- Disable editing column 0
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement
