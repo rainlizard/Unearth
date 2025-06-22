@@ -37,7 +37,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "VariationConstructs",
 "language": "GDScript",
-"path": "res://Scenes/ConstructedVariations.gd"
+"path": "res://Scenes/VariationConstructs.gd"
 } ]
 _global_script_class_icons={
 "CustomSpinBox": "",
@@ -86,7 +86,7 @@ window/dpi/allow_hidpi=true
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/GDScriptMacros/plugin.cfg", "res://addons/IncludeOnExport/plugin.cfg", "res://addons/SingletonScriptsShortcut/plugin.cfg", "res://addons/UnearthEditorPlugin/plugin.cfg", "res://addons/godot-plugin-refresher/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/GDScriptMacros/plugin.cfg", "res://addons/IncludeOnExport/plugin.cfg", "res://addons/NodeScriptRenamer/plugin.cfg", "res://addons/SingletonScriptsShortcut/plugin.cfg", "res://addons/UnearthEditorPlugin/plugin.cfg", "res://addons/godot-plugin-refresher/plugin.cfg" )
 
 [gd2cs]
 
