@@ -48,6 +48,12 @@ onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oModifiedListLabel = Nodelist.list["oModifiedListLabel"]
 onready var oModifiedListPanelContainer = Nodelist.list["oModifiedListPanelContainer"]
 onready var oTMapLoader = Nodelist.list["oTMapLoader"]
+onready var oColumnDetails = Nodelist.list["oColumnDetails"]
+onready var oDataClmPos = Nodelist.list["oDataClmPos"]
+onready var oSelector = Nodelist.list["oSelector"]
+onready var oEditor = Nodelist.list["oEditor"]
+onready var oUi = Nodelist.list["oUi"]
+onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 
 enum {
 	ONE_VARIATION,
@@ -906,3 +912,50 @@ func _on_ConfirmDeleteColumnsetFile_confirmed():
 			oMessage.big("Error", "Failed to delete the file.")
 	else:
 		oMessage.big("Error", "The columnset file doesn't exist.")
+
+
+func open_from_cursor_position():
+	var data = oColumnDetails.calculate_cursor_data()
+	if data.slabID == 0:
+		return
+	
+	var columnDetailsVisible = oPropertiesTabs.current_tab == 2
+	
+	if visible == false:
+		Utils.popup_centered(self)
+	
+	# Use the full variation to determine the correct slabID and local variation
+	var actualSlabID = data.fullVariation / 28
+	var actualLocalVariation = data.fullVariation % 28
+	
+	if columnDetailsVisible:
+		# When opened from Column mode, just set values without tab switching
+		oSlabsetIDSpinBox.value = actualSlabID
+		oVariationNumberSpinBox.value = actualLocalVariation
+		_on_SlabsetIDSpinBox_value_changed(actualSlabID)
+		variation_changed(actualLocalVariation)
+		
+		oColumnsetControls.oColumnIndexSpinBox.value = data.columnsetIndex
+		
+		var clmEditorControls = get_node("SlabsetTabs/TabClmEditor").oClmEditorControls
+		if is_instance_valid(clmEditorControls):
+			clmEditorControls.oColumnIndexSpinBox.value = data.clmEntryIndex
+	else:
+		# When opened from other modes, do the full tab navigation
+		oSlabsetIDSpinBox.value = actualSlabID
+		oVariationNumberSpinBox.value = actualLocalVariation
+		oSlabsetTabs.current_tab = 0
+		_on_SlabsetIDSpinBox_value_changed(actualSlabID)
+		variation_changed(actualLocalVariation)
+		
+		yield(get_tree(), 'idle_frame')
+		
+		oSlabsetTabs.current_tab = 1
+		oColumnsetControls.oColumnIndexSpinBox.value = data.columnsetIndex
+		
+		yield(get_tree(), 'idle_frame')
+		
+		oSlabsetTabs.current_tab = 2
+		var clmEditorControls = get_node("SlabsetTabs/TabClmEditor").oClmEditorControls
+		if is_instance_valid(clmEditorControls):
+			clmEditorControls.oColumnIndexSpinBox.value = data.clmEntryIndex

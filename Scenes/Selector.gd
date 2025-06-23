@@ -38,6 +38,8 @@ onready var oDisplaySlxNumbers = Nodelist.list["oDisplaySlxNumbers"]
 onready var oOwnerSelection = Nodelist.list["oOwnerSelection"]
 onready var oSlabNameDisplay = Nodelist.list["oSlabNameDisplay"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 
 onready var TILE_SIZE = Constants.TILE_SIZE
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
@@ -105,52 +107,62 @@ func mouse_button_on_field():
 	
 	# Initial on-press button
 	if Input.is_action_just_pressed("mouse_left"):
-		match mode:
-			MODE_TILE:
-				match oEditingTools.TOOL_SELECTED:
-					oEditingTools.RECTANGLE:
-						oRectangleSelection.set_initial_position(cursorTile)
-					oEditingTools.PAINTBUCKET:
-						oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_FILL)
-			MODE_SUBTILE:
-				draggingInstance = false
-				
-				var youClickedOnAnAlreadyInspectedThing = false
-				if oInspector.inspectorSubtile.floor() == cursorSubtile.floor():
-					if is_instance_valid(oInspector.inspectingInstance):
-						youClickedOnAnAlreadyInspectedThing = true
-				
-				if Input.is_action_pressed("place_overlapping"):
-					canPlace = true
-				
-				# Check if something is under the cursor and initiate dragging
-				# If you're clicking on an inspected subtile, then drag the inspected object. (helps with stacked objects))
-				
-				var thingAtCursor
-				
-				if youClickedOnAnAlreadyInspectedThing == true:
-					thingAtCursor = oInspector.inspectingInstance
-					oInspector.deselect()
-				else:
-					thingAtCursor = instance_position(get_global_mouse_position(), "Instance")
-				if is_instance_valid(thingAtCursor):
-					holdClickOnInstance = thingAtCursor
-					drag_init_relative_pos = thingAtCursor.global_position - get_global_mouse_position()
-				
-				if youClickedOnAnAlreadyInspectedThing == false:
-					if oSelection.cursorOnInstancesArray.empty() == false:
-						if is_instance_valid(oSelection.cursorOnInstancesArray[0]) == true:
-							oInspector.inspect_something(oSelection.cursorOnInstancesArray[0])
-					else:
+		var columnDetailsVisible = oPropertiesTabs.current_tab == 2
+		
+		if columnDetailsVisible:
+			# In column mode, left click opens SlabsetWindow
+			oSlabsetWindow.open_from_cursor_position()
+		else:
+			# Normal behavior when not in column mode
+			match mode:
+				MODE_TILE:
+					match oEditingTools.TOOL_SELECTED:
+						oEditingTools.RECTANGLE:
+							oRectangleSelection.set_initial_position(cursorTile)
+						oEditingTools.PAINTBUCKET:
+							oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_FILL)
+				MODE_SUBTILE:
+					draggingInstance = false
+					
+					var youClickedOnAnAlreadyInspectedThing = false
+					if oInspector.inspectorSubtile.floor() == cursorSubtile.floor():
+						if is_instance_valid(oInspector.inspectingInstance):
+							youClickedOnAnAlreadyInspectedThing = true
+					
+					if Input.is_action_pressed("place_overlapping"):
+						canPlace = true
+					
+					# Check if something is under the cursor and initiate dragging
+					# If you're clicking on an inspected subtile, then drag the inspected object. (helps with stacked objects))
+					
+					var thingAtCursor
+					
+					if youClickedOnAnAlreadyInspectedThing == true:
+						thingAtCursor = oInspector.inspectingInstance
 						oInspector.deselect()
+					else:
+						thingAtCursor = instance_position(get_global_mouse_position(), "Instance")
+					if is_instance_valid(thingAtCursor):
+						holdClickOnInstance = thingAtCursor
+						drag_init_relative_pos = thingAtCursor.global_position - get_global_mouse_position()
+					
+					if youClickedOnAnAlreadyInspectedThing == false:
+						if oSelection.cursorOnInstancesArray.empty() == false:
+							if is_instance_valid(oSelection.cursorOnInstancesArray[0]) == true:
+								oInspector.inspect_something(oSelection.cursorOnInstancesArray[0])
+						else:
+							oInspector.deselect()
 	
 	# Holding down button
 	if Input.is_action_pressed("mouse_left"):
+		var columnDetailsVisible = oPropertiesTabs.current_tab == 2
+		
 		if is_instance_valid(holdClickOnInstance) and Input.is_action_pressed("place_overlapping") == false:
 			if mouse_movement_vector != Vector2(0,0) or get_global_mouse_position() != prev_global_mouse_position:
 				draggingInstance = true
 				holdClickOnInstance.global_position = get_global_mouse_position() + drag_init_relative_pos
-		else:
+		elif columnDetailsVisible == false:
+			# Only allow slab placement when not in column mode
 			match oEditingTools.TOOL_SELECTED:
 				oEditingTools.PENCIL, oEditingTools.BRUSH:
 					if canPlace == true and visible == true:
@@ -201,13 +213,15 @@ func mouse_button_on_field():
 	
 	if Input.is_action_pressed("mouse_right"):
 		if visible == true:
-			if oSelection.cursorOnInstancesArray.empty() == false:
-				if is_instance_valid(oSelection.cursorOnInstancesArray[0]) == true:
-					change_mode(MODE_SUBTILE)
-			else:
-				change_mode(MODE_TILE)
-			oSelection.update_paint()
-			oPlacingSettings.set_placing_tab_and_update_it()
+			var columnDetailsVisible = oPropertiesTabs.current_tab == 2
+			if columnDetailsVisible == false:
+				if oSelection.cursorOnInstancesArray.empty() == false:
+					if is_instance_valid(oSelection.cursorOnInstancesArray[0]) == true:
+						change_mode(MODE_SUBTILE)
+				else:
+					change_mode(MODE_TILE)
+				oSelection.update_paint()
+				oPlacingSettings.set_placing_tab_and_update_it()
 	
 	if Input.is_action_pressed("mouse_right"):
 		if visible == true:
@@ -219,6 +233,13 @@ func mouse_button_on_field():
 	if Input.is_action_just_released("mouse_right"):
 		if Input.is_action_pressed("place_overlapping") == false:
 			oInspector.deselect()
+		
+		# Open SlabsetWindow if ColumnDetails tab is visible or SlabsetWindow is already open
+		if visible == true:
+			var columnDetailsVisible = oPropertiesTabs.current_tab == 2
+			var slabsetWindowVisible = oSlabsetWindow.visible
+			if columnDetailsVisible or slabsetWindowVisible:
+				oSlabsetWindow.open_from_cursor_position()
 	
 	if Input.is_action_pressed("ui_delete"):
 		oEditor.mapHasBeenEdited = true
@@ -292,9 +313,21 @@ func update_cursor_position():
 		moved_to_new_subtile()
 		previousPosSubtile = cursorSubtile
 	
-	match mode:
-		MODE_TILE: position = cursorTile * TILE_SIZE
-		MODE_SUBTILE: position = cursorSubtile * SUBTILE_SIZE
+	var columnDetailsVisible = oPropertiesTabs.current_tab == 2
+	if columnDetailsVisible:
+		position = cursorSubtile * SUBTILE_SIZE
+		$SubtileSelector.visible = true
+		$TileSelector.visible = false
+	else:
+		match mode:
+			MODE_TILE: 
+				position = cursorTile * TILE_SIZE
+				$SubtileSelector.visible = false
+				$TileSelector.visible = true
+			MODE_SUBTILE: 
+				position = cursorSubtile * SUBTILE_SIZE
+				$SubtileSelector.visible = true
+				$TileSelector.visible = false
 
 
 func moved_to_new_tile():

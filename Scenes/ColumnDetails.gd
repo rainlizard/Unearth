@@ -24,37 +24,20 @@ func update_details():
 	if visible == false or oDataClm.cubes.size() == 0: return
 	oColumnListData.clear()
 	
-	var pos = Vector2()
-	var entryIndex = 0
-	var columnsetIndex = 0
-	var slabVariation = ""
+	var cursorData = calculate_cursor_data()
+	var entryIndex = cursorData.clmEntryIndex
+	var columnsetIndex = cursorData.columnsetIndex
+	var slabVariation = cursorData.variationDescription
 	
-	if oEditor.currentView == oEditor.VIEW_2D and oUi.mouseOnUi == false:
-		pos = oSelector.cursorSubtile
-		entryIndex = oDataClmPos.get_cell_clmpos(pos.x, pos.y)
-		var tilePos = Vector2(floor(pos.x / 3), floor(pos.y / 3))
-		var subtileIndex = (int(pos.y) % 3) * 3 + (int(pos.x) % 3)
-		var slabID = oSelector.get_slabID_at_pos(tilePos)
-		
-		if Slabs.data.has(slabID) and slabID < 1000:
-			var ownership = oDataOwnership.get_cellv_ownership(tilePos)
-			var surrID = oSlabPlacement.get_surrounding_slabIDs(tilePos.x, tilePos.y)
-			var surrOwner = oSlabPlacement.get_surrounding_ownership(tilePos.x, tilePos.y)
-			var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
-			
-			var bitmask = get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner, tilePos)
-			var slabsetIndexGroup = oSlabPlacement.make_slab(slabID * 28, bitmask)
-			
-			if bitmaskType == Slabs.BITMASK_REINFORCED:
-				oSlabPlacement.modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slabID)
-			else:
-				oSlabPlacement.modify_for_liquid(slabsetIndexGroup, surrID, slabID)
-			
-			var variation = slabsetIndexGroup[subtileIndex] / 9
-			columnsetIndex = Slabset.fetch_columnset_index(variation, subtileIndex)
-			slabVariation = get_variation_description(variation, bitmaskType, surrID)
+	# Calculate the real slab ID and name from the full variation
+	var realSlabID = cursorData.fullVariation / 28
+	var realSlabName = "Unknown"
+	if Slabs.data.has(realSlabID):
+		realSlabName = Slabs.data[realSlabID][Slabs.NAME]
+	var slabsetInfo = realSlabName + " : " + str(realSlabID)
 	
 	var data = [
+		["Slabset", slabsetInfo],
 		["Variation", slabVariation if slabVariation != "" else "N/A"],
 		["Columnset", columnsetIndex],
 		["Clm data", entryIndex],
@@ -78,6 +61,58 @@ func update_details():
 		if item[1] != null:
 			oColumnListData.add_item(item[0], str(item[1]))
 
+func calculate_cursor_data():
+	var defaultData = {
+		"slabID": 0,
+		"columnsetIndex": 0,
+		"localVariation": 0,
+		"fullVariation": 0,
+		"clmEntryIndex": 0,
+		"variationDescription": ""
+	}
+	
+	if oEditor.currentView != oEditor.VIEW_2D or oUi.mouseOnUi == true:
+		return defaultData
+	
+	var pos = oSelector.cursorSubtile
+	var tilePos = Vector2(floor(pos.x / 3), floor(pos.y / 3))
+	var slabID = oSelector.get_slabID_at_pos(tilePos)
+	
+	if Slabs.data.has(slabID) == false or slabID >= 1000:
+		return defaultData
+	
+	var entryIndex = oDataClmPos.get_cell_clmpos(pos.x, pos.y)
+	var subtileIndex = (int(pos.y) % 3) * 3 + (int(pos.x) % 3)
+	var columnsetIndex = 0
+	var slabVariation = ""
+	
+	var ownership = oDataOwnership.get_cellv_ownership(tilePos)
+	var surrID = oSlabPlacement.get_surrounding_slabIDs(tilePos.x, tilePos.y)
+	var surrOwner = oSlabPlacement.get_surrounding_ownership(tilePos.x, tilePos.y)
+	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
+	
+	var bitmask = get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner, tilePos)
+	var slabsetIndexGroup = oSlabPlacement.make_slab(slabID * 28, bitmask)
+	
+	if bitmaskType == Slabs.BITMASK_REINFORCED:
+		oSlabPlacement.modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slabID)
+	else:
+		oSlabPlacement.modify_for_liquid(slabsetIndexGroup, surrID, slabID)
+	
+	var variation = slabsetIndexGroup[subtileIndex] / 9
+	columnsetIndex = Slabset.fetch_columnset_index(variation, subtileIndex)
+	slabVariation = get_variation_description(variation, bitmaskType, surrID)
+	
+	return {
+		"slabID": slabID,
+		"columnsetIndex": columnsetIndex,
+		"localVariation": variation % 28,
+		"fullVariation": variation,
+		"clmEntryIndex": entryIndex,
+		"variationDescription": slabVariation
+	}
+
+
 func get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner, tilePos):
 	match bitmaskType:
 		Slabs.BITMASK_BLOCK: return oSlabPlacement.get_tall_bitmask(surrID)
@@ -100,3 +135,5 @@ func get_variation_description(variation, bitmaskType, surrID):
 		return baseDescription + (" (room face)" if hasRoomFace else " (near water)")
 	
 	return baseDescription
+
+

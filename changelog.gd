@@ -9,6 +9,7 @@ const string = """
 - Added preference "Allow CLM data editing" which is disabled by default
 - Disable editing column 0
 - Display 'Columnset' and 'Variation' in Properties 'Column' tab
+- While in Column tab, when you click on the map the slabset window will open and go to that column
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

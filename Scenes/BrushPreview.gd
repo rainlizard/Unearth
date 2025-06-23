@@ -8,6 +8,7 @@ onready var oUi = Nodelist.list["oUi"]
 onready var oPreferencesWindow = Nodelist.list["oPreferencesWindow"]
 onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
+onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 
 var img = Image.new()
 var tex = ImageTexture.new()
@@ -59,6 +60,11 @@ func update_img():
 	
 
 func _process(delta):
+	var columnDetailsVisible = oPropertiesTabs.current_tab == 2
+	if columnDetailsVisible:
+		visible = false
+		return
+	
 	oBrushPreviewDisplay.rect_position = (oSelector.cursorTile+offsetBrushPos) * Vector2(96,96)
 	visible = true
 	if oUi.mouseOnUi == true: visible = false
