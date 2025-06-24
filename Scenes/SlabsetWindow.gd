@@ -104,6 +104,35 @@ func _ready():
 	oObjRelativeZSpinBox.step = 1.0 / 256.0
 	
 	oDkSlabsetVoxelView.initialize()
+	
+	connect("item_rect_changed", self, "_on_SlabsetWindow_item_rect_changed")
+
+func _on_SlabsetWindow_item_rect_changed():
+	if Settings.haveInitializedAllSettings == false: return
+	Settings.set_setting("slabset_window_size", rect_size)
+	Settings.set_setting("slabset_window_position", rect_position)
+
+func popup_on_right_side():
+	var hasPositionSetting = Settings.cfg_has_setting("slabset_window_position")
+	var hasSizeSetting = Settings.cfg_has_setting("slabset_window_size")
+	
+	if hasPositionSetting == false or hasSizeSetting == false:
+		var screenSize = OS.get_screen_size()
+		var defaultWidth = 610
+		var defaultHeight = 990
+		
+		if hasSizeSetting == false:
+			rect_size = Vector2(defaultWidth, defaultHeight)
+		
+		if hasPositionSetting == false:
+			var rightSideX = screenSize.x - defaultWidth - 50
+			var centeredY = (screenSize.y - defaultHeight) / 2
+			rect_position = Vector2(rightSideX, centeredY)
+	
+	popup()
+	
+	visible = false
+	visible = true
 
 func _notification(what):
 	match what:
@@ -924,7 +953,7 @@ func open_from_cursor_position():
 	var columnDetailsVisible = oPropertiesTabs.current_tab == 2
 	
 	if visible == false:
-		Utils.popup_centered(self)
+		popup_on_right_side()
 	
 	# Use the full variation to determine the correct slabID and local variation
 	var actualSlabID = data.fullVariation / 28

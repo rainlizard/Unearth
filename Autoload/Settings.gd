@@ -45,6 +45,8 @@ var listOfSettings = [
 	"slab_window_size",
 	"slab_window_position",
 	"slab_window_scale",
+	"slabset_window_size",
+	"slabset_window_position",
 	"thing_window_size",
 	"thing_window_position",
 	"thing_window_scale",
@@ -288,6 +290,14 @@ func game_setting(doWhat,string,value):
 			var oPickSlabWindow = $'../Main/Ui/UiTools/PickSlabWindow'
 			if doWhat == SET: oPickSlabWindow.grid_window_scale = value
 			if doWhat == GET: return oPickSlabWindow.grid_window_scale
+		"slabset_window_size":
+			var oSlabsetWindow = $'../Main/Ui/UiSystem/SlabsetWindow'
+			if doWhat == SET: oSlabsetWindow.rect_size = value
+			if doWhat == GET: return oSlabsetWindow.rect_size
+		"slabset_window_position":
+			var oSlabsetWindow = $'../Main/Ui/UiSystem/SlabsetWindow'
+			if doWhat == SET: oSlabsetWindow.rect_position = value
+			if doWhat == GET: return oSlabsetWindow.rect_position
 		"thing_window_size":
 			var oPickThingWindow = $'../Main/Ui/UiTools/PickThingWindow'
 			if doWhat == SET: oPickThingWindow.rect_size = value

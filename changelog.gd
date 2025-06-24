@@ -10,6 +10,8 @@ const string = """
 - Disable editing column 0
 - Display 'Columnset' and 'Variation' in Properties 'Column' tab
 - While in Column tab, when you click on the map the slabset window will open and go to that column
+- Small UI theme adjustments
+- Slabset window size & position stored in settings, defaults to being a smaller window on the side
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

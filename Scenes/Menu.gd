@@ -247,7 +247,7 @@ func _on_EditSubmenu_Pressed(pressedID):
 		5: # Texture editing
 			Utils.popup_centered(oTextureEditingWindow)
 		6: # Modify slabset
-			Utils.popup_centered(oSlabsetWindow)
+			oSlabsetWindow.popup_on_right_side()
 
 func _on_slab_style_window_close_button_clicked():
 	oMenuButtonEdit.get_popup().set_item_checked(0, false)

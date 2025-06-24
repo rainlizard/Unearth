@@ -67,7 +67,7 @@ func shortcut_pressed(id):
 	var spinbox = id.get_node("CustomSpinBox")
 	var clmIndex = spinbox.value
 	
-	Utils.popup_centered(oSlabsetWindow)
+	oSlabsetWindow.popup_on_right_side()
 	oSlabsetTabs.current_tab = 2
 	
 	oClmEditorControls.oColumnIndexSpinBox.value = clmIndex
