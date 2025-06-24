@@ -1,4 +1,4 @@
-[gd_scene load_steps=200 format=2]
+[gd_scene load_steps=199 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -243,24 +243,6 @@ shader = ExtResource( 36 )
 shader = ExtResource( 8 )
 shader_param/zoom = 1.0
 shader_param/thickness = 4.0
-
-[sub_resource type="StyleBoxFlat" id=15]
-content_margin_left = 12.0
-content_margin_right = 12.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-bg_color = Color( 0.172549, 0.164706, 0.196078, 1 )
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color( 0.25098, 0.243137, 0.282353, 1 )
-border_blend = true
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-shadow_size = 3
 
 [sub_resource type="StyleBoxFlat" id=10]
 
@@ -1201,6 +1183,7 @@ margin_right = 1696.0
 margin_bottom = 360.0
 grow_horizontal = 0
 grow_vertical = 0
+rect_min_size = Vector2( 311, 0 )
 size_flags_horizontal = 2
 size_flags_vertical = 2
 window_title = "Properties"
@@ -1209,14 +1192,17 @@ script = ExtResource( 72 )
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
 mouse_filter = 2
 
 [node name="UniversalDetails" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer"]
-margin_right = 300.0
-margin_bottom = 55.0
+margin_right = 299.0
+margin_bottom = 49.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/panel = SubResource( 15 )
 script = ExtResource( 82 )
 
 [node name="TimerUpdateColumnEntries" type="Timer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails"]
@@ -1224,20 +1210,20 @@ wait_time = 0.1
 one_shot = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails"]
-margin_left = 12.0
-margin_top = 12.0
-margin_right = 288.0
-margin_bottom = 43.0
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 290.0
+margin_bottom = 40.0
 
 [node name="UniversalListData" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/VBoxContainer"]
-margin_right = 276.0
+margin_right = 281.0
 mouse_filter = 2
 custom_constants/vseparation = 8
 script = ExtResource( 42 )
 
 [node name="Spacing" type="Control" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/VBoxContainer"]
 margin_top = 4.0
-margin_right = 276.0
+margin_right = 281.0
 margin_bottom = 6.0
 rect_min_size = Vector2( 0, 2 )
 size_flags_horizontal = 3
@@ -1245,7 +1231,7 @@ size_flags_vertical = 3
 
 [node name="SlabNameDisplay" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/VBoxContainer"]
 margin_top = 10.0
-margin_right = 276.0
+margin_right = 281.0
 margin_bottom = 31.0
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -1255,42 +1241,42 @@ autowrap = true
 script = ExtResource( 90 )
 
 [node name="PropertiesTabs" type="TabContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer"]
-margin_top = 59.0
-margin_right = 300.0
-margin_bottom = 163.0
+margin_top = 53.0
+margin_right = 299.0
+margin_bottom = 94.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
 script = ExtResource( 118 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ThingDetails" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 12.0
-margin_top = 43.0
-margin_right = -12.0
-margin_bottom = -12.0
+margin_left = 5.0
+margin_top = 36.0
+margin_right = -5.0
+margin_bottom = -5.0
 grow_horizontal = 0
 grow_vertical = 0
 rect_clip_content = true
 script = ExtResource( 79 )
 
 [node name="SelectionStatus" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails"]
-margin_right = 276.0
+margin_right = 290.0
 margin_bottom = 45.0
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus"]
-margin_right = 136.0
+margin_right = 143.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 
 [node name="SelectionStatusButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 127.0
+margin_right = 134.0
 margin_bottom = 36.0
 focus_mode = 0
 size_flags_horizontal = 3
@@ -1299,15 +1285,15 @@ text = "Selected"
 flat = true
 
 [node name="PanelContainer2" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus"]
-margin_left = 140.0
-margin_right = 276.0
+margin_left = 147.0
+margin_right = 290.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 
 [node name="DeleteSelectedButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer2"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 127.0
+margin_right = 134.0
 margin_bottom = 36.0
 focus_mode = 0
 size_flags_horizontal = 3
@@ -1317,7 +1303,7 @@ flat = true
 
 [node name="ThingListData" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails"]
 margin_top = 49.0
-margin_right = 276.0
+margin_right = 290.0
 margin_bottom = 49.0
 mouse_filter = 2
 custom_constants/vseparation = 8
@@ -1340,25 +1326,35 @@ size_flags_vertical = 3
 custom_constants/vseparation = 8
 script = ExtResource( 42 )
 
-[node name="OwnerSelection" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 4.0
 margin_right = 276.0
-margin_bottom = 46.0
+margin_bottom = 43.0
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_constants/margin_right = 7
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 2
+
+[node name="OwnerSelection" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer"]
+margin_right = 269.0
+margin_bottom = 37.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 73 )
 
-[node name="OwnershipGridContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
-margin_top = 5.0
-margin_right = 276.0
-margin_bottom = 5.0
+[node name="OwnershipGridContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection"]
+margin_right = 269.0
 size_flags_horizontal = 3
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
 columns = 6
 
-[node name="UseSlabOwnerCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
-margin_top = 9.0
-margin_right = 276.0
-margin_bottom = 38.0
+[node name="UseSlabOwnerCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection"]
+margin_top = 4.0
+margin_right = 269.0
+margin_bottom = 33.0
 hint_tooltip = "The ownership of placed Things will be set to the ownership of the underlying slab"
 focus_mode = 0
 pressed = true
@@ -1368,7 +1364,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CollectibleLabel" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
+[node name="CollectibleLabel" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection"]
 visible = false
 margin_top = 9.0
 margin_right = 40.0
@@ -1377,26 +1373,26 @@ hint_tooltip = "Collectibles have their ownership set to Neutral unless placed i
 mouse_filter = 1
 text = "Collectible"
 
-[node name="Control" type="Control" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection"]
-margin_top = 42.0
-margin_right = 276.0
-margin_bottom = 42.0
+[node name="Control" type="Control" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection"]
+margin_top = 37.0
+margin_right = 269.0
+margin_bottom = 37.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedRect" type="TextureRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/Control"]
+[node name="SelectedRect" type="TextureRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection/Control"]
 material = SubResource( 9 )
 mouse_filter = 2
 texture = ExtResource( 84 )
 expand = true
 script = ExtResource( 83 )
 
-[node name="CenteredLabel" type="Control" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/Control"]
+[node name="CenteredLabel" type="Control" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection/Control"]
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/Control/CenteredLabel"]
+[node name="Label" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection/Control/CenteredLabel"]
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -1407,21 +1403,21 @@ __meta__ = {
 }
 
 [node name="HSeparator" type="HSeparator" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 50.0
+margin_top = 47.0
 margin_right = 276.0
-margin_bottom = 51.0
+margin_bottom = 48.0
 
 [node name="EditingTools" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 55.0
+margin_top = 52.0
 margin_right = 276.0
-margin_bottom = 138.0
+margin_bottom = 135.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 109 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_right = 276.0
+margin_bottom = 48.0
 
 [node name="ToolPencil" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
 margin_right = 48.0
@@ -1439,7 +1435,8 @@ texture_hover = ExtResource( 113 )
 expand = true
 
 [node name="ToolBrush" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
-margin_right = 48.0
+margin_left = 52.0
+margin_right = 100.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Brush tool"
@@ -1453,8 +1450,8 @@ texture_hover = ExtResource( 147 )
 expand = true
 
 [node name="ToolRectangle" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
-margin_left = 52.0
-margin_right = 100.0
+margin_left = 104.0
+margin_right = 152.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Rectangle tool"
@@ -1468,8 +1465,8 @@ texture_hover = ExtResource( 112 )
 expand = true
 
 [node name="ToolPaintBucket" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
-margin_left = 52.0
-margin_right = 100.0
+margin_left = 156.0
+margin_right = 204.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Paint bucket tool"
@@ -1483,16 +1480,19 @@ texture_hover = ExtResource( 142 )
 expand = true
 
 [node name="BrushSizeContainer" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
-margin_right = 170.0
-margin_bottom = 40.0
+margin_top = 52.0
+margin_right = 276.0
+margin_bottom = 83.0
 
 [node name="Label" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer"]
-margin_right = 92.0
-margin_bottom = 21.0
+margin_top = 5.0
+margin_right = 94.0
+margin_bottom = 26.0
 text = "Pencil size"
 
 [node name="EditBrushSizeValue" type="SpinBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer"]
-margin_right = 74.0
+margin_left = 98.0
+margin_right = 172.0
 margin_bottom = 31.0
 min_value = 1.0
 max_value = 180.0
@@ -1508,27 +1508,29 @@ focus_mode = 0
 text = "Place door as locked"
 
 [node name="FortifyCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 50.0
-margin_right = 186.0
-margin_bottom = 79.0
+margin_top = 139.0
+margin_right = 276.0
+margin_bottom = 168.0
 focus_mode = 0
 pressed = true
 text = "Fortify"
 
 [node name="MirrorPlacementCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 50.0
-margin_right = 186.0
-margin_bottom = 79.0
+margin_top = 172.0
+margin_right = 276.0
+margin_bottom = 201.0
 focus_mode = 0
 text = "Symmetrical"
 
 [node name="MirrorOptions" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = 45.0
+margin_top = 205.0
+margin_right = 276.0
+margin_bottom = 333.0
 script = ExtResource( 149 )
 
 [node name="MirrorSplitTextureRect" type="TextureRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions"]
+margin_right = 128.0
+margin_bottom = 128.0
 rect_min_size = Vector2( 128, 128 )
 mouse_filter = 2
 texture = ExtResource( 148 )
@@ -1545,6 +1547,8 @@ columns = 2
 
 [node name="MirrorColor0" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
+margin_right = 64.0
+margin_bottom = 64.0
 hint_tooltip = "Click to change ownership that will be used for this area"
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1552,8 +1556,9 @@ color = Color( 1, 0, 0, 1 )
 
 [node name="MirrorColor1" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = 64.0
+margin_right = 128.0
+margin_bottom = 64.0
 hint_tooltip = "Click to change ownership that will be used for this area"
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1561,8 +1566,9 @@ color = Color( 0, 0.156863, 1, 1 )
 
 [node name="MirrorColor2" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
-margin_right = 40.0
-margin_bottom = 40.0
+margin_top = 64.0
+margin_right = 64.0
+margin_bottom = 128.0
 hint_tooltip = "Click to change ownership that will be used for this area"
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1570,20 +1576,22 @@ color = Color( 0, 1, 0.0627451, 1 )
 
 [node name="MirrorColor3" type="ColorRect" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/MirrorSplitTextureRect/MirrorColorContainer"]
 show_behind_parent = true
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 128.0
+margin_bottom = 128.0
 hint_tooltip = "Click to change ownership that will be used for this area"
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0.827451, 1, 0, 1 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions"]
-margin_top = 50.0
-margin_right = 40.0
-margin_bottom = 90.0
+margin_left = 132.0
+margin_right = 265.0
+margin_bottom = 128.0
 
 [node name="SplitDirectionButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
-margin_right = 176.0
+margin_right = 133.0
 margin_bottom = 27.0
 focus_mode = 0
 size_flags_horizontal = 0
@@ -1591,17 +1599,18 @@ size_flags_vertical = 0
 text = "Division axis"
 
 [node name="MirrorFlipCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
-margin_right = 64.0
-margin_bottom = 29.0
+margin_top = 31.0
+margin_right = 113.0
+margin_bottom = 60.0
 focus_mode = 0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Diagonal"
 
 [node name="LimitThing" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 107.0
+margin_top = 337.0
 margin_right = 276.0
-margin_bottom = 128.0
+margin_bottom = 358.0
 size_flags_horizontal = 3
 columns = 2
 script = ExtResource( 139 )
@@ -1618,9 +1627,9 @@ margin_right = 124.0
 margin_bottom = 21.0
 
 [node name="PlacingTipsButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 132.0
+margin_top = 362.0
 margin_right = 276.0
-margin_bottom = 159.0
+margin_bottom = 389.0
 focus_mode = 0
 text = "Tips"
 
@@ -1731,10 +1740,10 @@ tab_align = 0
 [node name="MapBrowserTabEdit" type="Control" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 12.0
-margin_top = 43.0
-margin_right = -12.0
-margin_bottom = -12.0
+margin_left = 5.0
+margin_top = 36.0
+margin_right = -5.0
+margin_bottom = -5.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit"]
 anchor_right = 1.0
@@ -1744,7 +1753,7 @@ size_flags_vertical = 3
 custom_constants/separation = 0
 
 [node name="LineEditFilter" type="LineEdit" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer"]
-margin_right = 310.0
+margin_right = 324.0
 margin_bottom = 42.0
 focus_mode = 1
 mouse_filter = 1
@@ -1762,7 +1771,7 @@ __meta__ = {
 
 [node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer"]
 margin_top = 42.0
-margin_right = 310.0
+margin_right = 324.0
 margin_bottom = 50.0
 mouse_filter = 1
 custom_constants/separation = 8
@@ -1773,8 +1782,8 @@ __meta__ = {
 
 [node name="DynamicMapTree" type="Tree" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer"]
 margin_top = 50.0
-margin_right = 310.0
-margin_bottom = 747.0
+margin_right = 324.0
+margin_bottom = 761.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1806,12 +1815,12 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer"]
-margin_top = 747.0
-margin_right = 310.0
-margin_bottom = 784.0
+margin_top = 761.0
+margin_right = 324.0
+margin_bottom = 798.0
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer/VBoxContainer"]
-margin_right = 310.0
+margin_right = 324.0
 margin_bottom = 37.0
 custom_constants/margin_right = 5
 custom_constants/margin_top = 5
@@ -1821,7 +1830,7 @@ custom_constants/margin_bottom = 5
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer/VBoxContainer/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 305.0
+margin_right = 319.0
 margin_bottom = 32.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1859,7 +1868,7 @@ __meta__ = {
 
 [node name="BrowserFilename" type="Label" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 28.0
-margin_right = 247.0
+margin_right = 261.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1871,8 +1880,8 @@ __meta__ = {
 }
 
 [node name="BrowseButton" type="Button" parent="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
-margin_left = 251.0
-margin_right = 300.0
+margin_left = 265.0
+margin_right = 314.0
 margin_bottom = 27.0
 text = "Edit"
 
@@ -2195,22 +2204,22 @@ use_hidden_tabs_for_min_size = true
 [node name="TabFiles" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 12.0
-margin_top = 43.0
-margin_right = -12.0
-margin_bottom = -12.0
+margin_left = 5.0
+margin_top = 36.0
+margin_right = -5.0
+margin_bottom = -5.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles"]
-margin_right = 544.0
-margin_bottom = 424.0
+margin_right = 558.0
+margin_bottom = 438.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="KeeperFXDetection" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 21.0
 custom_colors/font_color = Color( 1, 0.658824, 0.329412, 1 )
 text = "Need to set executable"
@@ -2218,7 +2227,7 @@ align = 1
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 25.0
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 52.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2234,7 +2243,7 @@ __meta__ = {
 
 [node name="SetDirPath" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3"]
 margin_left = 166.0
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -2244,13 +2253,13 @@ autowrap = true
 
 [node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 56.0
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 76.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 80.0
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 120.0
 size_flags_horizontal = 3
 
@@ -2265,21 +2274,21 @@ __meta__ = {
 
 [node name="CmdLineDkCommands" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
 margin_left = 221.0
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 124.0
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 164.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ScrollContainer"]
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 __meta__ = {
@@ -2305,7 +2314,7 @@ expand_to_text_length = true
 
 [node name="CmdLineExecute" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ScrollContainer/HBoxContainer"]
 margin_left = 124.0
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
@@ -2314,13 +2323,13 @@ expand_to_text_length = true
 
 [node name="HSeparator4" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 168.0
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 188.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 192.0
-margin_right = 544.0
+margin_right = 558.0
 margin_bottom = 221.0
 text = "Always decompress maps"
 
@@ -5427,7 +5436,7 @@ stretch_mode = 4
 visible = true
 margin_left = -2945.0
 margin_top = -1513.0
-margin_right = -1665.0
+margin_right = -2335.0
 margin_bottom = -523.0
 window_title = "Slabset"
 resizable = true
@@ -5436,10 +5445,6 @@ script = ExtResource( 132 )
 [node name="SlabsetTabs" type="TabContainer" parent="Ui/UiSystem/SlabsetWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -5447,22 +5452,22 @@ size_flags_vertical = 3
 [node name="TabSlabset" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 12.0
-margin_top = 43.0
-margin_right = -12.0
-margin_bottom = -12.0
+margin_left = 5.0
+margin_top = 36.0
+margin_right = -5.0
+margin_bottom = -5.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset"]
-margin_right = 1236.0
-margin_bottom = 915.0
+margin_right = 600.0
+margin_bottom = 949.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DkSlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 905.0
-margin_bottom = 915.0
+margin_right = 269.0
+margin_bottom = 949.0
 displayingType = 2
 
 [node name="Control" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView"]
@@ -5476,7 +5481,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="SlabsetSlabNameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView/Control/VBoxContainer"]
-margin_right = 905.0
+margin_right = 269.0
 margin_bottom = 21.0
 size_flags_vertical = 1
 text = "Impenetrable Rock"
@@ -5484,28 +5489,28 @@ align = 2
 
 [node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView/Control/VBoxContainer"]
 margin_top = 25.0
-margin_right = 905.0
+margin_right = 269.0
 margin_bottom = 46.0
 size_flags_vertical = 1
 text = "Variation info"
 align = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer"]
-margin_left = 909.0
-margin_right = 1236.0
-margin_bottom = 915.0
+margin_left = 273.0
+margin_right = 600.0
+margin_bottom = 949.0
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
 margin_right = 327.0
-margin_bottom = 861.0
+margin_bottom = 895.0
 mouse_filter = 1
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer"]
 margin_right = 236.0
-margin_bottom = 861.0
+margin_bottom = 895.0
 size_flags_vertical = 3
 
 [node name="SlabsetPathsLabel" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
@@ -5720,7 +5725,7 @@ columns = 3
 [node name="PanelContainer3" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 311.0
 margin_right = 236.0
-margin_bottom = 861.0
+margin_bottom = 895.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -5728,7 +5733,7 @@ size_flags_vertical = 3
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 227.0
-margin_bottom = 541.0
+margin_bottom = 575.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_right = 218.0
@@ -5758,13 +5763,13 @@ text = "Delete"
 [node name="SlabsetObjectSection" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_top = 56.0
 margin_right = 218.0
-margin_bottom = 532.0
+margin_bottom = 566.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection"]
 margin_right = 218.0
-margin_bottom = 476.0
+margin_bottom = 510.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -5940,9 +5945,9 @@ size_flags_horizontal = 9
 text = "Export slabs.dat"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
-margin_top = 865.0
+margin_top = 899.0
 margin_right = 327.0
-margin_bottom = 915.0
+margin_bottom = 949.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer"]
 margin_left = 9.0
@@ -7937,7 +7942,7 @@ script = SubResource( 20 )
 [connection signal="mouse_exited" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer/SelectionStatusButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails" method="_on_SelectionStatusButton_mouse_exited"]
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer/SelectionStatusButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails" method="_on_SelectionStatusButton_pressed"]
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer2/DeleteSelectedButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails" method="_on_DeleteSelectedButton_pressed"]
-[connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/OwnerSelection/UseSlabOwnerCheckBox" method="_on_UseSlabOwnerCheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection/UseSlabOwnerCheckBox" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection/UseSlabOwnerCheckBox" method="_on_UseSlabOwnerCheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolPencil" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolPencil_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolBrush" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolBrush_toggled"]
 [connection signal="toggled" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer/ToolRectangle" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools" method="_on_ToolRectangle_toggled"]

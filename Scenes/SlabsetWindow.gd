@@ -268,9 +268,11 @@ func update_column_spinboxes():
 	for subtile in columnSettersArray.size():
 		var spinbox = columnSettersArray[subtile].get_node("CustomSpinBox")
 		spinbox.disconnect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
+		spinbox.disconnect("value_changed",oDkSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
 		var clmIndex = Slabset.fetch_columnset_index(variation, subtile)
 		spinbox.value = clmIndex
 		spinbox.connect("value_changed",self,"_on_Slabset3x3ColumnSpinBox_value_changed")
+		spinbox.connect("value_changed",oDkSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
 
 func _on_Slabset3x3ColumnSpinBox_value_changed(value):
