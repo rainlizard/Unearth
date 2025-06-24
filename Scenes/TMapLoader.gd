@@ -303,8 +303,8 @@ func apply_texture_pack():
 		"tmap_B_top": tmapBTopTex, "tmap_B_bottom": tmapBBottomTex,
 		"palette_texture": localPaletteTexture
 	}
-	if oOverheadGraphics.arrayOfColorRects.size() > 0:
-		_apply_shader_parameters(oOverheadGraphics.arrayOfColorRects[0].get_material() as ShaderMaterial, shaderParameters)
+	for i in range(oOverheadGraphics.arrayOfColorRects.size()):
+		_apply_shader_parameters(oOverheadGraphics.arrayOfColorRects[i].get_material() as ShaderMaterial, shaderParameters)
 	if oGame3D.materialArray.size() > 0:
 		_apply_shader_parameters(oGame3D.materialArray[0] as ShaderMaterial, shaderParameters)
 	for nodeID in get_tree().get_nodes_in_group("VoxelViewer"):

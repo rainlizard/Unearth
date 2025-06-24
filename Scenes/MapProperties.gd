@@ -38,6 +38,10 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oLofPathLinkButton = Nodelist.list["oLofPathLinkButton"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oTMapNames = Nodelist.list["oTMapNames"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+onready var oDkSlabsetVoxelView = Nodelist.list["oDkSlabsetVoxelView"]
+onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
+onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
 
 const kind_options = {
 	"Solo" : "FREE",
@@ -175,6 +179,14 @@ func _on_DungeonStyleList_item_selected(selectedIndex):
 	oEditor.mapHasBeenEdited = true
 	oDataLevelStyle.data = selectedIndex
 	oTMapLoader.apply_texture_pack()
+	
+	if oSlabsetWindow.visible == true:
+		if is_instance_valid(oDkSlabsetVoxelView):
+			oDkSlabsetVoxelView.refresh_entire_view()
+		if is_instance_valid(oColumnsetVoxelView):
+			oColumnsetVoxelView.refresh_entire_view()
+		if is_instance_valid(oClmEditorVoxelView):
+			oClmEditorVoxelView.refresh_entire_view()
 	
 	var messageText = "Tileset selection cleared."
 	if selectedIndex != -1:

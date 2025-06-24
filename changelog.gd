@@ -12,6 +12,9 @@ const string = """
 - While in Column tab, when you click on the map the slabset window will open and go to that column
 - Small UI theme adjustments
 - Slabset window size & position stored in settings, defaults to being a smaller window on the side
+- Fixed an issue where shaders would sometimes go dark
+- If the slabset window is open, their textures will now be updated when switching tileset
+- Detect when windows are offscreen better
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

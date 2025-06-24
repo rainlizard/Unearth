@@ -70,7 +70,16 @@ func _on_any_window_was_dragged(callingNode):
 func _on_viewport_size_changed():
 	var currentViewSize = get_viewport().size / Settings.UI_SCALE
 	for windowNode in listOfWindowDialogs:
-		_adjust_window_size_to_viewport(windowNode, currentViewSize)
+		if windowNode.visible == false:
+			continue
+		
+		var isOffScreen = (windowNode.rect_position.x + windowNode.rect_size.x > currentViewSize.x) or \
+						  (windowNode.rect_position.y + windowNode.rect_size.y > currentViewSize.y) or \
+						  (windowNode.rect_position.x < 0) or \
+						  (windowNode.rect_position.y < topMargin)
+		
+		if isOffScreen:
+			_adjust_window_size_to_viewport(windowNode, currentViewSize)
 
 func _on_window_dialog_became_visible(dialogNode):
 	if dialogNode.visible == true:

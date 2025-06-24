@@ -129,9 +129,6 @@ func popup_on_right_side():
 			var centeredY = (screenSize.y - defaultHeight) / 2
 			rect_position = Vector2(rightSideX, centeredY)
 	
-	popup()
-	
-	visible = false
 	visible = true
 
 func _notification(what):
@@ -947,8 +944,6 @@ func _on_ConfirmDeleteColumnsetFile_confirmed():
 
 func open_from_cursor_position():
 	var data = oColumnDetails.calculate_cursor_data()
-	if data.slabID == 0:
-		return
 	
 	var columnDetailsVisible = oPropertiesTabs.current_tab == 2
 	

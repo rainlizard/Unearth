@@ -1243,7 +1243,7 @@ script = ExtResource( 90 )
 [node name="PropertiesTabs" type="TabContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer"]
 margin_top = 53.0
 margin_right = 299.0
-margin_bottom = 94.0
+margin_bottom = 143.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource( 118 )
@@ -1252,7 +1252,6 @@ __meta__ = {
 }
 
 [node name="ThingDetails" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -1265,18 +1264,18 @@ rect_clip_content = true
 script = ExtResource( 79 )
 
 [node name="SelectionStatus" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails"]
-margin_right = 290.0
+margin_right = 289.0
 margin_bottom = 45.0
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus"]
-margin_right = 143.0
+margin_right = 142.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 
 [node name="SelectionStatusButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 134.0
+margin_right = 133.0
 margin_bottom = 36.0
 focus_mode = 0
 size_flags_horizontal = 3
@@ -1285,8 +1284,8 @@ text = "Selected"
 flat = true
 
 [node name="PanelContainer2" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus"]
-margin_left = 147.0
-margin_right = 290.0
+margin_left = 146.0
+margin_right = 289.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 
@@ -1303,7 +1302,7 @@ flat = true
 
 [node name="ThingListData" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails"]
 margin_top = 49.0
-margin_right = 290.0
+margin_right = 289.0
 margin_bottom = 49.0
 mouse_filter = 2
 custom_constants/vseparation = 8
