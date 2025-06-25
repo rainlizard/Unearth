@@ -230,9 +230,22 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 
+var lookupClmSpeedup = {}
+
+
+func get_column_index_from_lookup(cubes, floorTexture):
+	var keyString = str(cubes) + "|" + str(floorTexture)
+	if lookupClmSpeedup.has(keyString):
+		return lookupClmSpeedup[keyString]
+	else:
+		var clmIndex = oDataClm.index_entry(cubes, floorTexture)
+		lookupClmSpeedup[keyString] = clmIndex
+		return clmIndex
+
+
 func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	oOverheadOwnership.update_ownership_image_based_on_shape(shapePositionArray)
-	#var CODETIME_START = OS.get_ticks_msec()
+	var CODETIME_START = OS.get_ticks_msec()
 	
 	oEditor.mapHasBeenEdited = true
 	
@@ -280,6 +293,9 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 			shapePositionArray.erase(pos)
 			continue
 	
+	# Clear column lookup dictionary for this operation
+	lookupClmSpeedup.clear()
+	
 	oLoadingBar.visible = true
 	oLoadingBar.value = 0
 	var totalLoadingSize:float = max(1,shapePositionArray.size()) #abs((rectStart.x)-(rectEnd.x+1)) * abs((rectStart.y)-(rectEnd.y+1))
@@ -302,9 +318,12 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 			oLoadingBar.value = (currentLoad/(totalLoadingSize))*100
 			yield(get_tree(),'idle_frame')
 	
+	# Clear lookup dictionary after operation to free memory
+	lookupClmSpeedup.clear()
+	
 	oLoadingBar.visible = false
 	
-	#print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	oDataSlab.update_texture()
 	oOverheadGraphics.overhead2d_update_rect_single_threaded(shapePositionArray)
@@ -748,12 +767,11 @@ func slabset_position_to_column_data(slabsetIndexGroup, ownership):
 
 func set_columns(xSlab, ySlab, constructedColumns, constructedFloor):
 	oDataClm.a_column_has_changed_since_last_updating_utilized = true
+	var slabX = xSlab * 3
+	var slabY = ySlab * 3
 	for i in 9:
-		var clmIndex = oDataClm.index_entry(constructedColumns[i], constructedFloor[i])
-		
-		var ySubtile = i/3
-		var xSubtile = i - (ySubtile*3)
-		oDataClmPos.set_cell_clmpos((xSlab*3)+xSubtile, (ySlab*3)+ySubtile, clmIndex)
+		var clmIndex = get_column_index_from_lookup(constructedColumns[i], constructedFloor[i])
+		oDataClmPos.set_cell_clmpos(slabX + (i % 3), slabY + (i / 3), clmIndex)
 
 func get_tall_bitmask(surrID):
 	var bitmask = 0

@@ -12,6 +12,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oMapClmFilenameLabel = Nodelist.list["oMapClmFilenameLabel"]
 onready var oColumnEditorClearUnusedButton = Nodelist.list["oColumnEditorClearUnusedButton"]
 onready var oColumnEditorSortButton = Nodelist.list["oColumnEditorSortButton"]
+onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 
 # When re-opening window or opening for first time
 func _on_ColumnEditor_visibility_changed():
@@ -58,6 +59,7 @@ func _on_ColumnEditorClearUnusedButton_pressed():
 func _on_ConfirmClmClearUnused_confirmed():
 	oEditor.mapHasBeenEdited = true
 	oDataClm.clear_unused_entries()
+	oFlashingColumns.generate_column_position_texture()
 	
 	# Refresh voxel view
 	oClmEditorVoxelView.refresh_entire_view()

@@ -78,9 +78,6 @@ func clear_map(): # Remember, "Undo" calls this
 	# "LOF" # Do this last in case other functions rely on the old map size
 	oDataLof.clear_all()
 	
-	if oTabClmEditor.visible == true:
-		oTabClmEditor.visible = false
-	
 	print('Cleared map in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 func _notification(what: int):

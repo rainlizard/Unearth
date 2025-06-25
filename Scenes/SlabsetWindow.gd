@@ -50,6 +50,8 @@ onready var oModifiedListPanelContainer = Nodelist.list["oModifiedListPanelConta
 onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oColumnDetails = Nodelist.list["oColumnDetails"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
+onready var oSlabsetMapRegenerator = Nodelist.list["oSlabsetMapRegenerator"]
+onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oUi = Nodelist.list["oUi"]
@@ -78,6 +80,7 @@ onready var object_field_nodes = [
 ]
 
 var scnColumnSetter = preload('res://Scenes/ColumnSetter.tscn')
+var regeneration_timer: Timer
 
 var columnSettersArray = []
 
@@ -102,6 +105,12 @@ func _ready():
 	oObjRelativeXSpinBox.step = 1.0 / 256.0
 	oObjRelativeYSpinBox.step = 1.0 / 256.0
 	oObjRelativeZSpinBox.step = 1.0 / 256.0
+	
+	regeneration_timer = Timer.new()
+	regeneration_timer.wait_time = 1.5
+	regeneration_timer.one_shot = true
+	regeneration_timer.connect("timeout", self, "_on_regeneration_timer_timeout")
+	add_child(regeneration_timer)
 	
 	oDkSlabsetVoxelView.initialize()
 	
@@ -157,9 +166,14 @@ func _on_SlabsetWindow_visibility_changed():
 		update_slabset_delete_button_state()
 		update_columnset_delete_button_state()
 		
+		update_flash_state()
+		connect_column_spinboxes_to_flash_update()
+		
 		yield(get_tree(),'idle_frame')
 		oDkSlabsetVoxelView.oAllVoxelObjects.visible = true
 	elif visible == false:
+		if is_instance_valid(oFlashingColumns):
+			oFlashingColumns.stop_column_flash()
 		if is_instance_valid(oPickSlabWindow):
 			oPickSlabWindow.add_slabs()
 			Columnset.update_list_of_columns_that_contain_owned_cubes()
@@ -176,6 +190,10 @@ func _on_SlabsetTabs_tab_changed(tab):
 			oColumnsetVoxelView.visible = true
 			oDkSlabsetVoxelView.visible = false
 			oColumnsetVoxelView.initialize()
+		2: # CLM data
+			pass
+	
+	update_flash_state()
 
 
 func variation_changed(localVariation):
@@ -314,6 +332,16 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 			Slabset.dat[variation][i] = int(clmIndex)
 			#oSlabPalette.slabPal[variation][i] = clmIndex # This may not be working
 	adjust_column_color_if_different(variation)
+	restart_regeneration_timer()
+
+func _on_regeneration_timer_timeout():
+	if is_instance_valid(oSlabsetMapRegenerator):
+		var currentSlabID = int(oSlabsetIDSpinBox.value)
+		oSlabsetMapRegenerator.regenerate_slabs_using_slab_id(currentSlabID)
+
+func restart_regeneration_timer():
+	regeneration_timer.stop()
+	regeneration_timer.start()
 
 func ensure_dat_array_has_space(variation):
 	while variation >= Slabset.dat.size():
@@ -943,7 +971,7 @@ func _on_ConfirmDeleteColumnsetFile_confirmed():
 
 
 func open_from_cursor_position():
-	var data = oColumnDetails.calculate_cursor_data()
+	var data = oSlabsetMapRegenerator.calculate_cursor_data()
 	
 	var columnDetailsVisible = oPropertiesTabs.current_tab == 2
 	
@@ -985,3 +1013,51 @@ func open_from_cursor_position():
 		var clmEditorControls = get_node("SlabsetTabs/TabClmEditor").oClmEditorControls
 		if is_instance_valid(clmEditorControls):
 			clmEditorControls.oColumnIndexSpinBox.value = data.clmEntryIndex
+
+func update_flash_state():
+	if not is_instance_valid(oFlashingColumns):
+		return
+	
+	if visible:
+		match oSlabsetTabs.current_tab:
+			1: # Columnset tab
+				var columnsetIndex = int(oColumnsetControls.oColumnIndexSpinBox.value)
+				oFlashingColumns.start_columnset_flash(columnsetIndex)
+			2: # CLM data tab
+				var clmEditorControls = get_node("SlabsetTabs/TabClmEditor").oClmEditorControls
+				if is_instance_valid(clmEditorControls):
+					var columnIndex = int(clmEditorControls.oColumnIndexSpinBox.value)
+					oFlashingColumns.start_column_flash(columnIndex)
+				else:
+					oFlashingColumns.stop_column_flash()
+			_:
+				oFlashingColumns.stop_column_flash()
+	else:
+		oFlashingColumns.stop_column_flash()
+
+
+func connect_column_spinboxes_to_flash_update():
+	if not is_instance_valid(oFlashingColumns):
+		return
+	
+	# Connect CLM editor controls
+	var clmEditorControls = get_node("SlabsetTabs/TabClmEditor").oClmEditorControls
+	if is_instance_valid(clmEditorControls):
+		if clmEditorControls.oColumnIndexSpinBox.is_connected("value_changed", self, "on_spinbox_value_changed") == false:
+			clmEditorControls.oColumnIndexSpinBox.connect("value_changed", self, "on_spinbox_value_changed")
+	
+	# Connect Columnset controls
+	if is_instance_valid(oColumnsetControls):
+		if oColumnsetControls.oColumnIndexSpinBox.is_connected("value_changed", self, "on_spinbox_value_changed") == false:
+			oColumnsetControls.oColumnIndexSpinBox.connect("value_changed", self, "on_spinbox_value_changed")
+	
+	# Connect main slabset ID spinboxes that affect which column/columnset is shown
+	if oSlabsetIDSpinBox.is_connected("value_changed", self, "on_spinbox_value_changed") == false:
+		oSlabsetIDSpinBox.connect("value_changed", self, "on_spinbox_value_changed")
+	
+	if oVariationNumberSpinBox.is_connected("value_changed", self, "on_spinbox_value_changed") == false:
+		oVariationNumberSpinBox.connect("value_changed", self, "on_spinbox_value_changed")
+
+
+func on_spinbox_value_changed(value):
+	update_flash_state()

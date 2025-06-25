@@ -2,6 +2,7 @@ shader_type canvas_item;
 
 render_mode blend_mix;
 uniform sampler2D viewTextures : hint_albedo;
+uniform sampler2D columnPosData : hint_albedo;
 uniform sampler2D animationDatabase;
 const vec2 oneTileSize = vec2(32,32);
 const float TEXTURE_ANIMATION_SPEED = 12.0;
@@ -15,6 +16,8 @@ uniform sampler2D tmap_B_bottom:hint_albedo;
 uniform sampler2D palette_texture:hint_albedo;
 uniform vec2 fieldSizeInSubtiles = vec2(0.0, 0.0);
 uniform int supersampling_level = 4;
+uniform int flashingColumn = -1;
+uniform float flashIntensity = 0.0;
 const float DARKENING_FACTOR = 0.333;
 const vec2 TILE_DIMENSIONS = vec2(32.0, 32.0);
 const vec2 L8_ATLAS_PIXEL_DIMS = vec2(256.0, 1088.0);
@@ -152,5 +155,14 @@ void fragment() {
 		COLOR = vec4(averagedFinalColor.rgb * (1.0-DARKENING_FACTOR), averagedFinalColor.a);
 	} else {
 		COLOR = averagedFinalColor;
+	}
+	
+	if (flashingColumn >= 0 && flashIntensity > 0.0) {
+		vec3 columnIndexColor = texelGet(columnPosData, ivec2(originalSubtileX, originalSubtileY), 0).rgb;
+		int columnIndex = (int(columnIndexColor.r * 255.0) << 8) | int(columnIndexColor.g * 255.0);
+		if (columnIndex == flashingColumn) {
+			vec3 flashColor = mix(COLOR.rgb, vec3(0.264, 0.264, 0.66), flashIntensity*0.66);
+			COLOR = vec4(flashColor, COLOR.a);
+		}
 	}
 }

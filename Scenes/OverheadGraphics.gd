@@ -11,6 +11,7 @@ onready var oQuickMapPreviewDisplay = Nodelist.list["oQuickMapPreviewDisplay"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 onready var oReadPalette = Nodelist.list["oReadPalette"]
+onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 
 signal column_graphics_completed
 
@@ -28,10 +29,16 @@ var pixel_data = PoolByteArray()
 func update_full_overhead_map():
 	var CODETIME_START = OS.get_ticks_msec()
 	
+	# Always regenerate column position texture when updating the full overhead map
+	# This ensures it's updated when a new map is loaded
+	oFlashingColumns.generate_column_position_texture()
+	
 	if arrayOfColorRects.empty() == true:
 		initialize_display_fields()
 	else:
 		update_display_fields_size()
+		# Update the column position texture in existing display fields
+		oFlashingColumns.update_column_position_texture()
 	
 	var shapePositionArray = []
 	var totalPositions = M.xSize * M.ySize
@@ -118,6 +125,8 @@ func generate_pixel_data(pixData, shapePositionArray):
 
 
 
+
+
 func initialize_display_fields():
 	arrayOfColorRects.clear() # just in case
 	
@@ -148,10 +157,15 @@ func createDisplayField(setMap, showStyle):
 	mat.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
 	mat.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
 	mat.set_shader_param("viewTextures", overheadTexData)
+	
+	mat.set_shader_param("columnPosData", oFlashingColumns.columnPosTexData)
+	
 	mat.set_shader_param("slxData", oDataSlx.slxTexData)
 	mat.set_shader_param("slabIdData", oDataSlab.idTexData)
 	mat.set_shader_param("palette_texture", oReadPalette.palette_image_texture)
 	mat.set_shader_param("supersampling_level", Settings.get_setting("ssaa"))
+	mat.set_shader_param("flashingColumn", -1)
+	mat.set_shader_param("flashIntensity", 0.0)
 	
 	arrayOfColorRects.append(displayField)
 	oGame2D.add_child_below_node(self, displayField)
@@ -164,3 +178,6 @@ func update_display_fields_size():
 func update_ssaa_level(level):
 	for displayField in arrayOfColorRects:
 		displayField.material.set_shader_param("supersampling_level", level)
+
+
+

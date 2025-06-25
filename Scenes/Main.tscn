@@ -1,4 +1,4 @@
-[gd_scene load_steps=199 format=2]
+[gd_scene load_steps=201 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -180,6 +180,8 @@
 [ext_resource path="res://Scenes/ChangelogWindow.gd" type="Script" id=178]
 [ext_resource path="res://Scenes/RandomPlayers.gd" type="Script" id=179]
 [ext_resource path="res://Scenes/RandomPlayersPizza.gd" type="Script" id=180]
+[ext_resource path="res://Scenes/SlabsetMapRegenerator.gd" type="Script" id=181]
+[ext_resource path="res://Scenes/FlashingColumns.gd" type="Script" id=182]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -326,6 +328,9 @@ script = ExtResource( 30 )
 
 [node name="CfgLoader" type="Node" parent="."]
 script = ExtResource( 169 )
+
+[node name="FlashingColumns" type="Node" parent="."]
+script = ExtResource( 182 )
 
 [node name="TMapLoader" type="Node" parent="."]
 script = ExtResource( 46 )
@@ -608,6 +613,9 @@ expand = true
 
 [node name="AnalyzeGrids" type="Node2D" parent="Game2D"]
 script = ExtResource( 154 )
+
+[node name="SlabsetMapRegenerator" type="Node2D" parent="Game2D"]
+script = ExtResource( 181 )
 
 [node name="Ui" type="CanvasLayer" parent="."]
 layer = 2
