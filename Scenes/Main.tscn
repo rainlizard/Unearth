@@ -1,4 +1,4 @@
-[gd_scene load_steps=201 format=2]
+[gd_scene load_steps=203 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -182,6 +182,8 @@
 [ext_resource path="res://Scenes/RandomPlayersPizza.gd" type="Script" id=180]
 [ext_resource path="res://Scenes/SlabsetMapRegenerator.gd" type="Script" id=181]
 [ext_resource path="res://Scenes/FlashingColumns.gd" type="Script" id=182]
+[ext_resource path="res://Scenes/TabColumnset.gd" type="Script" id=183]
+[ext_resource path="res://Scenes/TabSlabset.gd" type="Script" id=184]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -353,6 +355,21 @@ script = ExtResource( 158 )
 [node name="PlaceThingWithSlab" type="Node" parent="SlabPlacement"]
 script = ExtResource( 80 )
 
+[node name="OpenMap" type="Node" parent="."]
+script = ExtResource( 5 )
+
+[node name="RNC" type="Node" parent="OpenMap"]
+script = ExtResource( 53 )
+
+[node name="Buffers" type="Node" parent="."]
+script = ExtResource( 165 )
+
+[node name="ReadData" type="Node" parent="Buffers"]
+script = ExtResource( 20 )
+
+[node name="WriteData" type="Node" parent="Buffers"]
+script = ExtResource( 32 )
+
 [node name="CurrentMap" type="Node" parent="."]
 script = ExtResource( 100 )
 
@@ -398,29 +415,14 @@ script = ExtResource( 141 )
 [node name="DataFakeSlab" type="Node" parent="CurrentMap"]
 script = ExtResource( 97 )
 
+[node name="SaveMap" type="Node" parent="."]
+script = ExtResource( 31 )
+
 [node name="UndoStates" type="Node" parent="."]
 script = ExtResource( 166 )
 
 [node name="ThreadedSaveUndo" type="Node" parent="UndoStates"]
 script = ExtResource( 167 )
-
-[node name="Buffers" type="Node" parent="."]
-script = ExtResource( 165 )
-
-[node name="ReadData" type="Node" parent="Buffers"]
-script = ExtResource( 20 )
-
-[node name="WriteData" type="Node" parent="Buffers"]
-script = ExtResource( 32 )
-
-[node name="OpenMap" type="Node" parent="."]
-script = ExtResource( 5 )
-
-[node name="RNC" type="Node" parent="OpenMap"]
-script = ExtResource( 53 )
-
-[node name="SaveMap" type="Node" parent="."]
-script = ExtResource( 31 )
 
 [node name="CustomSlabSystem" type="Node" parent="."]
 script = ExtResource( 127 )
@@ -5465,6 +5467,7 @@ margin_right = -5.0
 margin_bottom = -5.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource( 184 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset"]
 margin_right = 600.0
@@ -5999,6 +6002,7 @@ margin_right = -12.0
 margin_bottom = -12.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource( 183 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset"]
 margin_right = 1236.0
@@ -8021,9 +8025,6 @@ script = SubResource( 20 )
 [connection signal="visibility_changed" from="Ui/UiSystem/FileDialogOpen" to="Ui/UiSystem/FileDialogOpen" method="_on_FileDialogOpen_visibility_changed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmAutoGen" to="SlabPlacement" method="_on_ConfirmAutoGen_confirmed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmGenerateScript" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_ConfirmGenerateScript_confirmed"]
-[connection signal="confirmed" from="Ui/UiSystem/ConfirmClmClearUnused" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" method="_on_ConfirmClmClearUnused_confirmed"]
-[connection signal="confirmed" from="Ui/UiSystem/ConfirmDeleteSlabsetFile" to="Ui/UiSystem/SlabsetWindow" method="_on_ConfirmDeleteSlabsetFile_confirmed"]
-[connection signal="confirmed" from="Ui/UiSystem/ConfirmDeleteColumnsetFile" to="Ui/UiSystem/SlabsetWindow" method="_on_ConfirmDeleteColumnsetFile_confirmed"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ImageAsMapDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImageAsMapDialog_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonNewMap" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonNewMap_pressed"]
@@ -8081,41 +8082,6 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/FakeSlabHelpButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_FakeSlabHelpButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer3/AddCustomSlabButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_AddCustomSlabButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer3/HelpCustomSlabsButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_HelpCustomSlabsButton_pressed"]
-[connection signal="visibility_changed" from="Ui/UiSystem/SlabsetWindow" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetWindow_visibility_changed"]
-[connection signal="tab_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetTabs_tab_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetIDSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer/SlabsetIDSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView" method="_on_SlabsetIDSpinBox_value_changed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/SlabCopyButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabCopyButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/SlabPasteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabPasteButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2/SlabRevertButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabRevertButton_pressed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer/VariationNumberSpinBox" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView" method="_on_VariationNumberSpinBox_value_changed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2/VarCopyButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarCopyButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2/VarPasteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarPasteButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2/VarRevertButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarRevertButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2/VarRotateButton" to="Ui/UiSystem/SlabsetWindow" method="_on_VarRotateButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer/ObjAddButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjAddButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer/ObjDeleteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjDeleteButton_pressed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/PanelContainer/GridContainer2/ObjObjectIndexSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjObjectIndexSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjThingTypeSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjThingTypeSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjSubtypeSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjSubtypeSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjSubtileSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjSubtileSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjRelativeXSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjRelativeXSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjRelativeYSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjRelativeYSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjRelativeZSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjRelativeZSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjEffectRangeSpinBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjEffectRangeSpinBox_value_changed"]
-[connection signal="toggled" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection/VBoxContainer/GridContainer/ObjIsLightCheckBox" to="Ui/UiSystem/SlabsetWindow" method="_on_ObjIsLightCheckBox_toggled"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetCopyValues" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetCopyValues_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetHelpButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetDeleteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_SlabsetDeleteButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/ExportSlabsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsToml_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer/ColumnsetDeleteButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetDeleteButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer/ExportColumnsToml" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsToml_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/GridContainer/ColumnsetHelpButton" to="Ui/UiSystem/SlabsetWindow" method="_on_ColumnsetHelpButton_pressed"]
-[connection signal="visibility_changed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" method="_on_ColumnEditor_visibility_changed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorClearUnusedButton" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" method="_on_ColumnEditorClearUnusedButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorSortButton" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" method="_on_ColumnEditorSortButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorHelpButton" to="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor" method="_on_ColumnEditorHelpButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/NewMapWindow" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapWindow_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer3/SetNewFormat" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapFormat_item_selected"]
 [connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer/XSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_XSizeLine_focus_exited"]
@@ -8136,8 +8102,6 @@ script = SubResource( 20 )
 [connection signal="timeout" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions/NoiseUpdateTimer" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseUpdateTimer_timeout"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/ButtonNewMapOK" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonNewMapOK_pressed"]
 [connection signal="gui_input" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/QuickNoisePreview" to="Ui/UiSystem/NewMapWindow" method="_on_QuickNoisePreview_gui_input"]
-[connection signal="file_selected" from="Ui/UiSystem/ExportSlabsetTomlDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportSlabsetTomlDialog_file_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/ExportColumnsetTomlDialog" to="Ui/UiSystem/SlabsetWindow" method="_on_ExportColumnsetTomlDialog_file_selected"]
 [connection signal="about_to_show" from="Ui/UiSystem/ResizeCurrentMapSize" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeCurrentMapSize_about_to_show"]
 [connection signal="focus_exited" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer/SettingsXSizeLine" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_SettingsXSizeLine_focus_exited"]
 [connection signal="focus_exited" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer/SettingsYSizeLine" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_SettingsYSizeLine_focus_exited"]

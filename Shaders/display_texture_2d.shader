@@ -3,6 +3,8 @@ shader_type canvas_item;
 render_mode blend_mix;
 uniform sampler2D viewTextures : hint_albedo;
 uniform sampler2D columnPosData : hint_albedo;
+uniform sampler2D columnsetPosData : hint_albedo;
+uniform sampler2D variationPosData : hint_albedo;
 uniform sampler2D animationDatabase;
 const vec2 oneTileSize = vec2(32,32);
 const float TEXTURE_ANIMATION_SPEED = 12.0;
@@ -17,6 +19,17 @@ uniform sampler2D palette_texture:hint_albedo;
 uniform vec2 fieldSizeInSubtiles = vec2(0.0, 0.0);
 uniform int supersampling_level = 4;
 uniform int flashingColumn = -1;
+uniform int flashingColumnset = -1;
+uniform int flashingVariation = -1;
+uniform int flashingColumnset0 = -1;
+uniform int flashingColumnset1 = -1;
+uniform int flashingColumnset2 = -1;
+uniform int flashingColumnset3 = -1;
+uniform int flashingColumnset4 = -1;
+uniform int flashingColumnset5 = -1;
+uniform int flashingColumnset6 = -1;
+uniform int flashingColumnset7 = -1;
+uniform int flashingColumnset8 = -1;
 uniform float flashIntensity = 0.0;
 const float DARKENING_FACTOR = 0.333;
 const vec2 TILE_DIMENSIONS = vec2(32.0, 32.0);
@@ -157,12 +170,54 @@ void fragment() {
 		COLOR = averagedFinalColor;
 	}
 	
-	if (flashingColumn >= 0 && flashIntensity > 0.0) {
-		vec3 columnIndexColor = texelGet(columnPosData, ivec2(originalSubtileX, originalSubtileY), 0).rgb;
-		int columnIndex = (int(columnIndexColor.r * 255.0) << 8) | int(columnIndexColor.g * 255.0);
-		if (columnIndex == flashingColumn) {
-			vec3 flashColor = mix(COLOR.rgb, vec3(0.264, 0.264, 0.66), flashIntensity*0.66);
-			COLOR = vec4(flashColor, COLOR.a);
+	bool shouldFlash = false;
+	vec3 flashColor;
+	
+	if (flashIntensity > 0.0) {
+		if (flashingColumn >= 0) {
+			vec3 columnIndexColor = texelGet(columnPosData, ivec2(originalSubtileX, originalSubtileY), 0).rgb;
+			int columnIndex = (int(columnIndexColor.r * 255.0) << 8) | int(columnIndexColor.g * 255.0);
+			if (columnIndex == flashingColumn) {
+				shouldFlash = true;
+				flashColor = vec3(0.660, 0.660, 0.264);
+			}
 		}
+		
+		if (flashingColumnset >= 0) {
+			vec3 columnsetIndexColor = texelGet(columnsetPosData, ivec2(originalSubtileX, originalSubtileY), 0).rgb;
+			int columnsetIndex = (int(columnsetIndexColor.r * 255.0) << 8) | int(columnsetIndexColor.g * 255.0);
+			if (columnsetIndex == flashingColumnset) {
+				shouldFlash = true;
+				flashColor = vec3(0.264, 0.264, 0.660);
+			}
+		}
+		
+		if (flashingVariation >= 0) {
+			vec3 variationIndexColor = texelGet(variationPosData, ivec2(originalSubtileX, originalSubtileY), 0).rgb;
+			int variationIndex = (int(variationIndexColor.r * 255.0) << 8) | int(variationIndexColor.g * 255.0);
+			if (variationIndex == flashingVariation) {
+				shouldFlash = true;
+				flashColor = vec3(0.264, 0.660, 0.264); // Green color for variation flashing
+			}
+		}
+		
+		// Check if current columnset index matches any of the variation columnsets
+		if (!shouldFlash && (flashingColumnset0 >= 0 || flashingColumnset1 >= 0 || flashingColumnset2 >= 0 || 
+		                     flashingColumnset3 >= 0 || flashingColumnset4 >= 0 || flashingColumnset5 >= 0 || 
+		                     flashingColumnset6 >= 0 || flashingColumnset7 >= 0 || flashingColumnset8 >= 0)) {
+			vec3 columnsetIndexColor = texelGet(columnsetPosData, ivec2(originalSubtileX, originalSubtileY), 0).rgb;
+			int columnsetIndex = (int(columnsetIndexColor.r * 255.0) << 8) | int(columnsetIndexColor.g * 255.0);
+			if (columnsetIndex == flashingColumnset0 || columnsetIndex == flashingColumnset1 || columnsetIndex == flashingColumnset2 ||
+			    columnsetIndex == flashingColumnset3 || columnsetIndex == flashingColumnset4 || columnsetIndex == flashingColumnset5 ||
+			    columnsetIndex == flashingColumnset6 || columnsetIndex == flashingColumnset7 || columnsetIndex == flashingColumnset8) {
+				shouldFlash = true;
+				flashColor = vec3(0.660, 0.264, 0.660); // Purple color for multiple columnset flashing
+			}
+		}
+	}
+	
+	if (shouldFlash) {
+		vec3 finalFlashColor = mix(COLOR.rgb, flashColor, flashIntensity*0.66);
+		COLOR = vec4(finalFlashColor, COLOR.a);
 	}
 }

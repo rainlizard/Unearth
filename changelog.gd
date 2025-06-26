@@ -15,9 +15,9 @@ const string = """
 - Fixed an issue where shaders would sometimes go dark
 - If the slabset window is open, their textures will now be updated when switching tileset
 - Detect when windows are offscreen better
-- Current CLM data column flashes on map
+- In slabset window, flash all affected columns on the map
 - Slabs are placed 40% faster
-- Adjusting Slabset or Columnset will now automatically update the map to use those new columns
+- Editing Slabset or Columnset will now automatically update the map to use those new columns
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

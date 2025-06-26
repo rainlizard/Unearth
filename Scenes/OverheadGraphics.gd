@@ -29,16 +29,10 @@ var pixel_data = PoolByteArray()
 func update_full_overhead_map():
 	var CODETIME_START = OS.get_ticks_msec()
 	
-	# Always regenerate column position texture when updating the full overhead map
-	# This ensures it's updated when a new map is loaded
-	oFlashingColumns.generate_column_position_texture()
-	
 	if arrayOfColorRects.empty() == true:
 		initialize_display_fields()
 	else:
 		update_display_fields_size()
-		# Update the column position texture in existing display fields
-		oFlashingColumns.update_column_position_texture()
 	
 	var shapePositionArray = []
 	var totalPositions = M.xSize * M.ySize
@@ -159,12 +153,18 @@ func createDisplayField(setMap, showStyle):
 	mat.set_shader_param("viewTextures", overheadTexData)
 	
 	mat.set_shader_param("columnPosData", oFlashingColumns.columnPosTexData)
+	mat.set_shader_param("columnsetPosData", oFlashingColumns.columnsetPosTexData)
+	mat.set_shader_param("variationPosData", oFlashingColumns.variationPosTexData)
 	
 	mat.set_shader_param("slxData", oDataSlx.slxTexData)
 	mat.set_shader_param("slabIdData", oDataSlab.idTexData)
 	mat.set_shader_param("palette_texture", oReadPalette.palette_image_texture)
 	mat.set_shader_param("supersampling_level", Settings.get_setting("ssaa"))
 	mat.set_shader_param("flashingColumn", -1)
+	mat.set_shader_param("flashingColumnset", -1)
+	mat.set_shader_param("flashingVariation", -1)
+	for i in 9:
+		mat.set_shader_param("flashingColumnset" + str(i), -1)
 	mat.set_shader_param("flashIntensity", 0.0)
 	
 	arrayOfColorRects.append(displayField)

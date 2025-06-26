@@ -62,6 +62,10 @@ var clipboard = {
 	"cubes": []
 }
 
+signal cube_value_changed(clmIndex)
+signal floor_texture_changed(clmIndex)
+signal column_pasted(clmIndex)
+
 func _ready():
 	match name:
 		"ClmEditorControls":
@@ -83,7 +87,7 @@ func _ready():
 		cubeSpinBoxArray[i].connect("mouse_exited", self, "_on_cube_mouse_exited", [i])
 	
 	regeneration_timer = Timer.new()
-	regeneration_timer.wait_time = 1.5
+	regeneration_timer.wait_time = 0.5
 	regeneration_timer.one_shot = true
 	regeneration_timer.connect("timeout", self, "_on_regeneration_timer_timeout")
 	add_child(regeneration_timer)
@@ -222,7 +226,8 @@ func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
 		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-		oFlashingColumns.generate_column_position_texture()
+		oFlashingColumns.generate_clmdata_texture()
+		emit_signal("cube_value_changed", clmIndex)
 	nodeClm.cubes[clmIndex][cubeNumber] = int(value)
 	nodeVoxelView.update_column_view()
 	
@@ -232,6 +237,9 @@ func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
 	_on_cube_mouse_entered(cubeNumber) # Update tooltip
 	adjust_ui_color_if_different()
 	restart_regeneration_timer()
+
+
+
 
 func _on_FloorTextureSpinBox_value_changed(value):
 	var clmIndex = int(oColumnIndexSpinBox.value)
@@ -246,7 +254,8 @@ func _on_FloorTextureSpinBox_value_changed(value):
 		
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-		oFlashingColumns.generate_column_position_texture()
+		oFlashingColumns.generate_clmdata_texture()
+		emit_signal("floor_texture_changed", clmIndex)
 	nodeClm.floorTexture[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	
@@ -259,7 +268,7 @@ func _on_LintelSpinBox_value_changed(value):
 		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-		oFlashingColumns.generate_column_position_texture()
+		oFlashingColumns.generate_clmdata_texture()
 	nodeClm.lintel[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
@@ -271,7 +280,7 @@ func _on_PermanentSpinBox_value_changed(value):
 		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-		oFlashingColumns.generate_column_position_texture()
+		oFlashingColumns.generate_clmdata_texture()
 	nodeClm.permanent[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
@@ -283,7 +292,7 @@ func _on_OrientationSpinBox_value_changed(value):
 		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-		oFlashingColumns.generate_column_position_texture()
+		oFlashingColumns.generate_clmdata_texture()
 	nodeClm.orientation[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
@@ -295,7 +304,7 @@ func _on_HeightSpinBox_value_changed(value):
 		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-		oFlashingColumns.generate_column_position_texture()
+		oFlashingColumns.generate_clmdata_texture()
 	nodeClm.height[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
@@ -307,7 +316,7 @@ func _on_SolidMaskSpinBox_value_changed(value):
 		return
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-		oFlashingColumns.generate_column_position_texture()
+		oFlashingColumns.generate_clmdata_texture()
 	nodeClm.solidMask[clmIndex] = int(value)
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
@@ -351,7 +360,9 @@ func adjust_ui_color_if_different():
 		adjust_spinbox_color(cube_spinbox, cube_is_different)
 	
 	if nodeClm == Columnset:
-		oSlabsetWindow.update_save_columnset_button_availability() # Add this line
+		var oTabColumnset = Nodelist.list.get("oTabColumnset")
+		if is_instance_valid(oTabColumnset):
+			oTabColumnset.update_save_columnset_button_availability()
 
 
 # Function to check if a property is different from its default value
@@ -392,7 +403,8 @@ func _on_ColumnPasteButton_pressed():
 		
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-		oFlashingColumns.generate_column_position_texture()
+		oFlashingColumns.generate_clmdata_texture()
+		emit_signal("column_pasted", clmIndex)
 	
 	nodeClm.height[clmIndex] = clipboard["height"]
 	nodeClm.solidMask[clmIndex] = clipboard["solidMask"]
@@ -428,7 +440,7 @@ func _on_ColumnRevertButton_pressed():
 		
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
-		oFlashingColumns.generate_column_position_texture()
+		oFlashingColumns.generate_clmdata_texture()
 	revert_columns([clmIndex])
 	
 	_on_ColumnIndexSpinBox_value_changed(clmIndex)  # Refresh UI

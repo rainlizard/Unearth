@@ -31,11 +31,11 @@ func update_details():
 	var realSlabName = "Unknown"
 	if Slabs.data.has(realSlabID):
 		realSlabName = Slabs.data[realSlabID][Slabs.NAME]
-	var slabsetInfo = realSlabName + " : " + str(realSlabID)
+	var slabsetInfo = str(realSlabID) + " : " + realSlabName
 	
 	var data = [
 		["Slabset", slabsetInfo],
-		["Variation", slabVariation if slabVariation != "" else "N/A"],
+		["Variation", str(cursorData.localVariation)+' : '+slabVariation if slabVariation != "" else "N/A"],
 		["Columnset", columnsetIndex],
 		["Clm data", entryIndex],
 		["Utilized", oDataClm.utilized[entryIndex]],

@@ -277,7 +277,8 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	#rectStart = Vector2(clamp(rectStart.x, 0, M.xSize-1), clamp(rectStart.y, 0, M.ySize-1))
 	#rectEnd = Vector2(clamp(rectEnd.x, 0, M.xSize-1), clamp(rectEnd.y, 0, M.ySize-1))
 	
-	# Erase  (37ms)
+	# Erase
+	
 	for i in range(shapePositionArray.size() - 1, -1, -1): # iterate in reverse
 		var pos = shapePositionArray[i]
 		if pos.x < 0:
@@ -327,6 +328,12 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	
 	oDataSlab.update_texture()
 	oOverheadGraphics.overhead2d_update_rect_single_threaded(shapePositionArray)
+	
+	# Invalidate the columnset texture so it gets regenerated with fresh data
+	var oFlashingColumns = Nodelist.list["oFlashingColumns"]
+	if is_instance_valid(oFlashingColumns):
+		oFlashingColumns.invalidate_columnset_texture()
+	
 	yield(get_tree(),'idle_frame') # This is necessary for yielding this function to work. Unlike 'await' in Godot 4.0, You can only yield a function which itself also yields.
 
 func do_update_auto_walls(slabID):
@@ -796,19 +803,22 @@ func get_general_bitmask(slabID, ownership, surrID, surrOwner):
 	return bitmask
 
 func get_wall_bitmask(xSlab, ySlab, surrID, ownership):
-	var ownerS = oDataOwnership.get_cell_ownership(xSlab, ySlab+1)
-	var ownerW = oDataOwnership.get_cell_ownership(xSlab-1, ySlab)
-	var ownerN = oDataOwnership.get_cell_ownership(xSlab, ySlab-1)
-	var ownerE = oDataOwnership.get_cell_ownership(xSlab+1, ySlab)
-	if ownerS == 5: ownerS = ownership # If next to a Player 5 wall, treat it as earth, don't put up a wall against it.
-	if ownerW == 5: ownerW = ownership
-	if ownerN == 5: ownerN = ownership
-	if ownerE == 5: ownerE = ownership
+	var ownerPositions = [
+		Vector2(xSlab, ySlab+1),    # S
+		Vector2(xSlab-1, ySlab),    # W
+		Vector2(xSlab, ySlab-1),    # N
+		Vector2(xSlab+1, ySlab)     # E
+	]
+	var directionIndices = [dir.s, dir.w, dir.n, dir.e]
 	var bitmask = 0
-	if Slabs.data[ surrID[dir.s] ][Slabs.IS_SOLID] == false or ownerS != ownership: bitmask += 1
-	if Slabs.data[ surrID[dir.w] ][Slabs.IS_SOLID] == false or ownerW != ownership: bitmask += 2
-	if Slabs.data[ surrID[dir.n] ][Slabs.IS_SOLID] == false or ownerN != ownership: bitmask += 4
-	if Slabs.data[ surrID[dir.e] ][Slabs.IS_SOLID] == false or ownerE != ownership: bitmask += 8
+	var bitmaskPowers = [1, 2, 4, 8]
+	
+	for i in 4:
+		var ownerAtPos = oDataOwnership.get_cell_ownership(ownerPositions[i].x, ownerPositions[i].y)
+		if ownerAtPos == 5:
+			ownerAtPos = ownership
+		if Slabs.data[surrID[directionIndices[i]]][Slabs.IS_SOLID] == false or ownerAtPos != ownership:
+			bitmask += bitmaskPowers[i]
 	
 	return bitmask
 
