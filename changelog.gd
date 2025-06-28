@@ -18,6 +18,7 @@ const string = """
 - In slabset window, flash all affected columns on the map
 - Slabs are placed 40% faster
 - Editing Slabset or Columnset will now automatically update the map to use those new columns
+- 'Go to unused' button now works in 'Classic format'
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

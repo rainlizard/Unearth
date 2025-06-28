@@ -330,13 +330,27 @@ func _on_UtilizedSpinBox_value_changed(value):
 	nodeVoxelView.update_column_view()
 	adjust_ui_color_if_different()
 
+func find_consecutive_blank_columns_with_floor_texture_1():
+	for i in range(1, nodeClm.column_count - 1):
+		var currentCubes = nodeClm.cubes[i]
+		var nextCubes = nodeClm.cubes[i + 1]
+		var emptyArray = [0,0,0,0, 0,0,0,0]
+		if currentCubes == emptyArray and nextCubes == emptyArray and nodeClm.floorTexture[i] == 1 and nodeClm.floorTexture[i + 1] == 1:
+			return i
+	return -1
+
+
 func _on_ColumnFirstUnusedButton_pressed():
 	var findUnusedIndex = nodeClm.find_cubearray_index([0,0,0,0, 0,0,0,0], 0)
 	
 	if findUnusedIndex != -1:
 		oColumnIndexSpinBox.value = findUnusedIndex
 	else:
-		oMessage.quick("There are no empty columns")
+		var consecutiveBlankIndex = find_consecutive_blank_columns_with_floor_texture_1()
+		if consecutiveBlankIndex != -1:
+			oColumnIndexSpinBox.value = consecutiveBlankIndex
+		else:
+			oMessage.quick("There are no empty columns")
 
 func _on_CheckboxShowAll_toggled(checkboxValue):
 	oGridAdvancedValues.visible = checkboxValue
