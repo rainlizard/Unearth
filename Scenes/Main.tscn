@@ -5447,7 +5447,7 @@ margin_left = -2945.0
 margin_top = -1513.0
 margin_right = -2335.0
 margin_bottom = -523.0
-window_title = "Slabset"
+window_title = "Edit slabs"
 resizable = true
 script = ExtResource( 132 )
 

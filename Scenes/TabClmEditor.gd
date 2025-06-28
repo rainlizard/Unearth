@@ -103,7 +103,6 @@ func _on_ColumnEditor_visibility_changed():
 	if visible == true:
 		oClmEditorControls.just_opened()
 		oClmEditorVoxelView.initialize()
-		oPropertiesTabs.set_current_tab(2)
 		
 		oMapClmFilenameLabel.text = oCurrentMap.path.get_file().get_basename() + ".clm"
 		

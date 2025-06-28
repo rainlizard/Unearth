@@ -437,6 +437,7 @@ func _on_ObjAddButton_pressed():
 	add_new_object_to_variation(variation)
 	update_objects_ui()
 	oDkSlabsetVoxelView.update_column_view()
+	restart_regeneration_timer()
 
 func add_new_object_to_variation(variation):
 	var randomSubtype = 1
@@ -460,6 +461,7 @@ func _on_ObjDeleteButton_pressed():
 	update_objects_ui()
 	oDkSlabsetVoxelView.update_column_view()
 	oMessage.quick("Deleted object")
+	restart_regeneration_timer()
 
 func _on_ObjThingTypeSpinBox_value_changed(value:int):
 	value = 7 if value in [0, 2, 7] else 1
@@ -534,6 +536,7 @@ func update_object_property(the_property, new_value):
 	update_modified_label_for_slab_id()
 	update_modified_label_for_variation()
 	update_save_slabset_button_availability()
+	restart_regeneration_timer()
 
 func _on_SlabCopyButton_pressed():
 	copy(ALL_VARIATION)
@@ -593,6 +596,7 @@ func paste(howMany):
 	update_column_spinboxes()
 	update_objects_ui()
 	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
+	restart_regeneration_timer()
 
 func _on_VarRotateButton_pressed():
 	var variation = get_current_variation()
@@ -612,6 +616,7 @@ func _on_VarRotateButton_pressed():
 	update_column_spinboxes()
 	update_objects_ui()
 	oMessage.quick("Rotated variation")
+	restart_regeneration_timer()
 
 func _on_SlabRevertButton_pressed():
 	var slabID = int(oSlabsetIDSpinBox.value)
@@ -643,6 +648,7 @@ func revert(variations_to_revert):
 	update_objects_ui()
 	yield(get_tree(),'idle_frame')
 	oDkSlabsetVoxelView.refresh_entire_view()
+	restart_regeneration_timer()
 
 func _on_SlabsetHelpButton_pressed():
 	var helptxt = "slabset.toml and columnset.toml affect the appearance of slabs when they're placed. When placing in Unearth AND when placing in-game. \nHowever keep in mind these files are not automatically saved by Unearth, so you will need to press this 'Save slabset' button whenever you make any changes.\nNew entries in terrain.cfg are also required in order to add new Slab IDs to the Slabset.\n\nIf you set an object's RelativeX and RelativeY to be inside of a column/cube then it may not appear in-game."
@@ -676,6 +682,7 @@ func _on_ConfirmDeleteSlabsetFile_confirmed():
 			update_objects_ui()
 			oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 			update_slabset_delete_button_state()
+			restart_regeneration_timer()
 		else:
 			oMessage.big("Error", "Failed to delete the file.")
 	else:
