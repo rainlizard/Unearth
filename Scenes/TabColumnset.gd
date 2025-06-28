@@ -121,9 +121,12 @@ func _on_ExportColumnsetTomlDialog_file_selected(filePath):
 
 func _on_ColumnsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "Be wary not to confuse the Columnset with the CLM data. CLM data (.clm) are the appearance of any columns that have already been placed on the map, while the Columnset (.toml) is the appearance of any new columns that are placed in the future. \n"
+	helptxt += "columnset.toml is a global file in /fxdata/ that is used by all maps in the game, but it can also be saved as a local file for a map or campaign. When you run the game both columnset.toml files will be loaded, but with the local file overwriting any same fields of the file in /fxdata/.\n"
 	helptxt += "\n"
-	helptxt += "columnset.toml is a global file in /fxdata/ that is used by all maps in the game, but it can also be saved as a local file to a map or campaign. When you run the game both columnset.toml files will be loaded, but with the local file overwriting any same fields of the file in /fxdata/."
+	helptxt += "Be wary not to confuse the Columnset with the CLM data:\n"
+	helptxt += "- The Columnset (.toml) represents the appearance of new columns that are yet to be placed in the future.\n"
+	helptxt += "- CLM entries (.clm) represent the appearance of all columns that have already been placed on the map.\n"
+	
 	oMessage.big("Help",helptxt)
 
 func _on_ColumnsetDeleteButton_pressed():

@@ -5,6 +5,7 @@ onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oUniversalDetails = Nodelist.list["oUniversalDetails"]
+onready var oConfirmClmEntriesFull = Nodelist.list["oConfirmClmEntriesFull"]
 
 var column_count = 8192
 
@@ -19,6 +20,10 @@ var cubes = []
 var floorTexture = []
 
 var default_data = {}
+
+func _ready():
+	if is_instance_valid(oConfirmClmEntriesFull):
+		oConfirmClmEntriesFull.connect("confirmed", self, "_on_ConfirmClmEntriesFull_confirmed")
 
 func store_default_data():
 	default_data["utilized"] = utilized.duplicate(true)
@@ -69,7 +74,7 @@ func index_entry(cubeArray, setFloorID):
 		oTimerUpdateColumnEntries.start()
 		return index
 
-	oMessage.big("Error", "Clm entries are full. Try the 'Clear Unused' button in the CLM data window.")
+	Utils.popup_centered(oConfirmClmEntriesFull)
 	return 0
 
 var a_column_has_changed_since_last_updating_utilized = false
@@ -108,6 +113,10 @@ func calculate_lintel(cubeArray):
 				return reversedCubePosition
 	# If we don't find a 2nd hole, return 0 as default
 	return 0
+
+func _on_ConfirmClmEntriesFull_confirmed():
+	clear_unused_entries()
+	oFlashingColumns.generate_clmdata_texture()
 
 func clear_unused_entries():
 	update_all_utilized()

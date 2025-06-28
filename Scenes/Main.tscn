@@ -3067,6 +3067,19 @@ dialog_text = "Delete all columns which have no presence on the map? (a utilized
 dialog_autowrap = true
 script = ExtResource( 61 )
 
+[node name="ConfirmClmEntriesFull" type="ConfirmationDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -456.0
+margin_top = 304.0
+margin_right = -16.0
+margin_bottom = 409.0
+rect_min_size = Vector2( 300, 105 )
+popup_exclusive = true
+window_title = "CLM entries are full"
+dialog_text = "No more CLM entries available. Clear unused CLM entries to free up space?"
+dialog_autowrap = true
+script = ExtResource( 61 )
+
 [node name="ConfirmScriptDeletion" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -456.0
@@ -5965,8 +5978,24 @@ margin_top = 9.0
 margin_right = 318.0
 margin_bottom = 41.0
 
+[node name="SlabsetDeleteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+margin_right = 146.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Delete & revert"
+
+[node name="ExportSlabsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+margin_left = 150.0
+margin_right = 273.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Save slabset"
+
 [node name="SlabsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
-margin_right = 32.0
+margin_left = 277.0
+margin_right = 309.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_vertical = 4
@@ -5975,22 +6004,6 @@ texture_pressed = ExtResource( 66 )
 texture_hover = ExtResource( 128 )
 expand = true
 stretch_mode = 4
-
-[node name="SlabsetDeleteButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 36.0
-margin_right = 182.0
-margin_bottom = 27.0
-size_flags_horizontal = 3
-size_flags_vertical = 0
-text = "Delete & revert"
-
-[node name="ExportSlabsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
-margin_left = 186.0
-margin_right = 309.0
-margin_bottom = 27.0
-size_flags_horizontal = 3
-size_flags_vertical = 0
-text = "Save slabset"
 
 [node name="TabColumnset" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
 visible = false

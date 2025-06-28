@@ -651,7 +651,7 @@ func revert(variations_to_revert):
 	restart_regeneration_timer()
 
 func _on_SlabsetHelpButton_pressed():
-	var helptxt = "slabset.toml and columnset.toml affect the appearance of slabs when they're placed. When placing in Unearth AND when placing in-game. \nHowever keep in mind these files are not automatically saved by Unearth, so you will need to press this 'Save slabset' button whenever you make any changes.\nNew entries in terrain.cfg are also required in order to add new Slab IDs to the Slabset.\n\nIf you set an object's RelativeX and RelativeY to be inside of a column/cube then it may not appear in-game."
+	var helptxt = "slabset.toml and columnset.toml affect the appearance of slabs when they're placed; when placing in Unearth AND when placing in-game. \nHowever keep in mind these files are not automatically saved by Unearth, so you will need to press this 'Save slabset' button whenever you make any changes.\nNew entries in terrain.cfg are also required in order to add new Slab IDs to the Slabset.\n\nIf you set an object's RelativeX and RelativeY to be inside of a column/cube then it may not appear in-game."
 	oMessage.big("Help",helptxt)
 
 func _on_SlabsetDeleteButton_pressed():
