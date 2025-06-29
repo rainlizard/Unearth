@@ -21,6 +21,7 @@ const string = """
 - 'Go to unused' button now works in 'Classic format'
 - When you run out of clm entries, directly ask if the user wants to "Clear unused"
 - Calculate a column's Height and Lintel fields automatically, like how Solid mask is auto calculated
+- Fixed Things going dark on map when viewed in Slabset window.
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

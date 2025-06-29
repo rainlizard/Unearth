@@ -74,11 +74,14 @@ func add_billboard_obj(tex, pos:Vector3):
 	if tex == null:
 		tex = preload('res://Art/Thing.png')
 		id.pixel_size = 0.004
-	
-	id.texture = tex
+
+	if tex is Texture:
+		id.texture = tex.duplicate(true)
+	else:
+		id.texture = tex
+
 	id.translation = pos
-	#id.offset.x = tex.get_width()*0.5
-	id.offset.y = tex.get_height()*0.5
+	id.offset.y = tex.get_height() * 0.5
 	$"%AttachedObjects".add_child(id)
 
 
