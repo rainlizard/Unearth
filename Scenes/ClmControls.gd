@@ -229,10 +229,22 @@ func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
 		oFlashingColumns.generate_clmdata_texture()
 		emit_signal("cube_value_changed", clmIndex)
 	nodeClm.cubes[clmIndex][cubeNumber] = int(value)
-	nodeVoxelView.update_column_view()
 	
-	oHeightSpinBox.value = nodeClm.get_height_from_bottom(nodeClm.cubes[clmIndex])
-	oSolidMaskSpinBox.value = nodeClm.calculate_solid_mask(nodeClm.cubes[clmIndex])
+	# Auto-calculate height, solid mask, and lintel based on cube data
+	var calculatedHeight = nodeClm.get_height_from_bottom(nodeClm.cubes[clmIndex])
+	var calculatedSolidMask = nodeClm.calculate_solid_mask(nodeClm.cubes[clmIndex])
+	var calculatedLintel = nodeClm.calculate_lintel(nodeClm.cubes[clmIndex])
+	
+	# Update both the data arrays and UI
+	nodeClm.height[clmIndex] = calculatedHeight
+	nodeClm.solidMask[clmIndex] = calculatedSolidMask
+	nodeClm.lintel[clmIndex] = calculatedLintel
+	
+	oHeightSpinBox.value = calculatedHeight
+	oSolidMaskSpinBox.value = calculatedSolidMask
+	oLintelSpinBox.value = calculatedLintel
+	
+	nodeVoxelView.update_column_view()
 	
 	_on_cube_mouse_entered(cubeNumber) # Update tooltip
 	adjust_ui_color_if_different()
@@ -420,14 +432,16 @@ func _on_ColumnPasteButton_pressed():
 		oFlashingColumns.generate_clmdata_texture()
 		emit_signal("column_pasted", clmIndex)
 	
-	nodeClm.height[clmIndex] = clipboard["height"]
-	nodeClm.solidMask[clmIndex] = clipboard["solidMask"]
 	nodeClm.permanent[clmIndex] = clipboard["permanent"]
 	nodeClm.orientation[clmIndex] = clipboard["orientation"]
-	nodeClm.lintel[clmIndex] = clipboard["lintel"]
 	nodeClm.floorTexture[clmIndex] = clipboard["floorTexture"]
 	nodeClm.utilized[clmIndex] = clipboard["utilized"]
 	nodeClm.cubes[clmIndex] = clipboard["cubes"].duplicate(true)
+	
+	# Auto-calculate height, solid mask, and lintel based on pasted cube data
+	nodeClm.height[clmIndex] = nodeClm.get_height_from_bottom(nodeClm.cubes[clmIndex])
+	nodeClm.solidMask[clmIndex] = nodeClm.calculate_solid_mask(nodeClm.cubes[clmIndex])
+	nodeClm.lintel[clmIndex] = nodeClm.calculate_lintel(nodeClm.cubes[clmIndex])
 	
 	_on_ColumnIndexSpinBox_value_changed(clmIndex) # Update the UI to reflect the pasted values
 	oMessage.quick("Pasted column from clipboard")
@@ -437,14 +451,16 @@ func _on_ColumnPasteButton_pressed():
 
 func revert_columns(column_ids):
 	for column_id in column_ids:
-		nodeClm.height[column_id] = nodeClm.default_data["height"][column_id]
-		nodeClm.solidMask[column_id] = nodeClm.default_data["solidMask"][column_id]
 		nodeClm.permanent[column_id] = nodeClm.default_data["permanent"][column_id]
 		nodeClm.orientation[column_id] = nodeClm.default_data["orientation"][column_id]
-		nodeClm.lintel[column_id] = nodeClm.default_data["lintel"][column_id]
 		nodeClm.floorTexture[column_id] = nodeClm.default_data["floorTexture"][column_id]
 		nodeClm.utilized[column_id] = nodeClm.default_data["utilized"][column_id]
 		nodeClm.cubes[column_id] = nodeClm.default_data["cubes"][column_id].duplicate(true)
+		
+		# Auto-calculate height, solid mask, and lintel based on reverted cube data
+		nodeClm.height[column_id] = nodeClm.get_height_from_bottom(nodeClm.cubes[column_id])
+		nodeClm.solidMask[column_id] = nodeClm.calculate_solid_mask(nodeClm.cubes[column_id])
+		nodeClm.lintel[column_id] = nodeClm.calculate_lintel(nodeClm.cubes[column_id])
 
 func _on_ColumnRevertButton_pressed():
 	var clmIndex = int(oColumnIndexSpinBox.value)

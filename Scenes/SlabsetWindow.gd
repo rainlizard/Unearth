@@ -106,35 +106,17 @@ func open_from_cursor_position():
 	var actualSlabID = data.fullVariation / 28
 	var actualLocalVariation = data.fullVariation % 28
 	
-	if columnDetailsVisible:
-		# When opened from Column mode, just set values without tab switching
-		oSlabsetIDSpinBox.value = actualSlabID
-		oVariationNumberSpinBox.value = actualLocalVariation
-		oTabSlabset._on_SlabsetIDSpinBox_value_changed(actualSlabID)
-		oTabSlabset.variation_changed(actualLocalVariation)
-		
-		oColumnsetControls.oColumnIndexSpinBox.value = data.columnsetIndex
-		
-		oTabClmEditor.set_clm_column_index(data.clmEntryIndex)
-		
-		update_flash_state()
-	else:
-		# When opened from other modes, do the full tab navigation
-		oSlabsetIDSpinBox.value = actualSlabID
-		oVariationNumberSpinBox.value = actualLocalVariation
-		oSlabsetTabs.current_tab = 0
-		oTabSlabset._on_SlabsetIDSpinBox_value_changed(actualSlabID)
-		oTabSlabset.variation_changed(actualLocalVariation)
-		
-		yield(get_tree(), 'idle_frame')
-		
-		oSlabsetTabs.current_tab = 1
-		oColumnsetControls.oColumnIndexSpinBox.value = data.columnsetIndex
-		
-		yield(get_tree(), 'idle_frame')
-		
-		oSlabsetTabs.current_tab = 2
-		oTabClmEditor.set_clm_column_index(data.clmEntryIndex)
+	# When opened from Column mode, just set values without tab switching
+	oSlabsetIDSpinBox.value = actualSlabID
+	oVariationNumberSpinBox.value = actualLocalVariation
+	oTabSlabset._on_SlabsetIDSpinBox_value_changed(actualSlabID)
+	oTabSlabset.variation_changed(actualLocalVariation)
+	
+	oColumnsetControls.oColumnIndexSpinBox.value = data.columnsetIndex
+	
+	oTabClmEditor.set_clm_column_index(data.clmEntryIndex)
+	
+	update_flash_state()
 
 func update_flash_state():
 	if not is_instance_valid(oFlashingColumns) or is_initializing:

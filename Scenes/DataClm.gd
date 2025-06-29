@@ -93,26 +93,6 @@ func update_all_utilized():
 	
 	print('All CLM utilized updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
-func update_all_solid_mask():
-	var CODETIME_START = OS.get_ticks_msec()
-	for index in column_count:
-		solidMask[index] = calculate_solid_mask(cubes[index])
-	print('All CLM solid bitmask updated in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
-
-func calculate_lintel(cubeArray):
-	var holeCount = 0
-	# Scan from top to bottom (index 7 to 0)
-	for cubeNumber in range(7, -1, -1):
-		if cubeArray[cubeNumber] == 0:
-			holeCount += 1
-			if holeCount == 2:
-				# Found the 2nd hole, return the position of the cube above it
-				# The cube above this hole is at cubeNumber + 1
-				var cubePosition = cubeNumber + 1
-				var reversedCubePosition = 7 - cubePosition
-				return reversedCubePosition
-	# If we don't find a 2nd hole, return 0 as default
-	return 0
 
 func _on_ConfirmClmEntriesFull_confirmed():
 	clear_unused_entries()
@@ -123,9 +103,6 @@ func clear_unused_entries():
 	for clmIndex in column_count:
 		if utilized[clmIndex] == 0:
 			delete_column(clmIndex)
-
-
-
 
 
 func sort_columns_by_utilized():

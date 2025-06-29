@@ -615,6 +615,7 @@ func _on_VarRotateButton_pressed():
 		obj[Slabset.obj.RELATIVE_Y] = old_relative_x
 	update_column_spinboxes()
 	update_objects_ui()
+	oDkSlabsetVoxelView.refresh_entire_view()
 	oMessage.quick("Rotated variation")
 	restart_regeneration_timer()
 
