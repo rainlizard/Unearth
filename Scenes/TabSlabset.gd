@@ -37,7 +37,6 @@ onready var oModifiedListLabel = Nodelist.list["oModifiedListLabel"]
 onready var oModifiedListPanelContainer = Nodelist.list["oModifiedListPanelContainer"]
 onready var oSlabsetMapRegenerator = Nodelist.list["oSlabsetMapRegenerator"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
-onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 
 signal column_shortcut_pressed(clmIndex)
@@ -144,14 +143,10 @@ func _ready():
 	oConfirmDeleteSlabsetFile.connect("confirmed", self, "_on_ConfirmDeleteSlabsetFile_confirmed")
 	oExportSlabsetTomlDialog.connect("file_selected", self, "_on_ExportSlabsetTomlDialog_file_selected")
 	connect("visibility_changed", self, "_on_TabSlabset_visibility_changed")
-
-func initialize_tab():
-	oColumnsetVoxelView.visible = false
-	oDkSlabsetVoxelView.visible = true
-	oDkSlabsetVoxelView.initialize()
-
+	
 func _on_TabSlabset_visibility_changed():
 	if visible:
+		oDkSlabsetVoxelView.initialize()
 		is_initializing = true
 		update_slabset_delete_button_state()
 		oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
@@ -159,7 +154,7 @@ func _on_TabSlabset_visibility_changed():
 		yield(get_tree(),'idle_frame')
 		oDkSlabsetVoxelView.oAllVoxelObjects.visible = true
 		is_initializing = false
-		update_flash_state()
+		oSlabsetWindow.update_flash_state()
 	else:
 		oPickSlabWindow.add_slabs()
 		Columnset.update_list_of_columns_that_contain_owned_cubes()
@@ -279,7 +274,7 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 	restart_regeneration_timer()
 	oFlashingColumns.invalidate_columnset_texture()
 	oFlashingColumns.invalidate_variation_texture()
-	update_flash_state()
+	oSlabsetWindow.update_flash_state()
 
 func _on_regeneration_timer_timeout():
 	var currentSlabID = int(oSlabsetIDSpinBox.value)
@@ -692,10 +687,10 @@ func _on_ConfirmDeleteSlabsetFile_confirmed():
 func update_flash_state():
 	if is_initializing:
 		return
-	if visible:
+	if visible and oSlabsetWindow.visible:
 		var currentVariation = get_current_variation()
 		var slabID = int(oSlabsetIDSpinBox.value)
 		oFlashingColumns.start_variation_flash(currentVariation, slabID)
 
 func _on_flash_update_timer_timeout():
-	update_flash_state()
+	oSlabsetWindow.update_flash_state()

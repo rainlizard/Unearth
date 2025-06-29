@@ -1,5 +1,4 @@
 extends VBoxContainer
-onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
@@ -11,10 +10,9 @@ onready var oMapClmFilenameLabel = Nodelist.list["oMapClmFilenameLabel"]
 onready var oColumnEditorClearUnusedButton = Nodelist.list["oColumnEditorClearUnusedButton"]
 onready var oColumnEditorSortButton = Nodelist.list["oColumnEditorSortButton"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
-onready var oDkSlabsetVoxelView = Nodelist.list["oDkSlabsetVoxelView"]
-onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 
 var overhead_update_timer = Timer.new()
 var pending_clm_index = -1
@@ -35,6 +33,7 @@ func _ready():
 	var columnEditorSortButton = get_node("HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorSortButton")
 	var columnEditorHelpButton = get_node("HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorHelpButton")
 	connect("visibility_changed", self, "_on_ColumnEditor_visibility_changed")
+	
 	columnEditorClearUnusedButton.connect("pressed", self, "_on_ColumnEditorClearUnusedButton_pressed")
 	columnEditorSortButton.connect("pressed", self, "_on_ColumnEditorSortButton_pressed")
 	columnEditorHelpButton.connect("pressed", self, "_on_ColumnEditorHelpButton_pressed")
@@ -42,11 +41,6 @@ func _ready():
 	# Connect ConfirmClmClearUnused
 	if is_instance_valid(oConfirmClmClearUnused):
 		oConfirmClmClearUnused.connect("confirmed", self, "_on_ConfirmClmClearUnused_confirmed")
-
-func initialize_tab():
-	oColumnsetVoxelView.visible = false
-	oDkSlabsetVoxelView.visible = false
-	oClmEditorVoxelView.visible = true
 
 func _on_cube_value_changed(clmIndex):
 	if clmIndex > 0:
@@ -83,6 +77,9 @@ func _on_overhead_update_timer_timeout():
 func set_clm_column_index(clmEntryIndex):
 	oClmEditorControls.oColumnIndexSpinBox.value = clmEntryIndex
 
+func get_clm_column_index():
+	return oClmEditorControls.oColumnIndexSpinBox.value
+
 func setup_flash_connection():
 	if not oClmEditorControls.oColumnIndexSpinBox.is_connected("value_changed", self, "_on_clm_column_index_changed"):
 		oClmEditorControls.oColumnIndexSpinBox.connect("value_changed", self, "_on_clm_column_index_changed")
@@ -92,9 +89,9 @@ func disconnect_flash_connection():
 		oClmEditorControls.oColumnIndexSpinBox.disconnect("value_changed", self, "_on_clm_column_index_changed")
 
 func _on_clm_column_index_changed(value):
-	oFlashingColumns.start_column_flash(int(value))
+	oSlabsetWindow.update_flash_state()
 
-func update_clm_flash_state():
+func update_flash_state():
 	var columnIndex = int(oClmEditorControls.oColumnIndexSpinBox.value)
 	oFlashingColumns.start_column_flash(columnIndex)
 
@@ -103,15 +100,10 @@ func _on_ColumnEditor_visibility_changed():
 	if visible == true:
 		oClmEditorControls.just_opened()
 		oClmEditorVoxelView.initialize()
-		
 		oMapClmFilenameLabel.text = oCurrentMap.path.get_file().get_basename() + ".clm"
-		
-		# Refresh controls
 		oClmEditorControls._on_ColumnIndexSpinBox_value_changed(oClmEditorControls.oColumnIndexSpinBox.value)
-		
 		update_clm_editing_buttons()
-		# Flash connection is handled by SlabsetWindow tab switching
-		
+		oSlabsetWindow.update_flash_state()
 	else:
 		# Update "Clm entries" in properties window
 		yield(get_tree(),'idle_frame')

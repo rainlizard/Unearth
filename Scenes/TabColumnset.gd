@@ -11,7 +11,6 @@ onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oExportColumnsToml = Nodelist.list["oExportColumnsToml"]
 onready var oColumnsetDeleteButton = Nodelist.list["oColumnsetDeleteButton"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
-onready var oDkSlabsetVoxelView = Nodelist.list["oDkSlabsetVoxelView"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 
 var flash_update_timer = Timer.new()
@@ -55,28 +54,21 @@ func on_delayed_spinbox_value_changed(value):
 	flash_update_timer.start()
 
 func _on_flash_update_timer_timeout():
-	update_flash_state()
+	oSlabsetWindow.update_flash_state()
 
 func update_flash_state():
 	if visible:
 		var columnsetIndex = int(oColumnsetControls.oColumnIndexSpinBox.value)
 		oFlashingColumns.start_columnset_flash(columnsetIndex)
 
-func initialize_tab():
-	oColumnsetVoxelView.visible = true
-	oDkSlabsetVoxelView.visible = false
-	oColumnsetVoxelView.initialize()
 
 func _on_TabColumnset_visibility_changed():
 	if visible:
+		oColumnsetControls.just_opened()
+		oColumnsetVoxelView.initialize()
 		update_columnset_delete_button_state()
 		update_save_columnset_button_availability()
-		
-		# Initialize columnset controls when becoming visible
-		oColumnsetControls.just_opened()
-		
-		# Update flash state when becoming visible
-		update_flash_state()
+		oSlabsetWindow.update_flash_state()
 
 func update_columnset_delete_button_state():
 	var mapName = oCurrentMap.path.get_file().get_basename()

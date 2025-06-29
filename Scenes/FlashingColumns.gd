@@ -24,11 +24,7 @@ var variationTextureGenerated = false
 func _process(delta):
 	if (flashingColumnIndex >= 0 or flashingColumnsetIndex >= 0 or flashingColumnsetIndexes.size() > 0 or flashingVariationIndex >= 0) and is_instance_valid(oOverheadGraphics):
 		flashTimer += delta
-		var flashIntensity = (sin(flashTimer * 8.0) + 1.0) * 0.5
-		for displayField in oOverheadGraphics.arrayOfColorRects:
-			var material = displayField.material
-			if is_instance_valid(material) and material is ShaderMaterial:
-				material.set_shader_param("flashIntensity", flashIntensity)
+		update_flash_shader_params()
 
 
 func start_column_flash(columnIndex):

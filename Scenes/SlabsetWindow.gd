@@ -28,9 +28,18 @@ func _ready():
 	
 	# Connect window signals
 	connect("visibility_changed", self, "_on_SlabsetWindow_visibility_changed")
-	oSlabsetTabs.connect("tab_changed", self, "_on_SlabsetTabs_tab_changed")
 	
+	oSlabsetTabs.connect("tab_changed", self, "_on_SlabsetTabs_tab_changed")
 	oTabSlabset.connect("column_shortcut_pressed", self, "_on_TabSlabset_column_shortcut_pressed")
+
+func _on_SlabsetTabs_tab_changed(tab):
+	match tab:
+		0: # dat
+			oTabSlabset._on_TabSlabset_visibility_changed()
+		1: # clm
+			oTabColumnset._on_TabColumnset_visibility_changed()
+		2: # CLM data
+			oTabClmEditor._on_ColumnEditor_visibility_changed()
 
 func _on_SlabsetWindow_item_rect_changed():
 	if Settings.haveInitializedAllSettings == false: return
@@ -65,8 +74,6 @@ func _notification(what):
 func _on_SlabsetWindow_visibility_changed():
 	if visible == true:
 		is_initializing = true
-		_on_SlabsetTabs_tab_changed(oSlabsetTabs.current_tab)
-		
 		oSlabsetPathsLabel.start()
 		oColumnsetPathsLabel.start()
 		
@@ -82,17 +89,6 @@ func _on_SlabsetWindow_visibility_changed():
 		oPickSlabWindow.add_slabs()
 		Columnset.update_list_of_columns_that_contain_owned_cubes()
 		Columnset.update_list_of_columns_that_contain_rng_cubes()
-
-func _on_SlabsetTabs_tab_changed(tab):
-	match tab:
-		0: # dat
-			oTabSlabset.initialize_tab()
-		1: # clm
-			oTabColumnset.initialize_tab()
-		2: # CLM data
-			oTabClmEditor.initialize_tab()
-	
-	update_flash_state()
 
 func open_from_cursor_position():
 	var data = oSlabsetMapRegenerator.calculate_cursor_data()
@@ -126,15 +122,17 @@ func update_flash_state():
 		match oSlabsetTabs.current_tab:
 			0: # Slabset tab - flash all positions using the same full variation
 				oTabClmEditor.disconnect_flash_connection()
-				
-				oTabSlabset.update_flash_state()
+				var currentVariation = oTabSlabset.get_current_variation()
+				var slabID = int(oSlabsetIDSpinBox.value)
+				oFlashingColumns.start_variation_flash(currentVariation, slabID)
 			1: # Columnset tab
 				oTabClmEditor.disconnect_flash_connection()
-				
-				oTabColumnset.update_flash_state()
+				var columnsetIndex = int(oColumnsetControls.oColumnIndexSpinBox.value)
+				oFlashingColumns.start_columnset_flash(columnsetIndex)
 			2: # CLM data tab
 				oTabClmEditor.setup_flash_connection()
-				oTabClmEditor.update_clm_flash_state()
+				var columnIndex = int(oTabClmEditor.get_clm_column_index())
+				oFlashingColumns.start_column_flash(columnIndex)
 			_:
 				oTabClmEditor.disconnect_flash_connection()
 				oFlashingColumns.stop_column_flash()
