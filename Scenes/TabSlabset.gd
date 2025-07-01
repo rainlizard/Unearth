@@ -30,8 +30,8 @@ onready var oSlabsetPathsLabel = Nodelist.list["oSlabsetPathsLabel"]
 onready var oExportSlabsToml = Nodelist.list["oExportSlabsToml"]
 onready var oSlabRevertButton = Nodelist.list["oSlabRevertButton"]
 onready var oVarRevertButton = Nodelist.list["oVarRevertButton"]
-onready var oSlabsetDeleteButton = Nodelist.list["oSlabsetDeleteButton"]
-onready var oConfirmDeleteSlabsetFile = Nodelist.list["oConfirmDeleteSlabsetFile"]
+onready var oSlabsetRevertButton = Nodelist.list["oSlabsetRevertButton"]
+onready var oConfirmRevertSlabset = Nodelist.list["oConfirmRevertSlabset"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oModifiedListLabel = Nodelist.list["oModifiedListLabel"]
 onready var oModifiedListPanelContainer = Nodelist.list["oModifiedListPanelContainer"]
@@ -134,13 +134,13 @@ func _ready():
 	slabsetCopyValues.connect("pressed", self, "_on_SlabsetCopyValues_pressed")
 	
 	var slabsetHelpButton = get_node("HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetHelpButton")
-	var slabsetDeleteButton = get_node("HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetDeleteButton")
+	var SlabsetRevertButton = get_node("HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetRevertButton")
 	var exportSlabsToml = get_node("HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/ExportSlabsToml")
 	slabsetHelpButton.connect("pressed", self, "_on_SlabsetHelpButton_pressed")
-	slabsetDeleteButton.connect("pressed", self, "_on_SlabsetDeleteButton_pressed")
+	SlabsetRevertButton.connect("pressed", self, "_on_SlabsetRevertButton_pressed")
 	exportSlabsToml.connect("pressed", self, "_on_ExportSlabsToml_pressed")
 	
-	oConfirmDeleteSlabsetFile.connect("confirmed", self, "_on_ConfirmDeleteSlabsetFile_confirmed")
+	oConfirmRevertSlabset.connect("confirmed", self, "_on_ConfirmRevertSlabsetFile_confirmed")
 	oExportSlabsetTomlDialog.connect("file_selected", self, "_on_ExportSlabsetTomlDialog_file_selected")
 	connect("visibility_changed", self, "_on_TabSlabset_visibility_changed")
 	
@@ -148,7 +148,7 @@ func _on_TabSlabset_visibility_changed():
 	if visible:
 		oDkSlabsetVoxelView.initialize()
 		is_initializing = true
-		update_slabset_delete_button_state()
+		update_slabset_revert_button_state()
 		oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 		_on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 		yield(get_tree(),'idle_frame')
@@ -210,11 +210,9 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 		flash_update_timer.stop()
 		flash_update_timer.start()
 
-func update_slabset_delete_button_state():
-	var mapName = oCurrentMap.path.get_file().get_basename()
-	var slabsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".slabset.toml")
-	var dir = Directory.new()
-	oSlabsetDeleteButton.disabled = dir.file_exists(slabsetFilePath) == false
+func update_slabset_revert_button_state():
+	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
+	oSlabsetRevertButton.disabled = list_of_modified_slabs.empty()
 
 func update_modified_label_for_slab_id():
 	if Slabset.is_slab_edited(int(oSlabsetIDSpinBox.value)):
@@ -310,7 +308,7 @@ func _on_ExportSlabsetTomlDialog_file_selected(filePath):
 		yield(get_tree(),'idle_frame')
 	var dir = Directory.new()
 	if dir.file_exists(filePath):
-		update_slabset_delete_button_state()
+		update_slabset_revert_button_state()
 		if oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].has(filePath) == false:
 			oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].append(filePath)
 			oSlabsetPathsLabel.start()
@@ -346,6 +344,7 @@ func adjust_column_color_if_different(variation):
 	update_modified_label_for_slab_id()
 	update_modified_label_for_variation()
 	update_save_slabset_button_availability()
+	update_slabset_revert_button_state()
 
 func update_objects_ui():
 	var variation = get_current_variation()
@@ -531,6 +530,7 @@ func update_object_property(the_property, new_value):
 	update_modified_label_for_slab_id()
 	update_modified_label_for_variation()
 	update_save_slabset_button_availability()
+	update_slabset_revert_button_state()
 	restart_regeneration_timer()
 
 func _on_SlabCopyButton_pressed():
@@ -650,39 +650,27 @@ func _on_SlabsetHelpButton_pressed():
 	var helptxt = "slabset.toml and columnset.toml affect the appearance of slabs when they're placed; when placing in Unearth AND when placing in-game. \nHowever keep in mind these files are not automatically saved by Unearth, so you will need to press this 'Save slabset' button whenever you make any changes.\nNew entries in terrain.cfg are also required in order to add new Slab IDs to the Slabset.\n\nIf you set an object's RelativeX and RelativeY to be inside of a column/cube then it may not appear in-game."
 	oMessage.big("Help",helptxt)
 
-func _on_SlabsetDeleteButton_pressed():
-	var mapName = oCurrentMap.path.get_file().get_basename()
-	var slabsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".slabset.toml")
-	oConfirmDeleteSlabsetFile.dialog_text = "Revert all slabs to default and delete this file?\n" + slabsetFilePath
-	oConfirmDeleteSlabsetFile.rect_min_size.x = 800
-	Utils.popup_centered(oConfirmDeleteSlabsetFile)
+func _on_SlabsetRevertButton_pressed():
+	oConfirmRevertSlabset.dialog_text = "Revert all slabs to default?"
+	oConfirmRevertSlabset.rect_min_size.x = 800
+	Utils.popup_centered(oConfirmRevertSlabset)
 
-func _on_ConfirmDeleteSlabsetFile_confirmed():
-	var mapName = oCurrentMap.path.get_file().get_basename()
-	var slabsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".slabset.toml")
-	var dir = Directory.new()
-	if dir.file_exists(slabsetFilePath):
-		var err = dir.remove(slabsetFilePath)
-		if err == OK:
-			oMessage.quick("Deleted: " + slabsetFilePath)
-			oMessage.quick("Reverted all slabs")
-			var totalSlabs = max(Slabset.dat.size(), Slabset.tng.size()) / 28
-			var variations_to_revert = []
-			for slabID in totalSlabs:
-				for i in 28:
-					variations_to_revert.append((slabID * 28) + i)
-			revert(variations_to_revert)
-			oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].erase(slabsetFilePath)
-			oSlabsetPathsLabel.start()
-			update_column_spinboxes()
-			update_objects_ui()
-			oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
-			update_slabset_delete_button_state()
-			restart_regeneration_timer()
-		else:
-			oMessage.big("Error", "Failed to delete the file.")
-	else:
-		oMessage.big("Error", "The slabset file doesn't exist.")
+func _on_ConfirmRevertSlabsetFile_confirmed():
+	# Perform the revert operation
+	var totalSlabs = max(Slabset.dat.size(), Slabset.tng.size()) / 28
+	var variations_to_revert = []
+	for slabID in totalSlabs:
+		for i in 28:
+			variations_to_revert.append((slabID * 28) + i)
+	revert(variations_to_revert)
+	oMessage.quick("Reverted all slabs")
+	
+	# Update UI
+	update_column_spinboxes()
+	update_objects_ui()
+	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
+	update_slabset_revert_button_state()
+	restart_regeneration_timer()
 
 func update_flash_state():
 	if is_initializing:

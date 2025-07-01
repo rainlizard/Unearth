@@ -389,6 +389,7 @@ func adjust_ui_color_if_different():
 		var oTabColumnset = Nodelist.list.get("oTabColumnset")
 		if is_instance_valid(oTabColumnset):
 			oTabColumnset.update_save_columnset_button_availability()
+			oTabColumnset.update_columnset_revert_button_state()
 
 
 # Function to check if a property is different from its default value
@@ -457,10 +458,9 @@ func revert_columns(column_ids):
 		nodeClm.utilized[column_id] = nodeClm.default_data["utilized"][column_id]
 		nodeClm.cubes[column_id] = nodeClm.default_data["cubes"][column_id].duplicate(true)
 		
-		# Auto-calculate height, solid mask, and lintel based on reverted cube data
-		nodeClm.height[column_id] = nodeClm.get_height_from_bottom(nodeClm.cubes[column_id])
-		nodeClm.solidMask[column_id] = nodeClm.calculate_solid_mask(nodeClm.cubes[column_id])
-		nodeClm.lintel[column_id] = nodeClm.calculate_lintel(nodeClm.cubes[column_id])
+		nodeClm.height[column_id] = nodeClm.default_data["height"][column_id]
+		nodeClm.solidMask[column_id] = nodeClm.default_data["solidMask"][column_id]
+		nodeClm.lintel[column_id] = nodeClm.default_data["lintel"][column_id]
 
 func _on_ColumnRevertButton_pressed():
 	var clmIndex = int(oColumnIndexSpinBox.value)

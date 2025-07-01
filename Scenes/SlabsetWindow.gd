@@ -68,8 +68,8 @@ func popup_on_right_side():
 func _notification(what):
 	match what:
 		NOTIFICATION_WM_FOCUS_IN:
-			oTabSlabset.update_slabset_delete_button_state()
-			oTabColumnset.update_columnset_delete_button_state()
+			oTabSlabset.update_slabset_revert_button_state()
+			oTabColumnset.update_columnset_revert_button_state()
 
 func _on_SlabsetWindow_visibility_changed():
 	if visible == true:
@@ -77,8 +77,8 @@ func _on_SlabsetWindow_visibility_changed():
 		oSlabsetPathsLabel.start()
 		oColumnsetPathsLabel.start()
 		
-		oTabSlabset.update_slabset_delete_button_state()
-		oTabColumnset.update_columnset_delete_button_state()
+		oTabSlabset.update_slabset_revert_button_state()
+		oTabColumnset.update_columnset_revert_button_state()
 		
 		yield(get_tree(),'idle_frame')
 		oDkSlabsetVoxelView.oAllVoxelObjects.visible = true

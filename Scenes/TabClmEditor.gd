@@ -29,9 +29,9 @@ func _ready():
 		oClmEditorControls.connect("column_pasted", self, "_on_column_pasted")
 	
 	# Connect TabClmEditor controls
-	var columnEditorClearUnusedButton = get_node("HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorClearUnusedButton")
-	var columnEditorSortButton = get_node("HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorSortButton")
-	var columnEditorHelpButton = get_node("HBoxContainer/VBoxContainer2/HBoxContainer2/ColumnEditorHelpButton")
+	var columnEditorClearUnusedButton = get_node("HBoxContainer/VBoxContainer2/PanelContainer2/HBoxContainer/ColumnEditorClearUnusedButton")
+	var columnEditorSortButton = get_node("HBoxContainer/VBoxContainer2/PanelContainer2/HBoxContainer/ColumnEditorSortButton")
+	var columnEditorHelpButton = get_node("HBoxContainer/VBoxContainer2/PanelContainer2/HBoxContainer/ColumnEditorHelpButton")
 	connect("visibility_changed", self, "_on_ColumnEditor_visibility_changed")
 	
 	columnEditorClearUnusedButton.connect("pressed", self, "_on_ColumnEditorClearUnusedButton_pressed")

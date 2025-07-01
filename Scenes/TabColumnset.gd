@@ -3,13 +3,13 @@ extends VBoxContainer
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
-onready var oConfirmDeleteColumnsetFile = Nodelist.list["oConfirmDeleteColumnsetFile"]
+onready var oConfirmRevertColumnset = Nodelist.list["oConfirmRevertColumnset"]
 onready var oExportColumnsetTomlDialog = Nodelist.list["oExportColumnsetTomlDialog"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oColumnsetPathsLabel = Nodelist.list["oColumnsetPathsLabel"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oExportColumnsToml = Nodelist.list["oExportColumnsToml"]
-onready var oColumnsetDeleteButton = Nodelist.list["oColumnsetDeleteButton"]
+onready var oColumnsetRevertButton = Nodelist.list["oColumnsetRevertButton"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 
@@ -23,15 +23,15 @@ func _ready():
 	flash_update_timer.connect("timeout", self, "_on_flash_update_timer_timeout")
 	
 	# Connect columnset controls
-	var columnsetDeleteButton = get_node("HBoxContainer/VBoxContainer/PanelContainer2/GridContainer/ColumnsetDeleteButton")
-	var exportColumnsToml = get_node("HBoxContainer/VBoxContainer/PanelContainer2/GridContainer/ExportColumnsToml")
-	var columnsetHelpButton = get_node("HBoxContainer/VBoxContainer/PanelContainer2/GridContainer/ColumnsetHelpButton")
-	columnsetDeleteButton.connect("pressed", self, "_on_ColumnsetDeleteButton_pressed")
+	var ColumnsetRevertButton = get_node("HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ColumnsetRevertButton")
+	var exportColumnsToml = get_node("HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ExportColumnsToml")
+	var columnsetHelpButton = get_node("HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ColumnsetHelpButton")
+	ColumnsetRevertButton.connect("pressed", self, "_on_ColumnsetRevertButton_pressed")
 	exportColumnsToml.connect("pressed", self, "_on_ExportColumnsToml_pressed")
 	columnsetHelpButton.connect("pressed", self, "_on_ColumnsetHelpButton_pressed")
 	
 	# Connect external dialog connections
-	oConfirmDeleteColumnsetFile.connect("confirmed", self, "_on_ConfirmDeleteColumnsetFile_confirmed")
+	oConfirmRevertColumnset.connect("confirmed", self, "_on_ConfirmRevertColumnset_confirmed")
 	oExportColumnsetTomlDialog.connect("file_selected", self, "_on_ExportColumnsetTomlDialog_file_selected")
 	
 	# Connect to columnset controls to update save button availability
@@ -66,19 +66,13 @@ func _on_TabColumnset_visibility_changed():
 	if visible:
 		oColumnsetControls.just_opened()
 		oColumnsetVoxelView.initialize()
-		update_columnset_delete_button_state()
+		update_columnset_revert_button_state()
 		update_save_columnset_button_availability()
 		oSlabsetWindow.update_flash_state()
 
-func update_columnset_delete_button_state():
-	var mapName = oCurrentMap.path.get_file().get_basename()
-	var columnsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".columnset.toml")
-	
-	var dir = Directory.new()
-	if dir.file_exists(columnsetFilePath):
-		oColumnsetDeleteButton.disabled = false
-	else:
-		oColumnsetDeleteButton.disabled = true
+func update_columnset_revert_button_state():
+	var list_of_modified_columns = Columnset.find_all_different_columns()
+	oColumnsetRevertButton.disabled = list_of_modified_columns.empty()
 
 func update_save_columnset_button_availability():
 	var list_of_modified_columns = Columnset.find_all_different_columns()
@@ -89,6 +83,7 @@ func update_save_columnset_button_availability():
 
 func _on_columnset_timer_timeout():
 	update_save_columnset_button_availability()
+	update_columnset_revert_button_state()
 
 func _on_ExportColumnsToml_pressed():
 	Utils.popup_centered(oExportColumnsetTomlDialog)
@@ -105,7 +100,7 @@ func _on_ExportColumnsetTomlDialog_file_selected(filePath):
 	
 	var dir = Directory.new()
 	if dir.file_exists(filePath):
-		update_columnset_delete_button_state()
+		update_columnset_revert_button_state()
 		
 		if oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].has(filePath) == false:
 			oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].append(filePath)
@@ -121,43 +116,22 @@ func _on_ColumnsetHelpButton_pressed():
 	
 	oMessage.big("Help",helptxt)
 
-func _on_ColumnsetDeleteButton_pressed():
-	oConfirmDeleteColumnsetFile.dialog_text = "Revert all columns to default and delete this file?\n"
-	var mapName = oCurrentMap.path.get_file().get_basename()
-	var columnsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".columnset.toml")
-	oConfirmDeleteColumnsetFile.dialog_text += columnsetFilePath
-	oConfirmDeleteColumnsetFile.rect_min_size.x = 800
-	Utils.popup_centered(oConfirmDeleteColumnsetFile)
+func _on_ColumnsetRevertButton_pressed():
+	oConfirmRevertColumnset.dialog_text = "Revert all columns to default?"
+	oConfirmRevertColumnset.rect_min_size.x = 800
+	Utils.popup_centered(oConfirmRevertColumnset)
 
-func _on_ConfirmDeleteColumnsetFile_confirmed():
-	var mapName = oCurrentMap.path.get_file().get_basename()
-	var columnsetFilePath = oCurrentMap.path.get_base_dir().plus_file(mapName + ".columnset.toml")
+func _on_ConfirmRevertColumnset_confirmed():
+	# Perform the revert operation
+	var column_ids = []
+	for column_id in Columnset.default_data["cubes"].size():
+		column_ids.append(column_id)
+	oColumnsetControls.revert_columns(column_ids)
+	oMessage.quick("Reverted all columns")
 	
-	var dir = Directory.new()
-	if dir.file_exists(columnsetFilePath):
-		var err = dir.remove(columnsetFilePath)
-		if err == OK:
-			oMessage.quick("Deleted: " + columnsetFilePath)
-			oMessage.quick("Reverted all columns")
-			
-			# Revert every column to its default state
-			var column_ids = []
-			for column_id in Columnset.default_data["cubes"].size():
-				column_ids.append(column_id)
-			oColumnsetControls.revert_columns(column_ids)
-			
-			# Remove from the little box thing of currently loaded files
-			oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].erase(columnsetFilePath)
-			oColumnsetPathsLabel.start()
-			
-			# Update the UI
-			oSlabsetWindow.update_column_spinboxes()
-			oColumnsetControls._on_ColumnIndexSpinBox_value_changed(oColumnsetControls.oColumnIndexSpinBox.value)
-			oColumnsetControls.adjust_ui_color_if_different()
-			oColumnsetVoxelView.refresh_entire_view()
-			
-			update_columnset_delete_button_state()
-		else:
-			oMessage.big("Error", "Failed to delete the file.")
-	else:
-		oMessage.big("Error", "The columnset file doesn't exist.")
+	# Update the UI
+	oSlabsetWindow.update_column_spinboxes()
+	oColumnsetControls._on_ColumnIndexSpinBox_value_changed(oColumnsetControls.oColumnIndexSpinBox.value)
+	oColumnsetControls.adjust_ui_color_if_different()
+	oColumnsetVoxelView.refresh_entire_view()
+	update_columnset_revert_button_state()
