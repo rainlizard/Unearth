@@ -102,6 +102,12 @@ func open_from_cursor_position():
 	var actualSlabID = data.fullVariation / 28
 	var actualLocalVariation = data.fullVariation % 28
 	
+	# Validate slab ID for navigation restrictions
+	if not Slabset.is_valid_slab_id_for_navigation(actualSlabID):
+		if actualSlabID > Slabset.highest_slabset_id_from_fxdata and actualSlabID < Slabset.reserved_slabset:
+			actualSlabID = Slabset.highest_slabset_id_from_fxdata
+			actualLocalVariation = 0
+	
 	# When opened from Column mode, just set values without tab switching
 	oSlabsetIDSpinBox.value = actualSlabID
 	oVariationNumberSpinBox.value = actualLocalVariation

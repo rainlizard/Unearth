@@ -3,6 +3,9 @@ onready var oGame = Nodelist.list["oGame"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 
+var reserved_slabset = 100
+var highest_slabset_id_from_fxdata = 0
+
 var tng = []
 var dat = []
 var default_data = {}
@@ -35,6 +38,7 @@ enum dir {
 func clear_all_slabset_data():
 	tng = []
 	dat = []
+	highest_slabset_id_from_fxdata = 0
 
 func import_toml_slabset(filePath):
 	var processed_string = preprocess_toml_file(filePath)
@@ -51,6 +55,9 @@ func import_toml_slabset(filePath):
 		if cfg.has_section_key("slab0.S", "columns"): # Lowercase "Columns" means it's an out of date slabset.toml file
 			oMessage.big("Failed loading Slabset", "Old /fxdata/slabset.toml file, please install the latest KeeperFX alpha patch")
 	
+	var is_from_fxdata = "fxdata" in filePath
+	var max_slab_id_found = 0
+	
 	for section in cfg.get_sections():
 		var parts = section.split(".")
 		if parts.size() <= 1:
@@ -64,6 +71,9 @@ func import_toml_slabset(filePath):
 			oMessage.quick("Slabset: TOML section slab ID is not a valid integer: " + slab_id_str)
 			continue
 		var slabID = int(slab_id_str)
+		
+		if is_from_fxdata:
+			max_slab_id_found = max(max_slab_id_found, slabID)
 		
 		if not dir_numbers.has(parts[1]):
 			oMessage.quick("Slabset: TOML section variation key is invalid: " + parts[1])
@@ -95,7 +105,8 @@ func import_toml_slabset(filePath):
 				"Subtype": getObject[obj.THING_SUBTYPE] = int(value)
 				"EffectRange": getObject[obj.EFFECT_RANGE] = int(value)
 	
-	if "fxdata" in filePath:
+	if is_from_fxdata:
+		highest_slabset_id_from_fxdata = max_slab_id_found
 		store_default_data()
 
 
@@ -499,3 +510,8 @@ var dir_numbers = {
 #		for xTile in 28:
 #			create_obj_on_slab(xTile, yTile, idx)
 #			idx += 1
+
+func is_valid_slab_id_for_navigation(slabID):
+	if highest_slabset_id_from_fxdata <= 0:
+		return true
+	return slabID <= highest_slabset_id_from_fxdata or slabID >= reserved_slabset

@@ -2,7 +2,10 @@ extends 'res://Class/ClmClass.gd'
 onready var oGame = Nodelist.list["oGame"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 
-var column_count = 2048
+var column_count = 8192
+var reserved_columnset = 4096
+var highest_columnset_id_from_fxdata = 0
+
 var utilized = []
 var orientation = []
 var solidMask = []
@@ -28,9 +31,16 @@ func import_toml_columnset(filePath):
 	if err != OK:
 		return
 	
+	var is_from_fxdata = "fxdata" in filePath
+	var max_column_id_found = 0
+	
 	for section in cfg.get_sections():
 		if section.begins_with("column"):
 			var columnIndex = int(section)
+			
+			if is_from_fxdata:
+				max_column_id_found = max(max_column_id_found, columnIndex)
+			
 			utilized[columnIndex] = 0 #cfg.get_value(section, "Utilized", 0)
 			permanent[columnIndex] = 1 #cfg.get_value(section, "Permanent", 0)
 			lintel[columnIndex] = cfg.get_value(section, "Lintel", 0)
@@ -40,7 +50,8 @@ func import_toml_columnset(filePath):
 			orientation[columnIndex] = cfg.get_value(section, "Orientation", 0)
 			cubes[columnIndex] = cfg.get_value(section, "Cubes", [0,0,0,0, 0,0,0,0])
 	
-	if "fxdata" in filePath:
+	if is_from_fxdata:
+		highest_columnset_id_from_fxdata = max_column_id_found
 		store_default_data()
 		update_list_of_columns_that_contain_owned_cubes()
 		update_list_of_columns_that_contain_rng_cubes()
@@ -174,6 +185,11 @@ func update_list_of_columns_that_contain_rng_cubes():
 	
 	print('update_list_of_columns_that_contain_rng_cubes: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
+func clear_all_column_data():
+	.clear_all_column_data()
+	highest_columnset_id_from_fxdata = 0
+
+
 func update_list_of_columns_that_contain_owned_cubes():
 	var CODETIME_START = OS.get_ticks_msec()
 	columnsContainingOwnedCubes.clear()
@@ -195,3 +211,8 @@ func update_list_of_columns_that_contain_owned_cubes():
 			columnsContainingOwnedCubes[clmIndex] = ownedCubeTypesInColumn.keys()
 	
 	print('update_list_of_columns_that_contain_owned_cubes: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+func is_valid_column_id_for_navigation(columnID):
+	if highest_columnset_id_from_fxdata <= 0:
+		return true
+	return columnID <= highest_columnset_id_from_fxdata or columnID >= reserved_columnset

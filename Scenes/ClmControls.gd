@@ -49,6 +49,7 @@ var nodeClm
 var nodeVoxelView
 var isMouseOverFloorTexture = false
 var regeneration_timer: Timer
+var _previous_column_id = 0
 
 # Clipboard for column data
 var clipboard = {
@@ -103,6 +104,7 @@ func just_opened():
 			oColumnIndexSpinBox.max_value = oDataClm.column_count-1
 			if oColumnIndexSpinBox.value == 0:
 				oColumnIndexSpinBox.value = 1
+			_previous_column_id = int(oColumnIndexSpinBox.value)
 			nodeVoxelView.disable_camera_animation = false
 		"ColumnsetControls":
 			nodeVoxelView.disable_camera_animation = true
@@ -110,6 +112,7 @@ func just_opened():
 			oColumnIndexSpinBox.max_value = Columnset.column_count-1
 			if oColumnIndexSpinBox.value == 0:
 				oColumnIndexSpinBox.value = 1
+			_previous_column_id = int(oColumnIndexSpinBox.value)
 			nodeVoxelView.disable_camera_animation = false
 	update_clm_editing_state()
 
@@ -189,6 +192,29 @@ func _on_cube_mouse_exited(cubeNumber):
 
 func _on_ColumnIndexSpinBox_value_changed(value):
 	var clmIndex = int(value)
+
+	if nodeClm == Columnset:
+		var direction = clmIndex - _previous_column_id
+		
+		# Handle jumps for single-step changes (keyboard or spinbox buttons)
+		if abs(direction) == 1 and Columnset.highest_columnset_id_from_fxdata > 0:
+			if direction == 1 and _previous_column_id == Columnset.highest_columnset_id_from_fxdata:
+				oColumnIndexSpinBox.value = Columnset.reserved_columnset
+				return
+			elif direction == -1 and _previous_column_id == Columnset.reserved_columnset:
+				oColumnIndexSpinBox.value = Columnset.highest_columnset_id_from_fxdata
+				return
+		
+		# Handle direct text input into invalid range
+		if not Columnset.is_valid_column_id_for_navigation(clmIndex):
+			var mid_point = (Columnset.highest_columnset_id_from_fxdata + Columnset.reserved_columnset) / 2.0
+			if clmIndex < mid_point:
+				oColumnIndexSpinBox.value = Columnset.highest_columnset_id_from_fxdata
+			else:
+				oColumnIndexSpinBox.value = Columnset.reserved_columnset
+			return
+		
+		_previous_column_id = clmIndex
 	
 	for i in get_incoming_connections():
 		var nodeID = i["source"]

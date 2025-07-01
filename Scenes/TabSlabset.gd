@@ -64,6 +64,7 @@ var regeneration_timer = Timer.new()
 var flash_update_timer = Timer.new()
 var is_initializing = false
 var columnSettersArray = []
+var _previous_slab_id = 0
 
 onready var object_field_nodes = [
 	oObjIsLightCheckBox, null, oObjSubtileSpinBox,
@@ -148,6 +149,7 @@ func _on_TabSlabset_visibility_changed():
 	if visible:
 		oDkSlabsetVoxelView.initialize()
 		is_initializing = true
+		_previous_slab_id = int(oSlabsetIDSpinBox.value)
 		update_slabset_revert_button_state()
 		oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 		_on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
@@ -203,6 +205,27 @@ func variation_changed(localVariation):
 
 func _on_SlabsetIDSpinBox_value_changed(value):
 	value = int(value)
+	var direction = value - _previous_slab_id
+
+	# Handle jumps for single-step changes (keyboard or spinbox buttons)
+	if abs(direction) == 1 and Slabset.highest_slabset_id_from_fxdata > 0:
+		if direction == 1 and _previous_slab_id == Slabset.highest_slabset_id_from_fxdata:
+			oSlabsetIDSpinBox.value = Slabset.reserved_slabset
+			return
+		elif direction == -1 and _previous_slab_id == Slabset.reserved_slabset:
+			oSlabsetIDSpinBox.value = Slabset.highest_slabset_id_from_fxdata
+			return
+
+	# Handle direct text input into invalid range
+	if not Slabset.is_valid_slab_id_for_navigation(value):
+		var mid_point = (Slabset.highest_slabset_id_from_fxdata + Slabset.reserved_slabset) / 2.0
+		if value < mid_point:
+			oSlabsetIDSpinBox.value = Slabset.highest_slabset_id_from_fxdata
+		else:
+			oSlabsetIDSpinBox.value = Slabset.reserved_slabset
+		return
+
+	_previous_slab_id = value
 	var slabName = Slabs.data[value][Slabs.NAME] if Slabs.data.has(value) else "Unknown"
 	oSlabsetSlabNameLabel.text = slabName
 	update_column_spinboxes()
