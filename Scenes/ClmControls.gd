@@ -396,8 +396,12 @@ func find_consecutive_blank_columns_with_floor_texture_1():
 
 
 func _on_ColumnFirstUnusedButton_pressed():
-	var findUnusedIndex = nodeClm.find_cubearray_index([0,0,0,0, 0,0,0,0], 0)
-	
+	var findUnusedIndex = -1
+	if nodeClm == Columnset:
+		findUnusedIndex = find_unused_column_in_columnset()
+	else:
+		findUnusedIndex = nodeClm.find_cubearray_index([0,0,0,0, 0,0,0,0], 0)
+
 	if findUnusedIndex != -1:
 		oColumnIndexSpinBox.value = findUnusedIndex
 	else:
@@ -406,6 +410,23 @@ func _on_ColumnFirstUnusedButton_pressed():
 			oColumnIndexSpinBox.value = consecutiveBlankIndex
 		else:
 			oMessage.quick("There are no empty columns")
+
+
+func find_unused_column_in_columnset():
+	var empty_cubes = [0,0,0,0, 0,0,0,0]
+	
+	# Search in the upper range first
+	for i in range(Columnset.reserved_columnset, Columnset.column_count):
+		if Columnset.cubes[i] == empty_cubes and Columnset.floorTexture[i] == 0:
+			return i
+	
+	# Search in the lower range
+	for i in range(1, Columnset.highest_columnset_id_from_fxdata + 1):
+		if Columnset.cubes[i] == empty_cubes and Columnset.floorTexture[i] == 0:
+			return i
+			
+	return -1
+
 
 func _on_CheckboxShowAll_toggled(checkboxValue):
 	oGridAdvancedValues.visible = checkboxValue
