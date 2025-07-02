@@ -36,6 +36,7 @@ onready var oModifiedListPanelContainer = Nodelist.list["oModifiedListPanelConta
 onready var oSlabsetMapRegenerator = Nodelist.list["oSlabsetMapRegenerator"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 signal column_shortcut_pressed(clmIndex)
 
@@ -278,6 +279,7 @@ func update_column_spinboxes():
 		spinbox.connect("value_changed",oDkSlabsetVoxelView,"_on_Slabset3x3ColumnSpinBox_value_changed")
 
 func _on_Slabset3x3ColumnSpinBox_value_changed(value):
+	oEditor.mapHasBeenEdited = true
 	var variation = get_current_variation()
 	for y in 3:
 		for x in 3:
@@ -391,6 +393,16 @@ func update_object_fields(index):
 	var listOfObjects = get_list_of_objects(variation)
 	if index >= listOfObjects.size(): return
 	var obj = listOfObjects[index]
+
+	oObjThingTypeSpinBox.disconnect("value_changed", self, "_on_ObjThingTypeSpinBox_value_changed")
+	oObjSubtypeSpinBox.disconnect("value_changed", self, "_on_ObjSubtypeSpinBox_value_changed")
+	oObjIsLightCheckBox.disconnect("toggled", self, "_on_ObjIsLightCheckBox_toggled")
+	oObjEffectRangeSpinBox.disconnect("value_changed", self, "_on_ObjEffectRangeSpinBox_value_changed")
+	oObjSubtileSpinBox.disconnect("value_changed", self, "_on_ObjSubtileSpinBox_value_changed")
+	oObjRelativeXSpinBox.disconnect("value_changed", self, "_on_ObjRelativeXSpinBox_value_changed")
+	oObjRelativeYSpinBox.disconnect("value_changed", self, "_on_ObjRelativeYSpinBox_value_changed")
+	oObjRelativeZSpinBox.disconnect("value_changed", self, "_on_ObjRelativeZSpinBox_value_changed")
+	
 	if obj[0] == 1:
 		obj[6] = 0
 	else:
@@ -400,15 +412,19 @@ func update_object_fields(index):
 	oObjIsLightCheckBox.pressed = bool(obj[0])
 	oObjEffectRangeSpinBox.value = obj[8]
 	oObjSubtileSpinBox.value = obj[2]
-	oObjRelativeXSpinBox.disconnect("value_changed", self, "_on_ObjRelativeXSpinBox_value_changed")
-	oObjRelativeYSpinBox.disconnect("value_changed", self, "_on_ObjRelativeYSpinBox_value_changed")
-	oObjRelativeZSpinBox.disconnect("value_changed", self, "_on_ObjRelativeZSpinBox_value_changed")
 	oObjRelativeXSpinBox.value = obj[3] / 256.0
 	oObjRelativeYSpinBox.value = obj[4] / 256.0
 	oObjRelativeZSpinBox.value = obj[5] / 256.0
+
+	oObjThingTypeSpinBox.connect("value_changed", self, "_on_ObjThingTypeSpinBox_value_changed")
+	oObjSubtypeSpinBox.connect("value_changed", self, "_on_ObjSubtypeSpinBox_value_changed")
+	oObjIsLightCheckBox.connect("toggled", self, "_on_ObjIsLightCheckBox_toggled")
+	oObjEffectRangeSpinBox.connect("value_changed", self, "_on_ObjEffectRangeSpinBox_value_changed")
+	oObjSubtileSpinBox.connect("value_changed", self, "_on_ObjSubtileSpinBox_value_changed")
 	oObjRelativeXSpinBox.connect("value_changed", self, "_on_ObjRelativeXSpinBox_value_changed")
 	oObjRelativeYSpinBox.connect("value_changed", self, "_on_ObjRelativeYSpinBox_value_changed")
 	oObjRelativeZSpinBox.connect("value_changed", self, "_on_ObjRelativeZSpinBox_value_changed")
+	
 	if obj[0] == 1:
 		oObjSubtypeLabel.text = "Intensity"
 		oObjThingTypeLabel.modulate.a = 0
@@ -417,6 +433,7 @@ func update_object_fields(index):
 		oObjSubtypeLabel.text = "Subtype"
 		oObjThingTypeLabel.modulate.a = 1
 		oObjThingTypeSpinBox.modulate.a = 1
+	update_obj_name()
 
 func _on_ObjObjectIndexSpinBox_value_changed(value):
 	var variation = get_current_variation()
@@ -440,6 +457,7 @@ func update_obj_name():
 		oObjNameLabel.text = Things.fetch_id_string(thingType, subtype)
 
 func _on_ObjAddButton_pressed():
+	oEditor.mapHasBeenEdited = true
 	var variation = get_current_variation()
 	add_new_object_to_variation(variation)
 	update_objects_ui()
@@ -458,6 +476,7 @@ func add_new_object_to_variation(variation):
 	oMessage.quick("Added new object")
 
 func _on_ObjDeleteButton_pressed():
+	oEditor.mapHasBeenEdited = true
 	var variation = get_current_variation()
 	var listOfObjects = get_list_of_objects(variation)
 	var objectIndex = oObjObjectIndexSpinBox.value
@@ -471,6 +490,7 @@ func _on_ObjDeleteButton_pressed():
 	restart_regeneration_timer()
 
 func _on_ObjThingTypeSpinBox_value_changed(value:int):
+	oEditor.mapHasBeenEdited = true
 	if oObjIsLightCheckBox.pressed == true:
 		value = 0
 	else:
@@ -484,12 +504,14 @@ func _on_ObjThingTypeSpinBox_value_changed(value:int):
 	update_3D_sprite_visuals()
 
 func _on_ObjSubtypeSpinBox_value_changed(value:int):
+	oEditor.mapHasBeenEdited = true
 	value = int(value)
 	update_obj_name()
 	update_object_property(Slabset.obj.THING_SUBTYPE, value)
 	update_3D_sprite_visuals()
 
 func _on_ObjIsLightCheckBox_toggled(button_pressed:int):
+	oEditor.mapHasBeenEdited = true
 	if button_pressed == 1:
 		_previous_thing_type = int(oObjThingTypeSpinBox.value)
 		oObjSubtypeLabel.text = "Intensity"
@@ -508,9 +530,11 @@ func _on_ObjIsLightCheckBox_toggled(button_pressed:int):
 	update_3D_sprite_visuals()
 
 func _on_ObjEffectRangeSpinBox_value_changed(value:int):
+	oEditor.mapHasBeenEdited = true
 	update_object_property(Slabset.obj.EFFECT_RANGE, value)
 
 func _on_ObjSubtileSpinBox_value_changed(value:int):
+	oEditor.mapHasBeenEdited = true
 	update_object_property(Slabset.obj.SUBTILE, value)
 	update_3D_sprite_visuals()
 
@@ -518,6 +542,7 @@ func snap_to_256(floatValue):
 	return round(floatValue * 256.0) / 256.0
 
 func _on_ObjRelativeXSpinBox_value_changed(floatValue: float):
+	oEditor.mapHasBeenEdited = true
 	var newValue = snap_to_256(floatValue)
 	oObjRelativeXSpinBox.disconnect("value_changed", self, "_on_ObjRelativeXSpinBox_value_changed")
 	oObjRelativeXSpinBox.value = newValue
@@ -526,6 +551,7 @@ func _on_ObjRelativeXSpinBox_value_changed(floatValue: float):
 	update_3D_sprite_visuals()
 
 func _on_ObjRelativeYSpinBox_value_changed(floatValue: float):
+	oEditor.mapHasBeenEdited = true
 	var newValue = snap_to_256(floatValue)
 	oObjRelativeYSpinBox.disconnect("value_changed", self, "_on_ObjRelativeYSpinBox_value_changed")
 	oObjRelativeYSpinBox.value = newValue
@@ -534,6 +560,7 @@ func _on_ObjRelativeYSpinBox_value_changed(floatValue: float):
 	update_3D_sprite_visuals()
 
 func _on_ObjRelativeZSpinBox_value_changed(floatValue: float):
+	oEditor.mapHasBeenEdited = true
 	var newValue = snap_to_256(floatValue)
 	oObjRelativeZSpinBox.disconnect("value_changed", self, "_on_ObjRelativeZSpinBox_value_changed")
 	oObjRelativeZSpinBox.value = newValue
@@ -582,9 +609,11 @@ func copy(howMany):
 			clipboard["tng"].append(Slabset.tng[variation].duplicate(true))
 
 func _on_SlabPasteButton_pressed():
+	oEditor.mapHasBeenEdited = true
 	paste(ALL_VARIATION)
 
 func _on_VarPasteButton_pressed():
+	oEditor.mapHasBeenEdited = true
 	paste(ONE_VARIATION)
 
 func paste(howMany):
@@ -616,6 +645,7 @@ func paste(howMany):
 	restart_regeneration_timer()
 
 func _on_VarRotateButton_pressed():
+	oEditor.mapHasBeenEdited = true
 	var variation = get_current_variation()
 	ensure_dat_array_has_space(variation)
 	var new_dat = []

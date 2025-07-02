@@ -10,6 +10,7 @@ onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oColumnsetRevertButton = Nodelist.list["oColumnsetRevertButton"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 var flash_update_timer = Timer.new()
 
@@ -87,6 +88,7 @@ func _on_ColumnsetRevertButton_pressed():
 	Utils.popup_centered(oConfirmRevertColumnset)
 
 func _on_ConfirmRevertColumnset_confirmed():
+	oEditor.mapHasBeenEdited = true
 	# Perform the revert operation
 	var column_ids = []
 	for column_id in Columnset.default_data["cubes"].size():
