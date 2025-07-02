@@ -274,6 +274,11 @@ func export_toml_slabset(filePath):
 
 		for variationNumber in 28:
 			var variation = slabID * 28 + variationNumber
+			
+			# Only export this variation if it's actually different from default
+			if not (is_dat_variation_different(variation) or is_tng_variation_different(variation)):
+				continue
+				
 			var dirText = dir_texts[variationNumber]
 
 			ensure_dat_has_space(variation)
