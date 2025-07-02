@@ -95,13 +95,19 @@ func import_toml_slabset(filePath):
 			match key:
 				"Columns": dat[variation] = value
 				"Objects": tng[variation] = value
-				"IsLight": getObject[obj.IS_LIGHT] = int(value)
+				"IsLight": 
+					getObject[obj.IS_LIGHT] = int(value)
+					if int(value) == 1:
+						getObject[obj.THING_TYPE] = 0
 				"Subtile": getObject[obj.SUBTILE] = int(value)
 				"RelativePosition":
 					getObject[obj.RELATIVE_X] = int(value[0])
 					getObject[obj.RELATIVE_Y] = int(value[1])
 					getObject[obj.RELATIVE_Z] = int(value[2])
-				"ThingType": getObject[obj.THING_TYPE] = int(value) #int(Things.reverse_data_structure_name.get(value, 0))
+				"ThingType": 
+					getObject[obj.THING_TYPE] = int(value) #int(Things.reverse_data_structure_name.get(value, 0))
+					if getObject[obj.IS_LIGHT] == 1:
+						getObject[obj.THING_TYPE] = 0
 				"Subtype": getObject[obj.THING_SUBTYPE] = int(value)
 				"EffectRange": getObject[obj.EFFECT_RANGE] = int(value)
 	
@@ -246,6 +252,9 @@ func create_object_list(tng_buffer):
 		object_info[i][obj.THING_TYPE] = tng_buffer.get_u8()
 		object_info[i][obj.THING_SUBTYPE] = tng_buffer.get_u8()
 		object_info[i][obj.EFFECT_RANGE] = tng_buffer.get_u8()
+		
+		if object_info[i][obj.IS_LIGHT] == 1:
+			object_info[i][obj.THING_TYPE] = 0
 	
 	return object_info
 

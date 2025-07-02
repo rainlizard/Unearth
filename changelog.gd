@@ -24,6 +24,8 @@ const string = """
 - Fixed Things going dark on map when viewed in Slabset window.
 - Added reserved columnset space and slabset space for future keeperfx additions (if you already have custom column/slab IDs within this space, then you need to move them out)
 - For slabset.toml, only export the variations that were altered
+- Save map0000*.slabset.toml and map0000*.columnset.toml files when you save your map, if they've been modified
+- Fixed a slabset ui bug where lights were marking the variation as modified
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

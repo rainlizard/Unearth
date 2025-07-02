@@ -63,6 +63,7 @@ var flash_update_timer = Timer.new()
 var is_initializing = false
 var columnSettersArray = []
 var _previous_slab_id = 0
+var _previous_thing_type = 1
 
 onready var object_field_nodes = [
 	oObjIsLightCheckBox, null, oObjSubtileSpinBox,
@@ -390,6 +391,10 @@ func update_object_fields(index):
 	var listOfObjects = get_list_of_objects(variation)
 	if index >= listOfObjects.size(): return
 	var obj = listOfObjects[index]
+	if obj[0] == 1:
+		obj[6] = 0
+	else:
+		_previous_thing_type = obj[6]
 	oObjThingTypeSpinBox.value = obj[6]
 	oObjSubtypeSpinBox.value = obj[7]
 	oObjIsLightCheckBox.pressed = bool(obj[0])
@@ -404,6 +409,14 @@ func update_object_fields(index):
 	oObjRelativeXSpinBox.connect("value_changed", self, "_on_ObjRelativeXSpinBox_value_changed")
 	oObjRelativeYSpinBox.connect("value_changed", self, "_on_ObjRelativeYSpinBox_value_changed")
 	oObjRelativeZSpinBox.connect("value_changed", self, "_on_ObjRelativeZSpinBox_value_changed")
+	if obj[0] == 1:
+		oObjSubtypeLabel.text = "Intensity"
+		oObjThingTypeLabel.modulate.a = 0
+		oObjThingTypeSpinBox.modulate.a = 0
+	else:
+		oObjSubtypeLabel.text = "Subtype"
+		oObjThingTypeLabel.modulate.a = 1
+		oObjThingTypeSpinBox.modulate.a = 1
 
 func _on_ObjObjectIndexSpinBox_value_changed(value):
 	var variation = get_current_variation()
@@ -458,7 +471,11 @@ func _on_ObjDeleteButton_pressed():
 	restart_regeneration_timer()
 
 func _on_ObjThingTypeSpinBox_value_changed(value:int):
-	value = 7 if value in [0, 2, 7] else 1
+	if oObjIsLightCheckBox.pressed == true:
+		value = 0
+	else:
+		value = 7 if value in [0, 2, 7] else 1
+		_previous_thing_type = value
 	oObjThingTypeSpinBox.disconnect("value_changed", self, "_on_ObjThingTypeSpinBox_value_changed")
 	oObjThingTypeSpinBox.value = value
 	oObjThingTypeSpinBox.connect("value_changed", self, "_on_ObjThingTypeSpinBox_value_changed")
@@ -474,13 +491,18 @@ func _on_ObjSubtypeSpinBox_value_changed(value:int):
 
 func _on_ObjIsLightCheckBox_toggled(button_pressed:int):
 	if button_pressed == 1:
+		_previous_thing_type = int(oObjThingTypeSpinBox.value)
 		oObjSubtypeLabel.text = "Intensity"
 		oObjThingTypeLabel.modulate.a = 0
 		oObjThingTypeSpinBox.modulate.a = 0
+		update_object_property(Slabset.obj.THING_TYPE, 0)
+		oObjThingTypeSpinBox.value = 0
 	else:
 		oObjSubtypeLabel.text = "Subtype"
 		oObjThingTypeLabel.modulate.a = 1
 		oObjThingTypeSpinBox.modulate.a = 1
+		update_object_property(Slabset.obj.THING_TYPE, _previous_thing_type)
+		oObjThingTypeSpinBox.value = _previous_thing_type
 	update_obj_name()
 	update_object_property(Slabset.obj.IS_LIGHT, button_pressed)
 	update_3D_sprite_visuals()
