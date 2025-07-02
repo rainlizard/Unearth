@@ -4,11 +4,9 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oConfirmRevertColumnset = Nodelist.list["oConfirmRevertColumnset"]
-onready var oExportColumnsetTomlDialog = Nodelist.list["oExportColumnsetTomlDialog"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oColumnsetPathsLabel = Nodelist.list["oColumnsetPathsLabel"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
-onready var oExportColumnsToml = Nodelist.list["oExportColumnsToml"]
 onready var oColumnsetRevertButton = Nodelist.list["oColumnsetRevertButton"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
@@ -24,15 +22,12 @@ func _ready():
 	
 	# Connect columnset controls
 	var ColumnsetRevertButton = get_node("HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ColumnsetRevertButton")
-	var exportColumnsToml = get_node("HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ExportColumnsToml")
 	var columnsetHelpButton = get_node("HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ColumnsetHelpButton")
 	ColumnsetRevertButton.connect("pressed", self, "_on_ColumnsetRevertButton_pressed")
-	exportColumnsToml.connect("pressed", self, "_on_ExportColumnsToml_pressed")
 	columnsetHelpButton.connect("pressed", self, "_on_ColumnsetHelpButton_pressed")
 	
 	# Connect external dialog connections
 	oConfirmRevertColumnset.connect("confirmed", self, "_on_ConfirmRevertColumnset_confirmed")
-	oExportColumnsetTomlDialog.connect("file_selected", self, "_on_ExportColumnsetTomlDialog_file_selected")
 	
 	# Connect to columnset controls to update save button availability
 	var timer = oColumnsetControls.regeneration_timer
@@ -67,44 +62,14 @@ func _on_TabColumnset_visibility_changed():
 		oColumnsetControls.just_opened()
 		oColumnsetVoxelView.initialize()
 		update_columnset_revert_button_state()
-		update_save_columnset_button_availability()
 		oSlabsetWindow.update_flash_state()
 
 func update_columnset_revert_button_state():
 	var list_of_modified_columns = Columnset.find_all_different_columns()
 	oColumnsetRevertButton.disabled = list_of_modified_columns.empty()
 
-func update_save_columnset_button_availability():
-	var list_of_modified_columns = Columnset.find_all_different_columns()
-	if list_of_modified_columns.empty():
-		oExportColumnsToml.disabled = true
-	else:
-		oExportColumnsToml.disabled = false
-
 func _on_columnset_timer_timeout():
-	update_save_columnset_button_availability()
 	update_columnset_revert_button_state()
-
-func _on_ExportColumnsToml_pressed():
-	Utils.popup_centered(oExportColumnsetTomlDialog)
-	oExportColumnsetTomlDialog.current_dir = oCurrentMap.path.get_base_dir().plus_file("")
-	oExportColumnsetTomlDialog.current_path = oCurrentMap.path.get_base_dir().plus_file("")
-	
-	yield(get_tree(),'idle_frame') # Important if there's another toml file there
-	oExportColumnsetTomlDialog.get_line_edit().text = oCurrentMap.path.get_file().get_basename()+".columnset.toml"
-
-func _on_ExportColumnsetTomlDialog_file_selected(filePath):
-	Columnset.export_toml_columnset(filePath)
-	for i in 50:
-		yield(get_tree(),'idle_frame')
-	
-	var dir = Directory.new()
-	if dir.file_exists(filePath):
-		update_columnset_revert_button_state()
-		
-		if oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].has(filePath) == false:
-			oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].append(filePath)
-			oColumnsetPathsLabel.start()
 
 func _on_ColumnsetHelpButton_pressed():
 	var helptxt = ""

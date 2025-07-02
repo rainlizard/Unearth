@@ -60,6 +60,10 @@ func save_map(filePath):
 		oMessage.big("Error", "Saving failed. Try saving to a different directory.")
 		return
 
+	# Handle slabset.toml and columnset.toml files
+	save_slabset_toml(map_filename_no_ext, map_base_dir)
+	save_columnset_toml(map_filename_no_ext, map_base_dir)
+
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	if oDataScript.data == "" and oDataLua.data == "":
 		oMessage.big("Warning", "Your map has no script. In Map Settings, create a script then click 'Script Generator' to add basic functionality.")
@@ -122,5 +126,28 @@ func delete_existing_files(map_file_path):
 				dir.remove(fileName)
 		fileName = dir.get_next()
 
+
 func clicked_save_on_menu():
 	save_map(oCurrentMap.path)
+
+
+func save_slabset_toml(map_filename_no_ext, map_base_dir):
+	var slabset_file_path = map_base_dir.plus_file(map_filename_no_ext + ".slabset.toml")
+	if not Slabset.export_toml_slabset(slabset_file_path):
+		delete_toml_file_if_exists(slabset_file_path, "slabset.toml")
+
+
+func save_columnset_toml(map_filename_no_ext, map_base_dir):
+	var columnset_file_path = map_base_dir.plus_file(map_filename_no_ext + ".columnset.toml")
+	if not Columnset.export_toml_columnset(columnset_file_path):
+		delete_toml_file_if_exists(columnset_file_path, "columnset.toml")
+
+
+func delete_toml_file_if_exists(file_path, file_type):
+	if File.new().file_exists(file_path):
+		var global_path = ProjectSettings.globalize_path(file_path)
+		var err_trash = OS.move_to_trash(global_path)
+		if err_trash == OK:
+			print("Moved unmodified " + file_type + " file to trash: " + file_path.get_file())
+		else:
+			print("Error trashing " + file_type + " file: " + file_path.get_file() + " Code: " + str(err_trash))

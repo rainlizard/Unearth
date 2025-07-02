@@ -5959,14 +5959,6 @@ margin_bottom = 204.0
 size_flags_horizontal = 4
 text = "Use for custom slab"
 
-[node name="ExportSlabsDat" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
-visible = false
-margin_top = 556.0
-margin_right = 188.0
-margin_bottom = 583.0
-size_flags_horizontal = 9
-text = "Export slabs.dat"
-
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
 margin_top = 899.0
 margin_right = 236.0
@@ -5984,15 +5976,6 @@ margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 text = "Revert all"
-
-[node name="ExportSlabsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
-visible = false
-margin_left = 150.0
-margin_right = 273.0
-margin_bottom = 27.0
-size_flags_horizontal = 3
-size_flags_vertical = 0
-text = "Save slabset"
 
 [node name="SlabsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 margin_left = 186.0
@@ -6082,15 +6065,6 @@ visible = false
 margin_left = 176.0
 margin_right = 208.0
 margin_bottom = 27.0
-
-[node name="ExportColumnsToml" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer"]
-visible = false
-margin_top = 31.0
-margin_right = 172.0
-margin_bottom = 58.0
-size_flags_horizontal = 3
-size_flags_vertical = 0
-text = "Save columnset"
 
 [node name="ColumnsetHelpButton" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer"]
 margin_left = 176.0
@@ -6476,50 +6450,6 @@ size_flags_horizontal = 7
 size_flags_vertical = 7
 expand = true
 stretch_mode = 6
-
-[node name="ExportSlabsetDatDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = 2000.0
-margin_top = 3300.0
-margin_right = 3000.0
-margin_bottom = 3862.0
-rect_min_size = Vector2( 250, 87.5 )
-access = 2
-filters = PoolStringArray( "*.dat" )
-show_hidden_files = true
-
-[node name="ExportSlabsetClmDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = 2000.0
-margin_top = 4600.0
-margin_right = 3000.0
-margin_bottom = 5162.0
-rect_min_size = Vector2( 250, 87.5 )
-access = 2
-filters = PoolStringArray( "*.clm" )
-show_hidden_files = true
-
-[node name="ExportSlabsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = 3100.0
-margin_top = 2700.0
-margin_right = 4100.0
-margin_bottom = 3262.0
-rect_min_size = Vector2( 250, 87.5 )
-access = 2
-filters = PoolStringArray( "*.toml" )
-show_hidden_files = true
-
-[node name="ExportColumnsetTomlDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = 3100.0
-margin_top = 2000.0
-margin_right = 4100.0
-margin_bottom = 2562.0
-rect_min_size = Vector2( 250, 87.5 )
-access = 2
-filters = PoolStringArray( "*.toml" )
-show_hidden_files = true
 
 [node name="ResizeCurrentMapSize" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true

@@ -7,7 +7,6 @@ onready var oSlabsetSlabNameLabel = Nodelist.list["oSlabsetSlabNameLabel"]
 onready var oGridContainerDynamicColumns3x3 = Nodelist.list["oGridContainerDynamicColumns3x3"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oExportSlabsetTomlDialog = Nodelist.list["oExportSlabsetTomlDialog"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oObjObjectIndexSpinBox = Nodelist.list["oObjObjectIndexSpinBox"]
 onready var oObjAddButton = Nodelist.list["oObjAddButton"]
@@ -27,7 +26,6 @@ onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oSlabsetPathsLabel = Nodelist.list["oSlabsetPathsLabel"]
-onready var oExportSlabsToml = Nodelist.list["oExportSlabsToml"]
 onready var oSlabRevertButton = Nodelist.list["oSlabRevertButton"]
 onready var oVarRevertButton = Nodelist.list["oVarRevertButton"]
 onready var oSlabsetRevertButton = Nodelist.list["oSlabsetRevertButton"]
@@ -136,15 +134,12 @@ func _ready():
 	
 	var slabsetHelpButton = get_node("HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetHelpButton")
 	var SlabsetRevertButton = get_node("HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetRevertButton")
-	var exportSlabsToml = get_node("HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/ExportSlabsToml")
 	slabsetHelpButton.connect("pressed", self, "_on_SlabsetHelpButton_pressed")
 	SlabsetRevertButton.connect("pressed", self, "_on_SlabsetRevertButton_pressed")
-	exportSlabsToml.connect("pressed", self, "_on_ExportSlabsToml_pressed")
 	
 	oConfirmRevertSlabset.connect("confirmed", self, "_on_ConfirmRevertSlabsetFile_confirmed")
-	oExportSlabsetTomlDialog.connect("file_selected", self, "_on_ExportSlabsetTomlDialog_file_selected")
 	connect("visibility_changed", self, "_on_TabSlabset_visibility_changed")
-	
+
 func _on_TabSlabset_visibility_changed():
 	if visible:
 		oDkSlabsetVoxelView.initialize()
@@ -254,7 +249,7 @@ func update_modified_label_for_variation():
 		oVariationNumberSpinBox.modulate = Color(1, 1, 1)
 		oVarRevertButton.disabled = true
 
-func update_save_slabset_button_availability():
+func update_modified_label_for_all_slabs():
 	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
 	oModifiedListLabel.text = str(list_of_modified_slabs).replace("[","").replace("]","")
 	if oModifiedListLabel.text == "":
@@ -262,7 +257,7 @@ func update_save_slabset_button_availability():
 		oModifiedListLabel.text = "No modified slabs"
 	else:
 		oModifiedListPanelContainer.modulate = Color(1.4, 1.4, 1.7, 1.0)
-	oExportSlabsToml.disabled = list_of_modified_slabs.empty()
+
 
 func _on_VariationNumberSpinBox_value_changed(value):
 	update_column_spinboxes()
@@ -318,24 +313,6 @@ func _on_SlabsetCopyValues_pressed():
 	oSlabsetWindow.visible = false
 	oPickSlabWindow._on_pressed_add_new_custom_slab()
 
-func _on_ExportSlabsToml_pressed():
-	Utils.popup_centered(oExportSlabsetTomlDialog)
-	oExportSlabsetTomlDialog.current_dir = oCurrentMap.path.get_base_dir().plus_file("")
-	oExportSlabsetTomlDialog.current_path = oCurrentMap.path.get_base_dir().plus_file("")
-	yield(get_tree(),'idle_frame')
-	oExportSlabsetTomlDialog.get_line_edit().text = oCurrentMap.path.get_file().get_basename()+".slabset.toml"
-
-func _on_ExportSlabsetTomlDialog_file_selected(filePath):
-	Slabset.export_toml_slabset(filePath)
-	for i in 50:
-		yield(get_tree(),'idle_frame')
-	var dir = Directory.new()
-	if dir.file_exists(filePath):
-		update_slabset_revert_button_state()
-		if oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].has(filePath) == false:
-			oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP].append(filePath)
-			oSlabsetPathsLabel.start()
-
 func get_current_variation():
 	return (int(oSlabsetIDSpinBox.value) * 28) + int(oVariationNumberSpinBox.value)
 
@@ -366,7 +343,7 @@ func adjust_column_color_if_different(variation):
 			shortcut.modulate = Color(1,1,1)
 	update_modified_label_for_slab_id()
 	update_modified_label_for_variation()
-	update_save_slabset_button_availability()
+	update_modified_label_for_all_slabs()
 	update_slabset_revert_button_state()
 
 func update_objects_ui():
@@ -552,7 +529,7 @@ func update_object_property(the_property, new_value):
 	adjust_object_color_if_different(variation)
 	update_modified_label_for_slab_id()
 	update_modified_label_for_variation()
-	update_save_slabset_button_availability()
+	update_modified_label_for_all_slabs()
 	update_slabset_revert_button_state()
 	restart_regeneration_timer()
 

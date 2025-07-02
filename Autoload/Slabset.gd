@@ -263,12 +263,10 @@ enum { # BitFlags
 
 func export_toml_slabset(filePath):
 	var CODETIME_START = OS.get_ticks_msec()
-
 	var list_of_modified_slabs = get_all_modified_slabs()
 
 	if list_of_modified_slabs.empty():
-		oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved.")
-		return
+		return false
 
 	var lines = PoolStringArray()
 	for slabID in list_of_modified_slabs:
@@ -278,7 +276,7 @@ func export_toml_slabset(filePath):
 			var variation = slabID * 28 + variationNumber
 			var dirText = dir_texts[variationNumber]
 
-			ensure_dat_has_space(variation) # Ensure dat array is large enough
+			ensure_dat_has_space(variation)
 
 			lines.append("[slab" + str(slabID) + "." + dirText + "]")
 			lines.append("Columns = " + str(dat[variation]))
@@ -311,7 +309,7 @@ func export_toml_slabset(filePath):
 								value = object_properties[z]
 						if propertyName:
 							lines.append(propertyName + " = " + str(value))
-				if tng[variation].empty(): # If tng[variation] exists but has no objects
+				if tng[variation].empty():
 					lines.append("Objects = []")
 			else:
 				lines.append("Objects = []")
@@ -322,15 +320,15 @@ func export_toml_slabset(filePath):
 	var textFile = File.new()
 	if textFile.open(filePath, File.WRITE) != OK:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
-		return
+		return false
 
 	textFile.store_string("\n".join(lines))
 	textFile.close()
 
-	oMessage.quick("Saved: " + filePath)
-	oMessage.quick("Saved Slab IDs: " + str(list_of_modified_slabs).replace("[","").replace("]",""))
-
+	print("Saved: " + filePath)
+	print("Saved Slab IDs: " + str(list_of_modified_slabs).replace("[","").replace("]",""))
 	print('Exported in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	return true
 
 func get_all_modified_slabs():
 	var modified_slabs = []

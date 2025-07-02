@@ -98,43 +98,40 @@ func store_default_data():
 	default_data["floorTexture"] = floorTexture.duplicate(true)
 
 
-func export_toml_columnset(filePath): #"res://columnset.toml"
-	var oMessage = Nodelist.list["oMessage"]
-	
-	# Find differences if not a full export
-	var column_diffs = []
-	column_diffs = find_all_different_columns()
+func export_toml_columnset(filePath):
+	var column_diffs = find_all_different_columns()
 	if column_diffs.size() == 0:
-		oMessage.big("File wasn't saved", "You've made zero changes, so the file wasn't saved.")
-		return
+		return false
 	
 	var textFile = File.new()
 	if textFile.open(filePath, File.WRITE) != OK:
+		var oMessage = Nodelist.list["oMessage"]
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
-		return
+		return false
 	
 	textFile.store_line('[common]')
 	textFile.store_line('ColumnsCount = ' + str(column_count))
 	textFile.store_line('\r')
 	
 	for i in column_count:
-		# If this is a partial export, then skip this column if it is the same as default.
 		if column_diffs.has(i) == false:
 			continue
 		
 		textFile.store_line('[column' + str(i) +']')
-#		textFile.store_line('Utilized = ' + str(Columnset.utilized[i])) #(0-1)
-#		textFile.store_line('Permanent = ' + str(Columnset.permanent[i])) #(2)
-		textFile.store_line('Lintel = ' + str(Columnset.lintel[i])) #(2)
-		textFile.store_line('Height = ' + str(Columnset.height[i])) #(2)
-		textFile.store_line('SolidMask = ' + str(Columnset.solidMask[i])) #(3-4)
-		textFile.store_line('FloorTexture = ' + str(Columnset.floorTexture[i])) #(5-6)
-		textFile.store_line('Orientation = ' + str(Columnset.orientation[i])) #(7)
-		textFile.store_line('Cubes = ' + str(Columnset.cubes[i])) #(8-23)
+		textFile.store_line('Lintel = ' + str(lintel[i]))
+		textFile.store_line('Height = ' + str(height[i]))
+		textFile.store_line('SolidMask = ' + str(solidMask[i]))
+		textFile.store_line('FloorTexture = ' + str(floorTexture[i]))
+		textFile.store_line('Orientation = ' + str(orientation[i]))
+		textFile.store_line('Cubes = ' + str(cubes[i]))
 		textFile.store_line('\r')
 	
-	oMessage.quick("Saved: " + filePath)
 	textFile.close()
+	print("Saved: " + filePath)
+	return true
+
+
+
 
 func find_all_different_columns():
 	var diff_indices = []
