@@ -5,14 +5,15 @@ onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
 onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
-onready var oSlabsetPathsLabel = Nodelist.list["oSlabsetPathsLabel"]
 onready var oSlabsetMapRegenerator = Nodelist.list["oSlabsetMapRegenerator"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oTabSlabset = Nodelist.list["oTabSlabset"]
 onready var oTabColumnset = Nodelist.list["oTabColumnset"]
-onready var oColumnsetPathsLabel = Nodelist.list["oColumnsetPathsLabel"]
 onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
+onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oGame = Nodelist.list["oGame"]
+onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 
 var is_initializing = false
 
@@ -32,6 +33,43 @@ func _ready():
 	oSlabsetTabs.connect("tab_changed", self, "_on_SlabsetTabs_tab_changed")
 	oTabSlabset.connect("column_shortcut_pressed", self, "_on_TabSlabset_column_shortcut_pressed")
 
+func update_window_title():
+	match oSlabsetTabs.current_tab:
+		0: # Slabset tab
+			var file_path = get_meaningful_file_path("slabset.toml")
+			if file_path != "":
+				if "/" in file_path:
+					window_title = "Slabset - campaign"
+				else:
+					window_title = "Slabset - local"
+			else:
+				window_title = "Slabset"
+		1: # Columnset tab
+			var file_path = get_meaningful_file_path("columnset.toml")
+			if file_path != "":
+				if "/" in file_path:
+					window_title = "Columnset - campaign"
+				else:
+					window_title = "Columnset - local"
+			else:
+				window_title = "Columnset"
+		2: # CLM data tab (map.clm)
+			if oCurrentMap.path != "":
+				window_title = "CLM data - local"
+			else:
+				window_title = "CLM data"
+
+func get_meaningful_file_path(fileName):
+	for cfg_type in [oCfgLoader.LOAD_CFG_CURRENT_MAP, oCfgLoader.LOAD_CFG_CAMPAIGN]:
+		if oCfgLoader.paths_loaded.has(cfg_type):
+			for path in oCfgLoader.paths_loaded[cfg_type]:
+				if path and path.to_lower().ends_with(fileName):
+					if cfg_type == oCfgLoader.LOAD_CFG_CURRENT_MAP:
+						return path.get_file()
+					elif cfg_type == oCfgLoader.LOAD_CFG_CAMPAIGN:
+						return path
+	return ""
+
 func _on_SlabsetTabs_tab_changed(tab):
 	match tab:
 		0: # dat
@@ -40,6 +78,8 @@ func _on_SlabsetTabs_tab_changed(tab):
 			oTabColumnset._on_TabColumnset_visibility_changed()
 		2: # CLM data
 			oTabClmEditor._on_ColumnEditor_visibility_changed()
+	
+	update_window_title()
 
 func _on_SlabsetWindow_item_rect_changed():
 	if Settings.haveInitializedAllSettings == false: return
@@ -74,11 +114,11 @@ func _notification(what):
 func _on_SlabsetWindow_visibility_changed():
 	if visible == true:
 		is_initializing = true
-		oSlabsetPathsLabel.start()
-		oColumnsetPathsLabel.start()
 		
 		oTabSlabset.update_slabset_revert_button_state()
 		oTabColumnset.update_columnset_revert_button_state()
+		
+		update_window_title()
 		
 		yield(get_tree(),'idle_frame')
 		oDkSlabsetVoxelView.oAllVoxelObjects.visible = true
@@ -125,6 +165,7 @@ func update_flash_state():
 		return
 	
 	if visible:
+		update_window_title()
 		match oSlabsetTabs.current_tab:
 			0: # Slabset tab - flash all positions using the same full variation
 				oTabClmEditor.disconnect_flash_connection()
@@ -156,3 +197,8 @@ func variation_changed(localVariation):
 func _on_TabSlabset_column_shortcut_pressed(clmIndex):
 	oSlabsetTabs.current_tab = 1
 	oColumnsetControls.oColumnIndexSpinBox.value = clmIndex
+
+func update_slabset_and_columnset_widgets():
+	oTabSlabset.update_slabset_revert_button_state()
+	oTabColumnset.update_columnset_revert_button_state()
+	update_window_title()

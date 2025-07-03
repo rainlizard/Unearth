@@ -25,7 +25,6 @@ onready var oObjThingTypeLabel = Nodelist.list["oObjThingTypeLabel"]
 onready var oObjNameLabel = Nodelist.list["oObjNameLabel"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
-onready var oSlabsetPathsLabel = Nodelist.list["oSlabsetPathsLabel"]
 onready var oSlabRevertButton = Nodelist.list["oSlabRevertButton"]
 onready var oVarRevertButton = Nodelist.list["oVarRevertButton"]
 onready var oSlabsetRevertButton = Nodelist.list["oSlabsetRevertButton"]
@@ -37,6 +36,7 @@ onready var oSlabsetMapRegenerator = Nodelist.list["oSlabsetMapRegenerator"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
+onready var oCurrentlyOpenSlabset = Nodelist.list["oCurrentlyOpenSlabset"]
 
 signal column_shortcut_pressed(clmIndex)
 
@@ -233,6 +233,28 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 func update_slabset_revert_button_state():
 	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
 	oSlabsetRevertButton.disabled = list_of_modified_slabs.empty()
+	update_slabset_paths_label(list_of_modified_slabs)
+
+func update_slabset_paths_label(list_of_modified_slabs):
+	var file_path = oSlabsetWindow.get_meaningful_file_path("slabset.toml")
+	var final_text = ""
+	var tooltip_text = ""
+	
+	if file_path != "":
+		if "/" in file_path:
+			# Campaign file - show parent folder + filename
+			final_text = "/" + file_path.get_base_dir().get_file() + "/" + file_path.get_file()
+		else:
+			# Local file - show just filename
+			final_text = file_path
+		tooltip_text = file_path
+	else:
+		final_text = "No saved file"
+		tooltip_text = "No saved file"
+	
+	oCurrentlyOpenSlabset.text = final_text
+	oCurrentlyOpenSlabset.hint_tooltip = tooltip_text
+	oSlabsetWindow.update_window_title()
 
 func update_modified_label_for_slab_id():
 	if Slabset.is_slab_edited(int(oSlabsetIDSpinBox.value)):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=203 format=2]
+[gd_scene load_steps=202 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -90,7 +90,6 @@
 [ext_resource path="res://Scenes/EditBrushSizeValue.gd" type="Script" id=88]
 [ext_resource path="res://Scenes/LineEditFloat.gd" type="Script" id=89]
 [ext_resource path="res://Scenes/SlabNameDisplay.gd" type="Script" id=90]
-[ext_resource path="res://Scenes/SlabsetPathsLabel.gd" type="Script" id=91]
 [ext_resource path="res://Scenes/TextureAnimation.gd" type="Script" id=92]
 [ext_resource path="res://Scenes/SlabOwnerCheckBox.gd" type="Script" id=93]
 [ext_resource path="res://Scenes/Inspector.gd" type="Script" id=94]
@@ -5536,29 +5535,33 @@ margin_right = 236.0
 margin_bottom = 895.0
 size_flags_vertical = 3
 
-[node name="SlabsetPathsLabel" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_right = 236.0
-margin_bottom = 18.0
-script = ExtResource( 91 )
+margin_bottom = 39.0
+mouse_filter = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetPathsLabel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer4"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 227.0
-margin_bottom = 9.0
+margin_bottom = 30.0
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetPathsLabel/ScrollContainer"]
+[node name="CurrentlyOpenSlabset" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer4/ScrollContainer"]
 margin_right = 218.0
+margin_bottom = 21.0
+mouse_filter = 1
 size_flags_horizontal = 3
-size_flags_vertical = 3
+text = "Filename"
+align = 1
 
 [node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_top = 22.0
+margin_top = 43.0
 margin_right = 236.0
-margin_bottom = 102.0
+margin_bottom = 123.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2"]
 margin_left = 9.0
@@ -5622,9 +5625,9 @@ size_flags_horizontal = 3
 text = "Revert"
 
 [node name="ModifiedListPanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_top = 106.0
+margin_top = 127.0
 margin_right = 236.0
-margin_bottom = 145.0
+margin_bottom = 166.0
 hint_tooltip = "List of Slab IDs that have been modified."
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -5646,9 +5649,9 @@ size_flags_vertical = 3
 text = "Modified IDs:"
 
 [node name="PanelContainer5" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_top = 149.0
+margin_top = 170.0
 margin_right = 236.0
-margin_bottom = 260.0
+margin_bottom = 281.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5"]
 margin_left = 9.0
@@ -5718,9 +5721,9 @@ size_flags_horizontal = 3
 text = "Rotate"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_top = 264.0
+margin_top = 285.0
 margin_right = 236.0
-margin_bottom = 307.0
+margin_bottom = 328.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer"]
 margin_left = 9.0
@@ -5746,7 +5749,7 @@ size_flags_vertical = 4
 columns = 3
 
 [node name="PanelContainer3" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
-margin_top = 311.0
+margin_top = 332.0
 margin_right = 236.0
 margin_bottom = 895.0
 size_flags_horizontal = 3
@@ -5756,7 +5759,7 @@ size_flags_vertical = 3
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 227.0
-margin_bottom = 575.0
+margin_bottom = 554.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_right = 218.0
@@ -5786,13 +5789,13 @@ text = "Delete"
 [node name="SlabsetObjectSection" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_top = 56.0
 margin_right = 218.0
-margin_bottom = 566.0
+margin_bottom = 545.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection"]
 margin_right = 218.0
-margin_bottom = 510.0
+margin_bottom = 489.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -6017,27 +6020,37 @@ margin_left = 360.0
 margin_right = 586.0
 margin_bottom = 935.0
 
-[node name="ColumnsetPathsLabel" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer"]
 margin_right = 226.0
-margin_bottom = 18.0
-script = ExtResource( 91 )
+margin_bottom = 39.0
+mouse_filter = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/ColumnsetPathsLabel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 217.0
-margin_bottom = 9.0
+margin_bottom = 30.0
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/ColumnsetPathsLabel/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer/ScrollContainer"]
 margin_right = 208.0
+margin_bottom = 21.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="CurrentlyOpenColumnset" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer/ScrollContainer/VBoxContainer"]
+margin_right = 208.0
+margin_bottom = 21.0
+mouse_filter = 1
+size_flags_horizontal = 3
+text = "Filename"
+align = 1
+
 [node name="ColumnsetControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer" instance=ExtResource( 137 )]
-margin_top = 22.0
+margin_top = 43.0
 margin_right = 226.0
 margin_bottom = 881.0
 size_flags_horizontal = 1

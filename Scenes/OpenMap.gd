@@ -74,8 +74,8 @@ func start():
 			#	yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
 			#open_map("C:/Games/Dungeon Keeper/levels/deepdngn/map00084.slb")
-			open_map("C:/Games/Dungeon Keeper/levels/personal/map00001.slb")
-			#open_map("C:/Games/Dungeon Keeper/campgns/dk2/map00200.slb")
+			#open_map("C:/Games/Dungeon Keeper/levels/personal/map00001.slb")
+			open_map("C:/Games/Dungeon Keeper/campgns/dk2/map00200.slb")
 		else:
 			# initialize a cleared map
 			oCurrentMap.clear_map()

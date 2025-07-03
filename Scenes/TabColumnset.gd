@@ -5,12 +5,12 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oConfirmRevertColumnset = Nodelist.list["oConfirmRevertColumnset"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
-onready var oColumnsetPathsLabel = Nodelist.list["oColumnsetPathsLabel"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oColumnsetRevertButton = Nodelist.list["oColumnsetRevertButton"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
+onready var oCurrentlyOpenColumnset = Nodelist.list["oCurrentlyOpenColumnset"]
 
 var flash_update_timer = Timer.new()
 
@@ -68,6 +68,28 @@ func _on_TabColumnset_visibility_changed():
 func update_columnset_revert_button_state():
 	var list_of_modified_columns = Columnset.find_all_different_columns()
 	oColumnsetRevertButton.disabled = list_of_modified_columns.empty()
+	update_columnset_paths_label(list_of_modified_columns)
+
+func update_columnset_paths_label(list_of_modified_columns):
+	var file_path = oSlabsetWindow.get_meaningful_file_path("columnset.toml")
+	var final_text = ""
+	var tooltip_text = ""
+	
+	if file_path != "":
+		if "/" in file_path:
+			# Campaign file - show parent folder + filename
+			final_text = "/" + file_path.get_base_dir().get_file() + "/" + file_path.get_file()
+		else:
+			# Local file - show just filename
+			final_text = file_path
+		tooltip_text = file_path
+	else:
+		final_text = "No saved file"
+		tooltip_text = "No saved file"
+	
+	oCurrentlyOpenColumnset.text = final_text
+	oCurrentlyOpenColumnset.hint_tooltip = tooltip_text
+	oSlabsetWindow.update_window_title()
 
 func _on_columnset_timer_timeout():
 	update_columnset_revert_button_state()
