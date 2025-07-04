@@ -5,6 +5,7 @@ onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
 onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 
 # These are dictionaries containing dictionaries.
@@ -17,14 +18,6 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 #var creature_cfg : Dictionary
 #var trapdoor_cfg : Dictionary
 
-var paths_loaded = {}
-
-enum {
-	LOAD_CFG_DATA,
-	LOAD_CFG_FXDATA,
-	LOAD_CFG_CAMPAIGN,
-	LOAD_CFG_CURRENT_MAP,
-}
 var file_exists_checker = File.new()
 
 func start(mapPath):
@@ -50,7 +43,7 @@ func process_configuration_files(mapPath):
 		Slabset.load_default_original_slabset()
 		Columnset.load_default_original_columnset()
 	
-	clear_paths()
+	oConfigFileManager.clear_paths()
 	
 	var config_dirs = get_config_directories(mapPath)
 	var files_to_load = build_list_of_files_to_load(config_dirs, mapPath)
@@ -58,9 +51,9 @@ func process_configuration_files(mapPath):
 		
 		var combined_cfg_data = {}
 		
-		for load_cfg_type in [LOAD_CFG_DATA, LOAD_CFG_FXDATA, LOAD_CFG_CAMPAIGN, LOAD_CFG_CURRENT_MAP]:
+		for load_cfg_type in [oConfigFileManager.LOAD_CFG_DATA, oConfigFileManager.LOAD_CFG_FXDATA, oConfigFileManager.LOAD_CFG_CAMPAIGN, oConfigFileManager.LOAD_CFG_CURRENT_MAP]:
 			var check_path
-			if load_cfg_type == LOAD_CFG_CURRENT_MAP:
+			if load_cfg_type == oConfigFileManager.LOAD_CFG_CURRENT_MAP:
 				check_path = config_dirs[load_cfg_type] + "." + file_name_from_list
 			else:
 				check_path = config_dirs[load_cfg_type].plus_file(file_name_from_list)
@@ -68,7 +61,7 @@ func process_configuration_files(mapPath):
 			var actual_filepath = ""
 			if file_exists_checker.file_exists(check_path):
 				actual_filepath = check_path
-				paths_loaded[load_cfg_type].append(actual_filepath)
+				oConfigFileManager.paths_loaded[load_cfg_type].append(actual_filepath)
 			
 			if actual_filepath != "":
 				var ext = file_name_from_list.get_extension().to_lower()
@@ -91,29 +84,20 @@ func process_configuration_files(mapPath):
 				"cubes.cfg": Cube.read_cubes_cfg(combined_cfg_data)
 
 
-func clear_paths():
-	paths_loaded = {
-		LOAD_CFG_DATA: [],
-		LOAD_CFG_FXDATA: [],
-		LOAD_CFG_CAMPAIGN: [],
-		LOAD_CFG_CURRENT_MAP: []
-	}
-
-
 func get_config_directories(mapPath):
 	var campaign_cfg_data = load_campaign_boss_file(mapPath)
 	return {
-		LOAD_CFG_DATA: oGame.DK_DATA_DIRECTORY,
-		LOAD_CFG_FXDATA: oGame.DK_FXDATA_DIRECTORY,
-		LOAD_CFG_CAMPAIGN: oGame.GAME_DIRECTORY.plus_file(campaign_cfg_data.get("common", {}).get("CONFIGS_LOCATION", "")),
-		LOAD_CFG_CURRENT_MAP: mapPath.get_basename()
+		oConfigFileManager.LOAD_CFG_DATA: oGame.DK_DATA_DIRECTORY,
+		oConfigFileManager.LOAD_CFG_FXDATA: oGame.DK_FXDATA_DIRECTORY,
+		oConfigFileManager.LOAD_CFG_CAMPAIGN: oGame.GAME_DIRECTORY.plus_file(campaign_cfg_data.get("common", {}).get("CONFIGS_LOCATION", "")),
+		oConfigFileManager.LOAD_CFG_CURRENT_MAP: mapPath.get_basename()
 	}
 
 
 func build_list_of_files_to_load(config_dirs, mapPath):
 	var arr = []
-	var fxdata_cfg_files = Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_FXDATA], "cfg")
-	var fxdata_toml_files = Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_FXDATA], "toml")
+	var fxdata_cfg_files = Utils.get_filetype_in_directory(config_dirs[oConfigFileManager.LOAD_CFG_FXDATA], "cfg")
+	var fxdata_toml_files = Utils.get_filetype_in_directory(config_dirs[oConfigFileManager.LOAD_CFG_FXDATA], "toml")
 	for i in fxdata_cfg_files:
 		arr.append(i.get_file())
 	for i in fxdata_toml_files:
@@ -124,13 +108,13 @@ func build_list_of_files_to_load(config_dirs, mapPath):
 
 func get_all_texture_map_files(config_dirs, mapPath):
 	var merged_files = {} # Use a dictionary so duplicate filenames will be merged
-	var look_for_tmaps = Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_DATA], "dat")
-	look_for_tmaps += Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_CAMPAIGN], "dat")
+	var look_for_tmaps = Utils.get_filetype_in_directory(config_dirs[oConfigFileManager.LOAD_CFG_DATA], "dat")
+	look_for_tmaps += Utils.get_filetype_in_directory(config_dirs[oConfigFileManager.LOAD_CFG_CAMPAIGN], "dat")
 	for fullPath in look_for_tmaps:
 		if "tmap" in fullPath.to_lower():
 			merged_files[fullPath.get_file()] = true
 	
-	var look_for_tmaps2 = Utils.get_filetype_in_directory(config_dirs[LOAD_CFG_CURRENT_MAP].get_base_dir(), "dat")
+	var look_for_tmaps2 = Utils.get_filetype_in_directory(config_dirs[oConfigFileManager.LOAD_CFG_CURRENT_MAP].get_base_dir(), "dat")
 	for fullPath in look_for_tmaps2:
 		if "tmap" in fullPath.to_lower():
 			var tmap_ending_filename_part = fullPath.get_file().substr(fullPath.get_file().find(".") + 1)
@@ -301,3 +285,16 @@ func load_effects_data(file_path):
 			var effectName = cfg.get_value(section, "Name", "UNDEFINED_NAME")
 			
 			Things.DATA_EFFECTGEN[id] = [effectName, effectName, "EFFECTGEN"]
+
+func update_paths_for_saved_files(file_path, file_type):
+	if file_type == "slabset.toml" or file_type == "columnset.toml":
+		if not oConfigFileManager.paths_loaded.has(oConfigFileManager.LOAD_CFG_CURRENT_MAP):
+			oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CURRENT_MAP] = []
+		if not oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CURRENT_MAP].has(file_path):
+			oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CURRENT_MAP].append(file_path)
+
+func remove_path_from_loaded(file_path):
+	for load_cfg_type in oConfigFileManager.paths_loaded.keys():
+		if oConfigFileManager.paths_loaded[load_cfg_type].has(file_path):
+			oConfigFileManager.paths_loaded[load_cfg_type].erase(file_path)
+			break

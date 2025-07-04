@@ -14,6 +14,7 @@ onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
 onready var oMapProperties = Nodelist.list["oMapProperties"]
 onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 const TMAP_IMAGE_WIDTH: int = 256
 const TMAP_IMAGE_HEIGHT: int = 2176
@@ -77,12 +78,12 @@ func get_effective_tmap_data_from_cfgloader() -> Dictionary:
 		return {}
 
 	var effectiveSourcesByIdentifier = {}
-	var cfgLoaderPathsLoaded = oCfgLoader.paths_loaded # Get the modified paths_loaded
+	var cfgLoaderPathsLoaded = oConfigFileManager.paths_loaded
 
 	var sourceTypesWithEnum = [
-		{"sourceType": "data", "enumKey": oCfgLoader.LOAD_CFG_DATA},
-		{"sourceType": "campaign", "enumKey": oCfgLoader.LOAD_CFG_CAMPAIGN},
-		{"sourceType": "map", "enumKey": oCfgLoader.LOAD_CFG_CURRENT_MAP}
+		{"sourceType": "data", "enumKey": oConfigFileManager.LOAD_CFG_DATA},
+		{"sourceType": "campaign", "enumKey": oConfigFileManager.LOAD_CFG_CAMPAIGN},
+		{"sourceType": "map", "enumKey": oConfigFileManager.LOAD_CFG_CURRENT_MAP}
 	]
 	
 	var fileChecker = File.new() # To get modified times

@@ -13,6 +13,8 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 onready var oMenuButtonFile = Nodelist.list["oMenuButtonFile"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 var queueExit = false
 
@@ -133,13 +135,17 @@ func clicked_save_on_menu():
 
 func save_slabset_toml(map_filename_no_ext, map_base_dir):
 	var slabset_file_path = map_base_dir.plus_file(map_filename_no_ext + ".slabset.toml")
-	if not Slabset.export_toml_slabset(slabset_file_path):
+	if Slabset.export_toml_slabset(slabset_file_path):
+		oConfigFileManager.notify_file_created(slabset_file_path, "slabset.toml")
+	else:
 		delete_toml_file_if_exists(slabset_file_path, "slabset.toml")
 
 
 func save_columnset_toml(map_filename_no_ext, map_base_dir):
 	var columnset_file_path = map_base_dir.plus_file(map_filename_no_ext + ".columnset.toml")
-	if not Columnset.export_toml_columnset(columnset_file_path):
+	if Columnset.export_toml_columnset(columnset_file_path):
+		oConfigFileManager.notify_file_created(columnset_file_path, "columnset.toml")
+	else:
 		delete_toml_file_if_exists(columnset_file_path, "columnset.toml")
 
 
@@ -149,5 +155,6 @@ func delete_toml_file_if_exists(file_path, file_type):
 		var err_trash = OS.move_to_trash(global_path)
 		if err_trash == OK:
 			print("Moved unmodified " + file_type + " file to trash: " + file_path.get_file())
+			oConfigFileManager.notify_file_deleted(file_path, file_type)
 		else:
 			print("Error trashing " + file_type + " file: " + file_path.get_file() + " Code: " + str(err_trash))

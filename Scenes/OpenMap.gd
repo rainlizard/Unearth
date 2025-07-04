@@ -51,6 +51,7 @@ onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oTMapNames = Nodelist.list["oTMapNames"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 
 var TOTAL_TIME_TO_OPEN_MAP
@@ -228,6 +229,11 @@ func continue_load_openmap(map):
 	oGuidelines.update()
 	oMapSettingsWindow.visible = false
 	oSlabsetWindow.visible = false
+	
+	# Clear local config file tracking when opening a new map
+	# This is now handled by CfgLoader calling oConfigFileManager.clear_paths()
+	# oConfigFileManager.clear_local_files() was removed
+	
 	if map == "":
 		oMessage.quick('New map')
 	else:

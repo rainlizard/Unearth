@@ -11,6 +11,7 @@ onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentlyOpenColumnset = Nodelist.list["oCurrentlyOpenColumnset"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 var flash_update_timer = Timer.new()
 
@@ -20,6 +21,9 @@ func _ready():
 	flash_update_timer.one_shot = true
 	flash_update_timer.wait_time = 0.5
 	flash_update_timer.connect("timeout", self, "_on_flash_update_timer_timeout")
+	
+	# Connect to ConfigFileManager signals
+	oConfigFileManager.connect("config_file_status_changed", self, "_on_config_status_changed")
 	
 	# Connect columnset controls
 	var ColumnsetRevertButton = get_node("HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ColumnsetRevertButton")
@@ -124,3 +128,9 @@ func _on_ConfirmRevertColumnset_confirmed():
 	oColumnsetControls.adjust_ui_color_if_different()
 	oColumnsetVoxelView.refresh_entire_view()
 	update_columnset_revert_button_state()
+
+func _on_config_status_changed():
+	if Columnset.default_data.empty():
+		return
+	var list_of_modified_columns = Columnset.find_all_different_columns()
+	update_columnset_paths_label(list_of_modified_columns)

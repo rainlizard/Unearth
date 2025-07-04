@@ -27,7 +27,7 @@ const string = """
 - Save map0000*.slabset.toml and map0000*.columnset.toml files when you save your map, if they've been modified
 - Mark map as edited when modifying slabset/columnset
 - Fixed a slabset bug where lights were incorrectly marking the variation as modified
-- Slabset window title changes depending on whether you have local or campaign file open
+- Slabset window title changes depending on whether you have local or campaign file open, and display "No saved file" status
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

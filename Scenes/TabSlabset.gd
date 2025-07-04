@@ -37,6 +37,7 @@ onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentlyOpenSlabset = Nodelist.list["oCurrentlyOpenSlabset"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 signal column_shortcut_pressed(clmIndex)
 
@@ -139,8 +140,11 @@ func _ready():
 	slabsetHelpButton.connect("pressed", self, "_on_SlabsetHelpButton_pressed")
 	SlabsetRevertButton.connect("pressed", self, "_on_SlabsetRevertButton_pressed")
 	
-	oConfirmRevertSlabset.connect("confirmed", self, "_on_ConfirmRevertSlabsetFile_confirmed")
+	oConfirmRevertSlabset.connect("confirmed", self, "_on_ConfirmRevertSlabset_confirmed")
 	connect("visibility_changed", self, "_on_TabSlabset_visibility_changed")
+	
+	# Connect to ConfigFileManager signals
+	oConfigFileManager.connect("config_file_status_changed", self, "_on_config_status_changed")
 
 func _on_TabSlabset_visibility_changed():
 	if visible:
@@ -729,7 +733,7 @@ func _on_SlabsetRevertButton_pressed():
 	oConfirmRevertSlabset.rect_min_size.x = 800
 	Utils.popup_centered(oConfirmRevertSlabset)
 
-func _on_ConfirmRevertSlabsetFile_confirmed():
+func _on_ConfirmRevertSlabset_confirmed():
 	# Perform the revert operation
 	var totalSlabs = max(Slabset.dat.size(), Slabset.tng.size()) / 28
 	var variations_to_revert = []
@@ -756,3 +760,7 @@ func update_flash_state():
 
 func _on_flash_update_timer_timeout():
 	oSlabsetWindow.update_flash_state()
+
+func _on_config_status_changed():
+	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
+	update_slabset_paths_label(list_of_modified_slabs)

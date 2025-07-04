@@ -14,6 +14,7 @@ onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 var is_initializing = false
 
@@ -60,13 +61,13 @@ func update_window_title():
 				window_title = "CLM data"
 
 func get_meaningful_file_path(fileName):
-	for cfg_type in [oCfgLoader.LOAD_CFG_CURRENT_MAP, oCfgLoader.LOAD_CFG_CAMPAIGN]:
-		if oCfgLoader.paths_loaded.has(cfg_type):
-			for path in oCfgLoader.paths_loaded[cfg_type]:
+	for cfg_type in [oConfigFileManager.LOAD_CFG_CURRENT_MAP, oConfigFileManager.LOAD_CFG_CAMPAIGN]:
+		if oConfigFileManager.paths_loaded.has(cfg_type):
+			for path in oConfigFileManager.paths_loaded[cfg_type]:
 				if path and path.to_lower().ends_with(fileName):
-					if cfg_type == oCfgLoader.LOAD_CFG_CURRENT_MAP:
+					if cfg_type == oConfigFileManager.LOAD_CFG_CURRENT_MAP:
 						return path.get_file()
-					elif cfg_type == oCfgLoader.LOAD_CFG_CAMPAIGN:
+					elif cfg_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
 						return path
 	return ""
 
