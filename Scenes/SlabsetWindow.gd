@@ -65,10 +65,7 @@ func get_meaningful_file_path(fileName):
 		if oConfigFileManager.paths_loaded.has(cfg_type):
 			for path in oConfigFileManager.paths_loaded[cfg_type]:
 				if path and path.to_lower().ends_with(fileName):
-					if cfg_type == oConfigFileManager.LOAD_CFG_CURRENT_MAP:
-						return path.get_file()
-					elif cfg_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
-						return path
+					return path
 	return ""
 
 func _on_SlabsetTabs_tab_changed(tab):

@@ -246,14 +246,17 @@ func update_slabset_paths_label(list_of_modified_slabs):
 	var tooltip_text = ""
 	
 	if file_path != "":
-		if "/" in file_path:
+		var filename = file_path.get_file()
+		if filename == "slabset.toml":
 			# Campaign file - show parent folder + filename
-			final_text = "/" + file_path.get_base_dir().get_file() + "/" + file_path.get_file()
+			final_text = "/" + file_path.get_base_dir().get_file() + "/" + filename
 		else:
-			# Base game file
-			final_text = file_path
-
+			# Local file (map00001.slabset.toml) - show just filename
+			final_text = filename
 		tooltip_text = file_path
+	else:
+		final_text = "No saved file"
+		tooltip_text = "No saved file"
 	
 	oCurrentlyOpenSlabset.text = final_text
 	oCurrentlyOpenSlabset.hint_tooltip = tooltip_text

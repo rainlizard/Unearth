@@ -107,8 +107,10 @@ func _on_ColumnEditor_visibility_changed():
 		oClmEditorVoxelView.initialize()
 		if oCurrentMap.path == "":
 			oMapClmFilenameLabel.text = "No saved file"
+			oMapClmFilenameLabel.hint_tooltip = ""
 		else:
 			oMapClmFilenameLabel.text = oCurrentMap.path.get_file().get_basename() + ".clm"
+			oMapClmFilenameLabel.hint_tooltip = oCurrentMap.path.get_base_dir() + "/" + oCurrentMap.path.get_file().get_basename() + ".clm"
 		oClmEditorControls._on_ColumnIndexSpinBox_value_changed(oClmEditorControls.oColumnIndexSpinBox.value)
 		update_clm_editing_buttons()
 		oSlabsetWindow.update_flash_state()
