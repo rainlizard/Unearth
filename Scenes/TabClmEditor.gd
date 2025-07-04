@@ -27,6 +27,7 @@ func _ready():
 		oClmEditorControls.connect("cube_value_changed", self, "_on_cube_value_changed")
 		oClmEditorControls.connect("floor_texture_changed", self, "_on_floor_texture_changed")
 		oClmEditorControls.connect("column_pasted", self, "_on_column_pasted")
+		oClmEditorControls.connect("column_reverted", self, "_on_column_reverted")
 	
 	# Connect TabClmEditor controls
 	var columnEditorClearUnusedButton = get_node("HBoxContainer/VBoxContainer2/PanelContainer2/HBoxContainer/ColumnEditorClearUnusedButton")
@@ -51,6 +52,10 @@ func _on_floor_texture_changed(clmIndex):
 		update_overhead_for_clm_changes(clmIndex)
 
 func _on_column_pasted(clmIndex):
+	if clmIndex > 0:
+		update_overhead_for_clm_changes(clmIndex)
+
+func _on_column_reverted(clmIndex):
 	if clmIndex > 0:
 		update_overhead_for_clm_changes(clmIndex)
 

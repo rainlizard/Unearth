@@ -14,6 +14,7 @@ onready var oCurrentlyOpenColumnset = Nodelist.list["oCurrentlyOpenColumnset"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oModifiedColumnsetLabel = Nodelist.list["oModifiedColumnsetLabel"]
 onready var oModifiedColumnsetPanelContainer = Nodelist.list["oModifiedColumnsetPanelContainer"]
+onready var oSlabsetMapRegenerator = Nodelist.list["oSlabsetMapRegenerator"]
 
 var flash_update_timer = Timer.new()
 
@@ -125,6 +126,8 @@ func _on_ColumnsetRevertButton_pressed():
 	Utils.popup_centered(oConfirmRevertColumnset)
 
 func _on_ConfirmRevertColumnset_confirmed():
+	var list_of_modified_columns = Columnset.find_all_different_columns()
+	
 	oEditor.mapHasBeenEdited = true
 	# Perform the revert operation
 	var column_ids = []
@@ -139,6 +142,8 @@ func _on_ConfirmRevertColumnset_confirmed():
 	oColumnsetControls.adjust_ui_color_if_different()
 	oColumnsetVoxelView.refresh_entire_view()
 	update_columnset_revert_button_state()
+	for idx in list_of_modified_columns:
+		oSlabsetMapRegenerator.regenerate_slabs_using_columnset(idx)
 
 func _on_config_status_changed():
 	if Columnset.default_data.empty():

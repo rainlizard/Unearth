@@ -66,6 +66,7 @@ var is_initializing = false
 var columnSettersArray = []
 var _previous_slab_id = 0
 var _previous_thing_type = 1
+var pending_regeneration_slab_ids = []
 
 onready var object_field_nodes = [
 	oObjIsLightCheckBox, null, oObjSubtileSpinBox,
@@ -320,12 +321,26 @@ func _on_Slabset3x3ColumnSpinBox_value_changed(value):
 	oSlabsetWindow.update_flash_state()
 
 func _on_regeneration_timer_timeout():
-	var currentSlabID = int(oSlabsetIDSpinBox.value)
-	oSlabsetMapRegenerator.regenerate_slabs_using_slab_id(currentSlabID)
+	var all_slab_ids_to_process = []
+	for slabId in pending_regeneration_slab_ids:
+		all_slab_ids_to_process.append(slabId)
+		if Slabs.rooms_that_have_walls.has(slabId+1):
+			for aw_id in Slabs.auto_wall_updates_these.keys():
+				if all_slab_ids_to_process.find(aw_id) == -1:
+					all_slab_ids_to_process.append(aw_id)
+	for id in all_slab_ids_to_process:
+		oSlabsetMapRegenerator.regenerate_slabs_using_slab_id(id)
+	pending_regeneration_slab_ids.clear()
 
-func restart_regeneration_timer():
+func queue_slab_for_regeneration(slabId):
+	if pending_regeneration_slab_ids.find(slabId) == -1:
+		pending_regeneration_slab_ids.append(slabId)
 	regeneration_timer.stop()
 	regeneration_timer.start()
+
+func restart_regeneration_timer():
+	var currentSlabId = int(oSlabsetIDSpinBox.value)
+	queue_slab_for_regeneration(currentSlabId)
 
 func ensure_dat_array_has_space(variation):
 	while variation >= Slabset.dat.size():
@@ -388,7 +403,6 @@ func update_objects_ui():
 	update_modified_label_for_slab_id()
 	update_modified_label_for_variation()
 	update_slabset_revert_button_state()
-	restart_regeneration_timer()
 
 func update_3D_sprite_visuals():
 	yield(get_tree(),'idle_frame')
@@ -734,6 +748,9 @@ func _on_SlabsetRevertButton_pressed():
 	Utils.popup_centered(oConfirmRevertSlabset)
 
 func _on_ConfirmRevertSlabset_confirmed():
+	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
+	oEditor.mapHasBeenEdited = true
+	
 	# Perform the revert operation
 	var totalSlabs = max(Slabset.dat.size(), Slabset.tng.size()) / 28
 	var variations_to_revert = []
@@ -748,7 +765,9 @@ func _on_ConfirmRevertSlabset_confirmed():
 	update_objects_ui()
 	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 	update_slabset_revert_button_state()
-	restart_regeneration_timer()
+	
+	for id in list_of_modified_slabs:
+		oSlabsetMapRegenerator.regenerate_slabs_using_slab_id(id)
 
 func update_flash_state():
 	if is_initializing:

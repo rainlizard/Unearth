@@ -51,6 +51,7 @@ var nodeVoxelView
 var isMouseOverFloorTexture = false
 var regeneration_timer: Timer
 var _previous_column_id = 0
+var pending_regeneration_columnset_ids = []
 
 # Clipboard for column data
 var clipboard = {
@@ -67,6 +68,7 @@ var clipboard = {
 signal cube_value_changed(clmIndex)
 signal floor_texture_changed(clmIndex)
 signal column_pasted(clmIndex)
+signal column_reverted(clmIndex)
 
 func _ready():
 	match name:
@@ -89,7 +91,7 @@ func _ready():
 		cubeSpinBoxArray[i].connect("mouse_exited", self, "_on_cube_mouse_exited", [i])
 	
 	regeneration_timer = Timer.new()
-	regeneration_timer.wait_time = 0.5
+	regeneration_timer.wait_time = 0.25
 	regeneration_timer.one_shot = true
 	regeneration_timer.connect("timeout", self, "_on_regeneration_timer_timeout")
 	add_child(regeneration_timer)
@@ -120,13 +122,20 @@ func just_opened():
 func _on_regeneration_timer_timeout():
 	if name == "ColumnsetControls" and is_instance_valid(Nodelist.list.get("oSlabsetMapRegenerator")):
 		var oSlabsetMapRegenerator = Nodelist.list["oSlabsetMapRegenerator"]
-		var clmIndex = int(oColumnIndexSpinBox.value)
-		oSlabsetMapRegenerator.regenerate_slabs_using_columnset(clmIndex)
+		for columnsetIndex in pending_regeneration_columnset_ids:
+			oSlabsetMapRegenerator.regenerate_slabs_using_columnset(columnsetIndex)
+		pending_regeneration_columnset_ids.clear()
 
-func restart_regeneration_timer():
+func queue_columnset_for_regeneration(columnsetIndex):
 	if name == "ColumnsetControls":
+		if pending_regeneration_columnset_ids.find(columnsetIndex) == -1:
+			pending_regeneration_columnset_ids.append(columnsetIndex)
 		regeneration_timer.stop()
 		regeneration_timer.start()
+
+func restart_regeneration_timer():
+	var clmIndex = int(oColumnIndexSpinBox.value)
+	queue_columnset_for_regeneration(clmIndex)
 
 func update_clm_editing_state():
 	var currentColumn = int(oColumnIndexSpinBox.value)
@@ -530,14 +539,17 @@ func _on_ColumnRevertButton_pressed():
 	if clmIndex == 0:
 		oMessage.quick("Cannot revert column 0")
 		return
-		
+
 	if nodeClm == oDataClm:
 		oEditor.mapHasBeenEdited = true
 		oFlashingColumns.generate_clmdata_texture()
+		emit_signal("column_reverted", clmIndex)
 	elif nodeClm == Columnset:
 		oEditor.mapHasBeenEdited = true
+		restart_regeneration_timer()
+
 	revert_columns([clmIndex])
-	
+
 	_on_ColumnIndexSpinBox_value_changed(clmIndex)  # Refresh UI
 	oMessage.quick("Reverted column to default")
 	nodeVoxelView.refresh_entire_view()
