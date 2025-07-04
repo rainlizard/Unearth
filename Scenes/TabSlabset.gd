@@ -30,8 +30,8 @@ onready var oVarRevertButton = Nodelist.list["oVarRevertButton"]
 onready var oSlabsetRevertButton = Nodelist.list["oSlabsetRevertButton"]
 onready var oConfirmRevertSlabset = Nodelist.list["oConfirmRevertSlabset"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
-onready var oModifiedListLabel = Nodelist.list["oModifiedListLabel"]
-onready var oModifiedListPanelContainer = Nodelist.list["oModifiedListPanelContainer"]
+onready var oModifiedSlabsetLabel = Nodelist.list["oModifiedSlabsetLabel"]
+onready var oModifiedSlabsetPanelContainer = Nodelist.list["oModifiedSlabsetPanelContainer"]
 onready var oSlabsetMapRegenerator = Nodelist.list["oSlabsetMapRegenerator"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
@@ -249,16 +249,21 @@ func update_slabset_paths_label(list_of_modified_slabs):
 			# Campaign file - show parent folder + filename
 			final_text = "/" + file_path.get_base_dir().get_file() + "/" + file_path.get_file()
 		else:
-			# Local file - show just filename
+			# Base game file
 			final_text = file_path
+
 		tooltip_text = file_path
-	else:
-		final_text = "No saved file"
-		tooltip_text = "No saved file"
 	
 	oCurrentlyOpenSlabset.text = final_text
 	oCurrentlyOpenSlabset.hint_tooltip = tooltip_text
-	oSlabsetWindow.update_window_title()
+	
+	# Handle modified slabs label
+	oModifiedSlabsetLabel.text = str(list_of_modified_slabs).replace("[","").replace("]","")
+	if oModifiedSlabsetLabel.text == "":
+		oModifiedSlabsetPanelContainer.modulate = Color(1, 1, 1, 1)
+		oModifiedSlabsetLabel.text = "No modified slabs"
+	else:
+		oModifiedSlabsetPanelContainer.modulate = Color(1.4, 1.4, 1.7, 1.0)
 
 func update_modified_label_for_slab_id():
 	if Slabset.is_slab_edited(int(oSlabsetIDSpinBox.value)):
@@ -277,21 +282,14 @@ func update_modified_label_for_variation():
 		oVariationNumberSpinBox.modulate = Color(1, 1, 1)
 		oVarRevertButton.disabled = true
 
-func update_modified_label_for_all_slabs():
-	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
-	oModifiedListLabel.text = str(list_of_modified_slabs).replace("[","").replace("]","")
-	if oModifiedListLabel.text == "":
-		oModifiedListPanelContainer.modulate = Color(1, 1, 1, 1)
-		oModifiedListLabel.text = "No modified slabs"
-	else:
-		oModifiedListPanelContainer.modulate = Color(1.4, 1.4, 1.7, 1.0)
-
-
 func _on_VariationNumberSpinBox_value_changed(value):
 	update_column_spinboxes()
 	if is_initializing == false:
 		flash_update_timer.stop()
 		flash_update_timer.start()
+	update_modified_label_for_slab_id()
+	update_modified_label_for_variation()
+	update_slabset_revert_button_state()
 
 func update_column_spinboxes():
 	var variation = get_current_variation()
@@ -372,7 +370,6 @@ func adjust_column_color_if_different(variation):
 			shortcut.modulate = Color(1,1,1)
 	update_modified_label_for_slab_id()
 	update_modified_label_for_variation()
-	update_modified_label_for_all_slabs()
 	update_slabset_revert_button_state()
 
 func update_objects_ui():
@@ -388,6 +385,10 @@ func update_objects_ui():
 		update_3D_sprite_visuals()
 	else:
 		oDkSlabsetVoxelView.clear_attached_3d_objects()
+	update_modified_label_for_slab_id()
+	update_modified_label_for_variation()
+	update_slabset_revert_button_state()
+	restart_regeneration_timer()
 
 func update_3D_sprite_visuals():
 	yield(get_tree(),'idle_frame')
@@ -604,7 +605,6 @@ func update_object_property(the_property, new_value):
 	adjust_object_color_if_different(variation)
 	update_modified_label_for_slab_id()
 	update_modified_label_for_variation()
-	update_modified_label_for_all_slabs()
 	update_slabset_revert_button_state()
 	restart_regeneration_timer()
 

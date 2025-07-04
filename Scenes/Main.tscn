@@ -5621,7 +5621,7 @@ margin_bottom = 27.0
 size_flags_horizontal = 3
 text = "Revert"
 
-[node name="ModifiedListPanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ModifiedSlabsetPanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 127.0
 margin_right = 236.0
 margin_bottom = 166.0
@@ -5629,7 +5629,7 @@ hint_tooltip = "List of Slab IDs that have been modified."
 mouse_filter = 1
 size_flags_horizontal = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/ModifiedListPanelContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/ModifiedSlabsetPanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 227.0
@@ -5637,7 +5637,7 @@ margin_bottom = 30.0
 mouse_filter = 1
 scroll_vertical_enabled = false
 
-[node name="ModifiedListLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/ModifiedListPanelContainer/ScrollContainer"]
+[node name="ModifiedSlabsetLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/ModifiedSlabsetPanelContainer/ScrollContainer"]
 margin_right = 118.0
 margin_bottom = 21.0
 mouse_filter = 1
@@ -6033,8 +6033,32 @@ text = "Filename"
 align = 1
 autowrap = true
 
-[node name="ColumnsetControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer" instance=ExtResource( 137 )]
+[node name="ModifiedColumnsetPanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer"]
 margin_top = 43.0
+margin_right = 226.0
+margin_bottom = 82.0
+hint_tooltip = "List of Columnset IDs that have been modified."
+mouse_filter = 1
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/ModifiedColumnsetPanelContainer"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 217.0
+margin_bottom = 30.0
+mouse_filter = 1
+scroll_vertical_enabled = false
+
+[node name="ModifiedColumnsetLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/ModifiedColumnsetPanelContainer/ScrollContainer"]
+margin_right = 118.0
+margin_bottom = 21.0
+mouse_filter = 1
+size_flags_horizontal = 0
+size_flags_vertical = 3
+text = "Modified IDs:"
+
+[node name="ColumnsetControls" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer" instance=ExtResource( 137 )]
+margin_top = 86.0
 margin_right = 226.0
 margin_bottom = 881.0
 size_flags_horizontal = 1
@@ -7995,14 +8019,9 @@ script = SubResource( 20 )
 [connection signal="focus_exited" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignPosition/HBoxContainer2/EnsignPositionY" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_EnsignPositionY_focus_exited"]
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignPosition/HBoxContainer2/OpenMapCoordButton" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_OpenMapCoordButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignZoom/EnsignZoomLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_EnsignZoomLineEdit_text_changed"]
-[connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxOptions/OptionsOptionButton" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_OptionsOptionButton_item_selected"]
-[connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxNameID/NameIDLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_NameIDLineEdit_text_changed"]
-[connection signal="file_selected" from="Ui/UiSystem/ChooseTmapFileDialog" to="Ui/UiSystem/TextureEditingWindow/TeditLoadDAT" method="_on_ChooseTmapFileDialog_file_selected"]
-[connection signal="pressed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer/ScriptEditorCloseButton" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptEditorCloseButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer/ScriptEditorStatusLabel" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptEditorStatusLabel_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]
-[connection signal="pressed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/HelpButtonPosition/UNNEEDEDScriptHelpButton" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptHelpButton_pressed"]
 [connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/KeeperFXScriptCheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_KeeperFXScriptCheckBox_toggled"]
 [connection signal="text_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_PortalRateField_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlueAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_BlueAICheckBox_toggled"]

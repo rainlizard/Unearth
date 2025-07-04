@@ -28,6 +28,7 @@ const string = """
 - Mark map as edited when modifying slabset/columnset
 - Fixed a slabset bug where lights were incorrectly marking the variation as modified
 - Slabset window title changes depending on whether you have local or campaign file open, and display "No saved file" status
+- Added list of modified Columnset IDs
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

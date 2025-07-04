@@ -12,6 +12,8 @@ onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentlyOpenColumnset = Nodelist.list["oCurrentlyOpenColumnset"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
+onready var oModifiedColumnsetLabel = Nodelist.list["oModifiedColumnsetLabel"]
+onready var oModifiedColumnsetPanelContainer = Nodelist.list["oModifiedColumnsetPanelContainer"]
 
 var flash_update_timer = Timer.new()
 
@@ -73,6 +75,7 @@ func update_columnset_revert_button_state():
 	var list_of_modified_columns = Columnset.find_all_different_columns()
 	oColumnsetRevertButton.disabled = list_of_modified_columns.empty()
 	update_columnset_paths_label(list_of_modified_columns)
+	update_modified_label_for_all_columns(list_of_modified_columns)
 
 func update_columnset_paths_label(list_of_modified_columns):
 	var file_path = oSlabsetWindow.get_meaningful_file_path("columnset.toml")
@@ -94,6 +97,14 @@ func update_columnset_paths_label(list_of_modified_columns):
 	oCurrentlyOpenColumnset.text = final_text
 	oCurrentlyOpenColumnset.hint_tooltip = tooltip_text
 	oSlabsetWindow.update_window_title()
+
+func update_modified_label_for_all_columns(list_of_modified_columns):
+	oModifiedColumnsetLabel.text = str(list_of_modified_columns).replace("[","").replace("]","")
+	if oModifiedColumnsetLabel.text == "":
+		oModifiedColumnsetPanelContainer.modulate = Color(1, 1, 1, 1)
+		oModifiedColumnsetLabel.text = "No modified columns"
+	else:
+		oModifiedColumnsetPanelContainer.modulate = Color(1.4, 1.4, 1.7, 1.0)
 
 func _on_columnset_timer_timeout():
 	update_columnset_revert_button_state()
@@ -134,3 +145,4 @@ func _on_config_status_changed():
 		return
 	var list_of_modified_columns = Columnset.find_all_different_columns()
 	update_columnset_paths_label(list_of_modified_columns)
+	update_modified_label_for_all_columns(list_of_modified_columns)
