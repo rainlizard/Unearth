@@ -29,6 +29,8 @@ const string = """
 - Fixed a slabset bug where lights were incorrectly marking the variation as modified
 - Slabset window title changes depending on whether you have local or campaign file open, and display "No saved file" status
 - Added list of modified Columnset IDs
+- Moved column editor's 'Utilized' to advanced section
+- Removed ColumnsCount and [common] header from exported columnset.toml
 0.57.742 - 19/6/2025
 - Added Changelog window
 - New map window: added player placement

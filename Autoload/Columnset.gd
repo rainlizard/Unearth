@@ -109,10 +109,6 @@ func export_toml_columnset(filePath):
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 		return false
 	
-	textFile.store_line('[common]')
-	textFile.store_line('ColumnsCount = ' + str(column_count))
-	textFile.store_line('\r')
-	
 	for i in column_count:
 		if column_diffs.has(i) == false:
 			continue

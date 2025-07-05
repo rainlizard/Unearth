@@ -664,7 +664,7 @@ script = ExtResource( 76 )
 visible = true
 margin_top = 60.0
 margin_right = 321.0
-margin_bottom = 718.0
+margin_bottom = 816.0
 window_title = "Slab"
 resizable = true
 script = ExtResource( 68 )
@@ -677,7 +677,7 @@ size_flags_vertical = 3
 
 [node name="SlabTabs" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer"]
 margin_right = 321.0
-margin_bottom = 658.0
+margin_bottom = 756.0
 rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -690,14 +690,14 @@ margin_bottom = 31.0
 [node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs"]
 margin_top = 35.0
 margin_right = 321.0
-margin_bottom = 658.0
+margin_bottom = 756.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MainSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
 margin_right = 321.0
-margin_bottom = 623.0
+margin_bottom = 721.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -705,15 +705,15 @@ size_flags_vertical = 3
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 312.0
-margin_bottom = 614.0
+margin_bottom = 712.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/MainSlabs/ScrollContainer"]
 margin_left = 151.0
-margin_top = 302.0
+margin_top = 351.0
 margin_right = 151.0
-margin_bottom = 302.0
+margin_bottom = 351.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
@@ -5461,8 +5461,8 @@ stretch_mode = 4
 visible = true
 margin_left = -2945.0
 margin_top = -1513.0
-margin_right = -2335.0
-margin_bottom = -523.0
+margin_right = -1707.0
+margin_bottom = -357.0
 window_title = "Edit slabs"
 resizable = true
 script = ExtResource( 132 )
@@ -5486,14 +5486,14 @@ size_flags_vertical = 3
 script = ExtResource( 184 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset"]
-margin_right = 600.0
-margin_bottom = 949.0
+margin_right = 1228.0
+margin_bottom = 1115.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DkSlabsetVoxelView" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer" instance=ExtResource( 19 )]
-margin_right = 360.0
-margin_bottom = 949.0
+margin_right = 988.0
+margin_bottom = 1115.0
 displayingType = 2
 
 [node name="Control" type="Control" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView"]
@@ -5507,7 +5507,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="SlabsetSlabNameLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView/Control/VBoxContainer"]
-margin_right = 360.0
+margin_right = 988.0
 margin_bottom = 21.0
 size_flags_vertical = 1
 text = "Impenetrable Rock"
@@ -5515,28 +5515,28 @@ align = 2
 
 [node name="VariationInfoLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/DkSlabsetVoxelView/Control/VBoxContainer"]
 margin_top = 25.0
-margin_right = 360.0
+margin_right = 988.0
 margin_bottom = 46.0
 size_flags_vertical = 1
 text = "Variation info"
 align = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer"]
-margin_left = 364.0
-margin_right = 600.0
-margin_bottom = 949.0
+margin_left = 992.0
+margin_right = 1228.0
+margin_bottom = 1115.0
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
 margin_right = 236.0
-margin_bottom = 895.0
+margin_bottom = 1061.0
 mouse_filter = 1
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer"]
 margin_right = 236.0
-margin_bottom = 895.0
+margin_bottom = 1061.0
 size_flags_vertical = 3
 
 [node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
@@ -5749,7 +5749,7 @@ columns = 3
 [node name="PanelContainer3" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_top = 332.0
 margin_right = 236.0
-margin_bottom = 895.0
+margin_bottom = 1061.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -5757,7 +5757,7 @@ size_flags_vertical = 3
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 227.0
-margin_bottom = 554.0
+margin_bottom = 720.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_right = 218.0
@@ -5787,13 +5787,13 @@ text = "Delete"
 [node name="SlabsetObjectSection" type="ScrollContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer"]
 margin_top = 56.0
 margin_right = 218.0
-margin_bottom = 545.0
+margin_bottom = 711.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection"]
 margin_right = 218.0
-margin_bottom = 489.0
+margin_bottom = 655.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -5961,9 +5961,9 @@ size_flags_horizontal = 4
 text = "Use for custom slab"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer"]
-margin_top = 899.0
+margin_top = 1065.0
 margin_right = 236.0
-margin_bottom = 949.0
+margin_bottom = 1115.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/PanelContainer"]
 margin_left = 9.0

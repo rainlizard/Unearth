@@ -154,7 +154,7 @@ func update_clm_editing_state():
 	oOrientationSpinBox.editable = canEdit
 	oLintelSpinBox.editable = canEdit
 	oFloorTextureSpinBox.editable = canEdit
-	oUtilizedSpinBox.editable = canEdit
+	oUtilizedSpinBox.editable = canEdit and name != "ColumnsetControls"
 	
 	for cubeSpinBox in cubeSpinBoxArray:
 		cubeSpinBox.editable = canEdit

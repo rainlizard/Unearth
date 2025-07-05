@@ -280,6 +280,7 @@ func export_toml_slabset(filePath):
 	var lines = PoolStringArray()
 	for slabID in list_of_modified_slabs:
 		lines.append("[slab" + str(slabID) + "]")
+		lines.append("")
 
 		for variationNumber in 28:
 			var variation = slabID * 28 + variationNumber
