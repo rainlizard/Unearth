@@ -24,6 +24,12 @@ func _ready():
 	oSlabsetTabs.set_tab_title(1, "Columnset") #slabs.clm
 	oSlabsetTabs.set_tab_title(2, "CLM data") #map.clm
 	
+	# Hide or show the CLM data tab according to user preference
+	var show_clm_tab = Settings.get_setting("show_clm_data_tab")
+	oSlabsetTabs.set_tab_hidden(2, !show_clm_tab)
+	if show_clm_tab == false and oSlabsetTabs.current_tab == 2:
+		oSlabsetTabs.current_tab = 0
+	
 	oDkSlabsetVoxelView.initialize()
 	
 	connect("item_rect_changed", self, "_on_SlabsetWindow_item_rect_changed")
@@ -33,6 +39,7 @@ func _ready():
 	
 	oSlabsetTabs.connect("tab_changed", self, "_on_SlabsetTabs_tab_changed")
 	oTabSlabset.connect("column_shortcut_pressed", self, "_on_TabSlabset_column_shortcut_pressed")
+
 
 func update_window_title():
 	match oSlabsetTabs.current_tab:

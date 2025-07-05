@@ -33,7 +33,7 @@ onready var oOwnerAlpha = Nodelist.list["oOwnerAlpha"]
 onready var oScriptEditorFontSize = Nodelist.list["oScriptEditorFontSize"]
 onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
-onready var oAllowCLMDataEditingCheckbox = Nodelist.list["oAllowCLMDataEditingCheckbox"]
+onready var oShowCLMDataTabCheckbox = Nodelist.list["oShowCLMDataTabCheckbox"]
 onready var oSymmetryGuidelinesSetting = Nodelist.list["oSymmetryGuidelinesSetting"]
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
@@ -93,8 +93,7 @@ func _on_SettingsWindow_about_to_show():
 	oEditorFontSize.update_appearance(Settings.get_setting("editor_font_size"))
 	oScriptEditorFontSize.update_appearance(Settings.get_setting("script_editor_font_size"))
 	oCheckBoxNewMapAutoOpensMapSettings.pressed = Settings.get_setting("auto_open_map_settings")
-	var allowClmEditing = Settings.get_setting("allow_clm_data_editing")
-	oAllowCLMDataEditingCheckbox.pressed = allowClmEditing if allowClmEditing != null else false
+	oShowCLMDataTabCheckbox.pressed = Settings.get_setting("show_clm_data_tab")
 
 func _on_CheckBoxVsync_toggled(button_pressed):
 	Settings.set_setting("vsync", button_pressed)
@@ -201,14 +200,10 @@ func _on_CheckBoxDisplay3dInfo_toggled(button_pressed):
 func _on_CheckBoxNewMapAutoOpensMapSettings_toggled(button_pressed):
 	Settings.set_setting("auto_open_map_settings", button_pressed)
 
-func _on_AllowCLMDataEditingCheckbox_toggled(button_pressed):
-	Settings.set_setting("allow_clm_data_editing", button_pressed)
-	var oClmEditorControls = Nodelist.list["oClmEditorControls"]
-	if is_instance_valid(oClmEditorControls):
-		oClmEditorControls.update_clm_editing_state()
-	var oTabClmEditor = Nodelist.list["oTabClmEditor"]
-	if is_instance_valid(oTabClmEditor):
-		oTabClmEditor.update_clm_editing_buttons()
+func _on_ShowCLMDataTabCheckbox_toggled(button_pressed):
+	Settings.set_setting("show_clm_data_tab", button_pressed)
+	var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
+	oSlabsetTabs.set_tab_hidden(2, !button_pressed)
 
 func edited_MSAA(new_text):
 	var slider_value = int(new_text)

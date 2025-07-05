@@ -6,7 +6,7 @@ const string = """
 - Some small optimizations to overhead 2D graphics
 - Fixed an issue where viewing certain Slabset variations would cause them to be marked as modified
 - Slabset window's "Near water" & "Near lava" text replaced with "Room face variation" on certain slabIDs like LAIR_WALL
-- Added preference "Allow CLM data editing" which is disabled by default
+- Added preference "Show CLM data tab" which is disabled by default
 - Disable editing column 0
 - Display 'Columnset' and 'Variation' in Properties 'Column' tab
 - While in Column tab, when you click on the map the slabset window will open and go to that column

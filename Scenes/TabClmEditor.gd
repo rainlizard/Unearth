@@ -13,6 +13,7 @@ onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
+onready var oClmDataReadOnlyCheckBox = Nodelist.list["oClmDataReadOnlyCheckBox"]
 
 var overhead_update_timer = Timer.new()
 var pending_clm_index = -1
@@ -28,6 +29,9 @@ func _ready():
 		oClmEditorControls.connect("floor_texture_changed", self, "_on_floor_texture_changed")
 		oClmEditorControls.connect("column_pasted", self, "_on_column_pasted")
 		oClmEditorControls.connect("column_reverted", self, "_on_column_reverted")
+	
+	# Setup read-only checkbox
+	oClmDataReadOnlyCheckBox.connect("toggled", self, "_on_ReadOnlyCheckBox_toggled")
 	
 	# Connect TabClmEditor controls
 	var columnEditorClearUnusedButton = get_node("HBoxContainer/VBoxContainer2/PanelContainer2/HBoxContainer/ColumnEditorClearUnusedButton")
@@ -114,26 +118,25 @@ func _on_ColumnEditor_visibility_changed():
 		oClmEditorControls._on_ColumnIndexSpinBox_value_changed(oClmEditorControls.oColumnIndexSpinBox.value)
 		update_clm_editing_buttons()
 		oSlabsetWindow.update_flash_state()
+		# Apply read-only state
+		_on_ReadOnlyCheckBox_toggled(oClmDataReadOnlyCheckBox.pressed)
 	else:
 		# Update "Clm entries" in properties window
 		yield(get_tree(),'idle_frame')
 		oDataClm.count_filled_clm_entries()
 
 func update_clm_editing_buttons():
-	var allowEditing = Settings.get_setting("allow_clm_data_editing")
-	if allowEditing == null or not Settings.haveInitializedAllSettings:
-		allowEditing = false
-	
-	oColumnEditorClearUnusedButton.disabled = not allowEditing
-	oColumnEditorSortButton.disabled = not allowEditing
+	# CLM data editing is always enabled when the tab is visible
+	oColumnEditorClearUnusedButton.disabled = false
+	oColumnEditorSortButton.disabled = false
 
 func _on_ColumnEditorHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "- To edit CLM data, enable 'Allow CLM data editing' in Preferences > UI."
-	helptxt += '\n'
 	helptxt += "- Use middle mouse to zoom in and out, left click and drag to rotate view. You can use the arrow keys to switch between columns faster and also use arrow keys while a field's selected to navigate cubes faster." #Holding left click on a field's little arrows while moving the mouse up or down provides speedy navigation too.
 	helptxt += '\n'
 	helptxt += "- If your column has multiple gaps then some of the top/bottom cube faces may not display in-game."
+	helptxt += '\n'
+	helptxt += "- To hide this tab, disable 'Show CLM data tab' in Preferences > UI."
 	oMessage.big("Help",helptxt)
 
 
@@ -152,6 +155,11 @@ func _on_ConfirmClmClearUnused_confirmed():
 	
 	# Refresh "Clm entries" in Properties window
 	oDataClm.count_filled_clm_entries()
+
+
+func _on_ReadOnlyCheckBox_toggled(buttonPressed):
+	if oClmEditorControls:
+		oClmEditorControls.set_read_only_mode(buttonPressed)
 
 func _on_ColumnEditorSortButton_pressed():
 	oEditor.mapHasBeenEdited = true

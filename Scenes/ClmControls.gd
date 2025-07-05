@@ -52,6 +52,7 @@ var isMouseOverFloorTexture = false
 var regeneration_timer: Timer
 var _previous_column_id = 0
 var pending_regeneration_columnset_ids = []
+var isReadOnlyMode = false
 
 # Clipboard for column data
 var clipboard = {
@@ -139,40 +140,31 @@ func restart_regeneration_timer():
 
 func update_clm_editing_state():
 	var currentColumn = int(oColumnIndexSpinBox.value)
-	var canEditCurrentColumn = true
+	# Both CLM Editor and Columnset only check column 0 restriction
+	var canEditCurrentColumn = currentColumn != 0
 	
-	# For CLM Editor, check both the setting and column 0 restriction
-	if name == "ClmEditorControls":
-		var allowEditing = Settings.get_setting("allow_clm_data_editing")
-		if allowEditing == null or not Settings.haveInitializedAllSettings:
-			allowEditing = false
-		canEditCurrentColumn = allowEditing and currentColumn != 0
-	# For Columnset, only check column 0 restriction
-	elif name == "ColumnsetControls":
-		canEditCurrentColumn = currentColumn != 0
+	# Check if read-only mode is active
+	var isReadOnly = get_read_only_mode()
 	
-	oHeightSpinBox.editable = canEditCurrentColumn
-	oSolidMaskSpinBox.editable = canEditCurrentColumn
-	oPermanentSpinBox.editable = canEditCurrentColumn
-	oOrientationSpinBox.editable = canEditCurrentColumn
-	oLintelSpinBox.editable = canEditCurrentColumn
-	oFloorTextureSpinBox.editable = canEditCurrentColumn
+	var canEdit = canEditCurrentColumn and not isReadOnly
+	
+	oHeightSpinBox.editable = canEdit
+	oSolidMaskSpinBox.editable = canEdit
+	oPermanentSpinBox.editable = canEdit
+	oOrientationSpinBox.editable = canEdit
+	oLintelSpinBox.editable = canEdit
+	oFloorTextureSpinBox.editable = canEdit
+	oUtilizedSpinBox.editable = canEdit
 	
 	for cubeSpinBox in cubeSpinBoxArray:
-		cubeSpinBox.editable = canEditCurrentColumn
+		cubeSpinBox.editable = canEdit
 	
-	oColumnRevertButton.disabled = not canEditCurrentColumn
-	oColumnCopyButton.disabled = not canEditCurrentColumn
-	oColumnPasteButton.disabled = not canEditCurrentColumn
+	oColumnRevertButton.disabled = not canEdit
+	oColumnCopyButton.disabled = not canEdit
+	oColumnPasteButton.disabled = not canEdit
 	
-	# First unused button logic depends on the context
-	if name == "ClmEditorControls":
-		var allowEditing = Settings.get_setting("allow_clm_data_editing")
-		if allowEditing == null or not Settings.haveInitializedAllSettings:
-			allowEditing = false
-		oColumnFirstUnusedButton.disabled = not allowEditing
-	elif name == "ColumnsetControls":
-		oColumnFirstUnusedButton.disabled = false
+	# First unused button is always enabled for both contexts
+	oColumnFirstUnusedButton.disabled = false
 
 func establish_maximum_cube_field_values():
 	for i in cubeSpinBoxArray.size():
@@ -553,3 +545,12 @@ func _on_ColumnRevertButton_pressed():
 	_on_ColumnIndexSpinBox_value_changed(clmIndex)  # Refresh UI
 	oMessage.quick("Reverted column to default")
 	nodeVoxelView.refresh_entire_view()
+
+
+func set_read_only_mode(readOnly):
+	isReadOnlyMode = readOnly
+	update_clm_editing_state()
+
+
+func get_read_only_mode():
+	return isReadOnlyMode
