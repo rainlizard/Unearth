@@ -45,7 +45,7 @@ jobs:
         }
         found {
           print $0
-        }' changelog.gd | sed 's/^- /• /' | head -n -1)
+        }' changelog.gd | head -n -1)
         
         # Save changelog to output using heredoc to handle multiline content
         {
