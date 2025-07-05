@@ -2,33 +2,33 @@ extends Node
 
 const string = """
 <version> - <date>
-- In overhead 2D view, always display highest cube of a column (previously it was relying on the "height" value which lead to confusion)
-- Some small optimizations to overhead 2D graphics
-- Fixed an issue where viewing certain Slabset variations would cause them to be marked as modified
-- Slabset window's "Near water" & "Near lava" text replaced with "Room face variation" on certain slabIDs like LAIR_WALL
+- Editing Slabset or Columnset will now instantly update slabs on the map to use those new columns
+- Auto save map0000*.slabset.toml and map0000*.columnset.toml files when you save your map (if they've been modified)
+- In Slabset window, flash all affected columns on the map
+- In Properties window's Column tab, when you click on the map the Slabset window will automatically open and go to that column
+- Slabset window title changes depending on whether you have local or campaign file open and displays "No saved file" status
 - Added preference "Show CLM data tab" which is disabled by default
+- Added list of modified Columnset IDs in the Columnset window
+- Slabs are placed 40% faster
+- Some small optimizations to overhead 2D graphics
+- Mark map as edited when modifying slabset/columnset
+- Added reserved columnset space and slabset space for future default keeperfx additions (if you already have custom column/slab IDs within this space, then you need to move them out)
+- When you run out of clm entries, directly ask if the user wants to "Clear unused"
+- Calculate a column's Height and Lintel fields automatically, like how Solid mask is auto calculated
+- Slabset window's "Near water" & "Near lava" text replaced with "Room face variation" on certain slabIDs like LAIR_WALL
+- In overhead 2D view, always display highest cube of a column (previously it was relying on the "height" value which led to confusion)
+- Fixed an issue where viewing certain Slabset variations would cause them to be marked as modified
 - Disable editing column 0
 - Display 'Columnset' and 'Variation' in Properties 'Column' tab
-- While in Column tab, when you click on the map the slabset window will open and go to that column
 - Small UI theme adjustments
 - Slabset window size & position stored in settings, defaults to being a smaller window on the side
 - Fixed an issue where shaders would sometimes go dark
-- If the slabset window is open, their textures will now be updated when switching tileset
-- Detect when windows are offscreen better
-- In slabset window, flash all affected columns on the map
-- Slabs are placed 40% faster
-- Editing Slabset or Columnset will now automatically update the map to use those new columns
+- If the Slabset window is open, their textures will now be updated when switching tileset
+- Better detection for when windows are offscreen
 - 'Go to unused' button now works in 'Classic format'
-- When you run out of clm entries, directly ask if the user wants to "Clear unused"
-- Calculate a column's Height and Lintel fields automatically, like how Solid mask is auto calculated
-- Fixed Things going dark on map when viewed in Slabset window.
-- Added reserved columnset space and slabset space for future keeperfx additions (if you already have custom column/slab IDs within this space, then you need to move them out)
+- Fixed Things going dark on map when viewed in Slabset window
 - For slabset.toml only export the variations that were altered, instead of all 28 variations
-- Save map0000*.slabset.toml and map0000*.columnset.toml files when you save your map, if they've been modified
-- Mark map as edited when modifying slabset/columnset
 - Fixed a slabset bug where lights were incorrectly marking the variation as modified
-- Slabset window title changes depending on whether you have local or campaign file open, and display "No saved file" status
-- Added list of modified Columnset IDs
 - Moved column editor's 'Utilized' to advanced section
 - Removed ColumnsCount and [common] header from exported columnset.toml
 0.57.742 - 19/6/2025
@@ -88,7 +88,7 @@ const string = """
 - Fixed a bug where you'd lose external edits to your script if you pressed Undo in Unearth
 - Edit->Undo also no longer affects scripts at all. The internal script editor handles its own Undo states.
 - Blank .lua files are created on save
-- .lua files are monitored and loaded into memory as you edit them. Doing Save As will copy the lua file data to new your directory.
+- .lua files are monitored and loaded into memory as you edit them. Doing Save As will copy the lua file data to your new directory.
 - If the .lua file is not blank, then you won't get the error about your map having no script.
 0.52.662 - 10/2/2025
 - Fixed Herogates breaking when pressing 'Undo'
@@ -221,8 +221,8 @@ const string = """
 - When painting with ownership (in Ownership tab of Slab window), obey the rules of 'Ownable Natural Terrain' setting
 - Added a warning message when placing a Door Thing without a Door Slab
 - Prevent 'Place door as locked' from affecting nearby doors
-- map browser now expands /levels/ and /campgns/ folders by default
-- removed map browser's ugly font
+- Map browser now expands /levels/ and /campgns/ folders by default
+- Removed map browser's ugly font
 - Only show exit prompt when map has unsaved changes
 - Enter/Y/N keys now work in confirmation dialogs
 - Show the map browser after selecting the exe
@@ -666,7 +666,7 @@ If you've created these files, you'll need to rename them for the latest alpha p
 0.16 - 8/1/2022
 - 'Add new' button added to Custom Slabs tab
 - Fixed the write permissions error not popping up
-- When pressing Play button, preventing pressing again for a few seconds and display "Launching..." quick message
+- When pressing Play button, prevent pressing again for a few seconds and display "Launching..." quick message
 - When hovering mouse over tabs, use a custom tooltip instead of changing tab title
 - Fixed arrow keys not working in text fields
 - In the column editor, speed up the camera shift movement when changing the index value by a lot
@@ -764,7 +764,7 @@ If you've created these files, you'll need to rename them for the latest alpha p
 - Deleting things: Once again allow holding delete to constantly delete everything under cursor (I had changed it to single press)
 - Deleting things: Added a 'Delete' UI button in the properties window next to "Selected"
 - Deleting things: Added Ctrl+Delete keybind for deleting one specific thing
-- Load image as map: Fixed a bug where a colours with 0 alpha could be treated differently depending on their RGB components
+- Load image as map: Fixed a bug where colours with 0 alpha could be treated differently depending on their RGB components
 - Load image as map: Fixed up button/colour assignment. The way it should work is multiple colours can be assigned to one button, but multiple buttons cannot be assigned to one colour.
 - Load image as map: 'Apply all' button added, you can now re-use previous assignment settings for different images or new maps
 - Load image as map: Made the highlighted colour flash a little more obvious
@@ -841,7 +841,7 @@ If you've created these files, you'll need to rename them for the latest alpha p
 - Added "Ownable natural terrain" checkbox to Slab settings, placing natural terrain will always be Ownership "None"
 - The settings in "Slab settings" are now saved and remembered upon restarting editor
 - Action point number graphic now updated when changing number value
-- Thing window items should now initally resize properly
+- Thing window items should now initially resize properly
 - Show subtype ID next to Type in Properties window
 - Show slab ID next to slab name in Properties window
 - Show IDs in Properties window as you hover mouse in Thing window
