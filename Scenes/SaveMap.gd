@@ -63,8 +63,8 @@ func save_map(filePath):
 		return
 
 	# Handle slabset.toml and columnset.toml files
-	save_slabset_toml(map_filename_no_ext, map_base_dir)
-	save_columnset_toml(map_filename_no_ext, map_base_dir)
+	save_toml_file("slabset.toml", "oCurrentlyOpenSlabset", map_filename_no_ext, map_base_dir)
+	save_toml_file("columnset.toml", "oCurrentlyOpenColumnset", map_filename_no_ext, map_base_dir)
 
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	if oDataScript.data == "" and oDataLua.data == "":
@@ -133,20 +133,41 @@ func clicked_save_on_menu():
 	save_map(oCurrentMap.path)
 
 
-func save_slabset_toml(map_filename_no_ext, map_base_dir):
-	var slabset_file_path = map_base_dir.plus_file(map_filename_no_ext + ".slabset.toml")
-	if Slabset.export_toml_slabset(slabset_file_path):
-		oConfigFileManager.notify_file_created(slabset_file_path, "slabset.toml")
+func save_toml_file(file_type, ui_label_name, map_filename_no_ext, map_base_dir):
+	var file_path
+	var config_type = oConfigFileManager.LOAD_CFG_CURRENT_MAP
+	
+	# Check if there's an existing file from the UI tooltip
+	var ui_label = Nodelist.list[ui_label_name]
+	var existing_file_path = ui_label.hint_tooltip
+	
+	if existing_file_path != "" and existing_file_path != "No saved file":
+		# Use the existing file path (campaign or local)
+		file_path = existing_file_path
+		if existing_file_path.get_file() == file_type:
+			config_type = oConfigFileManager.LOAD_CFG_CAMPAIGN
 	else:
-		delete_toml_file_if_exists(slabset_file_path, "slabset.toml")
-
-
-func save_columnset_toml(map_filename_no_ext, map_base_dir):
-	var columnset_file_path = map_base_dir.plus_file(map_filename_no_ext + ".columnset.toml")
-	if Columnset.export_toml_columnset(columnset_file_path):
-		oConfigFileManager.notify_file_created(columnset_file_path, "columnset.toml")
+		# Default to local file
+		file_path = map_base_dir.plus_file(map_filename_no_ext + "." + file_type)
+	
+	var export_success = false
+	match file_type:
+		"slabset.toml":
+			export_success = Slabset.export_toml_slabset(file_path)
+		"columnset.toml":
+			export_success = Columnset.export_toml_columnset(file_path)
+	
+	if export_success:
+		if config_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
+			if not oConfigFileManager.paths_loaded[config_type].has(file_path):
+				oConfigFileManager.paths_loaded[config_type].append(file_path)
+			oConfigFileManager.emit_signal("config_file_status_changed")
+		else:
+			oConfigFileManager.notify_file_created(file_path, file_type)
+		print("Saved " + file_type.get_basename() + " to: " + file_path)
 	else:
-		delete_toml_file_if_exists(columnset_file_path, "columnset.toml")
+		delete_toml_file_if_exists(file_path, file_type)
+
 
 
 func delete_toml_file_if_exists(file_path, file_type):
@@ -158,3 +179,5 @@ func delete_toml_file_if_exists(file_path, file_type):
 			oConfigFileManager.notify_file_deleted(file_path, file_type)
 		else:
 			print("Error trashing " + file_type + " file: " + file_path.get_file() + " Code: " + str(err_trash))
+
+
