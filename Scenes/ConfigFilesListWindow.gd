@@ -1,6 +1,5 @@
 extends WindowDialog
-
-onready var oCfgLoader = Nodelist.list["oCfgLoader"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oVBoxContainerConfigLocalMap = Nodelist.list["oVBoxContainerConfigLocalMap"]
 onready var oVBoxContainerConfigFxdata = Nodelist.list["oVBoxContainerConfigFxdata"]
 onready var oVBoxContainerConfigCampaign = Nodelist.list["oVBoxContainerConfigCampaign"]
@@ -18,20 +17,20 @@ func update_everything():
 	for currentContainer in [oVBoxContainerConfigData, oVBoxContainerConfigFxdata, oVBoxContainerConfigCampaign, oVBoxContainerConfigLocalMap]:
 		for childNode in currentContainer.get_children():
 			childNode.queue_free()
-	for configType in [oCfgLoader.LOAD_CFG_DATA, oCfgLoader.LOAD_CFG_FXDATA, oCfgLoader.LOAD_CFG_CAMPAIGN, oCfgLoader.LOAD_CFG_CURRENT_MAP]:
-		if oCfgLoader.paths_loaded.has(configType) == false:
+	for configType in [oConfigFileManager.LOAD_CFG_DATA, oConfigFileManager.LOAD_CFG_FXDATA, oConfigFileManager.LOAD_CFG_CAMPAIGN, oConfigFileManager.LOAD_CFG_CURRENT_MAP]:
+		if oConfigFileManager.paths_loaded.has(configType) == false:
 			continue
 		var targetGrid
 		match configType:
-			oCfgLoader.LOAD_CFG_DATA:
+			oConfigFileManager.LOAD_CFG_DATA:
 				targetGrid = oVBoxContainerConfigData
-			oCfgLoader.LOAD_CFG_FXDATA:
+			oConfigFileManager.LOAD_CFG_FXDATA:
 				targetGrid = oVBoxContainerConfigFxdata
-			oCfgLoader.LOAD_CFG_CAMPAIGN:
+			oConfigFileManager.LOAD_CFG_CAMPAIGN:
 				targetGrid = oVBoxContainerConfigCampaign
-			oCfgLoader.LOAD_CFG_CURRENT_MAP:
+			oConfigFileManager.LOAD_CFG_CURRENT_MAP:
 				targetGrid = oVBoxContainerConfigLocalMap
-		for filePath in oCfgLoader.paths_loaded[configType]:
+		for filePath in oConfigFileManager.paths_loaded[configType]:
 			if filePath:
 				add_linkbutton(filePath, targetGrid)
 

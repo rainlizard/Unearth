@@ -2,7 +2,7 @@ extends Node
 
 onready var oChooseTmapFileDialog = Nodelist.list["oChooseTmapFileDialog"]
 onready var oGame = Nodelist.list["oGame"]
-onready var oCfgLoader = Nodelist.list["oCfgLoader"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oTeditSavePNG = Nodelist.list["oTeditSavePNG"]
@@ -22,20 +22,20 @@ func start_file_selection():
 
 
 func find_best_tmap_file() -> String:
-	if oCfgLoader.paths_loaded.has(oCfgLoader.LOAD_CFG_CURRENT_MAP):
-		for filePath in oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CURRENT_MAP]:
+	if oConfigFileManager.paths_loaded.has(oConfigFileManager.LOAD_CFG_CURRENT_MAP):
+		for filePath in oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CURRENT_MAP]:
 			if filePath.ends_with("dat"):
 				var lowerPath = filePath.to_lower()
 				if "tmapa" in lowerPath or "tmapb" in lowerPath:
 					return filePath
-	if oCfgLoader.paths_loaded.has(oCfgLoader.LOAD_CFG_CAMPAIGN):
-		for filePath in oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_CAMPAIGN]:
+	if oConfigFileManager.paths_loaded.has(oConfigFileManager.LOAD_CFG_CAMPAIGN):
+		for filePath in oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CAMPAIGN]:
 			if filePath.ends_with("dat"):
 				var lowerPath = filePath.to_lower()
 				if "tmapa" in lowerPath or "tmapb" in lowerPath:
 					return filePath
-	if oCfgLoader.paths_loaded.has(oCfgLoader.LOAD_CFG_DATA):
-		for filePath in oCfgLoader.paths_loaded[oCfgLoader.LOAD_CFG_DATA]:
+	if oConfigFileManager.paths_loaded.has(oConfigFileManager.LOAD_CFG_DATA):
+		for filePath in oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_DATA]:
 			if filePath.ends_with("dat"):
 				var lowerPath = filePath.to_lower()
 				if "tmapa" in lowerPath or "tmapb" in lowerPath:

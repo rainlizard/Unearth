@@ -6910,7 +6910,7 @@ stretch_mode = 4
 visible = true
 margin_left = 2184.0
 margin_top = -1832.0
-margin_right = 3288.0
+margin_right = 3338.0
 margin_bottom = -1217.0
 rect_min_size = Vector2( 281, 296 )
 mouse_filter = 1
@@ -6933,7 +6933,7 @@ custom_constants/margin_bottom = 20
 visible = false
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 1084.0
+margin_right = 1134.0
 margin_bottom = 595.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -6997,13 +6997,13 @@ margin_bottom = 81.0
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 1084.0
+margin_right = 1134.0
 margin_bottom = 595.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer"]
-margin_right = 1064.0
+margin_right = 1114.0
 margin_bottom = 575.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -7011,8 +7011,8 @@ custom_constants/separation = 20
 alignment = 1
 
 [node name="VBoxContainer4" type="VBoxContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer"]
-margin_left = 2.0
-margin_right = 252.0
+margin_left = 27.0
+margin_right = 277.0
 margin_bottom = 575.0
 rect_min_size = Vector2( 250, 0 )
 size_flags_vertical = 3
@@ -7051,8 +7051,8 @@ custom_colors/font_color = Color( 0.4, 0.4, 0.4, 1 )
 text = "test"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer"]
-margin_left = 272.0
-margin_right = 522.0
+margin_left = 297.0
+margin_right = 547.0
 margin_bottom = 575.0
 rect_min_size = Vector2( 250, 0 )
 size_flags_vertical = 3
@@ -7092,8 +7092,8 @@ custom_colors/font_color = Color( 0.4, 0.4, 0.4, 1 )
 text = "test"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer"]
-margin_left = 542.0
-margin_right = 792.0
+margin_left = 567.0
+margin_right = 817.0
 margin_bottom = 575.0
 rect_min_size = Vector2( 250, 0 )
 
@@ -7132,8 +7132,8 @@ custom_colors/font_color = Color( 0.4, 0.4, 0.4, 1 )
 text = "test"
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer"]
-margin_left = 812.0
-margin_right = 1062.0
+margin_left = 837.0
+margin_right = 1087.0
 margin_bottom = 575.0
 rect_min_size = Vector2( 250, 0 )
 

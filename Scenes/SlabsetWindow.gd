@@ -138,8 +138,6 @@ func _on_SlabsetWindow_visibility_changed():
 func open_from_cursor_position():
 	var data = oSlabsetMapRegenerator.calculate_cursor_data()
 	
-	var columnDetailsVisible = oPropertiesTabs.current_tab == 2
-	
 	if visible == false:
 		popup_on_right_side()
 	
