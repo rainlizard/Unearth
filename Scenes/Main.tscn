@@ -5475,7 +5475,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TabSlabset" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -5536,7 +5535,7 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer"]
-margin_right = 18.0
+margin_right = 236.0
 margin_bottom = 895.0
 size_flags_vertical = 3
 
@@ -6103,6 +6102,7 @@ expand = true
 stretch_mode = 4
 
 [node name="TabClmEditor" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0

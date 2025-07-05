@@ -725,16 +725,17 @@ func _on_VarRevertButton_pressed():
 
 func revert(variations_to_revert):
 	for variation in variations_to_revert:
-		if variation < Slabset.default_data["dat"].size():
-			Slabset.dat[variation] = Slabset.default_data["dat"][variation].duplicate()
-		else:
-			if variation < Slabset.dat.size():
-				Slabset.dat.remove(variation)
-		if variation < Slabset.default_data["tng"].size():
-			Slabset.tng[variation] = Slabset.default_data["tng"][variation].duplicate(true)
-		else:
-			if variation < Slabset.tng.size():
-				Slabset.tng.remove(variation)
+		var setToDat = Slabset.EMPTY_SLAB.duplicate()
+		var setToTng = []
+		
+		if Slabset.default_data.has("dat") and variation < Slabset.default_data["dat"].size():
+			setToDat = Slabset.default_data["dat"][variation].duplicate()
+		
+		if Slabset.default_data.has("tng") and variation < Slabset.default_data["tng"].size():
+			setToTng = Slabset.default_data["tng"][variation].duplicate(true)
+		
+		Slabset.dat[variation] = setToDat
+		Slabset.tng[variation] = setToTng
 	update_column_spinboxes()
 	update_objects_ui()
 	yield(get_tree(),'idle_frame')
@@ -754,10 +755,8 @@ func _on_ConfirmRevertSlabset_confirmed():
 	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
 	oEditor.mapHasBeenEdited = true
 	
-	# Perform the revert operation
-	var totalSlabs = max(Slabset.dat.size(), Slabset.tng.size()) / 28
 	var variations_to_revert = []
-	for slabID in totalSlabs:
+	for slabID in list_of_modified_slabs:
 		for i in 28:
 			variations_to_revert.append((slabID * 28) + i)
 	revert(variations_to_revert)
