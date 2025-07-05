@@ -64,13 +64,14 @@ func _on_AddCustomSlabWindow_visibility_changed():
 		
 
 func shortcut_pressed(id):
-	var spinbox = id.get_node("CustomSpinBox")
-	var clmIndex = spinbox.value
-	
-	oSlabsetWindow.popup_on_right_side()
-	oSlabsetTabs.current_tab = 2
-	
-	oClmEditorControls.oColumnIndexSpinBox.value = clmIndex
+	if oSlabsetTabs.get_tab_hidden(2) == false:
+		oSlabsetWindow.popup_on_right_side()
+		oSlabsetTabs.current_tab = 2
+		var spinbox = id.get_node("CustomSpinBox")
+		var clmIndex = spinbox.value
+		oClmEditorControls.oColumnIndexSpinBox.value = clmIndex
+	else:
+		oMessage.quick("CLM data tab is currently disabled (see Preferences->UI)")
 
 
 func _on_CustomSlabID_value_changed(value):
@@ -184,6 +185,7 @@ func _on_FakeSlabHelpButton_pressed():
 
 func _on_HelpCustomSlabsButton_pressed():
 	var helptext = ""
+	helptext += "Note these are CLM data index numbers, not Columnset index numbers. \n"
 	helptext += "After adding a fake slab, right click on its portrait within the slab selection window to remove it from the editor."
 	oMessage.big("Help",helptext)
 
