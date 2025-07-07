@@ -4,6 +4,9 @@ const string = """
 <version> - <date>
 - Respect desired windows size/position
 - Fixed some default window positioning
+- Fixed an issue where non-keeperfx installations were crashing on opening/new maps
+- Removed dernc.exe executable and added a gdscript implementation of the algorithm
+- Improved RNC decompression confirmation window
 0.58.784 - 6/7/2025
 - Editing Slabset or Columnset will now instantly update slabs on the map to use those new columns
 - Auto save map0000*.slabset.toml and map0000*.columnset.toml files when you save your map (if they've been modified)

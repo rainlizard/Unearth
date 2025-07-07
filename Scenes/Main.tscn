@@ -1,4 +1,4 @@
-[gd_scene load_steps=203 format=2]
+[gd_scene load_steps=204 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -184,6 +184,7 @@
 [ext_resource path="res://Scenes/TabColumnset.gd" type="Script" id=183]
 [ext_resource path="res://Scenes/TabSlabset.gd" type="Script" id=184]
 [ext_resource path="res://Scenes/ConfigFileManager.gd" type="Script" id=279]
+[ext_resource path="res://Scenes/ConfirmDecompression.gd" type="Script" id=280]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -1992,18 +1993,63 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ConfirmDecompression" type="ConfirmationDialog" parent="Ui/UiSystem"]
+[node name="ConfirmDecompression" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 56.0
-margin_top = -160.0
+margin_top = -432.0
 margin_right = 505.0
-margin_bottom = -90.0
-rect_min_size = Vector2( 300, 105 )
+margin_bottom = -325.0
+window_title = "Confirm decompress"
+resizable = true
+script = ExtResource( 280 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ConfirmDecompression"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+
+[node name="CompressionWindowLabel" type="Label" parent="Ui/UiSystem/ConfirmDecompression/VBoxContainer"]
+margin_right = 429.0
+margin_bottom = 23.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-popup_exclusive = true
-window_title = "Confirm decompress"
-script = ExtResource( 61 )
+text = "Test"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CompressionWindowCheckBox" type="CheckBox" parent="Ui/UiSystem/ConfirmDecompression/VBoxContainer"]
+margin_top = 27.0
+margin_right = 429.0
+margin_bottom = 56.0
+text = "Always decompress maps"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ConfirmDecompression/VBoxContainer"]
+margin_top = 60.0
+margin_right = 429.0
+margin_bottom = 87.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CompressionWindowButtonYes" type="Button" parent="Ui/UiSystem/ConfirmDecompression/VBoxContainer/HBoxContainer"]
+margin_left = 103.0
+margin_right = 212.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 109, 0 )
+text = "Yes"
+
+[node name="CompressionWindowButtonNo" type="Button" parent="Ui/UiSystem/ConfirmDecompression/VBoxContainer/HBoxContainer"]
+margin_left = 216.0
+margin_right = 325.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 109, 0 )
+text = "No"
 
 [node name="ConfirmDelete" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true

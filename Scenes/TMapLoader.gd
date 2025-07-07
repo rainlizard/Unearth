@@ -179,19 +179,13 @@ func start():
 
 
 func create_l8_image(tmapDatPath: String) -> Image:
-	var l8ByteArray: PoolByteArray
-	if oRNC.check_for_rnc_compression(tmapDatPath):
-		l8ByteArray = oRNC.decompress_to_bytes(tmapDatPath)
-		if l8ByteArray.empty():
-			printerr("RNC decompression failed for: ", tmapDatPath)
-			return null
-	else:
-		var file = File.new()
-		if file.open(tmapDatPath, File.READ) != OK:
-			printerr("Failed to open TMAP for L8 creation: ", tmapDatPath)
-			return null
-		l8ByteArray = file.get_buffer(file.get_len())
-		file.close()
+	var CODETIME_START = OS.get_ticks_msec()
+	var l8ByteArray: PoolByteArray = oRNC.decompress(tmapDatPath)
+	print('RNC processing ' + tmapDatPath + " : " + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	
+	if l8ByteArray.empty():
+		printerr("Failed to process file: ", tmapDatPath)
+		return null
 	
 	var actualDataSize = l8ByteArray.size()
 	var maxExpectedSize = TMAP_IMAGE_WIDTH * TMAP_IMAGE_HEIGHT

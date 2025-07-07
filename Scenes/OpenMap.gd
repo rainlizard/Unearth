@@ -74,8 +74,9 @@ func start():
 			#for i in 200:
 			#	yield(get_tree(), "idle_frame")
 			#oCurrentMap.clear_map()
+			open_map("C:/Games/Dungeon Keeper GOG/levels/MAP00001.SLB")
 			#open_map("C:/Games/Dungeon Keeper/levels/deepdngn/map00084.slb")
-			open_map("C:/Games/Dungeon Keeper/levels/personal/map00001.slb")
+			#open_map("C:/Games/Dungeon Keeper/levels/personal/map00001.slb")
 			#open_map("C:/Games/Dungeon Keeper/campgns/dk2/map00200.slb")
 		else:
 			# initialize a cleared map
@@ -177,10 +178,11 @@ func open_map(filePath):
 		print("----------------------------------------------")
 	else:
 		if ALWAYS_DECOMPRESS == false:
-			oConfirmDecompression.dialog_text = "In order to open this map, these files must be decompressed: \n\n" #'Unable to open map, it contains files which have RNC compression: \n\n'
+			var dialogText = "In order to open this map, these files must be decompressed: \n\n" #'Unable to open map, it contains files which have RNC compression: \n\n'
 			for i in compressedFiles:
-				oConfirmDecompression.dialog_text += i + '\n'
-			oConfirmDecompression.dialog_text += "\n" + "This will result in overwriting, continue?" + "\n" #Decompress these files? (Warning: they will be overwritten)
+				dialogText += i + '\n'
+			dialogText += "\n" + "This will result in overwriting, continue?" #Decompress these files? (Warning: they will be overwritten)
+			oConfirmDecompression.set_dialog_text(dialogText)
 			Utils.popup_centered(oConfirmDecompression)
 		else:
 			# Begin decompression without confirmation dialog
@@ -257,7 +259,12 @@ func _on_ConfirmDecompression_confirmed():
 	print('Attempting to decompress...')
 	
 	for path in compressedFiles:
-		oRNC.decompress(path)
+		var CODETIME_START = OS.get_ticks_msec()
+		var result = oRNC.decompress(path)
+		if result.empty():
+			printerr("Failed to decompress: ", path)
+		else:
+			print('RNC decompressing ' + path + " : " + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
 	# Retry opening the map
 	open_map(compressedFiles[0])

@@ -66,11 +66,12 @@ func initialize_window_desired_values():
 			subwindows_status[windowName] = {}
 		if not subwindows_status[windowName].has("desired_position"):
 			subwindows_status[windowName]["desired_position"] = window.rect_position
-		if not subwindows_status[windowName].has("desired_size"):
+		if not subwindows_status[windowName].has("desired_size") and window.resizable:
 			subwindows_status[windowName]["desired_size"] = window.rect_size
 		
 		window.rect_position = subwindows_status[windowName]["desired_position"]
-		window.rect_size = subwindows_status[windowName]["desired_size"]
+		if window.resizable and subwindows_status[windowName].has("desired_size"):
+			window.rect_size = subwindows_status[windowName]["desired_size"]
 	on_startup_put_windows_in_correct_positions()
 
 func on_startup_put_windows_in_correct_positions():
@@ -123,7 +124,8 @@ func _on_any_window_was_modified(callingNode):
 		var viewSize = get_viewport().size / Settings.UI_SCALE
 		
 		set_desired_window_position(callingNode.name, callingNode.rect_position)
-		set_desired_window_size(callingNode.name, callingNode.rect_size)
+		if callingNode.resizable:
+			set_desired_window_size(callingNode.name, callingNode.rect_size)
 		
 		_clamp_window_position(callingNode, viewSize)
 		_is_handling_drag = false
@@ -141,7 +143,7 @@ func _on_viewport_size_changed():
 		
 		if desiredPosition != Vector2.ZERO:
 			windowNode.rect_position = desiredPosition
-		if desiredSize != Vector2.ZERO:
+		if desiredSize != Vector2.ZERO and windowNode.resizable:
 			windowNode.rect_size = desiredSize
 		
 		_adjust_window_size_to_viewport(windowNode, currentViewSize)
