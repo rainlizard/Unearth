@@ -49,7 +49,7 @@ func initialize_window_settings():
 	if Settings.cfg_has_setting("editor_window_maximized_state") == true:
 		OS.window_maximized = Settings.read_cfg("editor_window_maximized_state")
 	else:
-		OS.window_maximized = false
+		OS.window_maximized = true
 	if Settings.cfg_has_setting("editor_window_fullscreen_state") == true:
 		OS.window_fullscreen = Settings.read_cfg("editor_window_fullscreen_state")
 	else:

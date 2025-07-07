@@ -120,8 +120,9 @@ func popup_on_right_side():
 func _notification(what):
 	match what:
 		NOTIFICATION_WM_FOCUS_IN:
-			oTabSlabset.update_slabset_revert_button_state()
-			oTabColumnset.update_columnset_revert_button_state()
+			if oCurrentMap.path != "":
+				oTabSlabset.update_slabset_revert_button_state()
+				oTabColumnset.update_columnset_revert_button_state()
 
 func _on_SlabsetWindow_visibility_changed():
 	if visible == true:

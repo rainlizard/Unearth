@@ -120,7 +120,7 @@ func executable_stuff():
 	
 	# Choose executable path upon first starting
 	if cfg_has_setting("executable_path") == false:
-		for i in 2:
+		for i in 3:
 			yield(get_tree(),'idle_frame')
 		var oChooseDkExe = $'../Main/Ui/UiSystem/ChooseDkExe'
 		Utils.popup_centered(oChooseDkExe)
