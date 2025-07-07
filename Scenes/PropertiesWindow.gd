@@ -3,6 +3,7 @@ onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oUniversalDetails = Nodelist.list["oUniversalDetails"]
 onready var oGridFunctions = Nodelist.list["oGridFunctions"]
 onready var oSelectionStatus = Nodelist.list["oSelectionStatus"]
+onready var oUi = Nodelist.list["oUi"]
 onready var vboxContainer = $VBoxContainer
 
 var rectChangedTimer = Timer.new()
@@ -11,7 +12,7 @@ func _ready():
 	get_close_button().expand = true
 	get_close_button().hide()
 	connect("item_rect_changed",self,"rect_changed_start_timer")
-	rectChangedTimer.connect("timeout", oGridFunctions, "_on_GridWindow_item_rect_changed", [self])
+	rectChangedTimer.connect("timeout", oUi, "_on_any_window_was_modified", [self])
 	rectChangedTimer.one_shot = true
 	add_child(rectChangedTimer)
 	

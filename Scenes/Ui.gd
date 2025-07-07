@@ -27,12 +27,56 @@ var FONT_SIZE_CR_LVL_MAX := 8.00 setget set_FONT_SIZE_CR_LVL_MAX
 var FACING_ARROW_SIZE_MAX := 1.00 setget set_FACING_ARROW_SIZE_MAX
 var FACING_ARROW_SIZE_BASE := 1.00 setget set_FACING_ARROW_SIZE_BASE
 
+var subwindows_status = {}
+
 const topMargin = 69
 
 var optionButtonIsOpened = false
 var mouseOnUi = false
 var _is_handling_drag = false
+var _is_user_dragging = false
 var listOfWindowDialogs = []
+
+func get_desired_window_position(windowName):
+	if subwindows_status.has(windowName) and subwindows_status[windowName].has("desired_position"):
+		return subwindows_status[windowName]["desired_position"]
+	return Vector2.ZERO
+
+func get_desired_window_size(windowName):
+	if subwindows_status.has(windowName) and subwindows_status[windowName].has("desired_size"):
+		return subwindows_status[windowName]["desired_size"]
+	return Vector2.ZERO
+
+func set_desired_window_position(windowName, position):
+	if not subwindows_status.has(windowName):
+		subwindows_status[windowName] = {}
+	subwindows_status[windowName]["desired_position"] = position
+	Settings.set_setting("subwindows_status", subwindows_status)
+
+func set_desired_window_size(windowName, size):
+	if not subwindows_status.has(windowName):
+		subwindows_status[windowName] = {}
+	subwindows_status[windowName]["desired_size"] = size
+	Settings.set_setting("subwindows_status", subwindows_status)
+
+func initialize_window_desired_values():
+	for window in listOfWindowDialogs:
+		var windowName = window.name
+		if not subwindows_status.has(windowName):
+			subwindows_status[windowName] = {}
+		if not subwindows_status[windowName].has("desired_position"):
+			subwindows_status[windowName]["desired_position"] = window.rect_position
+		if not subwindows_status[windowName].has("desired_size"):
+			subwindows_status[windowName]["desired_size"] = window.rect_size
+		
+		window.rect_position = subwindows_status[windowName]["desired_position"]
+		window.rect_size = subwindows_status[windowName]["desired_size"]
+	on_startup_put_windows_in_correct_positions()
+
+func on_startup_put_windows_in_correct_positions():
+	yield(get_tree(), 'idle_frame')
+	yield(get_tree(), 'idle_frame')
+	_on_viewport_size_changed()
 
 func _ready():
 	tabKeyInputEvent.scancode = KEY_TAB
@@ -45,9 +89,10 @@ func wait_until_windows_are_positioned():
 	for i in 10:
 		yield(get_tree(),'idle_frame')
 	for window in listOfWindowDialogs:
-		window.connect("item_rect_changed",self,"_on_any_window_was_dragged",[window])
+		window.connect("item_rect_changed",self,"_on_any_window_was_modified",[window])
 		window.connect("visibility_changed", self, "_on_window_dialog_became_visible", [window])
 		window.connect("resized", self, "_on_window_dialog_became_visible", [window])
+		window.connect("gui_input", self, "_on_window_gui_input", [window])
 	get_viewport().connect("size_changed", self, "_on_viewport_size_changed")
 
 func setup_focus_key():
@@ -59,13 +104,29 @@ func find_window_dialogs():
 			if potentialWindow is WindowDialog:
 				listOfWindowDialogs.append(potentialWindow)
 
-func _on_any_window_was_dragged(callingNode):
+func _on_window_gui_input(event, callingNode):
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT:
+			if event.pressed:
+				_is_user_dragging = true
+			else:
+				_is_user_dragging = false
+
+
+func _on_any_window_was_modified(callingNode):
+	if Settings.haveInitializedAllSettings == false: return
 	if _is_handling_drag:
 		return
-	_is_handling_drag = true
-	var viewSize = get_viewport().size / Settings.UI_SCALE
-	_clamp_window_position(callingNode, viewSize)
-	_is_handling_drag = false
+	
+	if _is_user_dragging:
+		_is_handling_drag = true
+		var viewSize = get_viewport().size / Settings.UI_SCALE
+		
+		set_desired_window_position(callingNode.name, callingNode.rect_position)
+		set_desired_window_size(callingNode.name, callingNode.rect_size)
+		
+		_clamp_window_position(callingNode, viewSize)
+		_is_handling_drag = false
 
 func _on_viewport_size_changed():
 	var currentViewSize = get_viewport().size / Settings.UI_SCALE
@@ -73,13 +134,18 @@ func _on_viewport_size_changed():
 		if windowNode.visible == false:
 			continue
 		
-		var isOffScreen = (windowNode.rect_position.x + windowNode.rect_size.x > currentViewSize.x) or \
-						  (windowNode.rect_position.y + windowNode.rect_size.y > currentViewSize.y) or \
-						  (windowNode.rect_position.x < 0) or \
-						  (windowNode.rect_position.y < topMargin)
+		_is_handling_drag = true
 		
-		if isOffScreen:
-			_adjust_window_size_to_viewport(windowNode, currentViewSize)
+		var desiredPosition = get_desired_window_position(windowNode.name)
+		var desiredSize = get_desired_window_size(windowNode.name)
+		
+		if desiredPosition != Vector2.ZERO:
+			windowNode.rect_position = desiredPosition
+		if desiredSize != Vector2.ZERO:
+			windowNode.rect_size = desiredSize
+		
+		_adjust_window_size_to_viewport(windowNode, currentViewSize)
+		_is_handling_drag = false
 
 func _on_window_dialog_became_visible(dialogNode):
 	if dialogNode.visible == true:

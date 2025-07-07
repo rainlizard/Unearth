@@ -7953,7 +7953,6 @@ script = SubResource( 20 )
 [connection signal="pressed" from="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/PlacingTipsButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_PlacingTipsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/EditingMode/PanelContainer/HBoxContainer/ModeSwitchButton" to="Ui/UiSystem/EditingMode" method="_on_ModeSwitchButton_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/MapBrowser" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowser_about_to_show"]
-[connection signal="item_rect_changed" from="Ui/UiSystem/MapBrowser" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowser_item_rect_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapBrowser" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowser_visibility_changed"]
 [connection signal="tab_changed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer" to="Ui/UiSystem/MapBrowser" method="_on_MapBrowserTabContainer_tab_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapBrowser/MapBrowserTabContainer/MapBrowserTabEdit/VBoxContainer/LineEditFilter" to="Ui/UiSystem/MapBrowser" method="_on_LineEdit_text_changed"]

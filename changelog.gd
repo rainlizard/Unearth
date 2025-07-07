@@ -1,6 +1,8 @@
-﻿extends Node
+extends Node
 
 const string = """
+<version> - <date>
+- Respect desired subwindows size/position
 0.58.784 - 6/7/2025
 - Editing Slabset or Columnset will now instantly update slabs on the map to use those new columns
 - Auto save map0000*.slabset.toml and map0000*.columnset.toml files when you save your map (if they've been modified)

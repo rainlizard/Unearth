@@ -13,6 +13,7 @@ func _ready():
 	Nodelist.done()
 	Settings.initialize_settings()
 	initialize_window_settings()
+	oUi.initialize_window_desired_values()
 	Graphics.load_extra_images_from_harddrive()
 	oOpenMap.start()
 	

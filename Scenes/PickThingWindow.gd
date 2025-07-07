@@ -8,6 +8,7 @@ onready var oGridFunctions = Nodelist.list["oGridFunctions"]
 onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oInspector = Nodelist.list["oInspector"]
+onready var oUi = Nodelist.list["oUi"]
 
 enum {
 	GRIDCON_PATH
@@ -59,7 +60,7 @@ func _ready():
 	connect("visibility_changed",oGridFunctions,"_on_GridWindow_visibility_changed",[self])
 	connect("gui_input",oGridFunctions,"_on_GridWindow_gui_input",[self])
 	connect("item_rect_changed",self,"rect_changed_start_timer")
-	rectChangedTimer.connect("timeout", oGridFunctions, "_on_GridWindow_item_rect_changed", [self])
+	rectChangedTimer.connect("timeout", oUi, "_on_any_window_was_modified", [self])
 	rectChangedTimer.one_shot = true
 	add_child(rectChangedTimer)
 	

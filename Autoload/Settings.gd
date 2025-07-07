@@ -16,8 +16,7 @@ var config = ConfigFile.new()
 var listOfSettings = [
 	"REMEMBER_TMAPA_PATHS",
 	"executable_path",
-	"file_viewer_window_size",
-	"file_viewer_window_position",
+	"subwindows_status",
 	"vsync",
 	"framerate_limit",
 	"ssaa",
@@ -42,13 +41,7 @@ var listOfSettings = [
 	"script_icon_max",
 	"facing_arrow_scale",
 	"facing_arrow_max",
-	"slab_window_size",
-	"slab_window_position",
 	"slab_window_scale",
-	"slabset_window_size",
-	"slabset_window_position",
-	"thing_window_size",
-	"thing_window_position",
 	"thing_window_scale",
 	"script_editor_font_size",
 	"last_changelog_displayed",
@@ -58,7 +51,6 @@ var listOfSettings = [
 #	"owner_window_scale",
 	
 	#"display_details_viewer",
-	"details_viewer_window_position",
 	"slab_style_window_size",
 	"slab_style_window_position",
 	"ownable_natural_terrain",
@@ -174,14 +166,10 @@ func game_setting(doWhat,string,value):
 			var oGame = $'../Main/Game'
 			if doWhat == SET: oGame.set_paths(value)
 			if doWhat == GET: return oGame.EXECUTABLE_PATH
-		"file_viewer_window_size":
-			var oMapBrowser = $'../Main/Ui/UiSystem/MapBrowser'
-			if doWhat == SET: oMapBrowser.rect_size = value
-			if doWhat == GET: return oMapBrowser.rect_size
-		"file_viewer_window_position":
-			var oMapBrowser = $'../Main/Ui/UiSystem/MapBrowser'
-			if doWhat == SET: oMapBrowser.rect_position = value
-			if doWhat == GET: return oMapBrowser.rect_position
+		"subwindows_status":
+			var oUi = $'../Main/Ui'
+			if doWhat == SET: oUi.subwindows_status = value
+			if doWhat == GET: return oUi.subwindows_status
 		"vsync":
 			if doWhat == SET: OS.vsync_enabled = value
 			if doWhat == GET: return OS.vsync_enabled
@@ -278,34 +266,13 @@ func game_setting(doWhat,string,value):
 			var oUi = $'../Main/Ui'
 			if doWhat == SET: oUi.FACING_ARROW_SIZE_MAX = value
 			if doWhat == GET: return oUi.FACING_ARROW_SIZE_MAX
-		"slab_window_size":
-			var oPickSlabWindow = $'../Main/Ui/UiTools/PickSlabWindow'
-			if doWhat == SET: oPickSlabWindow.rect_size = value
-			if doWhat == GET: return oPickSlabWindow.rect_size
-		"slab_window_position":
-			var oPickSlabWindow = $'../Main/Ui/UiTools/PickSlabWindow'
-			if doWhat == SET: oPickSlabWindow.rect_position = value
-			if doWhat == GET: return oPickSlabWindow.rect_position
+
 		"slab_window_scale":
 			var oPickSlabWindow = $'../Main/Ui/UiTools/PickSlabWindow'
 			if doWhat == SET: oPickSlabWindow.grid_window_scale = value
 			if doWhat == GET: return oPickSlabWindow.grid_window_scale
-		"slabset_window_size":
-			var oSlabsetWindow = $'../Main/Ui/UiSystem/SlabsetWindow'
-			if doWhat == SET: oSlabsetWindow.rect_size = value
-			if doWhat == GET: return oSlabsetWindow.rect_size
-		"slabset_window_position":
-			var oSlabsetWindow = $'../Main/Ui/UiSystem/SlabsetWindow'
-			if doWhat == SET: oSlabsetWindow.rect_position = value
-			if doWhat == GET: return oSlabsetWindow.rect_position
-		"thing_window_size":
-			var oPickThingWindow = $'../Main/Ui/UiTools/PickThingWindow'
-			if doWhat == SET: oPickThingWindow.rect_size = value
-			if doWhat == GET: return oPickThingWindow.rect_size
-		"thing_window_position":
-			var oPickThingWindow = $'../Main/Ui/UiTools/PickThingWindow'
-			if doWhat == SET: oPickThingWindow.rect_position = value
-			if doWhat == GET: return oPickThingWindow.rect_position
+
+
 		"thing_window_scale":
 			var oPickThingWindow = $'../Main/Ui/UiTools/PickThingWindow'
 			if doWhat == SET: oPickThingWindow.grid_window_scale = value
@@ -335,10 +302,7 @@ func game_setting(doWhat,string,value):
 		"editor_window_fullscreen_state":
 			if doWhat == SET: OS.window_fullscreen = value
 			if doWhat == GET: return OS.window_fullscreen
-		"details_viewer_window_position":
-			var oPropertiesWindow = $'../Main/Ui/UiTools/PropertiesWindow'
-			if doWhat == SET: oPropertiesWindow.rect_position = value
-			if doWhat == GET: return oPropertiesWindow.rect_position
+
 #		"display_details_viewer":
 #			var oPropertiesWindow = $'../Main/Ui/UiTools/PropertiesWindow'
 #			if doWhat == SET: oPropertiesWindow.display_details = value

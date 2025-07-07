@@ -32,7 +32,7 @@ func _ready():
 	
 	oDkSlabsetVoxelView.initialize()
 	
-	connect("item_rect_changed", self, "_on_SlabsetWindow_item_rect_changed")
+
 	
 	# Connect window signals
 	connect("visibility_changed", self, "_on_SlabsetWindow_visibility_changed")
@@ -86,27 +86,34 @@ func _on_SlabsetTabs_tab_changed(tab):
 	
 	update_window_title()
 
-func _on_SlabsetWindow_item_rect_changed():
-	if Settings.haveInitializedAllSettings == false: return
-	Settings.set_setting("slabset_window_size", rect_size)
-	Settings.set_setting("slabset_window_position", rect_position)
+
 
 func popup_on_right_side():
-	var hasPositionSetting = Settings.cfg_has_setting("slabset_window_position")
-	var hasSizeSetting = Settings.cfg_has_setting("slabset_window_size")
+	var oUi = Nodelist.list["oUi"]
+	var desiredPosition = oUi.get_desired_window_position(name)
+	var desiredSize = oUi.get_desired_window_size(name)
 	
-	if hasPositionSetting == false or hasSizeSetting == false:
+	if desiredPosition == Vector2.ZERO or desiredSize == Vector2.ZERO:
 		var screenSize = OS.get_screen_size()
 		var defaultWidth = 610
 		var defaultHeight = 990
 		
-		if hasSizeSetting == false:
+		if desiredSize == Vector2.ZERO:
 			rect_size = Vector2(defaultWidth, defaultHeight)
+			oUi.set_desired_window_size(name, rect_size)
+		else:
+			rect_size = desiredSize
 		
-		if hasPositionSetting == false:
+		if desiredPosition == Vector2.ZERO:
 			var rightSideX = screenSize.x - defaultWidth - 50
 			var centeredY = (screenSize.y - defaultHeight) / 2
 			rect_position = Vector2(rightSideX, centeredY)
+			oUi.set_desired_window_position(name, rect_position)
+		else:
+			rect_position = desiredPosition
+	else:
+		rect_position = desiredPosition
+		rect_size = desiredSize
 	
 	visible = true
 

@@ -151,10 +151,7 @@ func _on_TextureButton_pressed():
 		OS.shell_open(path.get_base_dir())
 
 
-func _on_MapBrowser_item_rect_changed():
-	if Settings.haveInitializedAllSettings == false: return # Necessary because otherwise this signal is firing too early. Settings haven't loaded the values from the cfg file yet.
-	Settings.set_setting("file_viewer_window_size", rect_size)
-	Settings.set_setting("file_viewer_window_position", rect_position)
+
 
 
 func _on_MapBrowser_visibility_changed():

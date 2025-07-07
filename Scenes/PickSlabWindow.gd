@@ -16,6 +16,7 @@ onready var oConfirmDeleteFakeSlab = Nodelist.list["oConfirmDeleteFakeSlab"]
 onready var oAddCustomSlabWindow = Nodelist.list["oAddCustomSlabWindow"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oSlabNameDisplay = Nodelist.list["oSlabNameDisplay"]
+onready var oUi = Nodelist.list["oUi"]
 
 onready var oSelectedRect = $Clippy/SelectedRect
 onready var oCenteredLabel = $Clippy/CenteredLabel
@@ -46,7 +47,7 @@ func _ready():
 	connect("visibility_changed",oGridFunctions,"_on_GridWindow_visibility_changed",[self])
 	connect("gui_input",oGridFunctions,"_on_GridWindow_gui_input",[self])
 	connect("item_rect_changed",self,"rect_changed_start_timer") # Using a timer to reduce lag
-	rectChangedTimer.connect("timeout", oGridFunctions, "_on_GridWindow_item_rect_changed", [self])
+	rectChangedTimer.connect("timeout", oUi, "_on_any_window_was_modified", [self])
 	rectChangedTimer.one_shot = true
 	add_child(rectChangedTimer)
 	
