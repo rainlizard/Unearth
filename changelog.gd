@@ -1,7 +1,7 @@
-extends Node
+﻿extends Node
 
 const string = """
-<version> - <date>
+0.59.789 - 9/7/2025
 - Respect desired windows size/position
 - Fixed some default window positioning
 - Fixed an issue where non-keeperfx installations were crashing on opening/new maps
