@@ -82,6 +82,7 @@ func process_configuration_files(mapPath):
 				"trapdoor.cfg": load_trapdoor_data(combined_cfg_data)
 				"terrain.cfg": load_terrain_data(combined_cfg_data)
 				"cubes.cfg": Cube.read_cubes_cfg(combined_cfg_data)
+				"rules.cfg": load_rules_data(combined_cfg_data)
 
 
 func get_config_directories(mapPath):
@@ -285,6 +286,11 @@ func load_effects_data(file_path):
 			var effectName = cfg.get_value(section, "Name", "UNDEFINED_NAME")
 			
 			Things.DATA_EFFECTGEN[id] = [effectName, effectName, "EFFECTGEN"]
+
+
+func load_rules_data(cfg):
+	oConfigFileManager.DATA_RULES = cfg
+	oConfigFileManager.store_default_data()
 
 func update_paths_for_saved_files(file_path, file_type):
 	if file_type == "slabset.toml" or file_type == "columnset.toml":

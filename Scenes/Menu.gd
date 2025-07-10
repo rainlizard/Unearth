@@ -44,6 +44,7 @@ onready var oSortCreatureStats = Nodelist.list["oSortCreatureStats"]
 onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
 onready var oConfirmOpenWhichScript = Nodelist.list["oConfirmOpenWhichScript"]
 onready var oChangelogWindow = Nodelist.list["oChangelogWindow"]
+onready var oCfgEditor = Nodelist.list["oCfgEditor"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -86,6 +87,7 @@ func add_edit_menu_items():
 	edit_popup.add_separator()
 	edit_popup.add_item("Slabset", 6)
 	edit_popup.add_item("Tileset", 5)
+	edit_popup.add_item("Cfg editor", 7)
 
 func update_undo_availability():
 	if oUndoStates.undo_history.size() <= 1:
@@ -248,6 +250,8 @@ func _on_EditSubmenu_Pressed(pressedID):
 			Utils.popup_centered(oTextureEditingWindow)
 		6: # Modify slabset
 			oSlabsetWindow.popup_on_right_side()
+		7: # Cfg editor
+			Utils.popup_centered(oCfgEditor)
 
 func _on_slab_style_window_close_button_clicked():
 	oMenuButtonEdit.get_popup().set_item_checked(0, false)

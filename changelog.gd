@@ -1,6 +1,8 @@
-﻿extends Node
+extends Node
 
 const string = """
+<version> - <date>
+- Cfg editor
 0.59.789 - 9/7/2025
 - Respect desired windows size/position
 - Fixed some default window positioning
