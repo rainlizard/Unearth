@@ -12,13 +12,9 @@ func _ready():
 	# Safe signal connections with null checks
 	if CompressionWindowButtonYes:
 		CompressionWindowButtonYes.connect("pressed", self, "_on_confirm_pressed")
-	else:
-		print("ERROR: CompressionWindowButtonYes is null - check node path")
 	
 	if CompressionWindowButtonNo:
 		CompressionWindowButtonNo.connect("pressed", self, "_on_cancel_pressed")
-	else:
-		print("ERROR: CompressionWindowButtonNo is null - check node path")
 
 func set_dialog_text(text: String):
 	if labelText:
@@ -50,8 +46,6 @@ func _resize_to_content():
 	
 	# Set the dialog size
 	rect_size = dialog_size
-	
-	print("Dialog resized to: ", dialog_size, " based on VBoxContainer minimum size: ", content_size)
 
 func _on_about_to_show():
 	alwaysDecompressCheckbox.pressed = oCheckBoxAlwaysDecompress.pressed

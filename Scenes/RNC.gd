@@ -68,7 +68,7 @@ static func _mirror_fast(x: int, n: int) -> int:
 	var result = 0
 	var src_bit = 1
 	var dst_bit = 1 << (n - 1)
-	for i in range(n):
+	for _i in range(n):
 		if x & src_bit:
 			result |= dst_bit
 		src_bit <<= 1
