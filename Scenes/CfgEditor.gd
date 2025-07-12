@@ -1,15 +1,19 @@
 extends WindowDialog
 
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
+onready var oMessage = Nodelist.list["oMessage"]
+onready var oCfgTabs = Nodelist.list["oCfgTabs"]
 
-onready var main_panel = $MarginContainer/ScrollContainer/MarginContainer/PanelContainer
-onready var main_container = $MarginContainer/ScrollContainer/MarginContainer/PanelContainer/HBoxContainer
+onready var main_panel = $CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer
+onready var main_container = $CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer
 onready var revert_button_scene = preload("res://Class/GenericRevertButton.tscn")
 
 var ui_built: bool = false
 
 
 func _ready():
+	oCfgTabs.set_tab_title(0, "Rules")
+	
 	connect("about_to_show", self, "_on_about_to_show")
 	yield(get_tree(),'idle_frame')
 	Utils.popup_centered(self)
@@ -23,6 +27,23 @@ func _on_about_to_show():
 
 func start():
 	build_rules_editor()
+
+
+func create_darker_border_stylebox():
+	var stylebox = StyleBoxFlat.new()
+	stylebox.content_margin_left = 12
+	stylebox.content_margin_right = 12
+	stylebox.content_margin_top = 1
+	stylebox.content_margin_bottom = 1
+	stylebox.bg_color = Color("#2c2a32")
+	stylebox.border_width_left = 1
+	stylebox.border_width_top = 1
+	stylebox.border_width_right = 1
+	stylebox.border_width_bottom = 1
+	stylebox.border_color = Color8(44,42,50)*0.80
+	stylebox.shadow_size = 0
+	stylebox.anti_aliasing = true
+	return stylebox
 
 
 func build_rules_editor():
@@ -97,6 +118,8 @@ func create_section_vbox_in_column(parent_column: VBoxContainer, section_name: S
 func create_config_control(parent: VBoxContainer, key: String, value, section_name: String, itemIndex: int):
 	var item_panel = PanelContainer.new()
 	item_panel.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+	item_panel.add_stylebox_override("panel", create_darker_border_stylebox())
+	item_panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	
 	parent.add_child(item_panel)
 	
@@ -130,6 +153,9 @@ func create_config_control(parent: VBoxContainer, key: String, value, section_na
 	revert_button.connect("pressed", self, "_on_revert_pressed", [section_name, key])
 	control_container.add_child(revert_button)
 	
+	item_panel.connect("mouse_entered", self, "_on_control_mouse_entered", [key_label, control_node, section_name, key])
+	item_panel.connect("mouse_exited", self, "_on_control_mouse_exited", [key_label, control_node, section_name, key])
+	
 	update_item_color(section_name, key, key_label)
 	if control_node != null:
 		update_control_color(section_name, key, control_node)
@@ -138,20 +164,25 @@ func create_config_control(parent: VBoxContainer, key: String, value, section_na
 
 func create_spinbox_control(parent: HBoxContainer, key: String, value, section_name: String, is_float: bool = false):
 	var spinbox = CustomSpinBox.new()
+	spinbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	
 	if is_float:
 		spinbox.step = 1
-		spinbox.min_value = -999999.0
-		spinbox.max_value = 999999.0
+		spinbox.min_value = -9999999999.0
+		spinbox.max_value = 9999999999.0
 	else:
 		spinbox.step = 1
-		spinbox.min_value = -999999
-		spinbox.max_value = 999999
+		spinbox.min_value = -9999999999
+		spinbox.max_value = 9999999999
 	
+	spinbox.rect_min_size.x = 100
 	spinbox.value = value
+	spinbox.get_line_edit().add_constant_override("minimum_spaces", 0)
 	setup_script_editor_font(spinbox)
 	
 	spinbox.connect("value_changed", self, "_on_value_changed", [section_name, key])
+	spinbox.get_line_edit().connect("focus_entered", self, "_on_spinbox_focus_entered", [spinbox])
+	spinbox.get_line_edit().connect("focus_exited", self, "_on_spinbox_focus_exited", [spinbox, section_name, key])
 	parent.add_child(spinbox)
 	return spinbox
 
@@ -197,19 +228,19 @@ func setup_script_editor_font(control: Control):
 
 func _on_value_changed(new_value, section_name: String, key: String):
 	oConfigFileManager.DATA_RULES[section_name][key] = new_value
-	print("Updated ", section_name, ".", key, " = ", new_value)
+	#print("Updated ", section_name, ".", key, " = ", new_value)
 	update_colors_after_change(section_name, key)
 
 
 func _on_text_changed(new_text: String, section_name: String, key: String):
 	oConfigFileManager.DATA_RULES[section_name][key] = new_text
-	print("Updated ", section_name, ".", key, " = ", new_text)
+	#print("Updated ", section_name, ".", key, " = ", new_text)
 	update_colors_after_change(section_name, key)
 
 
 func _on_array_text_changed(new_text: String, section_name: String, key: String):
 	oConfigFileManager.DATA_RULES[section_name][key] = new_text
-	print("Updated ", section_name, ".", key, " = ", new_text)
+	#print("Updated ", section_name, ".", key, " = ", new_text)
 	update_colors_after_change(section_name, key)
 
 
@@ -222,23 +253,57 @@ func _on_revert_pressed(section_name: String, key: String):
 		print("No default value found for ", section_name, ".", key)
 
 
+func _on_control_mouse_entered(key_label: Label, control_node: Control, section_name: String, key: String):
+	key_label.add_color_override("font_color", Color("#e6d9c1"))
+	if control_node != null:
+		if control_node is SpinBox:
+			control_node.get_line_edit().add_color_override("font_color", Color("#e6d9c1"))
+		else:
+			control_node.add_color_override("font_color", Color("#e6d9c1"))
+	
+	var comments = oConfigFileManager.get_comments_for_key("rules.cfg", section_name, key)
+	if comments.size() > 0:
+		var comment_text = ""
+		for comment in comments:
+			comment_text += comment + "\n"
+		comment_text = comment_text.strip_edges()
+		oMessage.quick(comment_text)
+
+
+func _on_control_mouse_exited(key_label: Label, control_node: Control, section_name: String, key: String):
+	update_item_color(section_name, key, key_label)
+	if control_node != null:
+		if control_node is SpinBox:
+			if control_node.get_line_edit().has_focus() == false:
+				update_control_color(section_name, key, control_node)
+		else:
+			update_control_color(section_name, key, control_node)
+
+func _on_spinbox_focus_entered(spinbox: SpinBox):
+	spinbox.get_line_edit().add_color_override("font_color", Color("#e6d9c1"))
+
+
+func _on_spinbox_focus_exited(spinbox: SpinBox, section_name: String, key: String):
+	update_control_color(section_name, key, spinbox)
+
+
 func update_item_color(section_name: String, key: String, label: Label):
 	if oConfigFileManager.is_item_different(section_name, key):
-		label.add_color_override("font_color", Color("#d1c7ff"))
+		label.add_color_override("font_color", Color("#e6d9c1"))
 	else:
 		label.add_color_override("font_color", Color8(109,107,127))
 
 func update_control_color(section_name: String, key: String, control: Control):
 	if oConfigFileManager.is_item_different(section_name, key):
 		if control is SpinBox:
-			control.get_line_edit().add_color_override("font_color", Color("#fff4bf"))
+			control.get_line_edit().add_color_override("font_color", Color("#e6d9c1"))
 		else:
-			control.add_color_override("font_color", Color("#d1c7ff"))
+			control.add_color_override("font_color", Color("#e6d9c1"))
 	else:
 		if control is SpinBox:
 			control.get_line_edit().add_color_override("font_color", Color8(109,107,127))
 		else:
-			control.add_color_override("font_color", Color("#d1c7ff").blend(Color(0.5,0.5,0.5, 0.75)))
+			control.add_color_override("font_color", Color8(148,145,159))
 
 
 func update_panel_color(section_name: String, key: String, item_panel: PanelContainer):

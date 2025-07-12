@@ -6541,45 +6541,53 @@ window_title = "Cfg editor"
 resizable = true
 script = ExtResource( 91 )
 
-[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor"]
+[node name="CfgTabs" type="TabContainer" parent="Ui/UiSystem/CfgEditor"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/margin_right = 10
-custom_constants/margin_top = 10
-custom_constants/margin_left = 10
-custom_constants/margin_bottom = 10
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/CfgEditor/MarginContainer"]
-margin_left = 10.0
-margin_top = 10.0
+[node name="TabRules" type="VBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 36.0
+margin_right = -5.0
+margin_bottom = -5.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules"]
 margin_right = 923.0
-margin_bottom = 632.0
+margin_bottom = 601.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 918.0
+margin_bottom = 596.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor/MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer"]
 margin_right = 913.0
-margin_bottom = 622.0
+margin_bottom = 591.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/margin_right = 10
-custom_constants/margin_top = 10
-custom_constants/margin_left = 10
-custom_constants/margin_bottom = 10
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
 
-[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/CfgEditor/MarginContainer/ScrollContainer/MarginContainer"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 903.0
-margin_bottom = 612.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/CfgEditor/MarginContainer/ScrollContainer/MarginContainer/PanelContainer"]
-margin_left = 9.0
-margin_top = 9.0
-margin_right = 884.0
-margin_bottom = 593.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 908.0
+margin_bottom = 586.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 

@@ -13,6 +13,7 @@ enum {
 var paths_loaded = {}
 
 var DATA_RULES = {}
+var FXDATA_COMMENTS = {}
 var default_data = {}
 
 
@@ -28,6 +29,7 @@ func clear_paths():
 		LOAD_CFG_CURRENT_MAP: []
 	}
 	DATA_RULES = {}
+	FXDATA_COMMENTS = {}
 	default_data = {}
 	emit_signal("config_file_status_changed")
 
@@ -35,6 +37,12 @@ func clear_paths():
 func store_default_data():
 	if not DATA_RULES.empty():
 		default_data = DATA_RULES.duplicate(true)
+
+
+func get_comments_for_key(filename: String, section_name: String, key: String) -> Array:
+	if FXDATA_COMMENTS.has(filename) and FXDATA_COMMENTS[filename].has(section_name) and FXDATA_COMMENTS[filename][section_name].has(key):
+		return FXDATA_COMMENTS[filename][section_name][key]
+	return []
 
 
 func is_item_different(section_name: String, key: String) -> bool:

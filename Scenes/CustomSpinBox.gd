@@ -3,10 +3,9 @@ class_name CustomSpinBox
 
 func _ready():
 	get_line_edit().expand_to_text_length = true
-#	get_line_edit().grow_horizontal = Control.GROW_DIRECTION_BEGIN
-#	get_line_edit().size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	get_line_edit().grow_horizontal = Control.GROW_DIRECTION_BEGIN # Important for expanding to the left insde of the right
 	get_line_edit().align = LineEdit.ALIGN_RIGHT
-	
+
 func _input(event):
 	if is_instance_valid(get_focus_owner()) == false: return
 	if get_focus_owner().get_parent() != self: return # get_parent is used because LineEdit is a child of SpinBox

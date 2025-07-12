@@ -59,11 +59,12 @@ func get_filetype_in_directory(directory_path: String, file_extension: String) -
 
 func read_dkcfg_file(file_path) -> Dictionary:
 	var config = {}
+	var comments = {}
 	var current_section = ""
 	
 	var file = File.new()
 	if not file.file_exists(file_path):
-		return config
+		return {"config": config, "comments": comments}
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	
@@ -71,22 +72,29 @@ func read_dkcfg_file(file_path) -> Dictionary:
 	var lines = file.get_as_text().split("\n")
 	file.close()
 	
+	var pending_comments = []
+	
 	for line in lines:
-		line = line.strip_edges()
+		var stripped_line = line.strip_edges()
 		
-		if line.begins_with(";") or line.empty():
+		if stripped_line.begins_with(";"):
+			pending_comments.append(stripped_line)
 			continue
 		
-		if line.begins_with("[") and line.ends_with("]"):
-			current_section = line.substr(1, line.length() - 2)
+		if stripped_line.empty():
+			continue
+		
+		if stripped_line.begins_with("[") and stripped_line.ends_with("]"):
+			current_section = stripped_line.substr(1, stripped_line.length() - 2)
 			config[current_section] = {}
+			pending_comments.clear()
 		else:
-			var delimiter_pos = line.find("=") # Splits by equals sign with substr()
+			var delimiter_pos = stripped_line.find("=")
 			if delimiter_pos != -1:
-				var key = line.substr(0, delimiter_pos).strip_edges()
-				var value = line.substr(delimiter_pos + 1).strip_edges()
+				var key = stripped_line.substr(0, delimiter_pos).strip_edges()
+				var value = stripped_line.substr(delimiter_pos + 1).strip_edges()
 				
-				if key == "Name": # Ensure "Name" field is always treated as a single string
+				if key == "Name":
 					config[current_section][key] = value
 				else:
 					var items = value.split(" ")
@@ -94,7 +102,7 @@ func read_dkcfg_file(file_path) -> Dictionary:
 						var construct_new_value_array = []
 						for item in items:
 							item = item.strip_edges()
-							if not item.empty(): # This handles having multiple spaces in a row
+							if not item.empty():
 								if item.is_valid_integer():
 									construct_new_value_array.append(int(item))
 								else:
@@ -105,10 +113,19 @@ func read_dkcfg_file(file_path) -> Dictionary:
 							config[current_section][key] = int(value)
 						else:
 							config[current_section][key] = value
+				
+				if pending_comments.size() > 0:
+					if not comments.has(current_section):
+						comments[current_section] = {}
+					comments[current_section][key] = pending_comments.duplicate()
+					pending_comments.clear()
 	
-	print('Read ' + file_path.get_file() + ' dkcfg in : ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	print('Read ' + file_path.get_file() + ' dkcfg with comments in : ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
-	return config
+	return {"config": config, "comments": comments}
+
+
+
 
 func super_merge(dict1, dict2):
 	var merged = {}

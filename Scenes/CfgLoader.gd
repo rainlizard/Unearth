@@ -72,8 +72,11 @@ func process_configuration_files(mapPath):
 						"textureanim.toml": oTextureAnimation.generate_animation_database(actual_filepath)
 						"effects.toml": load_effects_data(actual_filepath)
 				elif ext == "cfg":
-					var cfgData = Utils.read_dkcfg_file(actual_filepath)
-					combined_cfg_data = Utils.super_merge(combined_cfg_data, cfgData)
+					var result = Utils.read_dkcfg_file(actual_filepath)
+					combined_cfg_data = Utils.super_merge(combined_cfg_data, result["config"])
+					
+					if load_cfg_type == oConfigFileManager.LOAD_CFG_FXDATA and not result["comments"].empty():
+						oConfigFileManager.FXDATA_COMMENTS[file_name_from_list] = result["comments"]
 		# Load it
 		if combined_cfg_data.empty() == false:
 			match file_name_from_list:
