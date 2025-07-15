@@ -3,13 +3,15 @@ extends WindowDialog
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oCfgTabs = Nodelist.list["oCfgTabs"]
+onready var oLabelCfgComment = Nodelist.list["oLabelCfgComment"]
+onready var oPanelCfgComment = Nodelist.list["oPanelCfgComment"]
 
-onready var main_panel = $CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer
-onready var main_container = $CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer
+onready var main_panel = $CfgTabs/TabRules/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer
+onready var main_container = $CfgTabs/TabRules/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer
 onready var revert_button_scene = preload("res://Class/GenericRevertButton.tscn")
 
 var ui_built: bool = false
-
+var font = DynamicFont.new()
 
 func _ready():
 	oCfgTabs.set_tab_title(0, "Rules")
@@ -20,13 +22,23 @@ func _ready():
 
 
 func _on_about_to_show():
+	setup_font()
 	if not ui_built:
 		start()
 		ui_built = true
 
+func setup_font():
+	var font_data = load("res://Theme/Hack_Regular.ttf")
+	font_data.antialiased = true
+	font.font_data = font_data
+	font.size = Settings.get_setting("script_editor_font_size")
+	font.use_mipmaps = true
+	font.use_filter = true
+
 
 func start():
 	build_rules_editor()
+	oLabelCfgComment.add_font_override("font", font)
 
 
 func create_darker_border_stylebox():
@@ -208,14 +220,6 @@ func create_array_control(parent: HBoxContainer, key: String, value: Array, sect
 
 
 func setup_script_editor_font(control: Control):
-	var font = DynamicFont.new()
-	var font_data = load("res://Theme/Hack_Regular.ttf")
-	font_data.antialiased = true
-	font.font_data = font_data
-	font.size = Settings.get_setting("script_editor_font_size")
-	font.use_mipmaps = true
-	font.use_filter = true
-	
 	if control is Label:
 		control.add_font_override("font", font)
 	elif control is LineEdit:
@@ -254,12 +258,12 @@ func _on_revert_pressed(section_name: String, key: String):
 
 
 func _on_control_mouse_entered(key_label: Label, control_node: Control, section_name: String, key: String):
-	key_label.add_color_override("font_color", Color("#e6d9c1"))
+	key_label.add_color_override("font_color", Color8(255, 217, 193))
 	if control_node != null:
 		if control_node is SpinBox:
-			control_node.get_line_edit().add_color_override("font_color", Color("#e6d9c1"))
+			control_node.get_line_edit().add_color_override("font_color", Color8(255, 217, 193))
 		else:
-			control_node.add_color_override("font_color", Color("#e6d9c1"))
+			control_node.add_color_override("font_color", Color8(255, 217, 193))
 	
 	var comments = oConfigFileManager.get_comments_for_key("rules.cfg", section_name, key)
 	if comments.size() > 0:
@@ -267,7 +271,11 @@ func _on_control_mouse_entered(key_label: Label, control_node: Control, section_
 		for comment in comments:
 			comment_text += comment + "\n"
 		comment_text = comment_text.strip_edges()
-		oMessage.quick(comment_text)
+		oPanelCfgComment.visible = true
+		oLabelCfgComment.text = comment_text
+	else:
+		oPanelCfgComment.visible = false
+		oLabelCfgComment.text = ""
 
 
 func _on_control_mouse_exited(key_label: Label, control_node: Control, section_name: String, key: String):
@@ -280,7 +288,7 @@ func _on_control_mouse_exited(key_label: Label, control_node: Control, section_n
 			update_control_color(section_name, key, control_node)
 
 func _on_spinbox_focus_entered(spinbox: SpinBox):
-	spinbox.get_line_edit().add_color_override("font_color", Color("#e6d9c1"))
+	spinbox.get_line_edit().add_color_override("font_color", Color8(230, 217, 193))
 
 
 func _on_spinbox_focus_exited(spinbox: SpinBox, section_name: String, key: String):
@@ -289,19 +297,19 @@ func _on_spinbox_focus_exited(spinbox: SpinBox, section_name: String, key: Strin
 
 func update_item_color(section_name: String, key: String, label: Label):
 	if oConfigFileManager.is_item_different(section_name, key):
-		label.add_color_override("font_color", Color("#e6d9c1"))
+		label.add_color_override("font_color", Color8(230, 217, 193))
 	else:
-		label.add_color_override("font_color", Color8(109,107,127))
+		label.add_color_override("font_color", Color8(145,142,169))
 
 func update_control_color(section_name: String, key: String, control: Control):
 	if oConfigFileManager.is_item_different(section_name, key):
 		if control is SpinBox:
-			control.get_line_edit().add_color_override("font_color", Color("#e6d9c1"))
+			control.get_line_edit().add_color_override("font_color", Color8(230, 217, 193))
 		else:
-			control.add_color_override("font_color", Color("#e6d9c1"))
+			control.add_color_override("font_color", Color8(230, 217, 193))
 	else:
 		if control is SpinBox:
-			control.get_line_edit().add_color_override("font_color", Color8(109,107,127))
+			control.get_line_edit().add_color_override("font_color", Color8(145,142,169)) #Color8(131,128,152)
 		else:
 			control.add_color_override("font_color", Color8(148,145,159))
 
