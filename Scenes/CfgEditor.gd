@@ -6,8 +6,8 @@ onready var oCfgTabs = Nodelist.list["oCfgTabs"]
 onready var oLabelCfgComment = Nodelist.list["oLabelCfgComment"]
 onready var oPanelCfgComment = Nodelist.list["oPanelCfgComment"]
 
-onready var main_panel = $CfgTabs/TabRules/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer
-onready var main_container = $CfgTabs/TabRules/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer
+onready var main_panel = $CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer
+onready var main_container = $CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer
 onready var revert_button_scene = preload("res://Class/GenericRevertButton.tscn")
 
 var ui_built: bool = false
@@ -17,6 +17,7 @@ func _ready():
 	oCfgTabs.set_tab_title(0, "Rules")
 	
 	connect("about_to_show", self, "_on_about_to_show")
+	oPanelCfgComment.connect("mouse_entered", self, "_on_panel_cfg_comment_mouse_entered")
 	yield(get_tree(),'idle_frame')
 	Utils.popup_centered(self)
 
@@ -265,6 +266,8 @@ func _on_control_mouse_entered(key_label: Label, control_node: Control, section_
 		else:
 			control_node.add_color_override("font_color", Color8(255, 217, 193))
 	
+	yield(get_tree(),'idle_frame')
+	
 	var comments = oConfigFileManager.get_comments_for_key("rules.cfg", section_name, key)
 	if comments.size() > 0:
 		var comment_text = ""
@@ -378,6 +381,13 @@ func find_section_vbox(section_name: String) -> VBoxContainer:
 						if header_label is Label and header_label.text == "[" + section_name + "]":
 							return child
 	return null
+
+
+func _on_panel_cfg_comment_mouse_entered():
+	if oPanelCfgComment.get_v_size_flags() == Control.SIZE_SHRINK_END:
+		oPanelCfgComment.set_v_size_flags(0)
+	else:
+		oPanelCfgComment.set_v_size_flags(Control.SIZE_SHRINK_END)
 
 
 func rebuild_ui():

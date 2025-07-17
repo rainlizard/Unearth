@@ -6565,7 +6565,7 @@ custom_constants/margin_top = 5
 custom_constants/margin_left = 5
 custom_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 918.0
@@ -6573,15 +6573,9 @@ margin_bottom = 596.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer"]
 margin_right = 913.0
-margin_bottom = 500.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/VBoxContainer/ScrollContainer"]
-margin_right = 913.0
-margin_bottom = 500.0
+margin_bottom = 591.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 5
@@ -6589,21 +6583,24 @@ custom_constants/margin_top = 5
 custom_constants/margin_left = 5
 custom_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 908.0
-margin_bottom = 495.0
+margin_bottom = 586.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PanelCfgComment" type="PanelContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/VBoxContainer"]
-margin_top = 504.0
-margin_right = 913.0
-margin_bottom = 591.0
+[node name="PanelCfgComment" type="PanelContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 918.0
+margin_bottom = 92.0
+mouse_filter = 1
 size_flags_horizontal = 3
+size_flags_vertical = 0
 
-[node name="LabelCfgComment" type="Label" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/VBoxContainer/PanelCfgComment"]
+[node name="LabelCfgComment" type="Label" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/PanelCfgComment"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 904.0
