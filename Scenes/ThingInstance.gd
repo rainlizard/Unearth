@@ -179,7 +179,9 @@ func _on_zoom_level_changed(zoom):
 
 func set_ownership(setval):
 	ownership = setval
-	
+	call_deferred("set_ownership_material_one_frame_later") # this fixes a bug
+
+func set_ownership_material_one_frame_later(): # needs to be call_deferred
 	if ownership == 5 and thingType != Things.TYPE.CREATURE: # If the object has no ownership don't apply the material or else it'll flash.
 		$"%ThingTexture".material = null
 	else:

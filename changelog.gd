@@ -3,6 +3,7 @@ extends Node
 const string = """
 <version> - <date>
 - Cfg editor
+- Fixed neutral creatures not flashing on map load. Slowed down flashing.
 0.59.789 - 9/7/2025
 - Respect desired windows size/position
 - Fixed some default window positioning
