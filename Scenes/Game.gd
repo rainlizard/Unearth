@@ -27,7 +27,7 @@ var COMMAND_LINE_CONSOLE = ""
 var COMMAND_LINE_CONSOLE_ARG = ""
 var DK_COMMANDS = "-nointro -alex -nocd"
 
-func running_keeperfx():
+func keeperfx_is_installed():
 	var path = EXECUTABLE_PATH.get_file().to_lower()
 	if path == "keeperfx.exe" or path == "keeperfx_hvlog.exe":
 		return true
@@ -58,7 +58,7 @@ func set_paths(path):
 			"LEVELS": DK_LEVELS_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 			"CAMPGNS": DK_CAMPGNS_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 	
-	if running_keeperfx() == true:
+	if keeperfx_is_installed() == true:
 		oKeeperFXDetection.text = "KeeperFX detected. " + "(Version " + KEEPERFX_VERSION_STRING + ")"
 		oKeeperFXDetection.set("custom_colors/font_color", Color(0.5,1.0,0.5,1))
 		oKeeperFXDetection.visible = true

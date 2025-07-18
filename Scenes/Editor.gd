@@ -65,10 +65,11 @@ func _unhandled_input(event):
 
 func _notification(what):
 	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
-		Settings.write_cfg("editor_window_position", OS.window_position)
-		Settings.write_cfg("editor_window_maximized_state", OS.window_maximized)
-		Settings.write_cfg("editor_window_fullscreen_state", OS.window_fullscreen)
-		Settings.write_cfg("editor_window_size", OS.window_size)
+		if OS.window_size.x >= 720 and OS.window_size.y >= 720 and OS.is_window_minimized() == false:
+			Settings.write_cfg("editor_window_position", OS.window_position)
+			Settings.write_cfg("editor_window_maximized_state", OS.window_maximized)
+			Settings.write_cfg("editor_window_fullscreen_state", OS.window_fullscreen)
+			Settings.write_cfg("editor_window_size", OS.window_size)
 		
 		#if OS.has_feature("standalone") == true:
 		if mapHasBeenEdited == true:

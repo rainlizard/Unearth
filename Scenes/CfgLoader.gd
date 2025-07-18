@@ -6,7 +6,7 @@ onready var oCustomSlabSystem = Nodelist.list["oCustomSlabSystem"]
 onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
-
+onready var oReadCfg = Nodelist.list["oReadCfg"]
 
 # These are dictionaries containing dictionaries.
 # objects_cfg["section_name"]["key"] will return the "value"
@@ -36,9 +36,8 @@ func start(mapPath):
 
 
 func process_configuration_files(mapPath):
-	
-	if oCurrentFormat.selected == Constants.ClassicFormat:
-		# Use unearth defaults
+	if oCurrentFormat.selected == Constants.ClassicFormat or oGame.keeperfx_is_installed() == false:
+		# Use Unearth defaults
 		Cube.load_dk_original_cubes()
 		Slabset.load_default_original_slabset()
 		Columnset.load_default_original_columnset()
@@ -72,8 +71,8 @@ func process_configuration_files(mapPath):
 						"textureanim.toml": oTextureAnimation.generate_animation_database(actual_filepath)
 						"effects.toml": load_effects_data(actual_filepath)
 				elif ext == "cfg":
-					var result = Utils.read_dkcfg_file(actual_filepath)
-					combined_cfg_data = Utils.super_merge(combined_cfg_data, result["config"])
+					var result = oReadCfg.read_dkcfg_file(actual_filepath)
+					combined_cfg_data = super_merge(combined_cfg_data, result["config"])
 					
 					if load_cfg_type == oConfigFileManager.LOAD_CFG_FXDATA and not result["comments"].empty():
 						oConfigFileManager.FXDATA_COMMENTS[file_name_from_list] = result["comments"]
@@ -83,10 +82,23 @@ func process_configuration_files(mapPath):
 				"objects.cfg": load_objects_data(combined_cfg_data)
 				"creature.cfg": load_creatures_data(combined_cfg_data)
 				"trapdoor.cfg": load_trapdoor_data(combined_cfg_data)
-				"terrain.cfg": load_terrain_data(combined_cfg_data)
+				"terrain.cfg": 
+					load_terrain_data(combined_cfg_data)
+					load_room_data_from_terrain(combined_cfg_data)
 				"cubes.cfg": Cube.read_cubes_cfg(combined_cfg_data)
 				"rules.cfg": load_rules_data(combined_cfg_data)
+				"magic.cfg": load_magic_data(combined_cfg_data)
 
+func super_merge(dict1, dict2):
+	var merged = {}
+	for key in dict1:
+		merged[key] = dict1[key]
+	for key in dict2:
+		if key in merged and typeof(merged[key]) == TYPE_DICTIONARY and typeof(dict2[key]) == TYPE_DICTIONARY:
+			merged[key] = super_merge(merged[key], dict2[key])
+		else:
+			merged[key] = dict2[key]
+	return merged
 
 func get_config_directories(mapPath):
 	var campaign_cfg_data = load_campaign_boss_file(mapPath)
@@ -270,7 +282,7 @@ func load_campaign_boss_file(mapPath):
 		return {}
 	var list_of_main_campaign_files = Utils.get_filetype_in_directory(levelsDirPath, "cfg")
 	for campaignPath in list_of_main_campaign_files:
-		var cfgDictionary = Utils.read_dkcfg_file(campaignPath)
+		var cfgDictionary = oReadCfg.read_dkcfg_file(campaignPath)
 		var levelsLocation = cfgDictionary.get("common", {}).get("LEVELS_LOCATION", null)
 		if levelsLocation and oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower() == mapPath.get_base_dir().to_lower():
 			#print(oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower())
@@ -294,6 +306,18 @@ func load_effects_data(file_path):
 func load_rules_data(cfg):
 	oConfigFileManager.DATA_RULES = cfg
 	oConfigFileManager.store_default_data()
+
+func load_magic_data(cfg):
+	oConfigFileManager.DATA_MAGIC = cfg
+
+func load_room_data_from_terrain(cfg):
+	var room_data = {}
+	for section in cfg:
+		if section.begins_with("room"):
+			var id = int(section)
+			if id == 0: continue
+			room_data[id] = cfg[section]
+	oConfigFileManager.DATA_ROOMS = room_data
 
 func update_paths_for_saved_files(file_path, file_type):
 	if file_type == "slabset.toml" or file_type == "columnset.toml":

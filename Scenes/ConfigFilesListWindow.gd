@@ -6,7 +6,7 @@ onready var oVBoxContainerConfigCampaign = Nodelist.list["oVBoxContainerConfigCa
 onready var oVBoxContainerConfigData = Nodelist.list["oVBoxContainerConfigData"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oGame = Nodelist.list["oGame"]
-
+onready var oReadCfg = Nodelist.list["oReadCfg"]
 
 func _on_ConfigFilesListWindow_about_to_show():
 	update_everything()
@@ -59,7 +59,7 @@ func get_campaign_main_data(mapPathArgument):
 		return {}
 	var listOfCampaignFiles = Utils.get_filetype_in_directory(levelsDirectoryPath, "cfg")
 	for campaignFilePath in listOfCampaignFiles:
-		var configData = Utils.read_dkcfg_file(campaignFilePath)
+		var configData = oReadCfg.read_dkcfg_file(campaignFilePath)
 		var levelsLocation = configData.get("common", {}).get("LEVELS_LOCATION", null)
 		if levelsLocation and oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower() == mapPathArgument.get_base_dir().to_lower():
 			return configData

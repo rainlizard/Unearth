@@ -131,6 +131,8 @@ func _on_any_window_was_modified(callingNode):
 		_is_handling_drag = false
 
 func _on_viewport_size_changed():
+	if OS.window_size.x < 720 or OS.window_size.y < 720:
+		return
 	var currentViewSize = get_viewport().size / Settings.UI_SCALE
 	for windowNode in listOfWindowDialogs:
 		if windowNode.visible == false:
@@ -151,10 +153,14 @@ func _on_viewport_size_changed():
 
 func _on_window_dialog_became_visible(dialogNode):
 	if dialogNode.visible == true:
+		if OS.window_size.x < 720 or OS.window_size.y < 720:
+			return
 		var currentViewSize = get_viewport().size / Settings.UI_SCALE
 		_adjust_window_size_to_viewport(dialogNode, currentViewSize)
 
 func _adjust_window_size_to_viewport(windowNode, currentViewSize):
+	if OS.window_size.x < 720 or OS.window_size.y < 720:
+		return
 	windowNode.rect_size.x = clamp(windowNode.rect_size.x, 0, currentViewSize.x)
 	windowNode.rect_size.y = clamp(windowNode.rect_size.y, 0, currentViewSize.y - topMargin)
 	_clamp_window_position(windowNode, currentViewSize)

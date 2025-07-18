@@ -1,4 +1,4 @@
-[gd_scene load_steps=205 format=2]
+[gd_scene load_steps=209 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -184,6 +184,10 @@
 [ext_resource path="res://Scenes/FlashingColumns.gd" type="Script" id=182]
 [ext_resource path="res://Scenes/TabColumnset.gd" type="Script" id=183]
 [ext_resource path="res://Scenes/TabSlabset.gd" type="Script" id=184]
+[ext_resource path="res://Scenes/TabRules.gd" type="Script" id=185]
+[ext_resource path="res://Scenes/RulesResearch.gd" type="Script" id=186]
+[ext_resource path="res://Scenes/RulesSacrifices.gd" type="Script" id=187]
+[ext_resource path="res://Scenes/ReadCfg.gd" type="Script" id=188]
 [ext_resource path="res://Scenes/ConfigFileManager.gd" type="Script" id=279]
 [ext_resource path="res://Scenes/ConfirmDecompression.gd" type="Script" id=280]
 
@@ -335,6 +339,9 @@ script = ExtResource( 279 )
 
 [node name="CfgLoader" type="Node" parent="."]
 script = ExtResource( 169 )
+
+[node name="ReadCfg" type="Node" parent="CfgLoader"]
+script = ExtResource( 188 )
 
 [node name="FlashingColumns" type="Node" parent="."]
 script = ExtResource( 182 )
@@ -6554,6 +6561,13 @@ margin_right = -5.0
 margin_bottom = -5.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource( 185 )
+
+[node name="RulesSacrifices" type="Node" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules"]
+script = ExtResource( 187 )
+
+[node name="RulesResearch" type="Node" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules"]
+script = ExtResource( 186 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules"]
 margin_right = 923.0
@@ -6595,7 +6609,7 @@ size_flags_vertical = 3
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 918.0
-margin_bottom = 92.0
+margin_bottom = 44.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -6604,8 +6618,8 @@ size_flags_vertical = 0
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 904.0
-margin_bottom = 78.0
-text = "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test "
+margin_bottom = 30.0
+text = "test"
 autowrap = true
 
 [node name="ResizeCurrentMapSize" type="WindowDialog" parent="Ui/UiSystem"]
@@ -8051,6 +8065,10 @@ value = 1.0
 rounded = true
 align = 1
 script = SubResource( 20 )
+
+[node name="WindowDialog" type="WindowDialog" parent="."]
+margin_right = 48.0
+margin_bottom = 40.0
 
 [connection signal="visibility_changed" from="Game2D/Selector" to="Game2D/Selector" method="_on_Selector_visibility_changed"]
 [connection signal="visibility_changed" from="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/OnlyOwnership" to="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/OnlyOwnership" method="_on_OnlyOwnership_visibility_changed"]

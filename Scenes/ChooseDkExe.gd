@@ -6,8 +6,8 @@ onready var oKeeperFXDetection = Nodelist.list["oKeeperFXDetection"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 
 func _on_ChooseDkExe_file_selected(path):
-	Settings.set_setting("executable_path", path) # Do this first so running_keeperfx() works
-	if oGame.running_keeperfx() == false:
+	Settings.set_setting("executable_path", path) # Do this first so keeperfx_is_installed() works
+	if oGame.keeperfx_is_installed() == false:
 		oMessage.big("Warning", "It seems you didn't select the keeperfx executable, it is recommended that you install and use KeeperFX to take advantage of new features.")
 	
 	var err = oGame.test_write_permissions()

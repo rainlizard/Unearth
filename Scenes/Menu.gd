@@ -191,7 +191,7 @@ func constantly_monitor_play_button_state():
 	var parentDirectory = currentDirectory.get_base_dir()
 	
 	var mapIsInCorrectDirectory = false
-	if oGame.running_keeperfx() == true:
+	if oGame.keeperfx_is_installed() == true:
 		if parentDirectory.ends_with("/LEVELS") or parentDirectory.ends_with("/CAMPGNS"):
 			mapIsInCorrectDirectory = true
 	else:
@@ -257,7 +257,7 @@ func _on_slab_style_window_close_button_clicked():
 	oMenuButtonEdit.get_popup().set_item_checked(0, false)
 
 func _on_MenuButtonHelp_about_to_show():
-	if oGame.running_keeperfx() == true:
+	if oGame.keeperfx_is_installed() == true:
 		oMenuButtonHelp.get_popup().set_item_disabled(0, false) # New script commands
 		oMenuButtonHelp.get_popup().set_item_disabled(1, true) # Old Script commands
 	else:
@@ -365,7 +365,7 @@ func _on_MenuButtonSettings_pressed():
 
 func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in combination with OS.execute otherwise a Godot bug occurs
 	if oCurrentFormat.selected == Constants.KfxFormat:
-		if oGame.running_keeperfx() == false:
+		if oGame.keeperfx_is_installed() == false:
 			oMessage.big("Incompatible", "Your map format is set to KFX format, but your game executable is not set to keeperfx.exe")
 			return
 	

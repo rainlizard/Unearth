@@ -56,6 +56,7 @@ func clear_all_cube_data():
 
 
 func read_cubes_cfg(get_cfg_data):
+	print("read_cubes_cfg")
 	var int_cfg_data = {}
 	for key in get_cfg_data:
 		int_cfg_data[int(key)] = get_cfg_data[key]
@@ -73,6 +74,7 @@ func read_cubes_cfg(get_cfg_data):
 
 
 func load_dk_original_cubes():
+	print("load_dk_original_cubes")
 	tex = [
 		[  0,   0,   0,   0,   0,   0],
 		[  2,   2,   2,   2,   5,   2],

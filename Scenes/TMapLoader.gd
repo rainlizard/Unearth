@@ -289,7 +289,7 @@ func apply_texture_pack():
 	if tmapBTopTex == null or tmapBBottomTex == null:
 		if alreadyShowedErrorOnce == false:
 			alreadyShowedErrorOnce = true
-			if oGame.EXECUTABLE_PATH.get_file().to_lower() == "keeperfx.exe": #keeper.exe shouldn't give this warning, because dos versions don't have tmapb files
+			if oGame.keeperfx_is_installed() == true: #keeper.exe shouldn't give this warning, because dos versions don't have tmapb files
 				oMessage.quick("Warning: TMAPB textures for tileset " + str(tilesetIndex) + " are missing.")
 		var blankTexture = _create_blank_half_texture()
 		if tmapBTopTex == null: tmapBTopTex = blankTexture

@@ -13,7 +13,7 @@ void fragment() {
 	final_rgb = vec3(final_rgb.r+final_rgb.g+final_rgb.b) / 3.0;
 	
 	
-	if (final_rgb.r >= 0.999) {discard;}
+	if (final_rgb.r >= 0.99) {discard;}
 	final_rgb *= 6.0;
 	
 	COLOR = vec4(final_rgb, clamp(luminance, 0.0, 1.0));

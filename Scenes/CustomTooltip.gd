@@ -19,6 +19,7 @@ func set_text(txt):
 		visible = false
 	else:
 		visible = true
+		VisualServer.canvas_item_set_z_index(get_canvas_item(), 10)
 	#$TooltipPicture.visible = false
 #	yield(get_tree(),'idle_frame')
 #	yield(get_tree(),'idle_frame')
@@ -32,6 +33,7 @@ func set_floortexture(floorTextureValue):
 	oTooltipPic.visible = true
 	
 	visible = true
+	VisualServer.canvas_item_set_z_index(get_canvas_item(), 10)
 	#$PanelContainer/Label.text = ""
 	
 	var dataImage = Image.new()

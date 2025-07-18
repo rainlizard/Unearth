@@ -18,5 +18,7 @@ textures
 .mono/
 .vs/
 .cursor/
+.claude/
+CLAUDE.md
 userinput.py
 data_*/

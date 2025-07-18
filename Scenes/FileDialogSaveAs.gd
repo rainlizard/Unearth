@@ -37,7 +37,7 @@ func _on_FileDialogSaveAs_about_to_show():
 	var path
 	if oCurrentMap.path == "":
 		var personalFolder = oGame.DK_LEVELS_DIRECTORY.plus_file("personal")
-		if Directory.new().dir_exists(personalFolder) and oGame.running_keeperfx() == true:
+		if Directory.new().dir_exists(personalFolder) and oGame.keeperfx_is_installed() == true:
 			path = personalFolder # KeeperFX has personal folder
 		else:
 			path = oGame.DK_LEVELS_DIRECTORY # Old DK does not have personal folder
@@ -80,7 +80,7 @@ func _process(delta):
 	saveInstruction.set("custom_colors/font_color", Color(1,0.5,0.5,1))
 	
 	var dir = current_dir.to_upper()
-	if oGame.running_keeperfx() == true:
+	if oGame.keeperfx_is_installed() == true:
 		saveInstruction.text = "Map not playable from this directory. (KeeperFX)"
 		if dir.ends_with("/LEVELS"):
 			saveInstruction.text = "Must save in a sub directory. (KeeperFX)"

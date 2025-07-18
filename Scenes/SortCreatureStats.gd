@@ -3,6 +3,7 @@ onready var oGame = Nodelist.list["oGame"]
 onready var oSortCreaStatsGrid = Nodelist.list["oSortCreaStatsGrid"]
 onready var oStatsOptionButton = Nodelist.list["oStatsOptionButton"]
 onready var oMessage = Nodelist.list["oMessage"]
+onready var oReadCfg = Nodelist.list["oReadCfg"]
 
 var name_type = 0
 
@@ -16,7 +17,7 @@ func _on_SortCreatureStats_visibility_changed():
 func start():
 	var listOfCfgs = Utils.get_filetype_in_directory(oGame.GAME_DIRECTORY.plus_file("creatrs"), "CFG")
 	for path in listOfCfgs:
-		var aaa = Utils.read_dkcfg_file(path)
+		var aaa = oReadCfg.read_dkcfg_file(path)
 		all_creature_data[path.get_file()] = aaa
 	
 	populate_optionbutton()

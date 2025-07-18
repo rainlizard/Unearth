@@ -4,6 +4,8 @@ const string = """
 <version> - <date>
 - Cfg editor
 - Fixed neutral creatures not flashing on map load. Slowed down flashing.
+- Fixed issues with tiny (main) window sizes
+- Fixed a bug with loading KFX Format maps in a non-keeperfx installation
 0.59.789 - 9/7/2025
 - Respect desired windows size/position
 - Fixed some default window positioning

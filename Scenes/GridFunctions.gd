@@ -1,5 +1,17 @@
 extends Node
 
+func _ready():
+	get_viewport().connect("size_changed", self, "_on_window_maximized")
+
+func _on_window_maximized():
+	yield(get_tree(),'idle_frame')
+	var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
+	var oPickThingWindow = Nodelist.list["oPickThingWindow"]
+	if oPickSlabWindow.visible:
+		_on_GridWindow_resized(oPickSlabWindow)
+	if oPickThingWindow.visible:
+		_on_GridWindow_resized(oPickThingWindow)
+
 func _on_GridWindow_visibility_changed(callingNode): # Initial load for correct grid arrangement
 	if callingNode.visible == true:
 		for i in 2:
