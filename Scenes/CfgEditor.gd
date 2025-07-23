@@ -312,9 +312,13 @@ func rebuild_specific_section(section_name: String):
 		var add_button = Button.new()
 		add_button.text = "Add new"
 		add_button.hint_tooltip = "Add new sacrifice"
+		add_button.rect_min_size.x = 120
+		add_button.set_h_size_flags(Control.SIZE_SHRINK_CENTER)
 		setup_script_editor_font(add_button)
 		add_button.connect("pressed", oRulesSacrifices, "_on_add_sacrifice_pressed", [section_name])
 		button_container.add_child(add_button)
+		button_container.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+		button_container.alignment = BoxContainer.ALIGN_CENTER
 		section_vbox.add_child(button_container)
 		oRulesSacrifices.add_button = add_button
 	elif section_name == "research":
@@ -322,9 +326,13 @@ func rebuild_specific_section(section_name: String):
 		var add_button = Button.new()
 		add_button.text = "Add new"
 		add_button.hint_tooltip = "Add new research"
+		add_button.rect_min_size.x = 120
+		add_button.set_h_size_flags(Control.SIZE_SHRINK_CENTER)
 		setup_script_editor_font(add_button)
 		add_button.connect("pressed", oRulesResearch, "_on_add_research_pressed", [section_name])
 		button_container.add_child(add_button)
+		button_container.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+		button_container.alignment = BoxContainer.ALIGN_CENTER
 		section_vbox.add_child(button_container)
 		oRulesResearch.add_button = add_button
 	
@@ -494,6 +502,16 @@ func rebuild_ui():
 	oRulesSacrifices.control_references.clear()
 	oRulesResearch.control_references.clear()
 	build_rules_editor()
+	call_deferred("_update_scrollbars")
+
+
+func _update_scrollbars():
+	if scroll_container:
+		scroll_container.get_v_scrollbar().visible = false
+		scroll_container.get_h_scrollbar().visible = false
+		yield(get_tree(),'idle_frame')
+		scroll_container.get_v_scrollbar().visible = true
+		scroll_container.get_h_scrollbar().visible = true
 
 
 func _on_selection_item_pressed(selected_item: String):

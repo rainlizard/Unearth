@@ -27,29 +27,8 @@ func create_research_control(parent: VBoxContainer, array_index, value, section_
 	parent.add_child(item_panel)
 	
 	var control_container = HBoxContainer.new()
-	control_container.add_constant_override("separation", 20)
 	control_container.set_h_size_flags(Control.SIZE_EXPAND_FILL)
 	item_panel.add_child(control_container)
-	
-	var move_button_container = HBoxContainer.new()
-	move_button_container.add_constant_override("separation", 2)
-	control_container.add_child(move_button_container)
-	
-	var move_up_button = Button.new()
-	move_up_button.text = "↑"
-	move_up_button.hint_tooltip = "Move Up"
-	move_up_button.rect_min_size.x = 25
-	editor_context.setup_script_editor_font(move_up_button)
-	move_up_button.connect("pressed", self, "_on_move_research_up_pressed", [section_name, array_index])
-	move_button_container.add_child(move_up_button)
-	
-	var move_down_button = Button.new()
-	move_down_button.text = "↓"
-	move_down_button.hint_tooltip = "Move Down"
-	move_down_button.rect_min_size.x = 25
-	editor_context.setup_script_editor_font(move_down_button)
-	move_down_button.connect("pressed", self, "_on_move_research_down_pressed", [section_name, array_index])
-	move_button_container.add_child(move_down_button)
 	
 	var type_items = ["MAGIC", "ROOM", "CREATURE"]
 	var type_label = Label.new()
@@ -101,9 +80,27 @@ func create_research_control(parent: VBoxContainer, array_index, value, section_
 		revert_button.modulate.a = 0
 	control_container.add_child(revert_button)
 	
+	var move_button_container = HBoxContainer.new()
+	move_button_container.add_constant_override("separation", 2)
+	control_container.add_child(move_button_container)
+	
+	var move_up_button = Button.new()
+	move_up_button.text = "↑"
+	move_up_button.hint_tooltip = "Move Up"
+	editor_context.setup_script_editor_font(move_up_button)
+	move_up_button.connect("pressed", self, "_on_move_research_up_pressed", [section_name, array_index])
+	move_button_container.add_child(move_up_button)
+	
+	var move_down_button = Button.new()
+	move_down_button.text = "↓"
+	move_down_button.hint_tooltip = "Move Down"
+	editor_context.setup_script_editor_font(move_down_button)
+	move_down_button.connect("pressed", self, "_on_move_research_down_pressed", [section_name, array_index])
+	move_button_container.add_child(move_down_button)
+	
 	var remove_button = Button.new()
 	remove_button.text = "-"
-	remove_button.hint_tooltip = "Remove"
+	remove_button.hint_tooltip = "Delete entry"
 	remove_button.rect_min_size.x = 30
 	editor_context.setup_script_editor_font(remove_button)
 	remove_button.connect("pressed", self, "_on_remove_research_pressed", [section_name, array_index])
