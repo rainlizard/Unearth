@@ -69,12 +69,12 @@ jobs:
     - name: Prepare Directories
       run: |
         rm -rf ./bin
-        mkdir -p ./bin/ExportLinux/Unearth ./bin/ExportWindows/Unearth
+        mkdir -p ./bin/ExportLinux/unearth ./bin/ExportWindows/unearth
     - name: Export Godot Game (Linux)
-      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" ./bin/ExportLinux/Unearth/Unearth.x86_64
+      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" ./bin/ExportLinux/unearth/unearth.x86_64
 
     - name: Export Godot Game (Windows)
-      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" ./bin/ExportWindows/Unearth/Unearth.exe
+      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" ./bin/ExportWindows/unearth/unearth.exe
 
     - name: Install Wine
       run: |
@@ -85,7 +85,7 @@ jobs:
         wget https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -O rcedit.exe
     - name: Set Executable Details and Replace Icon in Windows Export with rcedit
       run: |
-        wine rcedit.exe ./bin/ExportWindows/Unearth/Unearth.exe \
+        wine rcedit.exe ./bin/ExportWindows/unearth/unearth.exe \
           --set-icon Art/icon/UnearthIcon.ico \
           --set-version-string FileDescription "Unearth Editor for Dungeon Keeper" \
           --set-file-version ${{ steps.version_info.outputs.FULL_VERSION }} \
@@ -97,13 +97,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux
-        path: ./bin/ExportLinux/Unearth/
+        path: ./bin/ExportLinux/unearth/
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
-        path: ./bin/ExportWindows/Unearth/
+        path: ./bin/ExportWindows/unearth/
 
     - name: Install Butler
       if: startsWith(github.ref, 'refs/tags/')
@@ -117,13 +117,13 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       run: |
         cd ./bin/ExportLinux/
-        zip -r ../unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip Unearth/
+        zip -r ../unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux.zip unearth/
 
     - name: Zip Windows Build for Release
       if: startsWith(github.ref, 'refs/tags/')
       run: |
         cd ./bin/ExportWindows/
-        zip -r ../unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip Unearth/
+        zip -r ../unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows.zip unearth/
 
     - name: Upload to itch.io
       if: startsWith(github.ref, 'refs/tags/')

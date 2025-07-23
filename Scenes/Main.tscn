@@ -3549,7 +3549,7 @@ visible = true
 margin_left = -976.0
 margin_top = 672.0
 margin_right = -293.0
-margin_bottom = 886.0
+margin_bottom = 862.0
 window_title = "About"
 script = ExtResource( 119 )
 
@@ -3563,7 +3563,7 @@ margin_bottom = -20.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/AboutWindow/ScrollContainer"]
 margin_right = 616.0
-margin_bottom = 174.0
+margin_bottom = 149.0
 
 [node name="AboutDescriptionLabel" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer"]
 margin_right = 616.0
@@ -3587,84 +3587,92 @@ __meta__ = {
 [node name="AboutGridContainer" type="GridContainer" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer"]
 margin_top = 53.0
 margin_right = 616.0
-margin_bottom = 174.0
+margin_bottom = 149.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label1" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
-margin_right = 102.0
+margin_right = 115.0
 margin_bottom = 21.0
 text = "Github"
 
 [node name="LinkButton1" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
-margin_left = 106.0
-margin_right = 575.0
+margin_left = 119.0
+margin_right = 474.0
 margin_bottom = 21.0
 text = "https://github.com/rainlizard/Unearth"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+[node name="Label4" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
 margin_top = 25.0
-margin_right = 102.0
+margin_right = 115.0
 margin_bottom = 46.0
-text = "Itch.io"
+text = "DK Discord"
 
-[node name="LinkButton2" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
-margin_left = 106.0
+[node name="LinkButton4" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_left = 119.0
 margin_top = 25.0
-margin_right = 575.0
+margin_right = 474.0
 margin_bottom = 46.0
 focus_mode = 2
-text = "https://rainlizard.itch.io/unearth"
+text = "https://discord.com/invite/zKTjfDh"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+[node name="Label5" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
 margin_top = 50.0
-margin_right = 102.0
+margin_right = 115.0
 margin_bottom = 71.0
+text = "KeeperFX.net"
 
-[node name="LabelBlank" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
-margin_left = 106.0
+[node name="LinkButton5" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_left = 119.0
 margin_top = 50.0
-margin_right = 575.0
+margin_right = 474.0
 margin_bottom = 71.0
+focus_mode = 2
+text = "https://keeperfx.net"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label3" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
-margin_top = 75.0
+visible = false
+margin_top = 50.0
 margin_right = 102.0
-margin_bottom = 96.0
+margin_bottom = 71.0
 text = "DK Forums"
 
 [node name="LinkButton3" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+visible = false
 margin_left = 106.0
-margin_top = 75.0
+margin_top = 50.0
 margin_right = 575.0
-margin_bottom = 96.0
+margin_bottom = 71.0
 focus_mode = 2
 text = "https://keeperklan.com/forums/22-DK1-Mapmaking"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label4" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
-margin_top = 100.0
-margin_right = 102.0
-margin_bottom = 121.0
-text = "DK Discord"
+[node name="Label2" type="Label" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_top = 75.0
+margin_right = 115.0
+margin_bottom = 96.0
+text = "Itch.io"
 
-[node name="LinkButton4" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
-margin_left = 106.0
-margin_top = 100.0
-margin_right = 575.0
-margin_bottom = 121.0
+[node name="LinkButton2" type="LinkButton" parent="Ui/UiSystem/AboutWindow/ScrollContainer/VBoxContainer/AboutGridContainer"]
+margin_left = 119.0
+margin_top = 75.0
+margin_right = 474.0
+margin_bottom = 96.0
 focus_mode = 2
-text = "https://discord.com/invite/zKTjfDh"
+text = "https://rainlizard.itch.io/unearth"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -7501,7 +7509,6 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "File"
 align = 0
-items = [ "New map", null, 0, false, false, 0, 0, null, "", false, "Browse maps", null, 0, false, false, 1, 0, null, "", false, "Open map", null, 0, false, false, 2, 0, null, "", false, "Open recent", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Save map", null, 0, false, false, 4, 0, null, "", false, "Save map as", null, 0, false, false, 5, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Reload map", null, 0, false, false, 6, 0, null, "", false, "Image to map", null, 0, false, false, 7, 0, null, "", false, "Export preview", null, 0, false, false, 8, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Preferences", null, 0, false, false, 9, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Exit", null, 0, false, false, 10, 0, null, "", false ]
 switch_on_hover = true
 
 [node name="VSeparator1" type="VSeparator" parent="Ui/UiTop/Menu/HBoxContainer2"]

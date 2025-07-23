@@ -73,7 +73,30 @@ func _ready():
 	oMenuButtonView.get_popup().connect("id_pressed",self,"_on_ViewSubmenu_Pressed")
 	oMenuButtonHelp.get_popup().connect("id_pressed",self,"_on_HelpSubmenu_Pressed")
 	
+	add_file_menu_items()
 	add_edit_menu_items()
+
+func add_file_menu_items():
+	# Add menu items to oMenuButtonFile
+	var file_popup = oMenuButtonFile.get_popup()
+	
+	file_popup.add_item("New map", 0)
+	file_popup.add_item("Browse maps", 1)
+	file_popup.add_item("Open map", 2)
+	file_popup.add_item("Open recent", 3)
+	file_popup.add_separator()
+	file_popup.add_item("Save map", 4)
+	file_popup.add_item("Save map as", 5)
+	file_popup.add_separator()
+	file_popup.add_item("Reload map", 6)
+	file_popup.add_item("Image to map", 7)
+	file_popup.add_item("Export preview", 8)
+	file_popup.add_item("Workshop", 11)
+	file_popup.add_separator()
+	file_popup.add_item("Preferences", 9)
+	file_popup.add_separator()
+	file_popup.add_item("Exit", 10)
+
 
 func add_edit_menu_items():
 	# Add menu items to oMenuButtonEdit
@@ -87,7 +110,7 @@ func add_edit_menu_items():
 	edit_popup.add_separator()
 	edit_popup.add_item("Slabset", 6)
 	edit_popup.add_item("Tileset", 5)
-	edit_popup.add_item("Cfg editor", 7)
+	#edit_popup.add_item("Cfg editor", 7)
 
 func update_undo_availability():
 	if oUndoStates.undo_history.size() <= 1:
@@ -231,6 +254,7 @@ func _on_FileSubmenu_Pressed(pressedID):
 		8: Utils.popup_centered(oExportPreview) # Export preview
 		9: oPreferencesWindow._on_ButtonSettings_pressed()
 		10: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
+		11: OS.shell_open("https://keeperfx.net/workshop") # Workshop
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:

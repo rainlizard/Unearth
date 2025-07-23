@@ -120,10 +120,16 @@ func executable_stuff():
 	
 	# Choose executable path upon first starting
 	if cfg_has_setting("executable_path") == false:
-		for i in 3:
-			yield(get_tree(),'idle_frame')
-		var oChooseDkExe = $'../Main/Ui/UiSystem/ChooseDkExe'
-		Utils.popup_centered(oChooseDkExe)
+		# Try auto-detection first
+		var autoDetectedPath = auto_detect_executable()
+		if autoDetectedPath != "":
+			set_setting("executable_path", autoDetectedPath)
+		else:
+			# Auto-detection failed, show file dialog
+			for i in 3:
+				yield(get_tree(),'idle_frame')
+			var oChooseDkExe = $'../Main/Ui/UiSystem/ChooseDkExe'
+			Utils.popup_centered(oChooseDkExe)
 	else:
 		# Test whenever you restart, to always show the error if there's a problem
 		if oGame.EXECUTABLE_PATH != "": # Don't provide an error when an executable hasn't even been set
@@ -134,6 +140,19 @@ func cfg_has_setting(setting):
 
 func cfg_remove_setting(setting):
 	return config.erase_section_key("settings", setting)
+
+
+func auto_detect_executable():
+	var directories = [OS.get_executable_path().get_base_dir(), OS.get_executable_path().get_base_dir().get_base_dir()]
+	var executables = [["keeperfx", "exe"], ["keeper", "exe"]]
+	
+	for directory in directories:
+		for executable in executables:
+			var foundPath = Utils.case_insensitive_file(directory, executable[0], executable[1])
+			if foundPath != "":
+				return foundPath
+	
+	return ""
 
 
 

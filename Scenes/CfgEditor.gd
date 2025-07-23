@@ -39,8 +39,9 @@ func _ready():
 	
 	connect("about_to_show", self, "_on_about_to_show")
 	oPanelCfgComment.connect("mouse_entered", self, "_on_panel_cfg_comment_mouse_entered")
-	yield(get_tree(),'idle_frame')
-	Utils.popup_centered(self)
+	
+	#yield(get_tree(),'idle_frame')
+	#Utils.popup_centered(self)
 
 
 func _on_about_to_show():

@@ -6,6 +6,9 @@ const string = """
 - Fixed neutral creatures not flashing on map load. Slowed down flashing.
 - Fixed issues with tiny (main) window sizes
 - Fixed a bug with loading KFX Format maps in a non-keeperfx installation
+- Added link to keeperfx.net/workshop in File menu
+- Lowercase folder and executable
+- Attempt to auto-detect keeperfx.exe or keeper.exe in current folder and parent folder.
 0.59.789 - 9/7/2025
 - Respect desired windows size/position
 - Fixed some default window positioning
