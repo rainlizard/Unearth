@@ -61,6 +61,9 @@ func _ready():
 		if i is MenuButton:
 			i.get_popup().rect_min_size.x = 180
 	
+	add_file_menu_items()
+	add_edit_menu_items()
+	
 	recentlyOpenedPopupMenu.set_name("recentlyOpened")
 	var popup = oMenuButtonFile.get_popup()
 	popup.add_child(recentlyOpenedPopupMenu)
@@ -72,9 +75,6 @@ func _ready():
 	oMenuButtonEdit.get_popup().connect("id_pressed",self,"_on_EditSubmenu_Pressed")
 	oMenuButtonView.get_popup().connect("id_pressed",self,"_on_ViewSubmenu_Pressed")
 	oMenuButtonHelp.get_popup().connect("id_pressed",self,"_on_HelpSubmenu_Pressed")
-	
-	add_file_menu_items()
-	add_edit_menu_items()
 
 func add_file_menu_items():
 	# Add menu items to oMenuButtonFile

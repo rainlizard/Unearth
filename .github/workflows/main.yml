@@ -97,13 +97,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-linux
-        path: ./bin/ExportLinux/unearth/
+        path: ./bin/ExportLinux/
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: unearth-${{ steps.version_info.outputs.FULL_VERSION }}-windows
-        path: ./bin/ExportWindows/unearth/
+        path: ./bin/ExportWindows/
 
     - name: Install Butler
       if: startsWith(github.ref, 'refs/tags/')
