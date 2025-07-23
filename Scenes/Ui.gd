@@ -29,7 +29,7 @@ var FACING_ARROW_SIZE_BASE := 1.00 setget set_FACING_ARROW_SIZE_BASE
 
 var subwindows_status = {}
 
-const topMargin = 69
+const topMargin = 68
 
 var optionButtonIsOpened = false
 var mouseOnUi = false
@@ -69,7 +69,10 @@ func initialize_window_desired_values():
 		if not subwindows_status[windowName].has("desired_size") and window.resizable:
 			subwindows_status[windowName]["desired_size"] = window.rect_size
 		
-		window.rect_position = subwindows_status[windowName]["desired_position"]
+		var desiredPos = subwindows_status[windowName]["desired_position"]
+		if desiredPos.y < topMargin:
+			desiredPos.y = topMargin
+		window.rect_position = desiredPos
 		if window.resizable and subwindows_status[windowName].has("desired_size"):
 			window.rect_size = subwindows_status[windowName]["desired_size"]
 	on_startup_put_windows_in_correct_positions()
