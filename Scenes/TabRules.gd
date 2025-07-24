@@ -60,7 +60,9 @@ func create_spinbox_control(parent: HBoxContainer, key: String, value, section_n
 	var spinbox = CustomSpinBox.new()
 	spinbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	spinbox.step = 1
-	var limit = 9999999999.0 if is_float else 9999999999
+	var limit = 9999999999
+	if is_float:
+		 limit = 9999999999.0
 	spinbox.min_value = -limit
 	spinbox.max_value = limit
 	spinbox.rect_min_size.x = 100

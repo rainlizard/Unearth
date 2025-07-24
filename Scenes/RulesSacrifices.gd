@@ -85,7 +85,7 @@ func create_sacrifice_control(parent: VBoxContainer, array_index, value, section
 		var ingredient_label = Label.new()
 		ingredient_label.text = ingredient_value
 		#ingredient_label.set_h_size_flags(Control.SIZE_SHRINK_BEGIN)
-		var string_size_in_font = oCfgEditor.font.get_string_size(ingredient_label.text)
+		#var string_size_in_font = oCfgEditor.font.get_string_size(ingredient_label.text)
 		#ingredient_label.autowrap = true
 		#ingredient_label.rect_min_size = Vector2(string_size_in_font.x, 0) # Vector2(100, 0)
 		ingredient_label.mouse_filter = Control.MOUSE_FILTER_STOP

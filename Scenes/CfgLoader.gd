@@ -22,26 +22,61 @@ var file_exists_checker = File.new()
 
 func start(mapPath):
 	var CODETIME_LOADCFG_START = OS.get_ticks_msec()
-	Things.clear_dynamic_lists()
-	Things.reset_thing_data_to_default()
-	Slabs.reset_slab_data_to_default()
-	Slabset.clear_all_slabset_data()
-	Columnset.clear_all_column_data()
-	Cube.clear_all_cube_data()
-	process_configuration_files(mapPath)
+	clear_stuff()
+	load_classic_or_kfx_format(mapPath)
 	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 	if oConfigFilesListWindow.visible:
 		Utils.popup_centered(oConfigFilesListWindow)
 	oCustomSlabSystem.load_unearth_custom_slabs_file()
 
 
-func process_configuration_files(mapPath):
+func clear_stuff():
+	Things.clear_dynamic_lists()
+	Things.reset_thing_data_to_default()
+	Slabs.reset_slab_data_to_default()
+	Slabset.clear_all_slabset_data()
+	Columnset.clear_all_column_data()
+	Cube.clear_all_cube_data()
+
+
+func load_classic_or_kfx_format(mapPath):
 	if oCurrentFormat.selected == Constants.ClassicFormat or oGame.keeperfx_is_installed() == false:
-		# Use Unearth defaults
-		Cube.load_dk_original_cubes()
-		Slabset.load_default_original_slabset()
-		Columnset.load_default_original_columnset()
+		load_classic_format()
+	else:
+		load_kfx_format(mapPath)
+
+
+func load_classic_format():
+	# Load configuration for classic Dungeon Keeper format
+	# Uses Unearth defaults and scans DATA directory for TMAP files
+	Cube.load_dk_original_cubes()
+	Slabset.load_default_original_slabset()
+	Columnset.load_default_original_columnset()
 	
+	# Populate default spellbooks for Classic format
+	for subtype in [11,12,13,14,15,16,17,18,19,20,21,22,23,45,46,47,48,134,135]:
+		Things.LIST_OF_SPELLBOOKS.append(subtype)
+	
+	# Populate default Hero Gate for Classic format
+	Things.LIST_OF_HEROGATES.append(49)
+	
+	# Load TMAP files for classic format
+	load_classic_tmap_files()
+
+
+func load_classic_tmap_files():
+	oConfigFileManager.clear_paths()
+	# Scan DATA directory for TMAP files
+	var data_directory = oGame.DK_DATA_DIRECTORY
+	var tmap_files = Utils.get_filetype_in_directory(data_directory, "dat")
+	for fullPath in tmap_files:
+		if "tmap" in fullPath.to_lower():
+			oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_DATA].append(fullPath)
+
+
+func load_kfx_format(mapPath):
+	# Load configuration for KeeperFX format
+	# Processes .cfg and .toml files from multiple directories
 	oConfigFileManager.clear_paths()
 	
 	var config_dirs = get_config_directories(mapPath)

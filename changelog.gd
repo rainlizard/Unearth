@@ -10,6 +10,7 @@ const string = """
 - Lowercase folder and executable
 - Attempt to auto-detect keeperfx.exe or keeper.exe in current folder and parent folder.
 - Slightly more accurate herogate shader
+- Fix herogate numbers missing in Classic format
 0.59.789 - 9/7/2025
 - Respect desired windows size/position
 - Fixed some default window positioning
