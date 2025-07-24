@@ -1,3 +1,6 @@
+# Set the working directory to the script's directory
+Set-Location -Path $PSScriptRoot
+
 # Read the contents of Autoload/Version.gd
 $versionFile = Get-Content -Path "Autoload/Version.gd"
 

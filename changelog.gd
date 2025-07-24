@@ -2,15 +2,13 @@ extends Node
 
 const string = """
 <version> - <date>
-- Cfg editor
-- Fixed neutral creatures not flashing on map load. Slowed down flashing.
-- Fixed issues with tiny (main) window sizes
-- Fixed a bug with loading KFX Format maps in a non-keeperfx installation
+- Attempt to auto-detect keeperfx.exe or keeper.exe in current folder and parent folder
 - Added link to keeperfx.net/workshop in File menu
-- Lowercase folder and executable
-- Attempt to auto-detect keeperfx.exe or keeper.exe in current folder and parent folder.
-- Slightly more accurate herogate shader
 - Fix herogate numbers missing in Classic format
+- Slightly more accurate herogate shader
+- Fixed issues with subwindows breaking when the main window is resized too small
+- Fixed neutral creatures not flashing on map load, slowed down flashing
+- Lowercase folder and executable
 0.59.789 - 9/7/2025
 - Respect desired windows size/position
 - Fixed some default window positioning
