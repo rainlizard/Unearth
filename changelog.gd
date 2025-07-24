@@ -9,6 +9,7 @@ const string = """
 - Added link to keeperfx.net/workshop in File menu
 - Lowercase folder and executable
 - Attempt to auto-detect keeperfx.exe or keeper.exe in current folder and parent folder.
+- Slightly more accurate herogate shader
 0.59.789 - 9/7/2025
 - Respect desired windows size/position
 - Fixed some default window positioning

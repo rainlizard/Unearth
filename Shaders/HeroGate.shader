@@ -1,5 +1,5 @@
 shader_type canvas_item;
-render_mode blend_add;
+render_mode blend_mix;
 
 uniform float colour_intensity = 4.0;
 
@@ -14,7 +14,7 @@ void fragment() {
 	
 	
 	if (final_rgb.r >= 0.99) {discard;}
-	final_rgb *= 6.0;
+	final_rgb *= 4.0;
 	
-	COLOR = vec4(final_rgb, clamp(luminance, 0.0, 1.0));
+	COLOR = vec4(final_rgb, tex_color.a*0.25);//clamp(luminance, 0.0, 1.0));
 }
