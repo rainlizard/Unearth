@@ -86,7 +86,7 @@ func update_placing_tab():
 			availableFields = [FIELDS.SUBTYPE]
 		Things.TYPE.OBJECT:
 			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE]
-			if subtype == 133: #Mysterious Box
+			if Things.is_custom_special_box(subtype) == true: # Custom Special Box
 				availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.CUSTOM_BOX_ID]
 			if oCurrentFormat.selected != 0: # Classic format
 				availableFields.append(FIELDS.ORIENTATION)

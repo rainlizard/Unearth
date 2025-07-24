@@ -427,10 +427,9 @@ func read_tngfx(buffer):
 					id.parentTile = c.get_value(section, "ParentTile")
 					if id.subtype in Things.LIST_OF_HEROGATES: # Hero Gate
 						id.herogateNumber = c.get_value(section, "HerogateNumber")
-					elif id.subtype == 133: # Mysterious Box
-						id.boxNumber = c.get_value(section, "CustomBox")
 					elif id.subtype in Things.LIST_OF_GOLDPILES:
 						id.goldValue = c.get_value(section, "GoldValue", -1)
+					id.boxNumber = c.get_value(section, "CustomBox", -1)
 					id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.CREATURE:
 					id.index = c.get_value(section, "Index")

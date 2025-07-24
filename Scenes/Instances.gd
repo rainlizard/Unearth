@@ -264,7 +264,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			
 			if id.subtype in Things.LIST_OF_HEROGATES: # Hero Gate
 				id.herogateNumber = get_free_hero_gate_number() #originalInstance.herogateNumber
-			elif id.subtype == 133: # Mysterious Box
+			elif Things.is_custom_special_box(id.subtype) == true: # Special Box
 				id.boxNumber = oPlacingSettings.boxNumber
 			elif id.subtype in [2,7]: # Torch and Unlit Torch
 				for direction in [Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1)]:

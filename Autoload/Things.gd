@@ -220,6 +220,11 @@ func find_subtype_by_name(thingType, findName):
 			return subtype_key
 	return null
 
+func is_custom_special_box(subtype):
+	if not DATA_OBJECT.has(subtype) or DATA_OBJECT[subtype][GENRE] != "SPECIALBOX":
+		return false
+	return true
+
 var DATA_EXTRA = {
 0 : [null, null, null, null],
 1 : ["ACTIONPOINT", "ACTIONPOINT"],
