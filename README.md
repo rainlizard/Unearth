@@ -1,4 +1,4 @@
-# Description
+# Unearth
 
 A map editor made for Dungeon Keeper 1 and KeeperFX, prioritizing ease of use and extending map editing capabilities. When running the editor, the game will be detected, maps will be browsable and playable using the 'Play' button. To see all editor controls check the Help menu.
 
@@ -6,7 +6,7 @@ You can set up file association on Windows with any of the map file types (.slb,
 
 Report all bugs and feature requests to the [issues page](https://github.com/rainlizard/Unearth/issues).
 
-# Installation instructions
+# Installation
 Download the .zip from the [releases page](https://github.com/rainlizard/Unearth/releases), then extract the archive into the game directory.
 
 If you extract somewhere other than the game directory, then Unearth will prompt you to locate the game executable.
