@@ -223,6 +223,8 @@ func find_subtype_by_name(thingType, findName):
 func is_custom_special_box(subtype):
 	if not DATA_OBJECT.has(subtype) or DATA_OBJECT[subtype][GENRE] != "SPECIALBOX":
 		return false
+	if subtype in [86,87,88,89,90,91,92,93,170,171,172,173]:
+		return false
 	return true
 
 var DATA_EXTRA = {

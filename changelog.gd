@@ -1,6 +1,8 @@
-﻿extends Node
+extends Node
 
 const string = """
+<version> - <date>
+- All custom specials now have access to the CustomBox field
 0.60.804 - 24/7/2025
 - Attempt to auto-detect keeperfx.exe or keeper.exe in current folder and parent folder
 - Added link to keeperfx.net/workshop in File menu
