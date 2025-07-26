@@ -1,7 +1,7 @@
-extends Node
+﻿extends Node
 
 const string = """
-<version> - <date>
+0.61.811 - 26/7/2025
 - All custom specials now have access to the CustomBox field
 - Fixed loading classic format
 - Fixed loading campaign CFGs
