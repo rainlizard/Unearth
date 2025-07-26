@@ -122,7 +122,6 @@ func load_default_original_slabset():
 	
 	var object_info = create_object_list(tng_buffer)
 	if object_info.size() == 0:
-		oMessage.quick("Failed to load objects")
 		return
 	
 	var totalSlabs = 42 + 16

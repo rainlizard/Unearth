@@ -17,7 +17,7 @@ func _on_SortCreatureStats_visibility_changed():
 func start():
 	var listOfCfgs = Utils.get_filetype_in_directory(oGame.GAME_DIRECTORY.plus_file("creatrs"), "CFG")
 	for path in listOfCfgs:
-		var aaa = oReadCfg.read_dkcfg_file(path)
+		var aaa = oReadCfg.read_dkcfg_file(path)["config"]
 		all_creature_data[path.get_file()] = aaa
 	
 	populate_optionbutton()
