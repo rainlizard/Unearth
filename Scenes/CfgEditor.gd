@@ -25,7 +25,6 @@ onready var main_container = $CfgTabs/TabRules/MarginContainer/ScrollContainer/V
 onready var scroll_container = $CfgTabs/TabRules/MarginContainer/ScrollContainer
 onready var revert_button_scene = preload("res://Class/GenericRevertButton.tscn")
 
-var ui_built: bool = false
 var font = DynamicFont.new()
 var control_references: Dictionary = {}
 var section_vboxes: Dictionary = {}
@@ -47,10 +46,9 @@ func _ready():
 
 
 func _on_about_to_show():
+	print("???")
 	setup_font()
-	if not ui_built:
-		start()
-		ui_built = true
+	start()
 
 func setup_font():
 	var font_data = load("res://Theme/Hack_Regular.ttf")

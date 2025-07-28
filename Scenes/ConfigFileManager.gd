@@ -13,9 +13,8 @@ enum {
 var paths_loaded = {}
 
 var current_data = {}
-var FXDATA_COMMENTS = {}
 var default_data = {}
-
+var FXDATA_COMMENTS = {}
 
 func _ready():
 	clear_paths()
