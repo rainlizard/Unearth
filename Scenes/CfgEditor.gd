@@ -101,7 +101,7 @@ func build_rules_editor():
 	for child in main_container.get_children():
 		child.queue_free()
 	
-	var rules_data = oConfigFileManager.DATA_RULES
+	var rules_data = oConfigFileManager.current_data.get("rules.cfg", {})
 	if rules_data.empty():
 		create_no_data_label()
 		return
@@ -235,7 +235,7 @@ func _on_array_text_changed(new_text: String, section_name: String, key: String)
 
 
 func update_data_value(section_name: String, key: String, value):
-	oConfigFileManager.DATA_RULES[section_name][key] = value
+	oConfigFileManager.current_data["rules.cfg"][section_name][key] = value
 	update_colors_after_change(section_name, key)
 
 
@@ -250,7 +250,7 @@ func perform_single_revert(section_name: String, key: String) -> bool:
 		return false
 	var default_section = oConfigFileManager.default_data["rules.cfg"].get(section_name)
 	if default_section and default_section.has(key):
-		oConfigFileManager.DATA_RULES[section_name][key] = default_section[key]
+		oConfigFileManager.current_data["rules.cfg"][section_name][key] = default_section[key]
 		print("Reverted ", section_name, ".", key, " to default")
 		return true
 	print("No default value found for ", section_name, ".", key)
@@ -259,7 +259,7 @@ func perform_single_revert(section_name: String, key: String) -> bool:
 
 func _on_revert_section_pressed(section_name: String):
 	if oConfigFileManager.default_data.has("rules.cfg") and oConfigFileManager.default_data["rules.cfg"].has(section_name):
-		oConfigFileManager.DATA_RULES[section_name] = oConfigFileManager.default_data["rules.cfg"][section_name].duplicate(true)
+		oConfigFileManager.current_data["rules.cfg"][section_name] = oConfigFileManager.default_data["rules.cfg"][section_name].duplicate(true)
 		print("Reverted entire section [", section_name, "] to defaults")
 		update_section_after_revert(section_name)
 	else:
@@ -299,7 +299,7 @@ func rebuild_specific_section(section_name: String):
 		child.queue_free()
 	
 	# Rebuild the section content
-	var section_data = oConfigFileManager.DATA_RULES[section_name]
+	var section_data = oConfigFileManager.current_data["rules.cfg"][section_name]
 	var itemIndex = 0
 	
 	if section_data is Array:
@@ -351,7 +351,7 @@ func update_all_standard_controls(section_name: String):
 	if not item_panels.has(section_name):
 		return
 	
-	var section_data = oConfigFileManager.DATA_RULES[section_name]
+	var section_data = oConfigFileManager.current_data["rules.cfg"][section_name]
 	for key in item_panels[section_name]:
 		var item_data = item_panels[section_name][key]
 		var control = item_data["control"]

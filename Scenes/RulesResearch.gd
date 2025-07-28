@@ -133,18 +133,20 @@ func get_research_kind_items(type_name: String) -> Array:
 	match type_name:
 		"MAGIC":
 			var items = []
-			for section_key in oConfigFileManager.DATA_MAGIC:
-				if section_key.begins_with("power"):
-					var power_data = oConfigFileManager.DATA_MAGIC[section_key]
-					if power_data.has("Name"):
-						items.append(power_data["Name"])
+			if oConfigFileManager.current_data.has("magic.cfg"):
+				for section_key in oConfigFileManager.current_data["magic.cfg"]:
+					if section_key.begins_with("power"):
+						var power_data = oConfigFileManager.current_data["magic.cfg"][section_key]
+						if power_data.has("Name"):
+							items.append(power_data["Name"])
 			return items
 		"ROOM":
 			var items = []
-			for room_id in oConfigFileManager.DATA_ROOMS:
-				var room_data = oConfigFileManager.DATA_ROOMS[room_id]
-				if room_data.has("Name"):
-					items.append(room_data["Name"])
+			if oConfigFileManager.current_data.has("terrain.cfg"):
+				for room_id in oConfigFileManager.current_data["terrain.cfg"]:
+					var room_data = oConfigFileManager.current_data["terrain.cfg"][room_id]
+					if room_data.has("Name"):
+						items.append(room_data["Name"])
 			return items
 		"CREATURE":
 			var items = []
@@ -157,17 +159,17 @@ func get_research_kind_items(type_name: String) -> Array:
 
 
 func update_research_value(section_name: String, array_index: int, research_data: Dictionary):
-	var research_list = oConfigFileManager.DATA_RULES[section_name]
+	var research_list = oConfigFileManager.current_data["rules.cfg"][section_name]
 	if array_index >= 0 and array_index < research_list.size():
 		research_list[array_index] = [research_data.type, research_data.kind, research_data.points]
 
 
 func add_research_data():
-	oConfigFileManager.DATA_RULES["research"].append(["MAGIC", "POWER_SIGHT", 1])
+	oConfigFileManager.current_data["rules.cfg"]["research"].append(["MAGIC", "POWER_SIGHT", 1])
 
 
 func remove_research_data(section_name: String, array_index: int):
-	var research_list = oConfigFileManager.DATA_RULES[section_name]
+	var research_list = oConfigFileManager.current_data["rules.cfg"][section_name]
 	if array_index >= 0 and array_index < research_list.size():
 		research_list.remove(array_index)
 		cleanup_control_references(array_index)
@@ -281,7 +283,7 @@ func get_tooltip_text_for_label(label: Label, array_index: int) -> String:
 
 
 func move_research_item(section_name: String, from_index: int, to_index: int):
-	var research_list = oConfigFileManager.DATA_RULES[section_name]
+	var research_list = oConfigFileManager.current_data["rules.cfg"][section_name]
 	if from_index >= 0 and from_index < research_list.size() and to_index >= 0 and to_index < research_list.size():
 		var item = research_list[from_index]
 		research_list.remove(from_index)
@@ -299,7 +301,7 @@ func _on_move_research_down_pressed(section_name: String, array_index: int):
 
 
 func try_move_research(section_name: String, from_index: int, to_index: int) -> bool:
-	var research_list = oConfigFileManager.DATA_RULES[section_name]
+	var research_list = oConfigFileManager.current_data["rules.cfg"][section_name]
 	if from_index >= 0 and to_index >= 0 and from_index < research_list.size() and to_index < research_list.size() and from_index != to_index:
 		move_research_item(section_name, from_index, to_index)
 		return true

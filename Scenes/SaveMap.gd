@@ -213,12 +213,12 @@ func save_rules_cfg_file(file_type, ui_label_name, map_filename_no_ext, map_base
 
 
 func export_rules_cfg(file_path):
-	if oConfigFileManager.DATA_RULES.empty():
+	if not oConfigFileManager.current_data.has("rules.cfg") or oConfigFileManager.current_data["rules.cfg"].empty():
 		return false
 	
 	var has_any_changes = false
 	var sections_to_export = {}
-	var rules_data = oConfigFileManager.DATA_RULES
+	var rules_data = oConfigFileManager.current_data["rules.cfg"]
 	
 	for section_name in rules_data.keys():
 		var section_data = rules_data[section_name]

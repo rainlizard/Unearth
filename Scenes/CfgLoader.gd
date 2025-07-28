@@ -313,10 +313,10 @@ func load_effects_data(file_path):
 
 
 func load_rules_data(cfg):
-	oConfigFileManager.DATA_RULES = cfg
+	oConfigFileManager.current_data["rules.cfg"] = cfg
 
 func load_magic_data(cfg):
-	oConfigFileManager.DATA_MAGIC = cfg
+	oConfigFileManager.current_data["magic.cfg"] = cfg
 
 func load_room_data_from_terrain(cfg):
 	var room_data = {}
@@ -325,7 +325,7 @@ func load_room_data_from_terrain(cfg):
 			var id = int(section)
 			if id == 0: continue
 			room_data[id] = cfg[section]
-	oConfigFileManager.DATA_ROOMS = room_data
+	oConfigFileManager.current_data["terrain.cfg"] = room_data
 
 func update_paths_for_saved_files(file_path, file_type):
 	if file_type == "slabset.toml" or file_type == "columnset.toml":

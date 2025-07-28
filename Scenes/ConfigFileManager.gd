@@ -12,9 +12,7 @@ enum {
 }
 var paths_loaded = {}
 
-var DATA_RULES = {}
-var DATA_MAGIC = {}
-var DATA_ROOMS = {}
+var current_data = {}
 var FXDATA_COMMENTS = {}
 var default_data = {}
 
@@ -30,17 +28,15 @@ func clear_paths():
 		LOAD_CFG_CAMPAIGN: [],
 		LOAD_CFG_CURRENT_MAP: []
 	}
-	DATA_RULES = {}
-	DATA_MAGIC = {}
-	DATA_ROOMS = {}
+	current_data = {}
 	FXDATA_COMMENTS = {}
 	default_data = {}
 	emit_signal("config_file_status_changed")
 
 
 func store_default_data():
-	if not DATA_RULES.empty():
-		default_data["rules.cfg"] = DATA_RULES.duplicate(true)
+	if current_data.has("rules.cfg") and not current_data["rules.cfg"].empty():
+		default_data["rules.cfg"] = current_data["rules.cfg"].duplicate(true)
 
 
 func get_comments_for_key(filename: String, section_name: String, key: String) -> Array:
@@ -53,19 +49,19 @@ func is_item_different(section_name: String, key: String) -> bool:
 	if not default_data.has("rules.cfg") or not default_data["rules.cfg"].has(section_name) or not default_data["rules.cfg"][section_name].has(key):
 		return false
 	
-	if not DATA_RULES.has(section_name) or not DATA_RULES[section_name].has(key):
+	if not current_data.has("rules.cfg") or not current_data["rules.cfg"].has(section_name) or not current_data["rules.cfg"][section_name].has(key):
 		return false
 	
-	var current_value = DATA_RULES[section_name][key]
+	var current_value = current_data["rules.cfg"][section_name][key]
 	var default_value = default_data["rules.cfg"][section_name][key]
 	return current_value != default_value
 
 
 func is_section_different(section_name: String) -> bool:
-	if not DATA_RULES.has(section_name):
+	if not current_data.has("rules.cfg") or not current_data["rules.cfg"].has(section_name):
 		return false
 	
-	var current_section = DATA_RULES[section_name]
+	var current_section = current_data["rules.cfg"][section_name]
 	
 	# Handle array format (for research/sacrifices)
 	if current_section is Array:

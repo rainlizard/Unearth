@@ -175,17 +175,17 @@ func get_ingredient_items() -> Array:
 
 func update_sacrifice_value(section_name: String, array_index: int, sacrifice_data: Dictionary):
 	var sacrifice_array = [sacrifice_data.type, sacrifice_data.reward] + sacrifice_data.ingredients
-	var sacrifices_list = oConfigFileManager.DATA_RULES[section_name]
+	var sacrifices_list = oConfigFileManager.current_data["rules.cfg"][section_name]
 	if array_index >= 0 and array_index < sacrifices_list.size():
 		sacrifices_list[array_index] = sacrifice_array
 
 
 func add_sacrifice_data():
-	oConfigFileManager.DATA_RULES["sacrifices"].append(["MkCreature", "BILE_DEMON", "SPIDER", "SPIDER", "SPIDER"])
+	oConfigFileManager.current_data["rules.cfg"]["sacrifices"].append(["MkCreature", "BILE_DEMON", "SPIDER", "SPIDER", "SPIDER"])
 
 
 func remove_sacrifice_data(section_name: String, array_index: int):
-	var sacrifices_list = oConfigFileManager.DATA_RULES[section_name]
+	var sacrifices_list = oConfigFileManager.current_data["rules.cfg"][section_name]
 	if array_index >= 0 and array_index < sacrifices_list.size():
 		sacrifices_list.remove(array_index)
 		cleanup_control_references(array_index)

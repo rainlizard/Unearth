@@ -155,7 +155,7 @@ func check_default_value_exists(section_name: String, array_index: int) -> bool:
 func check_item_difference(section_name: String, array_index: int) -> bool:
 	if not check_default_value_exists(section_name, array_index):
 		return true
-	var current_section = oCfgEditor.oConfigFileManager.DATA_RULES[section_name]
+	var current_section = oCfgEditor.oConfigFileManager.current_data["rules.cfg"][section_name]
 	var default_section = oCfgEditor.oConfigFileManager.default_data["rules.cfg"][section_name]
 	if not (current_section is Array) or array_index >= current_section.size():
 		return true
@@ -167,7 +167,7 @@ func perform_item_revert(section_name: String, array_index: int) -> bool:
 		print("No default rules.cfg data found")
 		return false
 	var default_section = oCfgEditor.oConfigFileManager.default_data["rules.cfg"].get(section_name)
-	var current_section = oCfgEditor.oConfigFileManager.DATA_RULES.get(section_name)
+	var current_section = oCfgEditor.oConfigFileManager.current_data.get("rules.cfg", {}).get(section_name)
 	if not default_section or not (default_section is Array and current_section is Array):
 		print("No valid default data for ", section_name)
 		return false
