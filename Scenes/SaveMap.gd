@@ -65,6 +65,9 @@ func save_map(filePath):
 	# Handle slabset.toml and columnset.toml files
 	save_toml_file("slabset.toml", "oCurrentlyOpenSlabset", map_filename_no_ext, map_base_dir)
 	save_toml_file("columnset.toml", "oCurrentlyOpenColumnset", map_filename_no_ext, map_base_dir)
+	
+	# Handle rules.cfg file
+	save_rules_cfg_file("rules.cfg", "oCurrentlyOpenRules", map_filename_no_ext, map_base_dir)
 
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	if oDataScript.data == "" and oDataLua.data == "":
@@ -171,6 +174,121 @@ func save_toml_file(file_type, ui_label_name, map_filename_no_ext, map_base_dir)
 
 
 func delete_toml_file_if_exists(file_path, file_type):
+	if File.new().file_exists(file_path):
+		var global_path = ProjectSettings.globalize_path(file_path)
+		var err_trash = OS.move_to_trash(global_path)
+		if err_trash == OK:
+			print("Moved unmodified " + file_type + " file to trash: " + file_path.get_file())
+			oConfigFileManager.notify_file_deleted(file_path, file_type)
+		else:
+			print("Error trashing " + file_type + " file: " + file_path.get_file() + " Code: " + str(err_trash))
+
+
+func save_rules_cfg_file(file_type, ui_label_name, map_filename_no_ext, map_base_dir):
+	var file_path
+	var config_type = oConfigFileManager.LOAD_CFG_CURRENT_MAP
+	
+	var ui_label = Nodelist.list[ui_label_name]
+	var existing_file_path = ui_label.hint_tooltip
+	
+	if existing_file_path != "" and existing_file_path != "No saved file":
+		file_path = existing_file_path
+		if existing_file_path.get_file() == file_type:
+			config_type = oConfigFileManager.LOAD_CFG_CAMPAIGN
+	else:
+		file_path = map_base_dir.plus_file(map_filename_no_ext + "." + file_type)
+	
+	var export_success = export_rules_cfg(file_path)
+	
+	if export_success:
+		if config_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
+			if not oConfigFileManager.paths_loaded[config_type].has(file_path):
+				oConfigFileManager.paths_loaded[config_type].append(file_path)
+			oConfigFileManager.emit_signal("config_file_status_changed")
+		else:
+			oConfigFileManager.notify_file_created(file_path, file_type)
+		print("Saved " + file_type.get_basename() + " to: " + file_path)
+	else:
+		delete_rules_cfg_file_if_exists(file_path, file_type)
+
+
+func export_rules_cfg(file_path):
+	if oConfigFileManager.DATA_RULES.empty():
+		return false
+	
+	var has_any_changes = false
+	var sections_to_export = {}
+	var rules_data = oConfigFileManager.DATA_RULES
+	
+	for section_name in rules_data.keys():
+		var section_data = rules_data[section_name]
+		
+		if section_name == "research" or section_name == "sacrifices":
+			if oConfigFileManager.is_section_different(section_name):
+				sections_to_export[section_name] = section_data
+				has_any_changes = true
+		else:
+			var modified_keys = {}
+			if section_data is Dictionary:
+				for key in section_data.keys():
+					if oConfigFileManager.is_item_different(section_name, key):
+						modified_keys[key] = section_data[key]
+						has_any_changes = true
+			if not modified_keys.empty():
+				sections_to_export[section_name] = modified_keys
+	
+	if not has_any_changes:
+		return false
+	
+	var file = File.new()
+	if file.open(file_path, File.WRITE) != OK:
+		return false
+	
+	for section_name in sections_to_export.keys():
+		file.store_line("[" + section_name + "]")
+		var section_data = sections_to_export[section_name]
+		
+		if section_name == "research" and section_data is Array:
+			for item in section_data:
+				if item is Array and item.size() >= 3:
+					var research_type = str(item[0])
+					var research_item = str(item[1])
+					var research_cost = str(item[2])
+					file.store_line("Research = " + research_type + " " + research_item + " " + research_cost)
+		elif section_name == "sacrifices" and section_data is Array:
+			for item in section_data:
+				if item is Array and item.size() >= 2:
+					var command = str(item[0])
+					var result = str(item[1])
+					var ingredients = []
+					for i in range(2, item.size()):
+						ingredients.append(str(item[i]))
+					if ingredients.size() > 0:
+						var ingredients_text = " ".join(ingredients)
+						file.store_line(command + " = " + result + " " + ingredients_text)
+					else:
+						file.store_line(command + " = " + result)
+		elif section_data is Dictionary:
+			for key in section_data.keys():
+				var value = section_data[key]
+				if value is Array:
+					if value.empty():
+						file.store_line(key + " = ")
+					else:
+						var str_values = []
+						for v in value:
+							str_values.append(str(v))
+						file.store_line(key + " = " + " ".join(str_values))
+				else:
+					file.store_line(key + " = " + str(value))
+		
+		file.store_line("")
+	
+	file.close()
+	return true
+
+
+func delete_rules_cfg_file_if_exists(file_path, file_type):
 	if File.new().file_exists(file_path):
 		var global_path = ProjectSettings.globalize_path(file_path)
 		var err_trash = OS.move_to_trash(global_path)

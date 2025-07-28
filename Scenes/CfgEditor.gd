@@ -18,9 +18,10 @@ onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oCfgTabs = Nodelist.list["oCfgTabs"]
 onready var oLabelCfgComment = Nodelist.list["oLabelCfgComment"]
 onready var oPanelCfgComment = Nodelist.list["oPanelCfgComment"]
+onready var oCurrentlyOpenRules = Nodelist.list["oCurrentlyOpenRules"]
 
-onready var main_panel = $CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer
-onready var main_container = $CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer/HBoxContainer
+onready var main_panel = $CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer
+onready var main_container = $CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer
 onready var scroll_container = $CfgTabs/TabRules/MarginContainer/ScrollContainer
 onready var revert_button_scene = preload("res://Class/GenericRevertButton.tscn")
 
@@ -39,9 +40,10 @@ func _ready():
 	
 	connect("about_to_show", self, "_on_about_to_show")
 	oPanelCfgComment.connect("mouse_entered", self, "_on_panel_cfg_comment_mouse_entered")
+	oConfigFileManager.connect("config_file_status_changed", self, "_on_config_status_changed")
 	
-	#yield(get_tree(),'idle_frame')
-	#Utils.popup_centered(self)
+	yield(get_tree(),'idle_frame')
+	Utils.popup_centered(self)
 
 
 func _on_about_to_show():
@@ -92,6 +94,7 @@ func setup_script_editor_font(control: Control):
 func start():
 	build_rules_editor()
 	setup_script_editor_font(oLabelCfgComment)
+	update_rules_paths_label()
 
 
 func build_rules_editor():
@@ -538,3 +541,36 @@ func _on_link_button_pressed(selected_item: String):
 	
 	if callback != null and callback.is_valid():
 		callback.call_funcv([selected_item, metadata])
+
+
+func _on_config_status_changed():
+	update_rules_paths_label()
+
+
+func get_meaningful_file_path(fileName):
+	for cfg_type in [oConfigFileManager.LOAD_CFG_CURRENT_MAP, oConfigFileManager.LOAD_CFG_CAMPAIGN]:
+		if oConfigFileManager.paths_loaded.has(cfg_type):
+			for path in oConfigFileManager.paths_loaded[cfg_type]:
+				if path and path.to_lower().ends_with(fileName):
+					return path
+	return ""
+
+
+func update_rules_paths_label():
+	var file_path = get_meaningful_file_path("rules.cfg")
+	var final_text = ""
+	var tooltip_text = ""
+	
+	if file_path != "":
+		var filename = file_path.get_file()
+		if filename == "rules.cfg":
+			final_text = "/" + file_path.get_base_dir().get_file() + "/" + filename
+		else:
+			final_text = filename
+		tooltip_text = file_path
+	else:
+		final_text = "No saved file"
+		tooltip_text = "No saved file"
+	
+	oCurrentlyOpenRules.text = final_text
+	oCurrentlyOpenRules.hint_tooltip = tooltip_text

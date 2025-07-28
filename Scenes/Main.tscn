@@ -6595,7 +6595,33 @@ margin_bottom = 596.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer"]
+margin_right = 913.0
+margin_bottom = 591.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_left = 206.0
+margin_right = 706.0
+margin_bottom = 39.0
+rect_min_size = Vector2( 500, 0 )
+mouse_filter = 1
+size_flags_horizontal = 4
+
+[node name="CurrentlyOpenRules" type="Label" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer/PanelContainer4"]
+margin_left = 9.0
+margin_top = 9.0
+margin_right = 491.0
+margin_bottom = 30.0
+mouse_filter = 1
+size_flags_horizontal = 7
+text = "Filename"
+align = 1
+autowrap = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 43.0
 margin_right = 913.0
 margin_bottom = 591.0
 size_flags_horizontal = 3
@@ -6605,19 +6631,20 @@ custom_constants/margin_top = 5
 custom_constants/margin_left = 5
 custom_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 908.0
-margin_bottom = 586.0
+margin_bottom = 543.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PanelCfgComment" type="PanelContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer"]
+visible = false
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 918.0
-margin_bottom = 44.0
+margin_bottom = 23.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 0

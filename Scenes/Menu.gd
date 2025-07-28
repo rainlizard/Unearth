@@ -108,9 +108,9 @@ func add_edit_menu_items():
 	edit_popup.add_item("Update all slabs", 4)
 	edit_popup.add_item("Resize map", 3)
 	edit_popup.add_separator()
+	edit_popup.add_item("Rules", 7)
 	edit_popup.add_item("Slabset", 6)
 	edit_popup.add_item("Tileset", 5)
-	#edit_popup.add_item("Cfg editor", 7)
 
 func update_undo_availability():
 	if oUndoStates.undo_history.size() <= 1:
