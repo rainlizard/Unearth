@@ -7,7 +7,7 @@ onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
 var control_references: Dictionary = {}
 var add_button: Button = null
 
-func create_sacrifice_control(parent: VBoxContainer, array_index, value, section_name: String, itemIndex: int, revert_button_scene, editor_context):
+func create_sacrifice_control(parent: VBoxContainer, array_index: int, value, section_name: String, itemIndex: int, revert_button_scene, editor_context):
 	var sacrifice_data = parse_sacrifice_string(value)
 	
 	var item_panel = PanelContainer.new()

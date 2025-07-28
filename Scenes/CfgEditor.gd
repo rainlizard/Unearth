@@ -46,7 +46,6 @@ func _ready():
 
 
 func _on_about_to_show():
-	print("???")
 	setup_font()
 	start()
 
@@ -213,9 +212,9 @@ func create_section_add_button(section_vbox: VBoxContainer, section_name: String
 
 func create_config_control(parent: VBoxContainer, key, value, section_name: String, itemIndex: int):
 	if section_name == "sacrifices":
-		oRulesSacrifices.create_sacrifice_control(parent, key, value, section_name, itemIndex, revert_button_scene, self)
+		oRulesSacrifices.create_sacrifice_control(parent, int(key), value, section_name, itemIndex, revert_button_scene, self)
 	elif section_name == "research":
-		oRulesResearch.create_research_control(parent, key, value, section_name, itemIndex, revert_button_scene, self)
+		oRulesResearch.create_research_control(parent, int(key), value, section_name, itemIndex, revert_button_scene, self)
 	else:
 		oTabRules.create_standard_config_control(parent, str(key), value, section_name, itemIndex, revert_button_scene, self)
 

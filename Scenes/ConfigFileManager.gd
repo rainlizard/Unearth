@@ -87,17 +87,22 @@ func is_section_different(section_name: String) -> bool:
 				return true
 		
 		if default_data.has("rules.cfg") and default_data["rules.cfg"].has(section_name):
-			for key in default_data["rules.cfg"][section_name].keys():
-				if not current_section.has(key):
-					return true
+			var default_section = default_data["rules.cfg"][section_name]
+			if default_section is Dictionary:
+				for key in default_section.keys():
+					if not current_section.has(key):
+						return true
 		
 		if section_name == "sacrifices":
 			if not default_data.has("rules.cfg") or not default_data["rules.cfg"].has(section_name):
 				return true
-			var current_keys = current_section.keys()
-			var default_keys = default_data["rules.cfg"][section_name].keys()
-			if current_keys.size() > default_keys.size():
-				return true
+			if current_section is Dictionary:
+				var current_keys = current_section.keys()
+				var default_section = default_data["rules.cfg"][section_name]
+				if default_section is Dictionary:
+					var default_keys = default_section.keys()
+					if current_keys.size() > default_keys.size():
+						return true
 	
 	return false
 

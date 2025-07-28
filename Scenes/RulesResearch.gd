@@ -16,7 +16,7 @@ func parse_research_array(value) -> Dictionary:
 	return result
 
 
-func create_research_control(parent: VBoxContainer, array_index, value, section_name: String, itemIndex: int, revert_button_scene, editor_context):
+func create_research_control(parent: VBoxContainer, array_index: int, value, section_name: String, itemIndex: int, revert_button_scene, editor_context):
 	var research_data = parse_research_array(value)
 	
 	var item_panel = PanelContainer.new()

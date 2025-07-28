@@ -78,7 +78,7 @@ func load_cfgs(mapPath):
 						"effects.toml": load_effects_data(actual_filepath)
 				elif ext == "cfg":
 					var result = oReadCfg.read_dkcfg_file(actual_filepath)
-					combined_cfg_data = super_merge(combined_cfg_data, result["config"])
+					combined_cfg_data = super_merge_dictionaries(combined_cfg_data, result["config"])
 					
 					if load_cfg_type == oConfigFileManager.LOAD_CFG_FXDATA:
 						if not result["config"].empty():
@@ -98,13 +98,13 @@ func load_cfgs(mapPath):
 				"rules.cfg": load_rules_data(combined_cfg_data)
 				"magic.cfg": load_magic_data(combined_cfg_data)
 
-func super_merge(dict1, dict2):
+func super_merge_dictionaries(dict1:Dictionary, dict2:Dictionary):
 	var merged = {}
 	for key in dict1:
 		merged[key] = dict1[key]
 	for key in dict2:
 		if key in merged and typeof(merged[key]) == TYPE_DICTIONARY and typeof(dict2[key]) == TYPE_DICTIONARY:
-			merged[key] = super_merge(merged[key], dict2[key])
+			merged[key] = super_merge_dictionaries(merged[key], dict2[key])
 		else:
 			merged[key] = dict2[key]
 	return merged

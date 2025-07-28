@@ -19,8 +19,8 @@ func read_dkcfg_file(file_path: String) -> Dictionary:
 	
 	var lines = content.split("\n")
 	var pending_comments = []
-	var filename = file_path.get_file()
-	var is_rules_cfg = filename == "rules.cfg"
+	var getFilename = file_path.get_file()
+	var is_rules_cfg = "rules.cfg" in getFilename
 	
 	for line in lines:
 		var stripped = line.strip_edges()
@@ -89,6 +89,6 @@ func read_dkcfg_file(file_path: String) -> Dictionary:
 			pending_comments.clear()
 	
 	var elapsed_time = OS.get_ticks_msec() - start_time
-	print("Read " + filename + " dkcfg with comments in : " + str(elapsed_time) + "ms")
+	print("Read " + getFilename + " dkcfg with comments in : " + str(elapsed_time) + "ms")
 	
 	return {"config": config, "comments": comments}
