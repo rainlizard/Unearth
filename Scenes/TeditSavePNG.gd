@@ -133,7 +133,7 @@ func setup_reloader(packFolderName: String, packFolderPath: String, packContent:
 
 func open_texture_folder():
 	if packFolder == "" and openFolder == "":
-		oMessage.big("Error", "No texture pack loaded. Please load a tileset first using 'Create Filelist'.")
+		oMessage.big("Error", "No texture pack loaded. Please load a tileset first.")
 		return
 	var folderToOpen = openFolder if openFolder != "" else packFolder
 	if not Directory.new().dir_exists(folderToOpen):

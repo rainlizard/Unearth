@@ -1,6 +1,8 @@
-﻿extends Node
+extends Node
 
 const string = """
+<version> - <date>
+- Fixed 'Edit tilesets' window
 0.61.811 - 26/7/2025
 - All custom specials now have access to the CustomBox field
 - Fixed loading classic format
