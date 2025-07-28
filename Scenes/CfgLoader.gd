@@ -80,8 +80,11 @@ func load_cfgs(mapPath):
 					var result = oReadCfg.read_dkcfg_file(actual_filepath)
 					combined_cfg_data = super_merge(combined_cfg_data, result["config"])
 					
-					if load_cfg_type == oConfigFileManager.LOAD_CFG_FXDATA and not result["comments"].empty():
-						oConfigFileManager.FXDATA_COMMENTS[file_name_from_list] = result["comments"]
+					if load_cfg_type == oConfigFileManager.LOAD_CFG_FXDATA:
+						if not result["config"].empty():
+							oConfigFileManager.default_data[file_name_from_list] = result["config"].duplicate(true)
+						if not result["comments"].empty():
+							oConfigFileManager.FXDATA_COMMENTS[file_name_from_list] = result["comments"]
 		# Load it
 		if combined_cfg_data.empty() == false:
 			match file_name_from_list:
@@ -311,7 +314,6 @@ func load_effects_data(file_path):
 
 func load_rules_data(cfg):
 	oConfigFileManager.DATA_RULES = cfg
-	oConfigFileManager.store_default_data()
 
 func load_magic_data(cfg):
 	oConfigFileManager.DATA_MAGIC = cfg

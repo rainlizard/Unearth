@@ -40,7 +40,7 @@ func clear_paths():
 
 func store_default_data():
 	if not DATA_RULES.empty():
-		default_data = DATA_RULES.duplicate(true)
+		default_data["rules.cfg"] = DATA_RULES.duplicate(true)
 
 
 func get_comments_for_key(filename: String, section_name: String, key: String) -> Array:
@@ -50,14 +50,14 @@ func get_comments_for_key(filename: String, section_name: String, key: String) -
 
 
 func is_item_different(section_name: String, key: String) -> bool:
-	if not default_data.has(section_name) or not default_data[section_name].has(key):
+	if not default_data.has("rules.cfg") or not default_data["rules.cfg"].has(section_name) or not default_data["rules.cfg"][section_name].has(key):
 		return false
 	
 	if not DATA_RULES.has(section_name) or not DATA_RULES[section_name].has(key):
 		return false
 	
 	var current_value = DATA_RULES[section_name][key]
-	var default_value = default_data[section_name][key]
+	var default_value = default_data["rules.cfg"][section_name][key]
 	return current_value != default_value
 
 
@@ -70,10 +70,10 @@ func is_section_different(section_name: String) -> bool:
 	# Handle array format (for research/sacrifices)
 	if current_section is Array:
 		# For arrays, we need to compare the entire array structure
-		if not default_data.has(section_name):
+		if not default_data.has("rules.cfg") or not default_data["rules.cfg"].has(section_name):
 			return true
 		
-		var default_section = default_data[section_name]
+		var default_section = default_data["rules.cfg"][section_name]
 		if not (default_section is Array):
 			return true
 		
@@ -91,14 +91,16 @@ func is_section_different(section_name: String) -> bool:
 			if is_item_different(section_name, key):
 				return true
 		
-		if default_data.has(section_name):
-			for key in default_data[section_name].keys():
+		if default_data.has("rules.cfg") and default_data["rules.cfg"].has(section_name):
+			for key in default_data["rules.cfg"][section_name].keys():
 				if not current_section.has(key):
 					return true
 		
 		if section_name == "sacrifices":
+			if not default_data.has("rules.cfg") or not default_data["rules.cfg"].has(section_name):
+				return true
 			var current_keys = current_section.keys()
-			var default_keys = default_data[section_name].keys()
+			var default_keys = default_data["rules.cfg"][section_name].keys()
 			if current_keys.size() > default_keys.size():
 				return true
 	

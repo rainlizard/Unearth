@@ -245,7 +245,10 @@ func _on_revert_pressed(section_name: String, key: String):
 
 
 func perform_single_revert(section_name: String, key: String) -> bool:
-	var default_section = oConfigFileManager.default_data.get(section_name)
+	if not oConfigFileManager.default_data.has("rules.cfg"):
+		print("No default rules.cfg data found")
+		return false
+	var default_section = oConfigFileManager.default_data["rules.cfg"].get(section_name)
 	if default_section and default_section.has(key):
 		oConfigFileManager.DATA_RULES[section_name][key] = default_section[key]
 		print("Reverted ", section_name, ".", key, " to default")
@@ -255,8 +258,8 @@ func perform_single_revert(section_name: String, key: String) -> bool:
 
 
 func _on_revert_section_pressed(section_name: String):
-	if oConfigFileManager.default_data.has(section_name):
-		oConfigFileManager.DATA_RULES[section_name] = oConfigFileManager.default_data[section_name].duplicate(true)
+	if oConfigFileManager.default_data.has("rules.cfg") and oConfigFileManager.default_data["rules.cfg"].has(section_name):
+		oConfigFileManager.DATA_RULES[section_name] = oConfigFileManager.default_data["rules.cfg"][section_name].duplicate(true)
 		print("Reverted entire section [", section_name, "] to defaults")
 		update_section_after_revert(section_name)
 	else:
