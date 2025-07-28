@@ -19,6 +19,7 @@ onready var oCfgTabs = Nodelist.list["oCfgTabs"]
 onready var oLabelCfgComment = Nodelist.list["oLabelCfgComment"]
 onready var oPanelCfgComment = Nodelist.list["oPanelCfgComment"]
 onready var oCurrentlyOpenRules = Nodelist.list["oCurrentlyOpenRules"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 onready var main_panel = $CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer
 onready var main_container = $CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer/HBoxContainer
@@ -233,6 +234,7 @@ func _on_array_text_changed(new_text: String, section_name: String, key: String)
 
 func update_data_value(section_name: String, key: String, value):
 	oConfigFileManager.current_data["rules.cfg"][section_name][key] = value
+	oEditor.mapHasBeenEdited = true
 	update_colors_after_change(section_name, key)
 
 
@@ -248,6 +250,7 @@ func perform_single_revert(section_name: String, key: String) -> bool:
 	var default_section = oConfigFileManager.default_data["rules.cfg"].get(section_name)
 	if default_section and default_section.has(key):
 		oConfigFileManager.current_data["rules.cfg"][section_name][key] = default_section[key]
+		oEditor.mapHasBeenEdited = true
 		print("Reverted ", section_name, ".", key, " to default")
 		return true
 	print("No default value found for ", section_name, ".", key)
@@ -257,6 +260,7 @@ func perform_single_revert(section_name: String, key: String) -> bool:
 func _on_revert_section_pressed(section_name: String):
 	if oConfigFileManager.default_data.has("rules.cfg") and oConfigFileManager.default_data["rules.cfg"].has(section_name):
 		oConfigFileManager.current_data["rules.cfg"][section_name] = oConfigFileManager.default_data["rules.cfg"][section_name].duplicate(true)
+		oEditor.mapHasBeenEdited = true
 		print("Reverted entire section [", section_name, "] to defaults")
 		update_section_after_revert(section_name)
 	else:

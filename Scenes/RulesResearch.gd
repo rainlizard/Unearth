@@ -3,6 +3,7 @@ onready var oCfgEditor = Nodelist.list["oCfgEditor"]
 onready var oTabRules = Nodelist.list["oTabRules"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 var control_references: Dictionary = {}
 var add_button: Button = null
@@ -162,16 +163,19 @@ func update_research_value(section_name: String, array_index: int, research_data
 	var research_list = oConfigFileManager.current_data["rules.cfg"][section_name]
 	if array_index >= 0 and array_index < research_list.size():
 		research_list[array_index] = [research_data.type, research_data.kind, research_data.points]
+		oEditor.mapHasBeenEdited = true
 
 
 func add_research_data():
 	oConfigFileManager.current_data["rules.cfg"]["research"].append(["MAGIC", "POWER_SIGHT", 1])
+	oEditor.mapHasBeenEdited = true
 
 
 func remove_research_data(section_name: String, array_index: int):
 	var research_list = oConfigFileManager.current_data["rules.cfg"][section_name]
 	if array_index >= 0 and array_index < research_list.size():
 		research_list.remove(array_index)
+		oEditor.mapHasBeenEdited = true
 		cleanup_control_references(array_index)
 		oCfgEditor.update_colors_after_change(section_name, array_index)
 
@@ -288,6 +292,7 @@ func move_research_item(section_name: String, from_index: int, to_index: int):
 		var item = research_list[from_index]
 		research_list.remove(from_index)
 		research_list.insert(to_index, item)
+		oEditor.mapHasBeenEdited = true
 
 
 func _on_move_research_up_pressed(section_name: String, array_index: int):
@@ -331,5 +336,6 @@ func _on_research_revert_pressed(section_name: String, array_index: int):
 func research_item_revert(array_index: int):
 	var section_name = "research"
 	if oTabRules.perform_item_revert(section_name, array_index):
-		update_research_ui_after_revert(array_index, oConfigFileManager.default_data[section_name][array_index])
+		oEditor.mapHasBeenEdited = true
+		update_research_ui_after_revert(array_index, oConfigFileManager.default_data["rules.cfg"][section_name][array_index])
 		oCfgEditor.update_colors_after_change(section_name, array_index)

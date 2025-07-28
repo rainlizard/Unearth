@@ -3,6 +3,7 @@ onready var oCfgEditor = Nodelist.list["oCfgEditor"]
 onready var oTabRules = Nodelist.list["oTabRules"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 var control_references: Dictionary = {}
 var add_button: Button = null
@@ -178,16 +179,19 @@ func update_sacrifice_value(section_name: String, array_index: int, sacrifice_da
 	var sacrifices_list = oConfigFileManager.current_data["rules.cfg"][section_name]
 	if array_index >= 0 and array_index < sacrifices_list.size():
 		sacrifices_list[array_index] = sacrifice_array
+		oEditor.mapHasBeenEdited = true
 
 
 func add_sacrifice_data():
 	oConfigFileManager.current_data["rules.cfg"]["sacrifices"].append(["MkCreature", "BILE_DEMON", "SPIDER", "SPIDER", "SPIDER"])
+	oEditor.mapHasBeenEdited = true
 
 
 func remove_sacrifice_data(section_name: String, array_index: int):
 	var sacrifices_list = oConfigFileManager.current_data["rules.cfg"][section_name]
 	if array_index >= 0 and array_index < sacrifices_list.size():
 		sacrifices_list.remove(array_index)
+		oEditor.mapHasBeenEdited = true
 		cleanup_control_references(array_index)
 		oCfgEditor.update_colors_after_change(section_name, array_index)
 
@@ -500,5 +504,6 @@ func _on_sacrifice_revert_pressed(section_name: String, array_index: int):
 func sacrifice_item_revert(array_index: int):
 	var section_name = "sacrifices"
 	if oTabRules.perform_item_revert(section_name, array_index):
-		update_sacrifice_ui_after_revert(array_index, oConfigFileManager.default_data[section_name][array_index])
+		oEditor.mapHasBeenEdited = true
+		update_sacrifice_ui_after_revert(array_index, oConfigFileManager.default_data["rules.cfg"][section_name][array_index])
 		oCfgEditor.update_colors_after_change(section_name, array_index)

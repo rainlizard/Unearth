@@ -2,6 +2,7 @@ extends Node
 
 const string = """
 <version> - <date>
+- Added Edit->Rules
 - Fixed 'Edit tilesets' window
 0.61.811 - 26/7/2025
 - All custom specials now have access to the CustomBox field
