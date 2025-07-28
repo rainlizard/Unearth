@@ -41,9 +41,6 @@ func _ready():
 	connect("about_to_show", self, "_on_about_to_show")
 	oPanelCfgComment.connect("mouse_entered", self, "_on_panel_cfg_comment_mouse_entered")
 	oConfigFileManager.connect("config_file_status_changed", self, "_on_config_status_changed")
-	
-	yield(get_tree(),'idle_frame')
-	Utils.popup_centered(self)
 
 
 func _on_about_to_show():

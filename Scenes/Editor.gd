@@ -77,9 +77,10 @@ func _notification(what):
 		else:
 			get_tree().quit()
 	elif what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
-		Engine.target_fps = framerate_limit
+		VisualServer.render_loop_enabled = true
 	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
-		Engine.target_fps = int(min(12, framerate_limit))
+		if Settings.get_setting("pause_when_minimized") == true:
+			VisualServer.render_loop_enabled = false
 
 func just_opened_editor():
 	yield(get_tree(),'idle_frame')

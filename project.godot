@@ -89,6 +89,7 @@ gdscript/warnings/integer_division=false
 window/size/height=576
 window/size/borderless=true
 window/dpi/allow_hidpi=true
+window/energy_saving/keep_screen_on=false
 
 [editor_plugins]
 

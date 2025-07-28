@@ -34,6 +34,7 @@ onready var oScriptEditorFontSize = Nodelist.list["oScriptEditorFontSize"]
 onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
 onready var oShowCLMDataTabCheckbox = Nodelist.list["oShowCLMDataTabCheckbox"]
+onready var oPauseWhenMinimizedCheckbox = Nodelist.list["oPauseWhenMinimizedCheckbox"]
 onready var oSymmetryGuidelinesSetting = Nodelist.list["oSymmetryGuidelinesSetting"]
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
@@ -94,6 +95,7 @@ func _on_SettingsWindow_about_to_show():
 	oScriptEditorFontSize.update_appearance(Settings.get_setting("script_editor_font_size"))
 	oCheckBoxNewMapAutoOpensMapSettings.pressed = Settings.get_setting("auto_open_map_settings")
 	oShowCLMDataTabCheckbox.pressed = Settings.get_setting("show_clm_data_tab")
+	oPauseWhenMinimizedCheckbox.pressed = Settings.get_setting("pause_when_minimized")
 
 func _on_CheckBoxVsync_toggled(button_pressed):
 	Settings.set_setting("vsync", button_pressed)
@@ -204,6 +206,9 @@ func _on_ShowCLMDataTabCheckbox_toggled(button_pressed):
 	Settings.set_setting("show_clm_data_tab", button_pressed)
 	var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
 	oSlabsetTabs.set_tab_hidden(2, !button_pressed)
+
+func _on_PauseWhenMinimizedCheckbox_toggled(button_pressed):
+	Settings.set_setting("pause_when_minimized", button_pressed)
 
 func edited_MSAA(new_text):
 	var slider_value = int(new_text)

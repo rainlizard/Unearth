@@ -76,6 +76,7 @@ var listOfSettings = [
 	"fortify",
 	"automatic_torch_slabs",
 	"show_clm_data_tab",
+	"pause_when_minimized",
 	# These four are read inside Viewport script
 #	"editor_window_position",
 #	"editor_window_size",
@@ -429,6 +430,10 @@ func game_setting(doWhat,string,value):
 			var oShowCLMDataTabCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/ShowCLMDataTabCheckbox'
 			if doWhat == SET: oShowCLMDataTabCheckbox.pressed = value
 			if doWhat == GET: return oShowCLMDataTabCheckbox.pressed
+		"pause_when_minimized":
+			var oPauseWhenMinimizedCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/PauseWhenMinimizedCheckbox'
+			if doWhat == SET: oPauseWhenMinimizedCheckbox.pressed = value
+			if doWhat == GET: return oPauseWhenMinimizedCheckbox.pressed
 
 func delete_settings():
 	var dir = Directory.new()
