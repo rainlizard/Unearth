@@ -28,6 +28,34 @@ var fieldBoundary = Rect2()
 var mapHasBeenEdited = false setget set_map_has_been_edited
 var framerate_limit = 120 setget set_framerate_limit
 var ssaa_level = 4 setget set_ssaa_level
+var updating_screen = false
+var rendering_rate = 0.0 setget set_rendering_rate
+var rendering_timer = 0.0
+var low_processor_sleep_value = 0 setget set_low_processor_sleep_value
+var low_processor_enabled = false setget set_low_processor_enabled
+var inputs_update_screen = false setget set_inputs_update_screen
+var window_has_focus = true
+
+func set_inputs_update_screen(val):
+	inputs_update_screen = val
+
+func set_low_processor_sleep_value(val):
+	OS.low_processor_usage_mode_sleep_usec = val
+	low_processor_sleep_value = val
+
+func set_low_processor_enabled(val):
+	OS.low_processor_usage_mode = val
+	low_processor_enabled = val
+
+
+func set_rendering_rate(val):
+	rendering_rate = val
+	if val > 0:
+		yield(get_tree(),'idle_frame')
+		VisualServer.render_loop_enabled = true
+	else:
+		yield(get_tree(),'idle_frame')
+		VisualServer.render_loop_enabled = true
 
 func set_map_has_been_edited(setVal):
 	if int(setVal) == oEditor.SET_EDITED_WITHOUT_SAVING_STATE: #If you save, then click Undo, it should mark as not saved but not create a new undo state when marking as edited.
@@ -42,6 +70,7 @@ func _ready():
 	get_viewport().msaa = Viewport.MSAA_4X # default setting
 	get_tree().set_auto_accept_quit(false)
 	just_opened_editor()
+
 
 func _unhandled_input(event):
 	# Needs to be in _unhandled_input otherwise pressing ESC closes the popup instantly
@@ -77,8 +106,10 @@ func _notification(what):
 		else:
 			get_tree().quit()
 	elif what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+		window_has_focus = true
 		VisualServer.render_loop_enabled = true
 	elif what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
+		window_has_focus = false
 		if Settings.get_setting("pause_when_minimized") == true:
 			VisualServer.render_loop_enabled = false
 
@@ -120,3 +151,43 @@ func set_ssaa_level(val):
 		oOverheadGraphics.update_ssaa_level(val)
 	if oGame3D != null:
 		oGame3D.update_ssaa_level(val)
+
+var mouse_buttons_held = {}
+
+func _process(delta):
+	if rendering_rate > 0:
+		rendering_timer += delta
+		if rendering_timer >= 1.0 / rendering_rate:
+			rendering_timer = 0.0
+			update_screen()
+		if mouse_buttons_held.size() > 0:
+			input_requests_screen_update()
+
+func _input(event):
+	if event is InputEventMouseMotion:
+		pass
+	else:
+		if event is InputEventMouseButton:
+			if event.pressed == true:
+				mouse_buttons_held[event.button_index] = true
+			else:
+				mouse_buttons_held.erase(event.button_index)
+		else:
+			input_requests_screen_update() # All other keys
+
+func input_requests_screen_update():
+	if inputs_update_screen == true:
+		update_screen()
+
+func update_screen():
+	if rendering_rate == 0:
+		return  # render_loop already enabled continuously
+	if updating_screen == true:
+		return
+	if window_has_focus == false and Settings.get_setting("pause_when_minimized") == true:
+		return  # Don't render when unfocused and pause is enabled
+	updating_screen = true
+	VisualServer.render_loop_enabled = true
+	yield(get_tree(),'idle_frame')
+	VisualServer.render_loop_enabled = false
+	updating_screen = false

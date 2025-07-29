@@ -6,6 +6,7 @@
 [resource]
 resource_local_to_scene = true
 shader = ExtResource( 1 )
+shader_param/custom_time = 0.0
 shader_param/showOnlySpecificStyle = 77777777
 shader_param/fieldSizeInSubtiles = Vector2( 255, 255 )
 shader_param/supersampling_level = 4

@@ -58,6 +58,7 @@ _global_script_class_icons={
 
 config/name="Unearth"
 run/main_scene="res://Scenes/Main.tscn"
+run/delta_sync_after_draw=true
 boot_splash/image="Skip-loading-screen"
 config/icon="res://Art/icon/UnearthIcon256x256.png"
 

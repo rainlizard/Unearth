@@ -8,6 +8,7 @@ uniform sampler2D tmap_B_bottom:hint_albedo;
 uniform sampler2D palette_texture:hint_albedo;
 uniform sampler2D animationDatabase;
 uniform int supersampling_level = 4;
+uniform float custom_time = 0.0;
 varying vec4 worldPos;
 const float TEXTURE_ANIMATION_SPEED = 12.0;
 const vec2 TILE_DIMENSIONS = vec2(32.0, 32.0);
@@ -76,7 +77,7 @@ vec4 calculate_pixel_3d(sampler2D l8AtlasTexture, int tileIndex, vec2 localTileU
 vec4 get_sampled_color_3d(vec2 currentUv, vec2 currentUv2) {
 	int indexVal = getIndex(currentUv2);
 	if (indexVal >= 544 && indexVal < 1000) {
-		int frame = int(mod(TIME * TEXTURE_ANIMATION_SPEED, 8.0));
+		int frame = int(mod(custom_time * TEXTURE_ANIMATION_SPEED, 8.0));
 		indexVal = getAnimationFrame(frame, (indexVal - 544));
 	}
 	vec4 sampleColor;

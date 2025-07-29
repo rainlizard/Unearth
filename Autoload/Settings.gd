@@ -77,6 +77,9 @@ var listOfSettings = [
 	"automatic_torch_slabs",
 	"show_clm_data_tab",
 	"pause_when_minimized",
+	"low_processor_mode_sleep_usec",
+	"inputs_update_screen",
+	"rendering_rate",
 	# These four are read inside Viewport script
 #	"editor_window_position",
 #	"editor_window_size",
@@ -434,6 +437,22 @@ func game_setting(doWhat,string,value):
 			var oPauseWhenMinimizedCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/PauseWhenMinimizedCheckbox'
 			if doWhat == SET: oPauseWhenMinimizedCheckbox.pressed = value
 			if doWhat == GET: return oPauseWhenMinimizedCheckbox.pressed
+		"low_processor_mode_sleep_usec":
+			var oLowProcessorModeSleepUsec = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/LowProcessorModeSleepUsec'
+			var oEditor = $'../Main/Editor'
+			if doWhat == SET:
+				oEditor.low_processor_sleep_value = value
+				oEditor.low_processor_enabled = value > 0
+				oLowProcessorModeSleepUsec.update_appearance(value)
+			if doWhat == GET: return oEditor.low_processor_sleep_value
+		"inputs_update_screen":
+			var oEditor = $'../Main/Editor'
+			if doWhat == SET: oEditor.inputs_update_screen = value
+			if doWhat == GET: return oEditor.inputs_update_screen
+		"rendering_rate":
+			var oEditor = $'../Main/Editor'
+			if doWhat == SET: oEditor.rendering_rate = value
+			if doWhat == GET: return oEditor.rendering_rate
 
 func delete_settings():
 	var dir = Directory.new()

@@ -19,7 +19,7 @@ var overheadImgData = Image.new()
 var overheadTexData = ImageTexture.new()
 
 var arrayOfColorRects = []
-
+var accumulated_time = 0.0
 var thread = Thread.new()
 var semaphore = Semaphore.new()
 var mutex = Mutex.new()
@@ -180,4 +180,7 @@ func update_ssaa_level(level):
 		displayField.material.set_shader_param("supersampling_level", level)
 
 
-
+func _process(delta):
+	accumulated_time += delta
+	for displayField in arrayOfColorRects:
+		displayField.material.set_shader_param("custom_time", accumulated_time)

@@ -6,6 +6,7 @@ onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 onready var oReadPalette = Nodelist.list["oReadPalette"]
 
 var materialArray = []
+var accumulated_time = 0.0
 
 func create_material_array(numberOfSlabStyles):
 	materialArray.clear()
@@ -41,6 +42,7 @@ func create_material(map):
 	mat.set_shader_param("palette_texture", oReadPalette.get_palette_texture())
 	mat.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
 	mat.set_shader_param("supersampling_level", Settings.get_setting("ssaa"))
+	mat.set_shader_param("custom_time", accumulated_time)
 	return mat
 
 func enable_or_disable_mipmaps_on_all_materials(enabled):
@@ -50,3 +52,8 @@ func enable_or_disable_mipmaps_on_all_materials(enabled):
 func update_ssaa_level(level):
 	for mat in materialArray:
 		mat.set_shader_param("supersampling_level", level)
+
+func _process(delta):
+	accumulated_time += delta
+	for mat in materialArray:
+		mat.set_shader_param("custom_time", accumulated_time)

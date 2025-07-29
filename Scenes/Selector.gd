@@ -334,6 +334,7 @@ func moved_to_new_tile():
 	if mode == MODE_TILE: canPlace = true
 
 func moved_to_new_subtile():
+	oEditor.input_requests_screen_update()
 	oColumnDetails.update_details()
 	
 	if mode == MODE_SUBTILE:

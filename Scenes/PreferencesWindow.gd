@@ -35,6 +35,9 @@ onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
 onready var oShowCLMDataTabCheckbox = Nodelist.list["oShowCLMDataTabCheckbox"]
 onready var oPauseWhenMinimizedCheckbox = Nodelist.list["oPauseWhenMinimizedCheckbox"]
+onready var oInputsUpdateScreenCheckbox = Nodelist.list["oInputsUpdateScreenCheckbox"]
+onready var oRenderingRateSpinBox = Nodelist.list["oRenderingRateSpinBox"]
+onready var oLowProcessorModeSleepUsec = Nodelist.list["oLowProcessorModeSleepUsec"]
 onready var oSymmetryGuidelinesSetting = Nodelist.list["oSymmetryGuidelinesSetting"]
 
 #onready var oTabEditor = Nodelist.list["oTabEditor"]
@@ -96,6 +99,9 @@ func _on_SettingsWindow_about_to_show():
 	oCheckBoxNewMapAutoOpensMapSettings.pressed = Settings.get_setting("auto_open_map_settings")
 	oShowCLMDataTabCheckbox.pressed = Settings.get_setting("show_clm_data_tab")
 	oPauseWhenMinimizedCheckbox.pressed = Settings.get_setting("pause_when_minimized")
+	oInputsUpdateScreenCheckbox.pressed = Settings.get_setting("inputs_update_screen")
+	oRenderingRateSpinBox.update_appearance(Settings.get_setting("rendering_rate"))
+	oLowProcessorModeSleepUsec.update_appearance(Settings.get_setting("low_processor_mode_sleep_usec"))
 
 func _on_CheckBoxVsync_toggled(button_pressed):
 	Settings.set_setting("vsync", button_pressed)
@@ -209,6 +215,18 @@ func _on_ShowCLMDataTabCheckbox_toggled(button_pressed):
 
 func _on_PauseWhenMinimizedCheckbox_toggled(button_pressed):
 	Settings.set_setting("pause_when_minimized", button_pressed)
+
+func _on_InputsUpdateScreenCheckbox_toggled(button_pressed):
+	Settings.set_setting("inputs_update_screen", button_pressed)
+	yield(get_tree(),'idle_frame')
+	VisualServer.render_loop_enabled = true # Just here to fix a brief 1 frame visual bug
+
+
+func edited_RenderingRateSpinBox(new_text):
+	Settings.set_setting("rendering_rate", float(new_text))
+
+func edited_LowProcessorModeSleepUsec(new_text):
+	Settings.set_setting("low_processor_mode_sleep_usec", int(new_text))
 
 func edited_MSAA(new_text):
 	var slider_value = int(new_text)

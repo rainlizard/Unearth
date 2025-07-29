@@ -253,6 +253,7 @@ shader = ExtResource( 36 )
 shader = ExtResource( 8 )
 shader_param/zoom = 1.0
 shader_param/thickness = 4.0
+shader_param/custom_time = 0.0
 
 [sub_resource type="StyleBoxFlat" id=10]
 
@@ -3005,6 +3006,42 @@ settingText = "Framerate limit"
 slider_step = 1.0
 maximum_value = 240.0
 
+[node name="LowProcessorModeSleepUsec" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer" instance=ExtResource( 16 )]
+visible = false
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 373.0
+margin_right = 544.0
+margin_bottom = 404.0
+settingText = "Low Processor Mode"
+slider_step = 1000.0
+maximum_value = 500000.0
+
+[node name="RenderingRateSpinBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 373.0
+margin_right = 544.0
+margin_bottom = 404.0
+settingText = "Rendering rate"
+slider_step = 1.0
+maximum_value = 240.0
+
+[node name="InputsUpdateScreenCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer"]
+margin_top = 373.0
+margin_right = 544.0
+margin_bottom = 402.0
+text = "Inputs update screen"
+
+[node name="PauseWhenMinimizedCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer"]
+margin_top = 340.0
+margin_right = 544.0
+margin_bottom = 369.0
+pressed = true
+text = "Pause when unfocused"
+
 [node name="CheckBoxVsync" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer"]
 margin_top = 243.0
 margin_right = 544.0
@@ -3019,13 +3056,6 @@ text = "Display FPS"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="PauseWhenMinimizedCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer"]
-margin_top = 340.0
-margin_right = 544.0
-margin_bottom = 369.0
-pressed = true
-text = "Pause when minimized"
 
 [node name="ResetToDefault" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer"]
 margin_top = 483.0
@@ -8178,9 +8208,10 @@ margin_bottom = 40.0
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxSmoothPan" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxSmoothPan_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxMouseEdgePanning" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxMouseEdgePanning_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxDisplay3dInfo" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxDisplay3dInfo_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/InputsUpdateScreenCheckbox" to="Ui/UiSystem/PreferencesWindow" method="_on_InputsUpdateScreenCheckbox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/PauseWhenMinimizedCheckbox" to="Ui/UiSystem/PreferencesWindow" method="_on_PauseWhenMinimizedCheckbox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/CheckBoxVsync" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxVsync_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/CheckBoxDisplayFPS" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxDisplayFPS_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/PauseWhenMinimizedCheckbox" to="Ui/UiSystem/PreferencesWindow" method="_on_PauseWhenMinimizedCheckbox_toggled"]
 [connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/ResetToDefault" to="Ui/UiSystem/PreferencesWindow" method="_on_ResetToDefault_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/CloseButton" to="Ui/UiSystem/PreferencesWindow" method="_on_CloseButton_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/FileDialogSaveAs" to="Ui/UiSystem/FileDialogSaveAs" method="_on_FileDialogSaveAs_about_to_show"]
@@ -8310,3 +8341,4 @@ margin_bottom = 40.0
 [connection signal="value_changed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/PreviewResizeGridContainer/PreviewHeightSpinBox" to="Ui/UiPreviewExporter/ExportPreview" method="_on_PreviewHeightSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/SavePreviewPngButton" to="Ui/UiPreviewExporter/ExportPreview" method="_on_SavePreviewPngButton_pressed"]
 [connection signal="file_selected" from="Ui/UiPreviewExporter/ExportPreviewPngDialog" to="Ui/UiPreviewExporter/ExportPreview" method="_on_ExportPreviewPngDialog_file_selected"]
+[connection signal="visibility_changed" from="Ui/UiPreviewExporter/LoadingBar" to="Ui/UiPreviewExporter/LoadingBar" method="_on_LoadingBar_visibility_changed"]

@@ -3,6 +3,7 @@ onready var oSelection = Nodelist.list["oSelection"]
 
 var dataImage = Image.new()
 var dataTexture = ImageTexture.new()
+var accumulated_time = 0.0
 
 #var columns = [0,0,0, 0,0,0, 0,0,0]
 func _ready():
@@ -89,5 +90,7 @@ func set_visual(columnArray):
 	else:
 		material.set_shader_param("slabIdData", preload("res://Shaders/Black3x3.png"))
 
-#func _process(delta):
-#	print(material.get_shader_param("dkTextureMap_Split_A"))
+func _process(delta):
+	accumulated_time += delta
+	if material != null:
+		material.set_shader_param("custom_time", accumulated_time)

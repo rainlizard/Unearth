@@ -6,6 +6,7 @@ uniform sampler2D columnPosData : hint_albedo;
 uniform sampler2D columnsetPosData : hint_albedo;
 uniform sampler2D variationPosData : hint_albedo;
 uniform sampler2D animationDatabase;
+uniform float custom_time = 0.0;
 const vec2 oneTileSize = vec2(32,32);
 const float TEXTURE_ANIMATION_SPEED = 12.0;
 uniform int showOnlySpecificStyle = 77777;
@@ -105,7 +106,7 @@ vec4 get_sampled_color(vec2 currentUv) {
 	int subtileY = int(fieldSizeInSubtiles.y * currentUv.y);
 	int index = getIndex(ivec2(subtileX,subtileY));
 	if (index >= 544 && index < 1000) {
-		int frame = int(mod(TIME * TEXTURE_ANIMATION_SPEED, 8.0));
+		int frame = int(mod(custom_time * TEXTURE_ANIMATION_SPEED, 8.0));
 		index = getAnimationFrame(frame, index - 544);
 	}
 	vec2 localUV = vec2(
