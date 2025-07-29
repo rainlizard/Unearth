@@ -719,6 +719,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/MainSlabs/ScrollContainer"]
+margin_left = 151.0
+margin_top = 351.0
+margin_right = 151.0
+margin_bottom = 351.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
@@ -901,6 +905,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Creature/ScrollContainer"]
+margin_left = 316.0
+margin_top = 82.0
+margin_right = 316.0
+margin_bottom = 82.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 custom_constants/vseparation = 0
@@ -2270,8 +2278,8 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles"]
-margin_right = 546.0
-margin_bottom = 233.0
+margin_right = 558.0
+margin_bottom = 438.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -2345,7 +2353,7 @@ size_flags_vertical = 0
 scroll_vertical_enabled = false
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ScrollContainer"]
-margin_right = 182.0
+margin_right = 558.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 __meta__ = {
@@ -3794,6 +3802,8 @@ size_flags_vertical = 3
 follow_focus = true
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer2/ScrollContainer"]
+margin_right = 185.0
+margin_bottom = 423.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -3842,7 +3852,7 @@ margin_right = 610.0
 margin_bottom = 725.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer"]
-margin_right = 331.0
+margin_right = 558.0
 margin_bottom = 993.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -4416,8 +4426,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ScriptEditor" type="PanelContainer" parent="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer"]
-margin_right = 486.0
-margin_bottom = 39.0
+margin_right = 1310.0
+margin_bottom = 730.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_styles/panel = ExtResource( 130 )
@@ -4526,7 +4536,7 @@ margin_bottom = 771.0
 size_flags_vertical = 3
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer"]
-margin_right = 423.0
+margin_right = 844.0
 margin_bottom = 570.0
 size_flags_horizontal = 3
 
@@ -5143,7 +5153,7 @@ margin_bottom = 155.0
 scroll_vertical_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/TEScrollContainer"]
-margin_right = 14.0
+margin_right = 264.0
 margin_bottom = 21.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -5593,8 +5603,8 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer"]
-margin_right = 248.0
-margin_bottom = 430.0
+margin_right = 236.0
+margin_bottom = 1061.0
 size_flags_vertical = 3
 
 [node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
@@ -5630,7 +5640,7 @@ mouse_filter = 1
 scroll_vertical_enabled = false
 
 [node name="ModifiedSlabsetLabel" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/ModifiedSlabsetPanelContainer/ScrollContainer"]
-margin_right = 118.0
+margin_right = 218.0
 margin_bottom = 21.0
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -5851,7 +5861,7 @@ scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer3/VBoxContainer/SlabsetObjectSection"]
 margin_right = 218.0
-margin_bottom = 327.0
+margin_bottom = 655.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -6593,8 +6603,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer"]
-margin_right = 500.0
-margin_bottom = 53.0
+margin_right = 913.0
+margin_bottom = 591.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -6968,6 +6978,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ActionPointList" type="ItemList" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ScrollContainer"]
+margin_right = 241.0
+margin_bottom = 256.0
 rect_clip_content = false
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -7042,6 +7054,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="SortCreaStatsGrid" type="GridContainer" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/ScrollContainer"]
+margin_right = 309.0
+margin_bottom = 839.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/hseparation = 20
@@ -7168,8 +7182,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer"]
-margin_right = 1060.0
-margin_bottom = 82.0
+margin_right = 1114.0
+margin_bottom = 575.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 20
@@ -7373,8 +7387,8 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ChangelogWindow/MarginContainer/VBoxContainer/ScrollContainer"]
-margin_right = 1248.0
-margin_bottom = 20.0
+margin_right = 1260.0
+margin_bottom = 1224.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 10

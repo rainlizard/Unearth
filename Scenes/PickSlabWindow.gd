@@ -129,6 +129,7 @@ func add_slabs():
 	print('add_slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
 	if is_instance_valid(oTMapLoader):
+		yield(get_tree(),'idle_frame') # Fixes a bug where textures go dark when opening slabset window
 		oTMapLoader.apply_texture_pack()
 
 func custom_slab_add_new_button():
