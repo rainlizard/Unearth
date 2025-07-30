@@ -1,7 +1,7 @@
-extends Node
+﻿extends Node
 
 const string = """
-<version> - <date>
+0.62.830 - 30/7/2025
 - Added Edit->'Rules'
 - Added Graphics->'Rendering rate'
 - Added Graphics->'Inputs update screen'
