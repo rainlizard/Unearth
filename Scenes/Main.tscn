@@ -6585,10 +6585,10 @@ stretch_mode = 6
 
 [node name="CfgEditor" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -1249.0
-margin_top = 2256.0
-margin_right = -316.0
-margin_bottom = 2898.0
+margin_left = -2569.0
+margin_top = 3024.0
+margin_right = -649.0
+margin_bottom = 4104.0
 window_title = "Cfg editor"
 resizable = true
 script = ExtResource( 91 )
@@ -6615,8 +6615,8 @@ script = ExtResource( 187 )
 script = ExtResource( 186 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules"]
-margin_right = 923.0
-margin_bottom = 601.0
+margin_right = 1910.0
+margin_bottom = 1039.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 5
@@ -6627,20 +6627,20 @@ custom_constants/margin_bottom = 5
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 918.0
-margin_bottom = 596.0
+margin_right = 1905.0
+margin_bottom = 1034.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer"]
-margin_right = 913.0
-margin_bottom = 591.0
+margin_right = 1900.0
+margin_bottom = 1029.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer"]
-margin_left = 206.0
-margin_right = 706.0
+margin_left = 700.0
+margin_right = 1200.0
 margin_bottom = 39.0
 rect_min_size = Vector2( 500, 0 )
 mouse_filter = 1
@@ -6659,8 +6659,8 @@ autowrap = true
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer"]
 margin_top = 43.0
-margin_right = 913.0
-margin_bottom = 591.0
+margin_right = 1900.0
+margin_bottom = 1029.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 5
@@ -6671,8 +6671,8 @@ custom_constants/margin_bottom = 5
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/CfgEditor/CfgTabs/TabRules/MarginContainer/ScrollContainer/VBoxContainer/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 908.0
-margin_bottom = 543.0
+margin_right = 1895.0
+margin_bottom = 981.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -6680,7 +6680,7 @@ size_flags_vertical = 3
 visible = false
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 918.0
+margin_right = 1905.0
 margin_bottom = 23.0
 mouse_filter = 1
 size_flags_horizontal = 3
