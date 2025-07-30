@@ -5,7 +5,7 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oScriptEditorStatusLabel = Nodelist.list["oScriptEditorStatusLabel"]
-onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 onready var oScriptEditorWindow = Nodelist.list["oScriptEditorWindow"]
@@ -37,11 +37,11 @@ func _on_ScriptTextEdit_text_changed():
 	
 	var updateHelpers = false
 	var line = oScriptTextEdit.get_line(oScriptTextEdit.cursor_get_line())
-	for i in oScriptHelpers.commandsWithPositions.size():
-		if oScriptHelpers.commandsWithPositions[i][0] in line.to_upper():
+	for i in oScriptMarkers.commandsWithPositions.size():
+		if oScriptMarkers.commandsWithPositions[i][0] in line.to_upper():
 			updateHelpers = true
 	if updateHelpers == true:
-		oScriptHelpers.start() # in the case of updating a line (with coords) in the built-in Script Editor
+		oScriptMarkers.start() # in the case of updating a line (with coords) in the built-in Script Editor
 
 
 func set_script_as_edited(edited):
@@ -90,13 +90,13 @@ func update_texteditor():
 	oScriptTextEdit.cursor_set_column(columnNumber)
 	
 	update_empty_script_status()
-	oScriptHelpers.start() # in the case of editing text file outside of Unearth
+	oScriptMarkers.start() # in the case of editing text file outside of Unearth
 
 
 func _on_ScriptTextEdit_visibility_changed():
 	if visible == false:
 		# When you close the window, update script helpers. This is important to update here in case you remove any lines (helper related) in the script editor
-		oScriptHelpers.start()
+		oScriptMarkers.start()
 
 
 func _on_ScriptHelpButton_pressed():

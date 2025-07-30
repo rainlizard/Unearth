@@ -132,7 +132,7 @@
 [ext_resource path="res://Theme/StyleBoxThinnerPanel.tres" type="StyleBox" id=130]
 [ext_resource path="res://Scenes/SGRectHighlighter.gd" type="Script" id=131]
 [ext_resource path="res://Scenes/SlabsetWindow.gd" type="Script" id=132]
-[ext_resource path="res://Scenes/ScriptHelpers.gd" type="Script" id=133]
+[ext_resource path="res://Scenes/ScriptMarkers.gd" type="Script" id=133]
 [ext_resource path="res://Scenes/NewMapWindow.gd" type="Script" id=134]
 [ext_resource path="res://Class/SliderSetting.tscn" type="PackedScene" id=135]
 [ext_resource path="res://Scenes/QuickMapPreview.gd" type="Script" id=136]
@@ -606,7 +606,7 @@ margin_bottom = 500.0
 mouse_filter = 2
 expand = true
 
-[node name="ScriptHelpers" type="Node2D" parent="Game2D"]
+[node name="ScriptMarkers" type="Node2D" parent="Game2D"]
 script = ExtResource( 133 )
 
 [node name="Guidelines" type="Node2D" parent="Game2D"]

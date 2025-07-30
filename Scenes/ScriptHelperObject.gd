@@ -1,7 +1,7 @@
 extends Node2D
 onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
-onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
 onready var oUi = Nodelist.list["oUi"]
 
 
@@ -18,15 +18,15 @@ func _ready():
 
 func _on_zoom_level_changed(zoom):
 	var inventScale = Vector2()
-	inventScale.x = clamp(zoom.x, 0.0, oScriptHelpers.SCRIPT_ICON_SIZE_MAX)
-	inventScale.y = clamp(zoom.y, 0.0, oScriptHelpers.SCRIPT_ICON_SIZE_MAX)
+	inventScale.x = clamp(zoom.x, 0.0, oScriptMarkers.SCRIPT_ICON_SIZE_MAX)
+	inventScale.y = clamp(zoom.y, 0.0, oScriptMarkers.SCRIPT_ICON_SIZE_MAX)
 	
-	if zoom.x > oScriptHelpers.SCRIPT_ICON_SIZE_MAX:
+	if zoom.x > oScriptMarkers.SCRIPT_ICON_SIZE_MAX:
 		visible = false
 	else:
 		visible = true
 	
-	scale = inventScale * oScriptHelpers.SCRIPT_ICON_SIZE_BASE
+	scale = inventScale * oScriptMarkers.SCRIPT_ICON_SIZE_BASE
 
 
 func _on_MouseDetection_mouse_entered():

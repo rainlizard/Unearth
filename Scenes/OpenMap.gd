@@ -22,7 +22,7 @@ onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
-onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oDataLiquid = Nodelist.list["oDataLiquid"]
@@ -195,7 +195,7 @@ func continue_load(map):
 	oEditor.update_boundaries()
 	oScriptEditor.initialize_for_new_map()
 	oOverheadOwnership.start()
-	oScriptHelpers.start()
+	oScriptMarkers.start()
 	
 	oTMapLoader.start()
 	oTMapNames.update_texture_map_names() # Update names after tmap loader has started

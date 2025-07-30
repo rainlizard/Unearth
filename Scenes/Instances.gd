@@ -4,7 +4,7 @@ onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataClmPos = Nodelist.list["oDataClmPos"]
-onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 onready var oMirrorOptions = Nodelist.list["oMirrorOptions"]
 onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
@@ -53,7 +53,7 @@ func place_new_action_point(newThingType, newSubtype, newPosition, newOwnership)
 	id.data7 = 0
 	add_child(id)
 	
-	oScriptHelpers.start() # Update when action points change
+	oScriptMarkers.start() # Update when action points change
 
 enum {
 	MIRROR_THING

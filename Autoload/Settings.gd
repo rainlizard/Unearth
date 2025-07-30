@@ -274,13 +274,13 @@ func game_setting(doWhat,string,value):
 			if doWhat == SET: oUi.FONT_SIZE_CR_LVL_MAX = value
 			if doWhat == GET: return oUi.FONT_SIZE_CR_LVL_MAX
 		"script_icon_scale":
-			var oScriptHelpers = $'../Main/Game2D/ScriptHelpers'
-			if doWhat == SET: oScriptHelpers.SCRIPT_ICON_SIZE_BASE = value
-			if doWhat == GET: return oScriptHelpers.SCRIPT_ICON_SIZE_BASE
+			var oScriptMarkers = $'../Main/Game2D/ScriptMarkers'
+			if doWhat == SET: oScriptMarkers.SCRIPT_ICON_SIZE_BASE = value
+			if doWhat == GET: return oScriptMarkers.SCRIPT_ICON_SIZE_BASE
 		"script_icon_max":
-			var oScriptHelpers = $'../Main/Game2D/ScriptHelpers'
-			if doWhat == SET: oScriptHelpers.SCRIPT_ICON_SIZE_MAX = value
-			if doWhat == GET: return oScriptHelpers.SCRIPT_ICON_SIZE_MAX
+			var oScriptMarkers = $'../Main/Game2D/ScriptMarkers'
+			if doWhat == SET: oScriptMarkers.SCRIPT_ICON_SIZE_MAX = value
+			if doWhat == GET: return oScriptMarkers.SCRIPT_ICON_SIZE_MAX
 		"facing_arrow_scale":
 			var oUi = $'../Main/Ui'
 			if doWhat == SET: oUi.FACING_ARROW_SIZE_BASE = value

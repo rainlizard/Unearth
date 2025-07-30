@@ -4,6 +4,7 @@ onready var oInspector = Nodelist.list["oInspector"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oActionPointList = Nodelist.list["oActionPointList"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
 
 var ownership = 5 # Not used by Dungeon Keeper, this is just to make it easy for the editor.
 var thingType = Things.TYPE.EXTRA
@@ -23,6 +24,8 @@ func set_location_x(setVal):
 	position.x = locationX * 32
 	if locationX != null and locationY != null:
 		add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+		if oScriptMarkers and pointNumber != null:
+			oScriptMarkers.update_action_point_markers(self)
 
 func set_location_y(setVal):
 	if locationX != null and locationY != null:
@@ -31,6 +34,8 @@ func set_location_y(setVal):
 	position.y = locationY * 32
 	if locationX != null and locationY != null:
 		add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+		if oScriptMarkers and pointNumber != null:
+			oScriptMarkers.update_action_point_markers(self)
 
 func set_location_z(setVal): # This is actually unused for action points, but its presence fixes errors
 	locationZ = setVal

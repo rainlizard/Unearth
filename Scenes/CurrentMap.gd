@@ -18,7 +18,7 @@ onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oMain = Nodelist.list["oMain"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataScript = Nodelist.list["oDataScript"]
-onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
 onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oMenu = Nodelist.list["oMenu"]
@@ -73,7 +73,7 @@ func clear_map(): # Remember, "Undo" calls this
 	# 3D
 	oGenerateTerrain.clear()
 	
-	oScriptHelpers.clear()
+	oScriptMarkers.clear()
 	
 	# "LOF" # Do this last in case other functions rely on the old map size
 	oDataLof.clear_all()

@@ -167,3 +167,15 @@ func script_icon_size_base(setVal):
 	for id in get_tree().get_nodes_in_group("ScriptHelperObject"):
 		id._on_zoom_level_changed(oCamera2D.zoom)
 	SCRIPT_ICON_SIZE_BASE = setVal
+
+
+func update_action_point_markers(actionPointInstance):
+	if is_instance_valid(actionPointInstance) == false:
+		return
+	
+	var newPosition = Vector2(actionPointInstance.position.x, actionPointInstance.position.y)
+	
+	for id in get_tree().get_nodes_in_group("ScriptHelperObject"):
+		var lineText = id.get_meta('line')
+		if str(actionPointInstance.pointNumber) in lineText:
+			id.position = newPosition

@@ -23,7 +23,7 @@ onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oCustomSlabsTab = Nodelist.list["oCustomSlabsTab"]
 onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
-onready var oScriptHelpers = Nodelist.list["oScriptHelpers"]
+onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
 onready var oEditingTools = Nodelist.list["oEditingTools"]
 onready var oMirrorPlacementCheckBox = Nodelist.list["oMirrorPlacementCheckBox"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
@@ -300,7 +300,7 @@ func manually_delete_one_instance(inst):
 			oInspector.deselect()
 		
 		if inst.is_in_group("ActionPoint"):
-			oScriptHelpers.start() # Update when action points change
+			oScriptMarkers.start() # Update when action points change
 		
 		if oMirrorPlacementCheckBox.pressed == true:
 			oInstances.mirror_deletion_of_instance(inst)
