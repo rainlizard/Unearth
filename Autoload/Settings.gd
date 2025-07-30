@@ -74,6 +74,7 @@ var listOfSettings = [
 	"chance_path_stone",
 	"auto_open_map_settings",
 	"fortify",
+	"place_locked",
 	"automatic_torch_slabs",
 	"show_clm_data_tab",
 	"pause_when_minimized",
@@ -426,6 +427,10 @@ func game_setting(doWhat,string,value):
 			var oFortifyCheckBox = $"../Main/Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/FortifyCheckBox"
 			if doWhat == SET: oFortifyCheckBox.pressed = value
 			if doWhat == GET: return oFortifyCheckBox.pressed
+		"place_locked":
+			var oPlaceLockedCheckBox = $"../Main/Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/PlaceLockedCheckBox"
+			if doWhat == SET: oPlaceLockedCheckBox.pressed = value
+			if doWhat == GET: return oPlaceLockedCheckBox.pressed
 		"last_changelog_displayed":
 			if doWhat == SET: write_cfg("last_changelog_displayed", value)
 			if doWhat == GET: return read_cfg("last_changelog_displayed")

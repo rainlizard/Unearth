@@ -4,6 +4,7 @@ onready var oBrushSizeContainer = Nodelist.list["oBrushSizeContainer"]
 onready var oBrushPreview = Nodelist.list["oBrushPreview"]
 onready var oFillUseDisplay = Nodelist.list["oFillUseDisplay"]
 onready var oFortifyCheckBox = Nodelist.list["oFortifyCheckBox"]
+onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 
 var BRUSH_SIZE = 1
 

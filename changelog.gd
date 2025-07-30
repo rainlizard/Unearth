@@ -11,6 +11,7 @@ const string = """
 - Merged PR 'New Maiden Icon and all other Stuff for the Bird'
 - When moving Action Points, update their script markers
 - Reset preferences button now reopens editor
+- 'Place door as locked' checkbox remembered between restarting editor (like Fortify is)
 0.61.811 - 26/7/2025
 - All custom specials now have access to the CustomBox field
 - Fixed loading classic format

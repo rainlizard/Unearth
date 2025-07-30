@@ -8,6 +8,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oLimitThing = Nodelist.list["oLimitThing"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
+onready var oPlaceLockedCheckBox = $EditingTools/PlaceLockedCheckBox
 
 # Default values for placement
 var effectRange = 5
@@ -44,6 +45,7 @@ enum FIELDS {
 
 func _ready():
 	get_parent().set_tab_title(1, "Create")
+	oPlaceLockedCheckBox.connect("toggled", self, "_on_PlaceLockedCheckBox_toggled")
 
 func editing_mode_was_switched(modeString):
 	if modeString == "Slab":
@@ -180,3 +182,7 @@ func _on_PlacingTipsButton_pressed():
 
 func _on_FortifyCheckBox_toggled(button_pressed):
 	Settings.set_setting("fortify", button_pressed)
+
+
+func _on_PlaceLockedCheckBox_toggled(button_pressed):
+	Settings.set_setting("place_locked", button_pressed)
