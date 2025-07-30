@@ -182,11 +182,13 @@ func set_ownership(setval):
 	call_deferred("set_ownership_material_one_frame_later") # this fixes a bug
 
 func set_ownership_material_one_frame_later(): # needs to be call_deferred
-	if thingType == Things.TYPE.CREATURE:
-		if ownership == 255:
-			print('For some reason ownership 255 at '+str(locationX)+' - '+str(locationY))
-			return
-		$"%ThingTexture".material = Nodelist.list["oInstanceOwnership"].materialInstanceOwnership[ownership]
+	if ownership == 255:
+		print('For some reason ownership 255 is at '+str(locationX)+' - '+str(locationY))
+		return
+	if thingType != Things.TYPE.CREATURE and ownership == 5: # Don't flash normal objects
+		return
+
+	$"%ThingTexture".material = Nodelist.list["oInstanceOwnership"].materialInstanceOwnership[ownership]
 
 
 
