@@ -3059,11 +3059,11 @@ __meta__ = {
 
 [node name="ResetToDefault" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer"]
 margin_top = 483.0
-margin_right = 296.0
+margin_right = 314.0
 margin_bottom = 510.0
 size_flags_horizontal = 2
 size_flags_vertical = 8
-text = "Reset preferences (closes editor)"
+text = "Reset preferences (restarts editor)"
 __meta__ = {
 "_edit_use_anchors_": false
 }

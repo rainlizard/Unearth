@@ -118,9 +118,15 @@ func _on_ChooseDkExe_file_selected(path):
 func _on_CloseButton_pressed():
 	hide()
 
+func restart_application():
+	var executable_path = OS.get_executable_path()
+	OS.execute(executable_path, [], false)
+	get_tree().quit()
+
+
 func _on_ResetToDefault_pressed():
 	Settings.delete_settings()
-	get_tree().quit()
+	restart_application()
 
 func _on_CheckBoxSmoothPan_toggled(button_pressed):
 	Settings.set_setting("smooth_pan_enabled", button_pressed)
