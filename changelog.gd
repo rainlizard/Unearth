@@ -1,6 +1,8 @@
-﻿extends Node
+extends Node
 
 const string = """
+<version> - <date>
+- nothing
 0.63.832 - 5/8/2025
 - Fixed blue selector's broken animation
 - Fixed objects not being alpha coloured in shade of player
