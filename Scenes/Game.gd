@@ -8,6 +8,7 @@ onready var oCmdLineConsole = Nodelist.list["oCmdLineConsole"]
 onready var oCmdLineConsoleArg = Nodelist.list["oCmdLineConsoleArg"]
 onready var oCmdLineExecute = Nodelist.list["oCmdLineExecute"]
 onready var oKeeperFXDetection = Nodelist.list["oKeeperFXDetection"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 var EXECUTABLE_PATH = ""
 var GAME_DIRECTORY = ""
@@ -126,7 +127,12 @@ func cmdline(mapPath):
 	var newCampaignName = mapPath.get_base_dir().get_file()
 	constructString += " -level " + newMapNumber
 	if newCampaignName != "levels": # The older DK structure stored all their maps in /levels/ folder and did not use campaign command.
-		constructString += " -campaign " + newCampaignName
+		var mappackCfgFilename = oConfigFileManager.current_mappack_cfg_filename
+		if mappackCfgFilename != "":
+			var campaignName = mappackCfgFilename.get_basename()
+			constructString += " -campaign " + campaignName
+		else:
+			constructString += " -campaign " + newCampaignName
 	
 	constructString = constructString.strip_edges(true,true)
 	

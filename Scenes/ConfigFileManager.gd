@@ -15,6 +15,7 @@ var paths_loaded = {}
 var current_data = {}
 var default_data = {}
 var FXDATA_COMMENTS = {}
+var current_mappack_cfg_filename = ""
 
 func _ready():
 	clear_paths()
@@ -30,6 +31,7 @@ func clear_paths():
 	current_data = {}
 	FXDATA_COMMENTS = {}
 	default_data = {}
+	current_mappack_cfg_filename = ""
 	emit_signal("config_file_status_changed")
 
 

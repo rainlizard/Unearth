@@ -288,6 +288,7 @@ func load_campaign_boss_file(mapPath):
 	var levelsDirPath = mapPath.get_base_dir().get_base_dir()
 	var parentDirFolderName = levelsDirPath.get_file()
 	if parentDirFolderName != "levels" and parentDirFolderName != "campgns":
+		oConfigFileManager.current_mappack_cfg_filename = ""
 		return {}
 	var list_of_main_campaign_files = Utils.get_filetype_in_directory(levelsDirPath, "cfg")
 	for campaignPath in list_of_main_campaign_files:
@@ -295,7 +296,9 @@ func load_campaign_boss_file(mapPath):
 		var levelsLocation = cfgDictionary.get("common", {}).get("LEVELS_LOCATION", null)
 		if levelsLocation and oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower() == mapPath.get_base_dir().to_lower():
 			#print(oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower())
+			oConfigFileManager.current_mappack_cfg_filename = campaignPath.get_file()
 			return cfgDictionary
+	oConfigFileManager.current_mappack_cfg_filename = ""
 	return {}
 
 func load_effects_data(file_path):
