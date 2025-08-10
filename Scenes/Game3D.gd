@@ -38,8 +38,8 @@ func create_material(map):
 		mat.set_shader_param("tmap_A_bottom", oTMapLoader.cachedTextures[map][1])
 		mat.set_shader_param("tmap_B_top", oTMapLoader.cachedTextures[map][2])
 		mat.set_shader_param("tmap_B_bottom", oTMapLoader.cachedTextures[map][3])
-
-	mat.set_shader_param("palette_texture", oReadPalette.get_palette_texture())
+	
+	mat.set_shader_param("palette_texture", oReadPalette.palette_image_texture_3d)
 	mat.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
 	mat.set_shader_param("supersampling_level", Settings.get_setting("ssaa"))
 	mat.set_shader_param("custom_time", accumulated_time)

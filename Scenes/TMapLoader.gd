@@ -27,6 +27,11 @@ enum {
 	LOADING_SUCCESS
 }
 
+enum PaletteType {
+	PALETTE_2D,
+	PALETTE_3D
+}
+
 var rememberedTmapaPaths = {}
 var cachedTextures = []
 var texturesLoadedState = LOADING_NOT_STARTED
@@ -125,7 +130,7 @@ func start():
 	var totalProcessStartTime = OS.get_ticks_msec()
 	texturesLoadedState = LOADING_IN_PROGRESS
 
-	if oReadPalette.initialize_palette_resources(Settings.unearthdata.plus_file("palette.dat")) == false or oReadPalette.get_palette_texture() == null:
+	if oReadPalette.initialize_palette_resources(Settings.unearthdata.plus_file("palette.dat")) == false or oReadPalette.palette_image_texture_2d == null:
 		printerr("Critical: Palette texture is null or initialization failed.")
 		oMessage.big("Error", "Tileset Error: Palette texture unavailable.")
 		texturesLoadedState = LOADING_NOT_STARTED
@@ -257,10 +262,15 @@ func _create_blank_half_texture() -> ImageTexture:
 	return blankTexture
 
 
-func _apply_shader_parameters(material: ShaderMaterial, shaderParameters: Dictionary):
-	if material != null:
-		for paramName in shaderParameters:
-			material.set_shader_param(paramName, shaderParameters[paramName])
+func apply_shader_params(material: ShaderMaterial, tmapTextures: Dictionary, paletteType: int = PaletteType.PALETTE_2D):
+	if material == null: return
+	material.set_shader_param("tmap_A_top", tmapTextures["tmap_A_top"])
+	material.set_shader_param("tmap_A_bottom", tmapTextures["tmap_A_bottom"])
+	material.set_shader_param("tmap_B_top", tmapTextures["tmap_B_top"])
+	material.set_shader_param("tmap_B_bottom", tmapTextures["tmap_B_bottom"])
+	match paletteType:
+		PaletteType.PALETTE_2D: material.set_shader_param("palette_texture", oReadPalette.palette_image_texture_2d)
+		PaletteType.PALETTE_3D: material.set_shader_param("palette_texture", oReadPalette.palette_image_texture_3d)
 
 var alreadyShowedErrorOnce = false
 
@@ -269,7 +279,7 @@ func apply_texture_pack():
 	if texturesLoadedState != LOADING_SUCCESS or cachedTextures.empty():
 		oMessage.big("Error", "Tilesets are not loaded or failed to load. Cannot set texture pack.")
 		return
-	var localPaletteTexture = oReadPalette.get_palette_texture()
+	var localPaletteTexture = oReadPalette.palette_image_texture_2d
 	if localPaletteTexture == null:
 		oMessage.big("Error", "Palette texture is not loaded. Cannot apply textures.")
 		return
@@ -294,32 +304,31 @@ func apply_texture_pack():
 		var blankTexture = _create_blank_half_texture()
 		if tmapBTopTex == null: tmapBTopTex = blankTexture
 		if tmapBBottomTex == null: tmapBBottomTex = blankTexture
-	var shaderParameters = {
+	var tmapTextures = {
 		"tmap_A_top": tmapATopTex, "tmap_A_bottom": tmapABottomTex,
-		"tmap_B_top": tmapBTopTex, "tmap_B_bottom": tmapBBottomTex,
-		"palette_texture": localPaletteTexture
+		"tmap_B_top": tmapBTopTex, "tmap_B_bottom": tmapBBottomTex
 	}
 	if oOverheadGraphics.arrayOfColorRects.size() > 0:
-		_apply_shader_parameters(oOverheadGraphics.arrayOfColorRects[0].get_material() as ShaderMaterial, shaderParameters)
+		apply_shader_params(oOverheadGraphics.arrayOfColorRects[0].get_material() as ShaderMaterial, tmapTextures)
 	if oGame3D.materialArray.size() > 0:
-		_apply_shader_parameters(oGame3D.materialArray[0] as ShaderMaterial, shaderParameters)
+		apply_shader_params(oGame3D.materialArray[0] as ShaderMaterial, tmapTextures, PaletteType.PALETTE_3D)
 	for nodeID in get_tree().get_nodes_in_group("VoxelViewer"):
 		if is_instance_valid(nodeID) == false: continue
 		if nodeID.has_method("get_voxel_material"):
-			_apply_shader_parameters(nodeID.get_voxel_material("all") as ShaderMaterial, shaderParameters)
-			_apply_shader_parameters(nodeID.get_voxel_material("selected") as ShaderMaterial, shaderParameters)
+			apply_shader_params(nodeID.get_voxel_material("all") as ShaderMaterial, tmapTextures, PaletteType.PALETTE_3D)
+			apply_shader_params(nodeID.get_voxel_material("selected") as ShaderMaterial, tmapTextures, PaletteType.PALETTE_3D)
 		elif nodeID.has_node("oAllVoxelObjects") and nodeID.has_node("oSelectedVoxelObject"):
 			var allVoxelsNode = nodeID.get_node("oAllVoxelObjects")
 			if allVoxelsNode is MeshInstance and allVoxelsNode.mesh != null and allVoxelsNode.mesh.surface_get_material_count() > 0:
-				_apply_shader_parameters(allVoxelsNode.mesh.surface_get_material(0) as ShaderMaterial, shaderParameters)
+				apply_shader_params(allVoxelsNode.mesh.surface_get_material(0) as ShaderMaterial, tmapTextures, PaletteType.PALETTE_3D)
 			var selectedVoxelsNode = nodeID.get_node("oSelectedVoxelObject")
 			if selectedVoxelsNode is MeshInstance and selectedVoxelsNode.mesh != null and selectedVoxelsNode.mesh.surface_get_material_count() > 0:
-				_apply_shader_parameters(selectedVoxelsNode.mesh.surface_get_material(0) as ShaderMaterial, shaderParameters)
-	apply_slabwindow_textures(shaderParameters)
+				apply_shader_params(selectedVoxelsNode.mesh.surface_get_material(0) as ShaderMaterial, tmapTextures, PaletteType.PALETTE_3D)
+	apply_slabwindow_textures(tmapTextures)
 
 
-func apply_slabwindow_textures(shaderParameters: Dictionary):
+func apply_slabwindow_textures(tmapTextures: Dictionary):
 	yield(get_tree(),'idle_frame')
 	for nodeID in get_tree().get_nodes_in_group("SlabDisplay"):
 		if is_instance_valid(nodeID):
-			_apply_shader_parameters(nodeID.get_material() as ShaderMaterial, shaderParameters)
+			apply_shader_params(nodeID.get_material() as ShaderMaterial, tmapTextures)

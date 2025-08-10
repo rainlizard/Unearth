@@ -158,7 +158,7 @@ func createDisplayField(setMap, showStyle):
 	
 	mat.set_shader_param("slxData", oDataSlx.slxTexData)
 	mat.set_shader_param("slabIdData", oDataSlab.idTexData)
-	mat.set_shader_param("palette_texture", oReadPalette.palette_image_texture)
+	mat.set_shader_param("palette_texture", oReadPalette.palette_image_texture_2d)
 	mat.set_shader_param("supersampling_level", Settings.get_setting("ssaa"))
 	mat.set_shader_param("flashingColumn", -1)
 	mat.set_shader_param("flashingColumnset", -1)
