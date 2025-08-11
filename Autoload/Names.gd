@@ -90,7 +90,7 @@ const things = {
 	TYPE.OBJECT : {
 		"BARREL" : "Barrel",
 		"TORCH" : "Torch",
-		"GOLD_CHEST" : "Gold Pot (500)",
+		"GOLD_CHEST" : "Large Gold Pot (500)",
 		"TEMPLE_STATUE" : "Lit Statue",
 		"SOUL_CONTAINER" : "Dungeon Heart",
 		"GOLD" : "Gold Pot (250)",
