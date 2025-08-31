@@ -241,23 +241,32 @@ func update_slabset_revert_button_state():
 	update_slabset_paths_label(list_of_modified_slabs)
 
 func update_slabset_paths_label(list_of_modified_slabs):
+	print("DEBUG update_slabset_paths_label: Called with list_of_modified_slabs=" + str(list_of_modified_slabs))
 	var file_path = oSlabsetWindow.get_meaningful_file_path("slabset.toml")
+	print("DEBUG update_slabset_paths_label: get_meaningful_file_path returned='" + file_path + "'")
 	var final_text = ""
 	var tooltip_text = ""
 	
 	if file_path != "":
+		print("DEBUG update_slabset_paths_label: File path is not empty")
 		var filename = file_path.get_file()
+		print("DEBUG update_slabset_paths_label: filename=" + filename)
 		if filename == "slabset.toml":
+			print("DEBUG update_slabset_paths_label: Detected CAMPAIGN file (filename matches slabset.toml)")
 			# Campaign file - show parent folder + filename
 			final_text = "/" + file_path.get_base_dir().get_file() + "/" + filename
 		else:
+			print("DEBUG update_slabset_paths_label: Detected LOCAL file (filename is " + filename + ")")
 			# Local file (map00001.slabset.toml) - show just filename
 			final_text = filename
 		tooltip_text = file_path
+		print("DEBUG update_slabset_paths_label: final_text='" + final_text + "', tooltip_text='" + tooltip_text + "'")
 	else:
+		print("DEBUG update_slabset_paths_label: File path is empty, setting to 'No saved file'")
 		final_text = "No saved file"
 		tooltip_text = "No saved file"
 	
+	print("DEBUG update_slabset_paths_label: Setting UI text='" + final_text + "', tooltip='" + tooltip_text + "'")
 	oCurrentlyOpenSlabset.text = final_text
 	oCurrentlyOpenSlabset.hint_tooltip = tooltip_text
 	

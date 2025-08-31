@@ -68,11 +68,26 @@ func update_window_title():
 				window_title = "CLM data"
 
 func get_meaningful_file_path(fileName):
+	print("DEBUG get_meaningful_file_path: Looking for fileName=" + fileName)
+	print("DEBUG get_meaningful_file_path: Available config types in paths_loaded=" + str(oConfigFileManager.paths_loaded.keys()))
+	
 	for cfg_type in [oConfigFileManager.LOAD_CFG_CURRENT_MAP, oConfigFileManager.LOAD_CFG_CAMPAIGN]:
+		print("DEBUG get_meaningful_file_path: Checking cfg_type=" + str(cfg_type))
 		if oConfigFileManager.paths_loaded.has(cfg_type):
-			for path in oConfigFileManager.paths_loaded[cfg_type]:
+			print("DEBUG get_meaningful_file_path: Found cfg_type in paths_loaded")
+			var paths_for_type = oConfigFileManager.paths_loaded[cfg_type]
+			print("DEBUG get_meaningful_file_path: paths_for_type=" + str(paths_for_type))
+			for path in paths_for_type:
+				print("DEBUG get_meaningful_file_path: Checking path='" + str(path) + "'")
 				if path and path.to_lower().ends_with(fileName):
+					print("DEBUG get_meaningful_file_path: FOUND MATCH! Returning path='" + path + "'")
 					return path
+				else:
+					print("DEBUG get_meaningful_file_path: Path doesn't match (path=" + str(path) + ", ends_with_check=" + str(path.to_lower().ends_with(fileName) if path else "path_is_null") + ")")
+		else:
+			print("DEBUG get_meaningful_file_path: cfg_type not found in paths_loaded")
+	
+	print("DEBUG get_meaningful_file_path: No match found, returning empty string")
 	return ""
 
 func _on_SlabsetTabs_tab_changed(tab):
