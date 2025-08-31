@@ -240,7 +240,7 @@ func update_slabset_revert_button_state():
 
 func update_slabset_paths_label():
 	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
-	var file_path = oCurrentMap.current_filepath_for_slabset
+	var file_path = oCurrentMap.existing_slabset_file
 	var final_text = ""
 	var tooltip_text = ""
 	

@@ -552,7 +552,7 @@ func _on_config_status_changed():
 
 func update_rules_paths_label():
 	var oCurrentMap = Nodelist.list["oCurrentMap"]
-	var file_path = oCurrentMap.current_filepath_for_rules
+	var file_path = oCurrentMap.existing_rules_file
 	var final_text = ""
 	var tooltip_text = ""
 	

@@ -44,7 +44,7 @@ func _ready():
 func update_window_title():
 	match oSlabsetTabs.current_tab:
 		0: # Slabset tab
-			var file_path = oCurrentMap.current_filepath_for_slabset
+			var file_path = oCurrentMap.existing_slabset_file
 			if file_path != "":
 				if "/" in file_path:
 					window_title = "Slabset - campaign"
@@ -53,7 +53,7 @@ func update_window_title():
 			else:
 				window_title = "Slabset"
 		1: # Columnset tab
-			var file_path = oCurrentMap.current_filepath_for_columnset
+			var file_path = oCurrentMap.existing_columnset_file
 			if file_path != "":
 				if "/" in file_path:
 					window_title = "Columnset - campaign"

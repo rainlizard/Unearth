@@ -33,9 +33,9 @@ var currentFilePaths = {} # [0] = pathString,  [1] = modified date
 var DKScript_enabled = false
 var LuaScript_enabled = false
 
-var current_filepath_for_slabset = ""
-var current_filepath_for_rules = ""
-var current_filepath_for_columnset = ""
+var existing_slabset_file = ""
+var existing_rules_file = ""
+var existing_columnset_file = ""
 
 enum {
 	PATHSTRING
@@ -105,9 +105,9 @@ func get_meaningful_file_path(fileName):
 	return ""
 
 func update_config_paths():
-	current_filepath_for_slabset = get_meaningful_file_path("slabset.toml")
-	current_filepath_for_columnset = get_meaningful_file_path("columnset.toml") 
-	current_filepath_for_rules = get_meaningful_file_path("rules.cfg")
+	existing_slabset_file = get_meaningful_file_path("slabset.toml")
+	existing_columnset_file = get_meaningful_file_path("columnset.toml") 
+	existing_rules_file = get_meaningful_file_path("rules.cfg")
 
 
 func check_script_file_modifications():

@@ -63,11 +63,11 @@ func save_map(filePath):
 		return
 
 	# Handle slabset.toml and columnset.toml files
-	save_toml_file("slabset.toml", "oCurrentlyOpenSlabset", map_filename_no_ext, map_base_dir)
-	save_toml_file("columnset.toml", "oCurrentlyOpenColumnset", map_filename_no_ext, map_base_dir)
+	save_toml_file("slabset.toml", map_filename_no_ext, map_base_dir)
+	save_toml_file("columnset.toml", map_filename_no_ext, map_base_dir)
 	
 	# Handle rules.cfg file
-	save_rules_cfg_file("rules.cfg", "oCurrentlyOpenRules", map_filename_no_ext, map_base_dir)
+	save_rules_cfg_file("rules.cfg", map_filename_no_ext, map_base_dir)
 
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	if oDataScript.data == "" and oDataLua.data == "":
@@ -136,15 +136,19 @@ func clicked_save_on_menu():
 	save_map(oCurrentMap.path)
 
 
-func save_toml_file(file_type, ui_label_name, map_filename_no_ext, map_base_dir):
+func save_toml_file(file_type, map_filename_no_ext, map_base_dir):
 	var file_path
 	var config_type = oConfigFileManager.LOAD_CFG_CURRENT_MAP
 	
-	# Check if there's an existing file from the UI tooltip
-	var ui_label = Nodelist.list[ui_label_name]
-	var existing_file_path = ui_label.hint_tooltip
+	# Get the current file path from oCurrentMap
+	var existing_file_path = ""
+	match file_type:
+		"slabset.toml":
+			existing_file_path = oCurrentMap.existing_slabset_file
+		"columnset.toml":
+			existing_file_path = oCurrentMap.existing_columnset_file
 	
-	if existing_file_path != "" and existing_file_path != "No saved file":
+	if existing_file_path != "":
 		# Use the existing file path (campaign or local)
 		file_path = existing_file_path
 		if existing_file_path.get_file() == file_type:
@@ -184,14 +188,14 @@ func delete_toml_file_if_exists(file_path, file_type):
 			print("Error trashing " + file_type + " file: " + file_path.get_file() + " Code: " + str(err_trash))
 
 
-func save_rules_cfg_file(file_type, ui_label_name, map_filename_no_ext, map_base_dir):
+func save_rules_cfg_file(file_type, map_filename_no_ext, map_base_dir):
 	var file_path
 	var config_type = oConfigFileManager.LOAD_CFG_CURRENT_MAP
 	
-	var ui_label = Nodelist.list[ui_label_name]
-	var existing_file_path = ui_label.hint_tooltip
+	# Get the current file path from oCurrentMap
+	var existing_file_path = oCurrentMap.existing_rules_file
 	
-	if existing_file_path != "" and existing_file_path != "No saved file":
+	if existing_file_path != "":
 		file_path = existing_file_path
 		if existing_file_path.get_file() == file_type:
 			config_type = oConfigFileManager.LOAD_CFG_CAMPAIGN

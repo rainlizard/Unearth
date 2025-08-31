@@ -5,7 +5,7 @@ const string = """
 - Fixed not being able to run maps that have a different LEVELS_LOCATION than their mappack .cfg filename
 - Fixed shaders going dark for real this time
 - Renamed Gold Pot (500) to Large Gold Pot (500)
-- Fixed slabset.toml/columnset.toml/rules.cfg saving in correct folder
+- Fixed slabset.toml/columnset.toml/rules.cfg saving in incorrect folder
 0.63.832 - 5/8/2025
 - Fixed blue selector's broken animation
 - Fixed objects not being alpha coloured in shade of player
