@@ -44,7 +44,7 @@ func _ready():
 func update_window_title():
 	match oSlabsetTabs.current_tab:
 		0: # Slabset tab
-			var file_path = get_meaningful_file_path("slabset.toml")
+			var file_path = oCurrentMap.current_filepath_for_slabset
 			if file_path != "":
 				if "/" in file_path:
 					window_title = "Slabset - campaign"
@@ -53,7 +53,7 @@ func update_window_title():
 			else:
 				window_title = "Slabset"
 		1: # Columnset tab
-			var file_path = get_meaningful_file_path("columnset.toml")
+			var file_path = oCurrentMap.current_filepath_for_columnset
 			if file_path != "":
 				if "/" in file_path:
 					window_title = "Columnset - campaign"
@@ -67,13 +67,6 @@ func update_window_title():
 			else:
 				window_title = "CLM data"
 
-func get_meaningful_file_path(fileName):
-	for cfg_type in [oConfigFileManager.LOAD_CFG_CURRENT_MAP, oConfigFileManager.LOAD_CFG_CAMPAIGN]:
-		if oConfigFileManager.paths_loaded.has(cfg_type):
-			for path in oConfigFileManager.paths_loaded[cfg_type]:
-				if path and path.to_lower().ends_with(fileName):
-					return path
-	return ""
 
 func _on_SlabsetTabs_tab_changed(tab):
 	match tab:

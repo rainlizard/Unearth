@@ -548,17 +548,11 @@ func _on_config_status_changed():
 	update_rules_paths_label()
 
 
-func get_meaningful_file_path(fileName):
-	for cfg_type in [oConfigFileManager.LOAD_CFG_CURRENT_MAP, oConfigFileManager.LOAD_CFG_CAMPAIGN]:
-		if oConfigFileManager.paths_loaded.has(cfg_type):
-			for path in oConfigFileManager.paths_loaded[cfg_type]:
-				if path and path.to_lower().ends_with(fileName):
-					return path
-	return ""
 
 
 func update_rules_paths_label():
-	var file_path = get_meaningful_file_path("rules.cfg")
+	var oCurrentMap = Nodelist.list["oCurrentMap"]
+	var file_path = oCurrentMap.current_filepath_for_rules
 	var final_text = ""
 	var tooltip_text = ""
 	

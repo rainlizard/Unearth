@@ -236,12 +236,11 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 		flash_update_timer.start()
 
 func update_slabset_revert_button_state():
-	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
-	oSlabsetRevertButton.disabled = list_of_modified_slabs.empty()
-	update_slabset_paths_label(list_of_modified_slabs)
+	update_slabset_paths_label()
 
-func update_slabset_paths_label(list_of_modified_slabs):
-	var file_path = oSlabsetWindow.get_meaningful_file_path("slabset.toml")
+func update_slabset_paths_label():
+	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
+	var file_path = oCurrentMap.current_filepath_for_slabset
 	var final_text = ""
 	var tooltip_text = ""
 	
@@ -268,6 +267,8 @@ func update_slabset_paths_label(list_of_modified_slabs):
 		oModifiedSlabsetLabel.text = "No modified slabs"
 	else:
 		oModifiedSlabsetPanelContainer.modulate = Color(1.4, 1.4, 1.7, 1.0)
+	
+	oSlabsetRevertButton.disabled = list_of_modified_slabs.empty()
 
 func update_modified_label_for_slab_id():
 	if Slabset.is_slab_edited(int(oSlabsetIDSpinBox.value)):
@@ -783,5 +784,4 @@ func _on_flash_update_timer_timeout():
 	oSlabsetWindow.update_flash_state()
 
 func _on_config_status_changed():
-	var list_of_modified_slabs = Slabset.get_all_modified_slabs()
-	update_slabset_paths_label(list_of_modified_slabs)
+	update_slabset_paths_label()

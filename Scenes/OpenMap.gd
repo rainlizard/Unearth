@@ -234,6 +234,9 @@ func continue_load_openmap(map):
 	oSlabsetWindow.visible = false
 	oCfgEditor.visible = false
 	
+	# Update config file paths in oCurrentMap
+	oCurrentMap.update_config_paths()
+	
 	# Clear local config file tracking when opening a new map
 	# This is now handled by CfgLoader calling oConfigFileManager.clear_paths()
 	# oConfigFileManager.clear_local_files() was removed

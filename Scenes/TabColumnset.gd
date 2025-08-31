@@ -79,7 +79,7 @@ func update_columnset_revert_button_state():
 	update_modified_label_for_all_columns(list_of_modified_columns)
 
 func update_columnset_paths_label(list_of_modified_columns):
-	var file_path = oSlabsetWindow.get_meaningful_file_path("columnset.toml")
+	var file_path = oCurrentMap.current_filepath_for_columnset
 	var final_text = ""
 	var tooltip_text = ""
 	

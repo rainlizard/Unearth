@@ -33,14 +33,25 @@ var currentFilePaths = {} # [0] = pathString,  [1] = modified date
 var DKScript_enabled = false
 var LuaScript_enabled = false
 
+var current_filepath_for_slabset = ""
+var current_filepath_for_rules = ""
+var current_filepath_for_columnset = ""
 
 enum {
 	PATHSTRING
 	MODIFIED_DATE
 }
 
+
 func _init():
 	OS.set_window_title('Unearth v'+Version.full)
+
+func _ready():
+	var oConfigFileManager = Nodelist.list["oConfigFileManager"]
+	oConfigFileManager.connect("config_file_status_changed", self, "_on_config_status_changed")
+
+func _on_config_status_changed():
+	update_config_paths()
 
 func _on_ButtonNewMap_pressed():
 	oOpenMap.open_map("") # This means "blank" map
@@ -83,6 +94,21 @@ func clear_map(): # Remember, "Undo" calls this
 func _notification(what: int):
 	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
 		check_script_file_modifications()
+
+func get_meaningful_file_path(fileName):
+	var oConfigFileManager = Nodelist.list["oConfigFileManager"]
+	for cfg_type in [oConfigFileManager.LOAD_CFG_CURRENT_MAP, oConfigFileManager.LOAD_CFG_CAMPAIGN]:
+		if oConfigFileManager.paths_loaded.has(cfg_type):
+			for path in oConfigFileManager.paths_loaded[cfg_type]:
+				if path and path.to_lower().ends_with(fileName):
+					return path
+	return ""
+
+func update_config_paths():
+	current_filepath_for_slabset = get_meaningful_file_path("slabset.toml")
+	current_filepath_for_columnset = get_meaningful_file_path("columnset.toml") 
+	current_filepath_for_rules = get_meaningful_file_path("rules.cfg")
+
 
 func check_script_file_modifications():
 	if DKScript_enabled and currentFilePaths.has("TXT"):
