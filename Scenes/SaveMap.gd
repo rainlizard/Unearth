@@ -63,15 +63,8 @@ func save_map(filePath):
 		return
 
 	# Handle slabset.toml and columnset.toml files
-	print("DEBUG save_map: About to save slabset.toml, map_filename_no_ext=" + map_filename_no_ext + ", map_base_dir=" + map_base_dir)
-	print("DEBUG save_map: oCurrentlyOpenSlabset tooltip before save: '" + Nodelist.list["oCurrentlyOpenSlabset"].hint_tooltip + "'")
 	save_toml_file("slabset.toml", "oCurrentlyOpenSlabset", map_filename_no_ext, map_base_dir)
-	print("DEBUG save_map: oCurrentlyOpenSlabset tooltip after slabset save: '" + Nodelist.list["oCurrentlyOpenSlabset"].hint_tooltip + "'")
-	
-	print("DEBUG save_map: About to save columnset.toml")
-	print("DEBUG save_map: oCurrentlyOpenColumnset tooltip before save: '" + Nodelist.list["oCurrentlyOpenColumnset"].hint_tooltip + "'")
 	save_toml_file("columnset.toml", "oCurrentlyOpenColumnset", map_filename_no_ext, map_base_dir)
-	print("DEBUG save_map: oCurrentlyOpenColumnset tooltip after columnset save: '" + Nodelist.list["oCurrentlyOpenColumnset"].hint_tooltip + "'")
 	
 	# Handle rules.cfg file
 	save_rules_cfg_file("rules.cfg", "oCurrentlyOpenRules", map_filename_no_ext, map_base_dir)
@@ -144,66 +137,38 @@ func clicked_save_on_menu():
 
 
 func save_toml_file(file_type, ui_label_name, map_filename_no_ext, map_base_dir):
-	print("DEBUG save_toml_file: Starting with file_type=" + file_type + ", ui_label_name=" + ui_label_name)
-	print("DEBUG save_toml_file: map_filename_no_ext=" + map_filename_no_ext + ", map_base_dir=" + map_base_dir)
-	
 	var file_path
 	var config_type = oConfigFileManager.LOAD_CFG_CURRENT_MAP
-	print("DEBUG save_toml_file: Initial config_type=" + str(config_type))
 	
 	# Check if there's an existing file from the UI tooltip
 	var ui_label = Nodelist.list[ui_label_name]
-	print("DEBUG save_toml_file: Got ui_label for " + ui_label_name)
 	var existing_file_path = ui_label.hint_tooltip
-	print("DEBUG save_toml_file: existing_file_path from tooltip='" + existing_file_path + "'")
 	
 	if existing_file_path != "" and existing_file_path != "No saved file":
-		print("DEBUG save_toml_file: Using existing file path")
 		# Use the existing file path (campaign or local)
 		file_path = existing_file_path
-		print("DEBUG save_toml_file: Set file_path to existing path=" + file_path)
-		print("DEBUG save_toml_file: existing_file_path.get_file()=" + existing_file_path.get_file() + ", file_type=" + file_type)
 		if existing_file_path.get_file() == file_type:
-			print("DEBUG save_toml_file: File matches type, setting config_type to CAMPAIGN")
 			config_type = oConfigFileManager.LOAD_CFG_CAMPAIGN
-		else:
-			print("DEBUG save_toml_file: File does NOT match type, keeping config_type as CURRENT_MAP")
 	else:
-		print("DEBUG save_toml_file: No existing file, defaulting to local file")
 		# Default to local file
 		file_path = map_base_dir.plus_file(map_filename_no_ext + "." + file_type)
-		print("DEBUG save_toml_file: Set file_path to local=" + file_path)
-	
-	print("DEBUG save_toml_file: Final file_path=" + file_path)
-	print("DEBUG save_toml_file: Final config_type=" + str(config_type))
 	
 	var export_success = false
 	match file_type:
 		"slabset.toml":
-			print("DEBUG save_toml_file: Calling Slabset.export_toml_slabset with path=" + file_path)
 			export_success = Slabset.export_toml_slabset(file_path)
 		"columnset.toml":
-			print("DEBUG save_toml_file: Calling Columnset.export_toml_columnset with path=" + file_path)
 			export_success = Columnset.export_toml_columnset(file_path)
 	
-	print("DEBUG save_toml_file: Export success=" + str(export_success))
-	
 	if export_success:
-		print("DEBUG save_toml_file: Export successful, processing config type=" + str(config_type))
 		if config_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
-			print("DEBUG save_toml_file: Processing as CAMPAIGN file")
 			if not oConfigFileManager.paths_loaded[config_type].has(file_path):
-				print("DEBUG save_toml_file: Adding path to campaign paths_loaded")
 				oConfigFileManager.paths_loaded[config_type].append(file_path)
-			else:
-				print("DEBUG save_toml_file: Path already in campaign paths_loaded")
 			oConfigFileManager.emit_signal("config_file_status_changed")
 		else:
-			print("DEBUG save_toml_file: Processing as LOCAL/CURRENT_MAP file")
 			oConfigFileManager.notify_file_created(file_path, file_type)
 		print("Saved " + file_type.get_basename() + " to: " + file_path)
 	else:
-		print("DEBUG save_toml_file: Export failed, attempting to delete file")
 		delete_toml_file_if_exists(file_path, file_type)
 
 
