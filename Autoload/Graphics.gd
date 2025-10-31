@@ -135,8 +135,8 @@ var sprite_id = {
 "WORD_OF_POWER" : preload("res://dk_images/trapdoor_64/trap_wop_std.png"),
 "LAVA" : preload("res://dk_images/trapdoor_64/trap_lava_std.png"),
 "TNT" : preload("res://extra_images/tnt.png"),
-"BALLISTA" : preload("res://extra_images/ballista.png"),
 "SENTRY" : preload("res://extra_images/sentry.png"),
+"BALLISTA" : preload("res://extra_images/ballista.png"),
 
 # Decorations/Furniture
 "BANNER" : preload("res://extra_images/banner.png"),
