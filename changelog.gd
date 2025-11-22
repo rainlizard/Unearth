@@ -1,6 +1,8 @@
 ﻿extends Node
 
 const string = """
+<version> - <date>
+- Added Sentry and Ballista trap icons
 0.64.842 - 8/9/2025
 - Fixed not being able to run maps that have a different LEVELS_LOCATION than their mappack .cfg filename
 - Fixed shaders going dark for real this time
