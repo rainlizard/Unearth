@@ -34,6 +34,7 @@ onready var oScriptEditorFontSize = Nodelist.list["oScriptEditorFontSize"]
 onready var oEditorFontSize = Nodelist.list["oEditorFontSize"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
 onready var oShowCLMDataTabCheckbox = Nodelist.list["oShowCLMDataTabCheckbox"]
+onready var oAllowReservedIdEditingCheckbox = Nodelist.list["oAllowReservedIdEditingCheckbox"]
 onready var oPauseWhenMinimizedCheckbox = Nodelist.list["oPauseWhenMinimizedCheckbox"]
 onready var oInputsUpdateScreenCheckbox = Nodelist.list["oInputsUpdateScreenCheckbox"]
 onready var oRenderingRateSpinBox = Nodelist.list["oRenderingRateSpinBox"]
@@ -98,6 +99,7 @@ func _on_SettingsWindow_about_to_show():
 	oScriptEditorFontSize.update_appearance(Settings.get_setting("script_editor_font_size"))
 	oCheckBoxNewMapAutoOpensMapSettings.pressed = Settings.get_setting("auto_open_map_settings")
 	oShowCLMDataTabCheckbox.pressed = Settings.get_setting("show_clm_data_tab")
+	oAllowReservedIdEditingCheckbox.pressed = Settings.get_setting("allow_reserved_id_editing")
 	oPauseWhenMinimizedCheckbox.pressed = Settings.get_setting("pause_when_minimized")
 	oInputsUpdateScreenCheckbox.pressed = Settings.get_setting("inputs_update_screen")
 	oRenderingRateSpinBox.update_appearance(Settings.get_setting("rendering_rate"))
@@ -218,6 +220,9 @@ func _on_ShowCLMDataTabCheckbox_toggled(button_pressed):
 	Settings.set_setting("show_clm_data_tab", button_pressed)
 	var oSlabsetTabs = Nodelist.list["oSlabsetTabs"]
 	oSlabsetTabs.set_tab_hidden(2, !button_pressed)
+
+func _on_AllowReservedIdEditingCheckbox_toggled(button_pressed):
+	Settings.set_setting("allow_reserved_id_editing", button_pressed)
 
 func _on_PauseWhenMinimizedCheckbox_toggled(button_pressed):
 	Settings.set_setting("pause_when_minimized", button_pressed)

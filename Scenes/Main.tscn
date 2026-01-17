@@ -2753,6 +2753,12 @@ margin_right = 544.0
 margin_bottom = 307.0
 text = "Show CLM data tab"
 
+[node name="AllowReservedIdEditingCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer"]
+margin_top = 311.0
+margin_right = 544.0
+margin_bottom = 340.0
+text = "Allow editing reserved slab/column IDs"
+
 [node name="TabCamera" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
 anchor_right = 1.0
@@ -8205,6 +8211,7 @@ margin_bottom = 40.0
 [connection signal="focus_exited" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/GridContainer/DamagedWallLineEdit" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_DamagedWallLineEdit_focus_exited"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/CheckBoxNewMapAutoOpensMapSettings" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxNewMapAutoOpensMapSettings_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/ShowCLMDataTabCheckbox" to="Ui/UiSystem/PreferencesWindow" method="_on_ShowCLMDataTabCheckbox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/AllowReservedIdEditingCheckbox" to="Ui/UiSystem/PreferencesWindow" method="_on_AllowReservedIdEditingCheckbox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxSmoothPan" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxSmoothPan_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxMouseEdgePanning" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxMouseEdgePanning_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer/CheckBoxDisplay3dInfo" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxDisplay3dInfo_toggled"]

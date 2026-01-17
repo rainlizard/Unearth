@@ -1,6 +1,8 @@
-﻿extends Node
+extends Node
 
 const string = """
+<version> - <date>
+- Added setting to allow editing reserved IDs in slabset editor
 0.65.848 - 22/11/2025
 - Added Sentry and Ballista trap icons
 0.64.842 - 8/9/2025

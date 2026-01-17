@@ -210,22 +210,23 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 	var direction = value - _previous_slab_id
 
 	# Handle jumps for single-step changes (keyboard or spinbox buttons)
-	if abs(direction) == 1 and Slabset.highest_slabset_id_from_fxdata > 0:
-		if direction == 1 and _previous_slab_id == Slabset.highest_slabset_id_from_fxdata:
-			oSlabsetIDSpinBox.value = Slabset.reserved_slabset
-			return
-		elif direction == -1 and _previous_slab_id == Slabset.reserved_slabset:
-			oSlabsetIDSpinBox.value = Slabset.highest_slabset_id_from_fxdata
-			return
+	if not Settings.get_setting("allow_reserved_id_editing"):
+		if abs(direction) == 1 and Slabset.highest_slabset_id_from_fxdata > 0:
+			if direction == 1 and _previous_slab_id == Slabset.highest_slabset_id_from_fxdata:
+				oSlabsetIDSpinBox.value = Slabset.reserved_slabset
+				return
+			elif direction == -1 and _previous_slab_id == Slabset.reserved_slabset:
+				oSlabsetIDSpinBox.value = Slabset.highest_slabset_id_from_fxdata
+				return
 
-	# Handle direct text input into invalid range
-	if not Slabset.is_valid_slab_id_for_navigation(value):
-		var mid_point = (Slabset.highest_slabset_id_from_fxdata + Slabset.reserved_slabset) / 2.0
-		if value < mid_point:
-			oSlabsetIDSpinBox.value = Slabset.highest_slabset_id_from_fxdata
-		else:
-			oSlabsetIDSpinBox.value = Slabset.reserved_slabset
-		return
+		# Handle direct text input into invalid range
+		if not Slabset.is_valid_slab_id_for_navigation(value):
+			var mid_point = (Slabset.highest_slabset_id_from_fxdata + Slabset.reserved_slabset) / 2.0
+			if value < mid_point:
+				oSlabsetIDSpinBox.value = Slabset.highest_slabset_id_from_fxdata
+			else:
+				oSlabsetIDSpinBox.value = Slabset.reserved_slabset
+			return
 
 	_previous_slab_id = value
 	var slabName = Slabs.data[value][Slabs.NAME] if Slabs.data.has(value) else "Unknown"

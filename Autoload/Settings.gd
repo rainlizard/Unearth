@@ -77,6 +77,7 @@ var listOfSettings = [
 	"place_locked",
 	"automatic_torch_slabs",
 	"show_clm_data_tab",
+	"allow_reserved_id_editing",
 	"pause_when_minimized",
 	"low_processor_mode_sleep_usec",
 	"inputs_update_screen",
@@ -438,6 +439,10 @@ func game_setting(doWhat,string,value):
 			var oShowCLMDataTabCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/ShowCLMDataTabCheckbox'
 			if doWhat == SET: oShowCLMDataTabCheckbox.pressed = value
 			if doWhat == GET: return oShowCLMDataTabCheckbox.pressed
+		"allow_reserved_id_editing":
+			var oAllowReservedIdEditingCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/AllowReservedIdEditingCheckbox'
+			if doWhat == SET: oAllowReservedIdEditingCheckbox.pressed = value
+			if doWhat == GET: return oAllowReservedIdEditingCheckbox.pressed
 		"pause_when_minimized":
 			var oPauseWhenMinimizedCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/PauseWhenMinimizedCheckbox'
 			if doWhat == SET: oPauseWhenMinimizedCheckbox.pressed = value
