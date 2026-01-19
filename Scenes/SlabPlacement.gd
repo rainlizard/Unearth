@@ -689,28 +689,24 @@ func fill_reinforced_wall_corners(slabID, slabsetIndexGroup, surrID, bitmaskType
 		slabsetIndexGroup[6] = ((fullVariationIndex + dir.all) * 9) + 6
 
 func randomize_columns(columnsetIndexList, constructedColumns):
-	# For each subtile
-	for subtile in range(9):  # Assuming you have 9 subtiles, adjust if necessary
+	for subtile in 9:
 		var dkClmIndex = columnsetIndexList[subtile]
-
-		# Check if the current column has RNG cube types
-		if Columnset.columnsContainingRngCubes.has(dkClmIndex):
-			var rngCubeTypesInColumn = Columnset.columnsContainingRngCubes[dkClmIndex]
-			# For each cube in the column
-			for cubeIndex in range(8):  # Assuming 8 cubes per column
-				var cubeID = constructedColumns[subtile][cubeIndex]
-
-				# Iterate through each RNG cube type in the column
-				for rngType in rngCubeTypesInColumn:
-					# Check if the cube ID is part of the current RNG type
-					if cubeID in Cube.rngCube[rngType]:
-						# Select a random cube ID from the corresponding RNG cube group
-						var randomCubeID = Cube.rngCube[rngType][randi() % Cube.rngCube[rngType].size()]
-
-						# Replace the cube with a random one from the same group
-						constructedColumns[subtile][cubeIndex] = randomCubeID
-						break  # Don't bother looking at the other rngTypes for this cube position
+		if Columnset.columnsContainingRngCubes.has(dkClmIndex) == false:
+			continue
+		var rngCubeTypesInColumn = Columnset.columnsContainingRngCubes[dkClmIndex]
+		for cubeIndex in 8:
+			var cubeID = constructedColumns[subtile][cubeIndex]
+			if is_custom_cube(cubeID):
+				continue
+			for rngType in rngCubeTypesInColumn:
+				if cubeID in Cube.rngCube[rngType]:
+					constructedColumns[subtile][cubeIndex] = Cube.rngCube[rngType][randi() % Cube.rngCube[rngType].size()]
+					break
 	return constructedColumns
+
+
+func is_custom_cube(cubeID):
+	return Cube.is_cube_modified(cubeID)
 
 func adjust_ownership_graphic(columnsetIndexList, constructedColumns, ownership):
 	for subtile in 9:

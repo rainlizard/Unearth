@@ -72,8 +72,7 @@ func read_cubes_cfg(get_cfg_data):
 	set_max_cubes()
 
 
-func load_dk_original_cubes():
-	tex = [
+const DEFAULT_TEX = [
 		[  0,   0,   0,   0,   0,   0],
 		[  2,   2,   2,   2,   5,   2],
 		[  3,   3,   3,   3,   5,   3],
@@ -585,8 +584,20 @@ func load_dk_original_cubes():
 		[  0,   0,   0,   0,   0,   0],
 		[  0,   0,   0,   0,   0,   0],
 		[  0,   0,   0,   0,   0,   0],
-	]
+]
+
+
+func load_dk_original_cubes():
+	tex = DEFAULT_TEX.duplicate(true)
 	set_max_cubes()
+
+
+func is_cube_modified(cubeID):
+	if cubeID >= tex.size():
+		return false
+	if cubeID >= DEFAULT_TEX.size():
+		return true
+	return tex[cubeID] != DEFAULT_TEX[cubeID]
 
 func set_max_cubes():
 	var oClmEditorControls = Nodelist.list["oClmEditorControls"]
