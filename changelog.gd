@@ -1,6 +1,10 @@
 ﻿extends Node
 
 const string = """
+0.66.861 - 20/3/2026
+- Fixed bad column randomization when custom cubes.cfg is involved
+- Updated icons for Sentry, Ballista, Druid, Druid Lair
+- Removed "-nocd" from default Play button arguments
 0.66.852 - 17/1/2026
 - Added setting to allow editing reserved IDs in slabset editor
 0.65.848 - 22/11/2025
