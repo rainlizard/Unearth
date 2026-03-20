@@ -26,7 +26,7 @@ var KEEPERFX_VERSION_STRING = "0"
 var COMMAND_LINE = ""
 var COMMAND_LINE_CONSOLE = ""
 var COMMAND_LINE_CONSOLE_ARG = ""
-var DK_COMMANDS = "-nointro -alex -nocd"
+var DK_COMMANDS = "-nointro -alex"
 
 func keeperfx_is_installed():
 	var path = EXECUTABLE_PATH.get_file().to_lower()
