@@ -53,8 +53,7 @@ func import_toml_columnset(filePath):
 	if is_from_fxdata:
 		highest_columnset_id_from_fxdata = max_column_id_found
 		store_default_data()
-		update_list_of_columns_that_contain_owned_cubes()
-		update_list_of_columns_that_contain_rng_cubes()
+	update_cube_lists()
 
 func load_default_original_columnset():
 	var filePath = Utils.case_insensitive_file(oGame.DK_DATA_DIRECTORY, "SLABS", "CLM")
@@ -84,8 +83,7 @@ func load_default_original_columnset():
 			cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
 	
 	store_default_data()
-	update_list_of_columns_that_contain_owned_cubes()
-	update_list_of_columns_that_contain_rng_cubes()
+	update_cube_lists()
 
 func store_default_data():
 	default_data["utilized"] = utilized.duplicate(true)
@@ -96,6 +94,11 @@ func store_default_data():
 	default_data["height"] = height.duplicate(true)
 	default_data["cubes"] = cubes.duplicate(true)
 	default_data["floorTexture"] = floorTexture.duplicate(true)
+
+
+func update_cube_lists():
+	update_list_of_columns_that_contain_owned_cubes()
+	update_list_of_columns_that_contain_rng_cubes()
 
 
 func export_toml_columnset(filePath):

@@ -133,8 +133,7 @@ func _on_SlabsetWindow_visibility_changed():
 	elif visible == false:
 		oFlashingColumns.stop_column_flash()
 		oPickSlabWindow.add_slabs()
-		Columnset.update_list_of_columns_that_contain_owned_cubes()
-		Columnset.update_list_of_columns_that_contain_rng_cubes()
+		Columnset.update_cube_lists()
 
 func open_from_cursor_position():
 	var data = oSlabsetMapRegenerator.calculate_cursor_data()
