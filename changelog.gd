@@ -1,6 +1,10 @@
 ﻿extends Node
 
 const string = """
+0.66.866 - 29/3/2026
+- Fixed a column cache bug involving owned cubes
+- Fixed a bug with ownership painting
+- Updated Druid portrait
 0.66.861 - 20/3/2026
 - Fixed bad column randomization when custom cubes.cfg is involved
 - Updated icons for Sentry, Ballista, Druid, Druid Lair
