@@ -102,19 +102,17 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 				MIRROR_STYLE:
 					pass
 				MIRROR_ONLY_OWNERSHIP:
-					if slabID_is_ownable(slabID):
-						calculateOwner = true
+					calculateOwner = true
 			
 			if calculateOwner == true:
-				if oMirrorOptions.ui_quadrants_have_owner(mainPaint) == false:
-					oDataOwnership.set_cellv_ownership(toPos, mainPaint)
-				else:
+				var paintOwner = mainPaint
+				if oMirrorOptions.ui_quadrants_have_owner(mainPaint):
 					if mainPaint == quadrantDestinationOwner:
-						oDataOwnership.set_cellv_ownership(toPos, quadrantClickedOnOwner)
+						paintOwner = quadrantClickedOnOwner
 					else:
 						match oMirrorOptions.splitType:
 							0,1:
-								oDataOwnership.set_cellv_ownership(toPos, quadrantDestinationOwner)
+								paintOwner = quadrantDestinationOwner
 							2:
 								var otherTwoQuadrants = []
 								for i in 4:
@@ -124,11 +122,17 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 								
 								if otherTwoQuadrants.size() == 2:
 									if quadrantDestinationOwner == otherTwoQuadrants[0]:
-										oDataOwnership.set_cellv_ownership(toPos, otherTwoQuadrants[1])
+										paintOwner = otherTwoQuadrants[1]
 									else:
-										oDataOwnership.set_cellv_ownership(toPos, otherTwoQuadrants[0])
+										paintOwner = otherTwoQuadrants[0]
 								else:
-									oDataOwnership.set_cellv_ownership(toPos, quadrantDestinationOwner)
+									paintOwner = quadrantDestinationOwner
+				if mirrorWhat == MIRROR_ONLY_OWNERSHIP and slabID_is_ownable(slabID) == false:
+					oDataOwnership.set_cellv_ownership(toPos, 5)
+				else:
+					oDataOwnership.set_cellv_ownership(toPos, paintOwner)
+				if mirrorWhat == MIRROR_ONLY_OWNERSHIP:
+					oInstances.manage_thing_ownership_on_slab(toPos.x, toPos.y, paintOwner)
 			
 			# Always add position to mirroredPositionArray, decide what to do with the positions after the loop is done.
 			mirroredPositionArray.append(toPos)
@@ -253,8 +257,8 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	if oOnlyOwnership.visible == true and autogen_was_called == false:
 		for pos in shapePositionArray:
 			var slabID = oDataSlab.get_cell(pos.x, pos.y)
-			var ownership = oDataOwnership.get_cell_ownership(pos.x, pos.y)
-			if Slabs.data.has(slabID):
+			if Slabs.data.has(slabID) and slabID_is_ownable(slabID):
+				var ownership = oDataOwnership.get_cell_ownership(pos.x, pos.y)
 				oInstances.manage_thing_ownership_on_slab(pos.x, pos.y, ownership)
 	
 	if updateNearby == true:
