@@ -67,15 +67,14 @@ func start():
 	print('overhead ownership (start): ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func ownership_paint_shape(shapePositionArray, ownership):
-	
-	var setColour = Constants.ownerRoomCol[ownership]
-	
 	slabOwnershipImage.lock()
 	for pos in shapePositionArray:
 		var slabID = oDataSlab.get_cell(pos.x, pos.y)
-		if oSlabPlacement.slabID_is_ownable(slabID) == true:
-			oDataOwnership.set_cellv_ownership(pos, ownership) # Set cell data
-			slabOwnershipImage.set_pixelv(pos, setColour)  # Set image data
+		var setOwnership = 5
+		if oSlabPlacement.slabID_is_ownable(slabID):
+			setOwnership = ownership
+		oDataOwnership.set_cellv_ownership(pos, setOwnership)
+		slabOwnershipImage.set_pixelv(pos, Constants.ownerRoomCol[setOwnership])
 	slabOwnershipImage.unlock()
 	
 	slabOwnershipTexture.set_data(slabOwnershipImage)
@@ -92,11 +91,8 @@ func update_ownership_image_based_on_shape(shapePositionArray):
 
 
 func ownership_update_things(shapePositionArray, paintOwnership):
-	# Change ownership of spellbooks when placing slab ownership (Ownership tab)
-	for id in get_tree().get_nodes_in_group("Spellbook"):
-		var slabPos = Vector2(int(id.locationX/3),int(id.locationY/3))
-		if slabPos in shapePositionArray:
-			id.ownership = paintOwnership
+	for pos in shapePositionArray:
+		oInstances.manage_thing_ownership_on_slab(pos.x, pos.y, paintOwnership)
 
 #func ownership_update_rect(rectStart, rectEnd, ownership):
 #	rectStart = Vector2(clamp(rectStart.x, 0, 84), clamp(rectStart.y, 0, 84))
@@ -142,5 +138,3 @@ func _process(delta):
 
 #func _draw():
 #	draw_texture_rect(slabOwnershipTexture, Rect2(0,0,85*TSIZE,85*TSIZE), false, Color( 1, 1, 1, 1 ), false, null)
-
-
