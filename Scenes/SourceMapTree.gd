@@ -26,6 +26,9 @@ func update_source_tree(): # Call this whenever there's an update to the filesys
 	path = oGame.GAME_DIRECTORY.plus_file("campgns")
 	var campgnsTreeItem = add_tree_dir(self, self, path)
 	deep_scan(path, campgnsTreeItem)
+	path = oGame.GAME_DIRECTORY.plus_file("multiplayer")
+	var multiplayerTreeItem = add_tree_dir(self, self, path)
+	deep_scan(path, multiplayerTreeItem)
 	
 	# For the remaining items without lif names
 	for BASENAME in treeItemsThatWantNames:
