@@ -82,11 +82,9 @@ func _process(delta):
 	var dir = current_dir.to_upper()
 	if oGame.keeperfx_is_installed() == true:
 		saveInstruction.text = "Map not playable from this directory. (KeeperFX)"
-		if dir.ends_with("/LEVELS"):
+		if oGame.is_map_root(dir) == true:
 			saveInstruction.text = "Must save in a sub directory. (KeeperFX)"
-		if dir.ends_with("/CAMPGNS"):
-			saveInstruction.text = "Must save in a sub directory. (KeeperFX)"
-		if dir.get_base_dir().ends_with("/LEVELS") or dir.get_base_dir().ends_with("/CAMPGNS") or dir.get_base_dir().ends_with("/MULTIPLAYER"):
+		if oGame.is_playable_dir(dir) == true:
 			saveInstruction.text = "Map playable from this directory. (KeeperFX)"
 			saveInstruction.set("custom_colors/font_color", Color(0.5,1.0,0.5,1))
 	else:

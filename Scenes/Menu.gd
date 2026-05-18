@@ -211,15 +211,10 @@ func constantly_monitor_play_button_state():
 	var mapPath = oCurrentMap.path.to_upper().replace('\\','/')
 	
 	var currentDirectory = mapPath.get_base_dir()
-	var parentDirectory = currentDirectory.get_base_dir()
 	
 	var mapIsInCorrectDirectory = false
-	if oGame.keeperfx_is_installed() == true:
-		if parentDirectory.ends_with("/LEVELS") or parentDirectory.ends_with("/CAMPGNS") or parentDirectory.ends_with("/MULTIPLAYER"):
-			mapIsInCorrectDirectory = true
-	else:
-		if currentDirectory.ends_with("/LEVELS"):
-			mapIsInCorrectDirectory = true
+	if oGame.is_playable_dir(currentDirectory) == true:
+		mapIsInCorrectDirectory = true
 	
 	if mapIsInCorrectDirectory == true: # Is playable path
 		oMenuPlayButton.disabled = false

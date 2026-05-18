@@ -54,8 +54,7 @@ func get_campaign_main_data(mapPathArgument):
 	if mapPathArgument == "" or mapPathArgument == null:
 		return {}
 	var levelsDirectoryPath = mapPathArgument.get_base_dir().get_base_dir()
-	var parentDirectoryName = levelsDirectoryPath.get_file()
-	if parentDirectoryName != "levels" and parentDirectoryName != "campgns":
+	if oGame.is_map_root(levelsDirectoryPath) == false:
 		return {}
 	var listOfCampaignFiles = Utils.get_filetype_in_directory(levelsDirectoryPath, "cfg")
 	for campaignFilePath in listOfCampaignFiles:

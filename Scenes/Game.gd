@@ -16,6 +16,7 @@ var DK_DATA_DIRECTORY = ""
 var DK_FXDATA_DIRECTORY = ""
 var DK_LEVELS_DIRECTORY = ""
 var DK_CAMPGNS_DIRECTORY = ""
+var DK_MULTIPLAYER_DIRECTORY = ""
 #var KEEPERFX_VERSION_INT = 0 # This is set in set_paths() when EXECUTABLE_PATH is set.
 var KEEPERFX_VERSION_STRING = "0"
 #const KEEPERFX_VERSION_REQUIRED_INT = 0503372 #0.5.0.3372
@@ -27,6 +28,7 @@ var COMMAND_LINE = ""
 var COMMAND_LINE_CONSOLE = ""
 var COMMAND_LINE_CONSOLE_ARG = ""
 var DK_COMMANDS = "-nointro -alex"
+const KEEPERFX_MAP_ROOTS = ["levels", "multiplayer", "campgns"]
 
 func keeperfx_is_installed():
 	var path = EXECUTABLE_PATH.get_file().to_lower()
@@ -34,6 +36,44 @@ func keeperfx_is_installed():
 		return true
 	else:
 		return false
+
+
+func is_map_root(path):
+	if path == null or path == "":
+		return false
+	var folderName = path.replace('\\','/').trim_suffix("/").get_file().to_lower()
+	return KEEPERFX_MAP_ROOTS.has(folderName)
+
+
+func is_playable_dir(path):
+	if path == null or path == "":
+		return false
+	var normalizedPath = path.replace('\\','/').trim_suffix("/")
+	if keeperfx_is_installed() == true:
+		return is_map_root(normalizedPath.get_base_dir())
+	return normalizedPath.get_file().to_lower() == "levels"
+
+
+func get_map_root(path):
+	if path == null or path == "":
+		return ""
+	return path.replace('\\','/').get_base_dir().get_base_dir().get_file().to_lower()
+
+
+func is_multiplayer_map(path):
+	return get_map_root(path) == "multiplayer"
+
+
+func has_multiplayer_root():
+	return DK_MULTIPLAYER_DIRECTORY != ""
+
+
+func get_campaign_path(mapPath, campaignName):
+	var mapRoot = get_map_root(mapPath)
+	if keeperfx_is_installed() == true and has_multiplayer_root() == true and KEEPERFX_MAP_ROOTS.has(mapRoot) == true:
+		return mapRoot.plus_file(campaignName).replace('\\','/')
+	return campaignName
+
 
 func _input(event):
 	if Input.is_action_just_pressed("SaveAndPlay"):
@@ -51,6 +91,11 @@ func set_paths(path):
 	EXECUTABLE_PATH = path
 	GAME_DIRECTORY = path.get_base_dir()
 	set_keeperfx_version()
+	DK_DATA_DIRECTORY = ""
+	DK_FXDATA_DIRECTORY = ""
+	DK_LEVELS_DIRECTORY = ""
+	DK_CAMPGNS_DIRECTORY = ""
+	DK_MULTIPLAYER_DIRECTORY = ""
 	
 	for i in get_main_subdirectories(GAME_DIRECTORY): # Directories only
 		match i.to_upper():
@@ -58,6 +103,7 @@ func set_paths(path):
 			"FXDATA": DK_FXDATA_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 			"LEVELS": DK_LEVELS_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 			"CAMPGNS": DK_CAMPGNS_DIRECTORY = GAME_DIRECTORY.plus_file(i)
+			"MULTIPLAYER": DK_MULTIPLAYER_DIRECTORY = GAME_DIRECTORY.plus_file(i)
 	
 	if keeperfx_is_installed() == true:
 		oKeeperFXDetection.text = "KeeperFX detected. " + "(Version " + KEEPERFX_VERSION_STRING + ")"
@@ -125,14 +171,16 @@ func cmdline(mapPath):
 	
 	var newMapNumber = mapPath.get_file().to_upper().trim_prefix("MAP")
 	var newCampaignName = mapPath.get_base_dir().get_file()
+	if is_multiplayer_map(mapPath) == true:
+		constructString += " -1player"
 	constructString += " -level " + newMapNumber
 	if newCampaignName != "levels": # The older DK structure stored all their maps in /levels/ folder and did not use campaign command.
 		var mappackCfgFilename = oConfigFileManager.current_mappack_cfg_filename
 		if mappackCfgFilename != "":
 			var campaignName = mappackCfgFilename.get_basename()
-			constructString += " -campaign " + campaignName
+			constructString += " -campaign " + get_campaign_path(mapPath, campaignName)
 		else:
-			constructString += " -campaign " + newCampaignName
+			constructString += " -campaign " + get_campaign_path(mapPath, newCampaignName)
 	
 	constructString = constructString.strip_edges(true,true)
 	
@@ -238,6 +286,3 @@ func set_keeperfx_version():
 
 #"-nointro -altinput -alex"
 #F:\Games\Dungeon Keeper\
-
-
-

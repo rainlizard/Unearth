@@ -286,8 +286,7 @@ func get_sprite(newName, animID):
 
 func load_campaign_boss_file(mapPath):
 	var levelsDirPath = mapPath.get_base_dir().get_base_dir()
-	var parentDirFolderName = levelsDirPath.get_file()
-	if parentDirFolderName != "levels" and parentDirFolderName != "campgns" and parentDirFolderName != "multiplayer":
+	if oGame.is_map_root(levelsDirPath) == false:
 		oConfigFileManager.current_mappack_cfg_filename = ""
 		return {}
 	var list_of_main_campaign_files = Utils.get_filetype_in_directory(levelsDirPath, "cfg")

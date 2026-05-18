@@ -19,16 +19,13 @@ func update_source_tree(): # Call this whenever there's an update to the filesys
 	create_item() # Important to create root
 	get_root().set_text(0,"SourceMapTree root")
 	
-	var path
-	path = oGame.GAME_DIRECTORY.plus_file("levels")
-	var levelsTreeItem = add_tree_dir(self, self, path)
-	deep_scan(path, levelsTreeItem)
-	path = oGame.GAME_DIRECTORY.plus_file("campgns")
-	var campgnsTreeItem = add_tree_dir(self, self, path)
-	deep_scan(path, campgnsTreeItem)
-	path = oGame.GAME_DIRECTORY.plus_file("multiplayer")
-	var multiplayerTreeItem = add_tree_dir(self, self, path)
-	deep_scan(path, multiplayerTreeItem)
+	var dir = Directory.new()
+	for rootName in oGame.KEEPERFX_MAP_ROOTS:
+		var path = oGame.GAME_DIRECTORY.plus_file(rootName)
+		if dir.dir_exists(path) == false:
+			continue
+		var rootTreeItem = add_tree_dir(self, self, path)
+		deep_scan(path, rootTreeItem)
 	
 	# For the remaining items without lif names
 	for BASENAME in treeItemsThatWantNames:
