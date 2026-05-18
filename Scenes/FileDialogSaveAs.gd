@@ -86,7 +86,7 @@ func _process(delta):
 			saveInstruction.text = "Must save in a sub directory. (KeeperFX)"
 		if dir.ends_with("/CAMPGNS"):
 			saveInstruction.text = "Must save in a sub directory. (KeeperFX)"
-		if dir.get_base_dir().ends_with("/LEVELS") or dir.get_base_dir().ends_with("/CAMPGNS"):
+		if dir.get_base_dir().ends_with("/LEVELS") or dir.get_base_dir().ends_with("/CAMPGNS") or dir.get_base_dir().ends_with("/MULTIPLAYER"):
 			saveInstruction.text = "Map playable from this directory. (KeeperFX)"
 			saveInstruction.set("custom_colors/font_color", Color(0.5,1.0,0.5,1))
 	else:

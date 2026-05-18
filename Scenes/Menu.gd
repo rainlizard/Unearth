@@ -215,7 +215,7 @@ func constantly_monitor_play_button_state():
 	
 	var mapIsInCorrectDirectory = false
 	if oGame.keeperfx_is_installed() == true:
-		if parentDirectory.ends_with("/LEVELS") or parentDirectory.ends_with("/CAMPGNS"):
+		if parentDirectory.ends_with("/LEVELS") or parentDirectory.ends_with("/CAMPGNS") or parentDirectory.ends_with("/MULTIPLAYER"):
 			mapIsInCorrectDirectory = true
 	else:
 		if currentDirectory.ends_with("/LEVELS"):
