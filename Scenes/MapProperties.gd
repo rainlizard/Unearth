@@ -46,7 +46,6 @@ onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
 const kind_options = {
 	"Solo" : "FREE",
 	"Multiplayer" : "MULTI",
-	"Cooperative" : "COOP",
 	"Campaign" : "SINGLE",
 	"Campaign Secret" : "BONUS",
 	"Campaign Moon" : "EXTRA",
@@ -55,6 +54,7 @@ const kind_options = {
 const options_options = {
 	"None" : "",
 	"Tutorial flag icon" : "TUTORIAL",
+	"Cooperative flag icon" : "COOP",
 }
 
 
@@ -239,7 +239,7 @@ func _on_KindOptionButton_item_selected(index):
 
 func _on_OptionsOptionButton_item_selected(index):
 	oEditor.mapHasBeenEdited = true
-	oDataLof.OPTIONS = options_options[oOptionsOptionButton.text]
+	oDataLof.OPTIONS = options_options[oOptionsOptionButton.get_item_text(index)]
 
 
 func _on_EnsignPositionX_focus_exited():
@@ -293,7 +293,7 @@ func update_section_visibility():
 		"Multiplayer":
 			oHBoxPlayers.visible = true
 			oHBoxEnsignPosition.visible = true
-			oHBoxOptions.visible = false
+			oHBoxOptions.visible = true
 			oHBoxLandView.visible = true
 			oHBoxNameID.visible = true
 		"Campaign", "Campaign Secret", "Campaign Moon":
