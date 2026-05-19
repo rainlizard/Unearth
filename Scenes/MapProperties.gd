@@ -46,6 +46,7 @@ onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
 const kind_options = {
 	"Solo" : "FREE",
 	"Multiplayer" : "MULTI",
+	"Cooperative" : "COOP",
 	"Campaign" : "SINGLE",
 	"Campaign Secret" : "BONUS",
 	"Campaign Moon" : "EXTRA",
