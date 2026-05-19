@@ -1,6 +1,10 @@
 ﻿extends Node
 
 const string = """
+0.67.875 - 19/5/2026
+- Added support for KeeperFX's new /multiplayer/ directory
+- Renamed Options to Flag icon and added 'Cooperative flag icon'
+- Updated Maiden creature portrait
 0.66.866 - 29/3/2026
 - Fixed a column cache bug involving owned cubes
 - Fixed a bug with ownership painting
