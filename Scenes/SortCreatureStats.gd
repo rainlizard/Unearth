@@ -1,9 +1,8 @@
 extends WindowDialog
-onready var oGame = Nodelist.list["oGame"]
 onready var oSortCreaStatsGrid = Nodelist.list["oSortCreaStatsGrid"]
 onready var oStatsOptionButton = Nodelist.list["oStatsOptionButton"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oReadCfg = Nodelist.list["oReadCfg"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 var name_type = 0
 
@@ -15,16 +14,16 @@ func _on_SortCreatureStats_visibility_changed():
 		start()
 
 func start():
-	var listOfCfgs = Utils.get_filetype_in_directory(oGame.GAME_DIRECTORY.plus_file("creatrs"), "CFG")
-	for path in listOfCfgs:
-		var aaa = oReadCfg.read_dkcfg_file(path)["config"]
-		all_creature_data[path.get_file()] = aaa
+	all_creature_data = oConfigFileManager.current_data.get("creature_stats", {})
+	selected_labels.clear()
+	oStatsOptionButton.clear()
 	
 	populate_optionbutton()
 	
-	# Default selection
-	oStatsOptionButton.select(2)
-	_on_StatsOptionButton_item_selected(2)
+	var default_index = min(2, oStatsOptionButton.get_item_count() - 1)
+	if default_index >= 0:
+		oStatsOptionButton.select(default_index)
+		_on_StatsOptionButton_item_selected(default_index)
 
 func _on_StatsOptionButton_item_selected(optionButtonIndex):
 	update_list(optionButtonIndex)
@@ -63,7 +62,7 @@ func figure_out_name(NAME_ID, file):
 	match name_type:
 		0:
 			var subtype = Things.find_subtype_by_name(Things.TYPE.CREATURE, NAME_ID)
-			return Things.fetch_name(Things.TYPE.CREATURE, subtype)
+			return NAME_ID if subtype == null else Things.fetch_name(Things.TYPE.CREATURE, subtype)
 		1:
 			return NAME_ID
 		2: 
@@ -71,28 +70,16 @@ func figure_out_name(NAME_ID, file):
 
 
 func sort_list(a, b):
-	
-	var compareA
-	var compareB
-	
-	if a[1] is int:
-		compareA = a[1]
-	elif a[1] is String:
-		compareA = a[1].length()
-	elif a[1] is Array:
-		compareA = int(a[1][0])
-	else:
-		compareA = 0
-	
-	if b[1] is int:
-		compareB = b[1]
-	elif b[1] is String:
-		compareB = b[1].length()
-	elif b[1] is Array:
-		compareB = int(b[1][0])
-	else:
-		compareB = 0
-	return compareA < compareB
+	return sort_value(a[1]) < sort_value(b[1])
+
+func sort_value(value):
+	if value is int:
+		return value
+	if value is String:
+		return value.length()
+	if value is Array:
+		return int(value[0])
+	return 0
 
 func add_entry(string1, value, fontColor):
 	var addLabel1 = Label.new()
@@ -176,21 +163,23 @@ func _on_LeftStatsButton_pressed():
 
 
 func populate_optionbutton():
-	var items_checked = 0
+	var added_options = {}
 	for file in all_creature_data:
-		items_checked += 1
 		for section in all_creature_data[file]:
-			if items_checked == 1:
-				for key in all_creature_data[file][section].keys():
-					var idx = oStatsOptionButton.get_item_count()
-					oStatsOptionButton.add_item(key)
-					oStatsOptionButton.set_item_metadata(idx, [section, key])
+			var item_count = oStatsOptionButton.get_item_count()
+			for key in all_creature_data[file][section].keys():
+				var option_key = section + "." + key
+				if added_options.has(option_key):
+					continue
+				var idx = oStatsOptionButton.get_item_count()
+				oStatsOptionButton.add_item(key)
+				oStatsOptionButton.set_item_metadata(idx, [section, key])
+				added_options[option_key] = true
+			if oStatsOptionButton.get_item_count() > item_count:
 				oStatsOptionButton.add_separator()
 
 
 func _on_CCStatsHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "These files are currently only loaded from the main /creatrs/ directory, not from anywhere else."
+	helptxt += "Creature stats are loaded with map configs from /creatrs/, campaign CREATURES_LOCATION, and map-local creature files."
 	oMessage.big("Help",helptxt)
-
-

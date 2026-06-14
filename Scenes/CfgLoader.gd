@@ -37,7 +37,8 @@ func start(mapPath):
 		Things.LIST_OF_SPELLBOOKS = [11,12,13,14,15,16,17,18,19,20,21,22,23,45,46,47,48,134,135]
 		Things.LIST_OF_HEROGATES = [49]
 	
-	load_cfgs(mapPath)
+	var campaign_cfg = load_cfgs(mapPath)
+	load_creature_stats_data(mapPath, campaign_cfg)
 	
 	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 	if oConfigFilesListWindow.visible:
@@ -50,7 +51,8 @@ func load_cfgs(mapPath):
 	# Processes .cfg and .toml files from multiple directories
 	oConfigFileManager.clear_paths()
 	
-	var config_dirs = get_config_directories(mapPath)
+	var campaign_cfg = load_campaign_boss_file(mapPath)
+	var config_dirs = get_config_directories(mapPath, campaign_cfg)
 	var files_to_load = build_list_of_files_to_load(config_dirs, mapPath)
 	for file_name_from_list in files_to_load:
 		
@@ -97,6 +99,7 @@ func load_cfgs(mapPath):
 				"cubes.cfg": Cube.read_cubes_cfg(combined_cfg_data)
 				"rules.cfg": load_rules_data(combined_cfg_data)
 				"magic.cfg": load_magic_data(combined_cfg_data)
+	return campaign_cfg
 
 func super_merge_dictionaries(dict1:Dictionary, dict2:Dictionary):
 	var merged = {}
@@ -109,8 +112,7 @@ func super_merge_dictionaries(dict1:Dictionary, dict2:Dictionary):
 			merged[key] = dict2[key]
 	return merged
 
-func get_config_directories(mapPath):
-	var campaign_cfg_data = load_campaign_boss_file(mapPath)
+func get_config_directories(mapPath, campaign_cfg_data):
 	return {
 		oConfigFileManager.LOAD_CFG_DATA: oGame.DK_DATA_DIRECTORY,
 		oConfigFileManager.LOAD_CFG_FXDATA: oGame.DK_FXDATA_DIRECTORY,
@@ -245,6 +247,37 @@ func load_creatures_data(cfg): # 3ms
 			var newName = creatures[id_number]
 			var newSprite = get_sprite(newName, -1)
 			Things.DATA_CREATURE[creature_id] = [newName, newSprite, "CREATURE"]
+
+func load_creature_stats_data(mapPath, campaign_cfg):
+	var data = {}
+	var dirs = [oGame.GAME_DIRECTORY.plus_file("creatrs")]
+	var creature_location = campaign_cfg.get("common", {}).get("CREATURES_LOCATION", "")
+	if creature_location != "":
+		dirs.append(oGame.GAME_DIRECTORY.plus_file(creature_location))
+	for dir in dirs:
+		load_creature_stats_dir(data, dir)
+	if mapPath != "":
+		var map_file_prefix = mapPath.get_basename().get_file() + "."
+		var lower_map_file_prefix = map_file_prefix.to_lower()
+		var map_cfgs = Utils.get_filetype_in_directory(mapPath.get_base_dir(), "CFG")
+		map_cfgs.sort()
+		for path in map_cfgs:
+			var file = path.get_file()
+			if file.to_lower().begins_with(lower_map_file_prefix):
+				load_creature_stats_file(data, file.substr(map_file_prefix.length()), path, true)
+	oConfigFileManager.current_data["creature_stats"] = data
+
+func load_creature_stats_dir(data, dir):
+	var listOfCfgs = Utils.get_filetype_in_directory(dir, "CFG")
+	listOfCfgs.sort()
+	for path in listOfCfgs:
+		load_creature_stats_file(data, path.get_file(), path)
+
+func load_creature_stats_file(data, file, path, require_attributes = false):
+	var cfg_data = oReadCfg.read_dkcfg_file(path)["config"]
+	if cfg_data.empty() or (require_attributes and cfg_data.has("attributes") == false):
+		return
+	data[file] = super_merge_dictionaries(data.get(file, {}), cfg_data)
 
 func load_trapdoor_data(cfg): # 1ms
 	for section in cfg:
