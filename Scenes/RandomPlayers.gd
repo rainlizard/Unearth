@@ -476,7 +476,7 @@ func place_objects():
 				if isCenter:
 					for offset in [Vector2(-2, -2), Vector2(-2, 2), Vector2(2, -2), Vector2(2, 2)]:
 						var impPos = Vector3((x + offset.x) * 3 + 1.5, (y + offset.y) * 3 + 1.5, 1)
-						oInstances.place_new_thing(Things.TYPE.CREATURE, 23, impPos, centerOwnership)
+						oInstances.place_default_creature(23, impPos, centerOwnership)
 					print("Placed 4 imps around dungeon heart at (", x, ",", y, ") for owner ", centerOwnership)
 
 

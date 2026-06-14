@@ -340,6 +340,16 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 			oMessage.big("Warning","You placed a Door Thing without a Door Slab. Switch to Slab Mode and place a Door Slab for proper functionality.")
 	return id
 
+
+func place_default_creature(newSubtype, newPosition, newOwnership):
+	var id = place_new_thing(Things.TYPE.CREATURE, newSubtype, newPosition, newOwnership)
+	id.creatureLevel = 1
+	id.creatureName = ""
+	id.creatureGold = 0
+	id.creatureInitialHealth = 100
+	return id
+
+
 #Slabset.obj.IS_LIGHT,     # [0] IsLight [0-1]
 #Slabset.obj.VARIATION,    # [1] Variation
 #Slabset.obj.SUBTILE,      # [2] Subtile [0-9]
