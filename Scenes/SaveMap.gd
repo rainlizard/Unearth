@@ -27,33 +27,39 @@ func save_map(filePath):
 	var map_filename_no_ext = map_basename_with_ext.get_basename()
 	var map_base_dir = filePath.get_base_dir()
 	var SAVETIME_START = OS.get_ticks_msec()
-	delete_existing_files(filePath)
 	
 	var script_definitions = [
 		{"key": "TXT", "enabled": oCurrentMap.DKScript_enabled, "ext": ".txt", "display": "DKScript"},
 		{"key": "LUA", "enabled": oCurrentMap.LuaScript_enabled, "ext": ".lua", "display": "LuaScript"}
 	]
 	for script_def in script_definitions:
-		if not script_def.enabled:
-			delete_script_file(map_filename_no_ext, map_base_dir, script_def.key, script_def.ext, script_def.display)
+		if script_def.enabled == false:
+			delete_script_file(map_filename_no_ext, map_base_dir, script_def, filePath)
+	delete_existing_files(filePath)
 
 	oDataClm.update_all_utilized()
 	var writeFailure = false
 	for EXT in oBuffers.FILE_TYPES:
-		var saveToFilePath = map_base_dir.plus_file(map_filename_no_ext + '.' + EXT.to_lower())
+		var saveToFilePath = get_save_path(map_base_dir, map_filename_no_ext, EXT)
+		if OS.get_name() == "X11":
+			delete_map_files(map_base_dir, map_filename_no_ext, EXT, saveToFilePath)
 		var should_process = oBuffers.should_process_file_type(EXT)
 		if should_process:
 			if oBuffers.write(saveToFilePath, EXT.to_upper()) != OK:
 				writeFailure = true
 		
-		if File.new().file_exists(saveToFilePath):
+		var should_record_file = should_process or oCurrentMap.currentFilePaths.has(EXT)
+		if File.new().file_exists(saveToFilePath) and should_record_file:
 			var modTime = File.new().get_modified_time(saveToFilePath)
 			var precise_path = Utils.case_insensitive_file(map_base_dir, saveToFilePath.get_file().get_basename(), saveToFilePath.get_extension())
-			oCurrentMap.currentFilePaths[EXT] = [precise_path if precise_path else saveToFilePath, modTime]
+			var path_to_record = saveToFilePath
+			if precise_path != "":
+				path_to_record = precise_path
+			oCurrentMap.currentFilePaths[EXT] = [path_to_record, modTime]
 		elif oCurrentMap.currentFilePaths.has(EXT):
 			var path_info = oCurrentMap.currentFilePaths[EXT]
 			var is_valid_path = typeof(path_info) == TYPE_ARRAY and path_info.size() > oCurrentMap.PATHSTRING and File.new().file_exists(path_info[oCurrentMap.PATHSTRING])
-			if not should_process and not is_valid_path:
+			if should_process == false and is_valid_path == false:
 				oCurrentMap.currentFilePaths.erase(EXT)
 			elif should_process:
 				oCurrentMap.currentFilePaths.erase(EXT)
@@ -81,55 +87,90 @@ func save_map(filePath):
 	if queueExit:
 		get_tree().quit()
 
-func delete_script_file(map_filename_no_ext, map_base_dir, script_key, file_ext, display_name):
-	var script_target_filename = map_filename_no_ext + file_ext
-	var path_to_delete = ""
-	if oCurrentMap.currentFilePaths.has(script_key):
-		var path_info = oCurrentMap.currentFilePaths[script_key]
-		if typeof(path_info) == TYPE_ARRAY and path_info.size() > oCurrentMap.PATHSTRING:
-			path_to_delete = path_info[oCurrentMap.PATHSTRING]
-	if path_to_delete == "" or not File.new().file_exists(path_to_delete):
-		path_to_delete = Utils.case_insensitive_file(map_base_dir, script_target_filename.get_basename(), script_target_filename.get_extension())
-	if path_to_delete == "" or not File.new().file_exists(path_to_delete):
-		return
 
-	var global_path = ProjectSettings.globalize_path(path_to_delete)
-	var err_trash = OS.move_to_trash(global_path)
+func get_save_path(map_base_dir, map_filename_no_ext, EXT):
+	var save_to_file_path = map_base_dir.plus_file(map_filename_no_ext + "." + EXT.to_lower())
+	var precise_path = Utils.case_insensitive_file(map_base_dir, map_filename_no_ext, EXT)
+	if precise_path != "":
+		return precise_path
+	return save_to_file_path
+
+
+func is_same_map(map_file_path):
+	if oCurrentMap.path == "":
+		return false
+	if oCurrentMap.path.get_base_dir().to_upper() != map_file_path.get_base_dir().to_upper():
+		return false
+	return oCurrentMap.path.get_file().get_basename().to_upper() == map_file_path.get_file().get_basename().to_upper()
+
+
+func get_script_path(map_filename_no_ext, map_base_dir, file_ext):
+	var filename = map_filename_no_ext + file_ext
+	var precise_path = Utils.case_insensitive_file(map_base_dir, filename.get_basename(), filename.get_extension())
+	if precise_path != "":
+		return precise_path
+	return map_base_dir.plus_file(filename)
+
+
+func delete_script_file(map_filename_no_ext, map_base_dir, script_def, map_file_path):
+	var target_path = get_script_path(map_filename_no_ext, map_base_dir, script_def.ext)
+	var tracked_path = ""
+	if oCurrentMap.currentFilePaths.has(script_def.key) == true:
+		var path_info = oCurrentMap.currentFilePaths[script_def.key]
+		if typeof(path_info) == TYPE_ARRAY and path_info.size() > oCurrentMap.PATHSTRING:
+			tracked_path = path_info[oCurrentMap.PATHSTRING]
+	var should_delete = tracked_path != "" and tracked_path.to_upper() == target_path.to_upper()
+	if should_delete == false:
+		var has_tracked_script = oCurrentMap.currentFilePaths.has(script_def.key)
+		if is_same_map(map_file_path) == false and has_tracked_script == true:
+			oCurrentMap.currentFilePaths.erase(script_def.key)
+		return
+	if File.new().file_exists(target_path) == false:
+		oCurrentMap.currentFilePaths.erase(script_def.key)
+		return
+	var err_trash = OS.move_to_trash(ProjectSettings.globalize_path(target_path))
 	if err_trash == OK:
-		print("Moved disabled " + display_name + " file to trash: " + path_to_delete.get_file())
-		if oCurrentMap.currentFilePaths.has(script_key):
-			oCurrentMap.currentFilePaths.erase(script_key)
+		print("Moved disabled " + script_def.display + " file to trash: " + target_path.get_file())
+		oCurrentMap.currentFilePaths.erase(script_def.key)
 	else:
-		var msg = "Error trashing " + display_name + " file: " + path_to_delete.get_file()
+		var msg = "Error trashing " + script_def.display + " file: " + target_path.get_file()
 		oMessage.quick(msg)
 		print(msg + " Code: " + str(err_trash))
 
+
 func delete_existing_files(map_file_path):
-	var fileTypesToDelete = []
-	var baseDirectory = map_file_path.get_base_dir()
-	var MAP_NAME_NO_EXT = map_file_path.get_file().get_basename().to_upper()
-
-	if OS.get_name() == "X11":
-		fileTypesToDelete = oBuffers.FILE_TYPES
-	elif oCurrentFormat.selected == Constants.ClassicFormat:
-		fileTypesToDelete = ["TNGFX", "APTFX", "LGTFX"]
+	var file_types_to_delete = []
+	var base_directory = map_file_path.get_base_dir()
+	var map_name_no_ext = map_file_path.get_file().get_basename()
+	if oCurrentFormat.selected == Constants.ClassicFormat:
+		file_types_to_delete = ["TNGFX", "APTFX", "LGTFX"]
 	elif oCurrentFormat.selected == Constants.KfxFormat:
-		fileTypesToDelete = ["LIF", "TNG", "APT", "LGT"]
-	if fileTypesToDelete.empty():
+		file_types_to_delete = ["LIF", "TNG", "APT", "LGT"]
+	if file_types_to_delete.empty() == true:
 		return
+	for file_extension in file_types_to_delete:
+		delete_map_files(base_directory, map_name_no_ext, file_extension)
+		if oCurrentMap.currentFilePaths.has(file_extension) == true:
+			oCurrentMap.currentFilePaths.erase(file_extension)
 
+
+func delete_map_files(base_directory, map_name_no_ext, file_extension, kept_file_path = ""):
 	var dir = Directory.new()
-	if dir.open(baseDirectory) != OK:
-		print("An error occurred when trying to access " + baseDirectory)
+	if dir.open(base_directory) != OK:
+		print("An error occurred when trying to access " + base_directory)
 		return
 	dir.list_dir_begin(true, false)
-	var fileName = dir.get_next()
-	while fileName != "":
-		if MAP_NAME_NO_EXT in fileName.to_upper() and fileTypesToDelete.has(fileName.get_extension().to_upper()):
-			if dir.file_exists(fileName):
-				print("Deleted due to format conflict/OS: " + fileName)
-				dir.remove(fileName)
-		fileName = dir.get_next()
+	var file_name = dir.get_next()
+	while file_name != "":
+		if dir.current_is_dir() == false:
+			var same_name = file_name.get_basename().to_upper() == map_name_no_ext.to_upper()
+			var same_extension = file_name.get_extension().to_upper() == file_extension.to_upper()
+			var same_path = base_directory.plus_file(file_name) == kept_file_path
+			if same_name == true and same_extension == true and same_path == false:
+				print("Deleted due to format conflict: " + file_name)
+				dir.remove(file_name)
+		file_name = dir.get_next()
+	dir.list_dir_end()
 
 
 func clicked_save_on_menu():
@@ -301,5 +342,3 @@ func delete_rules_cfg_file_if_exists(file_path, file_type):
 			oConfigFileManager.notify_file_deleted(file_path, file_type)
 		else:
 			print("Error trashing " + file_type + " file: " + file_path.get_file() + " Code: " + str(err_trash))
-
-

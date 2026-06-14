@@ -126,7 +126,7 @@ func open_map(filePath):
 	if map == "": # If it's a new map, then map format is set to the format you selected on New Map window
 		oCurrentFormat.selected = oSetNewFormat.selected
 	else:
-		if oCurrentMap.currentFilePaths.has("TNGFX") == true:
+		if has_map_file("TNGFX") == true:
 			oCurrentFormat.selected = Constants.KfxFormat
 		else:
 			oCurrentFormat.selected = Constants.ClassicFormat
@@ -147,12 +147,8 @@ func open_map(filePath):
 		
 		for EXT in oBuffers.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
-				
-				# Don't bother reading original formats if KFX format files have been found
-				if EXT == "TNG" and oCurrentMap.currentFilePaths.has("TNGFX") == true: continue
-				if EXT == "APT" and oCurrentMap.currentFilePaths.has("APTFX") == true: continue
-				if EXT == "LGT" and oCurrentMap.currentFilePaths.has("LGTFX") == true: continue
-				if EXT == "LIF" and oCurrentMap.currentFilePaths.has("LOF") == true: continue
+				if should_read_file(EXT) == false:
+					continue
 				
 				var readPath = oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING]
 				oBuffers.read(readPath, EXT.to_upper())
@@ -190,6 +186,28 @@ func open_map(filePath):
 		else:
 			# Begin decompression without confirmation dialog
 			_on_ConfirmDecompression_confirmed()
+
+
+func has_map_file(fileType):
+	if oCurrentMap.currentFilePaths.has(fileType) == false:
+		return false
+	var filePath = oCurrentMap.currentFilePaths[fileType][oCurrentMap.PATHSTRING]
+	return File.new().file_exists(filePath)
+
+
+func should_read_file(fileType):
+	var replacementFiles = {
+		"LIF": "LOF",
+		"TNG": "TNGFX",
+		"APT": "APTFX",
+		"LGT": "LGTFX"
+	}
+	if oCurrentFormat.selected == Constants.ClassicFormat:
+		return ["TNGFX", "APTFX", "LGTFX"].has(fileType) == false
+	elif oCurrentFormat.selected == Constants.KfxFormat:
+		if replacementFiles.has(fileType) == true:
+			return has_map_file(replacementFiles[fileType]) == false
+	return true
 
 func continue_load(map):
 	# initialize_editor_components
