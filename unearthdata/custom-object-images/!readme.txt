@@ -5,6 +5,7 @@ Add "_portrait" onto the end of the filename for a separate image to be used in 
 ---
 
 New objects can also be added by editing the Unearth source code:
-https://github.com/rainlizard/Unearth/blob/main/Autoload/ObjectNames.gd
+https://github.com/rainlizard/Unearth/blob/main/Autoload/Things.gd
+https://github.com/rainlizard/Unearth/blob/main/Autoload/Names.gd
 https://github.com/rainlizard/Unearth/blob/main/Autoload/Graphics.gd
 https://github.com/rainlizard/Unearth/tree/main/extra_images/
