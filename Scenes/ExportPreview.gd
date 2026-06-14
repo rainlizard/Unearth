@@ -100,14 +100,13 @@ func set_basic_camera_stuff():
 
 func calculate_zoom():
 	var terrain_size = Vector3(M.xSize * 3, 8, M.ySize * 3)
-	# Calculate the window's aspect ratio
-	var window_aspect_ratio = OS.window_size.x / max(1, OS.window_size.y)
+	var viewport_size = get_viewport().size
+	var viewport_aspect_ratio = max(1.0, viewport_size.x) / max(1.0, viewport_size.y)
 
-	# Zoom out based on the dominant dimension
-	if window_aspect_ratio > 1:  # Landscape mode
-		oCamera3D.size = terrain_size.x * window_aspect_ratio
-	else:  # Portrait mode
-		oCamera3D.size = terrain_size.z
+	if oCamera3D.keep_aspect == Camera.KEEP_WIDTH:
+		oCamera3D.size = max(terrain_size.x, terrain_size.z * viewport_aspect_ratio)
+	else:
+		oCamera3D.size = max(terrain_size.z, terrain_size.x / viewport_aspect_ratio)
 	
 	if oCamera3D.size+zoomAdjust >= 0.001 and oCamera3D.size+zoomAdjust <= 16384: # Fixes an error with Camera Size.
 		oCamera3D.size += zoomAdjust
