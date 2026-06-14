@@ -3824,7 +3824,7 @@ margin_right = 379.0
 margin_bottom = 374.0
 size_flags_horizontal = 7
 size_flags_vertical = 7
-stretch_mode = 6
+stretch_mode = 5
 
 [node name="ImageAsMapGuide" type="Label" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer"]
 margin_top = 378.0

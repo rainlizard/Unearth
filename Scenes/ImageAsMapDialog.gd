@@ -10,6 +10,7 @@ onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 
 var imageData = Image.new()
+var sourceImageData = Image.new()
 var textureData = ImageTexture.new()
 var btnGroup = ButtonGroup.new()
 var highlightedColour
@@ -37,40 +38,49 @@ func _on_ImgMapButtonSelectImage_pressed():
 	Utils.popup_centered(oChooseMapImageFileDialog)
 
 func _on_ChooseMapImageFileDialog_file_selected(path):
-	
-	var err = imageData.load(path)
+	var err = sourceImageData.load(path)
 	
 	if err != OK:
 		oMessage.quick("Error loading file.")
 		return
 	
-	if imageData.get_size().x > M.xSize or imageData.get_size().y > M.ySize:
-		oMessage.quick("Image has been downscaled to fit the current map size.")
-		imageData.resize(M.xSize,M.ySize,Image.INTERPOLATE_NEAREST) #Image.Interpolation.INTERPOLATE_NEAREST
-	if imageData.get_size() == Vector2(M.xSize,M.ySize):
-		oMessage.quick("Image size perfectly matches the current map size.")
-	if imageData.get_size().x < M.xSize or imageData.get_size().y < M.ySize:
-		oMessage.quick("Image has been centered to fit the current map size.")
-		#offsetResultBy = ( (Vector2(85,85) - imageData.get_size()) / 2 ).floor()
-		
-		var copyPaste = Image.new()
-		copyPaste.copy_from(imageData)
-		#print(copyPaste.get_size())
-		
-		
-		# Center image if it's small
-		imageData.crop(M.xSize,M.ySize)
-		imageData.fill(Color(0,0,0,0))
-		
-		var destinationCoordinates = ( (Vector2(M.xSize,M.ySize) - copyPaste.get_size()) / 2 ).floor()
-		
-		imageData.blit_rect(copyPaste,copyPaste.get_used_rect(), destinationCoordinates)
-	#offsetResultBy = Vector2(1,1) # # To take into consideration the border
+	fit_image_to_current_map_size(true)
+
+func fit_image_to_current_map_size(showMessage):
+	if sourceImageData.is_empty():
+		return
+
+	var mapSize = Vector2(M.xSize, M.ySize)
+	var sourceSize = sourceImageData.get_size()
+	var fittedImage = Image.new()
+	fittedImage.copy_from(sourceImageData)
+
+	if sourceSize.x > mapSize.x or sourceSize.y > mapSize.y:
+		if showMessage == true:
+			oMessage.quick("Image has been downscaled to fit the current map size.")
+		fittedImage.resize(int(mapSize.x), int(mapSize.y), Image.INTERPOLATE_NEAREST) #Image.Interpolation.INTERPOLATE_NEAREST
+	elif sourceSize == mapSize:
+		if showMessage == true:
+			oMessage.quick("Image size perfectly matches the current map size.")
+	elif sourceSize.x < mapSize.x or sourceSize.y < mapSize.y:
+		if showMessage == true:
+			oMessage.quick("Image has been centered to fit the current map size.")
+
+	imageData.create(int(mapSize.x), int(mapSize.y), false, Image.FORMAT_RGBA8)
+	imageData.fill(Color(0,0,0,0))
+	var destinationCoordinates = ((mapSize - fittedImage.get_size()) / 2).floor()
+	imageData.blit_rect(fittedImage, Rect2(Vector2(), fittedImage.get_size()), destinationCoordinates)
 	
 	textureData = ImageTexture.new()
 	textureData.create_from_image(imageData, 0) # flags off
 	oMapImageTextureRect.texture = textureData
 	oImageAsMapGuide.visible = true
+
+func update_image_if_map_size_changed():
+	if sourceImageData.is_empty():
+		return
+	if imageData.get_size() != Vector2(M.xSize, M.ySize):
+		fit_image_to_current_map_size(false)
 
 
 func _on_MapImageTextureRect_gui_input(event):
@@ -79,17 +89,17 @@ func _on_MapImageTextureRect_gui_input(event):
 	
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		CODETIME_START = OS.get_ticks_msec()
+		update_image_if_map_size_changed()
 		
-		var mousePos = get_global_mouse_position() * Settings.UI_SCALE
+		var imagePos = get_map_image_mouse_position()
+		if imagePos == null:
+			oMessage.quick("Click within the image.")
+			return
 		
-		var screenshot = Image.new()
-		screenshot = get_viewport().get_texture().get_data()
-		
-		screenshot.lock()
-		screenshot.flip_y() # Must be used due to Godot
-		var pixel = screenshot.get_pixelv(mousePos)
+		imageData.lock()
+		var pixel = imageData.get_pixelv(imagePos)
 		highlightedColour = Color8(pixel.r8, pixel.g8, pixel.b8, pixel.a8)
-		screenshot.unlock()
+		imageData.unlock()
 		#print(highlightedColour)
 		if highlightedColour == transparencyColour:
 			highlightedColour = Color(0,0,0,0)
@@ -107,6 +117,29 @@ func _on_MapImageTextureRect_gui_input(event):
 				i.release_focus()
 		
 		#oMessage.quick("Highlighted colour: " + str(highlightedColour.r8) + "," + str(highlightedColour.g8) + "," + str(highlightedColour.b8))
+
+func get_map_image_mouse_position():
+	var imageSize = imageData.get_size()
+	var previewSize = oMapImageTextureRect.rect_size
+	if imageSize.x <= 0 or imageSize.y <= 0 or previewSize.x <= 0 or previewSize.y <= 0:
+		return null
+
+	var scale = min(previewSize.x / imageSize.x, previewSize.y / imageSize.y)
+	if scale <= 0:
+		return null
+
+	var displayedSize = imageSize * scale
+	var displayedStart = ((previewSize - displayedSize) / 2).floor()
+	var mousePos = oMapImageTextureRect.get_local_mouse_position()
+	if mousePos.x < displayedStart.x or mousePos.y < displayedStart.y:
+		return null
+	if mousePos.x >= displayedStart.x + displayedSize.x or mousePos.y >= displayedStart.y + displayedSize.y:
+		return null
+
+	var imagePos = ((mousePos - displayedStart) / scale).floor()
+	imagePos.x = clamp(imagePos.x, 0, imageSize.x - 1)
+	imagePos.y = clamp(imagePos.y, 0, imageSize.y - 1)
+	return imagePos
 
 #CODETIME_START = OS.get_ticks_msec()
 #print('Map to image time: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
@@ -165,6 +198,7 @@ func _on_ImgMapButtonApply_pressed():
 		oMessage.quick("You haven't even set any colours yet.")
 
 func apply_colour_as_slabIDs_to_map(doColour, slabID):
+	update_image_if_map_size_changed()
 	var shapePositionArray = []
 	
 	imageData.lock()
