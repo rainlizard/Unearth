@@ -5,11 +5,13 @@ onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oSelector = Nodelist.list["oSelector"]
+var zero_key_value = 10
+var shortcut_tooltip = "You can also use keyboard keys 0-9 as a shortcut for setting levels"
 
 
 func _ready():
 	get_line_edit().expand_to_text_length = true
-	set_tooltip("You can also use keyboard keys 0-9 as a shortcut for setting levels")
+	set_tooltip(shortcut_tooltip)
 
 func _input(event):
 	if visible == false: return
@@ -35,24 +37,25 @@ func _input(event):
 		
 		yield(get_tree(),'idle_frame')
 		if allowKeyShortcuts == true:
-			var setVal
-			match event.scancode:
-				KEY_1, KEY_KP_1: setVal = 1
-				KEY_2, KEY_KP_2: setVal = 2
-				KEY_3, KEY_KP_3: setVal = 3
-				KEY_4, KEY_KP_4: setVal = 4
-				KEY_5, KEY_KP_5: setVal = 5
-				KEY_6, KEY_KP_6: setVal = 6
-				KEY_7, KEY_KP_7: setVal = 7
-				KEY_8, KEY_KP_8: setVal = 8
-				KEY_9, KEY_KP_9: setVal = 9
-				KEY_0, KEY_KP_0:
-					setVal = 10
-					get_line_edit().text = "10"
-			
-			if setVal != null:
-				value = setVal
-				get_line_edit().modulate = Color(2,2,2,1)
-				for i in 10:
-					yield(get_tree(),'idle_frame')
-				get_line_edit().modulate = Color(1,1,1,1)
+			var setVal = get_number_key(event.scancode)
+			if setVal == null: return
+			value = setVal
+			get_line_edit().modulate = Color(2,2,2,1)
+			for i in 10:
+				yield(get_tree(),'idle_frame')
+			get_line_edit().modulate = Color(1,1,1,1)
+
+
+func get_number_key(scancode):
+	match scancode:
+		KEY_1, KEY_KP_1: return 1
+		KEY_2, KEY_KP_2: return 2
+		KEY_3, KEY_KP_3: return 3
+		KEY_4, KEY_KP_4: return 4
+		KEY_5, KEY_KP_5: return 5
+		KEY_6, KEY_KP_6: return 6
+		KEY_7, KEY_KP_7: return 7
+		KEY_8, KEY_KP_8: return 8
+		KEY_9, KEY_KP_9: return 9
+		KEY_0, KEY_KP_0: return zero_key_value
+	return null

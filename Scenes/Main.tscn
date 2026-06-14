@@ -3229,7 +3229,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer"]
-margin_right = 1130.0
+margin_right = 1220.0
 margin_bottom = 539.0
 custom_constants/margin_right = 20
 custom_constants/margin_top = 20
@@ -3239,29 +3239,29 @@ custom_constants/margin_bottom = 20
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 1110.0
+margin_right = 1200.0
 margin_bottom = 519.0
 custom_constants/separation = 24
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer"]
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 499.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 21.0
 text = "2D"
 align = 1
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 25.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 49.0
 rect_min_size = Vector2( 24, 24 )
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 53.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 499.0
 custom_constants/hseparation = 21
 columns = 2
@@ -3273,7 +3273,7 @@ text = "Tab"
 
 [node name="Label30" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 21.0
 text = "Switch between placing Slabs or Things"
 
@@ -3286,7 +3286,7 @@ text = "Mouse wheel up (Ctrl+Up)"
 [node name="Label19" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 25.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 46.0
 text = "Zoom in"
 
@@ -3299,7 +3299,7 @@ text = "Mouse wheel down (Ctrl+Down)"
 [node name="Label20" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 50.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 71.0
 text = "Zoom out"
 
@@ -3312,7 +3312,7 @@ text = "Hold middle click"
 [node name="Label21" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 75.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 96.0
 text = "Pan grab"
 
@@ -3325,7 +3325,7 @@ text = "WASD / Arrow keys"
 [node name="Label22" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 100.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 121.0
 text = "Pan directionally"
 
@@ -3338,7 +3338,7 @@ text = "Left click"
 [node name="Label23" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 125.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 146.0
 text = "Place / Inspect"
 
@@ -3351,7 +3351,7 @@ text = "Ctrl + Left click"
 [node name="Label24" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 150.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 171.0
 text = "Place overlapping"
 
@@ -3364,7 +3364,7 @@ text = "Right click"
 [node name="Label25" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 175.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 196.0
 text = "Grab type under cursor (eyedropper tool)"
 
@@ -3377,7 +3377,7 @@ text = "Delete"
 [node name="Label26" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 200.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 221.0
 text = "Delete all objects under cursor"
 
@@ -3390,7 +3390,7 @@ text = "Ctrl + Delete"
 [node name="Label27" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 225.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 246.0
 text = "Delete one object under cursor"
 
@@ -3403,7 +3403,7 @@ text = "Shift"
 [node name="Label28" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 250.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 271.0
 text = "Cycle between overlapping objects"
 
@@ -3416,7 +3416,7 @@ text = "Alt + Mouse wheel"
 [node name="Label17" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 275.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 296.0
 text = "Adjust 'range' of inspected object"
 
@@ -3429,9 +3429,9 @@ text = "Number keys [0-9]"
 [node name="Label29" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 300.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 321.0
-text = "Quickly set creature level / brush size"
+text = "Quickly set creature level / brush size / custom box"
 
 [node name="Label14" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_top = 325.0
@@ -3442,7 +3442,7 @@ text = "Ctrl + Z"
 [node name="Label18" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 325.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 346.0
 text = "Undo"
 
@@ -3455,7 +3455,7 @@ text = "Ctrl + S"
 [node name="Label34" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 350.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 371.0
 text = "Save"
 
@@ -3468,7 +3468,7 @@ text = "Alt + Enter"
 [node name="Label31" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 375.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 396.0
 text = "Fullscreen"
 
@@ -3481,7 +3481,7 @@ text = "ESC"
 [node name="Label32" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 400.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 421.0
 text = "Exit"
 
@@ -3494,13 +3494,13 @@ text = "Spacebar"
 [node name="Label37" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
 margin_top = 425.0
-margin_right = 674.0
+margin_right = 764.0
 margin_bottom = 446.0
 text = "Toggle door lock"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer"]
-margin_left = 698.0
-margin_right = 1090.0
+margin_left = 788.0
+margin_right = 1180.0
 margin_bottom = 499.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2"]

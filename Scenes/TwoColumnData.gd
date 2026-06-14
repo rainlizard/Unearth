@@ -67,14 +67,18 @@ func add_item(leftString, rightString):
 			for i in nodeRightColumn.get_item_count():
 				if nodeRightColumn.get_item_text(nodeRightColumn.get_item_index(i)) == rightString:
 					nodeRightColumn.selected = i
-		"Level":
+		"Level","Custom box":
 			nodeRightColumn = scnLevelChanger.instance()
 			#nodeRightColumn.expand_to_text_length = true
 			nodeRightColumn.theme = thinLineEditTheme #!!!!!!!!!!!!!
 			nodeRightColumn.connect("value_changed", self, "_on_property_value_changed", [nodeRightColumn, leftString])
 			nodeRightColumn.get_line_edit().connect("text_changed", self, "_on_property_value_typed_in_manually", [nodeRightColumn, leftString])
+			if leftString == "Custom box":
+				nodeRightColumn.zero_key_value = 0
+				nodeRightColumn.max_value = 255
+				nodeRightColumn.shortcut_tooltip = "You can also use keyboard keys 0-9 as a shortcut for setting the custom box"
 			nodeRightColumn.value = float(rightString)
-		"Effect range","Light range","Intensity","Gate #","Point range","Point #","Custom box","Unknown 9","Unknown 10","Unknown 11-12","Unknown 13","Unknown 14","Unknown 15","Unknown 16","Unknown 17","Unknown 18","Unknown 19","Unknown 20","Gold held","Health %","Gold value":
+		"Effect range","Light range","Intensity","Gate #","Point range","Point #","Unknown 9","Unknown 10","Unknown 11-12","Unknown 13","Unknown 14","Unknown 15","Unknown 16","Unknown 17","Unknown 18","Unknown 19","Unknown 20","Gold held","Health %","Gold value":
 			nodeRightColumn = scnSpinBoxPropertiesValue.instance()
 			#nodeRightColumn.expand_to_text_length = true
 			nodeRightColumn.theme = thinLineEditTheme #!!!!!!!!!!!!!
