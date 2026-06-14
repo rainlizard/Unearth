@@ -166,16 +166,16 @@ func load_objects_data(cfg): # 10ms
 				if newSprite == null:
 					newSprite = Things.DATA_OBJECT[id][Things.SPRITE]
 				newGenre = objSection.get("Genre")
-				if newGenre == "SPELLBOOK":
-					Things.LIST_OF_SPELLBOOKS.append(id)
-				if newGenre == "HEROGATE":
-					Things.LIST_OF_HEROGATES.append(id)
 			else:
 				newName = objSection.get("Name", "UNDEFINED_NAME")
 				animID = objSection.get("AnimationID")
 				newSprite = get_sprite(newName, animID)
 				
 				newGenre = objSection.get("Genre")
+			if newGenre == "SPELLBOOK":
+				Things.LIST_OF_SPELLBOOKS.append(id)
+			if newGenre == "HEROGATE":
+				Things.LIST_OF_HEROGATES.append(id)
 			
 			Things.DATA_OBJECT[id] = [newName, newSprite, newGenre]
 

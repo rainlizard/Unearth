@@ -80,6 +80,8 @@ func _enter_tree():
 			if subtype in Things.LIST_OF_HEROGATES:
 				add_to_group("HeroGate")
 				yield(get_tree(),'idle_frame')
+				if herogateNumber == null:
+					set_herogateNumber(oInstances.get_free_hero_gate_number())
 				if oActionPointList:
 					oActionPointList.update_ap_list()
 		
@@ -327,7 +329,6 @@ func _draw():
 
 func update_spinning_key(): # Called after changing the lock state
 	# Get any overlapping key if one exists
-	oInstances = Nodelist.list["oInstances"]
 	var keyID = oInstances.get_node_on_subtile(locationX, locationY, "Key")
 	
 	if doorLocked == 0:

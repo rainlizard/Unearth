@@ -426,7 +426,7 @@ func read_tngfx(buffer):
 				Things.TYPE.OBJECT:
 					id.parentTile = c.get_value(section, "ParentTile")
 					if id.subtype in Things.LIST_OF_HEROGATES: # Hero Gate
-						id.herogateNumber = c.get_value(section, "HerogateNumber")
+						id.herogateNumber = c.get_value(section, "HerogateNumber", null)
 					elif id.subtype in Things.LIST_OF_GOLDPILES:
 						id.goldValue = c.get_value(section, "GoldValue", -1)
 					id.boxNumber = c.get_value(section, "CustomBox", -1)

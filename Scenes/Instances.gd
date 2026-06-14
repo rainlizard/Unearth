@@ -621,7 +621,7 @@ func get_free_index_number():
 func get_free_hero_gate_number():
 	var listOfHeroGateNumbers = []
 	for id in get_tree().get_nodes_in_group("Thing"):
-		if id.is_in_group("HeroGate"):
+		if id.is_in_group("HeroGate") and id.herogateNumber != null:
 			listOfHeroGateNumbers.append(id.herogateNumber)
 	
 	var newNumber = 1

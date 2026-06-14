@@ -25,7 +25,7 @@ func update_ap_list():
 	var hero_gates = []
 	for id in get_tree().get_nodes_in_group("Thing"):
 		if id.is_queued_for_deletion() == false:
-			if id.is_in_group("HeroGate"):
+			if id.is_in_group("HeroGate") and id.herogateNumber != null:
 				hero_gates.append(id)
 	hero_gates.sort_custom(self, "sort_hero_gates")
 	
