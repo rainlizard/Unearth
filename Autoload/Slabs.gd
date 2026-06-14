@@ -278,10 +278,10 @@ var icons = {
 "DOOR_STEEL2": preload("res://dk_images/trapdoor_64/door_pers_iron_std.png"),
 "DOOR_MAGIC2": preload("res://dk_images/trapdoor_64/door_pers_magic_std.png"),
 "HEART_PEDESTAL": preload("res://dk_images/crucials/anim0949/r1frame01.png"),
-"DOOR_SECRET": preload("res://extra_images/secret_door.png"),
-"DOOR_SECRET2": preload("res://extra_images/secret_door.png"),
-"DOOR_MIDAS": preload("res://extra_images/midas_door.png"),
-"DOOR_MIDAS2": preload("res://extra_images/midas_door.png"),
+"DOOR_SECRET": preload("res://images_assorted/secret_door.png"),
+"DOOR_SECRET2": preload("res://images_assorted/secret_door.png"),
+"DOOR_MIDAS": preload("res://images_assorted/midas_door.png"),
+"DOOR_MIDAS2": preload("res://images_assorted/midas_door.png"),
 }
 
 var slabOrder = [

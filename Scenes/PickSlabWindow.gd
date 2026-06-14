@@ -32,11 +32,11 @@ enum {
 # To adjust space around the icon, "hseparation" is actually the space between a tab's text and its icon. And also increase content_margin_left in theme.
 
 onready var tabs = {
-	Slabs.TAB_MAINSLAB: [oSlabTabs.get_node("TabFolder/MainSlabs/ScrollContainer/GridContainer"), "res://edited_images/icon_slab1.png"], #"res://dk_images/crspell_64/dig_std.png"
-	Slabs.TAB_OTHER: [oSlabTabs.get_node("TabFolder/WallSlabs/ScrollContainer/GridContainer"), "res://edited_images/icon_slab2.png"], #"res://dk_images/crspell_64/dig_dis.png"
-	Slabs.TAB_CUSTOM: [oSlabTabs.get_node("TabFolder/CustomSlabsTab/ScrollContainer/GridContainer"), "res://edited_images/icon_slab2.png"],
+	Slabs.TAB_MAINSLAB: [oSlabTabs.get_node("TabFolder/MainSlabs/ScrollContainer/GridContainer"), "res://images_assorted/icon_slab1.png"], #"res://dk_images/crspell_64/dig_std.png"
+	Slabs.TAB_OTHER: [oSlabTabs.get_node("TabFolder/WallSlabs/ScrollContainer/GridContainer"), "res://images_assorted/icon_slab2.png"], #"res://dk_images/crspell_64/dig_dis.png"
+	Slabs.TAB_CUSTOM: [oSlabTabs.get_node("TabFolder/CustomSlabsTab/ScrollContainer/GridContainer"), "res://images_assorted/icon_slab2.png"],
 	Slabs.TAB_STYLE: [oSlabTabs.get_node("TabFolder/SlabStyle/ScrollContainer/GridContainer"), "res://dk_images/magic_dust/anim0978/r1frame06.png"],
-	Slabs.TAB_OWNER: [oSlabTabs.get_node("TabFolder/OnlyOwnership/ScrollContainer/GridContainer"), "res://dk_images/furniture/flagpole_redflag_fp/r1frame05.png"], # "res://edited_images/ownership.png"
+	Slabs.TAB_OWNER: [oSlabTabs.get_node("TabFolder/OnlyOwnership/ScrollContainer/GridContainer"), "res://dk_images/furniture/flagpole_redflag_fp/r1frame05.png"], # "res://images_assorted/ownership.png"
 	Slabs.TAB_NONE: [null, ""],
 }
 

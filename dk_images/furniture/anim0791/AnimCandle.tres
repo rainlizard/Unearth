@@ -1,7 +1,7 @@
 [gd_resource type="AnimatedTexture" load_steps=6 format=2]
 
 [ext_resource path="res://addons/animated_texture_but_better/animated_texture_but_better.gd" type="Script" id=1]
-[ext_resource path="res://dk_images/furniture/anim0791/r1frame01.png" type="Texture" id=2]
+[ext_resource path="res://images_objects/furniture/anim0791/r1frame01.png" type="Texture" id=2]
 [ext_resource path="res://dk_images/furniture/anim0791/r1frame02.png" type="Texture" id=3]
 [ext_resource path="res://dk_images/furniture/anim0791/r1frame03.png" type="Texture" id=4]
 [ext_resource path="res://dk_images/furniture/anim0791/r1frame04.png" type="Texture" id=5]

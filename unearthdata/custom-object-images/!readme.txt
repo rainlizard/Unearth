@@ -8,4 +8,4 @@ New objects can also be added by editing the Unearth source code:
 https://github.com/rainlizard/Unearth/blob/main/Autoload/Things.gd
 https://github.com/rainlizard/Unearth/blob/main/Autoload/Names.gd
 https://github.com/rainlizard/Unearth/blob/main/Autoload/Graphics.gd
-https://github.com/rainlizard/Unearth/tree/main/extra_images/
+https://github.com/rainlizard/Unearth/tree/main/images_objects/
