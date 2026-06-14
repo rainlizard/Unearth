@@ -59,8 +59,8 @@ func create_door_thing(xSlab, ySlab, ownership):
 	var newDoorNode = oInstances.place_new_thing(Things.TYPE.DOOR, 0, createAtPos, ownership)
 
 	if is_instance_valid(existingDoorNode):
-		oInstances.kill_instance(existingDoorNode)
 		newDoorNode.doorLocked = existingDoorNode.doorLocked
+		oInstances.kill_instance(existingDoorNode)
 	
 	newDoorNode.update_spinning_key()
 

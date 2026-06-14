@@ -24,6 +24,8 @@ onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oDataSlx = Nodelist.list["oDataSlx"]
 onready var oFortifyCheckBox = Nodelist.list["oFortifyCheckBox"]
+onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
+onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
 onready var oRoundPathNearLiquid = Nodelist.list["oRoundPathNearLiquid"]
 onready var oRoundEarthNearPath = Nodelist.list["oRoundEarthNearPath"]
 onready var oRoundEarthNearLiquid = Nodelist.list["oRoundEarthNearLiquid"]
@@ -56,6 +58,18 @@ enum {
 }
 
 var autogen_was_called = false
+
+
+func set_door_locks(shapePositions, slabID):
+	if Slabs.is_door(slabID) == false: return
+	var doorLocked = oPlacingSettings.doorLocked
+	if oPlaceLockedCheckBox.visible == true:
+		doorLocked = int(oPlaceLockedCheckBox.pressed)
+	for pos in shapePositions:
+		var doorNode = oInstances.get_node_on_subtile((pos.x * 3) + 1.5, (pos.y * 3) + 1.5, "Door")
+		if is_instance_valid(doorNode):
+			doorNode.doorLocked = doorLocked
+
 
 func mirror_placement(shapePositionArray, mirrorWhat):
 	var mirroredPositionArray = []
@@ -147,6 +161,8 @@ func mirror_placement(shapePositionArray, mirrorWhat):
 			oOverheadOwnership.update_ownership_image_based_on_shape(mirroredPositionArray)
 	
 	var updateNearby = oSelection.some_manual_placements_dont_update_nearby()
+	if mirrorWhat == MIRROR_SLAB_AND_OWNER:
+		set_door_locks(mirroredPositionArray, oSelection.paintSlab)
 	generate_slabs_based_on_id(mirroredPositionArray, updateNearby) # Always necessary when updating ownership
 
 
@@ -229,6 +245,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 	# Any removals to the shape
 	for i in removeFromShape:
 		shapePositionArray.erase(i)
+	set_door_locks(shapePositionArray, slabID)
 	
 	#print('Slab IDs set in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 

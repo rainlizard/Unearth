@@ -8,6 +8,9 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oLimitThing = Nodelist.list["oLimitThing"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
+onready var oSelector = Nodelist.list["oSelector"]
+onready var oInstances = Nodelist.list["oInstances"]
+onready var oEditor = Nodelist.list["oEditor"]
 onready var oPlaceLockedCheckBox = $EditingTools/PlaceLockedCheckBox
 
 # Default values for placement
@@ -46,6 +49,35 @@ enum FIELDS {
 func _ready():
 	get_parent().set_tab_title(1, "Create")
 	oPlaceLockedCheckBox.connect("toggled", self, "_on_PlaceLockedCheckBox_toggled")
+
+
+func _input(event):
+	if (event is InputEventKey) == false or event.pressed == false or event.echo == true: return
+	if event.scancode != KEY_SPACE or is_visible_in_tree() == false: return
+	if oPropertiesTabs.current_tab != 1 or (get_focus_owner() is LineEdit): return
+	if oMapSettingsWindow.visible == true: return
+	var inputHandled = oPlaceLockedCheckBox.visible
+	if oPlaceLockedCheckBox.visible == true:
+		oPlaceLockedCheckBox.pressed = oPlaceLockedCheckBox.pressed == false
+	if toggle_cursor_door() == true:
+		inputHandled = true
+	if inputHandled == true:
+		get_tree().set_input_as_handled()
+
+
+func toggle_cursor_door():
+	if oSelector.visible == false: return false
+	var cursorTile = oSelector.cursorTile
+	if Slabs.is_door(oSelector.get_slabID_at_pos(cursorTile)) == false: return false
+	var doorNode = oInstances.get_node_on_subtile((cursorTile.x * 3) + 1.5, (cursorTile.y * 3) + 1.5, "Door")
+	if is_instance_valid(doorNode) == false: return false
+	doorNode.doorLocked = int(doorNode.doorLocked == 0)
+	doorNode.update_spinning_key()
+	oInstances.mirror_adjusted_value(doorNode, "doorLocked", Vector2(doorNode.locationX, doorNode.locationY))
+	oEditor.mapHasBeenEdited = true
+	oThingDetails.update_details()
+	return true
+
 
 func editing_mode_was_switched(modeString):
 	if modeString == "Slab":
