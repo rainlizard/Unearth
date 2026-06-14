@@ -1,4 +1,4 @@
-[gd_scene load_steps=209 format=2]
+[gd_scene load_steps=208 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -69,7 +69,6 @@
 [ext_resource path="res://Scenes/ChooseDkExe.gd" type="Script" id=67]
 [ext_resource path="res://Scenes/PickSlabWindow.gd" type="Script" id=68]
 [ext_resource path="res://Art/IconRectangle.png" type="Texture" id=69]
-[ext_resource path="res://Art/FontUI.tres" type="DynamicFont" id=70]
 [ext_resource path="res://Scenes/Menu.gd" type="Script" id=71]
 [ext_resource path="res://Scenes/PropertiesWindow.gd" type="Script" id=72]
 [ext_resource path="res://Scenes/OwnerSelection.gd" type="Script" id=73]
@@ -1780,7 +1779,6 @@ margin_bottom = 42.0
 focus_mode = 1
 mouse_filter = 1
 size_flags_horizontal = 3
-custom_fonts/font = ExtResource( 70 )
 context_menu_enabled = false
 clear_button_enabled = true
 right_icon = ExtResource( 56 )
