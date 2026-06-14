@@ -138,7 +138,7 @@ func update_paint():
 					oPlacingSettings.replicate_instance_settings(cursorOnInstancesArray[0])
 
 
-func construct_shape_for_placement(constructType):
+func construct_shape_for_placement(constructType, cursorTiles = null):
 	oEditor.mapHasBeenEdited = true
 	var shapePositionArray = []
 	match constructType:
@@ -161,14 +161,9 @@ func construct_shape_for_placement(constructType):
 				for x in range(rectStart.x, rectEnd.x+1):
 					shapePositionArray.append(Vector2(x,y))
 		CONSTRUCT_PENCIL, CONSTRUCT_BRUSH:
-			var ct_and_offset = oSelector.cursorTile + oBrushPreview.offsetBrushPos
-			for pos in oBrushPreview.brushShapeArray:
-				var newPos = pos + ct_and_offset
-				if newPos.x < oEditor.fieldBoundary.position.x: continue
-				if newPos.x > oEditor.fieldBoundary.end.x-1: continue
-				if newPos.y < oEditor.fieldBoundary.position.y: continue
-				if newPos.y > oEditor.fieldBoundary.end.y-1: continue
-				shapePositionArray.append(newPos)
+			if cursorTiles == null:
+				cursorTiles = [oSelector.cursorTile]
+			shapePositionArray = get_brush_shape_positions(cursorTiles)
 		CONSTRUCT_FILL:
 			var beginTile = oSelector.world2tile(get_global_mouse_position())
 			
@@ -240,6 +235,23 @@ func construct_shape_for_placement(constructType):
 			
 			var updateNearby = some_manual_placements_dont_update_nearby()
 			oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, updateNearby)
+
+
+func get_brush_shape_positions(cursorTiles):
+	var shapePositionArray = []
+	var addedPositions = {}
+	for cursorTile in cursorTiles:
+		var ct_and_offset = cursorTile + oBrushPreview.offsetBrushPos
+		for pos in oBrushPreview.brushShapeArray:
+			var newPos = pos + ct_and_offset
+			if newPos.x < oEditor.fieldBoundary.position.x: continue
+			if newPos.x > oEditor.fieldBoundary.end.x-1: continue
+			if newPos.y < oEditor.fieldBoundary.position.y: continue
+			if newPos.y > oEditor.fieldBoundary.end.y-1: continue
+			if addedPositions.has(newPos): continue
+			addedPositions[newPos] = true
+			shapePositionArray.append(newPos)
+	return shapePositionArray
 
 
 func some_manual_placements_dont_update_nearby():

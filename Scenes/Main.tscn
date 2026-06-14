@@ -7832,13 +7832,13 @@ margin_right = 346.0
 margin_bottom = 32.0
 
 [node name="PreviewPreset1Button" type="Button" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_right = 98.0
+margin_right = 49.0
 margin_bottom = 27.0
 text = "Flat"
 
 [node name="PreviewPreset2Button" type="Button" parent="Ui/UiPreviewExporter/ExportPreview/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_left = 102.0
-margin_right = 200.0
+margin_left = 53.0
+margin_right = 151.0
 margin_bottom = 27.0
 text = "Isometric"
 

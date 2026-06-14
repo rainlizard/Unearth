@@ -51,6 +51,7 @@ var cursorTile = Vector2()
 var cursorSubtile = Vector2()
 var previousPosTile = Vector2()
 var previousPosSubtile = Vector2()
+var previousPaintTile = null
 
 var prev_global_mouse_position = Vector2()
 var mouse_movement_vector = Vector2()
@@ -82,6 +83,7 @@ func _process(delta):
 	if oQuickMapPreview.visible == true: visible = false
 	if oEditor.fieldBoundary.has_point(cursorTile) == false: visible = false
 	if preventClickWhenFocusing == true: visible = false
+	if visible == false: previousPaintTile = null
 	
 	if oEditor.currentView == oEditor.VIEW_2D:
 		mouse_button_anywhere()
@@ -96,6 +98,7 @@ func _process(delta):
 
 func mouse_button_anywhere():
 	if Input.is_action_pressed("mouse_left") == false:
+		previousPaintTile = null
 		if oEditingTools.TOOL_SELECTED == oEditingTools.RECTANGLE:
 			if oRectangleSelection.visible == true:
 				oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_RECTANGLE)
@@ -174,9 +177,9 @@ func mouse_button_on_field():
 							MODE_TILE:
 								match oEditingTools.TOOL_SELECTED:
 									oEditingTools.PENCIL:
-										oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_PENCIL)
+										place_interpolated_tiles(oSelection.CONSTRUCT_PENCIL)
 									oEditingTools.BRUSH:
-										oSelection.construct_shape_for_placement(oSelection.CONSTRUCT_BRUSH)
+										place_interpolated_tiles(oSelection.CONSTRUCT_BRUSH)
 								
 				oEditingTools.RECTANGLE:
 					oRectangleSelection.update_positions(cursorTile)
@@ -283,6 +286,40 @@ func handle_zoom(event, instance, property_name, message_prefix):
 		adjust_range(instance, property_name, 1, message_prefix)
 	if event.is_action_released('zoom_out'):
 		adjust_range(instance, property_name, -1, message_prefix)
+
+func place_interpolated_tiles(constructType):
+	var paintTiles = [cursorTile]
+	if previousPaintTile != null:
+		paintTiles = get_tile_line(previousPaintTile, cursorTile)
+	oSelection.construct_shape_for_placement(constructType, paintTiles)
+	previousPaintTile = cursorTile
+
+func get_tile_line(fromTile, toTile):
+	var positions = []
+	var x0 = int(fromTile.x)
+	var y0 = int(fromTile.y)
+	var x1 = int(toTile.x)
+	var y1 = int(toTile.y)
+	var dx = abs(x1 - x0)
+	var dy = abs(y1 - y0)
+	var sx = 1 if x0 < x1 else -1
+	var sy = 1 if y0 < y1 else -1
+	var err = dx - dy
+
+	while true:
+		positions.append(Vector2(x0, y0))
+		if x0 == x1 and y0 == y1:
+			break
+
+		var e2 = err * 2
+		if e2 > -dy:
+			err -= dy
+			x0 += sx
+		if e2 < dx:
+			err += dx
+			y0 += sy
+
+	return positions
 
 func adjust_range(instance, property_name, increment, message_prefix):
 	var newRange = clamp(instance.get(property_name) + increment, 0, 32767)
