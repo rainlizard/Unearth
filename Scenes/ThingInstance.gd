@@ -186,10 +186,20 @@ func set_ownership_material_one_frame_later(): # needs to be call_deferred
 		print('For some reason ownership 255 is at '+str(locationX)+' - '+str(locationY))
 		return
 	if thingType != Things.TYPE.CREATURE and ownership == 5: # Don't flash normal objects
+		$"%ThingTexture".material = get_texture_material()
 		return
 
 	$"%ThingTexture".material = Nodelist.list["oInstanceOwnership"].materialInstanceOwnership[ownership]
 
+
+func get_texture_material():
+	if thingType == Things.TYPE.OBJECT:
+		if subtype == 49:
+			return preload("res://Shaders/HeroGateMaterial.tres")
+		var objectData = Things.DATA_OBJECT.get(subtype)
+		if objectData and objectData[Things.NAME_ID] is String and objectData[Things.NAME_ID].begins_with("HEARTFLAME_"):
+			return preload("res://Shaders/FlameMaterial.tres")
+	return null
 
 
 func set_effectRange(setval):
@@ -244,13 +254,7 @@ func set_texture_based_on_thingtype():
 	var tex = Things.fetch_sprite(thingType, subtype)
 	match thingType:
 		Things.TYPE.OBJECT:
-			if subtype == 49: # Gate
-				$"%ThingTexture".material = preload("res://Shaders/HeroGateMaterial.tres")
-			
-			var object_data = Things.DATA_OBJECT.get(subtype)
-			if object_data and object_data[Things.NAME_ID] is String and object_data[Things.NAME_ID].begins_with("HEARTFLAME_"):
-				$"%ThingTexture".material = preload("res://Shaders/FlameMaterial.tres")
-			
+			$"%ThingTexture".material = get_texture_material()
 			var successOrFailure = Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($"%ThingTexture", subtype)
 			if successOrFailure == true:
 				$"%ThingTexture".rect_position += Vector2(-1,9)
