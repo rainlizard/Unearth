@@ -28,9 +28,10 @@ const colourDict = {
 	0: Color.black,
 	2 : Color("241800"),
 	3 : Color("241800"),
-	50 : Color("241800"),
+	50 : Color8(32,26,11),
 	
 	1 : Color("605C10"),
+	60 : Color("7C7414"),
 	
 	4: Color("40301C"),
 	5: Color("40301C"),
@@ -81,6 +82,34 @@ var spoiledSlabs = {
 	Slabs.GOLD:null,
 	Slabs.GEMS:null,
 }
+
+func slab_is_ownable(slabID):
+	if Slabs.data.has(slabID) == false:
+		return false
+	return Slabs.data[slabID][Slabs.IS_OWNABLE] == true
+
+
+func is_neutral_room(slabID, ownership):
+	if ownership != 5:
+		return false
+	return slab_is_ownable(slabID)
+
+
+func is_bedrock(slabID):
+	if slabID == 50:
+		return true
+	if Slabs.data.has(slabID) == false:
+		return false
+	return Slabs.data[slabID][Slabs.NAME] == "HARD_FLOOR"
+
+
+func neutral_color(slabID):
+	if is_bedrock(slabID):
+		return Color8(32,26,11)
+	if Slabs.data.has(slabID) and Slabs.data[slabID][Slabs.IS_SOLID] == true:
+		return Color("241800")
+	return Constants.ownerFloorCol[5]
+
 
 func _ready():
 	visible = false
@@ -149,11 +178,13 @@ func update_img(slbFilePath):
 				else:
 					if slabID == Slabs.CLAIMED_GROUND and ownership != 255:
 						img.set_pixel(x,y,Constants.ownerFloorCol[ownership])
+					elif is_neutral_room(slabID, ownership):
+						img.set_pixel(x,y,Color(1,1,1,1)) # Neutral room. Use shader to flash it.
 					else:
-						if ownership == 5:
-							img.set_pixel(x,y,Color(1,1,1,1)) # Neutral room. Use shader to flash it.
-						else:
+						if slab_is_ownable(slabID) and ownership != 5:
 							img.set_pixel(x,y,Constants.ownerRoomCol[ownership])
+						else:
+							img.set_pixel(x,y,neutral_color(slabID))
 			else:
 				var pixelHasBeenSet = false
 				if colourDict.has(slabID):
