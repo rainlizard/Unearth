@@ -514,6 +514,7 @@ func try_upgrade_to_torch_slab(xSlab:int, ySlab:int, currentSlabID, surrID):
 const DIRECTION_NAMES = ["South", "West", "North", "East", "South West", "North West", "North East", "South East", "All direction"]
 const TORCH_SUBTILE_MAP = {0:7, 1:3, 2:1, 3:5, -1:-1}
 const BLANK_CUBES = [0,0,0,0,0,0,0,0]
+const BRIDGE_LAVA_VARIATION_OFFSET = 9
 const WATER_FLOOR = 545
 const LAVA_FLOORS = [546, 547]
 
@@ -633,8 +634,8 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 			slabID = stuff[0]
 			bitmaskType = stuff[1]
 			modifyForLiquid = false
-	# SlabID is adjusted by determine_door_direction(), so make_slab() needs to occur right after
-	var slabsetIndexGroup = make_slab(slabID*28, bitmask)
+	# SlabID is adjusted by determine_door_direction(), so make_slab_for_tile() needs to occur right after
+	var slabsetIndexGroup = make_slab_for_tile(slabID, bitmask, xSlab, ySlab)
 	
 	
 	if bitmaskType == Slabs.BITMASK_REINFORCED:
@@ -972,8 +973,8 @@ func modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slab
 
 func modify_for_liquid(slabsetIndexGroup, surrID, slabID):
 	
-	# Don't modify slab if slab is liquid
-	if slabID == Slabs.WATER or slabID == Slabs.LAVA:
+	# Don't modify slab if slab is liquid or bridge
+	if slabID == Slabs.WATER or slabID == Slabs.LAVA or Slabs.data[slabID][Slabs.LIQUID_TYPE] == Slabs.WLB_BRIDGE:
 		return
 	
 	var modify0 = 0; var modify1 = 0; var modify2 = 0; var modify3 = 0; var modify4 = 0; var modify5 = 0; var modify6 = 0; var modify7 = 0; var modify8 = 0
@@ -1022,6 +1023,13 @@ func modify_for_liquid(slabsetIndexGroup, surrID, slabID):
 	slabsetIndexGroup[6] += modify6
 	slabsetIndexGroup[7] += modify7
 	slabsetIndexGroup[8] += modify8
+
+func make_slab_for_tile(slabID, bitmask, xSlab, ySlab):
+	var slabsetIndexGroup = make_slab(slabID * 28, bitmask)
+	if Slabs.data[slabID][Slabs.LIQUID_TYPE] == Slabs.WLB_BRIDGE and oDataLiquid.get_cell(xSlab, ySlab) == Slabs.WLB_LAVA:
+		for subtile in slabsetIndexGroup.size():
+			slabsetIndexGroup[subtile] += BRIDGE_LAVA_VARIATION_OFFSET
+	return slabsetIndexGroup
 
 func make_slab(fullVariationIndex, bitmask):
 	var slabsetIndexGroup = bitmaskToSlab[bitmask].duplicate()

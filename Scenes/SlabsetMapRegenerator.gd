@@ -39,7 +39,7 @@ func calculate_cursor_data():
 	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
 	
 	var bitmask = get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner, tilePos)
-	var slabsetIndexGroup = oSlabPlacement.make_slab(slabID * 28, bitmask)
+	var slabsetIndexGroup = oSlabPlacement.make_slab_for_tile(slabID, bitmask, tilePos.x, tilePos.y)
 	
 	if bitmaskType == Slabs.BITMASK_REINFORCED:
 		oSlabPlacement.modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slabID)
