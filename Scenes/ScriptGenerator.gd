@@ -255,7 +255,7 @@ func initialize_creatures_available(): # oCreaturePool
 		id.set_meta("variable", functionVariable)
 		var getName = Things.fetch_name(Things.TYPE.CREATURE, subtype)
 		id.hint_tooltip = getName + ' availability'
-		set_creature_texture(id, subtype, i[4], getName)
+		set_button_texture(id, Things.fetch_sprite(Things.TYPE.CREATURE, subtype), getName)
 		id.get_node("%TextEditableLabel").hint_tooltip = getName + ' in pool'
 		id.get_node("%TextEditableLabel").editable = true
 		id.get_node("%TextEditableLabel").mouse_filter = Control.MOUSE_FILTER_PASS
@@ -329,14 +329,14 @@ func get_room_list():
 func get_creature_list():
 	var creatureList = []
 	for i in listCreature:
-		creatureList.append([i[0], i[1], i[2], listCreature.find(i) < 16, false])
+		creatureList.append([i[0], i[1], i[2], listCreature.find(i) < 16])
 	if oCurrentFormat.selected == Constants.ClassicFormat:
 		return creatureList
 	var allSubtypes = Things.DATA_CREATURE.keys()
 	allSubtypes.sort()
 	for subtype in allSubtypes:
 		if can_add_creature(creatureList, subtype):
-			creatureList.append([subtype, Things.fetch_id_string(Things.TYPE.CREATURE, subtype), 0, true, true])
+			creatureList.append([subtype, Things.fetch_id_string(Things.TYPE.CREATURE, subtype), 0, true])
 	return creatureList
 
 
@@ -396,36 +396,6 @@ func add_trapdoor_button(parent, thingType, subtype, currentStates):
 	else:
 		id.set_availability_state(id.ENABLED)
 	parent.add_child(id)
-
-
-func set_creature_texture(id, subtype, isCustomCreature, getName):
-	var texture = Things.fetch_sprite(Things.TYPE.CREATURE, subtype)
-	if isCustomCreature == true:
-		texture = crop_transparent_texture(texture)
-		id.get_node("%IconTextureRect").stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	set_button_texture(id, texture, getName)
-
-
-func crop_transparent_texture(texture):
-	if texture == null:
-		return null
-	var image = texture.get_data()
-	if image == null:
-		return texture
-	image.convert(Image.FORMAT_RGBA8)
-	var cropRect = image.get_used_rect()
-	if cropRect.size == Vector2(0, 0):
-		return texture
-	var padding = max(1, int(max(cropRect.size.x, cropRect.size.y) * 0.20))
-	var width = int(cropRect.size.x) + padding * 2
-	var height = int(cropRect.size.y) + padding * 2
-	var croppedImage = Image.new()
-	croppedImage.create(width, height, false, Image.FORMAT_RGBA8)
-	croppedImage.fill(Color(0, 0, 0, 0))
-	croppedImage.blit_rect(image, cropRect, Vector2(padding, padding))
-	var croppedTexture = ImageTexture.new()
-	croppedTexture.create_from_image(croppedImage, 0)
-	return croppedTexture
 
 
 func set_button_texture(id, texture, getName):
