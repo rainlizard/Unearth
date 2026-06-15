@@ -5,7 +5,6 @@ onready var oBuffers = Nodelist.list["oBuffers"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oThreadedSaveUndo = Nodelist.list["oThreadedSaveUndo"]
 onready var oLoadingBar = Nodelist.list["oLoadingBar"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
@@ -47,7 +46,20 @@ func _process(delta):
 					yield(get_tree(), "idle_frame")
 			else:
 				break
-		oThreadedSaveUndo.semaphore.post()
+		print("Start save undo state")
+		var CODETIME_START = OS.get_ticks_msec()
+		var new_state = {}
+		for EXT in oBuffers.FILE_TYPES:
+			if oBuffers.should_process_file_type(EXT) == false:
+				continue
+			if EXT == "TXT" or EXT == "LUA":
+				continue
+			new_state[EXT] = oBuffers.get_buffer_for_extension(EXT, oCurrentMap.path)
+		if new_state.has("TNGFX") and new_state["TNGFX"] == null:
+			oMessage.big("Undo state error", "TNGFX buffer broke")
+		else:
+			on_undo_state_saved(new_state)
+		print("End save undo state: " + str(OS.get_ticks_msec() - CODETIME_START) + "ms")
 		
 		undo_save_queued = false
 		set_process(true)
