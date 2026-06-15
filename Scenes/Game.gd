@@ -28,6 +28,7 @@ var COMMAND_LINE = ""
 var COMMAND_LINE_CONSOLE = ""
 var COMMAND_LINE_CONSOLE_ARG = ""
 var DK_COMMANDS = "-nointro -alex"
+var PACKETSAVE = false
 const KEEPERFX_MAP_ROOTS = ["levels", "multiplayer", "campgns"]
 
 func keeperfx_is_installed():
@@ -79,11 +80,11 @@ func _input(event):
 	if Input.is_action_just_pressed("SaveAndPlay"):
 		menu_play_clicked()
 
-func launch_game(mainCommands):
+func launch_game(mainCommands, launchMessage = "Launching..."):
 	var printOutput = []
 	OS.execute(COMMAND_LINE_CONSOLE, [COMMAND_LINE_CONSOLE_ARG, mainCommands], false, printOutput) # Make sure "false" is set so Unearth doesn't freeze
 	print(printOutput)
-	oMessage.quick("Launching...")
+	oMessage.quick(launchMessage)
 
 
 func set_paths(path):
@@ -119,6 +120,10 @@ func _on_CmdLineDkCommands_text_changed(new_text):
 	Settings.set_setting("dk_commands", new_text)
 	reconstruct_command_line()
 
+func _on_CmdLinePacketsave_toggled(button_pressed):
+	Settings.set_setting("packetsave", button_pressed)
+	reconstruct_command_line()
+
 func reconstruct_command_line():
 	print('Constructing command line...')
 	# Keep in mind Linux and Windows both want different quotation marks ' "
@@ -132,10 +137,10 @@ func reconstruct_command_line():
 	oCmdLineConsole.text = COMMAND_LINE_CONSOLE
 	oCmdLineConsoleArg.text = COMMAND_LINE_CONSOLE_ARG
 	
-	COMMAND_LINE = cmdline(oCurrentMap.path)
+	COMMAND_LINE = cmdline(oCurrentMap.path, false)
 	oCmdLineExecute.text = COMMAND_LINE
 
-func cmdline(mapPath):
+func cmdline(mapPath, packetLoad):
 	# Keep in mind Linux and Windows both want different quotation marks ' "
 	var constructString = ""
 	match OS.get_name():
@@ -187,13 +192,33 @@ func cmdline(mapPath):
 	if DK_COMMANDS != '':
 		constructString += ' '
 	constructString += DK_COMMANDS
+	var packetArguments = get_packet_arguments(mapPath, packetLoad)
+	if packetArguments != "":
+		constructString += " " + packetArguments
 	
 	return constructString
 
-func menu_play_clicked():
+func get_packet_arguments(mapPath, packetLoad):
+	if keeperfx_is_installed() == false:
+		return ""
+	if packetLoad == true:
+		return "-packetload " + get_packet_filename(mapPath)
+	if PACKETSAVE == true:
+		return "-packetsave " + get_packet_filename(mapPath)
+	return ""
+
+func get_packet_filename(mapPath):
+	return "unearth_auto_packet.pck"
+
+func menu_play_clicked(packetLoad = false):
 	if oEditor.mapHasBeenEdited == true:
 		oSaveMap.save_map(oCurrentMap.path)
-	launch_game(COMMAND_LINE)
+	var commandLine = COMMAND_LINE
+	var launchMessage = "Launching..."
+	if packetLoad == true:
+		commandLine = cmdline(oCurrentMap.path, true)
+		launchMessage = "Loading Packetsave"
+	launch_game(commandLine, launchMessage)
 
 func get_main_subdirectories(path):
 	var array = []

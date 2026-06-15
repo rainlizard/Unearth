@@ -49,6 +49,7 @@ onready var oCfgEditor = Nodelist.list["oCfgEditor"]
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
 var fixMenuExpansion
+var playButtonLocked = false
 
 func _ready():
 	# Allow Settings and Play button to be hovered without the dropdown menu appearing
@@ -383,16 +384,29 @@ func _on_MenuButtonSettings_pressed():
 
 
 func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in combination with OS.execute otherwise a Godot bug occurs
+	play_button_pressed(false)
+
+func _on_PlayButton_gui_input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.pressed == true:
+		accept_event()
+		play_button_pressed(true)
+
+func play_button_pressed(packetLoad):
+	if playButtonLocked == true:
+		return
 	if oCurrentFormat.selected == Constants.KfxFormat:
 		if oGame.keeperfx_is_installed() == false:
 			oMessage.big("Incompatible", "Your map format is set to KFX format, but your game executable is not set to keeperfx.exe")
 			return
+	if packetLoad == true and oGame.keeperfx_is_installed() == false:
+		oMessage.big("Incompatible", "Packetload requires keeperfx.exe")
+		return
 	
-	oGame.menu_play_clicked()
+	playButtonLocked = true
+	oGame.menu_play_clicked(packetLoad)
 	
-	oMenuPlayButton.disconnect("pressed",self,"_on_PlayButton_pressed")
 	yield(get_tree().create_timer(2.5), "timeout")
-	oMenuPlayButton.connect("pressed",self,"_on_PlayButton_pressed")
+	playButtonLocked = false
 
 func _on_ConfirmDiscardChanges_confirmed():
 	oOpenMap.open_map(oCurrentMap.path)

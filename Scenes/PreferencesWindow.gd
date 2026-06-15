@@ -6,6 +6,7 @@ onready var oMSAA = Nodelist.list["oMSAA"]
 onready var oCheckBoxAlwaysDecompress = Nodelist.list["oCheckBoxAlwaysDecompress"]
 onready var oChooseDkExe = Nodelist.list["oChooseDkExe"]
 onready var oCmdLineDkCommands = Nodelist.list["oCmdLineDkCommands"]
+onready var oCmdLinePacketsave = Nodelist.list["oCmdLinePacketsave"]
 onready var oCheckBoxMouseEdgePanning = Nodelist.list["oCheckBoxMouseEdgePanning"]
 onready var oCheckBoxSmoothPan = Nodelist.list["oCheckBoxSmoothPan"]
 onready var oCheckBoxDisplayFPS = Nodelist.list["oCheckBoxDisplayFPS"]
@@ -72,6 +73,8 @@ func _on_SettingsWindow_about_to_show():
 	oMSAA.update_appearance(msaa_slider_value)
 	oCheckBoxAlwaysDecompress.pressed = Settings.get_setting("always_decompress")
 	oCmdLineDkCommands.text = Settings.get_setting("dk_commands")
+	oCmdLinePacketsave.pressed = Settings.get_setting("packetsave")
+	oCmdLinePacketsave.disabled = oGame.keeperfx_is_installed() == false
 	
 	oCheckBoxMouseEdgePanning.pressed = Settings.get_setting("mouse_edge_panning")
 	oCheckBoxSmoothPan.pressed = Settings.get_setting("smooth_pan_enabled")

@@ -2289,32 +2289,10 @@ margin_right = 558.0
 margin_bottom = 76.0
 rect_min_size = Vector2( 0, 20 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 80.0
 margin_right = 558.0
 margin_bottom = 120.0
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
-margin_top = 9.0
-margin_right = 217.0
-margin_bottom = 30.0
-text = "Play button arguments :"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CmdLineDkCommands" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
-margin_left = 221.0
-margin_right = 558.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 0, 40 )
-size_flags_horizontal = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 124.0
-margin_right = 558.0
-margin_bottom = 164.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
@@ -2353,16 +2331,52 @@ size_flags_horizontal = 3
 editable = false
 expand_to_text_length = true
 
-[node name="HSeparator4" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 124.0
+margin_right = 558.0
+margin_bottom = 164.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
+margin_top = 9.0
+margin_right = 209.0
+margin_bottom = 30.0
+text = "Play button arguments"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
+margin_left = 213.0
+margin_top = 9.0
+margin_right = 233.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="CmdLineDkCommands" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
+margin_left = 237.0
+margin_right = 558.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 3
+
+[node name="CmdLinePacketsave" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 168.0
 margin_right = 558.0
-margin_bottom = 188.0
+margin_bottom = 197.0
+hint_tooltip = "Record packets whenever you play. Right-click the Play button to do a packetload."
+text = "Packetsave"
+
+[node name="HSeparator4" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 201.0
+margin_right = 558.0
+margin_bottom = 221.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 192.0
+margin_top = 225.0
 margin_right = 558.0
-margin_bottom = 221.0
+margin_bottom = 254.0
 text = "Always decompress maps"
 
 [node name="TabPlacements" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
@@ -8130,6 +8144,7 @@ margin_bottom = 40.0
 [connection signal="about_to_show" from="Ui/UiSystem/PreferencesWindow" to="Ui/UiSystem/PreferencesWindow" method="_on_SettingsWindow_about_to_show"]
 [connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/PreferencesWindow" method="_on_SetDirButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer/CmdLineDkCommands" to="Game" method="_on_CmdLineDkCommands_text_changed"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/CmdLinePacketsave" to="Game" method="_on_CmdLinePacketsave_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
 [connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer/WaterEffectPercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_WaterEffectPercent_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_LavaEffectPercent_value_changed"]
@@ -8261,6 +8276,7 @@ margin_bottom = 40.0
 [connection signal="file_selected" from="Ui/UiSystem/ChooseLandviewImageFileDialog" to="Ui/UiSystem/MapCoordinatesWindow" method="_on_ChooseLandviewImageFileDialog_file_selected"]
 [connection signal="pressed" from="Ui/UiTop/Menu/HBoxContainer2/MenuButtonSettings" to="Ui/UiTop/Menu" method="_on_MenuButtonSettings_pressed"]
 [connection signal="about_to_show" from="Ui/UiTop/Menu/HBoxContainer2/MenuButtonHelp" to="Ui/UiTop/Menu" method="_on_MenuButtonHelp_about_to_show"]
+[connection signal="gui_input" from="Ui/UiTop/Menu/HBoxContainer2/MenuPlayButton" to="Ui/UiTop/Menu" method="_on_PlayButton_gui_input"]
 [connection signal="pressed" from="Ui/UiTop/Menu/HBoxContainer2/MenuPlayButton" to="Ui/UiTop/Menu" method="_on_PlayButton_pressed"]
 [connection signal="timeout" from="Ui/UiMessages/FPScounter/Timer" to="Ui/UiMessages/FPScounter" method="_on_Wait_timeout"]
 [connection signal="about_to_show" from="Ui/UiPreviewExporter/ExportPreview" to="Ui/UiPreviewExporter/ExportPreview" method="_on_ExportPreview_about_to_show"]

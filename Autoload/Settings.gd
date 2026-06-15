@@ -23,6 +23,7 @@ var listOfSettings = [
 	"always_decompress",
 	"msaa",
 	"dk_commands",
+	"packetsave",
 	"mouse_edge_panning",
 	"pan_speed",
 	"zoom_step",
@@ -219,6 +220,10 @@ func game_setting(doWhat,string,value):
 			var oGame = $'../Main/Game'
 			if doWhat == SET: oGame.DK_COMMANDS = value
 			if doWhat == GET: return oGame.DK_COMMANDS
+		"packetsave":
+			var oGame = $'../Main/Game'
+			if doWhat == SET: oGame.PACKETSAVE = value
+			if doWhat == GET: return oGame.PACKETSAVE
 		"mouse_edge_panning":
 			var oCamera2D = $'../Main/Game2D/Camera2D'
 			if doWhat == SET: oCamera2D.MOUSE_EDGE_PANNING = value
