@@ -35,12 +35,8 @@ func _on_ScriptTextEdit_text_changed():
 	set_script_data(oScriptTextEdit.text)
 	update_empty_script_status()
 	
-	var updateHelpers = false
 	var line = oScriptTextEdit.get_line(oScriptTextEdit.cursor_get_line())
-	for i in oScriptMarkers.commandsWithPositions.size():
-		if oScriptMarkers.commandsWithPositions[i][0] in line.to_upper():
-			updateHelpers = true
-	if updateHelpers == true:
+	if oScriptMarkers.line_may_affect_position_markers(line):
 		oScriptMarkers.start() # in the case of updating a line (with coords) in the built-in Script Editor
 
 

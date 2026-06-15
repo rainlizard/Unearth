@@ -32,8 +32,12 @@ var commandsWithPositions = [
 	["ADD_OBJECT_TO_LEVEL_AT_POS", 1, IS_SUBTILE],
 	["DISPLAY_INFORMATION_WITH_POS", 1, IS_SUBTILE],
 	["DISPLAY_OBJECTIVE_WITH_POS", 1, IS_SUBTILE],
+	["DISPLAY_PLAYER_INFORMATION_WITH_POS", 2, IS_SUBTILE],
+	["DISPLAY_PLAYER_OBJECTIVE_WITH_POS", 2, IS_SUBTILE],
 	["QUICK_INFORMATION_WITH_POS", 2, IS_SUBTILE],
 	["QUICK_OBJECTIVE_WITH_POS", 2, IS_SUBTILE],
+	["QUICK_PLAYER_INFORMATION_WITH_POS", 3, IS_SUBTILE],
+	["QUICK_PLAYER_OBJECTIVE_WITH_POS", 3, IS_SUBTILE],
 	["PLACE_TRAP", 2, IS_SUBTILE],
 	
 	["CREATE_EFFECTS_LINE", 0, IS_LOCATION],
@@ -70,59 +74,17 @@ func start():
 	var scriptLines = oDataScript.data.split('\n',true)
 	for lineNumber in scriptLines.size():
 		var line = scriptLines[lineNumber]
+		var parsedCommand = get_command_from_line(line)
+		if parsedCommand.empty():
+			continue
 		
-		# Ignore commented lines (REM)
-		if line.to_upper().strip_edges(true,true).begins_with("REM") == false:
-			for commandAttributes in commandsWithPositions:
-				var cmdName = commandAttributes[0]
-				var argNumber = commandAttributes[1]
-				var positionType = commandAttributes[2]
-				
-				if cmdName + '(' in line.to_upper():
-					var argumentsArray = get_arguments_from_line(line)
-					var x = null
-					var y = null
-					match positionType:
-						IS_TILE:
-							var tileDistance = 96
-							if argumentsArray.size() > argNumber:
-								x = (int(argumentsArray[argNumber])*tileDistance) + (tileDistance*0.5)
-							if argumentsArray.size() > argNumber+1:
-								y = (int(argumentsArray[argNumber+1])*tileDistance) + (tileDistance*0.5)
-						IS_SUBTILE:
-							var tileDistance = 32
-							if argumentsArray.size() > argNumber:
-								x = (int(argumentsArray[argNumber])*tileDistance) + (tileDistance*0.5)
-							if argumentsArray.size() > argNumber+1:
-								y = (int(argumentsArray[argNumber+1])*tileDistance) + (tileDistance*0.5)
-						IS_LOCATION:
-							if argumentsArray.size() > argNumber:
-								# PLAYERx - zoom to player's dungeon heart
-								var heartID = null
-								if "PLAYER0" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(0)
-								if "PLAYER1" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(1)
-								if "PLAYER2" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(2)
-								if "PLAYER3" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(3)
-								if "PLAYER_GOOD" in argumentsArray[argNumber].to_upper(): heartID = oInstances.return_dungeon_heart(4)
-								if is_instance_valid(heartID):
-									x = heartID.position.x
-									y = heartID.position.y
-								else:
-									var positiveOrNegative = sign(float(argumentsArray[argNumber]))
-									match int(positiveOrNegative): # int() required for 'match' to work for negative integers
-										1: # Positive integer - zoom to Action Point of given number
-											var actionPointID = oInstances.return_action_point(int(argumentsArray[argNumber]))
-											if is_instance_valid(actionPointID):
-												x = actionPointID.position.x
-												y = actionPointID.position.y
-										-1: # Negative integer - zoom to Hero Gate of given number
-											var heroGateID = oInstances.return_hero_gate(abs(int(argumentsArray[argNumber])))
-											if is_instance_valid(heroGateID):
-												x = heroGateID.position.x
-												y = heroGateID.position.y
-					
-					if x != null and y != null:
-						create_helper_object(x, y, line, lineNumber+1)
+		var commandAttributes = get_position_command_attributes(parsedCommand["name"])
+		if commandAttributes == null:
+			continue
+
+		var markerPosition = get_marker_position(parsedCommand["arguments"], commandAttributes)
+		if markerPosition != null:
+			create_helper_object(markerPosition.x, markerPosition.y, line, lineNumber+1)
 	
 	print('Script helpers created ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
@@ -133,19 +95,113 @@ func clear():
 		id.position = Vector2(-100,-100)
 		id.queue_free()
 
-func get_arguments_from_line(line):
-	var leftBracketPos = line.find('(')
-	if leftBracketPos == -1: return []
+func get_command_from_line(line):
+	var trimmedLine = line.strip_edges(true, false)
+	if trimmedLine.to_upper().begins_with("REM"):
+		return {}
+
+	var leftBracketPos = trimmedLine.find('(')
+	if leftBracketPos == -1:
+		return {}
+
+	return {
+		"name": trimmedLine.substr(0, leftBracketPos).strip_edges().to_upper(),
+		"arguments": get_arguments_from_line(trimmedLine, leftBracketPos)
+	}
+
+func get_arguments_from_line(line, leftBracketPos):
+	var argumentsArray = []
+	var currentArgument = ""
+	var insideQuotes = false
+	var escaped = false
+	for i in range(leftBracketPos+1, line.length()):
+		var character = line.substr(i, 1)
+		if character == '"' and escaped == false:
+			insideQuotes = !insideQuotes
+		if character == ',' and insideQuotes == false:
+			argumentsArray.append(currentArgument.strip_edges())
+			currentArgument = ""
+		elif character == ')' and insideQuotes == false:
+			argumentsArray.append(currentArgument.strip_edges())
+			return argumentsArray # Note: this may return non-english characters depending on the script
+		else:
+			currentArgument += character
+		escaped = character == "\\" and escaped == false
+
+	return []
+
+func get_position_command_attributes(commandName):
+	for commandAttributes in commandsWithPositions:
+		if commandAttributes[0] == commandName:
+			return commandAttributes
+	return null
+
+func line_may_affect_position_markers(line):
+	var parsedCommand = get_command_from_line(line)
+	if parsedCommand.empty() == false:
+		return get_position_command_attributes(parsedCommand["name"]) != null
 	
-	var lineArgumentsOnly = line
-	lineArgumentsOnly.erase(0,leftBracketPos+1) #include erasing bracket
-	var rightBracketPos = lineArgumentsOnly.find(')')
-	if rightBracketPos == -1: return []
-	lineArgumentsOnly.erase(rightBracketPos,lineArgumentsOnly.length())
+	var upperLine = line.to_upper()
+	for commandAttributes in commandsWithPositions:
+		if commandAttributes[0] in upperLine:
+			return true
+	return false
+
+func get_marker_position(argumentsArray, commandAttributes):
+	var argNumber = commandAttributes[1]
+	match commandAttributes[2]:
+		IS_TILE:
+			return get_coordinate_position(argumentsArray, argNumber, 96)
+		IS_SUBTILE:
+			return get_coordinate_position(argumentsArray, argNumber, 32)
+		IS_LOCATION:
+			return get_location_position(argumentsArray, argNumber)
+	return null
+
+func get_coordinate_position(argumentsArray, argNumber, tileDistance):
+	var coordinateX = get_integer_argument(argumentsArray, argNumber)
+	var coordinateY = get_integer_argument(argumentsArray, argNumber+1)
+	if coordinateX == null or coordinateY == null:
+		return null
+	return Vector2((coordinateX*tileDistance) + (tileDistance*0.5), (coordinateY*tileDistance) + (tileDistance*0.5))
+
+func get_location_position(argumentsArray, argNumber):
+	if argumentsArray.size() <= argNumber:
+		return null
 	
-	lineArgumentsOnly = Array(lineArgumentsOnly.split(',',false))
+	var locationArgument = argumentsArray[argNumber].strip_edges()
+	# PLAYERx - zoom to player's dungeon heart
+	var heartID = null
+	if "PLAYER0" in locationArgument.to_upper(): heartID = oInstances.return_dungeon_heart(0)
+	if "PLAYER1" in locationArgument.to_upper(): heartID = oInstances.return_dungeon_heart(1)
+	if "PLAYER2" in locationArgument.to_upper(): heartID = oInstances.return_dungeon_heart(2)
+	if "PLAYER3" in locationArgument.to_upper(): heartID = oInstances.return_dungeon_heart(3)
+	if "PLAYER_GOOD" in locationArgument.to_upper(): heartID = oInstances.return_dungeon_heart(4)
+	if is_instance_valid(heartID):
+		return heartID.position
 	
-	return lineArgumentsOnly # Note: this may return non-english characters depending on the script
+	var location = get_integer_argument(argumentsArray, argNumber)
+	if location == null:
+		return null
+	match int(sign(location)): # int() required for 'match' to work for negative integers
+		1: # Positive integer - zoom to Action Point of given number
+			var actionPointID = oInstances.return_action_point(location)
+			if is_instance_valid(actionPointID):
+				return actionPointID.position
+		-1: # Negative integer - zoom to Hero Gate of given number
+			var heroGateID = oInstances.return_hero_gate(abs(location))
+			if is_instance_valid(heroGateID):
+				return heroGateID.position
+	return null
+
+func get_integer_argument(argumentsArray, argNumber):
+	if argumentsArray.size() <= argNumber:
+		return null
+	
+	var argument = argumentsArray[argNumber].strip_edges()
+	if argument.is_valid_integer() == false:
+		return null
+	return int(argument)
 
 func create_helper_object(x,y,line,lineNumber):
 	
