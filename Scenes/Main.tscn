@@ -4594,11 +4594,11 @@ custom_constants/hseparation = 28
 columns = 2
 
 [node name="ScriptSection1" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 422.0
 
 [node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 21.0
 text = "Options"
 align = 1
@@ -4608,14 +4608,14 @@ __meta__ = {
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 25.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 37.0
 rect_min_size = Vector2( 12, 12 )
 size_flags_horizontal = 3
 
 [node name="KeeperFXScriptCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 41.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 70.0
 hint_tooltip = "Adds LEVEL_VERSION at the top of the script, allowing for extended scripting.
 - Different arguments for CREATURE_AVAILABLE are used
@@ -4628,21 +4628,41 @@ __meta__ = {
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 74.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 105.0
 
 [node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer"]
 margin_top = 5.0
-margin_right = 201.0
+margin_right = 197.0
 margin_bottom = 26.0
 hint_tooltip = "SET_GENERATE_SPEED"
 mouse_filter = 1
-text = "Portal attraction rate:"
+text = "Portal attraction rate"
 
-[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer"]
-margin_left = 205.0
-margin_right = 263.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer"]
+margin_left = 224.0
+margin_right = 332.0
 margin_bottom = 31.0
+size_flags_horizontal = 10
+
+[node name="PortalRateInSeconds" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer/HBoxContainer"]
+margin_top = 5.0
+margin_right = 46.0
+margin_bottom = 26.0
+hint_tooltip = "This time is calculated assuming Game Turns is set to 20"
+mouse_filter = 1
+size_flags_horizontal = 10
+custom_colors/font_color = Color( 1, 1, 1, 0.376471 )
+text = "(20s)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer/HBoxContainer"]
+margin_left = 50.0
+margin_right = 108.0
+margin_bottom = 31.0
+size_flags_horizontal = 10
 text = "400"
 expand_to_text_length = true
 script = ExtResource( 123 )
@@ -4650,35 +4670,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PortalRateInSeconds" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer"]
-margin_left = 267.0
-margin_top = 5.0
-margin_right = 335.0
-margin_bottom = 26.0
-hint_tooltip = "This time is calculated assuming Game Turns is set to 20"
-mouse_filter = 1
-text = "(20 sec)"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 109.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 140.0
 
 [node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer2"]
 margin_top = 5.0
-margin_right = 126.0
+margin_right = 122.0
 margin_bottom = 26.0
 hint_tooltip = "START_MONEY"
 mouse_filter = 1
-text = "Starting gold:"
+text = "Starting gold"
 
 [node name="GoldField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer2"]
-margin_left = 130.0
-margin_right = 190.0
+margin_left = 272.0
+margin_right = 332.0
 margin_bottom = 31.0
+size_flags_horizontal = 10
 text = "2500"
 expand_to_text_length = true
 script = ExtResource( 123 )
@@ -4688,21 +4697,22 @@ __meta__ = {
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 144.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 175.0
 
 [node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer3"]
 margin_top = 5.0
-margin_right = 184.0
+margin_right = 180.0
 margin_bottom = 26.0
 hint_tooltip = "MAX_CREATURES"
 mouse_filter = 1
-text = "Maximum creatures:"
+text = "Maximum creatures"
 
 [node name="MaxCreaturesField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer3"]
-margin_left = 188.0
-margin_right = 246.0
+margin_left = 274.0
+margin_right = 332.0
 margin_bottom = 31.0
+size_flags_horizontal = 10
 text = "25"
 expand_to_text_length = true
 script = ExtResource( 123 )
@@ -4710,69 +4720,141 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BlueAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+[node name="BlueAIContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 179.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 208.0
+
+[node name="BlueAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlueAIContainer"]
+margin_right = 219.0
+margin_bottom = 29.0
 hint_tooltip = "Computer PLAYER1"
+size_flags_horizontal = 3
 text = "Blue keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GreenAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+[node name="BlueAIRoamingCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlueAIContainer"]
+margin_left = 223.0
+margin_right = 332.0
+margin_bottom = 29.0
+hint_tooltip = "COMPUTER_PLAYER(PLAYER1,ROAMING)"
+text = "Roaming"
+
+[node name="GreenAIContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 212.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 241.0
+
+[node name="GreenAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/GreenAIContainer"]
+margin_right = 219.0
+margin_bottom = 29.0
 hint_tooltip = "Computer PLAYER2"
+size_flags_horizontal = 3
 text = "Green keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="YellowAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+[node name="GreenAIRoamingCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/GreenAIContainer"]
+margin_left = 223.0
+margin_right = 332.0
+margin_bottom = 29.0
+hint_tooltip = "COMPUTER_PLAYER(PLAYER2,ROAMING)"
+text = "Roaming"
+
+[node name="YellowAIContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 245.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 274.0
+
+[node name="YellowAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/YellowAIContainer"]
+margin_right = 219.0
+margin_bottom = 29.0
 hint_tooltip = "Computer PLAYER3"
+size_flags_horizontal = 3
 text = "Yellow keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PurpleAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+[node name="YellowAIRoamingCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/YellowAIContainer"]
+margin_left = 223.0
+margin_right = 332.0
+margin_bottom = 29.0
+hint_tooltip = "COMPUTER_PLAYER(PLAYER3,ROAMING)"
+text = "Roaming"
+
+[node name="PurpleAIContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 278.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 307.0
-hint_tooltip = "Computer PLAYER3"
+
+[node name="PurpleAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/PurpleAIContainer"]
+margin_right = 219.0
+margin_bottom = 29.0
+hint_tooltip = "Computer PLAYER4"
+size_flags_horizontal = 3
 text = "Purple keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BlackAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+[node name="PurpleAIRoamingCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/PurpleAIContainer"]
+margin_left = 223.0
+margin_right = 332.0
+margin_bottom = 29.0
+hint_tooltip = "COMPUTER_PLAYER(PLAYER4,ROAMING)"
+text = "Roaming"
+
+[node name="BlackAIContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 311.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 340.0
-hint_tooltip = "Computer PLAYER3"
+
+[node name="BlackAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlackAIContainer"]
+margin_right = 219.0
+margin_bottom = 29.0
+hint_tooltip = "Computer PLAYER5"
+size_flags_horizontal = 3
 text = "Black keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OrangeAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
+[node name="BlackAIRoamingCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlackAIContainer"]
+margin_left = 223.0
+margin_right = 332.0
+margin_bottom = 29.0
+hint_tooltip = "COMPUTER_PLAYER(PLAYER5,ROAMING)"
+text = "Roaming"
+
+[node name="OrangeAIContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 344.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 373.0
-hint_tooltip = "Computer PLAYER3"
+
+[node name="OrangeAICheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/OrangeAIContainer"]
+margin_right = 219.0
+margin_bottom = 29.0
+hint_tooltip = "Computer PLAYER6"
+size_flags_horizontal = 3
 text = "Orange keeper AI"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="OrangeAIRoamingCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/OrangeAIContainer"]
+margin_left = 223.0
+margin_right = 332.0
+margin_bottom = 29.0
+hint_tooltip = "COMPUTER_PLAYER(PLAYER6,ROAMING)"
+text = "Roaming"
+
 [node name="WinConditionCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 377.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 406.0
 hint_tooltip = "Keep in mind if a keeper AI is not enabled then they'll be counted as defeated even if their dungeon heart has not been destroyed"
 text = "Win when all keepers are defeated"
@@ -4782,7 +4864,7 @@ __meta__ = {
 
 [node name="Spacing2" type="Control" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1"]
 margin_top = 410.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 422.0
 rect_min_size = Vector2( 12, 12 )
 __meta__ = {
@@ -4790,8 +4872,8 @@ __meta__ = {
 }
 
 [node name="ScriptSection4" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
-margin_left = 363.0
-margin_right = 423.0
+margin_left = 360.0
+margin_right = 420.0
 margin_bottom = 422.0
 
 [node name="HeaderLabel3" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection4"]
@@ -4811,11 +4893,11 @@ columns = 4
 
 [node name="ScriptSection2" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
 margin_top = 426.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 451.0
 
 [node name="HeaderLabel" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection2"]
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 21.0
 text = "Creatures"
 align = 1
@@ -4825,14 +4907,14 @@ __meta__ = {
 
 [node name="CreaturePool" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection2"]
 margin_top = 25.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 25.0
 columns = 4
 
 [node name="ScriptSection5" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
-margin_left = 363.0
+margin_left = 360.0
 margin_top = 426.0
-margin_right = 423.0
+margin_right = 420.0
 margin_bottom = 451.0
 
 [node name="HeaderLabel4" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection5"]
@@ -4852,11 +4934,11 @@ columns = 4
 
 [node name="ScriptSection3" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
 margin_top = 455.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 509.0
 
 [node name="HeaderLabel2" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection3"]
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 21.0
 text = "Heroes"
 align = 1
@@ -4866,14 +4948,14 @@ __meta__ = {
 
 [node name="HeroPool" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection3"]
 margin_top = 25.0
-margin_right = 335.0
+margin_right = 332.0
 margin_bottom = 25.0
 columns = 4
 
 [node name="ScriptSection6" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer"]
-margin_left = 363.0
+margin_left = 360.0
 margin_top = 455.0
-margin_right = 423.0
+margin_right = 420.0
 margin_bottom = 509.0
 
 [node name="HeaderLabel5" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection6"]
@@ -8303,13 +8385,13 @@ margin_bottom = 40.0
 [connection signal="text_changed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]
 [connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/KeeperFXScriptCheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_KeeperFXScriptCheckBox_toggled"]
-[connection signal="text_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_PortalRateField_text_changed"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlueAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_BlueAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/GreenAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_GreenAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/YellowAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_YellowAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/PurpleAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_PurpleAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlackAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_BlackAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/OrangeAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_OrangeAICheckBox_toggled"]
+[connection signal="text_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/HBoxContainer/HBoxContainer/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_PortalRateField_text_changed"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlueAIContainer/BlueAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_BlueAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/GreenAIContainer/GreenAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_GreenAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/YellowAIContainer/YellowAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_YellowAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/PurpleAIContainer/PurpleAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_PurpleAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlackAIContainer/BlackAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_BlackAICheckBox_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/OrangeAIContainer/OrangeAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_OrangeAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/AdjustResearchCheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_AdjustResearchCheckBox_toggled"]
 [connection signal="value_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockAmountSpinBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_WarlockAmountSpinBox_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockLevelSpinBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_WarlockLevelSpinBox_value_changed"]

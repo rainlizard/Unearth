@@ -8,6 +8,9 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oBlueAICheckBox = Nodelist.list["oBlueAICheckBox"]
 onready var oGreenAICheckBox = Nodelist.list["oGreenAICheckBox"]
 onready var oYellowAICheckBox = Nodelist.list["oYellowAICheckBox"]
+onready var oBlueAIRoamingCheckBox = Nodelist.list["oBlueAIRoamingCheckBox"]
+onready var oGreenAIRoamingCheckBox = Nodelist.list["oGreenAIRoamingCheckBox"]
+onready var oYellowAIRoamingCheckBox = Nodelist.list["oYellowAIRoamingCheckBox"]
 onready var oPortalRateField = Nodelist.list["oPortalRateField"]
 onready var oGoldField = Nodelist.list["oGoldField"]
 onready var oMaxCreaturesField = Nodelist.list["oMaxCreaturesField"]
@@ -31,6 +34,9 @@ onready var oInstances = Nodelist.list["oInstances"]
 onready var oPurpleAICheckBox = Nodelist.list["oPurpleAICheckBox"]
 onready var oBlackAICheckBox = Nodelist.list["oBlackAICheckBox"]
 onready var oOrangeAICheckBox = Nodelist.list["oOrangeAICheckBox"]
+onready var oPurpleAIRoamingCheckBox = Nodelist.list["oPurpleAIRoamingCheckBox"]
+onready var oBlackAIRoamingCheckBox = Nodelist.list["oBlackAIRoamingCheckBox"]
+onready var oOrangeAIRoamingCheckBox = Nodelist.list["oOrangeAIRoamingCheckBox"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oScriptEditorWindow = Nodelist.list["oScriptEditorWindow"]
 onready var oScriptGeneratorWindow = Nodelist.list["oScriptGeneratorWindow"]
@@ -169,17 +175,43 @@ func _ready():
 
 func update_options_based_on_mapformat():
 	if oCurrentFormat.selected == Constants.ClassicFormat:
-		oPurpleAICheckBox.visible = false
-		oBlackAICheckBox.visible = false
-		oOrangeAICheckBox.visible = false
+		oPurpleAICheckBox.get_parent().visible = false
+		oBlackAICheckBox.get_parent().visible = false
+		oOrangeAICheckBox.get_parent().visible = false
 	else:
-		oPurpleAICheckBox.visible = true
-		oBlackAICheckBox.visible = true
-		oOrangeAICheckBox.visible = true
+		oPurpleAICheckBox.get_parent().visible = true
+		oBlackAICheckBox.get_parent().visible = true
+		oOrangeAICheckBox.get_parent().visible = true
 	initialize_rooms_available()
 	initialize_creatures_available()
 	initialize_traps_available()
 	initialize_doors_available()
+
+
+func get_computer_player_argument(oRoamingCheckBox):
+	if oRoamingCheckBox.pressed == true:
+		return "ROAMING"
+	return "0"
+
+
+func add_computer_player_line(generateString, playerString, oCheckBox, oRoamingCheckBox):
+	if oCheckBox.pressed == true and oCheckBox.get_parent().visible == true:
+		generateString += "COMPUTER_PLAYER(" + playerString + "," + get_computer_player_argument(oRoamingCheckBox) + ")" + '\n'
+	return generateString
+
+
+func has_roaming_computer_player():
+	for aiSetting in [
+		[oBlueAICheckBox, oBlueAIRoamingCheckBox],
+		[oGreenAICheckBox, oGreenAIRoamingCheckBox],
+		[oYellowAICheckBox, oYellowAIRoamingCheckBox],
+		[oPurpleAICheckBox, oPurpleAIRoamingCheckBox],
+		[oBlackAICheckBox, oBlackAIRoamingCheckBox],
+		[oOrangeAICheckBox, oOrangeAIRoamingCheckBox],
+	]:
+		if aiSetting[0].pressed == true and aiSetting[0].get_parent().visible == true and aiSetting[1].pressed == true:
+			return true
+	return false
 
 
 func initialize_researchables():
@@ -439,31 +471,31 @@ func clear_available_buttons(parent):
 
 func _on_PortalRateField_text_changed(new_text):
 	var rateInSeconds = float(int(new_text)/20.0)
-	oPortalRateInSeconds.text = '('+str(rateInSeconds) + " sec)"
+	oPortalRateInSeconds.text = '('+str(rateInSeconds) + "s)"
 
 
 func _on_BlueAICheckBox_toggled(button_pressed):
-	if button_pressed == true:
+	if button_pressed == true and oBlueAIRoamingCheckBox.pressed == false:
 		if oInstances.check_for_dungeon_heart(1) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 func _on_GreenAICheckBox_toggled(button_pressed):
-	if button_pressed == true:
+	if button_pressed == true and oGreenAIRoamingCheckBox.pressed == false:
 		if oInstances.check_for_dungeon_heart(2) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 func _on_YellowAICheckBox_toggled(button_pressed):
-	if button_pressed == true:
+	if button_pressed == true and oYellowAIRoamingCheckBox.pressed == false:
 		if oInstances.check_for_dungeon_heart(3) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 func _on_PurpleAICheckBox_toggled(button_pressed):
-	if button_pressed == true:
+	if button_pressed == true and oPurpleAIRoamingCheckBox.pressed == false:
 		if oInstances.check_for_dungeon_heart(6) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 func _on_BlackAICheckBox_toggled(button_pressed):
-	if button_pressed == true:
+	if button_pressed == true and oBlackAIRoamingCheckBox.pressed == false:
 		if oInstances.check_for_dungeon_heart(7) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 func _on_OrangeAICheckBox_toggled(button_pressed):
-	if button_pressed == true:
+	if button_pressed == true and oOrangeAIRoamingCheckBox.pressed == false:
 		if oInstances.check_for_dungeon_heart(8) == false:
 			oMessage.quick("This player requires a Dungeon Heart! Otherwise their creatures will die after a few seconds.")
 
@@ -489,7 +521,7 @@ func execute_gen():
 	
 	var argumentForCreatureAvailable = ",1,1)"
 	
-	if oKeeperFXScriptCheckBox.pressed == true:
+	if oKeeperFXScriptCheckBox.pressed == true or has_roaming_computer_player():
 		generateString += "LEVEL_VERSION(1)" + '\n'
 		argumentForCreatureAvailable = ",1,0)"
 	
@@ -499,18 +531,12 @@ func execute_gen():
 	
 	generateString = add_one_extra_line(generateString)
 	
-	if oBlueAICheckBox.pressed == true and oBlueAICheckBox.visible == true:
-		generateString += "COMPUTER_PLAYER(PLAYER1,0)" + '\n'
-	if oGreenAICheckBox.pressed == true and oGreenAICheckBox.visible == true:
-		generateString += "COMPUTER_PLAYER(PLAYER2,0)" + '\n'
-	if oYellowAICheckBox.pressed == true and oYellowAICheckBox.visible == true:
-		generateString += "COMPUTER_PLAYER(PLAYER3,0)" + '\n'
-	if oPurpleAICheckBox.pressed == true and oPurpleAICheckBox.visible == true:
-		generateString += "COMPUTER_PLAYER(PLAYER4,0)" + '\n'
-	if oBlackAICheckBox.pressed == true and oBlackAICheckBox.visible == true:
-		generateString += "COMPUTER_PLAYER(PLAYER5,0)" + '\n'
-	if oOrangeAICheckBox.pressed == true and oOrangeAICheckBox.visible == true:
-		generateString += "COMPUTER_PLAYER(PLAYER6,0)" + '\n'
+	generateString = add_computer_player_line(generateString, "PLAYER1", oBlueAICheckBox, oBlueAIRoamingCheckBox)
+	generateString = add_computer_player_line(generateString, "PLAYER2", oGreenAICheckBox, oGreenAIRoamingCheckBox)
+	generateString = add_computer_player_line(generateString, "PLAYER3", oYellowAICheckBox, oYellowAIRoamingCheckBox)
+	generateString = add_computer_player_line(generateString, "PLAYER4", oPurpleAICheckBox, oPurpleAIRoamingCheckBox)
+	generateString = add_computer_player_line(generateString, "PLAYER5", oBlackAICheckBox, oBlackAIRoamingCheckBox)
+	generateString = add_computer_player_line(generateString, "PLAYER6", oOrangeAICheckBox, oOrangeAIRoamingCheckBox)
 
 	generateString = add_one_extra_line(generateString)
 	
