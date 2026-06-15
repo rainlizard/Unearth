@@ -6990,51 +6990,84 @@ text = "Fake Slabs (.une)"
 
 [node name="ActionPointListWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = 1704.0
-margin_top = -1832.0
-margin_right = 1985.0
-margin_bottom = -1536.0
-rect_min_size = Vector2( 281, 296 )
+margin_left = -984.0
+margin_top = -384.0
+margin_right = -659.0
+margin_bottom = -88.0
+rect_min_size = Vector2( 325, 296 )
 mouse_filter = 1
-window_title = "Action Point list"
+window_title = "Instance list"
 resizable = true
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ActionPointListWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_right = 10.0
+rect_min_size = Vector2( 325, 296 )
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 20
-custom_constants/margin_top = 20
+custom_constants/margin_top = 5
 custom_constants/margin_left = 20
 custom_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer"]
 margin_left = 20.0
-margin_top = 20.0
-margin_right = 261.0
+margin_top = 5.0
+margin_right = 315.0
 margin_bottom = 276.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer"]
-self_modulate = Color( 1, 0, 0, 1 )
-margin_right = 241.0
-margin_bottom = 256.0
+[node name="ActionPointList" type="TabContainer" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer"]
+margin_right = 295.0
+margin_bottom = 271.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 65 )
+
+[node name="Action points" type="ScrollContainer" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ActionPointList"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 36.0
+margin_right = -5.0
+margin_bottom = -5.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ActionPointList" type="ItemList" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ScrollContainer"]
-margin_right = 241.0
-margin_bottom = 256.0
+[node name="ActionPointHeroGateList" type="ItemList" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ActionPointList/Action points"]
+margin_right = 285.0
+margin_bottom = 230.0
 rect_clip_content = false
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
-items = [ "Item 0", null, false, "Item 1", null, false, "Item 2", null, false ]
 allow_reselect = true
 auto_height = true
-script = ExtResource( 65 )
+
+[node name="Creatures" type="ScrollContainer" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ActionPointList"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 36.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CreatureList" type="ItemList" parent="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ActionPointList/Creatures"]
+margin_right = 285.0
+margin_bottom = 230.0
+rect_clip_content = false
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+allow_reselect = true
+auto_height = true
 
 [node name="SortCreatureStats" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -7625,7 +7658,7 @@ custom_colors/font_color_hover = Color( 1, 0.65098, 0.556863, 1 )
 custom_colors/font_color_pressed = Color( 0.333333, 0.607843, 1, 1 )
 text = "View"
 align = 0
-items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Action points", null, 0, false, false, 4, 0, null, "", false, "Grid data", null, 0, false, false, 5, 0, null, "", false, "Config files", null, 0, false, false, 6, 0, null, "", false, "Creature stats", null, 0, false, false, 7, 0, null, "", false ]
+items = [ "Map folder", null, 0, false, false, 0, 0, null, "", false, "Script file", null, 0, false, false, 1, 0, null, "", false, "Log file", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "3D: 1st person", null, 0, false, false, 3, 0, null, "", false, "", null, 0, false, true, -1, 0, null, "", true, "Instance list", null, 0, false, false, 4, 0, null, "", false, "Grid data", null, 0, false, false, 5, 0, null, "", false, "Config files", null, 0, false, false, 6, 0, null, "", false, "Creature stats", null, 0, false, false, 7, 0, null, "", false ]
 switch_on_hover = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -8321,7 +8354,7 @@ margin_bottom = 40.0
 [connection signal="value_changed" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/ResizeFillWithID" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeFillWithID_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/ResizeApplyButton" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeApplyButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/GridDataWindow" to="Game2D/AnalyzeGrids" method="_on_GridDataWindow_visibility_changed"]
-[connection signal="visibility_changed" from="Ui/UiSystem/ActionPointListWindow" to="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ScrollContainer/ActionPointList" method="_on_ActionPointListWindow_visibility_changed"]
+[connection signal="visibility_changed" from="Ui/UiSystem/ActionPointListWindow" to="Ui/UiSystem/ActionPointListWindow/MarginContainer/VBoxContainer/ActionPointList" method="_on_ActionPointListWindow_visibility_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/SortCreatureStats" to="Ui/UiSystem/SortCreatureStats" method="_on_SortCreatureStats_visibility_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/StatsOptionButton" to="Ui/UiSystem/SortCreatureStats" method="_on_StatsOptionButton_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/LeftStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_LeftStatsButton_pressed"]

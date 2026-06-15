@@ -81,8 +81,8 @@ func _on_VisibilityNotifier2D_screen_exited():
 func _enter_tree():
 	yield(get_tree(),'idle_frame')
 	if oActionPointList:
-		oActionPointList.update_ap_list()
+		oActionPointList.update_if_visible()
 
 func _exit_tree():
 	if oActionPointList:
-		oActionPointList.update_ap_list()
+		oActionPointList.update_if_visible()

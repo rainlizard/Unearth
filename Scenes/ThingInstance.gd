@@ -83,10 +83,12 @@ func _enter_tree():
 				if herogateNumber == null:
 					set_herogateNumber(oInstances.get_free_hero_gate_number())
 				if oActionPointList:
-					oActionPointList.update_ap_list()
+					oActionPointList.update_if_visible()
 		
 		Things.TYPE.CREATURE:
 			add_to_group("Creature")
+			if oActionPointList:
+				oActionPointList.update_if_visible()
 		Things.TYPE.EFFECTGEN:
 			add_to_group("EffectGen")
 
@@ -131,6 +133,10 @@ func _exit_tree():
 		if is_instance_valid(doorID) == true:
 			doorID.doorLocked = 0
 
+	if oActionPointList:
+		if thingType == Things.TYPE.CREATURE or (thingType == Things.TYPE.OBJECT and subtype in Things.LIST_OF_HEROGATES):
+			oActionPointList.update_if_visible()
+
 
 func set_location_x(setVal):
 	if locationX != null and locationY != null:
@@ -139,6 +145,7 @@ func set_location_x(setVal):
 	position.x = locationX * 32
 	if locationX != null and locationY != null:
 		add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+		update_action_point_list_if_creature()
 
 func set_location_y(setVal):
 	if locationX != null and locationY != null:
@@ -147,6 +154,12 @@ func set_location_y(setVal):
 	position.y = locationY * 32
 	if locationX != null and locationY != null:
 		add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
+		update_action_point_list_if_creature()
+
+
+func update_action_point_list_if_creature():
+	if is_inside_tree() and thingType == Things.TYPE.CREATURE and oActionPointList:
+		oActionPointList.update_if_visible()
 
 
 func set_location_z(setVal):
@@ -182,6 +195,7 @@ func _on_zoom_level_changed(zoom):
 func set_ownership(setval):
 	ownership = setval
 	call_deferred("set_ownership_material_one_frame_later") # this fixes a bug
+	update_action_point_list_if_creature()
 
 func set_ownership_material_one_frame_later(): # needs to be call_deferred
 	if ownership == 255:

@@ -1,73 +1,134 @@
-extends ItemList
+extends TabContainer
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oActionPointListWindow = Nodelist.list["oActionPointListWindow"]
+onready var oCreatureList = Nodelist.list["oCreatureList"]
+onready var oActionPointHeroGateList = Nodelist.list["oActionPointHeroGateList"]
 
 
-const item_height = 25
+const ITEM_HEIGHT = 25
+const LINES_TO_SHOW = 10
 
-var lines_to_show = 10
+var selecting_from_list = false
+
 
 func _ready():
-	connect("item_selected",self,"_on_item_selected")
+	for list in [oCreatureList, oActionPointHeroGateList]:
+		list.connect("item_selected", self, "_on_item_selected", [list])
 	update_ap_list()
+
 
 func update_ap_list():
 	if is_inside_tree() == false: return # Fixes an annoying crash-on-exit.
-	clear()
+	populate_list(oCreatureList, get_creature_entries())
+	populate_list(oActionPointHeroGateList, get_action_point_entries() + get_hero_gate_entries())
+	update_list_height()
 
+
+func update_if_visible():
+	if is_instance_valid(oActionPointListWindow) and oActionPointListWindow.visible == true:
+		update_ap_list()
+
+
+func populate_list(list, entries):
+	list.clear()
+	for entry in entries:
+		list.add_item(entry[0])
+		list.set_item_metadata(list.get_item_count() - 1, entry[1])
+
+
+func get_creature_entries():
+	var entries = []
+	var creatures = []
+	for id in get_tree().get_nodes_in_group("Creature"):
+		if id.is_queued_for_deletion() == false:
+			creatures.append(id)
+	creatures.sort_custom(self, "sort_things")
+
+	for id in creatures:
+		entries.append([get_creature_text(id), id])
+	return entries
+
+
+func get_action_point_entries():
+	var entries = []
 	var action_points = []
 	for id in get_tree().get_nodes_in_group("ActionPoint"):
 		if id.is_queued_for_deletion() == false:
 			action_points.append(id)
 	action_points.sort_custom(self, "sort_action_points")
-	
+	for id in action_points:
+		entries.append(["Action Point " + str(id.pointNumber), id])
+	return entries
+
+
+func get_hero_gate_entries():
+	var entries = []
 	var hero_gates = []
 	for id in get_tree().get_nodes_in_group("Thing"):
 		if id.is_queued_for_deletion() == false:
 			if id.is_in_group("HeroGate") and id.herogateNumber != null:
 				hero_gates.append(id)
 	hero_gates.sort_custom(self, "sort_hero_gates")
-	
-	for id in action_points:
-		add_item("Action Point " + str(id.pointNumber))
 	for id in hero_gates:
-		add_item("Hero Gate " + str(id.herogateNumber))
-	
-	
-	
-	var lines = clamp(action_points.size(), 1, lines_to_show)
-	get_parent().get_parent().rect_min_size.y = 9 + (lines * item_height)
+		entries.append(["Hero Gate " + str(id.herogateNumber), id])
+	return entries
+
+
+func update_list_height():
+	var count = max(oCreatureList.get_item_count(), oActionPointHeroGateList.get_item_count())
+	var lines = clamp(count, 1, LINES_TO_SHOW)
+	rect_min_size.y = 35 + (lines * ITEM_HEIGHT)
 	
 	yield(get_tree(),'idle_frame')
-	get_parent().set_deferred("scroll_vertical",1000000)
+	oCreatureList.get_parent().set_deferred("scroll_vertical", 1000000)
+	oActionPointHeroGateList.get_parent().set_deferred("scroll_vertical", 1000000)
+
+
+func get_creature_text(id):
+	return Things.fetch_name(id.thingType, id.subtype) + " - " + Constants.ownershipNames[id.ownership] + " (" + str(id.locationX) + ", " + str(id.locationY) + ")"
+
+
+func sort_things(a, b):
+	var name_a = Things.fetch_name(a.thingType, a.subtype)
+	var name_b = Things.fetch_name(b.thingType, b.subtype)
+	if name_a == name_b:
+		if a.locationY == b.locationY:
+			return a.locationX < b.locationX
+		return a.locationY < b.locationY
+	return name_a < name_b
+
 
 func sort_action_points(a, b):
 	return a.pointNumber < b.pointNumber
+
+
 func sort_hero_gates(a, b):
 	return a.herogateNumber < b.herogateNumber
 
-func _on_item_selected(idx):
-	var txt = get_item_text(idx)
 
-	if txt.begins_with("Action Point "):
-		txt = txt.replace("Action Point ", "")
-		for id in get_tree().get_nodes_in_group("ActionPoint"):
-			if id.pointNumber == int(txt):
-				oInspector.inspect_something(id)
-	elif txt.begins_with("Hero Gate "):
-		txt = txt.replace("Hero Gate ", "")
-		for id in get_tree().get_nodes_in_group("Thing"):
-			if id.is_in_group("HeroGate"):
-				if id.herogateNumber == int(txt):
-					oInspector.inspect_something(id)
-	
-	if is_instance_valid(oInspector.inspectingInstance):
-		oCamera2D.center_camera_on_point(oInspector.inspectingInstance.position)
+func _on_item_selected(idx, list):
+	var id = list.get_item_metadata(idx)
+	if is_instance_valid(id) == false: return
+	if list == oCreatureList:
+		oActionPointHeroGateList.unselect_all()
+	else:
+		oCreatureList.unselect_all()
+	selecting_from_list = true
+	oInspector.inspect_something(id)
+	selecting_from_list = false
+	if oInspector.inspectingInstance == id:
+		oCamera2D.center_camera_on_point(id.position)
+
+
+func unselect_all():
+	oCreatureList.unselect_all()
+	oActionPointHeroGateList.unselect_all()
 
 
 func _on_ActionPointListWindow_visibility_changed():
 	if is_instance_valid(oActionPointListWindow) == false: return
 	if oActionPointListWindow.visible == true:
+		update_ap_list()
 		yield(get_tree(),'idle_frame')
 		oActionPointListWindow.rect_position.x = 0
