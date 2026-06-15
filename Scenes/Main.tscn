@@ -1,4 +1,4 @@
-[gd_scene load_steps=208 format=2]
+[gd_scene load_steps=205 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -129,7 +129,6 @@
 [ext_resource path="res://Art/HelpIconHover.png" type="Texture" id=128]
 [ext_resource path="res://Scenes/CustomTooltip.gd" type="Script" id=129]
 [ext_resource path="res://Theme/StyleBoxThinnerPanel.tres" type="StyleBox" id=130]
-[ext_resource path="res://Scenes/SGRectHighlighter.gd" type="Script" id=131]
 [ext_resource path="res://Scenes/SlabsetWindow.gd" type="Script" id=132]
 [ext_resource path="res://Scenes/ScriptMarkers.gd" type="Script" id=133]
 [ext_resource path="res://Scenes/NewMapWindow.gd" type="Script" id=134]
@@ -266,37 +265,6 @@ func _on_ChooseDefaultSaveFolder_dir_selected(dir_path):
 [sub_resource type="ShaderMaterial" id=14]
 shader = ExtResource( 106 )
 shader_param/flashSpecific = Color( 1e-05, 2e-05, 3e-05, 4e-05 )
-
-[sub_resource type="Animation" id=17]
-resource_name = "Flash"
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( -0.1, 0.5, 1 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0.25098 ), Color( 1, 1, 1, 0 ) ]
-}
-
-[sub_resource type="Animation" id=18]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
 
 [sub_resource type="DynamicFont" id=16]
 size = 20
@@ -4416,21 +4384,6 @@ margin_top = 816.0
 margin_right = 558.0
 margin_bottom = 993.0
 
-[node name="SGRectHighlighter" type="ColorRect" parent="Ui/UiSystem/MapSettingsWindow"]
-modulate = Color( 1, 1, 1, 0.04183 )
-margin_left = -344.0
-margin_top = 1923.0
-margin_right = -344.0
-margin_bottom = 1923.0
-mouse_filter = 2
-script = ExtResource( 131 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Ui/UiSystem/MapSettingsWindow/SGRectHighlighter"]
-autoplay = "Flash"
-reset_on_save = false
-anims/Flash = SubResource( 17 )
-anims/RESET = SubResource( 18 )
-
 [node name="ChooseTmapFileDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 4156.0
@@ -4584,7 +4537,7 @@ size_flags_vertical = 3
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer"]
 margin_right = 844.0
-margin_bottom = 570.0
+margin_bottom = 537.0
 size_flags_horizontal = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
@@ -4618,8 +4571,7 @@ margin_top = 41.0
 margin_right = 332.0
 margin_bottom = 70.0
 hint_tooltip = "Adds LEVEL_VERSION at the top of the script, allowing for extended scripting.
-- Different arguments for CREATURE_AVAILABLE are used
-- RESEARCH_ORDER function is used instead of RESEARCH function"
+- Different arguments for CREATURE_AVAILABLE are used"
 pressed = true
 text = "KeeperFX script"
 __meta__ = {
@@ -4994,152 +4946,6 @@ margin_top = 513.0
 margin_right = 844.0
 margin_bottom = 537.0
 rect_min_size = Vector2( 24, 24 )
-
-[node name="AdjustResearchCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-margin_left = 311.0
-margin_top = 541.0
-margin_right = 533.0
-margin_bottom = 570.0
-focus_mode = 0
-size_flags_horizontal = 6
-text = "Adjust research order"
-
-[node name="ResearchOrderCategory" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2"]
-visible = false
-margin_top = 447.0
-margin_right = 40.0
-margin_bottom = 487.0
-size_flags_horizontal = 2
-
-[node name="Spacing3" type="Control" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
-margin_top = -447.0
-margin_right = 24.0
-margin_bottom = -423.0
-rect_min_size = Vector2( 24, 24 )
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
-margin_top = 118.0
-margin_right = 835.0
-margin_bottom = 161.0
-custom_constants/separation = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Spacing" type="Control" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer"]
-margin_right = 24.0
-margin_bottom = 43.0
-rect_min_size = Vector2( 24, 43 )
-
-[node name="Label5" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer"]
-margin_top = 5.0
-margin_right = 64.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 64, 43 )
-valign = 1
-autowrap = true
-clip_text = true
-
-[node name="Label4" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer"]
-margin_top = 5.0
-margin_right = 100.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 100, 43 )
-text = "Research required"
-valign = 1
-autowrap = true
-clip_text = true
-
-[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer"]
-margin_top = 5.0
-margin_right = 130.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 130, 43 )
-text = "Estimated time"
-valign = 1
-autowrap = true
-clip_text = true
-
-[node name="Label2" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer"]
-margin_top = 5.0
-margin_right = 130.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 130, 43 )
-text = "Total estimated time"
-valign = 1
-autowrap = true
-clip_text = true
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
-margin_top = 25.0
-margin_right = 835.0
-margin_bottom = 89.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-scroll_vertical_enabled = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Researchables" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/ScrollContainer"]
-margin_right = 835.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Spacing2" type="Control" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
-margin_top = -447.0
-margin_right = 24.0
-margin_bottom = -423.0
-rect_min_size = Vector2( 24, 24 )
-
-[node name="Label3" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
-margin_top = 153.0
-margin_right = 835.0
-margin_bottom = 222.0
-text = "Calculate estimated time using:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory"]
-margin_top = 153.0
-margin_right = 589.0
-margin_bottom = 193.0
-
-[node name="Label4" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2"]
-margin_right = 835.0
-margin_bottom = 69.0
-text = "Warlocks"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="WarlockAmountSpinBox" type="SpinBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2"]
-margin_right = 74.0
-margin_bottom = 31.0
-max_value = 255.0
-value = 4.0
-rounded = true
-script = ExtResource( 81 )
-
-[node name="Label5" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2"]
-margin_right = 835.0
-margin_bottom = 69.0
-text = "Level"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="WarlockLevelSpinBox" type="SpinBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2"]
-margin_right = 74.0
-margin_bottom = 31.0
-min_value = 1.0
-max_value = 10.0
-value = 1.0
-rounded = true
-script = ExtResource( 81 )
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator"]
 margin_top = 775.0
@@ -8392,9 +8198,6 @@ margin_bottom = 40.0
 [connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/PurpleAIContainer/PurpleAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_PurpleAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/BlackAIContainer/BlackAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_BlackAICheckBox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/OrangeAIContainer/OrangeAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_OrangeAICheckBox_toggled"]
-[connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/AdjustResearchCheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_AdjustResearchCheckBox_toggled"]
-[connection signal="value_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockAmountSpinBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_WarlockAmountSpinBox_value_changed"]
-[connection signal="value_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/ResearchOrderCategory/HBoxContainer2/WarlockLevelSpinBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_WarlockLevelSpinBox_value_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/HBoxContainer4/SendToClipboardButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_SendToClipboardButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/HBoxContainer4/GenerateScriptButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_GenerateScriptButton_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ExportTmapDatDialog" to="Ui/UiSystem/TextureEditingWindow/TeditSaveDAT" method="_on_ExportTmapDatDialog_file_selected"]

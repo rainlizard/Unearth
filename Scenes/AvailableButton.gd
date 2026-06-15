@@ -44,9 +44,6 @@ func _on_button_pressed():
 		DISABLED: set_availability_state(ENABLED)
 		ENABLED: set_availability_state(DISABLED)
 	
-	# Adjust estimated times when things become researchable or unresearchable
-	oScriptGenerator.adjust_estimated_time()
-
 func set_availability_state(setVal):
 	availabilityState = setVal
 	

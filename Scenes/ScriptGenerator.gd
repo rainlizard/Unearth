@@ -1,6 +1,4 @@
 extends VBoxContainer
-onready var oWarlockLevelSpinBox = Nodelist.list["oWarlockLevelSpinBox"]
-onready var oWarlockAmountSpinBox = Nodelist.list["oWarlockAmountSpinBox"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
 onready var oRoomsAvailable = Nodelist.list["oRoomsAvailable"]
@@ -23,13 +21,9 @@ onready var oTrapsAvailable = Nodelist.list["oTrapsAvailable"]
 onready var oMagicAvailable = Nodelist.list["oMagicAvailable"]
 onready var oDoorsAvailable = Nodelist.list["oDoorsAvailable"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oGeneratorContainer = Nodelist.list["oGeneratorContainer"]
 onready var oScriptEditor = Nodelist.list["oScriptEditor"]
 onready var oConfirmGenerateScript = Nodelist.list["oConfirmGenerateScript"]
 onready var oKeeperFXScriptCheckBox = Nodelist.list["oKeeperFXScriptCheckBox"]
-onready var oResearchables = Nodelist.list["oResearchables"]
-onready var oResearchOrderCategory = Nodelist.list["oResearchOrderCategory"]
-onready var oAdjustResearchCheckBox = Nodelist.list["oAdjustResearchCheckBox"]
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oPurpleAICheckBox = Nodelist.list["oPurpleAICheckBox"]
 onready var oBlackAICheckBox = Nodelist.list["oBlackAICheckBox"]
@@ -119,54 +113,12 @@ var listRoom = [
 [Slabs.GRAVEYARD, "GRAVEYARD", 0],
 [Slabs.SCAVENGER_ROOM, "SCAVENGER", 0],
 ]
-enum {
-	IS_MAGIC
-	IS_ROOM
-}
-var listResearchOrder = [
-[IS_MAGIC, Things.SPELLBOOK.HAND         ,    250],
-[IS_MAGIC, Things.SPELLBOOK.SLAP         ,    500],
-[IS_MAGIC, Things.SPELLBOOK.POSSESS      ,    500],
-[IS_MAGIC, Things.SPELLBOOK.IMP          ,   1000],
-[IS_ROOM , Slabs.TREASURE_ROOM           ,   1000],
-[IS_ROOM , Slabs.LAIR                    ,   1000],
-[IS_ROOM , Slabs.HATCHERY                ,   1000],
-[IS_ROOM , Slabs.TRAINING_ROOM           ,   1000],
-[IS_ROOM , Slabs.LIBRARY                 ,   1000],
-[IS_MAGIC, Things.SPELLBOOK.SIGHT        ,   3800],
-[IS_ROOM , Slabs.BRIDGE                  ,   4600],
-[IS_MAGIC, Things.SPELLBOOK.SPEED        ,   5700],
-[IS_MAGIC, Things.SPELLBOOK.OBEY         ,   6000],
-[IS_ROOM , Slabs.GUARD_POST              ,   6700],
-[IS_MAGIC, Things.SPELLBOOK.CALL_TO_ARMS ,   7400],
-[IS_ROOM , Slabs.WORKSHOP                ,   9000],
-[IS_MAGIC, Things.SPELLBOOK.CONCEAL      ,   9400],
-[IS_ROOM , Slabs.BARRACKS                ,  12000],
-[IS_MAGIC, Things.SPELLBOOK.HOLD_AUDIENCE,  11000],
-[IS_ROOM , Slabs.PRISON                  ,  20000],
-[IS_MAGIC, Things.SPELLBOOK.CAVE_IN      ,  25000],
-[IS_ROOM , Slabs.TORTURE_CHAMBER         ,  20000],
-[IS_MAGIC, Things.SPELLBOOK.HEAL_CREATURE,  14000],
-[IS_ROOM , Slabs.TEMPLE                  ,  25000],
-[IS_MAGIC, Things.SPELLBOOK.LIGHTNING    ,  15000],
-[IS_ROOM , Slabs.GRAVEYARD               ,  25000],
-[IS_MAGIC, Things.SPELLBOOK.PROTECT      ,  15000],
-[IS_ROOM , Slabs.SCAVENGER_ROOM          ,  27500],
-[IS_MAGIC, Things.SPELLBOOK.CHICKEN      ,  20000],
-[IS_MAGIC, Things.SPELLBOOK.DISEASE      ,  20000],
-[IS_MAGIC, Things.SPELLBOOK.ARMAGEDDON   , 100000],
-[IS_MAGIC, Things.SPELLBOOK.DESTROY_WALLS, 750000],
-]
-
 func _ready():
 	initialize_rooms_available()
 	initialize_creatures_available()
 	initialize_traps_available()
 	initialize_magic_available()
 	initialize_doors_available()
-	
-	initialize_researchables()
-	adjust_estimated_time()
 	
 #	for i in 2:
 #		yield(get_tree(),'idle_frame')
@@ -185,6 +137,7 @@ func update_options_based_on_mapformat():
 	initialize_rooms_available()
 	initialize_creatures_available()
 	initialize_traps_available()
+	initialize_magic_available()
 	initialize_doors_available()
 
 
@@ -213,44 +166,6 @@ func has_roaming_computer_player():
 			return true
 	return false
 
-
-func initialize_researchables():
-	var labelNumber = 0
-	for i in listResearchOrder:
-		
-		var what = i[0]
-		var subtype = i[1]
-		var cost = i[2]
-		
-		var scene = preload('res://Scenes/ResearchableItem.tscn')
-		var idItem = scene.instance()
-		
-		if what == IS_MAGIC:
-			for checkAll in listMagic:
-				if checkAll[0] == subtype:
-					if Things.DATA_OBJECT.has(subtype):
-						var getName = Things.fetch_name(Things.TYPE.OBJECT, subtype)
-						idItem.hint_tooltip = getName + ' availability'
-						idItem.set_meta("variable",checkAll[1]) # function text
-						idItem.set_meta("ID", subtype)
-						idItem.type = idItem.MAGIC
-						idItem.set_magic_texture(subtype)
-					break
-		elif what == IS_ROOM:
-			for checkAll in listRoom:
-				if checkAll[0] == subtype:
-					idItem.hint_tooltip = Slabs.data[subtype][Slabs.NAME]
-					idItem.set_meta("variable",checkAll[1]) # function text
-					idItem.set_meta("ID", subtype)
-					idItem.type = idItem.ROOM
-					idItem.set_room_texture(subtype)
-					break
-		
-		labelNumber += 1
-		idItem.set_label_number(labelNumber)
-		idItem.set_research_required(cost)
-		
-		oResearchables.add_child(idItem)
 
 func initialize_rooms_available():
 	var currentStates = get_existing_states(oRoomsAvailable)
@@ -312,7 +227,9 @@ func initialize_traps_available(): # oTrapsAvailable
 		add_trapdoor_button(oTrapsAvailable, Things.TYPE.TRAP, subtype, currentStates)
 
 func initialize_magic_available(): # oMagicAvailable
-	for i in listMagic:
+	var currentStates = get_existing_states(oMagicAvailable)
+	clear_available_buttons(oMagicAvailable)
+	for i in get_magic_list():
 		var subtype = i[0]
 		var functionVariable = i[1]
 		var defaultAvailability = i[2]
@@ -324,7 +241,9 @@ func initialize_magic_available(): # oMagicAvailable
 		id.set_meta("ID", subtype)
 		id.get_node("%TextEditableLabel").editable = false
 		
-		if defaultAvailability == 1:
+		if currentStates.has(functionVariable):
+			id.set_availability_state(currentStates[functionVariable])
+		elif defaultAvailability == 1:
 			id.set_availability_state(id.OPTION_START)
 		else:
 			id.set_availability_state(id.OPTION_RESEARCH)
@@ -372,6 +291,28 @@ func get_creature_list():
 	return creatureList
 
 
+func get_magic_list():
+	var magicList = listMagic.duplicate(true)
+	if oCurrentFormat.selected == Constants.ClassicFormat:
+		return magicList
+	if oConfigFileManager.current_data.has("magic.cfg") == false:
+		return magicList
+	var magicData = oConfigFileManager.current_data["magic.cfg"]
+	var powerSections = magicData.keys()
+	powerSections.sort()
+	for section in powerSections:
+		if section.begins_with("power") == false:
+			continue
+		var powerName = magicData[section].get("Name", "")
+		var artifactName = magicData[section].get("Artifact", "")
+		if powerName == "" or artifactName == "" or artifactName == "NULL" or has_magic_function(magicList, powerName):
+			continue
+		var subtype = Things.find_subtype_by_name(Things.TYPE.OBJECT, artifactName)
+		if subtype != null and is_spellbook_object(subtype):
+			magicList.append([subtype, powerName, 0])
+	return magicList
+
+
 func has_room_function(roomList, functionVariable):
 	for room in roomList:
 		if room[1] == functionVariable:
@@ -384,6 +325,17 @@ func has_creature_subtype(creatureList, subtype):
 		if creature[0] == subtype:
 			return true
 	return false
+
+
+func has_magic_function(magicList, functionVariable):
+	for magic in magicList:
+		if magic[1] == functionVariable:
+			return true
+	return false
+
+
+func is_spellbook_object(subtype):
+	return Things.DATA_OBJECT.has(subtype) and Things.DATA_OBJECT[subtype][Things.GENRE] == "SPELLBOOK"
 
 
 func can_add_creature(creatureList, subtype):
@@ -593,24 +545,6 @@ func execute_gen():
 	
 	generateString = add_one_extra_line(generateString)
 	
-	if oAdjustResearchCheckBox.pressed == true:
-		for i in oResearchables.get_children():
-			if i.visible == false:
-				continue
-			var variableName = i.get_meta("variable")
-			var typeName = "ROOM"
-			var costName = str(i.get_research_required())
-			if i.type == i.MAGIC:
-				typeName = "MAGIC"
-			
-			var researchFunction = "RESEARCH"
-			if oKeeperFXScriptCheckBox.pressed == true:
-				researchFunction = "RESEARCH_ORDER"
-			
-			generateString += researchFunction + "(ALL_PLAYERS," + typeName + "," + variableName + ',' + costName + ')' + '\n'
-		
-		generateString = add_one_extra_line(generateString)
-	
 	if oWinConditionCheckBox.pressed == true:
 		generateString += "IF(PLAYER0,ALL_DUNGEONS_DESTROYED == 1)" + '\n'
 		generateString += "	WIN_GAME" + '\n'
@@ -626,43 +560,3 @@ func add_one_extra_line(generateString):
 
 func _on_KeeperFXScriptCheckBox_toggled(button_pressed):
 	pass # Replace with function body.
-
-
-func _on_WarlockAmountSpinBox_value_changed(value):
-	adjust_estimated_time()
-
-
-func _on_WarlockLevelSpinBox_value_changed(value):
-	adjust_estimated_time()
-
-
-func adjust_estimated_time():
-	var warlockAmount = oWarlockAmountSpinBox.value
-	var warlockLevel = oWarlockLevelSpinBox.value
-	var warlockResearchSpeed = 4
-	
-	#var calculated = floor((warlockResearchSpeed + (warlockResearchSpeed * warlockLevel * 0.35 )) * warlockAmount)
-	var speed = 0
-	for i in warlockAmount:
-		
-		speed += warlockResearchSpeed # level 1
-		for level in warlockLevel-1: # level 2-10
-			speed += floor(warlockResearchSpeed * 0.35)
-	
-	for id in get_tree().get_nodes_in_group("ResearchableItem"):
-		id.set_estimated_time(speed)
-	
-	# redo label number text
-	var markNumber = 0
-	for id in oResearchables.get_children():
-		if id.visible == true:
-			markNumber += 1
-			id.set_label_number(markNumber)
-
-
-func _on_AdjustResearchCheckBox_toggled(button_pressed):
-	oResearchOrderCategory.visible = button_pressed
-	yield(get_tree(),'idle_frame')
-	yield(get_tree(),'idle_frame')
-	if oResearchOrderCategory.visible == true:
-		oGeneratorContainer.scroll_vertical += 200
