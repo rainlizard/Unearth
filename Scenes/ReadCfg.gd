@@ -50,7 +50,7 @@ func read_dkcfg_file(file_path: String) -> Dictionary:
 		if key == "Name":
 			config[current_section][key] = value
 		elif is_rules_cfg and current_section == "sacrifices":
-			var items = value.split(" ")
+			var items = value.replace("\t", " ").split(" ")
 			if items.size() > 1:
 				var sacrifice_array = [key, items[0]]
 				for i in range(1, items.size()):
@@ -59,7 +59,7 @@ func read_dkcfg_file(file_path: String) -> Dictionary:
 						sacrifice_array.append(item)
 				config[current_section].append(sacrifice_array)
 		elif is_rules_cfg and current_section == "research":
-			var items = value.split(" ")
+			var items = value.replace("\t", " ").split(" ")
 			var filtered_items = []
 			for item in items:
 				var clean_item = item.strip_edges()
@@ -71,7 +71,7 @@ func read_dkcfg_file(file_path: String) -> Dictionary:
 				research_array.append(int(filtered_items[2]) if filtered_items[2].is_valid_integer() else filtered_items[2])
 				config[current_section].append(research_array)
 		else:
-			var items = value.split(" ")
+			var items = value.replace("\t", " ").split(" ")
 			if items.size() > 1:
 				var result = []
 				for item in items:

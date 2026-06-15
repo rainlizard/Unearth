@@ -17,6 +17,8 @@ var current_data = {}
 var default_data = {}
 var FXDATA_COMMENTS = {}
 var current_mappack_cfg_filename = ""
+var current_mappack_cfg_path = ""
+var current_mappack_cfg_data = {}
 
 func _ready():
 	clear_paths()
@@ -33,6 +35,8 @@ func clear_paths():
 	FXDATA_COMMENTS = {}
 	default_data = {}
 	current_mappack_cfg_filename = ""
+	current_mappack_cfg_path = ""
+	current_mappack_cfg_data = {}
 	emit_signal("config_file_status_changed")
 
 

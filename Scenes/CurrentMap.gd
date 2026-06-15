@@ -224,6 +224,8 @@ func get_tracked_config_file_paths(map_path = ""):
 	var paths = {}
 	if map_path == "":
 		map_path = path
+	if oConfigFileManager.current_mappack_cfg_path != "":
+		paths[oConfigFileManager.current_mappack_cfg_path] = true
 	for load_cfg_type in oConfigFileManager.paths_loaded.keys():
 		for file_path in oConfigFileManager.paths_loaded.get(load_cfg_type, []):
 			if file_path == "":

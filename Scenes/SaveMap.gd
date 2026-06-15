@@ -15,6 +15,8 @@ onready var oBuffers = Nodelist.list["oBuffers"]
 onready var oMenuButtonFile = Nodelist.list["oMenuButtonFile"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
+onready var oCfgLoader = Nodelist.list["oCfgLoader"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 
 var queueExit = false
 
@@ -63,6 +65,13 @@ func save_map(filePath):
 				oCurrentMap.currentFilePaths.erase(EXT)
 			elif should_process:
 				oCurrentMap.currentFilePaths.erase(EXT)
+
+	if oCurrentFormat.selected == Constants.KfxFormat:
+		var campaignFile = oCfgLoader.get_campaign_boss_file(filePath)
+		if oDataLof.write_campaign_map_size(filePath, campaignFile) == false:
+			writeFailure = true
+		else:
+			oCfgLoader.load_campaign_boss_file(filePath)
 
 	if writeFailure:
 		oMessage.big("Error", "Saving failed. Try saving to a different directory.")

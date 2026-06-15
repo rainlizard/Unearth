@@ -137,6 +137,7 @@ func open_map(filePath, show_opened_message = true, reset_camera = true):
 			compressedFiles.append(i[oCurrentMap.PATHSTRING])
 	
 	oCfgLoader.start(filePath)
+	oDataLof.use_campaign_map_size(filePath)
 	
 	if compressedFiles.empty() == true:
 		# Load files

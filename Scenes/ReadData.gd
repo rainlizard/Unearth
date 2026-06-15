@@ -42,7 +42,8 @@ func read_mapsize_from_lof(buffer):
 func read_lof(buffer):
 	buffer.seek(0)
 	# Be sure to default to 85x85 in case it can't be read.
-	oDataLof.use_size(85,85)
+	if oDataLof.uses_campaign_map_size() == false:
+		oDataLof.use_size(85,85)
 	oDataLof.KIND = "FREE" # Default to free if it can't be read. Goes ABOVE the check.
 	
 	value = buffer.get_string(buffer.get_size())
@@ -81,7 +82,7 @@ func read_lof(buffer):
 				oDataLof.DESCRIPTION = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "DATE":
 				oDataLof.DATE = lineParts[1].strip_edges()
-			if lineParts[0].strip_edges() == "MAPSIZE":
+			if lineParts[0].strip_edges() == "MAPSIZE" and oDataLof.uses_campaign_map_size() == false:
 				var sizeString = lineParts[1].strip_edges().split(" ")
 				if sizeString.size() == 2:
 					var x = sizeString[0].to_int()

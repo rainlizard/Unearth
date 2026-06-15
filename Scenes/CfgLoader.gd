@@ -327,21 +327,24 @@ func get_sprite(newName, animID):
 	if Graphics.sprite_id.has(newName): return newName
 	return null
 
-func load_campaign_boss_file(mapPath):
+func get_campaign_boss_file(mapPath):
 	var levelsDirPath = mapPath.get_base_dir().get_base_dir()
 	if oGame.is_map_root(levelsDirPath) == false:
-		oConfigFileManager.current_mappack_cfg_filename = ""
-		return {}
+		return {"path": "", "config": {}}
 	var list_of_main_campaign_files = Utils.get_filetype_in_directory(levelsDirPath, "cfg")
 	for campaignPath in list_of_main_campaign_files:
 		var cfgDictionary = oReadCfg.read_dkcfg_file(campaignPath)["config"]
 		var levelsLocation = cfgDictionary.get("common", {}).get("LEVELS_LOCATION", null)
 		if levelsLocation and oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower() == mapPath.get_base_dir().to_lower():
-			#print(oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower())
-			oConfigFileManager.current_mappack_cfg_filename = campaignPath.get_file()
-			return cfgDictionary
-	oConfigFileManager.current_mappack_cfg_filename = ""
-	return {}
+			return {"path": campaignPath, "config": cfgDictionary}
+	return {"path": "", "config": {}}
+
+func load_campaign_boss_file(mapPath):
+	var campaignFile = get_campaign_boss_file(mapPath)
+	oConfigFileManager.current_mappack_cfg_path = campaignFile["path"]
+	oConfigFileManager.current_mappack_cfg_data = campaignFile["config"]
+	oConfigFileManager.current_mappack_cfg_filename = campaignFile["path"].get_file()
+	return campaignFile["config"]
 
 func load_effects_data(file_path):
 	var cfg = ConfigFile.new()
