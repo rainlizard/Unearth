@@ -212,7 +212,8 @@ func get_packet_filename(mapPath):
 
 func menu_play_clicked(packetLoad = false):
 	if oEditor.mapHasBeenEdited == true:
-		oSaveMap.save_map(oCurrentMap.path)
+		if oSaveMap.save_map(oCurrentMap.path) == false:
+			return false
 	var commandLine = COMMAND_LINE
 	var launchMessage = "Launching..."
 	if packetLoad == true:

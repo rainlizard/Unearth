@@ -92,7 +92,7 @@ func start():
 func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
-func open_map(filePath):
+func open_map(filePath, show_opened_message = true, reset_camera = true):
 	
 	# a filePath of "" means make a blank map.
 	
@@ -172,7 +172,7 @@ func open_map(filePath):
 							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
 		
 		continue_load(map)
-		continue_load_openmap(map)
+		continue_load_openmap(map, show_opened_message, reset_camera)
 		print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
 		print("----------------------------------------------")
 	else:
@@ -240,7 +240,7 @@ func continue_load(map):
 		oInspector.deselect()
 
 
-func continue_load_openmap(map):
+func continue_load_openmap(map, show_opened_message = true, reset_camera = true):
 	oEditor.mapHasBeenEdited = false
 	oOwnerSelection.update_ownership_head_icons()
 	oScriptGenerator.update_options_based_on_mapformat()
@@ -255,7 +255,7 @@ func continue_load_openmap(map):
 	oCfgEditor.visible = false
 	
 	# Update config file paths in oCurrentMap
-	oCurrentMap.update_config_paths()
+	oCurrentMap.update_config_paths(true)
 	
 	# Clear local config file tracking when opening a new map
 	# This is now handled by CfgLoader calling oConfigFileManager.clear_paths()
@@ -263,7 +263,7 @@ func continue_load_openmap(map):
 	
 	if map == "":
 		oMessage.quick('New map')
-	else:
+	elif show_opened_message:
 		oMessage.quick('Opened map')
 	
 	# When opening a map, be sure that column 0 is empty. Otherwise apply a fix.
@@ -275,9 +275,10 @@ func continue_load_openmap(map):
 		oMessage.quick("Fixed column index 0, re-save your map.")
 	oDataClm.store_default_data()
 	
-	for i in 3:
-		yield(get_tree(),'idle_frame')
-	oCamera2D.reset_camera(M.xSize, M.ySize)
+	if reset_camera:
+		for i in 3:
+			yield(get_tree(),'idle_frame')
+		oCamera2D.reset_camera(M.xSize, M.ySize)
 
 
 func _on_ConfirmDecompression_confirmed():

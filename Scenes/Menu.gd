@@ -403,7 +403,9 @@ func play_button_pressed(packetLoad):
 		return
 	
 	playButtonLocked = true
-	oGame.menu_play_clicked(packetLoad)
+	if oGame.menu_play_clicked(packetLoad) == false:
+		playButtonLocked = false
+		return
 	
 	yield(get_tree().create_timer(2.5), "timeout")
 	playButtonLocked = false

@@ -66,17 +66,16 @@ func save_map(filePath):
 
 	if writeFailure:
 		oMessage.big("Error", "Saving failed. Try saving to a different directory.")
-		return
+		queueExit = false
+		return false
 
 	if oConfigFileManager.copy_current_map_files(oCurrentMap.path, filePath) == false:
 		oMessage.big("Error", "Saving failed while copying map config files. Try saving to a different directory.")
-		return
+		queueExit = false
+		return false
 
-	# Handle slabset.toml and columnset.toml files
-	save_toml_file("slabset.toml", map_filename_no_ext, map_base_dir)
-	save_toml_file("columnset.toml", map_filename_no_ext, map_base_dir)
-	
-	# Handle rules.cfg file
+	for file_type in ["slabset.toml", "columnset.toml"]:
+		save_toml_file(file_type, map_filename_no_ext, map_base_dir)
 	save_rules_cfg_file("rules.cfg", map_filename_no_ext, map_base_dir)
 
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
@@ -84,12 +83,14 @@ func save_map(filePath):
 		oMessage.big("Warning", "Your map has no script. In Map Settings, create a script then click 'Script Generator' to add basic functionality.")
 	oMessage.quick('Saved map')
 	oCurrentMap.set_path_and_title(filePath)
+	oCurrentMap.update_config_paths(true)
 	oEditor.mapHasBeenEdited = false
 	oScriptEditor.set_script_as_edited(false)
 	oDataClm.store_default_data()
 	oMapSettingsWindow.visible = false
 	if queueExit:
 		get_tree().quit()
+	return true
 
 
 func get_save_path(map_base_dir, map_filename_no_ext, EXT):
@@ -178,7 +179,7 @@ func delete_map_files(base_directory, map_name_no_ext, file_extension, kept_file
 
 
 func clicked_save_on_menu():
-	save_map(oCurrentMap.path)
+	return save_map(oCurrentMap.path)
 
 
 func save_toml_file(file_type, map_filename_no_ext, map_base_dir):
@@ -207,36 +208,18 @@ func save_toml_file(file_type, map_filename_no_ext, map_base_dir):
 		"slabset.toml":
 			var list_of_modified_slabs = Slabset.get_all_modified_slabs()
 			if list_of_modified_slabs.empty():
-				delete_toml_file_if_exists(file_path, file_type)
+				delete_config_file_if_exists(file_path, file_type)
 				return
 			export_success = Slabset.export_toml_slabset(file_path, list_of_modified_slabs)
 		"columnset.toml":
 			var column_diffs = Columnset.find_all_different_columns()
 			if column_diffs.empty():
-				delete_toml_file_if_exists(file_path, file_type)
+				delete_config_file_if_exists(file_path, file_type)
 				return
 			export_success = Columnset.export_toml_columnset(file_path, column_diffs)
 	
 	if export_success:
-		if config_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
-			if not oConfigFileManager.paths_loaded[config_type].has(file_path):
-				oConfigFileManager.paths_loaded[config_type].append(file_path)
-			oConfigFileManager.emit_signal("config_file_status_changed")
-		else:
-			oConfigFileManager.notify_file_created(file_path, file_type)
-		print("Saved " + file_type.get_basename() + " to: " + file_path)
-
-
-
-func delete_toml_file_if_exists(file_path, file_type):
-	if File.new().file_exists(file_path):
-		var global_path = ProjectSettings.globalize_path(file_path)
-		var err_trash = OS.move_to_trash(global_path)
-		if err_trash == OK:
-			print("Moved unmodified " + file_type + " file to trash: " + file_path.get_file())
-			oConfigFileManager.notify_file_deleted(file_path, file_type)
-		else:
-			print("Error trashing " + file_type + " file: " + file_path.get_file() + " Code: " + str(err_trash))
+		track_saved_config_file(file_path, file_type, config_type)
 
 
 func save_rules_cfg_file(file_type, map_filename_no_ext, map_base_dir):
@@ -254,17 +237,21 @@ func save_rules_cfg_file(file_type, map_filename_no_ext, map_base_dir):
 		file_path = map_base_dir.plus_file(map_filename_no_ext + "." + file_type)
 	
 	var export_success = export_rules_cfg(file_path)
-	
+
 	if export_success:
-		if config_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
-			if not oConfigFileManager.paths_loaded[config_type].has(file_path):
-				oConfigFileManager.paths_loaded[config_type].append(file_path)
-			oConfigFileManager.emit_signal("config_file_status_changed")
-		else:
-			oConfigFileManager.notify_file_created(file_path, file_type)
-		print("Saved " + file_type.get_basename() + " to: " + file_path)
+		track_saved_config_file(file_path, file_type, config_type)
 	else:
-		delete_rules_cfg_file_if_exists(file_path, file_type)
+		delete_config_file_if_exists(file_path, file_type)
+
+
+func track_saved_config_file(file_path, file_type, config_type):
+	if config_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
+		if not oConfigFileManager.paths_loaded[config_type].has(file_path):
+			oConfigFileManager.paths_loaded[config_type].append(file_path)
+		oConfigFileManager.emit_signal("config_file_status_changed")
+	else:
+		oConfigFileManager.notify_file_created(file_path, file_type)
+	print("Saved " + file_type.get_basename() + " to: " + file_path)
 
 
 func export_rules_cfg(file_path):
@@ -294,7 +281,7 @@ func export_rules_cfg(file_path):
 	
 	if not has_any_changes:
 		return false
-	
+
 	var file = File.new()
 	if file.open(file_path, File.WRITE) != OK:
 		return false
@@ -343,7 +330,7 @@ func export_rules_cfg(file_path):
 	return true
 
 
-func delete_rules_cfg_file_if_exists(file_path, file_type):
+func delete_config_file_if_exists(file_path, file_type):
 	if File.new().file_exists(file_path):
 		var global_path = ProjectSettings.globalize_path(file_path)
 		var err_trash = OS.move_to_trash(global_path)
