@@ -269,9 +269,10 @@ enum { # BitFlags
 	SKIP_OBJECTS = 2,
 }
 
-func export_toml_slabset(filePath):
+func export_toml_slabset(filePath, list_of_modified_slabs = null):
 	var CODETIME_START = OS.get_ticks_msec()
-	var list_of_modified_slabs = get_all_modified_slabs()
+	if list_of_modified_slabs == null:
+		list_of_modified_slabs = get_all_modified_slabs()
 
 	if list_of_modified_slabs.empty():
 		return false

@@ -205,9 +205,17 @@ func save_toml_file(file_type, map_filename_no_ext, map_base_dir):
 	var export_success = false
 	match file_type:
 		"slabset.toml":
-			export_success = Slabset.export_toml_slabset(file_path)
+			var list_of_modified_slabs = Slabset.get_all_modified_slabs()
+			if list_of_modified_slabs.empty():
+				delete_toml_file_if_exists(file_path, file_type)
+				return
+			export_success = Slabset.export_toml_slabset(file_path, list_of_modified_slabs)
 		"columnset.toml":
-			export_success = Columnset.export_toml_columnset(file_path)
+			var column_diffs = Columnset.find_all_different_columns()
+			if column_diffs.empty():
+				delete_toml_file_if_exists(file_path, file_type)
+				return
+			export_success = Columnset.export_toml_columnset(file_path, column_diffs)
 	
 	if export_success:
 		if config_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
@@ -217,8 +225,6 @@ func save_toml_file(file_type, map_filename_no_ext, map_base_dir):
 		else:
 			oConfigFileManager.notify_file_created(file_path, file_type)
 		print("Saved " + file_type.get_basename() + " to: " + file_path)
-	else:
-		delete_toml_file_if_exists(file_path, file_type)
 
 
 

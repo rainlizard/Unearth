@@ -43,17 +43,26 @@ func import_toml_columnset(filePath):
 			
 			utilized[columnIndex] = 0 #cfg.get_value(section, "Utilized", 0)
 			permanent[columnIndex] = 1 #cfg.get_value(section, "Permanent", 0)
-			lintel[columnIndex] = cfg.get_value(section, "Lintel", 0)
-			height[columnIndex] = cfg.get_value(section, "Height", 0)
-			solidMask[columnIndex] = cfg.get_value(section, "SolidMask", 0)
-			floorTexture[columnIndex] = cfg.get_value(section, "FloorTexture", 0)
-			orientation[columnIndex] = cfg.get_value(section, "Orientation", 0)
-			cubes[columnIndex] = cfg.get_value(section, "Cubes", [0,0,0,0, 0,0,0,0])
+			lintel[columnIndex] = get_columnset_value(cfg, section, "Lintel", 0)
+			height[columnIndex] = get_columnset_value(cfg, section, "Height", 0)
+			solidMask[columnIndex] = get_columnset_value(cfg, section, "SolidMask", 0)
+			floorTexture[columnIndex] = get_columnset_value(cfg, section, "FloorTexture", 0)
+			orientation[columnIndex] = get_columnset_value(cfg, section, "Orientation", 0)
+			cubes[columnIndex] = get_columnset_value(cfg, section, "Cubes", [0,0,0,0, 0,0,0,0])
 	
 	if is_from_fxdata:
 		highest_columnset_id_from_fxdata = max_column_id_found
 		store_default_data()
 	update_cube_lists()
+
+func get_columnset_value(cfg, section, key, default_value):
+	if cfg.has_section_key(section, key):
+		return cfg.get_value(section, key)
+	var key_lower = key.to_lower()
+	for section_key in cfg.get_section_keys(section):
+		if section_key.to_lower() == key_lower:
+			return cfg.get_value(section, section_key)
+	return default_value
 
 func load_default_original_columnset():
 	var filePath = Utils.case_insensitive_file(oGame.DK_DATA_DIRECTORY, "SLABS", "CLM")
@@ -101,8 +110,9 @@ func update_cube_lists():
 	update_list_of_columns_that_contain_rng_cubes()
 
 
-func export_toml_columnset(filePath):
-	var column_diffs = find_all_different_columns()
+func export_toml_columnset(filePath, column_diffs = null):
+	if column_diffs == null:
+		column_diffs = find_all_different_columns()
 	if column_diffs.size() == 0:
 		return false
 	
