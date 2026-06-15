@@ -8,6 +8,7 @@ var SCRIPT_ICON_SIZE_MAX = 8 setget script_icon_size_max
 var SCRIPT_ICON_SIZE_BASE = 0.5 setget script_icon_size_base
 
 var scnScriptHelperObject = preload('res://Scenes/ScriptHelperObject.tscn')
+var startQueued = false
 
 enum {
 	IS_TILE
@@ -58,7 +59,11 @@ var commandsWithPositions = [
 ]
 
 func start():
+	if startQueued == true:
+		return
+	startQueued = true
 	yield(get_tree(),'idle_frame') # This is necessary to fix an issue (with positions) when switching maps
+	startQueued = false
 	clear()
 	
 	var CODETIME_START = OS.get_ticks_msec()
@@ -172,10 +177,4 @@ func script_icon_size_base(setVal):
 func update_action_point_markers(actionPointInstance):
 	if is_instance_valid(actionPointInstance) == false:
 		return
-	
-	var newPosition = Vector2(actionPointInstance.position.x, actionPointInstance.position.y)
-	
-	for id in get_tree().get_nodes_in_group("ScriptHelperObject"):
-		var lineText = id.get_meta('line')
-		if str(actionPointInstance.pointNumber) in lineText:
-			id.position = newPosition
+	start()

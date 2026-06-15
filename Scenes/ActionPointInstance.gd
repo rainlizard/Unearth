@@ -43,6 +43,8 @@ func set_location_z(setVal): # This is actually unused for action points, but it
 func set_pointNumber(setval):
 	pointNumber = setval
 	$TextureRect/Number.text = str(pointNumber)
+	if is_inside_tree() and oScriptMarkers:
+		oScriptMarkers.start()
 
 func set_pointrange(setval):
 	pointRange = setval
