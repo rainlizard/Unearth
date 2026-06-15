@@ -246,6 +246,7 @@ func load_terrain_data(cfg): # 4ms
 					slabSection.get("Wibble", 0),
 					slabSection.get("WlbType", 0),
 					setIsOwnable,
+					slabSection.get("SlbID", 0),
 				]
 
 

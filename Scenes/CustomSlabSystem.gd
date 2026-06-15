@@ -43,6 +43,7 @@ func load_unearth_custom_slabs_file():
 			"bitmask": cfg.get_value(section, "bitmask", Slabs.BITMASK_FLOOR),
 			"is_solid": cfg.get_value(section, "is_solid", Slabs.FLOOR_SLAB),
 			"ownable": cfg.get_value(section, "ownable", Slabs.OWNABLE),
+			"edge_blend_group": cfg.get_value(section, "edge_blend_group", cfg.get_value(section, "slb_id", int(section.trim_prefix("slab")))),
 		}
 		
 		var retrieve_value
@@ -75,6 +76,7 @@ func add_custom_slab(slab_dict):
 		slab_dict["wibble_type"],
 		slab_dict["liquid_type"],
 		slab_dict["ownable"],
+		slab_dict["edge_blend_group"],
 	]
 	cfg.set_value(section,"name", slab_dict["name"])
 	cfg.set_value(section,"recognized_as", slab_dict["recognized_as"])
@@ -84,6 +86,7 @@ func add_custom_slab(slab_dict):
 	cfg.set_value(section,"bitmask", slab_dict["bitmask"])
 	cfg.set_value(section,"is_solid", slab_dict["is_solid"])
 	cfg.set_value(section,"ownable", slab_dict["ownable"])
+	cfg.set_value(section,"edge_blend_group", slab_dict["edge_blend_group"])
 	
 #	if slab_dict.has("door_thing") and slab_dict.has("door_orientation"):
 #		cfg.set_value(section,"door_thing", slab_dict["door_thing"])

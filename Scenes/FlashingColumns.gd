@@ -146,12 +146,11 @@ func generate_columnset_texture():
 		for y in M.ySize:
 			for x in M.xSize:
 				var slabID = oDataSlab.get_cell(x, y)
-				var tilePos = Vector2(x, y)
-				var ownership = oDataOwnership.get_cellv_ownership(tilePos)
+				var ownership = oDataOwnership.get_cellv_ownership(Vector2(x, y))
 				var surrID = oSlabPlacement.get_surrounding_slabIDs(x, y)
 				var surrOwner = oSlabPlacement.get_surrounding_ownership(x, y)
 				var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
-				var bitmask = oSlabsetMapRegenerator.get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner, tilePos)
+				var bitmask = oSlabsetMapRegenerator.get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner)
 				var slabsetIndexGroup = oSlabPlacement.make_slab_for_tile(slabID, bitmask, x, y)
 				if bitmaskType == Slabs.BITMASK_REINFORCED:
 					oSlabPlacement.modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slabID)
@@ -192,12 +191,11 @@ func generate_variation_texture():
 			for x in M.xSize:
 				var slabID = oDataSlab.get_cell(x, y)
 				if Slabs.data.has(slabID) and slabID < 1000:
-					var tilePos = Vector2(x, y)
-					var ownership = oDataOwnership.get_cellv_ownership(tilePos)
+					var ownership = oDataOwnership.get_cellv_ownership(Vector2(x, y))
 					var surrID = oSlabPlacement.get_surrounding_slabIDs(x, y)
 					var surrOwner = oSlabPlacement.get_surrounding_ownership(x, y)
 					var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
-					var bitmask = oSlabsetMapRegenerator.get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner, tilePos)
+					var bitmask = oSlabsetMapRegenerator.get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner)
 					var slabsetIndexGroup = oSlabPlacement.make_slab_for_tile(slabID, bitmask, x, y)
 					if bitmaskType == Slabs.BITMASK_REINFORCED:
 						oSlabPlacement.modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slabID)

@@ -113,6 +113,7 @@ func _on_AddCustomSlabButton_pressed():
 		"bitmask": oSlabBitmaskOptionButton.get_selected_id(),
 		"is_solid": bool(oSlabIsSolidOptionButton.get_selected_id()),
 		"ownable": bool(oSlabOwnableOptionButton.get_selected_id()),
+		"edge_blend_group": newID,
 	}
 	if oSlabBitmaskOptionButton.get_selected_id() == Slabs.BITMASK_DOOR1:
 		slab_dict["door_thing"] = int(oCustomDoorThing.value)

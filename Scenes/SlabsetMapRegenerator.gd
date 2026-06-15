@@ -38,7 +38,7 @@ func calculate_cursor_data():
 	var surrOwner = oSlabPlacement.get_surrounding_ownership(tilePos.x, tilePos.y)
 	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
 	
-	var bitmask = get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner, tilePos)
+	var bitmask = get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner)
 	var slabsetIndexGroup = oSlabPlacement.make_slab_for_tile(slabID, bitmask, tilePos.x, tilePos.y)
 	
 	if bitmaskType == Slabs.BITMASK_REINFORCED:
@@ -59,12 +59,12 @@ func calculate_cursor_data():
 		"variationDescription": slabVariation
 	}
 
-func get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner, tilePos):
+func get_bitmask(bitmaskType, slabID, ownership, surrID, surrOwner):
 	match bitmaskType:
-		Slabs.BITMASK_BLOCK: return oSlabPlacement.get_tall_bitmask(surrID)
+		Slabs.BITMASK_BLOCK: return oSlabPlacement.get_tall_bitmask(slabID, ownership, surrID, surrOwner)
 		Slabs.BITMASK_FLOOR: return oSlabPlacement.get_general_bitmask(slabID, ownership, surrID, surrOwner)
 		Slabs.BITMASK_CLAIMED: return oSlabPlacement.get_claimed_bitmask(slabID, ownership, surrID, surrOwner)
-		Slabs.BITMASK_REINFORCED: return oSlabPlacement.get_wall_bitmask(tilePos.x, tilePos.y, surrID, ownership)
+		Slabs.BITMASK_REINFORCED: return oSlabPlacement.get_wall_bitmask(slabID, ownership, surrID, surrOwner)
 		_: return 1
 
 func get_variation_description(variation, bitmaskType, surrID):
