@@ -68,6 +68,10 @@ func save_map(filePath):
 		oMessage.big("Error", "Saving failed. Try saving to a different directory.")
 		return
 
+	if oConfigFileManager.copy_current_map_files(oCurrentMap.path, filePath) == false:
+		oMessage.big("Error", "Saving failed while copying map config files. Try saving to a different directory.")
+		return
+
 	# Handle slabset.toml and columnset.toml files
 	save_toml_file("slabset.toml", map_filename_no_ext, map_base_dir)
 	save_toml_file("columnset.toml", map_filename_no_ext, map_base_dir)

@@ -122,16 +122,26 @@ func get_config_directories(mapPath, campaign_cfg_data):
 
 
 func build_list_of_files_to_load(config_dirs, mapPath):
-	var arr = []
-	var fxdata_cfg_files = Utils.get_filetype_in_directory(config_dirs[oConfigFileManager.LOAD_CFG_FXDATA], "cfg")
-	var fxdata_toml_files = Utils.get_filetype_in_directory(config_dirs[oConfigFileManager.LOAD_CFG_FXDATA], "toml")
-	for i in fxdata_cfg_files:
-		arr.append(i.get_file())
-	for i in fxdata_toml_files:
-		arr.append(i.get_file())
+	var files = {}
+	for extension in ["cfg", "toml"]:
+		for path in Utils.get_filetype_in_directory(config_dirs[oConfigFileManager.LOAD_CFG_FXDATA], extension):
+			files[path.get_file()] = true
+		add_map_file_suffixes(files, config_dirs[oConfigFileManager.LOAD_CFG_CURRENT_MAP], extension)
+	for file_name in get_all_texture_map_files(config_dirs, mapPath):
+		files[file_name] = true
+	var arr = files.keys()
 	arr.sort()
-	arr += get_all_texture_map_files(config_dirs, mapPath)
 	return arr
+
+func add_map_file_suffixes(files, current_map_path, extension):
+	if current_map_path == "":
+		return
+	var map_prefix = current_map_path.get_file() + "."
+	var map_prefix_lower = map_prefix.to_lower()
+	for path in Utils.get_filetype_in_directory(current_map_path.get_base_dir(), extension):
+		var file_name = path.get_file()
+		if file_name.to_lower().begins_with(map_prefix_lower):
+			files[file_name.substr(map_prefix.length())] = true
 
 func get_all_texture_map_files(config_dirs, mapPath):
 	var merged_files = {} # Use a dictionary so duplicate filenames will be merged

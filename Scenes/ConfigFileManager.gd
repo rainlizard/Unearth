@@ -1,6 +1,7 @@
 extends Node
 
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
+onready var oMessage = Nodelist.list["oMessage"]
 
 signal config_file_status_changed()
 
@@ -33,6 +34,39 @@ func clear_paths():
 	default_data = {}
 	current_mappack_cfg_filename = ""
 	emit_signal("config_file_status_changed")
+
+
+func copy_current_map_files(source_map_path, target_map_path):
+	if source_map_path == "" or source_map_path.get_basename().to_upper() == target_map_path.get_basename().to_upper():
+		return true
+	var current_map_paths = paths_loaded.get(LOAD_CFG_CURRENT_MAP, [])
+	var updated_map_paths = current_map_paths.duplicate()
+	var source_prefix = source_map_path.get_file().get_basename() + "."
+	var target_prefix = target_map_path.get_file().get_basename() + "."
+	var dir = Directory.new()
+	var copied_any = false
+	var copy_failed = false
+	for i in current_map_paths.size():
+		var file_path = current_map_paths[i]
+		var file_name = file_path.get_file()
+		if file_name.to_upper().begins_with(source_prefix.to_upper()) == false:
+			continue
+		var target_path = target_map_path.get_base_dir().plus_file(target_prefix + file_name.substr(source_prefix.length()))
+		var err = dir.copy(file_path, target_path)
+		if err != OK:
+			oMessage.quick("Error copying map file: " + file_name)
+			print("Error copying map file: " + file_path + " Code: " + str(err))
+			copy_failed = true
+			continue
+		updated_map_paths[i] = target_path
+		copied_any = true
+		print("Copied map file: " + target_path.get_file())
+	if copy_failed == true:
+		return false
+	if copied_any == true:
+		paths_loaded[LOAD_CFG_CURRENT_MAP] = updated_map_paths
+		emit_signal("config_file_status_changed")
+	return true
 
 
 func store_default_data():
