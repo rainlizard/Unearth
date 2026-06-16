@@ -20,7 +20,7 @@ func read_dkcfg_file(file_path: String) -> Dictionary:
 	var lines = content.split("\n")
 	var pending_comments = []
 	var getFilename = file_path.get_file()
-	var is_rules_cfg = "rules.cfg" in getFilename
+	var is_rules_cfg = getFilename.to_lower().ends_with("rules.cfg")
 	
 	for line in lines:
 		var stripped = line.strip_edges()
@@ -47,9 +47,10 @@ func read_dkcfg_file(file_path: String) -> Dictionary:
 		var key = stripped.substr(0, delimiter_pos).strip_edges()
 		var value = stripped.substr(delimiter_pos + 1).strip_edges()
 		
-		if key == "Name":
-			config[current_section][key] = value
-		elif is_rules_cfg and current_section == "sacrifices":
+		if not config.has(current_section):
+			continue
+		
+		if is_rules_cfg and current_section == "sacrifices":
 			var items = value.replace("\t", " ").split(" ")
 			if items.size() > 1:
 				var sacrifice_array = [key, items[0]]
@@ -70,6 +71,8 @@ func read_dkcfg_file(file_path: String) -> Dictionary:
 				var research_array = [filtered_items[0], filtered_items[1]]
 				research_array.append(int(filtered_items[2]) if filtered_items[2].is_valid_integer() else filtered_items[2])
 				config[current_section].append(research_array)
+		elif key == "Name":
+			config[current_section][key] = value
 		else:
 			var items = value.replace("\t", " ").split(" ")
 			if items.size() > 1:
