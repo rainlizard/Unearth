@@ -17,6 +17,7 @@ onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oDataLof = Nodelist.list["oDataLof"]
+onready var oMapBackups = Nodelist.list["oMapBackups"]
 
 var queueExit = false
 
@@ -29,6 +30,11 @@ func save_map(filePath):
 	var map_filename_no_ext = map_basename_with_ext.get_basename()
 	var map_base_dir = filePath.get_base_dir()
 	var SAVETIME_START = OS.get_ticks_msec()
+
+	if oMapBackups.backup_existing_map_files(filePath) == false:
+		oMessage.big("Error", "Saving cancelled because the existing map files could not be backed up. Try moving Unearth to a writable directory.")
+		queueExit = false
+		return false
 	
 	var script_definitions = [
 		{"key": "TXT", "enabled": oCurrentMap.DKScript_enabled, "ext": ".txt", "display": "DKScript"},
@@ -78,7 +84,7 @@ func save_map(filePath):
 		queueExit = false
 		return false
 
-	if oConfigFileManager.copy_current_map_files(oCurrentMap.path, filePath) == false:
+	if oCurrentMap.loaded_from_backup == false and oConfigFileManager.copy_current_map_files(oCurrentMap.path, filePath) == false:
 		oMessage.big("Error", "Saving failed while copying map config files. Try saving to a different directory.")
 		queueExit = false
 		return false
@@ -92,6 +98,7 @@ func save_map(filePath):
 		oMessage.big("Warning", "Your map has no script. In Map Settings, create a script then click 'Script Generator' to add basic functionality.")
 	oMessage.quick('Saved map')
 	oCurrentMap.set_path_and_title(filePath)
+	oCurrentMap.loaded_from_backup = false
 	oCurrentMap.update_config_paths(true)
 	oEditor.mapHasBeenEdited = false
 	oScriptEditor.set_script_as_edited(false)
@@ -197,10 +204,10 @@ func save_toml_file(file_type, map_filename_no_ext, map_base_dir):
 	
 	# Get the current file path from oCurrentMap
 	var existing_file_path = ""
-	match file_type:
-		"slabset.toml":
+	if oCurrentMap.loaded_from_backup == false:
+		if file_type == "slabset.toml":
 			existing_file_path = oCurrentMap.existing_slabset_file
-		"columnset.toml":
+		elif file_type == "columnset.toml":
 			existing_file_path = oCurrentMap.existing_columnset_file
 	
 	if existing_file_path != "":
@@ -236,7 +243,9 @@ func save_rules_cfg_file(file_type, map_filename_no_ext, map_base_dir):
 	var config_type = oConfigFileManager.LOAD_CFG_CURRENT_MAP
 	
 	# Get the current file path from oCurrentMap
-	var existing_file_path = oCurrentMap.existing_rules_file
+	var existing_file_path = ""
+	if oCurrentMap.loaded_from_backup == false:
+		existing_file_path = oCurrentMap.existing_rules_file
 	
 	if existing_file_path != "":
 		file_path = existing_file_path

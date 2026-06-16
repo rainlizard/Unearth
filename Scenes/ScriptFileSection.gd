@@ -102,6 +102,8 @@ func resolve_map_data(keyExtensionUppercase: String) -> String:
 			oMessage.quick("Corrected script path case: " + precisePath.get_file())
 		record_script_entry(precisePath, keyExtensionUppercase, true)
 		return precisePath
+	if oCurrentMap.loaded_from_backup == true:
+		return ""
 	oMessage.quick("File in map data not found on disk: " + pathFromData.get_file())
 	record_script_entry(pathFromData, keyExtensionUppercase, false)
 	return ""

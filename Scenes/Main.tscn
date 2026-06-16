@@ -1,4 +1,4 @@
-[gd_scene load_steps=204 format=2]
+[gd_scene load_steps=205 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -187,6 +187,7 @@
 [ext_resource path="res://Scenes/ReadCfg.gd" type="Script" id=188]
 [ext_resource path="res://Scenes/ConfigFileManager.gd" type="Script" id=279]
 [ext_resource path="res://Scenes/ConfirmDecompression.gd" type="Script" id=280]
+[ext_resource path="res://Scenes/MapBackups.gd" type="Script" id=281]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -2195,6 +2196,58 @@ margin_right = 339.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 109, 0 )
 text = "Cancel"
+
+[node name="MapBackups" type="WindowDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = 943.0
+margin_top = -1160.0
+margin_right = 1843.0
+margin_bottom = -660.0
+rect_min_size = Vector2( 900, 500 )
+window_title = "Backups"
+resizable = true
+script = ExtResource( 281 )
+
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/MapBackups"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapBackups/MarginContainer"]
+margin_right = 880.0
+margin_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BackupList" type="ItemList" parent="Ui/UiSystem/MapBackups/MarginContainer/VBoxContainer"]
+margin_right = 880.0
+margin_bottom = 449.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+allow_reselect = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/MapBackups/MarginContainer/VBoxContainer"]
+margin_top = 453.0
+margin_right = 880.0
+margin_bottom = 480.0
+alignment = 2
+
+[node name="LoadBackupButton" type="Button" parent="Ui/UiSystem/MapBackups/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 658.0
+margin_right = 767.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 109, 0 )
+text = "Load"
+
+[node name="CloseBackupButton" type="Button" parent="Ui/UiSystem/MapBackups/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 771.0
+margin_right = 880.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 109, 0 )
+text = "Close"
 
 [node name="PreferencesWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -8137,6 +8190,10 @@ margin_bottom = 40.0
 [connection signal="pressed" from="Ui/UiSystem/ConfirmOpenWhichScript/VBoxContainer/HBoxContainer/ButtonConfirmOpenDKScript" to="Ui/UiSystem/ConfirmOpenWhichScript" method="_on_ButtonConfirmOpenDKScript_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmOpenWhichScript/VBoxContainer/HBoxContainer/ButtonConfirmOpenLuaScript" to="Ui/UiSystem/ConfirmOpenWhichScript" method="_on_ButtonConfirmOpenLuaScript_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ConfirmOpenWhichScript/VBoxContainer/HBoxContainer/ButtonConfirmCancelOpenScript" to="Ui/UiSystem/ConfirmOpenWhichScript" method="_on_ButtonConfirmCancelOpenScript_pressed"]
+[connection signal="visibility_changed" from="Ui/UiSystem/MapBackups" to="Ui/UiSystem/MapBackups" method="_on_visibility_changed"]
+[connection signal="item_activated" from="Ui/UiSystem/MapBackups/MarginContainer/VBoxContainer/BackupList" to="Ui/UiSystem/MapBackups" method="_on_BackupList_item_activated"]
+[connection signal="pressed" from="Ui/UiSystem/MapBackups/MarginContainer/VBoxContainer/HBoxContainer/LoadBackupButton" to="Ui/UiSystem/MapBackups" method="_on_LoadBackup_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/MapBackups/MarginContainer/VBoxContainer/HBoxContainer/CloseBackupButton" to="Ui/UiSystem/MapBackups" method="_on_CloseBackup_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/PreferencesWindow" to="Ui/UiSystem/PreferencesWindow" method="_on_SettingsWindow_about_to_show"]
 [connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/PreferencesWindow" method="_on_SetDirButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer/CmdLineDkCommands" to="Game" method="_on_CmdLineDkCommands_text_changed"]

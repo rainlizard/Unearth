@@ -45,6 +45,7 @@ onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
 onready var oConfirmOpenWhichScript = Nodelist.list["oConfirmOpenWhichScript"]
 onready var oChangelogWindow = Nodelist.list["oChangelogWindow"]
 onready var oCfgEditor = Nodelist.list["oCfgEditor"]
+onready var oMapBackups = Nodelist.list["oMapBackups"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -85,6 +86,7 @@ func add_file_menu_items():
 	file_popup.add_item("Browse maps", 1)
 	file_popup.add_item("Open map", 2)
 	file_popup.add_item("Open recent", 3)
+	file_popup.add_item("Backups", 12)
 	file_popup.add_separator()
 	file_popup.add_item("Save map", 4)
 	file_popup.add_item("Save map as", 5)
@@ -127,6 +129,7 @@ func _on_RecentSubmenu_Pressed(pressedID):
 
 func add_recent(filePath):
 	if filePath == "": return
+	if oMapBackups.is_backup_path(filePath) == true: return
 	var recentString = filePath
 	
 	var findExisting = recentlyOpened.find(recentString)
@@ -172,7 +175,7 @@ func populate_recently_opened():
 	for i in range(recentlyOpened.size() - 1, -1, -1):
 		var mapPathKey = recentlyOpened[i]
 		var actualSlbFile = Utils.case_insensitive_file(mapPathKey.get_base_dir(), mapPathKey.get_file(), ".slb")
-		if actualSlbFile == "":
+		if actualSlbFile == "" or oMapBackups.is_backup_path(mapPathKey) == true:
 			recentlyOpened.remove(i)
 	for i in recentlyOpened.size():
 		var mapPathKey = recentlyOpened[i]
@@ -196,11 +199,11 @@ func populate_recently_opened():
 func _process(delta):
 	constantly_monitor_play_button_state()
 	
+	var save_map_disabled = oCurrentMap.path == "" or oCurrentMap.loaded_from_backup == true
+	oMenuButtonFile.get_popup().set_item_disabled(oMenuButtonFile.get_popup().get_item_index(4), save_map_disabled)
+	oMenuButtonFile.get_popup().set_item_disabled(oMenuButtonFile.get_popup().get_item_index(5), false)
 	if oCurrentMap.path == "": # Certain features hould only be available to maps that exist as files - maps that have already been "Saved as".
-		oMenuButtonFile.get_popup().set_item_disabled(oMenuButtonFile.get_popup().get_item_index(4),true) # Disable "Save map"
 		oMenuPlayButton.disabled = true # Can only play a map that has been "Saved as"
-	else:
-		oMenuButtonFile.get_popup().set_item_disabled(oMenuButtonFile.get_popup().get_item_index(4),false) # Enable "Save map"
 	
 	# Fix button being stretched
 	if visible == true and fixMenuExpansion != oEditor.mapHasBeenEdited:
@@ -209,6 +212,12 @@ func _process(delta):
 		show()
 
 func constantly_monitor_play_button_state():
+	if oCurrentMap.loaded_from_backup == true:
+		oMenuPlayButton.disabled = true
+		oMenuPlayButton.hint_tooltip = "Loaded backups must be saved as a map before playing."
+		oMenuPlayButton.text = "Save & Play"
+		return
+
 	var mapPath = oCurrentMap.path.to_upper().replace('\\','/')
 	
 	var currentDirectory = mapPath.get_base_dir()
@@ -251,6 +260,7 @@ func _on_FileSubmenu_Pressed(pressedID):
 		9: oPreferencesWindow._on_ButtonSettings_pressed()
 		10: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 		11: OS.shell_open("https://keeperfx.net/workshop") # Workshop
+		12: oMapBackups.open_window()
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:

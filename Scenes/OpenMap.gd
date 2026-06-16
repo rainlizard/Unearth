@@ -53,6 +53,7 @@ onready var oTMapNames = Nodelist.list["oTMapNames"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oCfgEditor = Nodelist.list["oCfgEditor"]
+onready var oMapBackups = Nodelist.list["oMapBackups"]
 
 
 var TOTAL_TIME_TO_OPEN_MAP
@@ -92,12 +93,15 @@ func start():
 func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
-func open_map(filePath, show_opened_message = true, reset_camera = true):
+func open_map(filePath, show_opened_message = true, reset_camera = true, loaded_from_backup = false):
 	
 	# a filePath of "" means make a blank map.
 	
 	# This will replace \ with /, just for the sake of fixing ugliness
 	filePath = filePath.replace("\\", "/")
+	if loaded_from_backup == false and oMapBackups.is_backup_path(filePath) == true:
+		loaded_from_backup = true
+	oCurrentMap.loaded_from_backup = loaded_from_backup
 	
 	# Prevent opening any maps under any circumstance if you haven't set the dk exe yet. (Fix to launching via file association)
 	if oGame.EXECUTABLE_PATH == "":
@@ -228,8 +232,6 @@ func continue_load(map):
 	# finalize_map_opening
 	oEditor.set_view_2d()
 
-	oMenu.add_recent(map)
-	
 	# Update for Undo
 	
 	oDisplaySlxNumbers.update()

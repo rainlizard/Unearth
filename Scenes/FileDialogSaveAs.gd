@@ -35,7 +35,7 @@ func line_edit_focus_exited():
 func _on_FileDialogSaveAs_about_to_show():
 	
 	var path
-	if oCurrentMap.path == "":
+	if oCurrentMap.path == "" or oCurrentMap.loaded_from_backup == true:
 		var personalFolder = oGame.DK_LEVELS_DIRECTORY.plus_file("personal")
 		if Directory.new().dir_exists(personalFolder) and oGame.keeperfx_is_installed() == true:
 			path = personalFolder # KeeperFX has personal folder

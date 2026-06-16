@@ -34,6 +34,7 @@ onready var oBuffers = Nodelist.list["oBuffers"]
 
 var path = ""
 var currentFilePaths = {} # [0] = pathString,  [1] = modified date
+var loaded_from_backup = false
 var DKScript_enabled = false
 var LuaScript_enabled = false
 var configFileModifiedTimes = {}
@@ -68,7 +69,8 @@ func _on_ButtonNewMap_pressed():
 func set_path_and_title(newpath):
 	if newpath != "":
 		OS.set_window_title(newpath + ' - Unearth v'+Version.full)
-		oMenu.add_recent(newpath) # Add saved maps to the recent menu
+		if loaded_from_backup == false:
+			oMenu.add_recent(newpath) # Add saved maps to the recent menu
 	else:
 		OS.set_window_title('Unearth v'+Version.full)
 	path = newpath
@@ -101,6 +103,8 @@ func clear_map(): # Remember, "Undo" calls this
 
 func _notification(what: int):
 	if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+		if loaded_from_backup == true:
+			return
 		check_script_file_modifications()
 		warn_if_external_files_changed()
 

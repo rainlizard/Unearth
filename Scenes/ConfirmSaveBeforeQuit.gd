@@ -9,7 +9,7 @@ func _ready():
 func _on_ButtonConfirmExitSave_pressed():
 	# Save or save as based on whether there is a path
 	oSaveMap.queueExit = true
-	if oCurrentMap.path == "":
+	if oCurrentMap.path == "" or oCurrentMap.loaded_from_backup == true:
 		Utils.popup_centered(oFileDialogSaveAs)
 	else:
 		oSaveMap.clicked_save_on_menu()

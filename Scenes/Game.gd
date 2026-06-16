@@ -211,6 +211,9 @@ func get_packet_filename(mapPath):
 	return "unearth_auto_packet.pck"
 
 func menu_play_clicked(packetLoad = false):
+	if oCurrentMap.loaded_from_backup == true:
+		oMessage.quick("Use Save As before playing a loaded backup.")
+		return false
 	if oEditor.mapHasBeenEdited == true:
 		if oSaveMap.save_map(oCurrentMap.path) == false:
 			return false
