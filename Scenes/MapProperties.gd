@@ -100,7 +100,9 @@ func _on_MapProperties_visibility_changed():
 			oEnsignPositionX.text = ENSIGN_XY[0]
 			oEnsignPositionY.text = ENSIGN_XY[1]
 		
+		oPlayersSpinBox.set_block_signals(true)
 		oPlayersSpinBox.value = int(oDataLof.PLAYERS)
+		oPlayersSpinBox.set_block_signals(false)
 		oSpeechLineEdit.text = oDataLof.SPEECH
 		oLandViewLineEdit.text = oDataLof.LAND_VIEW
 		oAuthorLineEdit.text = oDataLof.AUTHOR
