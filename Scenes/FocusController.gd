@@ -2,6 +2,13 @@ extends Control
 
 #func _unhandled_input(event):
 func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		var current_focus_control = get_focus_owner()
+		if is_instance_valid(current_focus_control) and current_focus_control is LineEdit:
+			current_focus_control.release_focus()
+			get_tree().set_input_as_handled()
+			return
+	
 	# Prevents ALT+ENTER from pressing a button
 	if Input.is_key_pressed(KEY_ALT):
 		var current_focus_control = get_focus_owner()
