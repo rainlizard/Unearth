@@ -9,6 +9,7 @@ var SCRIPT_ICON_SIZE_BASE = 0.5 setget script_icon_size_base
 
 var scnScriptHelperObject = preload('res://Scenes/ScriptHelperObject.tscn')
 var startQueued = false
+var scriptHelperObjects = []
 
 enum {
 	IS_TILE
@@ -71,6 +72,7 @@ func start():
 	clear()
 	
 	var CODETIME_START = OS.get_ticks_msec()
+	var markersByPosition = {}
 	var scriptLines = oDataScript.data.split('\n',true)
 	for lineNumber in scriptLines.size():
 		var line = scriptLines[lineNumber]
@@ -84,16 +86,17 @@ func start():
 
 		var markerPosition = get_marker_position(parsedCommand["arguments"], commandAttributes)
 		if markerPosition != null:
-			create_helper_object(markerPosition.x, markerPosition.y, line, lineNumber+1)
+			create_helper_object(markerPosition.x, markerPosition.y, line, lineNumber+1, markersByPosition)
 	
 	print('Script helpers created ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func clear():
 	oCustomTooltip.set_text("") #Fixes an issue when deleting an action point while mouse is hovering a script helper
 	
-	for id in get_tree().get_nodes_in_group("ScriptHelperObject"):
-		id.position = Vector2(-100,-100)
-		id.queue_free()
+	while scriptHelperObjects.empty() == false:
+		var id = scriptHelperObjects.pop_back()
+		if is_instance_valid(id):
+			id.free()
 
 func get_command_from_line(line):
 	var trimmedLine = line.strip_edges(true, false)
@@ -203,12 +206,14 @@ func get_integer_argument(argumentsArray, argNumber):
 		return null
 	return int(argument)
 
-func create_helper_object(x,y,line,lineNumber):
+func create_helper_object(x,y,line,lineNumber,markersByPosition):
 	
 	var newString = 'Line ' + str(lineNumber) + ': ' + line
+	var positionKey = str(x) + "," + str(y)
 	
 	# Merge with existing if there's already a ScriptHelperObject at that position
-	for id in get_tree().get_nodes_in_group("ScriptHelperObject"):
+	if markersByPosition.has(positionKey):
+		var id = markersByPosition[positionKey]
 		if id.position == Vector2(x,y):
 			var constructString = id.get_meta('line') + '\n' + newString
 			id.set_meta('line', constructString)
@@ -219,14 +224,18 @@ func create_helper_object(x,y,line,lineNumber):
 	id.position = Vector2(x, y)
 	id.set_meta('line', newString)
 	add_child(id)
+	scriptHelperObjects.append(id)
+	markersByPosition[positionKey] = id
 
 func script_icon_size_max(setVal):
-	for id in get_tree().get_nodes_in_group("ScriptHelperObject"):
-		id._on_zoom_level_changed(oCamera2D.zoom)
+	for id in scriptHelperObjects:
+		if is_instance_valid(id):
+			id._on_zoom_level_changed(oCamera2D.zoom)
 	SCRIPT_ICON_SIZE_MAX = setVal
 func script_icon_size_base(setVal):
-	for id in get_tree().get_nodes_in_group("ScriptHelperObject"):
-		id._on_zoom_level_changed(oCamera2D.zoom)
+	for id in scriptHelperObjects:
+		if is_instance_valid(id):
+			id._on_zoom_level_changed(oCamera2D.zoom)
 	SCRIPT_ICON_SIZE_BASE = setVal
 
 

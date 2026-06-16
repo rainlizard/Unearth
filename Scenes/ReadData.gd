@@ -247,7 +247,7 @@ func read_apt(buffer):
 		id.pointNumber = buffer.get_u8() # 6
 		id.data7 = buffer.get_u8() # 7
 		
-		oInstances.add_child(id)
+		oInstances.add_instance(id)
 func new_apt():
 	pass
 
@@ -282,7 +282,7 @@ func read_lgt(buffer):
 		
 		id.parentTile = buffer.get_u16() # 18-19
 		
-		oInstances.add_child(id)
+		oInstances.add_instance(id)
 func new_lgt():
 	pass
 
@@ -322,7 +322,7 @@ func read_lgtfx(buffer):
 			id.data9 = 0
 			id.data16 = 0
 			id.data17 = 0
-			oInstances.add_child(id)
+			oInstances.add_instance(id)
 	else:
 		oMessage.big(".lgtfx unparsable", "The map did not load correctly! Because the .lgtfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .lgtfx file.")
 
@@ -380,7 +380,7 @@ func read_tng(buffer):
 				id.doorOrientation = id.data13 # 13
 				id.doorLocked = id.data14 # 14
 		
-		oInstances.add_child(id)
+		oInstances.add_instance(id)
 		#tng_creation_order.append(id)
 func new_tng():
 	pass
@@ -460,7 +460,7 @@ func read_tngfx(buffer):
 			id.data17 = 0
 			id.data18_19 = 0
 			id.data20 = 0
-			oInstances.add_child(id)
+			oInstances.add_instance(id)
 	else:
 		oMessage.big(".tngfx unparsable", "The map did not load correctly! The .tngfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .tngfx file.")
 
@@ -494,7 +494,7 @@ func read_aptfx(buffer):
 			id.pointNumber = c.get_value(section, "POINTNUMBER")
 			id.pointRange = c.get_value(section, "POINTRANGE")[0] + (c.get_value(section, "POINTRANGE")[1] / 256.0)
 			id.data7 = 0
-			oInstances.add_child(id)
+			oInstances.add_instance(id)
 	else:
 		oMessage.big(".aptfx unparsable", "The map did not load correctly! Because the .aptfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .aptfx file.")
 

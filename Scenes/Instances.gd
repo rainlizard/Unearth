@@ -20,9 +20,15 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 var thingScn = preload("res://Scenes/ThingInstance.tscn")
 var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
 var lightScn = preload("res://Scenes/LightInstance.tscn")
+var all_instances = []
+var clearing_all_instances = false
 
 func _ready():
 	erase_instances_loop()
+
+func add_instance(id):
+	all_instances.append(id)
+	add_child(id)
 
 func place_new_light(newThingType, newSubtype, newPosition, newOwnership):
 	var id = lightScn.instance()
@@ -42,7 +48,7 @@ func place_new_light(newThingType, newSubtype, newPosition, newOwnership):
 	id.data16 = 0
 	id.data17 = 0
 	id.data18_19 = 0
-	add_child(id)
+	add_instance(id)
 
 func place_new_action_point(newThingType, newSubtype, newPosition, newOwnership):
 	var id = actionPointScn.instance()
@@ -51,7 +57,7 @@ func place_new_action_point(newThingType, newSubtype, newPosition, newOwnership)
 	id.pointRange = oPlacingSettings.pointRange
 	id.pointNumber = get_free_action_point_number()
 	id.data7 = 0
-	add_child(id)
+	add_instance(id)
 	
 	oScriptMarkers.start() # Update when action points change
 
@@ -310,7 +316,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership): # Pla
 				id.subtype = doorSlabData[Slabs.DOORSLAB_THING]
 				id.doorOrientation = doorSlabData[Slabs.DOORSLAB_ORIENTATION]
 	
-	add_child(id)
+	add_instance(id)
 	#print('Thing placed in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	# Warnings
@@ -434,7 +440,7 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 				7: id.subtype = 167 # Black
 				8: id.subtype = 169 # Orange
 	
-	add_child(id)
+	add_instance(id)
 	
 #	if slabID == Slabs.WALL_WITH_TORCH or slabID == Slabs.EARTH_WITH_TORCH:
 #
@@ -455,15 +461,22 @@ var instances_to_erase = []
 func erase_instances_loop(): # started by _ready()
 	for i in 2: # We need 2 idle_frames to separate the wait from the 1 idle_frame that perform_undo uses
 		yield(get_tree(),'idle_frame')
+	free_queued_instances(false)
+	erase_instances_loop()
+
+func free_queued_instances(freeAll):
 	var items_freed = 0
 	var max_items_to_free = max(1, instances_to_erase.size() * 0.01)
 	#var FREEING_CODETIME_START = OS.get_ticks_msec()
 	
-	while true:
+	while instances_to_erase.empty() == false:
 		var id = instances_to_erase.pop_back()
 		if is_instance_valid(id):
+			all_instances.erase(id)
 			items_freed += 1
 			id.free()
+		if freeAll == true:
+			continue
 		if instances_to_erase.size() > 2000: # If you're not erasing them fast enough, leaving too many instances on the field creates its own lag.
 			continue
 		elif instances_to_erase.empty() == true or items_freed > max_items_to_free:
@@ -471,13 +484,21 @@ func erase_instances_loop(): # started by _ready()
 	#if items_freed > 0:
 		#print(items_freed)
 		#print('Time spent freeing instances: ' + str(OS.get_ticks_msec() - FREEING_CODETIME_START) + 'ms')
-	
-	erase_instances_loop()
+
+func clear_all_instances():
+	clearing_all_instances = true
+	free_queued_instances(true)
+	while all_instances.empty() == false:
+		var id = all_instances.pop_back()
+		if is_instance_valid(id):
+			id.free()
+	clearing_all_instances = false
 
 func kill_instance(id): # Multi-thread safe
 	id.position = Vector2(rand_range(-10000000,-20000000),rand_range(-10000000,-20000000)) # Stacking them on the same position causes lag for some reason.
 	for group in id.get_groups():
 		id.remove_from_group(group)
+	all_instances.erase(id)
 	instances_to_erase.append(id)
 
 
@@ -644,28 +665,28 @@ func get_free_action_point_number():
 			return newNumber
 
 func return_dungeon_heart(ownership):
-	for id in get_tree().get_nodes_in_group("Instance"):
-		if id.thingType == Things.TYPE.OBJECT and id.subtype == 5: # Dungeon Heart
+	for id in all_instances:
+		if is_instance_valid(id) and id.thingType == Things.TYPE.OBJECT and id.subtype == 5: # Dungeon Heart
 			if id.ownership == ownership:
 				return id
 	return null
 
 func return_hero_gate(number):
-	for id in get_tree().get_nodes_in_group("Thing"):
-		if id.is_in_group("HeroGate"):
+	for id in all_instances:
+		if is_instance_valid(id) and id.is_in_group("HeroGate"):
 			if id.herogateNumber == number:
 				return id
 	return null
 
 func return_action_point(number):
-	for id in get_tree().get_nodes_in_group("ActionPoint"):
-		if id.pointNumber == number:
+	for id in all_instances:
+		if is_instance_valid(id) and id.is_in_group("ActionPoint") and id.pointNumber == number:
 			return id
 	return null
 
 func check_for_dungeon_heart(ownership):
-	for id in get_tree().get_nodes_in_group("Instance"):
-		if id.thingType == Things.TYPE.OBJECT and id.subtype == 5: # Dungeon Heart
+	for id in all_instances:
+		if is_instance_valid(id) and id.thingType == Things.TYPE.OBJECT and id.subtype == 5: # Dungeon Heart
 			if id.ownership == ownership:
 				return true
 	return false

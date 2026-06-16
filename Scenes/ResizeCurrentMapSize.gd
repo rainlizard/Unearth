@@ -78,8 +78,8 @@ func remove_outside_instances(newWidth, newHeight):
 	var newHeightInSubtiles = newHeight * 3
 	var newWidthInSubtiles =  newWidth * 3
 	
-	for instance in get_tree().get_nodes_in_group("Instance"):
-		if instance.locationX >= newWidthInSubtiles or instance.locationY >= newHeightInSubtiles:
+	for instance in oInstances.all_instances.duplicate():
+		if is_instance_valid(instance) and (instance.locationX >= newWidthInSubtiles or instance.locationY >= newHeightInSubtiles):
 			deletedInstancesCount += 1
 			oInstances.kill_instance(instance)
 	

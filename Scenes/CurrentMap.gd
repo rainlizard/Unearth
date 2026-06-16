@@ -31,6 +31,7 @@ onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oSaveMap = Nodelist.list["oSaveMap"]
 onready var oUiSystem = Nodelist.list["oUiSystem"]
 onready var oBuffers = Nodelist.list["oBuffers"]
+onready var oActionPointList = Nodelist.list["oActionPointList"]
 
 var path = ""
 var currentFilePaths = {} # [0] = pathString,  [1] = modified date
@@ -80,9 +81,8 @@ func set_path_and_title(newpath):
 func clear_map(): # Remember, "Undo" calls this
 	var CODETIME_START = OS.get_ticks_msec()
 	
-	var allInst = get_tree().get_nodes_in_group("Instance")
-	for id in allInst:
-		oInstances.kill_instance(id)
+	oInstances.clear_all_instances()
+	oActionPointList.update_if_visible()
 	
 	# "lif"
 	oDataMapName.clear()

@@ -5,6 +5,7 @@ onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oActionPointList = Nodelist.list["oActionPointList"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
+onready var oInstances = Nodelist.list["oInstances"]
 
 var ownership = 5 # Not used by Dungeon Keeper, this is just to make it easy for the editor.
 var thingType = Things.TYPE.EXTRA
@@ -84,5 +85,7 @@ func _enter_tree():
 		oActionPointList.update_if_visible()
 
 func _exit_tree():
+	if oInstances.clearing_all_instances:
+		return
 	if oActionPointList:
 		oActionPointList.update_if_visible()

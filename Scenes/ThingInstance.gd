@@ -126,6 +126,8 @@ func load_default_kfx_values():
 
 
 func _exit_tree():
+	if oInstances.clearing_all_instances:
+		return
 	# If a key is removed (manually deleted or otherwise) then change the door's lock state
 	# This is good to put here to handle symmetry
 	if subtype == 44 and thingType == Things.TYPE.OBJECT and is_in_group("Key"):
