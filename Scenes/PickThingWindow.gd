@@ -66,7 +66,7 @@ func _ready():
 	
 	oThingTabs.tabSystem.connect("tab_changed",oGridFunctions,"_on_tab_changed",[self])
 	
-	grid_window_scale = 0.55
+	grid_window_scale = 0.80
 	grid_item_size = Vector2(96, 96)
 	
 	# Window's minimum size

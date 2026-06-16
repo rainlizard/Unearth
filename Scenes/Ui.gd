@@ -36,6 +36,8 @@ var mouseOnUi = false
 var _is_handling_drag = false
 var _is_user_dragging = false
 var listOfWindowDialogs = []
+var lastMainWindowSize = Vector2.ZERO
+var lastWindowDialogSizes = {}
 
 func get_desired_window_position(windowName):
 	if subwindows_status.has(windowName) and subwindows_status[windowName].has("desired_position"):
@@ -60,6 +62,7 @@ func set_desired_window_size(windowName, size):
 	Settings.set_setting("subwindows_status", subwindows_status)
 
 func initialize_window_desired_values():
+	lastMainWindowSize = OS.window_size
 	for window in listOfWindowDialogs:
 		var windowName = window.name
 		if not subwindows_status.has(windowName):
@@ -75,6 +78,8 @@ func initialize_window_desired_values():
 		window.rect_position = desiredPos
 		if window.resizable and subwindows_status[windowName].has("desired_size"):
 			window.rect_size = subwindows_status[windowName]["desired_size"]
+		if window.resizable:
+			lastWindowDialogSizes[windowName] = window.rect_size
 	on_startup_put_windows_in_correct_positions()
 
 func on_startup_put_windows_in_correct_positions():
@@ -84,6 +89,7 @@ func on_startup_put_windows_in_correct_positions():
 
 func _ready():
 	tabKeyInputEvent.scancode = KEY_TAB
+	lastMainWindowSize = OS.window_size
 	setup_focus_key()
 	find_window_dialogs()
 	wait_until_windows_are_positioned()
@@ -107,6 +113,8 @@ func find_window_dialogs():
 		for potentialWindow in mainCategories.get_children():
 			if potentialWindow is WindowDialog:
 				listOfWindowDialogs.append(potentialWindow)
+				if potentialWindow.resizable:
+					lastWindowDialogSizes[potentialWindow.name] = potentialWindow.rect_size
 
 func _on_window_gui_input(event, callingNode):
 	if event is InputEventMouseButton:
@@ -126,6 +134,10 @@ func _on_any_window_was_modified(callingNode):
 		_is_handling_drag = true
 		var viewSize = get_viewport().size / Settings.UI_SCALE
 		
+		if callingNode.resizable and lastWindowDialogSizes.get(callingNode.name) != callingNode.rect_size:
+			lastWindowDialogSizes[callingNode.name] = callingNode.rect_size
+			print(callingNode.name + " window size: " + str(callingNode.rect_size))
+		
 		set_desired_window_position(callingNode.name, callingNode.rect_position)
 		if callingNode.resizable:
 			set_desired_window_size(callingNode.name, callingNode.rect_size)
@@ -134,6 +146,9 @@ func _on_any_window_was_modified(callingNode):
 		_is_handling_drag = false
 
 func _on_viewport_size_changed():
+	if lastMainWindowSize != OS.window_size:
+		lastMainWindowSize = OS.window_size
+		print("Main window size: " + str(OS.window_size))
 	if OS.window_size.x < 720 or OS.window_size.y < 720:
 		return
 	var currentViewSize = get_viewport().size / Settings.UI_SCALE

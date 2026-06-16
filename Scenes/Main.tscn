@@ -637,8 +637,8 @@ script = ExtResource( 76 )
 [node name="PickSlabWindow" type="WindowDialog" parent="Ui/UiTools"]
 visible = true
 margin_top = 60.0
-margin_right = 321.0
-margin_bottom = 816.0
+margin_right = 370.0
+margin_bottom = 993.0
 window_title = "Slab"
 resizable = true
 script = ExtResource( 68 )
@@ -650,44 +650,44 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="SlabTabs" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer"]
-margin_right = 321.0
-margin_bottom = 756.0
+margin_right = 370.0
+margin_bottom = 933.0
 rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 120 )
 
 [node name="TopTabsSection" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs" instance=ExtResource( 105 )]
-margin_right = 321.0
+margin_right = 370.0
 margin_bottom = 31.0
 
 [node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs"]
 margin_top = 35.0
-margin_right = 321.0
-margin_bottom = 756.0
+margin_right = 370.0
+margin_bottom = 933.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MainSlabs" type="PanelContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder"]
-margin_right = 321.0
-margin_bottom = 721.0
+margin_right = 370.0
+margin_bottom = 898.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/MainSlabs"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 312.0
-margin_bottom = 712.0
+margin_right = 361.0
+margin_bottom = 889.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickSlabWindow/VBoxContainer/SlabTabs/TabFolder/MainSlabs/ScrollContainer"]
-margin_left = 151.0
-margin_top = 351.0
-margin_right = 151.0
-margin_bottom = 351.0
+margin_left = 176.0
+margin_top = 440.0
+margin_right = 176.0
+margin_bottom = 440.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
@@ -818,8 +818,8 @@ __meta__ = {
 [node name="PickThingWindow" type="WindowDialog" parent="Ui/UiTools"]
 visible = true
 margin_top = 60.0
-margin_right = 650.0
-margin_bottom = 277.0
+margin_right = 667.0
+margin_bottom = 513.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 window_title = "Thing"
@@ -836,44 +836,44 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ThingTabs" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer"]
-margin_right = 650.0
-margin_bottom = 217.0
+margin_right = 667.0
+margin_bottom = 453.0
 rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 120 )
 
 [node name="TopTabsSection" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs" instance=ExtResource( 105 )]
-margin_right = 650.0
+margin_right = 667.0
 margin_bottom = 31.0
 
 [node name="TabFolder" type="VBoxContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs"]
 margin_top = 35.0
-margin_right = 650.0
-margin_bottom = 217.0
+margin_right = 667.0
+margin_bottom = 453.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Creature" type="PanelContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder"]
-margin_right = 650.0
-margin_bottom = 182.0
+margin_right = 667.0
+margin_bottom = 418.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Creature"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 641.0
-margin_bottom = 173.0
+margin_right = 658.0
+margin_bottom = 409.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiTools/PickThingWindow/VBoxContainer/ThingTabs/TabFolder/Creature/ScrollContainer"]
-margin_left = 316.0
-margin_top = 82.0
-margin_right = 316.0
-margin_bottom = 82.0
+margin_left = 324.0
+margin_top = 200.0
+margin_right = 324.0
+margin_bottom = 200.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 custom_constants/vseparation = 0

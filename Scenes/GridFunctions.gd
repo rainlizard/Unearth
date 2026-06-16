@@ -29,23 +29,34 @@ func _on_GridWindow_resized(callingNode):
 	var oGridContainer = callingNode.current_grid_container()
 	if oGridContainer == null: return
 	
-	var maxWidth
-	var maxHeight
-	match callingNode.name:
-		"PickSlabWindow":
-			var tabFolder = oGridContainer.get_parent().get_parent().get_parent()
-			maxWidth = floor(tabFolder.rect_size.x/(callingNode.grid_item_size.x*callingNode.grid_window_scale))
-			maxHeight = floor(tabFolder.rect_size.y/(callingNode.grid_item_size.y*callingNode.grid_window_scale))
-		"PickThingWindow":
-			var tabFolder = oGridContainer.get_parent().get_parent().get_parent()
-			maxWidth = floor(tabFolder.rect_size.x/(callingNode.grid_item_size.x*callingNode.grid_window_scale))
-			maxHeight = floor(tabFolder.rect_size.y/(callingNode.grid_item_size.y*callingNode.grid_window_scale))
-	if maxWidth > 0: oGridContainer.set_columns(maxWidth)
-	# If the window is wider than tall, then fit the grid items within maxHeight
-	if maxWidth > maxHeight and maxHeight > 0:
-		var itemCount = oGridContainer.get_child_count()
-		if itemCount > 0:
-			oGridContainer.set_columns(ceil(float(itemCount)/float(maxHeight)))
+	var scrollContainer = oGridContainer.get_parent()
+	var hseparation = oGridContainer.get_constant("hseparation")
+	var vseparation = oGridContainer.get_constant("vseparation")
+	var itemWidth = callingNode.grid_item_size.x * callingNode.grid_window_scale
+	var itemHeight = callingNode.grid_item_size.y * callingNode.grid_window_scale
+	var availableWidth = scrollContainer.rect_size.x
+	var availableHeight = scrollContainer.rect_size.y
+	var maxWidth = floor((availableWidth + hseparation) / (itemWidth + hseparation))
+	var maxHeight = floor((availableHeight + vseparation) / (itemHeight + vseparation))
+	var itemCount = oGridContainer.get_child_count()
+	if itemCount == 0 or maxWidth <= 0 or maxHeight <= 0: return
+	var maxColumns = int(min(maxWidth, itemCount))
+	var windowShape = float(maxWidth) / float(maxHeight)
+	var columnCount = int(round(sqrt(float(itemCount) * windowShape)))
+	columnCount = int(clamp(columnCount, 1, maxColumns))
+	var rowCount = ceil(float(itemCount) / float(columnCount))
+	var gridHeight = (rowCount * itemHeight) + (max(rowCount - 1, 0) * vseparation)
+	if gridHeight > availableHeight:
+		var scrollbarWidth = scrollContainer.get_v_scrollbar().rect_size.x
+		if scrollbarWidth <= 0:
+			scrollbarWidth = scrollContainer.get_v_scrollbar().get_combined_minimum_size().x
+		availableWidth -= scrollbarWidth
+		maxWidth = floor((availableWidth + hseparation) / (itemWidth + hseparation))
+		if maxWidth <= 0: return
+		maxColumns = int(min(maxWidth, itemCount))
+		windowShape = float(maxWidth) / float(maxHeight)
+		columnCount = int(round(sqrt(float(itemCount) * windowShape)))
+	oGridContainer.set_columns(int(clamp(columnCount, 1, maxColumns)))
 
 func _on_tab_changed(newTab, callingNode):
 	callingNode.update_scale(callingNode.grid_window_scale)
@@ -57,4 +68,5 @@ func _on_tab_changed(newTab, callingNode):
 			if callingNode.oSelectedRect.boundToItem == id:
 				callingNode.oSelectedRect.visible = true
 	
+	yield(get_tree(),'idle_frame')
 	_on_GridWindow_resized(callingNode)

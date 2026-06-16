@@ -54,7 +54,7 @@ func _ready():
 	oSlabTabs.tabSystem.connect("tab_changed",oGridFunctions,"_on_tab_changed",[self])
 	oSlabTabs.tabSystem.connect("tab_changed",self,"_on_SlabTabs_tab_changed")
 	
-	grid_window_scale = 0.76
+	grid_window_scale = 0.85
 	grid_item_size = Vector2(96, 96)
 	
 	# Window's minimum size
