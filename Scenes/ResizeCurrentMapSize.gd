@@ -1,6 +1,9 @@
 extends WindowDialog
-onready var oSettingsXSizeLine = Nodelist.list["oSettingsXSizeLine"]
-onready var oSettingsYSizeLine = Nodelist.list["oSettingsYSizeLine"]
+onready var oResizeTopSpinBox = Nodelist.list["oResizeTopSpinBox"]
+onready var oResizeBottomSpinBox = Nodelist.list["oResizeBottomSpinBox"]
+onready var oResizeLeftSpinBox = Nodelist.list["oResizeLeftSpinBox"]
+onready var oResizeRightSpinBox = Nodelist.list["oResizeRightSpinBox"]
+onready var oResizeMapSizeLabel = Nodelist.list["oResizeMapSizeLabel"]
 onready var oMapSizeTextLabel = Nodelist.list["oMapSizeTextLabel"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oOverheadOwnership = Nodelist.list["oOverheadOwnership"]
@@ -23,9 +26,17 @@ func _on_ResizeCurrentMapSizeButton_pressed():
 	Utils.popup_centered(self)
 
 func _on_ResizeCurrentMapSize_about_to_show():
-	oSettingsXSizeLine.text = str(M.xSize)
-	oSettingsYSizeLine.text = str(M.ySize)
+	oResizeTopSpinBox.value = 0
+	oResizeBottomSpinBox.value = 0
+	oResizeLeftSpinBox.value = 0
+	oResizeRightSpinBox.value = 0
+	update_resize_map_size_label()
 	oMapSettingsWindow.visible = false
+
+func update_resize_map_size_label():
+	var newWidth = M.xSize + int(oResizeLeftSpinBox.value) + int(oResizeRightSpinBox.value)
+	var newHeight = M.ySize + int(oResizeTopSpinBox.value) + int(oResizeBottomSpinBox.value)
+	oResizeMapSizeLabel.text = str(newWidth) + "x" + str(newHeight)
 
 # Function to handle updating the map size
 func set_new_map_size(newWidth, newHeight):
@@ -34,29 +45,33 @@ func set_new_map_size(newWidth, newHeight):
 	oMapSizeTextLabel.text = str(M.xSize) + " x " + str(M.ySize)
 
 
-# Function to get positions that need to be updated
-func get_positions_to_update(newWidth, newHeight, previousWidth, previousHeight):
+# Function to fill positions newly exposed by moving the old map inside the new size
+func fill_new_area(newWidth, newHeight, previousWidth, previousHeight, offsetX, offsetY):
 	var positionsToUpdate = {}
-	if newWidth > previousWidth:
-		for x in range(previousWidth, newWidth):
-			for y in newHeight:
-				positionsToUpdate[Vector2(x, y)] = true
-	if newHeight > previousHeight:
-		for y in range(previousHeight, newHeight):
-			for x in newWidth:
+	for y in newHeight:
+		for x in newWidth:
+			var previousX = x - offsetX
+			var previousY = y - offsetY
+			if previousX < 0 or previousY < 0 or previousX >= previousWidth or previousY >= previousHeight:
 				positionsToUpdate[Vector2(x, y)] = true
 	oSlabPlacement.place_shape_of_slab_id(positionsToUpdate.keys(), Slabs.EARTH, 5)
 	return positionsToUpdate
 
 # Function to remove old borders
-func remove_old_borders(newWidth, newHeight, previousWidth, previousHeight):
+func remove_old_borders(previousWidth, previousHeight, offsetX, offsetY, westDelta, northDelta, eastDelta, southDelta):
 	var removeBorder = []
-	if newWidth > previousWidth:
+	if westDelta > 0:
 		for y in previousHeight:
-			removeBorder.append(Vector2(previousWidth - 1, y))
-	if newHeight > previousHeight:
+			removeBorder.append(Vector2(offsetX, offsetY + y))
+	if eastDelta > 0:
+		for y in previousHeight:
+			removeBorder.append(Vector2(offsetX + previousWidth - 1, offsetY + y))
+	if northDelta > 0:
 		for x in previousWidth:
-			removeBorder.append(Vector2(x, previousHeight - 1))
+			removeBorder.append(Vector2(offsetX + x, offsetY))
+	if southDelta > 0:
+		for x in previousWidth:
+			removeBorder.append(Vector2(offsetX + x, offsetY + previousHeight - 1))
 	oSlabPlacement.place_shape_of_slab_id(removeBorder, Slabs.EARTH, 5)
 	return removeBorder
 
@@ -79,7 +94,7 @@ func remove_outside_instances(newWidth, newHeight):
 	var newWidthInSubtiles =  newWidth * 3
 	
 	for instance in oInstances.all_instances.duplicate():
-		if is_instance_valid(instance) and (instance.locationX >= newWidthInSubtiles or instance.locationY >= newHeightInSubtiles):
+		if is_instance_valid(instance) and (instance.locationX < 0 or instance.locationY < 0 or instance.locationX >= newWidthInSubtiles or instance.locationY >= newHeightInSubtiles):
 			deletedInstancesCount += 1
 			oInstances.kill_instance(instance)
 	
@@ -89,22 +104,62 @@ func remove_outside_instances(newWidth, newHeight):
 
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 
+func shift_instances(offsetX, offsetY, previousWidth, newWidth, newHeight):
+	var offsetSubtileX = offsetX * 3
+	var offsetSubtileY = offsetY * 3
+	for instance in oInstances.all_instances.duplicate():
+		if is_instance_valid(instance) == false:
+			continue
+		var parentTile = instance.get("parentTile")
+		if parentTile != null and parentTile != 65535:
+			var previousParentTile = int(parentTile)
+			var parentX = previousParentTile % previousWidth
+			var parentY = int(previousParentTile / previousWidth)
+			parentX += offsetX
+			parentY += offsetY
+			instance.remove_from_group("attachedtotile_" + str(previousParentTile))
+			if parentX < 0 or parentY < 0 or parentX >= newWidth or parentY >= newHeight:
+				oInstances.kill_instance(instance)
+				continue
+			instance.parentTile = (parentY * newWidth) + parentX
+			instance.add_to_group("attachedtotile_" + str(instance.parentTile))
+		instance.locationX += offsetSubtileX
+		instance.locationY += offsetSubtileY
+
 # The main function that calls all the helper functions
 func _on_ResizeApplyButton_pressed():
+	var northDelta = int(oResizeTopSpinBox.value)
+	var southDelta = int(oResizeBottomSpinBox.value)
+	var westDelta = int(oResizeLeftSpinBox.value)
+	var eastDelta = int(oResizeRightSpinBox.value)
+	if northDelta == 0 and southDelta == 0 and westDelta == 0 and eastDelta == 0:
+		return
+	
 	if oCurrentFormat.selected == Constants.ClassicFormat:
 		oMessage.big("Error", "Cannot resize map because it's in Classic format. Switch to KFX format first.")
 		return
 	
-	var newWidth = int(oSettingsXSizeLine.text)
-	var newHeight = int(oSettingsYSizeLine.text)
 	var previousWidth = M.xSize
 	var previousHeight = M.ySize
+	var newWidth = previousWidth + westDelta + eastDelta
+	var newHeight = previousHeight + northDelta + southDelta
+	var offsetX = westDelta
+	var offsetY = northDelta
+	
+	if newWidth < 1 or newHeight < 1:
+		oMessage.big("Error", "Map size must be at least 1 x 1.")
+		return
+	if newWidth > 170 or newHeight > 170:
+		oMessage.big("Error", "Map size cannot be larger than 170 x 170.")
+		return
+	
+	oBuffers.resize_all_data_structures(newWidth, newHeight, offsetX, offsetY)
+	shift_instances(offsetX, offsetY, previousWidth, newWidth, newHeight)
 	set_new_map_size(newWidth, newHeight)
-	oBuffers.resize_all_data_structures(newWidth, newHeight)
 	remove_outside_instances(newWidth, newHeight)
 	
-	var positionsToUpdate = get_positions_to_update(newWidth, newHeight, previousWidth, previousHeight)
-	var removeBorder = remove_old_borders(newWidth, newHeight, previousWidth, previousHeight)
+	var positionsToUpdate = fill_new_area(newWidth, newHeight, previousWidth, previousHeight, offsetX, offsetY)
+	var removeBorder = remove_old_borders(previousWidth, previousHeight, offsetX, offsetY, westDelta, northDelta, eastDelta, southDelta)
 	var addBorder = add_new_borders(newWidth, newHeight)
 	for pos in removeBorder:
 		positionsToUpdate[pos] = true
@@ -124,6 +179,12 @@ func _on_ResizeApplyButton_pressed():
 	oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, true)
 	
 	#yield(oSlabPlacement.generate_slabs_based_on_id(positionsToUpdate.keys(), true), "completed") # Important to update surrounding slabs too. For example, rooms that get cut off.
+	
+	oResizeTopSpinBox.value = 0
+	oResizeBottomSpinBox.value = 0
+	oResizeLeftSpinBox.value = 0
+	oResizeRightSpinBox.value = 0
+	update_resize_map_size_label()
 
 
 func update_editor_appearance():
@@ -132,18 +193,13 @@ func update_editor_appearance():
 	oGuidelines.update()
 
 
-func _on_SettingsXSizeLine_focus_exited():
-	if int(oSettingsXSizeLine.text) > 170:
-		oSettingsXSizeLine.text = "170"
-
-func _on_SettingsYSizeLine_focus_exited():
-	if int(oSettingsYSizeLine.text) > 170:
-		oSettingsYSizeLine.text = "170"
-
 func _on_ResizeFillWithID_value_changed(value):
 	value = int(value)
 	if Slabs.data.has(value):
 		oResizeFillWithIDLabel.text = Slabs.fetch_name(value)
+
+func _on_ResizeEdgeSpinBox_value_changed(value):
+	update_resize_map_size_label()
 
 #	for pos in positionsToUpdate.keys():
 #		var scene = preload('res://t.tscn')

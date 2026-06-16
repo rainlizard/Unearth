@@ -160,12 +160,12 @@ func should_process_file_type(EXT):
 			return false
 	return true
 
-func resize_all_data_structures(new_width, new_height):
-	oDataSlab.resize(new_width, new_height, 0)
-	oDataOwnership.resize((new_width*3)+1, (new_height*3)+1, 5)
-	oDataClmPos.resize((new_width*3)+1, (new_height*3)+1, 0)
-	oDataWibble.resize((new_width*3)+1, (new_height*3)+1, 0)
-	oDataLiquid.resize(new_width, new_height, 0)
-	oDataFakeSlab.resize(new_width, new_height, 0)
+func resize_all_data_structures(new_width, new_height, offset_x = 0, offset_y = 0):
+	oDataSlab.resize(new_width, new_height, 0, offset_x, offset_y)
+	oDataOwnership.resize((new_width*3)+1, (new_height*3)+1, 5, offset_x * 3, offset_y * 3)
+	oDataClmPos.resize((new_width*3)+1, (new_height*3)+1, 0, offset_x * 3, offset_y * 3)
+	oDataWibble.resize((new_width*3)+1, (new_height*3)+1, 0, offset_x * 3, offset_y * 3)
+	oDataLiquid.resize(new_width, new_height, 0, offset_x, offset_y)
+	oDataFakeSlab.resize(new_width, new_height, 0, offset_x, offset_y)
 	
-	oDataSlx.resize_bottom_right(new_width, new_height, 0)
+	oDataSlx.resize_bottom_right(new_width, new_height, 0, offset_x, offset_y)

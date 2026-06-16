@@ -48,7 +48,7 @@ func set_cellv(pos, value):
 func get_cellv(pos):
 	return get_cell(pos.x, pos.y)
 
-func resize(new_width, new_height, fillValue):
+func resize(new_width, new_height, fillValue, offset_x = 0, offset_y = 0):
 	var new_buffer_size = new_width * new_height * bytes_per_entry
 	var new_buffer = StreamPeerBuffer.new()
 	var new_data_array = PoolByteArray([])
@@ -56,8 +56,8 @@ func resize(new_width, new_height, fillValue):
 	new_data_array.fill(fillValue)
 	new_buffer.data_array = new_data_array
 	
-	var copy_width = min(width, new_width)
-	var copy_height = min(height, new_height)
+	var copy_width = width
+	var copy_height = height
 	
 	# This is necessary for the strangely sized data structures that are like: Vector2((width*3)+1,(height*3)+1)
 	match name:
@@ -67,8 +67,12 @@ func resize(new_width, new_height, fillValue):
 	
 	for y in range(copy_height):
 		for x in range(copy_width):
+			var new_x = x + offset_x
+			var new_y = y + offset_y
+			if new_x < 0 or new_y < 0 or new_x >= new_width or new_y >= new_height:
+				continue
 			var old_value = get_cell(x, y)
-			var new_seek_pos = (y * new_width + x) * bytes_per_entry
+			var new_seek_pos = (new_y * new_width + new_x) * bytes_per_entry
 			new_buffer.seek(new_seek_pos)
 			if bytes_per_entry == U8:
 				new_buffer.put_u8(old_value)

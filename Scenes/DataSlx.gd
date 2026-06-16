@@ -25,16 +25,23 @@ func get_tileset_value(x,y):
 	slxImgData.unlock()
 	return r
 
-func resize_bottom_right(new_width: int, new_height: int, fillValue: int):
+func resize_bottom_right(new_width: int, new_height: int, fillValue: int, offset_x: int = 0, offset_y: int = 0):
 	var resized_image = Image.new()
 	resized_image.create(new_width, new_height, false, slxImgData.get_format())
 	
 	var fill_color = Color8(fillValue, 0, 0)
 	resized_image.fill(fill_color)
 	
-	var copy_width = min(slxImgData.get_width(), new_width)
-	var copy_height = min(slxImgData.get_height(), new_height)
-	
-	resized_image.blit_rect(slxImgData, Rect2(0, 0, copy_width, copy_height), Vector2.ZERO)
+	var copy_width = slxImgData.get_width()
+	var copy_height = slxImgData.get_height()
+	var source_x = max(0, -offset_x)
+	var source_y = max(0, -offset_y)
+	var dest_x = max(0, offset_x)
+	var dest_y = max(0, offset_y)
+	copy_width = min(copy_width - source_x, new_width - dest_x)
+	copy_height = min(copy_height - source_y, new_height - dest_y)
+	if copy_width > 0 and copy_height > 0:
+		resized_image.blit_rect(slxImgData, Rect2(source_x, source_y, copy_width, copy_height), Vector2(dest_x, dest_y))
 	
 	slxImgData = resized_image
+	slxTexData.create_from_image(slxImgData, 0)
