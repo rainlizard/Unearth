@@ -4,6 +4,7 @@ onready var oSetDirPath = Nodelist.list["oSetDirPath"]
 onready var oCheckBoxVsync = Nodelist.list["oCheckBoxVsync"]
 onready var oMSAA = Nodelist.list["oMSAA"]
 onready var oCheckBoxAlwaysDecompress = Nodelist.list["oCheckBoxAlwaysDecompress"]
+onready var oBackupFolderSizeLimit = Nodelist.list["oBackupFolderSizeLimit"]
 onready var oChooseDkExe = Nodelist.list["oChooseDkExe"]
 onready var oCmdLineDkCommands = Nodelist.list["oCmdLineDkCommands"]
 onready var oCmdLinePacketsave = Nodelist.list["oCmdLinePacketsave"]
@@ -72,6 +73,7 @@ func _on_SettingsWindow_about_to_show():
 	var msaa_slider_value = msaa_enum_to_slider_value(msaa_enum)
 	oMSAA.update_appearance(msaa_slider_value)
 	oCheckBoxAlwaysDecompress.pressed = Settings.get_setting("always_decompress")
+	oBackupFolderSizeLimit.update_appearance(Settings.get_setting("backup_folder_size_limit_mb"))
 	oCmdLineDkCommands.text = Settings.get_setting("dk_commands")
 	oCmdLinePacketsave.pressed = Settings.get_setting("packetsave")
 	oCmdLinePacketsave.disabled = oGame.keeperfx_is_installed() == false
@@ -113,6 +115,11 @@ func _on_CheckBoxVsync_toggled(button_pressed):
 
 func _on_CheckBoxAlwaysDecompress_toggled(button_pressed):
 	Settings.set_setting("always_decompress", button_pressed)
+
+func edited_BackupFolderSizeLimit(new_text):
+	var new_value = max(1, int(new_text))
+	oBackupFolderSizeLimit.update_appearance(new_value)
+	Settings.set_setting("backup_folder_size_limit_mb", new_value)
 
 func _on_SetDirButton_pressed():
 	Utils.popup_centered(oChooseDkExe)

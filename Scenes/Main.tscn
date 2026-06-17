@@ -2428,6 +2428,18 @@ margin_right = 558.0
 margin_bottom = 254.0
 text = "Always decompress maps"
 
+[node name="BackupFolderSizeLimit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer" instance=ExtResource( 16 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 258.0
+margin_right = 558.0
+margin_bottom = 289.0
+settingText = "Backup folder limit (MB)"
+slider_step = 1.0
+minimum_value = 1.0
+maximum_value = 1.04858e+06
+
 [node name="TabPlacements" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
 visible = false
 anchor_right = 1.0

@@ -10,6 +10,7 @@ var UI_SCALE = Vector2(1, 1)
 var unearth_path = ""
 var unearthdata = ""
 var settings_file_path = ""
+var backup_folder_size_limit_mb = 1024
 
 var config = ConfigFile.new()
 
@@ -21,6 +22,7 @@ var listOfSettings = [
 	"framerate_limit",
 	"ssaa",
 	"always_decompress",
+	"backup_folder_size_limit_mb",
 	"msaa",
 	"dk_commands",
 	"packetsave",
@@ -211,6 +213,9 @@ func game_setting(doWhat,string,value):
 			var oOpenMap = $'../Main/OpenMap'
 			if doWhat == SET: oOpenMap.ALWAYS_DECOMPRESS = value
 			if doWhat == GET: return oOpenMap.ALWAYS_DECOMPRESS
+		"backup_folder_size_limit_mb":
+			if doWhat == SET: backup_folder_size_limit_mb = max(1, int(value))
+			if doWhat == GET: return backup_folder_size_limit_mb
 		"msaa":
 			
 			var oViewport = get_viewport()
