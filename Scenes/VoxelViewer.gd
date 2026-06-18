@@ -9,6 +9,7 @@ onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oVariationNumberSpinBox = Nodelist.list["oVariationNumberSpinBox"]
 onready var oColumnsetControls = Nodelist.list["oColumnsetControls"]
 onready var oClmEditorControls = Nodelist.list["oClmEditorControls"]
+onready var oTabCubes = Nodelist.list["oTabCubes"]
 
 
 onready var oVoxelCamera = $"VoxelViewport/VoxelCameraPivotPoint/VoxelCamera"
@@ -20,12 +21,13 @@ onready var oHighlightBase = $"VoxelViewport/VoxelCreator/HighlightBase"
 
 var scnBillboardObj = preload("res://Scenes/Billboard3DObject.tscn")
 
-export(int, "MAP_CUSTOM_SLAB", "MAP_COLUMN", "DK_SLABSET", "DK_COLUMN") var displayingType
+export(int, "MAP_CUSTOM_SLAB", "MAP_COLUMN", "DK_SLABSET", "DK_COLUMN", "DK_CUBE") var displayingType
 enum {
 	MAP_CUSTOM_SLAB
 	MAP_COLUMN
 	DK_SLABSET
 	DK_COLUMN
+	DK_CUBE
 }
 
 var viewObject = 0 setget set_object
@@ -35,21 +37,28 @@ var disable_camera_animation = false
 
 func initialize():
 	if is_instance_valid(oDataClm) == false: return
-	if oDataClm.cubes.empty() == true: return
-	
+	if displayingType == DK_CUBE and Cube.tex.empty() == true: return
+	if displayingType != DK_CUBE and oDataClm.cubes.empty() == true: return
+
 	#if visible == true:
 	var CODETIME_START = OS.get_ticks_msec()
-	
+
 	if displayingType == MAP_COLUMN: column_count = oDataClm.column_count
 	if displayingType == DK_COLUMN: column_count = Columnset.column_count
-	
-	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
+	if displayingType == DK_CUBE: column_count = Cube.CUBES_COUNT + 1
+
+	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN or displayingType == DK_CUBE:
 		do_all()
 	if displayingType == DK_SLABSET:
 		do_all()
-	
+
 	if displayingType == MAP_CUSTOM_SLAB:
 		oVoxelCamera.size = 10
+	if displayingType == DK_CUBE:
+		oVoxelCamera.size = 6
+		oVoxelCameraPivotPoint.translation.y = 0.5
+	else:
+		oVoxelCameraPivotPoint.translation.y = 4
 	
 
 	
@@ -60,6 +69,8 @@ func initialize():
 	if displayingType == DK_SLABSET or displayingType == MAP_CUSTOM_SLAB:
 		oHighlightBase.mesh.size = Vector2(4,4)
 	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
+		oHighlightBase.mesh.size = Vector2(2,2)
+	if displayingType == DK_CUBE:
 		oHighlightBase.mesh.size = Vector2(2,2)
 
 
@@ -113,6 +124,8 @@ func set_object(setVal):
 		setVal = clamp(setVal,0, 27)
 	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
 		setVal = clamp(setVal,1, column_count-1)
+	if displayingType == DK_CUBE:
+		setVal = clamp(setVal,0, column_count-1)
 	previousObject = viewObject
 	viewObject = setVal
 	
@@ -126,7 +139,7 @@ func set_object(setVal):
 			oVoxelCameraPivotPoint.translation.z = viewObject*2
 			oVoxelCameraPivotPoint.translation.x = viewObject*2
 	else:
-		oVoxelCamera.cameraShiftSpeed = clamp(0.02 * abs(previousObject-viewObject), 0.02, 0.3)
+		oVoxelCamera.cameraShiftSpeed = clamp(0.08 * abs(previousObject-viewObject), 0.08, 0.6)
 	
 	do_one()
 	
@@ -143,15 +156,21 @@ func set_object(setVal):
 	if displayingType == DK_COLUMN:
 		oColumnsetControls.oColumnIndexSpinBox.value = setVal
 		oColumnDetails.update_details()
+	if displayingType == DK_CUBE:
+		oTabCubes.oCubeIndexSpinBox.value = setVal
 	
 	 # Reset camera back
 	oVoxelCameraPivotPoint.rotation_degrees.z = -28.125
+	oVoxelCameraPivotPoint.translation.y = 0.5 if displayingType == DK_CUBE else 4.0
 	oSelectedPivotPoint.rotation_degrees.y = 0
 	oHighlightBase.visible = true
 	
 	if displayingType == DK_SLABSET:
 		oHighlightBase.translation.z = viewObject*4
 		oHighlightBase.translation.x = viewObject*4
+	elif displayingType == DK_CUBE:
+		oHighlightBase.translation.z = viewObject*2
+		oHighlightBase.translation.x = viewObject*2
 	else:
 		oHighlightBase.translation.z = viewObject*2
 		oHighlightBase.translation.x = viewObject*2
@@ -175,6 +194,13 @@ func do_all():
 					var y = clmIndex*2
 					oVoxelGen.column_gen(genArray, x, y, clmIndex, surrClmIndex, true, Columnset)
 		
+		oAllVoxelObjects.mesh = oVoxelGen.complete_mesh(genArray)
+		oAllVoxelObjects.translation.z = -0.5
+		oAllVoxelObjects.translation.x = -0.5
+
+	if displayingType == DK_CUBE:
+		for cubeID in column_count:
+			oVoxelGen.cube_gen(genArray, cubeID * 2, cubeID * 2, cubeID)
 		oAllVoxelObjects.mesh = oVoxelGen.complete_mesh(genArray)
 		oAllVoxelObjects.translation.z = -0.5
 		oAllVoxelObjects.translation.x = -0.5
@@ -236,6 +262,14 @@ func do_one():
 		oSelectedPivotPoint.translation.z = (viewObject * 2)
 		oSelectedPivotPoint.translation.x = (viewObject * 2)
 	
+	if displayingType == DK_CUBE:
+		oVoxelGen.cube_gen(genArray, 0, 0, viewObject)
+		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
+		oSelectedPivotPoint.translation.z = (viewObject * 2)
+		oSelectedPivotPoint.translation.x = (viewObject * 2)
+		oSelectedVoxelObject.translation.z = -0.5
+		oSelectedVoxelObject.translation.x = -0.5
+
 	if displayingType == DK_SLABSET: # This is not for fake slab, this is for slabset slabs
 		
 #		var slabID = oSlabsetIDSpinBox.value
@@ -279,6 +313,11 @@ func update_column_view():
 	do_one()
 	oColumnDetails.update_details()
 
+func update_cube_view():
+	oAllVoxelObjects.visible = false
+	oSelectedVoxelObject.visible = true
+	do_one()
+
 func _on_ColumnIndexSpinBox_value_changed(value):
 	
 	if oAllVoxelObjects.visible == false: # If was previously invisible (meaning you were editing "one") then update ALL
@@ -294,6 +333,16 @@ func _on_ColumnIndexSpinBox_value_changed(value):
 			oColumnsetControls.oColumnIndexSpinBox.disconnect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
 			set_object(value)
 			oColumnsetControls.oColumnIndexSpinBox.connect("value_changed",self,"_on_ColumnIndexSpinBox_value_changed")
+
+
+func _on_CubeIndexSpinBox_value_changed(value):
+	column_count = Cube.CUBES_COUNT + 1
+	if oAllVoxelObjects.visible == false:
+		oAllVoxelObjects.visible = true
+		do_all()
+	oTabCubes.oCubeIndexSpinBox.disconnect("value_changed",self,"_on_CubeIndexSpinBox_value_changed")
+	set_object(value)
+	oTabCubes.oCubeIndexSpinBox.connect("value_changed",self,"_on_CubeIndexSpinBox_value_changed")
 
 
 
@@ -337,4 +386,3 @@ func refresh_entire_view():
 	oAllVoxelObjects.visible = true
 	set_object(viewObject)
 	oSelectedVoxelObject.visible = true
-

@@ -33,6 +33,7 @@ func _ready():
 	var columnsetHelpButton = get_node("HBoxContainer/VBoxContainer/PanelContainer2/HBoxContainer/ColumnsetHelpButton")
 	ColumnsetRevertButton.connect("pressed", self, "_on_ColumnsetRevertButton_pressed")
 	columnsetHelpButton.connect("pressed", self, "_on_ColumnsetHelpButton_pressed")
+	oModifiedColumnsetLabel.connect("meta_clicked", self, "_on_ModifiedColumnsetLabel_meta_clicked")
 	
 	# Connect external dialog connections
 	oConfirmRevertColumnset.connect("confirmed", self, "_on_ConfirmRevertColumnset_confirmed")
@@ -53,6 +54,8 @@ func connect_columnset_flash_update():
 		oColumnsetControls.oColumnIndexSpinBox.connect("value_changed", self, "on_delayed_spinbox_value_changed")
 
 func on_delayed_spinbox_value_changed(value):
+	if oSlabsetWindow.flash_ids_on_map == false:
+		return
 	flash_update_timer.stop()
 	flash_update_timer.start()
 
@@ -60,7 +63,7 @@ func _on_flash_update_timer_timeout():
 	oSlabsetWindow.update_flash_state()
 
 func update_flash_state():
-	if visible:
+	if visible and oSlabsetWindow.flash_ids_on_map:
 		var columnsetIndex = int(oColumnsetControls.oColumnIndexSpinBox.value)
 		oFlashingColumns.start_columnset_flash(columnsetIndex)
 
@@ -83,29 +86,37 @@ func update_columnset_paths_label(list_of_modified_columns):
 	var final_text = ""
 	var tooltip_text = ""
 	
-	if file_path != "":
-		if "/" in file_path:
-			# Campaign file - show parent folder + filename
-			final_text = "/" + file_path.get_base_dir().get_file() + "/" + file_path.get_file()
+	if list_of_modified_columns.empty():
+		if Columnset.has_changes_since_load() and file_path != "":
+			final_text = "Save will delete: " + file_path.get_file()
+			tooltip_text = file_path
 		else:
-			# Local file - show just filename
-			final_text = file_path
+			final_text = ""
+	elif file_path != "":
+		var filename = file_path.get_file()
+		if filename == "columnset.toml":
+			final_text = "/" + file_path.get_base_dir().get_file() + "/" + filename
+		else:
+			final_text = filename
 		tooltip_text = file_path
 	else:
-		final_text = "No saved file"
-		tooltip_text = "No saved file"
+		if oCurrentMap.path == "":
+			final_text = "Save map first"
+			tooltip_text = "Save the map first to create a local columnset override."
+		else:
+			var local_file_path = oCurrentMap.path.get_basename() + ".columnset.toml"
+			final_text = "Save will create: " + local_file_path.get_file()
+			tooltip_text = local_file_path
 	
 	oCurrentlyOpenColumnset.text = final_text
 	oCurrentlyOpenColumnset.hint_tooltip = tooltip_text
 	oSlabsetWindow.update_window_title()
 
 func update_modified_label_for_all_columns(list_of_modified_columns):
-	oModifiedColumnsetLabel.text = str(list_of_modified_columns).replace("[","").replace("]","")
-	if oModifiedColumnsetLabel.text == "":
-		oModifiedColumnsetPanelContainer.modulate = Color(1, 1, 1, 1)
-		oModifiedColumnsetLabel.text = "No modified columns"
-	else:
-		oModifiedColumnsetPanelContainer.modulate = Color(1.4, 1.4, 1.7, 1.0)
+	Utils.set_id_links_label(list_of_modified_columns, oModifiedColumnsetLabel, oModifiedColumnsetPanelContainer, "No modified columns")
+
+func _on_ModifiedColumnsetLabel_meta_clicked(meta):
+	oColumnsetControls.oColumnIndexSpinBox.value = int(meta)
 
 func _on_columnset_timer_timeout():
 	update_columnset_revert_button_state()
@@ -113,6 +124,8 @@ func _on_columnset_timer_timeout():
 func _on_ColumnsetHelpButton_pressed():
 	var helptxt = ""
 	helptxt += "columnset.toml is a global file in /fxdata/ that is used by all maps in the game, but it can also be saved as a local file for a map or campaign. When you run the game both columnset.toml files will be loaded, but with the local file overwriting any same fields of the file in /fxdata/.\n"
+	helptxt += "\n"
+	helptxt += "When you save the map, Columnset edits are saved to the file shown at the top of this tab. If no Columnset file exists for this map yet, Unearth creates mapname.columnset.toml beside the map.\n"
 	helptxt += "\n"
 	helptxt += "Be wary not to confuse the Columnset with the CLM data:\n"
 	helptxt += "- The Columnset (.toml) represents the appearance of new columns that are yet to be placed in the future.\n"
@@ -142,8 +155,7 @@ func _on_ConfirmRevertColumnset_confirmed():
 	oColumnsetControls.adjust_ui_color_if_different()
 	oColumnsetVoxelView.refresh_entire_view()
 	update_columnset_revert_button_state()
-	for idx in list_of_modified_columns:
-		oSlabsetMapRegenerator.regenerate_slabs_using_columnset(idx)
+	oSlabsetMapRegenerator.regenerate_slabs_using_columnsets(list_of_modified_columns)
 
 func _on_config_status_changed():
 	if Columnset.default_data.empty():

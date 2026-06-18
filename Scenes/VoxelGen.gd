@@ -19,7 +19,7 @@ func column_gen(genArray, x, z, clmIndex, surrClmIndex, generateBottomFace, sour
 			
 			for side in 4:
 				var sideIdx = surrClmIndex[side]
-				if oDataClm.cubes[sideIdx][y] == 0 or sideIdx == TileMap.INVALID_CELL:
+				if sideIdx == TileMap.INVALID_CELL or sourceDataClm.cubes[sideIdx][y] == 0:
 					var textureID = Cube.tex[cubeID][side]
 					add_face(genArray, pos, side, textureID)
 			
@@ -38,6 +38,14 @@ func column_gen(genArray, x, z, clmIndex, surrClmIndex, generateBottomFace, sour
 				var pos = Vector3(x,y-1,z)
 				var textureID = sourceDataClm.floorTexture[clmIndex]
 				add_face(genArray, pos, 4, textureID)
+
+
+func cube_gen(genArray, x, z, cubeID):
+	if cubeID >= Cube.tex.size():
+		return
+	var pos = Vector3(x, 0, z)
+	for side in 6:
+		add_face(genArray, pos, side, Cube.tex[cubeID][side])
 
 func complete_mesh(genArray):
 	var generatedMesh = ArrayMesh.new()

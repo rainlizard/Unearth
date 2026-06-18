@@ -82,51 +82,35 @@ func get_variation_description(variation, bitmaskType, surrID):
 	
 	return baseDescription
 
-func find_variations_using_columnset(targetColumnsetIndex):
-	var CODETIME_START = OS.get_ticks_msec()
-	var matchingVariations = []
-	var slabsetSize = Slabset.dat.size()
-	for variation in slabsetSize:
-		if variation < Slabset.dat.size():
-			var datArray = Slabset.dat[variation]
-			for subtileIndex in 9:
-				if datArray[subtileIndex] == targetColumnsetIndex:
-					matchingVariations.append({
-						"variation": variation,
-						"slabID": variation / 28,
-						"localVariation": variation % 28,
-						"subtileIndex": subtileIndex
-					})
-					break
-	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-	return matchingVariations
+func make_id_lookup(ids):
+	var lookup = {}
+	for id in ids:
+		lookup[int(id)] = true
+	return lookup
 
-func regenerate_slabs_using_columnset(columnsetIndex):
-	var slabsToRegenerate = {}
-	var variationsFound = find_variations_using_columnset(columnsetIndex)
-	print("Found ", variationsFound.size(), " variations using columnset ", columnsetIndex)
-	for variationInfo in variationsFound:
-		var slabID = variationInfo.slabID
-		if not slabsToRegenerate.has(slabID):
-			slabsToRegenerate[slabID] = []
-		slabsToRegenerate[slabID].append(variationInfo.localVariation)
+func regenerate_slabs_using_columnsets(columnsetIndexes):
+	var targetColumnsetIndexes = make_id_lookup(columnsetIndexes)
+	if targetColumnsetIndexes.empty():
+		return
+	var slabIDs = {}
+	for variation in Slabset.dat.size():
+		var datArray = Slabset.dat[variation]
+		for subtileIndex in 9:
+			if targetColumnsetIndexes.has(datArray[subtileIndex]):
+				slabIDs[int(variation / 28)] = true
+				break
+	regenerate_slabs_using_slab_ids(slabIDs.keys())
+
+func regenerate_slabs_using_slab_ids(slabIDs):
+	var targetSlabIDs = make_id_lookup(slabIDs)
+	if targetSlabIDs.empty():
+		return
+
 	var slabPositions = []
 	for y in M.ySize:
 		for x in M.xSize:
 			var currentSlabID = oDataSlab.get_cell(x, y)
-			if slabsToRegenerate.has(currentSlabID):
+			if targetSlabIDs.has(currentSlabID):
 				slabPositions.append(Vector2(x, y))
-	print("Found ", slabPositions.size(), " slab positions to regenerate")
-	if slabPositions.size() > 0:
-		oSlabPlacement.generate_slabs_based_on_id(slabPositions, false)
-
-func regenerate_slabs_using_slab_id(slabID):
-	var slabPositions = []
-	for y in M.ySize:
-		for x in M.xSize:
-			var currentSlabID = oDataSlab.get_cell(x, y)
-			if currentSlabID == slabID:
-				slabPositions.append(Vector2(x, y))
-	print("Found ", slabPositions.size(), " positions with slab ID ", slabID, " to regenerate")
 	if slabPositions.size() > 0:
 		oSlabPlacement.generate_slabs_based_on_id(slabPositions, false)

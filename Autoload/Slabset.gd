@@ -9,6 +9,7 @@ var highest_slabset_id_from_fxdata = 0
 var tng = []
 var dat = []
 var default_data = {}
+var loaded_data = {}
 
 enum obj {
 	IS_LIGHT,     # [0] IsLight [0-1]
@@ -39,6 +40,7 @@ func clear_all_slabset_data():
 	tng = []
 	dat = []
 	highest_slabset_id_from_fxdata = 0
+	loaded_data = {}
 
 func import_toml_slabset(filePath):
 	var processed_string = preprocess_toml_file(filePath)
@@ -155,6 +157,15 @@ func store_default_data():
 	default_data["dat"] = dat.duplicate(true)
 	default_data["tng"] = tng.duplicate(true)
 
+func store_loaded_data():
+	loaded_data["dat"] = dat.duplicate(true)
+	loaded_data["tng"] = tng.duplicate(true)
+
+func has_changes_since_load():
+	if loaded_data.empty():
+		return get_all_modified_slabs().empty() == false
+	return dat != loaded_data["dat"] or tng != loaded_data["tng"]
+
 
 func resize_dat_and_tng_based_on_file(cfg):
 	var max_variation_size_needed = 0
@@ -177,11 +188,6 @@ const EMPTY_SLAB = [0,0,0, 0,0,0, 0,0,0]
 func ensure_dat_has_space(variationIndex):
 	while variationIndex >= dat.size():
 		dat.append(EMPTY_SLAB.duplicate(true))
-
-
-func ensure_tng_has_space(variationIndex): # Helper retained, though not used in export below
-	while variationIndex >= tng.size():
-		tng.append([])
 
 
 func preprocess_toml_file(filePath): # 7ms

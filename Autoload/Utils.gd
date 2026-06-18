@@ -30,6 +30,25 @@ func strip_letters_from_string(string):
 			string = string.replace(character,"")
 	return string
 
+func set_id_links_label(ids, rich_text_label, panel_container, empty_text):
+	if ids.empty():
+		panel_container.modulate = Color(1, 1, 1, 1)
+		rich_text_label.rect_min_size.x = 0
+		rich_text_label.bbcode_text = empty_text
+		return
+
+	panel_container.modulate = Color(1.4, 1.4, 1.7, 1.0)
+	var parts = []
+	for id in ids:
+		parts.append("[url=" + str(id) + "]" + str(id) + "[/url]")
+	rich_text_label.bbcode_text = ",".join(parts)
+
+	parts.clear()
+	for id in ids:
+		parts.append(str(id))
+	var font = rich_text_label.get_font("normal_font")
+	rich_text_label.rect_min_size.x = ceil(font.get_string_size(",".join(parts)).x)
+
 func string_has_letters(string):
 	if regex.search(string) == null:
 		return true

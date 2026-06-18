@@ -11,6 +11,7 @@ onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oTabColumnset = Nodelist.list["oTabColumnset"]
 
 onready var oColumnIndexSpinBox = $"%ColumnIndexSpinBox"
+onready var oGridSimpleValues = $"ScrollContainer/VBoxContainer/GridSimpleValues"
 onready var oGridAdvancedValues = $"%GridAdvancedValues"
 
 onready var oHeightSpinBox = $"%HeightSpinBox"
@@ -54,6 +55,10 @@ var _previous_column_id = 0
 var pending_regeneration_columnset_ids = []
 var isReadOnlyMode = false
 
+const iconShortcut = preload("res://Art/IconShortcut.png")
+const iconShortcutHover = preload("res://Art/IconShortcutHover.png")
+const iconShortcutPressed = preload("res://Art/IconShortcutPressed.png")
+
 # Clipboard for column data
 var clipboard = {
 	"height": 0,
@@ -70,6 +75,7 @@ signal cube_value_changed(clmIndex)
 signal floor_texture_changed(clmIndex)
 signal column_pasted(clmIndex)
 signal column_reverted(clmIndex)
+signal cube_shortcut_pressed(cubeID)
 
 func _ready():
 	match name:
@@ -79,6 +85,25 @@ func _ready():
 		"ColumnsetControls":
 			nodeClm = Columnset
 			nodeVoxelView = oColumnsetVoxelView
+			oGridSimpleValues.columns = 3
+			for cubeSpinBox in cubeSpinBoxArray:
+				var shortcutButton = TextureButton.new()
+				shortcutButton.rect_min_size = Vector2(28, 28)
+				shortcutButton.size_flags_horizontal = SIZE_SHRINK_CENTER
+				shortcutButton.size_flags_vertical = SIZE_SHRINK_CENTER
+				shortcutButton.texture_normal = iconShortcut
+				shortcutButton.texture_hover = iconShortcutHover
+				shortcutButton.texture_pressed = iconShortcutPressed
+				shortcutButton.expand = true
+				shortcutButton.stretch_mode = 4
+				shortcutButton.hint_tooltip = "Open this cube in the Cubeset tab"
+				oGridSimpleValues.add_child(shortcutButton)
+				oGridSimpleValues.move_child(shortcutButton, cubeSpinBox.get_index())
+				shortcutButton.connect("pressed", self, "_on_cube_shortcut_pressed", [cubeSpinBox])
+			var floorTextureSpacer = Control.new()
+			floorTextureSpacer.rect_min_size = Vector2(28, 1)
+			oGridSimpleValues.add_child(floorTextureSpacer)
+			oGridSimpleValues.move_child(floorTextureSpacer, oFloorTextureSpinBox.get_index())
 			
 	
 	oColumnIndexSpinBox.connect("value_changed", nodeVoxelView, "_on_ColumnIndexSpinBox_value_changed")
@@ -123,8 +148,7 @@ func just_opened():
 func _on_regeneration_timer_timeout():
 	if name == "ColumnsetControls" and is_instance_valid(Nodelist.list.get("oSlabsetMapRegenerator")):
 		var oSlabsetMapRegenerator = Nodelist.list["oSlabsetMapRegenerator"]
-		for columnsetIndex in pending_regeneration_columnset_ids:
-			oSlabsetMapRegenerator.regenerate_slabs_using_columnset(columnsetIndex)
+		oSlabsetMapRegenerator.regenerate_slabs_using_columnsets(pending_regeneration_columnset_ids)
 		pending_regeneration_columnset_ids.clear()
 
 func queue_columnset_for_regeneration(columnsetIndex):
@@ -188,6 +212,10 @@ func _on_cube_mouse_entered(cubeNumber):
 
 func _on_cube_mouse_exited(cubeNumber):
 	oCustomTooltip.set_text("")
+
+
+func _on_cube_shortcut_pressed(cubeSpinBox):
+	emit_signal("cube_shortcut_pressed", int(cubeSpinBox.value))
 
 
 

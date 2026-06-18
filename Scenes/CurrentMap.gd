@@ -45,13 +45,14 @@ var lastExternalChangeWarningKey = ""
 var existing_slabset_file = ""
 var existing_rules_file = ""
 var existing_columnset_file = ""
+var existing_cubes_file = ""
 
 enum {
 	PATHSTRING
 	MODIFIED_DATE
 }
 
-const CONFIG_FILE_NAMES = ["rules.cfg", "slabset.toml", "columnset.toml"]
+const CONFIG_FILE_NAMES = ["rules.cfg", "slabset.toml", "columnset.toml", "cubes.cfg"]
 
 
 func _init():
@@ -111,14 +112,15 @@ func _notification(what: int):
 func get_meaningful_file_path(fileName):
 	for cfg_type in [oConfigFileManager.LOAD_CFG_CURRENT_MAP, oConfigFileManager.LOAD_CFG_CAMPAIGN]:
 		if oConfigFileManager.paths_loaded.has(cfg_type):
-			for path in oConfigFileManager.paths_loaded[cfg_type]:
-				if path and path.to_lower().ends_with(fileName):
-					return path
+			for loaded_path in oConfigFileManager.paths_loaded[cfg_type]:
+				if loaded_path and loaded_path.to_lower().ends_with(fileName):
+					return loaded_path
 	return ""
 
 func update_config_paths(refresh_modified_times = false):
 	existing_slabset_file = get_meaningful_file_path("slabset.toml")
 	existing_columnset_file = get_meaningful_file_path("columnset.toml") 
+	existing_cubes_file = get_meaningful_file_path("cubes.cfg")
 	existing_rules_file = get_meaningful_file_path("rules.cfg")
 	if refresh_modified_times:
 		store_config_file_modified_times()

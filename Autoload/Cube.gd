@@ -2,9 +2,17 @@ extends Node
 
 var tex = []
 var names = []
+var default_tex = []
+var default_names = []
+var default_cfg_data = {}
+var cfg_data = {}
+var modified_since_load = false
 var cubesCfgLastModifiedTime = 0
 
 var CUBES_COUNT
+const CUBE_ITEMS_MAX = 1024
+const CUBE_TEXTURES = 6
+const TEXTURE_ID_MAX = 65535
 
 enum {
 	RED = 0
@@ -53,23 +61,201 @@ enum {
 func clear_all_cube_data():
 	tex.clear()
 	names.clear()
+	default_tex.clear()
+	default_names.clear()
+	default_cfg_data.clear()
+	cfg_data.clear()
+	modified_since_load = false
 
 
 func read_cubes_cfg(get_cfg_data):
+	cfg_data = get_cfg_data.duplicate(true)
 	var int_cfg_data = {}
 	for key in get_cfg_data:
-		int_cfg_data[int(key)] = get_cfg_data[key]
-	
-	var max_cube_key = int_cfg_data.keys().max()
-	
-	names.resize(max_cube_key + 1)
-	tex.resize(max_cube_key + 1)
+		var cubeID = int(key)
+		if cubeID >= 0 and cubeID < CUBE_ITEMS_MAX:
+			int_cfg_data[cubeID] = get_cfg_data[key]
+
+	if int_cfg_data.empty():
+		load_dk_original_cubes()
+		return
+
+	var cube_count = int_cfg_data.keys().max() + 1
+	names.resize(cube_count)
+	tex.resize(cube_count)
+	for cubeID in names.size():
+		names[cubeID] = ""
+		tex[cubeID] = [0,0,0,0,0,0]
 	
 	for cubeID in int_cfg_data:
 		names[cubeID] = int_cfg_data[cubeID].get("Name", "")
-		tex[cubeID] = int_cfg_data[cubeID].get("Textures", [])
+		tex[cubeID] = normalize_textures(int_cfg_data[cubeID].get("Textures", [0,0,0,0,0,0]))
+		var section = "cube" + str(cubeID)
+		if cfg_data.has(section):
+			cfg_data[section]["Textures"] = tex[cubeID].duplicate(true)
 	
+	store_default_data()
+	modified_since_load = false
 	set_max_cubes()
+
+
+func store_default_data():
+	var oConfigFileManager = Nodelist.list["oConfigFileManager"]
+	var source_data = cfg_data
+	if oConfigFileManager.default_data.has("cubes.cfg"):
+		source_data = oConfigFileManager.default_data["cubes.cfg"]
+	default_cfg_data = source_data.duplicate(true)
+	default_names.clear()
+	default_tex.clear()
+	for key in source_data:
+		var cubeID = int(key)
+		if cubeID < 0 or cubeID >= CUBE_ITEMS_MAX:
+			continue
+		if cubeID >= default_names.size():
+			default_names.resize(cubeID + 1)
+			default_tex.resize(cubeID + 1)
+		default_names[cubeID] = source_data[key].get("Name", "")
+		default_tex[cubeID] = normalize_textures(source_data[key].get("Textures", [0,0,0,0,0,0]))
+	for cubeID in default_names.size():
+		if default_names[cubeID] == null:
+			default_names[cubeID] = ""
+		if default_tex[cubeID] == null:
+			default_tex[cubeID] = [0,0,0,0,0,0]
+		else:
+			default_tex[cubeID] = normalize_textures(default_tex[cubeID])
+
+
+func normalize_textures(value):
+	var result = [0,0,0,0,0,0]
+	if value is Array:
+		for i in min(value.size(), CUBE_TEXTURES):
+			result[i] = clamp(int(value[i]), 0, TEXTURE_ID_MAX)
+	else:
+		result[0] = clamp(int(value), 0, TEXTURE_ID_MAX)
+	return result
+
+
+func ensure_cube_exists(cubeID):
+	cubeID = clamp(cubeID, 0, CUBE_ITEMS_MAX - 1)
+	if cubeID < tex.size():
+		return
+	var old_size = tex.size()
+	tex.resize(cubeID + 1)
+	names.resize(cubeID + 1)
+	for i in range(old_size, cubeID + 1):
+		tex[i] = [0,0,0,0,0,0]
+		names[i] = ""
+	set_max_cubes()
+
+
+func is_cube_modified(cubeID):
+	if cubeID >= tex.size():
+		return false
+	if cubeID >= default_tex.size():
+		var cube_name = names[cubeID] if cubeID < names.size() and names[cubeID] != null else ""
+		return cube_name != "" or tex[cubeID] != [0,0,0,0,0,0]
+	if tex[cubeID] != default_tex[cubeID]:
+		return true
+	var default_name = default_names[cubeID] if cubeID < default_names.size() else ""
+	return names[cubeID] != default_name
+
+
+func is_cube_extra_cfg_different(cubeID):
+	if default_cfg_data.empty():
+		return false
+	var section = "cube" + str(cubeID)
+	var current_section = cfg_data.get(section, {})
+	var default_section = default_cfg_data.get(section, {})
+	var keys = {}
+	for key in current_section.keys():
+		keys[key] = true
+	for key in default_section.keys():
+		keys[key] = true
+	for key in keys.keys():
+		if key == "Name" or key == "Textures":
+			continue
+		if current_section.get(key, null) != default_section.get(key, null):
+			return true
+	return false
+
+
+func is_cube_export_different(cubeID):
+	return is_cube_modified(cubeID) or is_cube_extra_cfg_different(cubeID)
+
+
+func find_first_unused_cube():
+	for cubeID in range(1, min(tex.size(), CUBE_ITEMS_MAX)):
+		if names[cubeID] == "" and tex[cubeID] == [0,0,0,0,0,0]:
+			return cubeID
+	if tex.size() < CUBE_ITEMS_MAX:
+		return tex.size()
+	return -1
+
+
+func mark_modified():
+	modified_since_load = true
+
+
+func get_all_export_cube_ids():
+	var export_cube_ids = []
+	for cubeID in min(tex.size(), CUBE_ITEMS_MAX):
+		if is_cube_export_different(cubeID):
+			export_cube_ids.append(cubeID)
+	return export_cube_ids
+
+
+func revert_cube(cubeID):
+	cubeID = clamp(cubeID, 0, CUBE_ITEMS_MAX - 1)
+	ensure_cube_exists(cubeID)
+	var section = "cube" + str(cubeID)
+	if cubeID >= default_tex.size():
+		names[cubeID] = ""
+		tex[cubeID] = [0,0,0,0,0,0]
+	else:
+		names[cubeID] = default_names[cubeID]
+		tex[cubeID] = default_tex[cubeID].duplicate(true)
+	if default_cfg_data.has(section):
+		cfg_data[section] = default_cfg_data[section].duplicate(true)
+		cfg_data[section]["Name"] = names[cubeID]
+		cfg_data[section]["Textures"] = tex[cubeID].duplicate(true)
+	else:
+		cfg_data.erase(section)
+
+
+func export_cfg_cubes(filePath):
+	var cube_diffs = get_all_export_cube_ids()
+	if cube_diffs.empty():
+		return false
+	var textFile = File.new()
+	if textFile.open(filePath, File.WRITE) != OK:
+		var oMessage = Nodelist.list["oMessage"]
+		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
+		return false
+	for cubeID in cube_diffs:
+		var section = "cube" + str(cubeID)
+		var section_data = cfg_data.get(section, {}).duplicate(true)
+		section_data["Name"] = names[cubeID]
+		section_data["Textures"] = tex[cubeID]
+		textFile.store_line("[" + section + "]")
+		textFile.store_line("Name = " + str(section_data["Name"]))
+		textFile.store_line("Textures = " + value_to_cfg_text(section_data["Textures"]))
+		for key in section_data.keys():
+			if key == "Name" or key == "Textures":
+				continue
+			textFile.store_line(str(key) + " = " + value_to_cfg_text(section_data[key]))
+		textFile.store_line("")
+	textFile.close()
+	print("Saved: " + filePath)
+	return true
+
+
+func value_to_cfg_text(value):
+	if value is Array:
+		var parts = []
+		for item in value:
+			parts.append(str(item))
+		return " ".join(parts)
+	return str(value)
 
 
 const DEFAULT_TEX = [
@@ -589,24 +775,25 @@ const DEFAULT_TEX = [
 
 func load_dk_original_cubes():
 	tex = DEFAULT_TEX.duplicate(true)
+	names.resize(tex.size())
+	for cubeID in names.size():
+		names[cubeID] = ""
+	default_tex = tex.duplicate(true)
+	default_names = names.duplicate(true)
+	default_cfg_data.clear()
+	modified_since_load = false
 	set_max_cubes()
 
 
-func is_cube_modified(cubeID):
-	if cubeID >= tex.size():
-		return false
-	if cubeID >= DEFAULT_TEX.size():
-		return true
-	return tex[cubeID] != DEFAULT_TEX[cubeID]
-
 func set_max_cubes():
-	var oClmEditorControls = Nodelist.list["oClmEditorControls"]
-	var oColumnsetControls = Nodelist.list["oColumnsetControls"]
+	CUBES_COUNT = min(Cube.tex.size() - 1, CUBE_ITEMS_MAX - 1)
 	
-	CUBES_COUNT = Cube.tex.size()-1
-	
-	oClmEditorControls.establish_maximum_cube_field_values()
-	oColumnsetControls.establish_maximum_cube_field_values()
+	if Nodelist.list.has("oClmEditorControls"):
+		Nodelist.list["oClmEditorControls"].establish_maximum_cube_field_values()
+	if Nodelist.list.has("oColumnsetControls"):
+		Nodelist.list["oColumnsetControls"].establish_maximum_cube_field_values()
+	if Nodelist.list.has("oTabCubes"):
+		Nodelist.list["oTabCubes"].establish_maximum_cube_field_values()
 
 
 func get_cubescfg_modified_time():

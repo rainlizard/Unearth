@@ -11,24 +11,28 @@ onready var oPropertiesTabs = Nodelist.list["oPropertiesTabs"]
 onready var oTabSlabset = Nodelist.list["oTabSlabset"]
 onready var oTabColumnset = Nodelist.list["oTabColumnset"]
 onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
+onready var oTabCubes = Nodelist.list["oTabCubes"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
+onready var oSlabsetFlashIdsButton = Nodelist.list["oSlabsetFlashIdsButton"]
+onready var oColumnsetFlashIdsButton = Nodelist.list["oColumnsetFlashIdsButton"]
 
 var is_initializing = false
+var flash_ids_on_map = false
+var has_been_opened = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	oSlabsetTabs.set_tab_title(0, "Slabset") #slabs.dat
 	oSlabsetTabs.set_tab_title(1, "Columnset") #slabs.clm
 	oSlabsetTabs.set_tab_title(2, "CLM data") #map.clm
+	oSlabsetTabs.set_tab_title(3, "Cubeset") #cubes.cfg
 	
 	# Hide or show the CLM data tab according to user preference
 	var show_clm_tab = Settings.get_setting("show_clm_data_tab")
 	oSlabsetTabs.set_tab_hidden(2, !show_clm_tab)
-	if show_clm_tab == false and oSlabsetTabs.current_tab == 2:
-		oSlabsetTabs.current_tab = 0
 	
 	oDkSlabsetVoxelView.initialize()
 	
@@ -39,6 +43,9 @@ func _ready():
 	
 	oSlabsetTabs.connect("tab_changed", self, "_on_SlabsetTabs_tab_changed")
 	oTabSlabset.connect("column_shortcut_pressed", self, "_on_TabSlabset_column_shortcut_pressed")
+	oColumnsetControls.connect("cube_shortcut_pressed", self, "_on_ColumnsetControls_cube_shortcut_pressed")
+	oSlabsetFlashIdsButton.connect("toggled", self, "_on_FlashIdsButton_toggled")
+	oColumnsetFlashIdsButton.connect("toggled", self, "_on_FlashIdsButton_toggled")
 
 
 func update_window_title():
@@ -46,7 +53,7 @@ func update_window_title():
 		0: # Slabset tab
 			var file_path = oCurrentMap.existing_slabset_file
 			if file_path != "":
-				if "/" in file_path:
+				if file_path.get_file() == "slabset.toml":
 					window_title = "Slabset - campaign"
 				else:
 					window_title = "Slabset - local"
@@ -55,7 +62,7 @@ func update_window_title():
 		1: # Columnset tab
 			var file_path = oCurrentMap.existing_columnset_file
 			if file_path != "":
-				if "/" in file_path:
+				if file_path.get_file() == "columnset.toml":
 					window_title = "Columnset - campaign"
 				else:
 					window_title = "Columnset - local"
@@ -66,6 +73,17 @@ func update_window_title():
 				window_title = "CLM data - local"
 			else:
 				window_title = "CLM data"
+		3: # cubes.cfg
+			var file_path = oCurrentMap.existing_cubes_file
+			if Cube.modified_since_load and oCurrentMap.path != "" and (file_path == "" or file_path.get_file() == "cubes.cfg"):
+				window_title = "Cubeset - local override"
+			elif file_path != "":
+				if file_path.get_file() == "cubes.cfg":
+					window_title = "Cubeset - campaign"
+				else:
+					window_title = "Cubeset - local"
+			else:
+				window_title = "Cubeset"
 
 
 func _on_SlabsetTabs_tab_changed(tab):
@@ -76,6 +94,8 @@ func _on_SlabsetTabs_tab_changed(tab):
 			oTabColumnset._on_TabColumnset_visibility_changed()
 		2: # CLM data
 			oTabClmEditor._on_ColumnEditor_visibility_changed()
+		3: # cubes.cfg
+			oTabCubes._on_TabCubes_visibility_changed()
 	
 	update_window_title()
 
@@ -107,6 +127,10 @@ func popup_on_right_side():
 	else:
 		rect_position = desiredPosition
 		rect_size = desiredSize
+	
+	if has_been_opened == false:
+		oSlabsetTabs.current_tab = 0
+		has_been_opened = true
 	
 	visible = true
 
@@ -172,23 +196,38 @@ func update_flash_state():
 		match oSlabsetTabs.current_tab:
 			0: # Slabset tab - flash all positions using the same full variation
 				oTabClmEditor.disconnect_flash_connection()
+				if flash_ids_on_map == false:
+					oFlashingColumns.stop_column_flash()
+					return
 				var currentVariation = oTabSlabset.get_current_variation()
 				var slabID = int(oSlabsetIDSpinBox.value)
 				oFlashingColumns.start_variation_flash(currentVariation, slabID)
 			1: # Columnset tab
 				oTabClmEditor.disconnect_flash_connection()
+				if flash_ids_on_map == false:
+					oFlashingColumns.stop_column_flash()
+					return
 				var columnsetIndex = int(oColumnsetControls.oColumnIndexSpinBox.value)
 				oFlashingColumns.start_columnset_flash(columnsetIndex)
 			2: # CLM data tab
 				oTabClmEditor.setup_flash_connection()
 				var columnIndex = int(oTabClmEditor.get_clm_column_index())
 				oFlashingColumns.start_column_flash(columnIndex)
+			3: # Cubeset tab
+				oTabClmEditor.disconnect_flash_connection()
+				oFlashingColumns.stop_column_flash()
 			_:
 				oTabClmEditor.disconnect_flash_connection()
 				oFlashingColumns.stop_column_flash()
 	else:
 		oTabClmEditor.disconnect_flash_connection()
 		oFlashingColumns.stop_column_flash()
+
+func _on_FlashIdsButton_toggled(button_pressed):
+	flash_ids_on_map = button_pressed
+	oSlabsetFlashIdsButton.set_pressed_no_signal(button_pressed)
+	oColumnsetFlashIdsButton.set_pressed_no_signal(button_pressed)
+	update_flash_state()
 
 # Helper methods that delegate to TabSlabset
 func update_column_spinboxes():
@@ -200,6 +239,10 @@ func variation_changed(localVariation):
 func _on_TabSlabset_column_shortcut_pressed(clmIndex):
 	oSlabsetTabs.current_tab = 1
 	oColumnsetControls.oColumnIndexSpinBox.value = clmIndex
+
+func _on_ColumnsetControls_cube_shortcut_pressed(cubeID):
+	oSlabsetTabs.current_tab = 3
+	oTabCubes.oCubeIndexSpinBox.value = cubeID
 
 func update_slabset_and_columnset_widgets():
 	oTabSlabset.update_slabset_revert_button_state()

@@ -1,5 +1,8 @@
 extends Control
 onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
+onready var oTMapLoader = Nodelist.list["oTMapLoader"]
+onready var oReadPalette = Nodelist.list["oReadPalette"]
+onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 
 var offset = Vector2(0,-35)
 
@@ -46,11 +49,6 @@ func set_floortexture(floorTextureValue):
 	dataImage.unlock()
 	dataTexture.set_data(dataImage)
 	
-	# Get required texture resources
-	var oTMapLoader = Nodelist.list["oTMapLoader"]
-	var oReadPalette = Nodelist.list["oReadPalette"]
-	var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
-	
 	oTooltipPic.material.set_shader_param("showOnlySpecificStyle", 0)
 	oTooltipPic.material.set_shader_param("slxData", preload("res://Shaders/Black3x3.png"))
 	oTooltipPic.material.set_shader_param("slabIdData", preload("res://Shaders/Black3x3.png"))
@@ -66,6 +64,6 @@ func set_floortexture(floorTextureValue):
 			oTooltipPic.material.set_shader_param("tmap_B_top", currentPack[2])
 			oTooltipPic.material.set_shader_param("tmap_B_bottom", currentPack[3])
 	
-	var paletteTexture = oReadPalette.get_palette_texture()
+	var paletteTexture = oReadPalette.palette_image_texture_2d
 	if paletteTexture != null:
 		oTooltipPic.material.set_shader_param("palette_texture", paletteTexture)

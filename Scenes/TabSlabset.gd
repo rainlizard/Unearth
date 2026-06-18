@@ -79,6 +79,7 @@ func _ready():
 		var id = scnColumnSetter.instance()
 		var spinbox = id.get_node("CustomSpinBox")
 		var shortcut = id.get_node("ButtonShortcut")
+		shortcut.hint_tooltip = "Open this column in the Columnset tab"
 		shortcut.connect("pressed",self,"shortcut_pressed",[id])
 		spinbox.min_value = 0
 		spinbox.max_value = Columnset.column_count-1
@@ -140,6 +141,7 @@ func _ready():
 	var SlabsetRevertButton = get_node("HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer/SlabsetRevertButton")
 	slabsetHelpButton.connect("pressed", self, "_on_SlabsetHelpButton_pressed")
 	SlabsetRevertButton.connect("pressed", self, "_on_SlabsetRevertButton_pressed")
+	oModifiedSlabsetLabel.connect("meta_clicked", self, "_on_ModifiedSlabsetLabel_meta_clicked")
 	
 	oConfirmRevertSlabset.connect("confirmed", self, "_on_ConfirmRevertSlabset_confirmed")
 	connect("visibility_changed", self, "_on_TabSlabset_visibility_changed")
@@ -201,7 +203,7 @@ func variation_changed(localVariation):
 	
 	oVariationInfoLabel.text = constructString
 	update_objects_ui()
-	if is_initializing == false:
+	if is_initializing == false and oSlabsetWindow.flash_ids_on_map:
 		flash_update_timer.stop()
 		flash_update_timer.start()
 
@@ -232,7 +234,7 @@ func _on_SlabsetIDSpinBox_value_changed(value):
 	var slabName = Slabs.data[value][Slabs.NAME] if Slabs.data.has(value) else "Unknown"
 	oSlabsetSlabNameLabel.text = slabName
 	update_column_spinboxes()
-	if is_initializing == false:
+	if is_initializing == false and oSlabsetWindow.flash_ids_on_map:
 		flash_update_timer.stop()
 		flash_update_timer.start()
 
@@ -245,31 +247,37 @@ func update_slabset_paths_label():
 	var final_text = ""
 	var tooltip_text = ""
 	
-	if file_path != "":
+	if list_of_modified_slabs.empty():
+		if Slabset.has_changes_since_load() and file_path != "":
+			final_text = "Save will delete: " + file_path.get_file()
+			tooltip_text = file_path
+		else:
+			final_text = ""
+	elif file_path != "":
 		var filename = file_path.get_file()
 		if filename == "slabset.toml":
-			# Campaign file - show parent folder + filename
 			final_text = "/" + file_path.get_base_dir().get_file() + "/" + filename
 		else:
-			# Local file (map00001.slabset.toml) - show just filename
 			final_text = filename
 		tooltip_text = file_path
 	else:
-		final_text = "No saved file"
-		tooltip_text = "No saved file"
+		if oCurrentMap.path == "":
+			final_text = "Save map first"
+			tooltip_text = "Save the map first to create a local slabset override."
+		else:
+			var local_file_path = oCurrentMap.path.get_basename() + ".slabset.toml"
+			final_text = "Save will create: " + local_file_path.get_file()
+			tooltip_text = local_file_path
 	
 	oCurrentlyOpenSlabset.text = final_text
 	oCurrentlyOpenSlabset.hint_tooltip = tooltip_text
 	
-	# Handle modified slabs label
-	oModifiedSlabsetLabel.text = str(list_of_modified_slabs).replace("[","").replace("]","")
-	if oModifiedSlabsetLabel.text == "":
-		oModifiedSlabsetPanelContainer.modulate = Color(1, 1, 1, 1)
-		oModifiedSlabsetLabel.text = "No modified slabs"
-	else:
-		oModifiedSlabsetPanelContainer.modulate = Color(1.4, 1.4, 1.7, 1.0)
+	Utils.set_id_links_label(list_of_modified_slabs, oModifiedSlabsetLabel, oModifiedSlabsetPanelContainer, "No modified slabs")
 	
 	oSlabsetRevertButton.disabled = list_of_modified_slabs.empty()
+
+func _on_ModifiedSlabsetLabel_meta_clicked(meta):
+	oSlabsetIDSpinBox.value = int(meta)
 
 func update_modified_label_for_slab_id():
 	if Slabset.is_slab_edited(int(oSlabsetIDSpinBox.value)):
@@ -290,7 +298,7 @@ func update_modified_label_for_variation():
 
 func _on_VariationNumberSpinBox_value_changed(value):
 	update_column_spinboxes()
-	if is_initializing == false:
+	if is_initializing == false and oSlabsetWindow.flash_ids_on_map:
 		flash_update_timer.stop()
 		flash_update_timer.start()
 	update_modified_label_for_slab_id()
@@ -333,8 +341,7 @@ func _on_regeneration_timer_timeout():
 			for aw_id in Slabs.auto_wall_updates_these.keys():
 				if all_slab_ids_to_process.find(aw_id) == -1:
 					all_slab_ids_to_process.append(aw_id)
-	for id in all_slab_ids_to_process:
-		oSlabsetMapRegenerator.regenerate_slabs_using_slab_id(id)
+	oSlabsetMapRegenerator.regenerate_slabs_using_slab_ids(all_slab_ids_to_process)
 	pending_regeneration_slab_ids.clear()
 
 func queue_slab_for_regeneration(slabId):
@@ -745,7 +752,7 @@ func revert(variations_to_revert):
 	restart_regeneration_timer()
 
 func _on_SlabsetHelpButton_pressed():
-	var helptxt = "slabset.toml and columnset.toml affect the appearance of slabs when they're placed; when placing in Unearth AND when placing in-game. \nHowever keep in mind these files are not automatically saved by Unearth, so you will need to press this 'Save slabset' button whenever you make any changes.\nNew entries in terrain.cfg are also required in order to add new Slab IDs to the Slabset.\n\nIf you set an object's RelativeX and RelativeY to be inside of a column/cube then it may not appear in-game."
+	var helptxt = "slabset.toml and columnset.toml affect the appearance of slabs when they're placed; when placing in Unearth AND when placing in-game.\n\nWhen you save the map, Slabset edits are saved to the file shown at the top of this tab. If no Slabset file exists for this map yet, Unearth creates mapname.slabset.toml beside the map.\n\nNew entries in terrain.cfg are also required in order to add new Slab IDs to the Slabset.\n\nIf you set an object's RelativeX and RelativeY to be inside of a column/cube then it may not appear in-game."
 	oMessage.big("Help",helptxt)
 
 func _on_SlabsetRevertButton_pressed():
@@ -770,11 +777,10 @@ func _on_ConfirmRevertSlabset_confirmed():
 	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
 	update_slabset_revert_button_state()
 	
-	for id in list_of_modified_slabs:
-		oSlabsetMapRegenerator.regenerate_slabs_using_slab_id(id)
+	oSlabsetMapRegenerator.regenerate_slabs_using_slab_ids(list_of_modified_slabs)
 
 func update_flash_state():
-	if is_initializing:
+	if is_initializing or oSlabsetWindow.flash_ids_on_map == false:
 		return
 	if visible and oSlabsetWindow.visible:
 		var currentVariation = get_current_variation()

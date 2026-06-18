@@ -16,6 +16,7 @@ var cubes = []
 var floorTexture = []
 
 var default_data = {}
+var loaded_data = {}
 
 var columnsContainingOwnedCubes = {}
 var columnsContainingRngCubes = {}
@@ -104,6 +105,30 @@ func store_default_data():
 	default_data["cubes"] = cubes.duplicate(true)
 	default_data["floorTexture"] = floorTexture.duplicate(true)
 
+func store_loaded_data():
+	loaded_data["utilized"] = utilized.duplicate(true)
+	loaded_data["orientation"] = orientation.duplicate(true)
+	loaded_data["solidMask"] = solidMask.duplicate(true)
+	loaded_data["permanent"] = permanent.duplicate(true)
+	loaded_data["lintel"] = lintel.duplicate(true)
+	loaded_data["height"] = height.duplicate(true)
+	loaded_data["cubes"] = cubes.duplicate(true)
+	loaded_data["floorTexture"] = floorTexture.duplicate(true)
+
+func has_changes_since_load():
+	if loaded_data.empty():
+		return find_all_different_columns().empty() == false
+	return (
+		utilized != loaded_data["utilized"]
+		or orientation != loaded_data["orientation"]
+		or solidMask != loaded_data["solidMask"]
+		or permanent != loaded_data["permanent"]
+		or lintel != loaded_data["lintel"]
+		or height != loaded_data["height"]
+		or cubes != loaded_data["cubes"]
+		or floorTexture != loaded_data["floorTexture"]
+	)
+
 
 func update_cube_lists():
 	update_list_of_columns_that_contain_owned_cubes()
@@ -170,8 +195,11 @@ func is_column_different(index):
 
 
 func update_list_of_columns_that_contain_rng_cubes():
-	var CODETIME_START = OS.get_ticks_msec()
 	columnsContainingRngCubes.clear()
+	if cubes.empty():
+		return
+	
+	var CODETIME_START = OS.get_ticks_msec()
 	
 	var reverseRngCubeLookup = {}
 	for key in Cube.rngCube.keys():
@@ -194,11 +222,15 @@ func update_list_of_columns_that_contain_rng_cubes():
 func clear_all_column_data():
 	.clear_all_column_data()
 	highest_columnset_id_from_fxdata = 0
+	loaded_data = {}
 
 
 func update_list_of_columns_that_contain_owned_cubes():
-	var CODETIME_START = OS.get_ticks_msec()
 	columnsContainingOwnedCubes.clear()
+	if cubes.empty():
+		return
+	
+	var CODETIME_START = OS.get_ticks_msec()
 	
 	var reverseOwnedCubeLookup = {}
 	for key in Cube.ownedCube.keys():

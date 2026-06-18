@@ -99,6 +99,8 @@ func load_cfgs(mapPath):
 				"cubes.cfg": Cube.read_cubes_cfg(combined_cfg_data)
 				"rules.cfg": load_rules_data(combined_cfg_data)
 				"magic.cfg": load_magic_data(combined_cfg_data)
+	Slabset.store_loaded_data()
+	Columnset.store_loaded_data()
 	return campaign_cfg
 
 func super_merge_dictionaries(dict1:Dictionary, dict2:Dictionary):

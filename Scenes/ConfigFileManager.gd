@@ -155,7 +155,8 @@ func notify_file_created(file_path, file_type):
 
 
 func notify_file_deleted(file_path, file_type):
-	if paths_loaded[LOAD_CFG_CURRENT_MAP].has(file_path):
-		paths_loaded[LOAD_CFG_CURRENT_MAP].erase(file_path)
+	for load_cfg_type in paths_loaded.keys():
+		if paths_loaded[load_cfg_type].has(file_path):
+			paths_loaded[load_cfg_type].erase(file_path)
 	emit_signal("config_file_status_changed")
 	print("oConfigFileManager: Removed tracking for file - " + file_type + ": " + file_path) 

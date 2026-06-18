@@ -6,8 +6,10 @@ var dataTexture = ImageTexture.new()
 var accumulated_time = 0.0
 
 #var columns = [0,0,0, 0,0,0, 0,0,0]
-func _ready():
+func _init():
 	add_to_group("SlabDisplay") #Important for when changing texture pack
+
+func _ready():
 	var iconSize = 0.35
 	$AspectRatioContainer.anchor_top -= iconSize
 	$AspectRatioContainer.anchor_bottom += iconSize

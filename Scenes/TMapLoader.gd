@@ -328,7 +328,6 @@ func apply_texture_pack():
 
 
 func apply_slabwindow_textures(tmapTextures: Dictionary):
-	yield(get_tree(),'idle_frame')
 	for nodeID in get_tree().get_nodes_in_group("SlabDisplay"):
 		if is_instance_valid(nodeID):
 			apply_shader_params(nodeID.get_material() as ShaderMaterial, tmapTextures)
