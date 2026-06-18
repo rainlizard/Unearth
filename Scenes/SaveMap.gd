@@ -268,7 +268,7 @@ func save_cubes_cfg_file(file_type, map_filename_no_ext, map_base_dir):
 
 
 func get_local_cubes_save_path(file_type, map_filename_no_ext, map_base_dir):
-	if oCurrentMap.loaded_from_backup == false and oCurrentMap.existing_cubes_file != "" and oCurrentMap.existing_cubes_file.get_file() != file_type:
+	if oCurrentMap.loaded_from_backup == false and oCurrentMap.existing_cubes_file != "" and oCurrentMap.existing_cubes_file.get_file().to_lower() != file_type:
 		return oCurrentMap.existing_cubes_file
 	return map_base_dir.plus_file(map_filename_no_ext + "." + file_type)
 

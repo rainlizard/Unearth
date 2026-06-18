@@ -75,10 +75,10 @@ func update_window_title():
 				window_title = "CLM data"
 		3: # cubes.cfg
 			var file_path = oCurrentMap.existing_cubes_file
-			if Cube.modified_since_load and oCurrentMap.path != "" and (file_path == "" or file_path.get_file() == "cubes.cfg"):
+			if Cube.modified_since_load and oCurrentMap.path != "" and (file_path == "" or file_path.get_file().to_lower() == "cubes.cfg"):
 				window_title = "Cubeset - local override"
 			elif file_path != "":
-				if file_path.get_file() == "cubes.cfg":
+				if file_path.get_file().to_lower() == "cubes.cfg":
 					window_title = "Cubeset - campaign"
 				else:
 					window_title = "Cubeset - local"

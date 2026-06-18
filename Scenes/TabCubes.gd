@@ -255,19 +255,19 @@ func update_cube_revert_button_state():
 	var final_text = ""
 	var tooltip_text = ""
 	if modified_cube_ids.empty():
-		if Cube.modified_since_load and file_path != "" and file_path.get_file() != "cubes.cfg":
+		if Cube.modified_since_load and file_path != "" and file_path.get_file().to_lower() != "cubes.cfg":
 			final_text = "Save will delete: " + file_path.get_file()
 			tooltip_text = file_path
 		else:
 			final_text = ""
 	elif file_path != "":
 		var filename = file_path.get_file()
-		if filename == "cubes.cfg":
+		if filename.to_lower() == "cubes.cfg":
 			final_text = "Loaded: /" + file_path.get_base_dir().get_file() + "/" + filename
 		else:
 			final_text = "Loaded: " + filename
 		tooltip_text = file_path
-		if Cube.modified_since_load and oCurrentMap.path != "" and filename == "cubes.cfg":
+		if Cube.modified_since_load and oCurrentMap.path != "" and filename.to_lower() == "cubes.cfg":
 			var local_file_path = oCurrentMap.path.get_basename() + ".cubes.cfg"
 			final_text = "Save target: " + local_file_path.get_file()
 			tooltip_text = "Loaded: " + file_path + "\nSave target: " + local_file_path

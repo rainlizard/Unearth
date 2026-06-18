@@ -72,6 +72,8 @@ func read_cubes_cfg(get_cfg_data):
 	cfg_data = get_cfg_data.duplicate(true)
 	var int_cfg_data = {}
 	for key in get_cfg_data:
+		if key.begins_with("cube") == false:
+			continue
 		var cubeID = int(key)
 		if cubeID >= 0 and cubeID < CUBE_ITEMS_MAX:
 			int_cfg_data[cubeID] = get_cfg_data[key]
@@ -108,6 +110,8 @@ func store_default_data():
 	default_names.clear()
 	default_tex.clear()
 	for key in source_data:
+		if key.begins_with("cube") == false:
+			continue
 		var cubeID = int(key)
 		if cubeID < 0 or cubeID >= CUBE_ITEMS_MAX:
 			continue
