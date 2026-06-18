@@ -214,7 +214,7 @@ func game_setting(doWhat,string,value):
 			if doWhat == SET: oOpenMap.ALWAYS_DECOMPRESS = value
 			if doWhat == GET: return oOpenMap.ALWAYS_DECOMPRESS
 		"backup_folder_size_limit_mb":
-			if doWhat == SET: backup_folder_size_limit_mb = max(1, int(value))
+			if doWhat == SET: backup_folder_size_limit_mb = max(0, int(value))
 			if doWhat == GET: return backup_folder_size_limit_mb
 		"msaa":
 			

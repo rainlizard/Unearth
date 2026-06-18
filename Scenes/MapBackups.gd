@@ -88,6 +88,9 @@ func backup_existing_map_files(map_file_path):
 	if map_files.empty() == true:
 		return true
 
+	if int(Settings.get_setting("backup_folder_size_limit_mb")) == 0:
+		return true
+
 	var date = OS.get_datetime_from_unix_time(newest_modified_time)
 	var folder_name = str(date["year"]).pad_zeros(4) + "-" + str(date["month"]).pad_zeros(2) + "-" + str(date["day"]).pad_zeros(2)
 	folder_name += "-" + str(date["hour"]).pad_zeros(2) + "-" + str(date["minute"]).pad_zeros(2) + "-" + str(date["second"]).pad_zeros(2)

@@ -117,7 +117,7 @@ func _on_CheckBoxAlwaysDecompress_toggled(button_pressed):
 	Settings.set_setting("always_decompress", button_pressed)
 
 func edited_BackupFolderSizeLimit(new_text):
-	var new_value = max(1, int(new_text))
+	var new_value = max(0, int(new_text))
 	oBackupFolderSizeLimit.update_appearance(new_value)
 	Settings.set_setting("backup_folder_size_limit_mb", new_value)
 
