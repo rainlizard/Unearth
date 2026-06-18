@@ -125,7 +125,9 @@ func set_object(setVal):
 	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
 		setVal = clamp(setVal,1, column_count-1)
 	if displayingType == DK_CUBE:
-		setVal = clamp(setVal,0, column_count-1)
+		setVal = clamp(setVal,0, Cube.CUBE_ITEMS_MAX - 1)
+		Cube.ensure_cube_exists(setVal)
+		column_count = Cube.CUBES_COUNT + 1
 	previousObject = viewObject
 	viewObject = setVal
 	
@@ -336,6 +338,7 @@ func _on_ColumnIndexSpinBox_value_changed(value):
 
 
 func _on_CubeIndexSpinBox_value_changed(value):
+	Cube.ensure_cube_exists(clamp(int(value), 0, Cube.CUBE_ITEMS_MAX - 1))
 	column_count = Cube.CUBES_COUNT + 1
 	if oAllVoxelObjects.visible == false:
 		oAllVoxelObjects.visible = true

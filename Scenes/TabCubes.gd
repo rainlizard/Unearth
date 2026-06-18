@@ -293,7 +293,7 @@ func adjust_ui_color_if_different():
 	var default_name = Cube.default_names[cubeID] if cubeID < Cube.default_names.size() else ""
 	oCubeNameLineEdit.modulate = Color(1.4,1.4,1.7) if Cube.names[cubeID] != default_name else Color(1,1,1)
 	for i in textureSpinBoxArray.size():
-		var default_value = -1
+		var default_value = 0
 		if cubeID < Cube.default_tex.size() and i < Cube.default_tex[cubeID].size():
 			default_value = Cube.default_tex[cubeID][i]
 		textureSpinBoxArray[i].modulate = Color(1.4,1.4,1.7) if Cube.tex[cubeID][i] != default_value else Color(1,1,1)
