@@ -30,6 +30,14 @@ func _on_GridWindow_resized(callingNode):
 	if oGridContainer == null: return
 	
 	var scrollContainer = oGridContainer.get_parent()
+	var tabControl = scrollContainer.get_parent()
+	var panelStyle = tabControl.get_stylebox("panel")
+	tabControl.rect_position = Vector2.ZERO
+	tabControl.rect_size = tabControl.get_parent().rect_size
+	scrollContainer.rect_position = Vector2(panelStyle.get_margin(MARGIN_LEFT), panelStyle.get_margin(MARGIN_TOP))
+	scrollContainer.rect_size = tabControl.rect_size - panelStyle.get_minimum_size()
+	scrollContainer.notification(Container.NOTIFICATION_SORT_CHILDREN)
+	
 	var hseparation = oGridContainer.get_constant("hseparation")
 	var vseparation = oGridContainer.get_constant("vseparation")
 	var itemWidth = callingNode.grid_item_size.x * callingNode.grid_window_scale
@@ -57,6 +65,7 @@ func _on_GridWindow_resized(callingNode):
 		windowShape = float(maxWidth) / float(maxHeight)
 		columnCount = int(round(sqrt(float(itemCount) * windowShape)))
 	oGridContainer.set_columns(int(clamp(columnCount, 1, maxColumns)))
+	oGridContainer.notification(Container.NOTIFICATION_SORT_CHILDREN)
 
 func _on_tab_changed(newTab, callingNode):
 	callingNode.update_scale(callingNode.grid_window_scale)
@@ -67,6 +76,3 @@ func _on_tab_changed(newTab, callingNode):
 		for id in callingNode.current_grid_container().get_children():
 			if callingNode.oSelectedRect.boundToItem == id:
 				callingNode.oSelectedRect.visible = true
-	
-	yield(get_tree(),'idle_frame')
-	_on_GridWindow_resized(callingNode)

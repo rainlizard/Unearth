@@ -2438,7 +2438,6 @@ margin_right = 558.0
 margin_bottom = 289.0
 settingText = "Backup folder limit (MB)"
 slider_step = 1.0
-minimum_value = 0.0
 maximum_value = 1.04858e+06
 
 [node name="TabPlacements" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]

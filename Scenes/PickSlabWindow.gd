@@ -78,6 +78,7 @@ func add_slabs():
 	var CODETIME_START = OS.get_ticks_msec()
 	clear_grid()
 	oSlabStyle.initialize_grid_items()
+	oOnlyOwnership.update_grid_items()
 	
 	var allSlabIDs = []
 	allSlabIDs.append_array(Slabs.slabOrder)
