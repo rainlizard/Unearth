@@ -1,6 +1,45 @@
 ﻿extends Node
 
 const string = """
+0.68.923 - 19/6/2026
+- Resize Map now resizes in any direction
+- Added Cubeset tab to Slabset editor for editing cubes.cfg texture IDs
+- Script Generator now includes custom rooms, creatures, traps, doors and magic from CFG files
+- Script Generator now has Roaming checkboxes for keeper AI
+- Detect external map/config file changes and prompt the user to keep or discard changes
+- Before saving occurs, a backup of the map is created in the /backups/ directory
+- Action Point list renamed to Instance list and now has tabs with Creatures and Hero Gates
+- Added a button to toggle the laggy map flashing for matching Slabset/Columnset IDs
+- Fixed: Save As now copies map-local cfg/toml files
+- Improved map opening speed by optimizing the clearing of instances and script markers
+- Script markers now parse quoted arguments more accurately and support more commands
+- Improved Slab and Thing window item layouts and changed some defaults
+- The "list of modified IDs" in Slabset editor are now clickable shortcuts
+- Creature Stats now loads /creatrs/, campaign CREATURES_LOCATION and local map creature files
+- Image-to-map now supports resized maps
+- Added interpolated placements for Pencil and Brush, it fills in gaps when you the mouse quickly
+- Locked door placement now preserves, mirrors and paints lock state more reliably
+- Undo state saving is no longer threaded, should fix a freeze when exiting on Linux (needs testing)
+- columnset.toml loading tries to preserve fields such as SolidMask (needs testing)
+- Added campaign cfg MAPSIZE support (needs testing)
+- Custom Box fields now support number key shortcuts
+- Added edge blend groups for more accurate slab edge behaviour (reads SlbID from terrain.cfg)
+- Any object can now be set as a Hero Gate in objects.cfg
+- Moving Action Points now updates script markers
+- Added Spacebar shortcut for toggling a door's lock state
+- Added packetsave option and right-clicking on Play button runs packetload
+- Added map preview colours for bedrock and dense gold
+- Bridges over lava now use lava bridge variations
+- Action Points are now layered above script marker icons so you can see them better
+- Various adjustments to the way slabset.toml, columnset.toml, rules.cfg, cubes.cfg are saved or deleted
+- ESC now exits focused text fields
+- Fixed a bug where starter Imps on a New Map were not always level 1
+- Fixed colouring when setting ownership to None
+- When opening a map, fixed an issue where sometimes it would be instantly marked as edited
+- Fixed Export Preview zoom calculations
+- Fixed Map Browser input font
+- Cleaned up a lot of unused files in the project
+- Updated custom object image readme links
 0.67.875 - 19/5/2026
 - Added support for KeeperFX's new /multiplayer/ directory
 - Renamed Options to Flag icon and added 'Cooperative flag icon'
