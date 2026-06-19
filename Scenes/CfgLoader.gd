@@ -194,62 +194,70 @@ func load_objects_data(cfg): # 10ms
 			Things.DATA_OBJECT[id] = [newName, newSprite, newGenre]
 
 
-var keeperfx_edited_slabs = [Slabs.GEMS] # This is to help with backwards compatibility for previous keeperfx versions that don't have these edits.
 func load_terrain_data(cfg): # 4ms
 	for section in cfg:
-		if section.begins_with("slab"):
-			var id = int(section)
-			if id >= 55 or id in keeperfx_edited_slabs:
-				var slabSection = cfg[section]
-				var setName = slabSection.get("Name", "UNKNOWN")
-				
-				var setIsOwnable = Slabs.NOT_OWNABLE
-				if slabSection.get("IsOwnable", 0) == 1:
-					setIsOwnable = Slabs.OWNABLE
-				
-				var getBlockFlags = slabSection.get("BlockFlags", [])
-				if getBlockFlags is String and getBlockFlags == "":
-					getBlockFlags = []
-				
-				var setBlockType = Slabs.FLOOR_SLAB
-				if "FILLED" in getBlockFlags or "DIGGABLE" in getBlockFlags or "VALUABLE" in getBlockFlags:
-					setBlockType = Slabs.BLOCK_SLAB
-				
-				var setBitmask = Slabs.BITMASK_BLOCK
-				if slabSection.get("Animated", 0) == 1:
-					setBitmask = Slabs.BITMASK_SIMPLE
-					if "IS_DOOR" in getBlockFlags:
-						if setName.ends_with("2"):
-							setBitmask = Slabs.BITMASK_DOOR2
-						else: setBitmask = Slabs.BITMASK_DOOR1
-				else:
-					match slabSection.get("Category", 0):
-						0: # Unclaimed
-							if setBlockType == Slabs.BLOCK_SLAB:
-								setBitmask = Slabs.BITMASK_BLOCK
-							elif setBlockType == Slabs.FLOOR_SLAB:
-								setBitmask = Slabs.BITMASK_FLOOR
-						1: # Diggable dirt
-							setBitmask = Slabs.BITMASK_BLOCK
-						2: # Claimed path
-							setBitmask = Slabs.BITMASK_CLAIMED
-						3: # Fortified wall
-							setBitmask = Slabs.BITMASK_REINFORCED
-						4: # Room
-							setBitmask = Slabs.BITMASK_FLOOR
-						5: # Obstacle
-							setBitmask = Slabs.BITMASK_SIMPLE
-				
-				Slabs.data[id] = [
-					setName,
-					setBlockType,
-					setBitmask,
-					Slabs.TAB_MAINSLAB,
-					slabSection.get("Wibble", 0),
-					slabSection.get("WlbType", 0),
-					setIsOwnable,
-					slabSection.get("SlbID", 0),
-				]
+		if section.begins_with("slab") == false:
+			continue
+		
+		var id = int(section)
+		var slabSection = cfg[section]
+		var slabData = Slabs.data.get(id, [
+			"UNKNOWN",
+			Slabs.FLOOR_SLAB,
+			Slabs.BITMASK_FLOOR,
+			Slabs.TAB_MAINSLAB,
+			0,
+			0,
+			Slabs.NOT_OWNABLE,
+			0,
+		]).duplicate()
+		
+		slabData[Slabs.NAME] = slabSection.get("Name", slabData[Slabs.NAME])
+		if slabSection.has("IsOwnable"):
+			slabData[Slabs.IS_OWNABLE] = Slabs.NOT_OWNABLE
+			if slabSection.get("IsOwnable", 0) == 1:
+				slabData[Slabs.IS_OWNABLE] = Slabs.OWNABLE
+		
+		var getBlockFlags = slabSection.get("BlockFlags", [])
+		if getBlockFlags is String and getBlockFlags == "":
+			getBlockFlags = []
+		
+		if slabSection.has("BlockFlags"):
+			slabData[Slabs.IS_SOLID] = Slabs.FLOOR_SLAB
+			if "FILLED" in getBlockFlags or "DIGGABLE" in getBlockFlags or "VALUABLE" in getBlockFlags:
+				slabData[Slabs.IS_SOLID] = Slabs.BLOCK_SLAB
+		
+		if slabSection.has("Animated") or slabSection.has("Category") or slabSection.has("BlockFlags"):
+			slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_BLOCK
+			if slabSection.get("Animated", 0) == 1:
+				slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_SIMPLE
+				if "IS_DOOR" in getBlockFlags:
+					if slabData[Slabs.NAME].ends_with("2"):
+						slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_DOOR2
+					else: slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_DOOR1
+			else:
+				match slabSection.get("Category", 0):
+					0: # Unclaimed
+						if slabData[Slabs.IS_SOLID] == Slabs.BLOCK_SLAB:
+							slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_BLOCK
+						elif slabData[Slabs.IS_SOLID] == Slabs.FLOOR_SLAB:
+							slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_FLOOR
+					1: # Diggable dirt
+						slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_BLOCK
+					2: # Claimed path
+						slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_CLAIMED
+					3: # Fortified wall
+						slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_REINFORCED
+					4: # Room
+						slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_FLOOR
+					5: # Obstacle
+						slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_SIMPLE
+		
+		slabData[Slabs.WIBBLE_TYPE] = slabSection.get("Wibble", slabData[Slabs.WIBBLE_TYPE])
+		slabData[Slabs.LIQUID_TYPE] = slabSection.get("WlbType", slabData[Slabs.LIQUID_TYPE])
+		slabData[Slabs.EDGE_BLEND_GROUP] = slabSection.get("SlbID", slabData[Slabs.EDGE_BLEND_GROUP])
+		
+		Slabs.data[id] = slabData
 
 
 func load_creatures_data(cfg): # 3ms
