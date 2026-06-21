@@ -283,12 +283,28 @@ func get_creature_list():
 		creatureList.append([i[0], i[1], i[2], listCreature.find(i) < 16])
 	if oCurrentFormat.selected == Constants.ClassicFormat:
 		return creatureList
+	var creatureStatsByName = {}
+	for file in oConfigFileManager.current_data.get("creature_stats", {}):
+		var attributes = oConfigFileManager.current_data["creature_stats"][file].get("attributes", {})
+		var creatureName = attributes.get("Name", "")
+		if creatureName != "":
+			creatureStatsByName[creatureName] = attributes
 	var allSubtypes = Things.DATA_CREATURE.keys()
 	allSubtypes.sort()
 	for subtype in allSubtypes:
 		if can_add_creature(creatureList, subtype):
-			creatureList.append([subtype, Things.fetch_id_string(Things.TYPE.CREATURE, subtype), 0, true])
+			var creatureName = Things.fetch_id_string(Things.TYPE.CREATURE, subtype)
+			creatureList.append([subtype, creatureName, 0, is_creature_evil(creatureName, creatureStatsByName)])
 	return creatureList
+
+
+func is_creature_evil(creatureName, creatureStatsByName):
+	if creatureStatsByName.has(creatureName) == false:
+		return true
+	var creatureProperties = creatureStatsByName[creatureName].get("Properties", [])
+	if creatureProperties is Array:
+		return creatureProperties.has("EVIL")
+	return creatureProperties == "EVIL"
 
 
 func get_magic_list():
