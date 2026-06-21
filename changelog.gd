@@ -1,6 +1,13 @@
 ﻿extends Node
 
 const string = """
+0.69.931 - 22/6/2026
+- Fixed issues with terrain.cfg not being loaded correctly
+- Centered sprites for Creatures/Spells/Traps/Doors and slightly adjusted their size
+- Fixed external changes dialog buttons being hidden offscreen if too many files were modified
+- Don't display bugged quit confirmation if quitting while external changes dialog is displaying
+- Custom creatures in script generator are sorted by their 'EVIL' property
+- More cleanup for the project image files
 0.68.923 - 19/6/2026
 - Resize Map now resizes in any direction
 - Added Cubeset tab to Slabset editor for editing cubes.cfg texture IDs
