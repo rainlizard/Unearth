@@ -148,7 +148,7 @@ func warn_if_external_files_changed():
 		return
 	lastExternalChangeWarningKey = warning_key
 	var message = "Some files for this map were edited outside Unearth:\n"
-	message += ", ".join(changed_file_paths) + "\n\n"
+	message += "\n".join(changed_file_paths) + "\n\n"
 	message += "Click Reload to discard your unsaved map editor changes and keep your external changes.\n"
 	message += "Or click Save to discard your external changes and keep your unsaved map editor changes."
 	show_external_changes_dialog(message)
