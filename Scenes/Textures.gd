@@ -10,7 +10,7 @@ extends Node2D
 #
 #var CODETIME_START
 #func _ready():
-#	get_dir_contents("dk_images")
+#	get_dir_contents("images_ui")
 #
 #	CODETIME_START = OS.get_ticks_msec()
 #	loadimages(files)

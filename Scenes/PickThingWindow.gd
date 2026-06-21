@@ -31,18 +31,18 @@ enum { # I only used the official DK keeperfx categories as a guide rather than 
 }
 
 onready var tabs = {
-	TAB_CREATURE: [oThingTabs.get_node("TabFolder/Creature"),"res://images_assorted/icon_creature.png"],
-	TAB_SPELL: [oThingTabs.get_node("TabFolder/Spell"),"res://images_assorted/icon_book.png"],
-	TAB_TRAP: [oThingTabs.get_node("TabFolder/Trap"),"res://dk_images/traps_doors/anim0845/r1frame04.png"],
+	TAB_CREATURE: [oThingTabs.get_node("TabFolder/Creature"),"res://images_ui/icon_creature.png"],
+	TAB_SPELL: [oThingTabs.get_node("TabFolder/Spell"),"res://images_objects/spellbooks/icon_book.png"],
+	TAB_TRAP: [oThingTabs.get_node("TabFolder/Trap"),"res://images_traps/traps_doors/anim0845/r1frame04.png"],
 	TAB_BOX: [oThingTabs.get_node("TabFolder/Box"),"res://images_objects/traps_doors/anim0116/r1frame12.png"],
 	TAB_SPECIAL: [oThingTabs.get_node("TabFolder/Special"),"res://images_objects/trapdoor_64/bonus_box_std.png"],
-	TAB_GOLD: [oThingTabs.get_node("TabFolder/Gold"),"res://dk_images/symbols_64/creatr_stat_gold_std.png"], #"res://dk_images/valuables/gold_hoard1_fp/r1frame03.png" #"res://dk_images/valuables/gold_hoard2_fp/r1frame02.png" #"res://dk_images/valuables/gold_hoard4_fp/r1frame01.png"
-	TAB_DECORATION: [oThingTabs.get_node("TabFolder/Decoration"),"res://dk_images/statues/anim0906/r1frame01.png"],
-	TAB_ACTION: [oThingTabs.get_node("TabFolder/Action"),"res://dk_images/guisymbols_64/sym_fight.png"], #"res://Art/ActionPoint.png"
-	TAB_EFFECTGEN: [oThingTabs.get_node("TabFolder/Effect"),"res://images_assorted/icon_effect.png"],
-	TAB_FURNITURE: [oThingTabs.get_node("TabFolder/Furniture"),"res://dk_images/furniture/workshop_machine_fp/r1frame01.png"], #"res://dk_images/furniture/training_machine_fp/r1frame09.png"
-	TAB_LAIR: [oThingTabs.get_node("TabFolder/Lair"),"res://dk_images/room_64/lair_std.png"],
-	TAB_MISC: [oThingTabs.get_node("TabFolder/Misc"),"res://dk_images/rpanel_64/tab_crtr_wandr_std.png"],
+	TAB_GOLD: [oThingTabs.get_node("TabFolder/Gold"),"res://images_ui/symbols_64/creatr_stat_gold_std.png"], #"res://images_objects/valuables/gold_hoard1_fp/r1frame03.png" #"res://images_objects/valuables/gold_hoard2_fp/r1frame02.png" #"res://images_objects/valuables/gold_hoard4_fp/r1frame01.png"
+	TAB_DECORATION: [oThingTabs.get_node("TabFolder/Decoration"),"res://images_objects/statues/anim0906/r1frame01.png"],
+	TAB_ACTION: [oThingTabs.get_node("TabFolder/Action"),"res://images_ui/guisymbols_64/sym_fight.png"], #"res://Art/ActionPoint.png"
+	TAB_EFFECTGEN: [oThingTabs.get_node("TabFolder/Effect"),"res://images_ui/icon_effect.png"],
+	TAB_FURNITURE: [oThingTabs.get_node("TabFolder/Furniture"),"res://images_objects/furniture/workshop_machine_fp/r1frame01.png"], #"res://images_objects/furniture/training_machine_fp/r1frame09.png"
+	TAB_LAIR: [oThingTabs.get_node("TabFolder/Lair"),"res://images_slabs/room_64/lair_std.png"],
+	TAB_MISC: [oThingTabs.get_node("TabFolder/Misc"),"res://images_ui/rpanel_64/tab_crtr_wandr_std.png"],
 }
 
 export var grid_item_size : Vector2

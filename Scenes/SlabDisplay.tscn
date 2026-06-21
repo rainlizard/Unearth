@@ -3,7 +3,7 @@
 [ext_resource path="res://Scenes/SlabDisplay.gd" type="Script" id=1]
 [ext_resource path="res://Shaders/SlabDisplayMat.tres" type="Material" id=2]
 [ext_resource path="res://Art/Cursor96x96Blue.png" type="Texture" id=4]
-[ext_resource path="res://dk_images/room_64/temple_std.png" type="Texture" id=5]
+[ext_resource path="res://images_slabs/room_64/temple_std.png" type="Texture" id=5]
 
 [node name="SlabDisplay" type="TextureButton"]
 material = ExtResource( 2 )

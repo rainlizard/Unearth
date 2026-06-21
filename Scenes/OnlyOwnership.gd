@@ -38,15 +38,15 @@ func update_grid_items():
 		
 		var keeperColourIconPic = id.get_node("TextureRect")
 		match i:
-			0: keeperColourIconPic.texture = preload("res://images_assorted/plyrsym_32/symbol_player_red_std.png")
-			1: keeperColourIconPic.texture = preload("res://images_assorted/plyrsym_32/symbol_player_blue_std.png")
-			2: keeperColourIconPic.texture = preload("res://images_assorted/plyrsym_32/symbol_player_green_std.png")
-			3: keeperColourIconPic.texture = preload("res://images_assorted/plyrsym_32/symbol_player_yellow_std.png")
-			4: keeperColourIconPic.texture = preload("res://images_assorted/plyrsym_32/symbol_player_white_std.png")
-			5: keeperColourIconPic.texture = preload("res://images_assorted/plyrsym_32/symbol_player_any_dis.png")
-			6: keeperColourIconPic.texture = preload("res://images_assorted/plyrsym_32/symbol_player_purple_std.png")
-			7: keeperColourIconPic.texture = preload("res://images_assorted/plyrsym_32/symbol_player_black_std.png")
-			8: keeperColourIconPic.texture = preload("res://images_assorted/plyrsym_32/symbol_player_orange_std.png")
+			0: keeperColourIconPic.texture = preload("res://images_ui/plyrsym_32/symbol_player_red_std.png")
+			1: keeperColourIconPic.texture = preload("res://images_ui/plyrsym_32/symbol_player_blue_std.png")
+			2: keeperColourIconPic.texture = preload("res://images_ui/plyrsym_32/symbol_player_green_std.png")
+			3: keeperColourIconPic.texture = preload("res://images_ui/plyrsym_32/symbol_player_yellow_std.png")
+			4: keeperColourIconPic.texture = preload("res://images_ui/plyrsym_32/symbol_player_white_std.png")
+			5: keeperColourIconPic.texture = preload("res://images_ui/plyrsym_32/symbol_player_any_dis.png")
+			6: keeperColourIconPic.texture = preload("res://images_ui/plyrsym_32/symbol_player_purple_std.png")
+			7: keeperColourIconPic.texture = preload("res://images_ui/plyrsym_32/symbol_player_black_std.png")
+			8: keeperColourIconPic.texture = preload("res://images_ui/plyrsym_32/symbol_player_orange_std.png")
 		
 		oGridContainer.add_child(id)
 	

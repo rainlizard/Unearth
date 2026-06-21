@@ -42,10 +42,10 @@ extends Node2D
 #
 #			tileSetID.tile_set_texture(tileID, load(texturePath))
 #
-#			# When exported, the directory on hard disk must be /dk_images/
+#			# When exported, the directory on hard disk must be /images_ui/
 #			#if OS.has_feature("standalone") == true:
-#			#	texturePath = texturePath.replace("dk_images_internal", "dk_images")
-#			#if texturePath.begins_with("dk_images") == true:
+#			#	texturePath = texturePath.replace("images_ui_internal", "images_ui")
+#			#if texturePath.begins_with("images_ui") == true:
 #			#tileSetID.tile_set_texture(tileID, oTextures.tex[texturePath])
 #
 #	currentPack = newPack

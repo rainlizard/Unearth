@@ -15,7 +15,7 @@ func _ready():
 	Settings.initialize_settings()
 	initialize_window_settings()
 	oUi.initialize_window_desired_values()
-	Graphics.load_images_assorted()
+	Graphics.load_custom_object_images()
 	oOpenMap.start()
 
 

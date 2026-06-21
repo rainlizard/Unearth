@@ -270,18 +270,31 @@ func set_herogateNumber(setval):
 
 func set_texture_based_on_thingtype():
 	var tex = Things.fetch_sprite(thingType, subtype)
+	var useCenteredIcon = thingType == Things.TYPE.CREATURE or thingType == Things.TYPE.TRAP or thingType == Things.TYPE.DOOR
 	match thingType:
 		Things.TYPE.OBJECT:
 			$"%ThingTexture".material = get_texture_material()
 			var successOrFailure = Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($"%ThingTexture", subtype)
 			if successOrFailure == true:
 				$"%ThingTexture".rect_position += Vector2(-1,9)
-		Things.TYPE.CREATURE:
-			if tex != null:
-				#$"%ThingTexture".rect_position.y -= 12
-				$"%ThingTexture".rect_scale = Vector2(1.5,1.5)
+			if Things.DATA_OBJECT.has(subtype):
+				var genre = Things.DATA_OBJECT[subtype][Things.GENRE]
+				useCenteredIcon = genre == "SPELLBOOK" or genre == "SPECIALBOX"
 	if tex != null:
 		$"%ThingTexture".texture = tex
+		if useCenteredIcon:
+			$"%ThingTexture".expand = false
+			$"%ThingTexture".stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+			var textureSize = tex.get_size()
+			var textureScale = Vector2(0.8,0.8)
+			if thingType == Things.TYPE.CREATURE:
+				textureScale = Vector2(1.5,1.5)
+			$"%ThingTexture".rect_min_size = textureSize
+			$"%ThingTexture".rect_size = textureSize
+			$"%ThingTexture".rect_scale = textureScale
+			$"%ThingTexture".rect_pivot_offset = Vector2.ZERO
+			$"%ThingTexture".rect_position = -(textureSize * textureScale * 0.5)
+			$"%ThingTexture".rect_position += Vector2(1,1) * textureScale # Take shadows in the sprite image into consideration for centering.
 	else:
 		$"%ThingTexture".texture = preload('res://Art/Thing.png')
 		$"%ThingTexture".expand = true
