@@ -101,7 +101,10 @@ func _notification(what):
 			Settings.write_cfg("editor_window_size", OS.window_size)
 		
 		#if OS.has_feature("standalone") == true:
-		if mapHasBeenEdited == true:
+		# "External changes dialog" pauses the tree, don't have the save confirmation at the same time. Just quit.
+		if get_tree().paused == true:
+			get_tree().quit()
+		elif mapHasBeenEdited == true:
 			Utils.popup_centered(oConfirmSaveBeforeQuit)
 		else:
 			get_tree().quit()
