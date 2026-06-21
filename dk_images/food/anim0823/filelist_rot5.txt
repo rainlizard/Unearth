@@ -1,4 +1,0 @@
-animation_2083   2   3  -19  -22
-r5frame01.png
-r5frame02.png
-r5frame03.png

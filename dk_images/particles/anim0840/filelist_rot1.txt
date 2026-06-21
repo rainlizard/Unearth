@@ -1,6 +1,0 @@
-animation_2100   0   5  -11   -3
-r1frame01.png
-r1frame02.png
-r1frame03.png
-r1frame04.png
-r1frame05.png

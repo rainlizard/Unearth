@@ -1,5 +1,0 @@
-animation_2035   0   4   -8  -41
-r1frame01.png
-r1frame02.png
-r1frame03.png
-r1frame04.png

@@ -1,9 +1,0 @@
-animation_2125   2   8  -43  -66
-r4frame01.png
-r4frame02.png
-r4frame03.png
-r4frame04.png
-r4frame05.png
-r4frame06.png
-r4frame07.png
-r4frame08.png
