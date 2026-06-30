@@ -53,6 +53,7 @@ enum {
 }
 
 const CONFIG_FILE_NAMES = ["rules.cfg", "slabset.toml", "columnset.toml", "cubes.cfg"]
+const SCRIPT_FILE_TYPES = ["TXT", "LUA"]
 
 
 func _init():
@@ -192,7 +193,7 @@ func _on_external_changes_save_pressed(dialog, map_path):
 func get_changed_external_files():
 	var changed_files = {}
 	for file_type in currentFilePaths.keys():
-		if script_file_auto_reloads(file_type):
+		if SCRIPT_FILE_TYPES.has(file_type):
 			continue
 		var file_info = currentFilePaths[file_type]
 		if typeof(file_info) == TYPE_ARRAY and file_info.size() > MODIFIED_DATE:
@@ -200,13 +201,13 @@ func get_changed_external_files():
 	for file_path in configFileModifiedTimes.keys():
 		add_if_modified(changed_files, file_path, configFileModifiedTimes.get(file_path))
 	for file_path in missingMapFileModifiedTimes.keys():
+		if SCRIPT_FILE_TYPES.has(file_path.get_extension().to_upper()):
+			continue
 		add_if_modified(changed_files, file_path, missingMapFileModifiedTimes.get(file_path))
 	return changed_files
 
 
 func script_file_auto_reloads(file_type):
-	if oEditor.mapHasBeenEdited:
-		return false
 	var enabled_script = (file_type == "TXT" and DKScript_enabled) or (file_type == "LUA" and LuaScript_enabled)
 	if enabled_script == false:
 		return false
@@ -253,6 +254,8 @@ func store_config_file_modified_times():
 	missingMapFileModifiedTimes.clear()
 	if path != "":
 		for file_type in oBuffers.FILE_TYPES:
+			if SCRIPT_FILE_TYPES.has(file_type):
+				continue
 			if currentFilePaths.has(file_type) == false:
 				var file_path = path.get_basename() + "." + file_type.to_lower()
 				missingMapFileModifiedTimes[file_path] = get_file_modified_time(file_path)
