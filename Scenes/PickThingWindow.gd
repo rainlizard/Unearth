@@ -47,6 +47,7 @@ onready var tabs = {
 
 export var grid_item_size : Vector2
 export var grid_window_scale : float setget update_scale
+const CREATURE_ICON_SCALE = 4.0
 onready var oSelectedRect = $Clippy/SelectedRect
 onready var oCenteredLabel = $Clippy/CenteredLabel
 var scnGridItem = preload("res://Scenes/GenericGridItem.tscn")
@@ -177,7 +178,7 @@ func add_to_category(tabNode, thingsData, thingtype, subtype):
 	if portraitTex != null:
 		id.img_normal = portraitTex
 	else:
-		var textureTex = Things.fetch_sprite(thingtype, subtype)
+		var textureTex = Things.fetch_icon_sprite(thingtype, subtype, grid_item_size, CREATURE_ICON_SCALE)
 		if textureTex != null:
 			id.img_normal = textureTex
 		else:
@@ -222,7 +223,7 @@ func change_portrait_on_hover(id, textureOrPortrait):
 	var subtype = id.get_meta("thingSubtype")
 	var tex
 	match textureOrPortrait:
-		CHANGE_TO_SPRITE: tex = Things.fetch_sprite(thingType, subtype)
+		CHANGE_TO_SPRITE: tex = Things.fetch_icon_sprite(thingType, subtype, grid_item_size, CREATURE_ICON_SCALE)
 		CHANGE_TO_PORTRAIT: tex = Things.fetch_portrait(thingType, subtype)
 	if tex != null:
 		id.img_normal = tex

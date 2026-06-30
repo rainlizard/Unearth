@@ -64,6 +64,28 @@ func fetch_sprite(thing_type:int, sub_type:int):
 	return null
 
 
+func fetch_icon_sprite(thing_type:int, sub_type:int, icon_size:Vector2, icon_scale:float):
+	var texture = fetch_sprite(thing_type, sub_type)
+	if thing_type != TYPE.CREATURE or texture == null:
+		return texture
+
+	var texture_size = texture.get_size()
+	var scale = min(icon_scale, min(icon_size.x / texture_size.x, icon_size.y / texture_size.y))
+	var scaled_size = (texture_size * scale).floor()
+	var image = texture.get_data()
+	image.convert(Image.FORMAT_RGBA8)
+	image.resize(int(scaled_size.x), int(scaled_size.y), Image.INTERPOLATE_NEAREST)
+
+	var icon_image = Image.new()
+	icon_image.create(int(icon_size.x), int(icon_size.y), false, Image.FORMAT_RGBA8)
+	icon_image.fill(Color(0, 0, 0, 0))
+	icon_image.blit_rect(image, Rect2(Vector2.ZERO, scaled_size), ((icon_size - scaled_size) * 0.5).floor())
+
+	var icon_texture = ImageTexture.new()
+	icon_texture.create_from_image(icon_image, 0)
+	return icon_texture
+
+
 func fetch_portrait(thing_type, sub_type):
 	var sub_type_data = data_structure(thing_type).get(sub_type)
 	if sub_type_data:

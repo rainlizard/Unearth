@@ -27,7 +27,7 @@ size_flags_horizontal = 7
 size_flags_vertical = 7
 texture = ExtResource( 1 )
 expand = true
-stretch_mode = 6
+stretch_mode = 5
 
 [node name="IconHighlight" type="ColorRect" parent="IconTextureRect"]
 unique_name_in_owner = true

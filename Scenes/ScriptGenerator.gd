@@ -97,6 +97,8 @@ var listMagic = [
 const CLASSIC_TRAP_ORDER = [2, 3, 4, 6, 1, 5]
 const CLASSIC_DOOR_ORDER = [1, 2, 3, 4]
 const HIDDEN_CREATURES = [23, 31]
+const ICON_SIZE = Vector2(96, 64)
+const CREATURE_ICON_SCALE = 2.5
 var listRoom = [
 [Slabs.TREASURE_ROOM, "TREASURE", 1],
 [Slabs.LAIR, "LAIR", 1],
@@ -202,7 +204,7 @@ func initialize_creatures_available(): # oCreaturePool
 		id.set_meta("variable", functionVariable)
 		var getName = Things.fetch_name(Things.TYPE.CREATURE, subtype)
 		id.hint_tooltip = getName + ' availability'
-		set_button_texture(id, Things.fetch_sprite(Things.TYPE.CREATURE, subtype), getName)
+		set_button_texture(id, Things.fetch_icon_sprite(Things.TYPE.CREATURE, subtype, ICON_SIZE, CREATURE_ICON_SCALE), getName)
 		id.get_node("%TextEditableLabel").hint_tooltip = getName + ' in pool'
 		id.get_node("%TextEditableLabel").editable = true
 		id.get_node("%TextEditableLabel").mouse_filter = Control.MOUSE_FILTER_PASS
@@ -236,7 +238,7 @@ func initialize_magic_available(): # oMagicAvailable
 		var id = scnAvailableButton.instance()
 		var getName = Things.fetch_name(Things.TYPE.OBJECT, subtype)
 		id.hint_tooltip = getName + ' availability'
-		id.get_node("%IconTextureRect").texture = Things.fetch_sprite(Things.TYPE.OBJECT, subtype)
+		set_button_texture(id, Things.fetch_sprite(Things.TYPE.OBJECT, subtype), getName)
 		id.set_meta("variable", functionVariable)
 		id.set_meta("ID", subtype)
 		id.get_node("%TextEditableLabel").editable = false
@@ -399,7 +401,11 @@ func add_trapdoor_button(parent, thingType, subtype, currentStates):
 
 
 func set_button_texture(id, texture, getName):
-	id.get_node("%IconTextureRect").texture = texture
+	var icon = id.get_node("%IconTextureRect")
+	icon.texture = texture
+	icon.expand = true
+	icon.rect_min_size = ICON_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	if texture == null:
 		add_icon_text(id, getName)
 
