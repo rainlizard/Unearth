@@ -154,13 +154,18 @@ func cfg_remove_setting(setting):
 func auto_detect_executable():
 	var directories = [OS.get_executable_path().get_base_dir(), OS.get_executable_path().get_base_dir().get_base_dir()]
 	var executables = [["keeperfx", "exe"], ["keeper", "exe"]]
-	
+
 	for directory in directories:
+		# Native Linux KeeperFX is an extension-less "keeperfx" binary; detect it first.
+		if OS.get_name() == "X11":
+			var nativePath = directory.plus_file("keeperfx")
+			if File.new().file_exists(nativePath):
+				return nativePath
 		for executable in executables:
 			var foundPath = Utils.case_insensitive_file(directory, executable[0], executable[1])
 			if foundPath != "":
 				return foundPath
-	
+
 	return ""
 
 
