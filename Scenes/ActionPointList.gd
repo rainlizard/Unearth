@@ -8,6 +8,17 @@ onready var oActionPointHeroGateList = Nodelist.list["oActionPointHeroGateList"]
 
 const ITEM_HEIGHT = 25
 const LINES_TO_SHOW = 10
+const CREATURE_LIST_OWNERSHIP_COLORS = [
+	Color8(255, 90, 80),
+	Color8(112, 150, 255),
+	Color8(86, 225, 90),
+	Color8(242, 220, 70),
+	Color8(242, 242, 242),
+	Color8(160, 160, 160),
+	Color8(224, 120, 220),
+	Color8(115, 115, 125),
+	Color8(255, 155, 70),
+]
 
 var selecting_from_list = false
 
@@ -34,7 +45,10 @@ func populate_list(list, entries):
 	list.clear()
 	for entry in entries:
 		list.add_item(entry[0])
-		list.set_item_metadata(list.get_item_count() - 1, entry[1])
+		var item_index = list.get_item_count() - 1
+		list.set_item_metadata(item_index, entry[1])
+		if entry.size() > 2:
+			list.set_item_custom_fg_color(item_index, entry[2])
 
 
 func get_creature_entries():
@@ -46,7 +60,7 @@ func get_creature_entries():
 	creatures.sort_custom(self, "sort_things")
 
 	for id in creatures:
-		entries.append([get_creature_text(id), id])
+		entries.append([get_creature_text(id), id, CREATURE_LIST_OWNERSHIP_COLORS[id.ownership]])
 	return entries
 
 
@@ -86,10 +100,12 @@ func update_list_height():
 
 
 func get_creature_text(id):
-	return Things.fetch_name(id.thingType, id.subtype) + " - " + Constants.ownershipNames[id.ownership] + " (" + str(id.locationX) + ", " + str(id.locationY) + ")"
+	return Things.fetch_name(id.thingType, id.subtype) + " (" + str(id.locationX) + ", " + str(id.locationY) + ")"
 
 
 func sort_things(a, b):
+	if a.ownership != b.ownership:
+		return a.ownership < b.ownership
 	var name_a = Things.fetch_name(a.thingType, a.subtype)
 	var name_b = Things.fetch_name(b.thingType, b.subtype)
 	if name_a == name_b:
