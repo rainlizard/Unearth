@@ -33,7 +33,7 @@ const KEEPERFX_MAP_ROOTS = ["levels", "multiplayer", "campgns"]
 
 func keeperfx_is_installed():
 	var path = EXECUTABLE_PATH.get_file().to_lower()
-	if path == "keeperfx.exe" or path == "keeperfx_hvlog.exe":
+	if path == "keeperfx.exe" or path == "keeperfx_hvlog.exe" or path == "keeperfx":
 		return true
 	else:
 		return false
@@ -152,8 +152,14 @@ func cmdline(mapPath, packetLoad):
 		"X11":
 			constructString += "cd "
 			constructString += "'" + GAME_DIRECTORY + "'"
-			constructString += " && wine "
-			constructString += "'" + EXECUTABLE_PATH.get_file() + "'"
+			constructString += " && "
+			# Native Linux KeeperFX runs directly (no Wine). Only fall back to Wine
+			# for an actual Windows .exe (e.g. running the Windows build under Wine).
+			if EXECUTABLE_PATH.get_extension().to_lower() == "exe":
+				constructString += "wine "
+				constructString += "'" + EXECUTABLE_PATH.get_file() + "'"
+			else:
+				constructString += "'./" + EXECUTABLE_PATH.get_file() + "'"
 	
 	# Delete -level xxx and -campaign xxx from the command line
 	var arrayOfWords = constructString.split(" ")
