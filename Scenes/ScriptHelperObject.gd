@@ -4,6 +4,7 @@ onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
 onready var oUi = Nodelist.list["oUi"]
 
+var fixedSize = false
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -17,6 +18,11 @@ func _ready():
 
 
 func _on_zoom_level_changed(zoom):
+	if fixedSize:
+		visible = true
+		scale = Vector2(1, 1)
+		return
+
 	var inventScale = Vector2()
 	inventScale.x = clamp(zoom.x, 0.0, oScriptMarkers.SCRIPT_ICON_SIZE_MAX)
 	inventScale.y = clamp(zoom.y, 0.0, oScriptMarkers.SCRIPT_ICON_SIZE_MAX)

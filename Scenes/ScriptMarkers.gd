@@ -73,6 +73,10 @@ func start():
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	var markersByPosition = {}
+	var actionPointPositions = {}
+	for id in get_tree().get_nodes_in_group("ActionPoint"):
+		if id.is_queued_for_deletion() == false:
+			actionPointPositions[id.position] = true
 	var scriptLines = oDataScript.data.split('\n',true)
 	for lineNumber in scriptLines.size():
 		var line = scriptLines[lineNumber]
@@ -86,7 +90,7 @@ func start():
 
 		var markerPosition = get_marker_position(parsedCommand["arguments"], commandAttributes)
 		if markerPosition != null:
-			create_helper_object(markerPosition.x, markerPosition.y, line, lineNumber+1, markersByPosition)
+			create_helper_object(markerPosition, line, lineNumber+1, markersByPosition, actionPointPositions.has(markerPosition))
 	
 	print('Script helpers created ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
@@ -206,26 +210,32 @@ func get_integer_argument(argumentsArray, argNumber):
 		return null
 	return int(argument)
 
-func create_helper_object(x,y,line,lineNumber,markersByPosition):
+func create_helper_object(markerPosition,line,lineNumber,markersByPosition,isActionPointBadge):
 	
 	var newString = 'Line ' + str(lineNumber) + ': ' + line
-	var positionKey = str(x) + "," + str(y)
 	
 	# Merge with existing if there's already a ScriptHelperObject at that position
-	if markersByPosition.has(positionKey):
-		var id = markersByPosition[positionKey]
-		if id.position == Vector2(x,y):
-			var constructString = id.get_meta('line') + '\n' + newString
-			id.set_meta('line', constructString)
-			return
+	if markersByPosition.has(markerPosition):
+		var id = markersByPosition[markerPosition]
+		var constructString = id.get_meta('line') + '\n' + newString
+		id.set_meta('line', constructString)
+		return
 	
 	# Create new
 	var id = scnScriptHelperObject.instance()
-	id.position = Vector2(x, y)
+	id.position = markerPosition
 	id.set_meta('line', newString)
+	if isActionPointBadge:
+		id.fixedSize = true
+		id.z_index = 2
+		var textureRect = id.get_node("TextureRect")
+		textureRect.margin_left = -24
+		textureRect.margin_top = -8
+		textureRect.margin_right = -8
+		textureRect.margin_bottom = 8
 	add_child(id)
 	scriptHelperObjects.append(id)
-	markersByPosition[positionKey] = id
+	markersByPosition[markerPosition] = id
 
 func script_icon_size_max(setVal):
 	for id in scriptHelperObjects:
