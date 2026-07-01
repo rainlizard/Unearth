@@ -53,6 +53,21 @@ func load_cfgs(mapPath):
 	
 	var campaign_cfg = load_campaign_boss_file(mapPath)
 	var config_dirs = get_config_directories(mapPath, campaign_cfg)
+	var sprite_zip_paths = []
+	var campaign_zip_dir = config_dirs[oConfigFileManager.LOAD_CFG_CAMPAIGN] if campaign_cfg.get("common", {}).get("CONFIGS_LOCATION", "") != "" else ""
+	for zip_dir in [config_dirs[oConfigFileManager.LOAD_CFG_FXDATA], campaign_zip_dir]:
+		if zip_dir == "":
+			continue
+		var zip_paths = Utils.get_filetype_in_directory(zip_dir, "zip")
+		zip_paths.sort()
+		for zip_path in zip_paths:
+			if sprite_zip_paths.has(zip_path) == false:
+				sprite_zip_paths.append(zip_path)
+	if mapPath != "":
+		var map_zip_path = mapPath.get_basename() + ".zip"
+		if file_exists_checker.file_exists(map_zip_path) and sprite_zip_paths.has(map_zip_path) == false:
+			sprite_zip_paths.append(map_zip_path)
+	Graphics.load_custom_sprite_zips(sprite_zip_paths)
 	var files_to_load = build_list_of_files_to_load(config_dirs, mapPath)
 	for file_name_from_list in files_to_load:
 		
@@ -169,23 +184,12 @@ func load_objects_data(cfg): # 10ms
 			var id = int(section)
 			if id == 0: continue
 			var objSection = cfg[section]
-			var newName
-			var animID
-			var newSprite
-			var newGenre
-			if Things.DATA_OBJECT.has(id) == true:
-				newName = objSection.get("Name", Things.DATA_OBJECT[id][Things.NAME_ID])
-				animID = objSection.get("AnimationID")
-				newSprite = get_sprite(newName, animID)
-				if newSprite == null:
-					newSprite = Things.DATA_OBJECT[id][Things.SPRITE]
-				newGenre = objSection.get("Genre")
-			else:
-				newName = objSection.get("Name", "UNDEFINED_NAME")
-				animID = objSection.get("AnimationID")
-				newSprite = get_sprite(newName, animID)
-				
-				newGenre = objSection.get("Genre")
+			var old_data = Things.DATA_OBJECT.get(id, ["UNDEFINED_NAME", null, null])
+			var newName = objSection.get("Name", old_data[Things.NAME_ID])
+			var newSprite = get_sprite(newName, objSection.get("AnimationID"))
+			if newSprite == null:
+				newSprite = old_data[Things.SPRITE]
+			var newGenre = objSection.get("Genre")
 			if newGenre == "SPELLBOOK":
 				Things.LIST_OF_SPELLBOOKS.append(id)
 			if newGenre == "HEROGATE":
@@ -271,12 +275,11 @@ func load_creatures_data(cfg): # 3ms
 
 func load_creature_stats_data(mapPath, campaign_cfg):
 	var data = {}
-	var dirs = [oGame.GAME_DIRECTORY.plus_file("creatrs")]
+	load_creature_stats_dir(data, oGame.GAME_DIRECTORY.plus_file("creatrs"))
+	var base_data = data.duplicate(true)
 	var creature_location = campaign_cfg.get("common", {}).get("CREATURES_LOCATION", "")
 	if creature_location != "":
-		dirs.append(oGame.GAME_DIRECTORY.plus_file(creature_location))
-	for dir in dirs:
-		load_creature_stats_dir(data, dir)
+		load_creature_stats_dir(data, oGame.GAME_DIRECTORY.plus_file(creature_location))
 	if mapPath != "":
 		var map_file_prefix = mapPath.get_basename().get_file() + "."
 		var lower_map_file_prefix = map_file_prefix.to_lower()
@@ -287,6 +290,45 @@ func load_creature_stats_data(mapPath, campaign_cfg):
 			if file.to_lower().begins_with(lower_map_file_prefix):
 				load_creature_stats_file(data, file.substr(map_file_prefix.length()), path, true)
 	oConfigFileManager.current_data["creature_stats"] = data
+	var hand_symbol_sprites = {}
+	var query_symbol_sprites = {}
+	for file in base_data:
+		var sprites = base_data[file].get("sprites", {})
+		var subtype = get_creature_subtype(file)
+		if subtype == null or sprites.empty():
+			continue
+		var default_sprite = Things.DATA_CREATURE[subtype][Things.SPRITE]
+		var symbol_key = get_creature_symbol_key(sprites.get("HandSymbol", null))
+		if symbol_key != null and default_sprite != null:
+			hand_symbol_sprites[symbol_key] = default_sprite
+		var default_portrait = str(default_sprite) + "_PORTRAIT"
+		symbol_key = get_creature_symbol_key(sprites.get("QuerySymbol", null))
+		if symbol_key != null and Graphics.sprite_id.has(default_portrait):
+			query_symbol_sprites[symbol_key] = default_portrait
+	for file in data:
+		var attributes = data[file].get("attributes", {})
+		var sprites = data[file].get("sprites", {})
+		var subtype = get_creature_subtype(file)
+		if subtype == null:
+			continue
+		if attributes.get("Name", "") != "":
+			Things.CREATURE_DISPLAY_NAMES[subtype] = attributes["Name"]
+		if sprites.empty():
+			continue
+		var sprite_key = get_creature_image_key(sprites.get("HandSymbol", null), hand_symbol_sprites)
+		if sprite_key == null:
+			for key in [sprites.get("Stand", null), file.get_basename().to_upper()]:
+				sprite_key = Graphics.get_sprite_key(key, false)
+				if sprite_key != null:
+					break
+		var portrait_key = get_creature_image_key(sprites.get("QuerySymbol", null), query_symbol_sprites)
+		if sprite_key == null:
+			sprite_key = portrait_key
+		if sprite_key == null:
+			continue
+		Things.DATA_CREATURE[subtype][Things.SPRITE] = sprite_key
+		if portrait_key != null:
+			Graphics.sprite_id[str(sprite_key) + "_PORTRAIT"] = Graphics.sprite_id[portrait_key]
 
 func load_creature_stats_dir(data, dir):
 	var listOfCfgs = Utils.get_filetype_in_directory(dir, "CFG")
@@ -299,6 +341,25 @@ func load_creature_stats_file(data, file, path, require_attributes = false):
 	if cfg_data.empty() or (require_attributes and cfg_data.has("attributes") == false):
 		return
 	data[file] = super_merge_dictionaries(data.get(file, {}), cfg_data)
+
+func get_creature_symbol_key(value):
+	if value == null:
+		return null
+	if value is Array:
+		return null if value.empty() else get_creature_symbol_key(value[0])
+	var key = str(value)
+	if key.is_valid_integer():
+		return str(int(key))
+	return key.to_upper()
+
+func get_creature_subtype(file):
+	return Things.find_subtype_by_name(Things.TYPE.CREATURE, file.get_basename().to_upper())
+
+func get_creature_image_key(value, fallback_sprites):
+	var sprite_key = Graphics.get_sprite_key(value, false)
+	if sprite_key != null:
+		return sprite_key
+	return fallback_sprites.get(get_creature_symbol_key(value), null)
 
 func load_trapdoor_data(cfg): # 1ms
 	for section in cfg:
@@ -332,10 +393,12 @@ func load_trapdoor_data(cfg): # 1ms
 func get_sprite(newName, animID):
 	if animID == null: return null
 	if int(animID) == 777: # 777 is the AnimationID for all spellbooks in objects.cfg, which unearth uses separate sprites for
-		if Graphics.sprite_id.has(newName): return newName
+		return Graphics.get_sprite_key(newName)
 	
-	if Graphics.sprite_id.has(animID): return animID
-	if Graphics.sprite_id.has(newName): return newName
+	for key in [animID, newName]:
+		var sprite_key = Graphics.get_sprite_key(key)
+		if sprite_key != null:
+			return sprite_key
 	return null
 
 func get_campaign_boss_file(mapPath):

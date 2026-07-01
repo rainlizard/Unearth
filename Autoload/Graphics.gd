@@ -1,5 +1,12 @@
 extends Node
 
+const SpriteZipLoader = preload("res://Autoload/SpriteZipLoader.gd")
+
+var base_sprite_id = {}
+var base_custom_sprite_keys = {}
+var custom_sprite_keys = {}
+var sprite_zip_loader = SpriteZipLoader.new()
+
 func load_custom_object_images():
 	var CODETIME_START = OS.get_ticks_msec()
 	var custom_images_dir = Settings.unearthdata.plus_file("custom-object-images")
@@ -9,9 +16,44 @@ func load_custom_object_images():
 		if texture is ImageTexture:
 			var image_name = image_path.get_file().get_basename().to_upper()
 			sprite_id[image_name] = texture
+			custom_sprite_keys[image_name] = true
 		else:
 			print("Failed to load texture: ", image_path)
+	base_sprite_id = sprite_id.duplicate()
+	base_custom_sprite_keys = custom_sprite_keys.duplicate()
 	print('Loaded extra images from HDD: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+func load_custom_sprite_zips(zip_paths):
+	var CODETIME_START = OS.get_ticks_msec()
+	if base_sprite_id.empty():
+		base_sprite_id = sprite_id.duplicate()
+	sprite_id = base_sprite_id.duplicate()
+	custom_sprite_keys = base_custom_sprite_keys.duplicate()
+	var loaded_count = sprite_zip_loader.load_custom_sprite_zips(zip_paths)
+	if zip_paths.empty() == false:
+		print('Indexed custom sprite zips: ' + str(loaded_count) + '/' + str(zip_paths.size()) + ' in ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+
+func get_sprite_key(value, allow_numeric = true):
+	if value == null:
+		return null
+	if value is Array:
+		return null if value.empty() else get_sprite_key(value[0], allow_numeric)
+	var key = str(value)
+	if key.is_valid_integer():
+		if allow_numeric == false:
+			return null
+		if sprite_id.has(int(key)):
+			return int(key)
+	key = key.to_upper()
+	if sprite_id.has(key):
+		return key
+	if sprite_zip_loader.load_sprite_key(key, sprite_id):
+		custom_sprite_keys[key] = true
+		return key
+	return null
+
+func is_custom_sprite_key(sprite_key):
+	return custom_sprite_keys.has(str(sprite_key).to_upper())
 
 # The keys can be integers or strings (as read from objects.cfg's AnimationID field)
 # When they're a String, they can be either read the 'Name' field or the 'AnimationID' field, whichever one is prioritized
@@ -334,4 +376,3 @@ var sprite_id = {
 #	else:
 #		print("An error occurred when trying to access the path.")
 #	return array
-

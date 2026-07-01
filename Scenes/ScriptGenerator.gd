@@ -238,7 +238,7 @@ func initialize_magic_available(): # oMagicAvailable
 		var id = scnAvailableButton.instance()
 		var getName = Things.fetch_name(Things.TYPE.OBJECT, subtype)
 		id.hint_tooltip = getName + ' availability'
-		set_button_texture(id, Things.fetch_sprite(Things.TYPE.OBJECT, subtype), getName)
+		set_button_texture(id, Things.fetch_icon_sprite(Things.TYPE.OBJECT, subtype, ICON_SIZE, CREATURE_ICON_SCALE), getName)
 		id.set_meta("variable", functionVariable)
 		id.set_meta("ID", subtype)
 		id.get_node("%TextEditableLabel").editable = false
@@ -288,9 +288,7 @@ func get_creature_list():
 	var creatureStatsByName = {}
 	for file in oConfigFileManager.current_data.get("creature_stats", {}):
 		var attributes = oConfigFileManager.current_data["creature_stats"][file].get("attributes", {})
-		var creatureName = attributes.get("Name", "")
-		if creatureName != "":
-			creatureStatsByName[creatureName] = attributes
+		creatureStatsByName[file.get_basename().to_upper()] = attributes
 	var allSubtypes = Things.DATA_CREATURE.keys()
 	allSubtypes.sort()
 	for subtype in allSubtypes:

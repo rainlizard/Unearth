@@ -40,6 +40,9 @@ func _init():
 	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
 	default_data["LIST_OF_BOXES"] = LIST_OF_BOXES.duplicate(true)
 
+var CREATURE_DISPLAY_NAMES = {}
+var cropped_sprite_cache = {}
+
 func reset_thing_data_to_default(): # Reset data. Takes 1ms.
 	DATA_EXTRA = default_data["DATA_EXTRA"].duplicate(true)
 	DATA_DOOR = default_data["DATA_DOOR"].duplicate(true)
@@ -48,32 +51,46 @@ func reset_thing_data_to_default(): # Reset data. Takes 1ms.
 	DATA_CREATURE = default_data["DATA_CREATURE"].duplicate(true)
 	DATA_OBJECT = default_data["DATA_OBJECT"].duplicate(true)
 	LIST_OF_BOXES = default_data["LIST_OF_BOXES"].duplicate(true)
+	CREATURE_DISPLAY_NAMES.clear()
 
-func fetch_sprite(thing_type:int, sub_type:int):
-	var data_structure_dictionary = data_structure(thing_type)
-	var sub_type_data = data_structure_dictionary.get(sub_type)
-	if sub_type_data:
-		var sprite = Graphics.sprite_id.get(sub_type_data[SPRITE])
-		if sprite:
-			return sprite
-		if sub_type_data.size() >= 3:
-			match sub_type_data[GENRE]:
-				"SPECIALBOX":  return Graphics.sprite_id.get(901, null)
-				"SPELLBOOK":   return Graphics.sprite_id.get(777, null)
-				"WORKSHOPBOX": return Graphics.sprite_id.get(114, null)
-	return null
+func fetch_sprite(thing_type:int, sub_type:int, crop_to_visible = false):
+	var sub_type_data = data_structure(thing_type).get(sub_type)
+	if sub_type_data == null:
+		return null
+	var sprite = Graphics.sprite_id.get(sub_type_data[SPRITE])
+	if sprite == null and sub_type_data.size() >= 3:
+		match sub_type_data[GENRE]:
+			"SPECIALBOX":  sprite = Graphics.sprite_id.get(901, null)
+			"SPELLBOOK":   sprite = Graphics.sprite_id.get(777, null)
+			"WORKSHOPBOX": sprite = Graphics.sprite_id.get(114, null)
+	if sprite == null or crop_to_visible == false:
+		return sprite
+	var cache_key = sprite.get_instance_id()
+	if cropped_sprite_cache.has(cache_key):
+		return cropped_sprite_cache[cache_key]
+	var image = sprite.get_data()
+	image.convert(Image.FORMAT_RGBA8)
+	var used_rect = image.get_used_rect()
+	if used_rect.size.x > 0 and used_rect.size.y > 0:
+		image = image.get_rect(used_rect)
+	var cropped_sprite = ImageTexture.new()
+	cropped_sprite.create_from_image(image, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
+	cropped_sprite_cache[cache_key] = cropped_sprite
+	return cropped_sprite
 
 
 func fetch_icon_sprite(thing_type:int, sub_type:int, icon_size:Vector2, icon_scale:float):
-	var texture = fetch_sprite(thing_type, sub_type)
-	if thing_type != TYPE.CREATURE or texture == null:
+	var sub_type_data = data_structure(thing_type).get(sub_type)
+	var needs_icon_texture = thing_type == TYPE.CREATURE or (thing_type == TYPE.OBJECT and sub_type_data and Graphics.is_custom_sprite_key(sub_type_data[SPRITE]))
+	var texture = fetch_sprite(thing_type, sub_type, needs_icon_texture)
+	if needs_icon_texture == false or texture == null:
 		return texture
 
-	var texture_size = texture.get_size()
-	var scale = min(icon_scale, min(icon_size.x / texture_size.x, icon_size.y / texture_size.y))
-	var scaled_size = (texture_size * scale).floor()
 	var image = texture.get_data()
 	image.convert(Image.FORMAT_RGBA8)
+	var texture_size = image.get_size()
+	var scale = min(icon_scale, min(icon_size.x / texture_size.x, icon_size.y / texture_size.y))
+	var scaled_size = (texture_size * scale).floor()
 	image.resize(int(scaled_size.x), int(scaled_size.y), Image.INTERPOLATE_NEAREST)
 
 	var icon_image = Image.new()
@@ -96,6 +113,8 @@ func fetch_portrait(thing_type, sub_type):
 
 
 func fetch_name(thing_type, sub_type):
+	if thing_type == TYPE.CREATURE and CREATURE_DISPLAY_NAMES.has(sub_type):
+		return CREATURE_DISPLAY_NAMES[sub_type].capitalize()
 	var dictionary_of_names = Names.things.get(thing_type)
 	if dictionary_of_names:
 		var data_structure = data_structure(thing_type)
