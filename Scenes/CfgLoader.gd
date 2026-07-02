@@ -268,10 +268,12 @@ func load_creatures_data(cfg): # 3ms
 	var creatures = cfg.get("common", {}).get("Creatures", [])
 	for id_number in creatures.size():
 		var creature_id = id_number + 1
-		if Things.DATA_CREATURE.has(creature_id) == false:
-			var newName = creatures[id_number]
-			var newSprite = get_sprite(newName, -1)
-			Things.DATA_CREATURE[creature_id] = [newName, newSprite, "CREATURE"]
+		var old_data = Things.DATA_CREATURE.get(creature_id, ["UNDEFINED_NAME", null, "CREATURE"])
+		var newName = creatures[id_number]
+		var newSprite = get_sprite(newName, -1)
+		if newSprite == null:
+			newSprite = old_data[Things.SPRITE]
+		Things.DATA_CREATURE[creature_id] = [newName, newSprite, "CREATURE"]
 
 func load_creature_stats_data(mapPath, campaign_cfg):
 	var data = {}
@@ -306,13 +308,10 @@ func load_creature_stats_data(mapPath, campaign_cfg):
 		if symbol_key != null and Graphics.sprite_id.has(default_portrait):
 			query_symbol_sprites[symbol_key] = default_portrait
 	for file in data:
-		var attributes = data[file].get("attributes", {})
 		var sprites = data[file].get("sprites", {})
 		var subtype = get_creature_subtype(file)
 		if subtype == null:
 			continue
-		if attributes.get("Name", "") != "":
-			Things.CREATURE_DISPLAY_NAMES[subtype] = attributes["Name"]
 		if sprites.empty():
 			continue
 		var sprite_key = get_creature_image_key(sprites.get("HandSymbol", null), hand_symbol_sprites)

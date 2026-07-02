@@ -37,7 +37,7 @@ func update_list(optionButtonIndex):
 	var optionButtonMeta = oStatsOptionButton.get_item_metadata(optionButtonIndex)
 	
 	for file in all_creature_data:
-		var getName = figure_out_name(file, all_creature_data[file].get("attributes").get("Name"))
+		var getName = figure_out_name(file)
 		
 		for section in all_creature_data[file]:
 			if section == optionButtonMeta[0]:
@@ -58,13 +58,13 @@ func update_list(optionButtonIndex):
 		
 		add_entry(i[0], i[1], col)
 
-func figure_out_name(file, display_name):
+func figure_out_name(file):
+	var subtype = Things.find_subtype_by_name(Things.TYPE.CREATURE, file.get_basename().to_upper())
 	match name_type:
 		0:
-			var subtype = Things.find_subtype_by_name(Things.TYPE.CREATURE, file.get_basename().to_upper())
-			return display_name if subtype == null else Things.fetch_name(Things.TYPE.CREATURE, subtype)
+			return file.get_basename().capitalize() if subtype == null else Things.fetch_name(Things.TYPE.CREATURE, subtype)
 		1:
-			return display_name
+			return file.get_basename().to_upper() if subtype == null else Things.fetch_id_string(Things.TYPE.CREATURE, subtype)
 		2: 
 			return file
 

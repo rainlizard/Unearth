@@ -40,8 +40,6 @@ func _init():
 	default_data["DATA_OBJECT"] = DATA_OBJECT.duplicate(true)
 	default_data["LIST_OF_BOXES"] = LIST_OF_BOXES.duplicate(true)
 
-var CREATURE_DISPLAY_NAMES = {}
-
 func reset_thing_data_to_default(): # Reset data. Takes 1ms.
 	DATA_EXTRA = default_data["DATA_EXTRA"].duplicate(true)
 	DATA_DOOR = default_data["DATA_DOOR"].duplicate(true)
@@ -50,7 +48,6 @@ func reset_thing_data_to_default(): # Reset data. Takes 1ms.
 	DATA_CREATURE = default_data["DATA_CREATURE"].duplicate(true)
 	DATA_OBJECT = default_data["DATA_OBJECT"].duplicate(true)
 	LIST_OF_BOXES = default_data["LIST_OF_BOXES"].duplicate(true)
-	CREATURE_DISPLAY_NAMES.clear()
 
 func fetch_sprite(thing_type:int, sub_type:int):
 	var sub_type_data = data_structure(thing_type).get(sub_type)
@@ -99,8 +96,6 @@ func fetch_portrait(thing_type, sub_type):
 
 
 func fetch_name(thing_type, sub_type):
-	if thing_type == TYPE.CREATURE and CREATURE_DISPLAY_NAMES.has(sub_type):
-		return CREATURE_DISPLAY_NAMES[sub_type].capitalize()
 	var dictionary_of_names = Names.things.get(thing_type)
 	if dictionary_of_names:
 		var data_structure = data_structure(thing_type)
