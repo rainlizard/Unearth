@@ -45,6 +45,7 @@ func get_zip_data(zip_path):
 
 	var zip_data = {
 		"modified_time": modified_time,
+		"cache_dir": Settings.unearthdata.plus_file("sprite-zip-cache").plus_file(zip_path.to_lower().md5_text() + "_" + str(modified_time)),
 		"zip": zip,
 		"zip_files": {},
 		"sprite_paths": {},
@@ -113,12 +114,22 @@ func load_zip_png_texture(zip_data, png_path):
 	var actual_path = zip_data["zip_files"].get(png_path.replace("\\", "/").to_lower(), "")
 	if actual_path == "":
 		return null
-	var bytes = zip_data["zip"].uncompress(actual_path)
-	if not (bytes is PoolByteArray):
-		return null
+	var image_path = zip_data["cache_dir"].plus_file(actual_path.md5_text() + ".png")
 	var img = Image.new()
-	if img.load_png_from_buffer(bytes) != OK:
-		return null
+	var loaded = file_checker.file_exists(image_path) and img.load(image_path) == OK
+	if loaded == false:
+		var bytes = zip_data["zip"].uncompress(actual_path)
+		if not (bytes is PoolByteArray):
+			return null
+		if img.load_png_from_buffer(bytes) != OK:
+			return null
+		img.convert(Image.FORMAT_RGBA8)
+		var used_rect = img.get_used_rect()
+		if used_rect.size.x > 0 and used_rect.size.y > 0:
+			img = img.get_rect(used_rect)
+		var dir = Directory.new()
+		dir.make_dir_recursive(zip_data["cache_dir"])
+		img.save_png(image_path)
 	var texture = ImageTexture.new()
 	texture.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
 	return texture

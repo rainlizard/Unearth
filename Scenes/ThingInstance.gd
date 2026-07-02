@@ -269,8 +269,7 @@ func set_herogateNumber(setval):
 
 
 func set_texture_based_on_thingtype():
-	var customObjectSprite = thingType == Things.TYPE.OBJECT and Things.DATA_OBJECT.has(subtype) and Graphics.is_custom_sprite_key(Things.DATA_OBJECT[subtype][Things.SPRITE])
-	var tex = Things.fetch_sprite(thingType, subtype, thingType == Things.TYPE.CREATURE or customObjectSprite)
+	var tex = Things.fetch_sprite(thingType, subtype)
 	var useCenteredIcon = thingType == Things.TYPE.CREATURE or thingType == Things.TYPE.TRAP or thingType == Things.TYPE.DOOR
 	match thingType:
 		Things.TYPE.OBJECT:
@@ -295,8 +294,7 @@ func set_texture_based_on_thingtype():
 			$"%ThingTexture".rect_scale = textureScale
 			$"%ThingTexture".rect_pivot_offset = Vector2.ZERO
 			$"%ThingTexture".rect_position = -(textureSize * textureScale * 0.5)
-			if thingType != Things.TYPE.CREATURE and customObjectSprite == false:
-				$"%ThingTexture".rect_position += Vector2(1,1) * textureScale # Take shadows in the sprite image into consideration for centering.
+			$"%ThingTexture".rect_position += Vector2(1,1) * textureScale # Take shadows in the sprite image into consideration for centering.
 	else:
 		$"%ThingTexture".texture = preload('res://Art/Thing.png')
 		$"%ThingTexture".expand = true
