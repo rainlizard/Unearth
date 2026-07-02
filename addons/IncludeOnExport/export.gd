@@ -11,10 +11,6 @@ var theExportFeatures
 func _export_begin(features, is_debug, export_path, flags):
 	theExportFeatures = features
 	output_root_dir = export_path.get_base_dir()
-	
-	# Export all the PNGs in /thing-images/
-	for i in dir_contents("res://unearthdata/custom-object-images/"):
-		_export_file_our_way(i)
 
 func _export_end():
 	print("Unearth v" + Version.full)
@@ -59,23 +55,6 @@ func _export_file_our_way(path):
 	wfile.store_buffer(buffer)
 	wfile.close()
 
-
-func dir_contents(path):
-	var array = []
-	var dir = Directory.new()
-	if dir.open(path) == OK:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if dir.current_is_dir():
-				pass
-			else:
-				if file_name.get_extension().to_upper() == "PNG":
-					array.append(path.plus_file(file_name))
-			file_name = dir.get_next()
-	else:
-		print("An error occurred when trying to access the path.")
-	return array
 
 #func zip_it_up(folder_to_zip_up):
 #	var createFileName

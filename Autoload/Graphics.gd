@@ -3,32 +3,15 @@ extends Node
 const SpriteZipLoader = preload("res://Autoload/SpriteZipLoader.gd")
 
 var base_sprite_id = {}
-var base_custom_sprite_keys = {}
 var custom_sprite_keys = {}
 var sprite_zip_loader = SpriteZipLoader.new()
-
-func load_custom_object_images():
-	var CODETIME_START = OS.get_ticks_msec()
-	var custom_images_dir = Settings.unearthdata.plus_file("custom-object-images")
-	var image_paths = Utils.get_filetype_in_directory(custom_images_dir, "png")
-	for image_path in image_paths:
-		var texture = Utils.load_external_texture(image_path)
-		if texture is ImageTexture:
-			var image_name = image_path.get_file().get_basename().to_upper()
-			sprite_id[image_name] = texture
-			custom_sprite_keys[image_name] = true
-		else:
-			print("Failed to load texture: ", image_path)
-	base_sprite_id = sprite_id.duplicate()
-	base_custom_sprite_keys = custom_sprite_keys.duplicate()
-	print('Loaded extra images from HDD: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func load_custom_sprite_zips(zip_paths):
 	var CODETIME_START = OS.get_ticks_msec()
 	if base_sprite_id.empty():
 		base_sprite_id = sprite_id.duplicate()
 	sprite_id = base_sprite_id.duplicate()
-	custom_sprite_keys = base_custom_sprite_keys.duplicate()
+	custom_sprite_keys.clear()
 	var loaded_count = sprite_zip_loader.load_custom_sprite_zips(zip_paths)
 	if zip_paths.empty() == false:
 		print('Indexed custom sprite zips: ' + str(loaded_count) + '/' + str(zip_paths.size()) + ' in ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
@@ -291,88 +274,3 @@ var sprite_id = {
 "BIRD" : preload("res://images_creatures/bird.png"),
 "BIRD_PORTRAIT" : preload("res://images_creatures/bird_portrait.png"),
 }
-
-
-#func load_custom_images_into_array(DATA_ARRAY, thingtypeImageFolder):
-#	print("Loading /thing-images/" + thingtypeImageFolder + " directory ...")
-#	var arrayOfFilenames = get_png_files_in_dir(Settings.unearthdata.plus_file("thing-images").plus_file(thingtypeImageFolder))
-#	for i in arrayOfFilenames:
-#		var subtypeID = int(i.get_file().get_basename())
-#		var img = Image.new()
-#		var err = img.load(i)
-#		if err == OK:
-#			var tex = ImageTexture.new()
-#			tex.create_from_image(img)
-#			if DATA_ARRAY.has(subtypeID):
-#				DATA_ARRAY[subtypeID][TEXTURE] = tex
-
-
-#func look_for_images_to_load(DATA_ARRAY, objectID, thingCfgName):
-#	if custom_images_list.empty() == true:
-#		custom_images_list = get_png_filenames_in_dir(Settings.unearthdata.plus_file("custom-object-images"))
-#
-#	var dir = Settings.unearthdata.plus_file("custom-object-images")
-#
-#	var uppercaseImageFilename = thingCfgName+".PNG".to_upper()
-#	var uppercasePortraitFilename = thingCfgName+"_PORTRAIT.PNG".to_upper()
-#
-#	var realImageFilename = ""
-#	var realPortraitFilename = ""
-#
-#	if custom_images_list.has(uppercaseImageFilename):
-#		 realImageFilename = custom_images_list[uppercaseImageFilename]
-#
-#	if custom_images_list.has(uppercasePortraitFilename):
-#		 realPortraitFilename = custom_images_list[uppercasePortraitFilename]
-#
-#	if realImageFilename != "":
-#		var img = Image.new()
-#		var err = img.load(dir.plus_file(realImageFilename))
-#		if err == OK:
-#			var tex = ImageTexture.new()
-#			tex.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
-#			#DATA_ARRAY[objectID][Things.TEXTURE] = tex
-#
-#	if realPortraitFilename != "":
-#		var img = Image.new()
-#		var err = img.load(dir.plus_file(realPortraitFilename))
-#		if err == OK:
-#			var tex = ImageTexture.new()
-#			tex.create_from_image(img, Texture.FLAG_MIPMAPS+Texture.FLAG_ANISOTROPIC_FILTER)
-#			#DATA_ARRAY[objectID][Things.PORTRAIT] = tex
-#
-#func get_png_filenames_in_dir(path):
-#	var dictionary = {}
-#	var dir = Directory.new()
-#	if dir.open(path) == OK:
-#		dir.list_dir_begin()
-#		var file_name = dir.get_next()
-#		while file_name != "":
-#			if dir.current_is_dir():
-#				pass
-#			else:
-#				if file_name.get_extension().to_upper() == "PNG":
-#					dictionary[file_name.to_upper().replace(" ", "_")] = file_name
-#			file_name = dir.get_next()
-#	else:
-#		print("An error occurred when trying to access the path.")
-#	return dictionary
-#
-#func get_png_files_in_dir(path):
-#	var array = []
-#	var dir = Directory.new()
-#	if dir.open(path) == OK:
-#		dir.list_dir_begin()
-#		var file_name = dir.get_next()
-#		while file_name != "":
-#			if dir.current_is_dir():
-#				pass
-#			else:
-#				if file_name.get_extension().to_upper() == "PNG":
-#					var fileNumber = file_name.get_file().get_basename()
-#					if Utils.string_has_letters(fileNumber) == false:
-#						array.append(path.plus_file(file_name))
-#			file_name = dir.get_next()
-#	else:
-#		print("An error occurred when trying to access the path.")
-#	return array
