@@ -1,6 +1,16 @@
 ﻿extends Node
 
 const string = """
+0.70.944 - 2/7/2026
+- /custom-object-images/ has been removed, images are now handled automatically
+- Sprite zips are automatically extracted into /sprite-zip-cache/ and loaded from there next time
+- Fixed external editing of .TXT and .LUA files, it was displaying the external changes dialog when it shouldn't have
+- Creature display names are now read from the [attributes] "Name" field in cfg files
+- Script marker icons are displayed next to their Action Points rather than hidden behind
+- The Creature tab in the Instance List now uses owner colours and is sorted by owner and name
+- Thing Picker and Script Generator icons are sized and centered better
+- Aligned a few object images
+- Native Linux KeeperFX can now be launched directly with the Play button instead of through Wine
 0.69.931 - 22/6/2026
 - Fixed issues with terrain.cfg not being loaded correctly
 - Centered sprites for Creatures/Spells/Traps/Doors and slightly adjusted their size
