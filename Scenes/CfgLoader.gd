@@ -37,8 +37,15 @@ func start(mapPath):
 		Things.LIST_OF_SPELLBOOKS = [11,12,13,14,15,16,17,18,19,20,21,22,23,45,46,47,48,134,135]
 		Things.LIST_OF_HEROGATES = [49]
 	
-	var campaign_cfg = load_cfgs(mapPath)
-	load_creature_stats_data(mapPath, campaign_cfg)
+	var mod_zip_paths = []
+	if oGame.GAME_DIRECTORY != "":
+		var mods_dir = oGame.GAME_DIRECTORY.plus_file("mods")
+		var dir_checker = Directory.new()
+		if dir_checker.dir_exists(mods_dir):
+			mod_zip_paths = Utils.get_filetype_in_directory(mods_dir, "zip", true)
+			mod_zip_paths.sort()
+	var campaign_cfg = load_cfgs(mapPath, mod_zip_paths)
+	load_creature_stats_data(mapPath, campaign_cfg, mod_zip_paths)
 	
 	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 	if oConfigFilesListWindow.visible:
@@ -46,7 +53,7 @@ func start(mapPath):
 	oCustomSlabSystem.load_unearth_custom_slabs_file()
 
 
-func load_cfgs(mapPath):
+func load_cfgs(mapPath, mod_zip_paths):
 	# Load configuration for KeeperFX format
 	# Processes .cfg and .toml files from multiple directories
 	oConfigFileManager.clear_paths()
@@ -56,17 +63,14 @@ func load_cfgs(mapPath):
 	var sprite_zip_paths = []
 	var campaign_zip_dir = config_dirs[oConfigFileManager.LOAD_CFG_CAMPAIGN] if campaign_cfg.get("common", {}).get("CONFIGS_LOCATION", "") != "" else ""
 	for zip_dir in [config_dirs[oConfigFileManager.LOAD_CFG_FXDATA], campaign_zip_dir]:
-		if zip_dir == "":
-			continue
-		var zip_paths = Utils.get_filetype_in_directory(zip_dir, "zip")
-		zip_paths.sort()
-		for zip_path in zip_paths:
-			if sprite_zip_paths.has(zip_path) == false:
-				sprite_zip_paths.append(zip_path)
+		add_sprite_zip_paths(sprite_zip_paths, zip_dir)
 	if mapPath != "":
 		var map_zip_path = mapPath.get_basename() + ".zip"
 		if file_exists_checker.file_exists(map_zip_path) and sprite_zip_paths.has(map_zip_path) == false:
 			sprite_zip_paths.append(map_zip_path)
+	for zip_path in mod_zip_paths:
+		if sprite_zip_paths.has(zip_path) == false:
+			sprite_zip_paths.append(zip_path)
 	Graphics.load_custom_sprite_zips(sprite_zip_paths)
 	var files_to_load = build_list_of_files_to_load(config_dirs, mapPath)
 	for file_name_from_list in files_to_load:
@@ -137,6 +141,14 @@ func get_config_directories(mapPath, campaign_cfg_data):
 		oConfigFileManager.LOAD_CFG_CURRENT_MAP: mapPath.get_basename()
 	}
 
+func add_sprite_zip_paths(sprite_zip_paths, zip_dir):
+	if zip_dir == "":
+		return
+	var zip_paths = Utils.get_filetype_in_directory(zip_dir, "zip")
+	zip_paths.sort()
+	for zip_path in zip_paths:
+		if sprite_zip_paths.has(zip_path) == false:
+			sprite_zip_paths.append(zip_path)
 
 func build_list_of_files_to_load(config_dirs, mapPath):
 	var files = {}
@@ -275,7 +287,7 @@ func load_creatures_data(cfg): # 3ms
 			newSprite = old_data[Things.SPRITE]
 		Things.DATA_CREATURE[creature_id] = [newName, newSprite, "CREATURE"]
 
-func load_creature_stats_data(mapPath, campaign_cfg):
+func load_creature_stats_data(mapPath, campaign_cfg, mod_zip_paths):
 	var data = {}
 	load_creature_stats_dir(data, oGame.GAME_DIRECTORY.plus_file("creatrs"))
 	var base_data = data.duplicate(true)
@@ -292,6 +304,25 @@ func load_creature_stats_data(mapPath, campaign_cfg):
 			if file.to_lower().begins_with(lower_map_file_prefix):
 				load_creature_stats_file(data, file.substr(map_file_prefix.length()), path, true)
 	oConfigFileManager.current_data["creature_stats"] = data
+	var sprite_data = data.duplicate(true)
+	if oGame.GAME_DIRECTORY != "" and mod_zip_paths.empty() == false:
+		var mods_dir = oGame.GAME_DIRECTORY.plus_file("mods")
+		var lower_mods_dir = mods_dir.to_lower()
+		var dir_checker = Directory.new()
+		var mod_creatrs_dirs = []
+		for zip_path in mod_zip_paths:
+			var zip_dir = zip_path.get_base_dir()
+			while zip_dir != "" and zip_dir.get_base_dir() != zip_dir:
+				var parent_dir = zip_dir.get_base_dir()
+				if parent_dir.to_lower() == lower_mods_dir:
+					var creatrs_dir = zip_dir.plus_file("creatrs")
+					if mod_creatrs_dirs.has(creatrs_dir) == false and dir_checker.dir_exists(creatrs_dir):
+						mod_creatrs_dirs.append(creatrs_dir)
+					break
+				zip_dir = parent_dir
+		mod_creatrs_dirs.sort()
+		for creatrs_dir in mod_creatrs_dirs:
+			load_creature_stats_dir(sprite_data, creatrs_dir)
 	var hand_symbol_sprites = {}
 	var query_symbol_sprites = {}
 	for file in base_data:
@@ -307,8 +338,8 @@ func load_creature_stats_data(mapPath, campaign_cfg):
 		symbol_key = get_creature_symbol_key(sprites.get("QuerySymbol", null))
 		if symbol_key != null and Graphics.sprite_id.has(default_portrait):
 			query_symbol_sprites[symbol_key] = default_portrait
-	for file in data:
-		var sprites = data[file].get("sprites", {})
+	for file in sprite_data:
+		var sprites = sprite_data[file].get("sprites", {})
 		var subtype = get_creature_subtype(file)
 		if subtype == null:
 			continue

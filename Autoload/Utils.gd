@@ -54,19 +54,27 @@ func string_has_letters(string):
 		return true
 	return false
 
-func get_filetype_in_directory(directory_path: String, file_extension: String) -> Array:
+func get_filetype_in_directory(directory_path: String, file_extension: String, include_subdirs = false) -> Array:
 	var files = []
-	var directory = Directory.new()
-	if directory.open(directory_path) == OK:
-		directory.list_dir_begin()
+	var dirs_to_check = [directory_path]
+	while dirs_to_check.empty() == false:
+		var current_dir = dirs_to_check[0]
+		dirs_to_check.remove(0)
+		var directory = Directory.new()
+		if directory.open(current_dir) != OK:
+			print("Failed to open directory: ", current_dir)
+			continue
+		directory.list_dir_begin(true, false)
 		var file_name = directory.get_next()
 		while file_name != "":
-			if not directory.current_is_dir() and file_name.get_extension().to_lower() == file_extension.to_lower():
-				files.append(directory_path.plus_file(file_name))
+			var path = current_dir.plus_file(file_name)
+			if directory.current_is_dir():
+				if include_subdirs:
+					dirs_to_check.append(path)
+			elif file_name.get_extension().to_lower() == file_extension.to_lower():
+				files.append(path)
 			file_name = directory.get_next()
 		directory.list_dir_end()
-	else:
-		print("Failed to open directory: ", directory_path)
 	return files
 
 func _escape_text_for_display(text_string: String) -> String:
