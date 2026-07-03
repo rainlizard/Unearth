@@ -386,10 +386,13 @@ func get_creature_subtype(file):
 	return Things.find_subtype_by_name(Things.TYPE.CREATURE, file.get_basename().to_upper())
 
 func get_creature_image_key(value, fallback_sprites):
+	var symbol_key = get_creature_symbol_key(value)
+	if symbol_key != null and fallback_sprites.has(symbol_key):
+		return fallback_sprites[symbol_key]
 	var sprite_key = Graphics.get_sprite_key(value, false)
 	if sprite_key != null:
 		return sprite_key
-	return fallback_sprites.get(get_creature_symbol_key(value), null)
+	return null
 
 func load_trapdoor_data(cfg): # 1ms
 	for section in cfg:
