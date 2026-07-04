@@ -1,6 +1,8 @@
 ﻿extends Node
 
 const string = """
+0.70.950 - 5/7/2026
+- Read custom trap images
 0.70.948 - 4/7/2026
 - Sprites and creature portraits can be read from the /mods/ directory (but not placements, that's intentionally still dependent on your map cfg)
 - Fixed some creature images being cached unnecessarily
