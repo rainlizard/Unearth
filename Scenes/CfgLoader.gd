@@ -408,7 +408,9 @@ func load_trapdoor_data(cfg): # 1ms
 		
 		var data = cfg[section]
 		var newName = data.get("Name", null)
-		var newSprite = get_sprite(newName, -1)
+		var newSprite = Graphics.get_sprite_key(data.get("SymbolSprites", null), false)
+		if newSprite == null:
+			newSprite = get_sprite(newName, data.get("AnimationID", -1))
 		var crateName = data.get("Crate", null)
 		
 		if trapOrDoor == Things.TYPE.DOOR:

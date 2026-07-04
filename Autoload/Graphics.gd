@@ -20,7 +20,11 @@ func get_sprite_key(value, allow_numeric = true):
 	if value == null:
 		return null
 	if value is Array:
-		return null if value.empty() else get_sprite_key(value[0], allow_numeric)
+		for item in value:
+			var sprite_key = get_sprite_key(item, allow_numeric)
+			if sprite_key != null:
+				return sprite_key
+		return null
 	var key = str(value)
 	if key.is_valid_integer():
 		if allow_numeric == false:

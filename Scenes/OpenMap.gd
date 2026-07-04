@@ -83,6 +83,7 @@ func start():
 			#	yield(get_tree(),'idle_frame')
 			#open_map("C:/Games/Dungeon Keeper/campgns/dk2/map00200.slb")
 			#open_map("C:/Games/Dungeon Keeper/levels/blazeend/map00001.slb")
+			open_map("C:/Games/Dungeon Keeper/levels/traphouse/map15416.slb")
 			pass
 		else:
 			# initialize a cleared map
