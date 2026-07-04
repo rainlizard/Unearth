@@ -1,6 +1,10 @@
 ﻿extends Node
 
 const string = """
+0.70.948 - 4/7/2026
+- Sprites and creature portraits can be read from the /mods/ directory (but not placements, that's intentionally still dependent on your map cfg)
+- Fixed some creature images being cached unnecessarily
+- Undid reading creature "Name" field from cfg files because this field has been removed in KeeperFX
 0.70.944 - 2/7/2026
 - /custom-object-images/ has been removed, images are now handled automatically
 - Sprite zips are automatically extracted into /sprite-zip-cache/ and loaded from there next time
