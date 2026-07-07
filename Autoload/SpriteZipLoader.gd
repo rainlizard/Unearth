@@ -9,26 +9,29 @@ var file_checker = File.new()
 func load_custom_sprite_zips(zip_paths):
 	active_zips.clear()
 	for zip_path in zip_paths:
-		var zip_data = get_zip_data(zip_path)
-		if zip_data != null:
-			active_zips.append(zip_data)
+		if file_checker.file_exists(zip_path):
+			active_zips.append(zip_path)
 	return active_zips.size()
 
 func load_sprite_key(sprite_key, sprite_id):
 	for index in range(active_zips.size() - 1, -1, -1):
 		var zip_data = active_zips[index]
+		if zip_data is String:
+			zip_data = get_zip_data(zip_data)
+			if zip_data == null:
+				active_zips.remove(index)
+				continue
+			active_zips[index] = zip_data
 		if zip_data["sprites"].has(sprite_key):
 			sprite_id[sprite_key] = zip_data["sprites"][sprite_key]
 			return true
 		var png_path = zip_data["sprite_paths"].get(sprite_key, "")
-		if png_path == "":
-			continue
-		var texture = load_zip_png_texture(zip_data, png_path)
-		if texture == null:
-			continue
-		zip_data["sprites"][sprite_key] = texture
-		sprite_id[sprite_key] = texture
-		return true
+		if png_path != "":
+			var texture = load_zip_png_texture(zip_data, png_path)
+			if texture != null:
+				zip_data["sprites"][sprite_key] = texture
+				sprite_id[sprite_key] = texture
+				return true
 	return false
 
 func get_zip_data(zip_path):

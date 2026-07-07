@@ -67,7 +67,7 @@ func generate_pixel_data(pixData, shapePositionArray):
 	var width = M.xSize * 3
 	var height = M.ySize * 3
 	pixData.resize(width * height * 3)
-	var clmPosBuffer = oDataClmPos.buffer
+	var clmPosData = oDataClmPos.buffer.data_array
 	var clmPosWidth = oDataClmPos.width
 	var clmCubes = oDataClm.cubes
 	var clmFloorTexture = oDataClm.floorTexture
@@ -94,8 +94,9 @@ func generate_pixel_data(pixData, shapePositionArray):
 			var rowPixelIndex = basePixelIndex + offsetY * widthBytes
 			for offsetX in range(3):
 				var seekPos = (rowSeekPos + offsetX) * 2
-				clmPosBuffer.seek(seekPos)
-				var clmIndex = abs(clmPosBuffer.get_16())
+				var clmIndex = clmPosData[seekPos] | (clmPosData[seekPos + 1] << 8)
+				if clmIndex >= 32768:
+					clmIndex = 65536 - clmIndex
 				
 				var cubeFace = columnFaceCache[clmIndex]
 				if cubeFace == -1:

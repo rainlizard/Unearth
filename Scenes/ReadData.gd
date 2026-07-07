@@ -404,9 +404,12 @@ func read_tngfx(buffer):
 			
 			var id = thingScn.instance()
 			
-			id.locationX = c.get_value(section, "SubtileX")[0] + (c.get_value(section, "SubtileX")[1] / 256.0)
-			id.locationY = c.get_value(section, "SubtileY")[0] + (c.get_value(section, "SubtileY")[1] / 256.0)
-			id.locationZ = c.get_value(section, "SubtileZ")[0] + (c.get_value(section, "SubtileZ")[1] / 256.0)
+			var subtileX = c.get_value(section, "SubtileX")
+			var subtileY = c.get_value(section, "SubtileY")
+			var subtileZ = c.get_value(section, "SubtileZ")
+			id.locationX = subtileX[0] + (subtileX[1] / 256.0)
+			id.locationY = subtileY[0] + (subtileY[1] / 256.0)
+			id.locationZ = subtileZ[0] + (subtileZ[1] / 256.0)
 			
 			id.subtype = c.get_value(section, "Subtype")
 			id.ownership = c.get_value(section, "Ownership")
@@ -440,7 +443,8 @@ func read_tngfx(buffer):
 					id.creatureInitialHealth = c.get_value(section, "CreatureInitialHealth", -1)
 					#id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.EFFECTGEN:
-					id.effectRange = c.get_value(section, "EffectRange")[0] + (c.get_value(section, "EffectRange")[1] / 256.0)
+					var effectRange = c.get_value(section, "EffectRange")
+					id.effectRange = effectRange[0] + (effectRange[1] / 256.0)
 					id.parentTile = c.get_value(section, "ParentTile")
 					id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.TRAP:

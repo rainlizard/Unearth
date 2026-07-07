@@ -22,6 +22,7 @@ var actionPointScn = preload("res://Scenes/ActionPointInstance.tscn")
 var lightScn = preload("res://Scenes/LightInstance.tscn")
 var all_instances = []
 var clearing_all_instances = false
+var bulk_loading = false
 
 func _ready():
 	erase_instances_loop()

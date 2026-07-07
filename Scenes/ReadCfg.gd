@@ -1,5 +1,7 @@
 extends Node
 
+var cfg_cache = {}
+
 func read_dkcfg_file(file_path: String, showTiming = true) -> Dictionary:
 	var config = {}
 	var comments = {}
@@ -10,12 +12,16 @@ func read_dkcfg_file(file_path: String, showTiming = true) -> Dictionary:
 		return {"config": config, "comments": comments}
 	
 	var start_time = OS.get_ticks_msec()
-	
 	if file.open(file_path, File.READ) != OK:
 		return {"config": config, "comments": comments}
 	
 	var content = file.get_as_text()
 	file.close()
+	if cfg_cache.has(file_path) and cfg_cache[file_path]["content"] == content:
+		return {
+			"config": cfg_cache[file_path]["config"].duplicate(true),
+			"comments": cfg_cache[file_path]["comments"].duplicate(true),
+		}
 	
 	var lines = content.split("\n")
 	var pending_comments = []
@@ -90,6 +96,11 @@ func read_dkcfg_file(file_path: String, showTiming = true) -> Dictionary:
 			comments[current_section][key] = pending_comments.duplicate()
 			pending_comments.clear()
 	
+	cfg_cache[file_path] = {
+		"content": content,
+		"config": config.duplicate(true),
+		"comments": comments.duplicate(true),
+	}
 	if showTiming:
 		print("Read " + file_path.get_file() + " dkcfg with comments in : " + str(OS.get_ticks_msec() - start_time) + "ms")
 	return {"config": config, "comments": comments}

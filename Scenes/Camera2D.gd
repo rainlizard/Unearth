@@ -49,8 +49,7 @@ func reset_camera(x, y):
 
 	# Notify other nodes about the zoom level change
 	yield(get_tree(), 'idle_frame')
-	for id in get_tree().get_nodes_in_group("Thing"):
-		id._on_zoom_level_changed(zoom)
+	emit_signal("zoom_level_changed", zoom)
 
 
 func _process(delta):

@@ -107,27 +107,27 @@ func initialize_thing_grid_items():
 							if putIntoTab == recategorization[subtype][0]:
 								putIntoTab = recategorization[subtype][1]
 						
-						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_OBJECT, thingCategory, subtype)
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], thingCategory, subtype)
 			Things.TYPE.CREATURE:
 				for subtype in Things.DATA_CREATURE:
 					if subtype != 0:
 						var putIntoTab = TAB_CREATURE
-						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_CREATURE, thingCategory, subtype)
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], thingCategory, subtype)
 			Things.TYPE.TRAP:
 				for subtype in Things.DATA_TRAP:
 					if subtype != 0:
 						var putIntoTab = TAB_TRAP
-						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_TRAP, thingCategory, subtype)
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], thingCategory, subtype)
 			Things.TYPE.DOOR:
 				for subtype in Things.DATA_DOOR:
 					if subtype != 0:
 						var putIntoTab = TAB_MISC
-						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_DOOR, thingCategory, subtype)
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], thingCategory, subtype)
 			Things.TYPE.EFFECTGEN:
 				for subtype in Things.DATA_EFFECTGEN:
 					if subtype != 0:
 						var putIntoTab = TAB_EFFECTGEN
-						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EFFECTGEN, thingCategory, subtype)
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], thingCategory, subtype)
 			Things.TYPE.EXTRA:
 				for subtype in Things.DATA_EXTRA:
 					if subtype != 0:
@@ -135,8 +135,9 @@ func initialize_thing_grid_items():
 						match subtype:
 							1: putIntoTab = TAB_ACTION # Action Point
 							2: putIntoTab = TAB_EFFECTGEN # Light
-						add_to_category(tabs[putIntoTab][GRIDCON_PATH], Things.DATA_EXTRA, thingCategory, subtype)
+						add_to_category(tabs[putIntoTab][GRIDCON_PATH], thingCategory, subtype)
 	
+	oGridFunctions._on_GridWindow_resized(self)
 	print('Initialized Things window: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 # Hardcoded recategorization for tabs
@@ -161,7 +162,7 @@ var recategorization = {
 128 : [TAB_EFFECTGEN, TAB_MISC], #SPINNCOIN
 }
 
-func add_to_category(tabNode, thingsData, thingtype, subtype):
+func add_to_category(tabNode, thingtype, subtype):
 	var getName = Things.fetch_name(thingtype, subtype)
 	if "Dummy Trap" in getName: return
 	
@@ -185,11 +186,6 @@ func add_to_category(tabNode, thingsData, thingtype, subtype):
 			id.img_normal = preload('res://Art/ThingDarkened.png')
 	
 	add_item_to_grid(gridcontainer, id, getName)
-	
-	# Needed for when adding custom objects
-	for i in 3:
-		yield(get_tree(),'idle_frame')
-		oGridFunctions._on_GridWindow_resized(self)
 
 
 func _process(delta): # It's necessary to use _process to update selection, because ScrollContainer won't fire a signal while you're scrolling.
@@ -351,8 +347,9 @@ func update_scale(setvalue):
 func remove_all_grid_items():
 	for tabIndex in oThingTabs.get_tab_count():
 		var tabID = oThingTabs.get_tab_control(tabIndex)
-		
-		for id in get_grid_container_node(tabID).get_children():
+		var gridContainer = get_grid_container_node(tabID)
+		for id in gridContainer.get_children():
+			gridContainer.remove_child(id)
 			id.queue_free()
 
 func rect_changed_start_timer():

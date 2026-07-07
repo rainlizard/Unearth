@@ -54,6 +54,8 @@ onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oCfgEditor = Nodelist.list["oCfgEditor"]
 onready var oMapBackups = Nodelist.list["oMapBackups"]
+onready var oInstances = Nodelist.list["oInstances"]
+onready var oActionPointList = Nodelist.list["oActionPointList"]
 
 
 var TOTAL_TIME_TO_OPEN_MAP
@@ -156,6 +158,7 @@ func open_map(filePath, show_opened_message = true, reset_camera = true, loaded_
 		var mapReadCount = 0
 		var mapReadTime = 0
 		var missingMapFiles = []
+		oInstances.bulk_loading = true
 		for EXT in oBuffers.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
 				if should_read_file(EXT) == false:
@@ -184,6 +187,8 @@ func open_map(filePath, show_opened_message = true, reset_camera = true, loaded_
 						for xSlab in M.xSize:
 							var slabID = oDataSlab.get_cell(xSlab, ySlab)
 							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
+		oInstances.bulk_loading = false
+		oActionPointList.update_if_visible()
 		if mapReadCount > 0:
 			print('Read map files: ' + str(mapReadCount) + ' files in ' + str(mapReadTime) + 'ms')
 		if missingMapFiles.empty() == false:

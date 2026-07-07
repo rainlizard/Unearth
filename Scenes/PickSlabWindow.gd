@@ -126,6 +126,7 @@ func add_slabs():
 			add_child_to_grid(tabs[putIntoTab][GRIDCON_PATH], id, useName)
 	
 	custom_slab_add_new_button()
+	oGridFunctions._on_GridWindow_resized(self)
 	
 	if visible == true:
 		set_selection(oSelection.paintSlab) # Default initial selection
@@ -153,8 +154,6 @@ func custom_slab_add_new_button():
 	
 	var tabID = tabs[Slabs.TAB_CUSTOM][GRIDCON_PATH]
 	tabID.add_child(id)
-	
-	oGridFunctions._on_GridWindow_resized(self)
 
 func _on_pressed_add_new_custom_slab():
 	Utils.popup_centered(oAddCustomSlabWindow)
@@ -176,7 +175,6 @@ func add_child_to_grid(tabID, id, set_text):
 	id.connect("pressed",self,"pressed",[id])
 	id.connect('gui_input',self,"_on_slab_portrait_gui_input",[id])
 	id.rect_min_size = Vector2(grid_item_size.x * grid_window_scale, grid_item_size.y * grid_window_scale)
-	oGridFunctions._on_GridWindow_resized(self)
 
 
 func clear_grid():

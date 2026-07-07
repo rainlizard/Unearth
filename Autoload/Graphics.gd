@@ -5,16 +5,27 @@ const SpriteZipLoader = preload("res://Autoload/SpriteZipLoader.gd")
 var base_sprite_id = {}
 var custom_sprite_keys = {}
 var sprite_zip_loader = SpriteZipLoader.new()
+var sprite_zip_signature = null
+var file_checker = File.new()
 
 func load_custom_sprite_zips(zip_paths):
 	var CODETIME_START = OS.get_ticks_msec()
+	var signature = []
+	for zip_path in zip_paths:
+		var modified_time = -1
+		if file_checker.file_exists(zip_path):
+			modified_time = file_checker.get_modified_time(zip_path)
+		signature.append([zip_path, modified_time])
 	if base_sprite_id.empty():
 		base_sprite_id = sprite_id.duplicate()
 	sprite_id = base_sprite_id.duplicate()
 	custom_sprite_keys.clear()
+	if signature == sprite_zip_signature:
+		return
+	sprite_zip_signature = signature
 	var loaded_count = sprite_zip_loader.load_custom_sprite_zips(zip_paths)
 	if zip_paths.empty() == false:
-		print('Indexed custom sprite zips: ' + str(loaded_count) + '/' + str(zip_paths.size()) + ' in ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+		print('Registered custom sprite zips: ' + str(loaded_count) + '/' + str(zip_paths.size()) + ' in ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func get_sprite_key(value, allow_numeric = true):
 	if value == null:

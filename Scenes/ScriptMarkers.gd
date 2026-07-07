@@ -10,6 +10,10 @@ var SCRIPT_ICON_SIZE_BASE = 0.5 setget script_icon_size_base
 var scnScriptHelperObject = preload('res://Scenes/ScriptHelperObject.tscn')
 var startQueued = false
 var scriptHelperObjects = []
+var commandAttributesByName = {}
+var actionPointPositionsByNumber = {}
+var heroGatePositionsByNumber = {}
+var dungeonHeartPositionsByOwner = {}
 
 enum {
 	IS_TILE
@@ -63,6 +67,10 @@ var commandsWithPositions = [
 	["ADD_PARTY_TO_LEVEL", 2, IS_LOCATION],
 ]
 
+func _ready():
+	for commandAttributes in commandsWithPositions:
+		commandAttributesByName[commandAttributes[0]] = commandAttributes
+
 func start():
 	if startQueued == true:
 		return
@@ -74,13 +82,24 @@ func start():
 	var CODETIME_START = OS.get_ticks_msec()
 	var markersByPosition = {}
 	var actionPointPositions = {}
-	for id in get_tree().get_nodes_in_group("ActionPoint"):
-		if id.is_queued_for_deletion() == false:
+	actionPointPositionsByNumber.clear()
+	heroGatePositionsByNumber.clear()
+	dungeonHeartPositionsByOwner.clear()
+	for id in oInstances.all_instances:
+		if is_instance_valid(id) == false or id.is_queued_for_deletion():
+			continue
+		if id.is_in_group("ActionPoint"):
 			actionPointPositions[id.position] = true
+			if actionPointPositionsByNumber.has(id.pointNumber) == false:
+				actionPointPositionsByNumber[id.pointNumber] = id.position
+		if id.thingType == Things.TYPE.OBJECT and id.subtype == 5 and dungeonHeartPositionsByOwner.has(id.ownership) == false:
+			dungeonHeartPositionsByOwner[id.ownership] = id.position
+		if id.is_in_group("HeroGate") and id.herogateNumber != null and heroGatePositionsByNumber.has(id.herogateNumber) == false:
+			heroGatePositionsByNumber[id.herogateNumber] = id.position
 	var scriptLines = oDataScript.data.split('\n',true)
 	for lineNumber in scriptLines.size():
 		var line = scriptLines[lineNumber]
-		var parsedCommand = get_command_from_line(line)
+		var parsedCommand = get_command_name_from_line(line)
 		if parsedCommand.empty():
 			continue
 		
@@ -88,7 +107,8 @@ func start():
 		if commandAttributes == null:
 			continue
 
-		var markerPosition = get_marker_position(parsedCommand["arguments"], commandAttributes)
+		var arguments = get_arguments_from_line(parsedCommand["line"], parsedCommand["leftBracketPos"])
+		var markerPosition = get_marker_position(arguments, commandAttributes)
 		if markerPosition != null:
 			create_helper_object(markerPosition, line, lineNumber+1, markersByPosition, actionPointPositions.has(markerPosition))
 	
@@ -102,7 +122,7 @@ func clear():
 		if is_instance_valid(id):
 			id.free()
 
-func get_command_from_line(line):
+func get_command_name_from_line(line):
 	var trimmedLine = line.strip_edges(true, false)
 	if trimmedLine.to_upper().begins_with("REM"):
 		return {}
@@ -113,7 +133,8 @@ func get_command_from_line(line):
 
 	return {
 		"name": trimmedLine.substr(0, leftBracketPos).strip_edges().to_upper(),
-		"arguments": get_arguments_from_line(trimmedLine, leftBracketPos)
+		"line": trimmedLine,
+		"leftBracketPos": leftBracketPos
 	}
 
 func get_arguments_from_line(line, leftBracketPos):
@@ -138,19 +159,16 @@ func get_arguments_from_line(line, leftBracketPos):
 	return []
 
 func get_position_command_attributes(commandName):
-	for commandAttributes in commandsWithPositions:
-		if commandAttributes[0] == commandName:
-			return commandAttributes
-	return null
+	return commandAttributesByName.get(commandName, null)
 
 func line_may_affect_position_markers(line):
-	var parsedCommand = get_command_from_line(line)
+	var parsedCommand = get_command_name_from_line(line)
 	if parsedCommand.empty() == false:
 		return get_position_command_attributes(parsedCommand["name"]) != null
 	
 	var upperLine = line.to_upper()
-	for commandAttributes in commandsWithPositions:
-		if commandAttributes[0] in upperLine:
+	for commandName in commandAttributesByName:
+		if commandName in upperLine:
 			return true
 	return false
 
@@ -177,28 +195,25 @@ func get_location_position(argumentsArray, argNumber):
 		return null
 	
 	var locationArgument = argumentsArray[argNumber].strip_edges()
+	var upperLocationArgument = locationArgument.to_upper()
 	# PLAYERx - zoom to player's dungeon heart
-	var heartID = null
-	if "PLAYER0" in locationArgument.to_upper(): heartID = oInstances.return_dungeon_heart(0)
-	if "PLAYER1" in locationArgument.to_upper(): heartID = oInstances.return_dungeon_heart(1)
-	if "PLAYER2" in locationArgument.to_upper(): heartID = oInstances.return_dungeon_heart(2)
-	if "PLAYER3" in locationArgument.to_upper(): heartID = oInstances.return_dungeon_heart(3)
-	if "PLAYER_GOOD" in locationArgument.to_upper(): heartID = oInstances.return_dungeon_heart(4)
-	if is_instance_valid(heartID):
-		return heartID.position
+	var heartPosition = null
+	if "PLAYER0" in upperLocationArgument: heartPosition = dungeonHeartPositionsByOwner.get(0, null)
+	if "PLAYER1" in upperLocationArgument: heartPosition = dungeonHeartPositionsByOwner.get(1, null)
+	if "PLAYER2" in upperLocationArgument: heartPosition = dungeonHeartPositionsByOwner.get(2, null)
+	if "PLAYER3" in upperLocationArgument: heartPosition = dungeonHeartPositionsByOwner.get(3, null)
+	if "PLAYER_GOOD" in upperLocationArgument: heartPosition = dungeonHeartPositionsByOwner.get(4, null)
+	if heartPosition != null:
+		return heartPosition
 	
 	var location = get_integer_argument(argumentsArray, argNumber)
 	if location == null:
 		return null
 	match int(sign(location)): # int() required for 'match' to work for negative integers
 		1: # Positive integer - zoom to Action Point of given number
-			var actionPointID = oInstances.return_action_point(location)
-			if is_instance_valid(actionPointID):
-				return actionPointID.position
+			return actionPointPositionsByNumber.get(location, null)
 		-1: # Negative integer - zoom to Hero Gate of given number
-			var heroGateID = oInstances.return_hero_gate(abs(location))
-			if is_instance_valid(heroGateID):
-				return heroGateID.position
+			return heroGatePositionsByNumber.get(abs(location), null)
 	return null
 
 func get_integer_argument(argumentsArray, argNumber):

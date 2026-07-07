@@ -25,7 +25,7 @@ func set_location_x(setVal):
 	position.x = locationX * 32
 	if locationX != null and locationY != null:
 		add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
-		if oScriptMarkers and pointNumber != null:
+		if oScriptMarkers and pointNumber != null and oInstances.bulk_loading == false:
 			oScriptMarkers.update_action_point_markers(self)
 
 func set_location_y(setVal):
@@ -35,7 +35,7 @@ func set_location_y(setVal):
 	position.y = locationY * 32
 	if locationX != null and locationY != null:
 		add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
-		if oScriptMarkers and pointNumber != null:
+		if oScriptMarkers and pointNumber != null and oInstances.bulk_loading == false:
 			oScriptMarkers.update_action_point_markers(self)
 
 func set_location_z(setVal): # This is actually unused for action points, but its presence fixes errors
@@ -44,7 +44,7 @@ func set_location_z(setVal): # This is actually unused for action points, but it
 func set_pointNumber(setval):
 	pointNumber = setval
 	$TextureRect/Number.text = str(pointNumber)
-	if is_inside_tree() and oScriptMarkers:
+	if is_inside_tree() and oScriptMarkers and oInstances.bulk_loading == false:
 		oScriptMarkers.start()
 
 func set_pointrange(setval):
@@ -79,7 +79,9 @@ func _on_VisibilityNotifier2D_screen_exited():
 	visible = false
 
 
-func _enter_tree():
+func _ready():
+	if oInstances.bulk_loading:
+		return
 	yield(get_tree(),'idle_frame')
 	if oActionPointList:
 		oActionPointList.update_if_visible()

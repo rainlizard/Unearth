@@ -7,6 +7,8 @@ onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
 onready var oActionPointList = Nodelist.list["oActionPointList"]
 onready var oUi = Nodelist.list["oUi"]
+onready var oCamera2D = Nodelist.list["oCamera2D"]
+onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
 
 #onready var oSelection = $'../../Selector/Selection'
 #onready var oInstanceOwnership = $'../../OverheadOwnership/InstanceOwnership'
@@ -47,7 +49,7 @@ var creatureName = null setget set_creatureName
 var orientation = null setget set_orientation
 var goldValue = null
 
-func _enter_tree():
+func _ready():
 	set_texture_based_on_thingtype()
 	set_grow_direction()
 	
@@ -55,10 +57,12 @@ func _enter_tree():
 		add_to_group('attachedtotile_'+str(parentTile))
 	
 	load_default_kfx_values()
+	if ownership != null and (thingType == Things.TYPE.CREATURE or ownership != 5):
+		set_ownership_material()
 	
-	var oCamera2D = Nodelist.list["oCamera2D"]
-	oCamera2D.connect("zoom_level_changed",self,"_on_zoom_level_changed")
-	_on_zoom_level_changed(oCamera2D.zoom)
+	if thingType == Things.TYPE.CREATURE or (orientation != null and orientation != 0):
+		ensure_zoom_signal_connected()
+		_on_zoom_level_changed(oCamera2D.zoom)
 	
 	match thingType:
 		Things.TYPE.TRAP:
@@ -79,18 +83,27 @@ func _enter_tree():
 				add_to_group("Spellbook")
 			if subtype in Things.LIST_OF_HEROGATES:
 				add_to_group("HeroGate")
-				yield(get_tree(),'idle_frame')
 				if herogateNumber == null:
-					set_herogateNumber(oInstances.get_free_hero_gate_number())
-				if oActionPointList:
+					if oInstances.bulk_loading:
+						set_herogateNumber(oInstances.get_free_hero_gate_number())
+					else:
+						yield(get_tree(),'idle_frame')
+						set_herogateNumber(oInstances.get_free_hero_gate_number())
+				if oActionPointList and oInstances.bulk_loading == false:
 					oActionPointList.update_if_visible()
 		
 		Things.TYPE.CREATURE:
 			add_to_group("Creature")
-			if oActionPointList:
+			if oActionPointList and oInstances.bulk_loading == false:
 				oActionPointList.update_if_visible()
 		Things.TYPE.EFFECTGEN:
 			add_to_group("EffectGen")
+
+func ensure_zoom_signal_connected():
+	if is_instance_valid(oCamera2D) == false:
+		return
+	if oCamera2D.is_connected("zoom_level_changed", self, "_on_zoom_level_changed") == false:
+		oCamera2D.connect("zoom_level_changed", self, "_on_zoom_level_changed")
 
 func load_default_kfx_values():
 	match thingType:
@@ -160,7 +173,7 @@ func set_location_y(setVal):
 
 
 func update_action_point_list_if_creature():
-	if is_inside_tree() and thingType == Things.TYPE.CREATURE and oActionPointList:
+	if is_inside_tree() and thingType == Things.TYPE.CREATURE and oActionPointList and oInstances.bulk_loading == false:
 		oActionPointList.update_if_visible()
 
 
@@ -171,35 +184,32 @@ func set_location_z(setVal):
 func _on_zoom_level_changed(zoom):
 	match thingType:
 		Things.TYPE.CREATURE:
-			var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
-			var oUiii = Nodelist.list["oUi"]
 			var inventScale = Vector2()
-			inventScale.x = clamp(zoom.x, 1.0, oUiii.FONT_SIZE_CR_LVL_MAX)
-			inventScale.y = clamp(zoom.y, 1.0, oUiii.FONT_SIZE_CR_LVL_MAX)
-			if zoom.x > oUiii.FONT_SIZE_CR_LVL_MAX or oQuickMapPreview.visible == true:
+			inventScale.x = clamp(zoom.x, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
+			inventScale.y = clamp(zoom.y, 1.0, oUi.FONT_SIZE_CR_LVL_MAX)
+			if zoom.x > oUi.FONT_SIZE_CR_LVL_MAX or oQuickMapPreview.visible == true:
 				$CreatureLevel.self_modulate = Color(0,0,0,0)
 			else:
 				$CreatureLevel.self_modulate = Color(1,1,1,1)
-			$CreatureLevel.scale = inventScale * oUiii.FONT_SIZE_CR_LVL_BASE * 1.5
+			$CreatureLevel.scale = inventScale * oUi.FONT_SIZE_CR_LVL_BASE * 1.5
 		_:
-			var oUiii = Nodelist.list["oUi"]
-			var oQuickMapPreviewww = Nodelist.list["oQuickMapPreview"]
 			var inventScale = Vector2()
-			inventScale.x = clamp(zoom.x, 1.0, oUiii.FACING_ARROW_SIZE_MAX)
-			inventScale.y = clamp(zoom.y, 1.0, oUiii.FACING_ARROW_SIZE_MAX)
-			if zoom.x > oUiii.FACING_ARROW_SIZE_MAX or oQuickMapPreviewww.visible == true:
+			inventScale.x = clamp(zoom.x, 1.0, oUi.FACING_ARROW_SIZE_MAX)
+			inventScale.y = clamp(zoom.y, 1.0, oUi.FACING_ARROW_SIZE_MAX)
+			if zoom.x > oUi.FACING_ARROW_SIZE_MAX or oQuickMapPreview.visible == true:
 				$WhiteArrow.self_modulate = Color(0,0,0,0)
 			else:
 				$WhiteArrow.self_modulate = Color(1,1,1,1)
-			$WhiteArrow.scale = inventScale * oUiii.FACING_ARROW_SIZE_BASE * 0.05
+			$WhiteArrow.scale = inventScale * oUi.FACING_ARROW_SIZE_BASE * 0.05
 
 
 func set_ownership(setval):
 	ownership = setval
-	call_deferred("set_ownership_material_one_frame_later") # this fixes a bug
+	if is_inside_tree():
+		call_deferred("set_ownership_material")
 	update_action_point_list_if_creature()
 
-func set_ownership_material_one_frame_later(): # needs to be call_deferred
+func set_ownership_material():
 	if ownership == 255:
 		print('For some reason ownership 255 is at '+str(locationX)+' - '+str(locationY))
 		return
@@ -207,7 +217,7 @@ func set_ownership_material_one_frame_later(): # needs to be call_deferred
 		$"%ThingTexture".material = get_texture_material()
 		return
 
-	$"%ThingTexture".material = Nodelist.list["oInstanceOwnership"].materialInstanceOwnership[ownership]
+	$"%ThingTexture".material = oInstanceOwnership.materialInstanceOwnership[ownership]
 
 
 func get_texture_material():
@@ -241,6 +251,8 @@ func set_creatureLevel(setval):
 	creatureLevel = setval
 	$CreatureLevel.frame = creatureLevel-1
 	$CreatureLevel.visible = true
+	if is_inside_tree():
+		ensure_zoom_signal_connected()
 
 func set_boxNumber(setval):
 	data14 = null
@@ -258,8 +270,13 @@ func set_orientation(setval):
 	if setval != 0:
 		$WhiteArrow.visible = true
 		$WhiteArrow.rotation_degrees = (setval/2047.0) * 360
+		if is_inside_tree():
+			ensure_zoom_signal_connected()
+			_on_zoom_level_changed(oCamera2D.zoom)
 	else:
 		$WhiteArrow.visible = false
+		if is_inside_tree() and thingType != Things.TYPE.CREATURE and oCamera2D.is_connected("zoom_level_changed", self, "_on_zoom_level_changed"):
+			oCamera2D.disconnect("zoom_level_changed", self, "_on_zoom_level_changed")
 	orientation = setval
 
 func set_herogateNumber(setval):
@@ -274,11 +291,11 @@ func set_texture_based_on_thingtype():
 	match thingType:
 		Things.TYPE.OBJECT:
 			$"%ThingTexture".material = get_texture_material()
-			var successOrFailure = Nodelist.list["oPickThingWindow"].add_workshop_item_sprite_overlay($"%ThingTexture", subtype)
-			if successOrFailure == true:
-				$"%ThingTexture".rect_position += Vector2(-1,9)
 			if Things.DATA_OBJECT.has(subtype):
-				var genre = Things.DATA_OBJECT[subtype][Things.GENRE]
+				var objectData = Things.DATA_OBJECT[subtype]
+				var genre = objectData[Things.GENRE]
+				if Things.LIST_OF_BOXES.has(objectData[Things.NAME_ID]) and oPickThingWindow.add_workshop_item_sprite_overlay($"%ThingTexture", subtype):
+					$"%ThingTexture".rect_position += Vector2(-1,9)
 				useCenteredIcon = genre == "SPELLBOOK" or genre == "SPECIALBOX"
 	if tex != null:
 		$"%ThingTexture".texture = tex
