@@ -46,8 +46,8 @@ func _on_NewMapWindow_visibility_changed():
 	# Default to KFX format
 	
 	if oGame.keeperfx_is_installed() == false: # or kfxOutOfDate == true:
-		oSetNewFormat.selected = Constants.ClassicFormat # Set default format to Classic format, for newbies who don't know what KeeperFX is
-		_on_NewMapFormat_item_selected(Constants.ClassicFormat)
+		oSetNewFormat.selected = Constants.OldFormat # Set default format to Old format, for newbies who don't know what KeeperFX is
+		_on_NewMapFormat_item_selected(Constants.OldFormat)
 	else:
 		oSetNewFormat.selected = Constants.KfxFormat # Set default format to KFX format
 		_on_NewMapFormat_item_selected(Constants.KfxFormat)
@@ -209,7 +209,7 @@ func _on_CheckBoxNewMapBorder_pressed():
 		update_border_image_with_blank()
 
 func _on_NewMapFormat_item_selected(index):
-	if index == Constants.ClassicFormat:
+	if index == Constants.OldFormat:
 		oXSizeLine.editable = false
 		oYSizeLine.editable = false
 		oXSizeLine.text = "85"
@@ -369,7 +369,7 @@ func _on_PlayerCount_sliderChanged():
 		6: # Pizza symmetry - no constraints, any player count is valid
 			pass
 	
-	if oSetNewFormat.selected == Constants.ClassicFormat:
+	if oSetNewFormat.selected == Constants.OldFormat:
 		if oPlayerCount.value > 4:
 			oPlayerCount.value = 4
 	

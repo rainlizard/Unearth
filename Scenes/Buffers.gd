@@ -144,7 +144,7 @@ func get_buffer_for_extension(EXT, filePath):
 		"UNE": return oWriteData.write_une()
 
 func should_process_file_type(EXT):
-	if oCurrentFormat.selected == Constants.ClassicFormat:
+	if oCurrentFormat.selected == Constants.OldFormat:
 		if ["LOF", "TNGFX", "APTFX", "LGTFX"].has(EXT):
 			return false
 	elif oCurrentFormat.selected == Constants.KfxFormat:

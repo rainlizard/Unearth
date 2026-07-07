@@ -167,7 +167,7 @@ func delete_existing_files(map_file_path):
 	var file_types_to_delete = []
 	var base_directory = map_file_path.get_base_dir()
 	var map_name_no_ext = map_file_path.get_file().get_basename()
-	if oCurrentFormat.selected == Constants.ClassicFormat:
+	if oCurrentFormat.selected == Constants.OldFormat:
 		file_types_to_delete = ["TNGFX", "APTFX", "LGTFX"]
 	elif oCurrentFormat.selected == Constants.KfxFormat:
 		file_types_to_delete = ["LIF", "TNG", "APT", "LGT"]

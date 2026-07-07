@@ -134,7 +134,7 @@ func _on_MapFormatSetting_item_selected(index):
 
 func set_format_selection(setFormat):
 	match setFormat:
-		0: # Classic format
+		0: # Old format
 			oAdvancedMapProperties.visible = false
 		1: # KFX format
 			oAdvancedMapProperties.visible = true

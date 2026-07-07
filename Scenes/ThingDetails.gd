@@ -160,23 +160,23 @@ func thing_details(id):
 			12:
 				description = "Health %"
 				value = id.creatureInitialHealth
-				if oCurrentFormat.selected == Constants.ClassicFormat: value = null
+				if oCurrentFormat.selected == Constants.OldFormat: value = null
 			13:
 				description = "Gold held"
 				value = id.creatureGold
-				if oCurrentFormat.selected == Constants.ClassicFormat: value = null
+				if oCurrentFormat.selected == Constants.OldFormat: value = null
 			14:
 				description = "Unique name"
 				value = id.creatureName
-				if oCurrentFormat.selected == Constants.ClassicFormat: value = null
+				if oCurrentFormat.selected == Constants.OldFormat: value = null
 			15:
 				description = "Gold value"
 				value = id.goldValue
-				if oCurrentFormat.selected == Constants.ClassicFormat: value = null
+				if oCurrentFormat.selected == Constants.OldFormat: value = null
 			16:
 				description = "Orientation"
 				value = id.orientation
-				if oCurrentFormat.selected == Constants.ClassicFormat: value = null
+				if oCurrentFormat.selected == Constants.OldFormat: value = null
 			
 		if value != null:
 			oThingListData.add_item(description, str(value))

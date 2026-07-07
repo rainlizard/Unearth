@@ -29,7 +29,7 @@ func start(mapPath):
 	Columnset.clear_all_column_data()
 	Cube.clear_all_cube_data()
 	
-	if oCurrentFormat.selected == Constants.ClassicFormat or oGame.keeperfx_is_installed() == false:
+	if oCurrentFormat.selected == Constants.OldFormat or oGame.keeperfx_is_installed() == false:
 		Cube.load_dk_original_cubes()
 		Slabset.load_default_original_slabset()
 		Columnset.load_default_original_columnset()

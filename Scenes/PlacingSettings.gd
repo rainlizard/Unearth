@@ -122,22 +122,22 @@ func update_placing_tab():
 			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE]
 			if Things.is_custom_special_box(subtype) == true: # Custom Special Box
 				availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.CUSTOM_BOX_ID]
-			if oCurrentFormat.selected != 0: # Classic format
+			if oCurrentFormat.selected != Constants.OldFormat:
 				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.CREATURE:
 			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.CREATURE_LEVEL]
-			if oCurrentFormat.selected != 0: # Classic format
+			if oCurrentFormat.selected != Constants.OldFormat:
 				availableFields.append(FIELDS.INITIAL_HEALTH)
 				availableFields.append(FIELDS.CREATURE_GOLD)
 				availableFields.append(FIELDS.CREATURE_NAME)
 				#availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.EFFECTGEN:
 			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.EFFECT_RANGE, FIELDS.ORIENTATION]
-			if oCurrentFormat.selected != 0: # Classic format
+			if oCurrentFormat.selected != Constants.OldFormat:
 				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.TRAP:
 			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.ORIENTATION]
-			if oCurrentFormat.selected != 0: # Classic format
+			if oCurrentFormat.selected != Constants.OldFormat:
 				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.DOOR:
 			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.DOOR_LOCKED]

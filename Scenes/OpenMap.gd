@@ -136,7 +136,7 @@ func open_map(filePath, show_opened_message = true, reset_camera = true, loaded_
 		if has_map_file("TNGFX") == true:
 			oCurrentFormat.selected = Constants.KfxFormat
 		else:
-			oCurrentFormat.selected = Constants.ClassicFormat
+			oCurrentFormat.selected = Constants.OldFormat
 	
 	compressedFiles.clear()
 	for i in oCurrentMap.currentFilePaths.values():
@@ -210,7 +210,7 @@ func should_read_file(fileType):
 		"APT": "APTFX",
 		"LGT": "LGTFX"
 	}
-	if oCurrentFormat.selected == Constants.ClassicFormat:
+	if oCurrentFormat.selected == Constants.OldFormat:
 		return ["TNGFX", "APTFX", "LGTFX"].has(fileType) == false
 	elif oCurrentFormat.selected == Constants.KfxFormat:
 		if replacementFiles.has(fileType) == true:

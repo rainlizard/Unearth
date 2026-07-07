@@ -128,7 +128,7 @@ func _ready():
 #	Utils.popup_centered(Nodelist.list["oMapSettingsWindow"])
 
 func update_options_based_on_mapformat():
-	if oCurrentFormat.selected == Constants.ClassicFormat:
+	if oCurrentFormat.selected == Constants.OldFormat:
 		oPurpleAICheckBox.get_parent().visible = false
 		oBlackAICheckBox.get_parent().visible = false
 		oOrangeAICheckBox.get_parent().visible = false
@@ -261,7 +261,7 @@ func initialize_doors_available(): # oDoorsAvailable
 
 func get_room_list():
 	var roomList = listRoom.duplicate(true)
-	if oCurrentFormat.selected == Constants.ClassicFormat:
+	if oCurrentFormat.selected == Constants.OldFormat:
 		return roomList
 	if oConfigFileManager.current_data.has("terrain.cfg") == false:
 		return roomList
@@ -283,7 +283,7 @@ func get_creature_list():
 	var creatureList = []
 	for i in listCreature:
 		creatureList.append([i[0], i[1], i[2], listCreature.find(i) < 16])
-	if oCurrentFormat.selected == Constants.ClassicFormat:
+	if oCurrentFormat.selected == Constants.OldFormat:
 		return creatureList
 	var creatureStatsByName = {}
 	for file in oConfigFileManager.current_data.get("creature_stats", {}):
@@ -309,7 +309,7 @@ func is_creature_evil(creatureName, creatureStatsByName):
 
 func get_magic_list():
 	var magicList = listMagic.duplicate(true)
-	if oCurrentFormat.selected == Constants.ClassicFormat:
+	if oCurrentFormat.selected == Constants.OldFormat:
 		return magicList
 	if oConfigFileManager.current_data.has("magic.cfg") == false:
 		return magicList
@@ -373,7 +373,7 @@ func get_trapdoor_subtypes(thingType):
 		subtypeList = CLASSIC_TRAP_ORDER.duplicate()
 	else:
 		subtypeList = CLASSIC_DOOR_ORDER.duplicate()
-	if oCurrentFormat.selected == Constants.ClassicFormat:
+	if oCurrentFormat.selected == Constants.OldFormat:
 		return subtypeList
 	var allSubtypes = Things.data_structure(thingType).keys()
 	allSubtypes.sort()

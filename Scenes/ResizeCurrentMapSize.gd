@@ -135,8 +135,8 @@ func _on_ResizeApplyButton_pressed():
 	if northDelta == 0 and southDelta == 0 and westDelta == 0 and eastDelta == 0:
 		return
 	
-	if oCurrentFormat.selected == Constants.ClassicFormat:
-		oMessage.big("Error", "Cannot resize map because it's in Classic format. Switch to KFX format first.")
+	if oCurrentFormat.selected == Constants.OldFormat:
+		oMessage.big("Error", "Cannot resize map because it's in Old format. Switch to KFX format first.")
 		return
 	
 	var previousWidth = M.xSize

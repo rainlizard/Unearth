@@ -184,7 +184,7 @@ func new_dat():
 	oDataClmPos.initialize((M.xSize*3)+1, (M.ySize*3)+1, 0, Grid.U16)
 
 func read_clm(buffer):
-	if oCurrentFormat.selected == Constants.ClassicFormat:
+	if oCurrentFormat.selected == Constants.OldFormat:
 		oDataClm.column_count = 2048
 	else:
 		oDataClm.column_count = 8192
@@ -214,7 +214,7 @@ func read_clm(buffer):
 			oDataClm.cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
 
 func new_clm():
-	if oCurrentFormat.selected == Constants.ClassicFormat:
+	if oCurrentFormat.selected == Constants.OldFormat:
 		oDataClm.column_count = 2048
 	else:
 		oDataClm.column_count = 8192
