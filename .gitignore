@@ -9,6 +9,7 @@ custom_objects.cfg
 unearthdata/tmapa0*
 unearthdata/tmapb0*
 unearthdata/sprite-zip-cache/
+sprite-zip-cache/
 textures
 
 ### Godot ###

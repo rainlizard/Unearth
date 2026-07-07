@@ -45,7 +45,7 @@ func get_zip_data(zip_path):
 
 	var zip_data = {
 		"modified_time": modified_time,
-		"cache_dir": Settings.unearthdata.plus_file("sprite-zip-cache").plus_file(zip_path.to_lower().md5_text() + "_" + str(modified_time)),
+		"cache_dir": Settings.unearth_path.plus_file("sprite-zip-cache").plus_file(zip_path.to_lower().md5_text() + "_" + str(modified_time)),
 		"zip": zip,
 		"zip_files": {},
 		"sprite_paths": {},
