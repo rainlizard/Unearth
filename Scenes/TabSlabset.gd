@@ -163,8 +163,7 @@ func _on_TabSlabset_visibility_changed():
 		oSlabsetWindow.update_flash_state()
 	else:
 		oPickSlabWindow.add_slabs()
-		Columnset.update_list_of_columns_that_contain_owned_cubes()
-		Columnset.update_list_of_columns_that_contain_rng_cubes()
+		Columnset.update_cube_lists()
 
 func shortcut_pressed(id):
 	var spinbox = id.get_node("CustomSpinBox")

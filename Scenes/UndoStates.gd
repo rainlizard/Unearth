@@ -93,6 +93,8 @@ func perform_undo():
 	
 	oCurrentMap.clear_map()
 	
+	var undoReadCount = 0
+	var undoReadTime = 0
 	for EXT in previous_state:
 		var buffer = previous_state[EXT]
 		if buffer == null or !(buffer is StreamPeerBuffer):
@@ -101,7 +103,11 @@ func perform_undo():
 			continue
 		var undotimeExt = OS.get_ticks_msec()
 		oBuffers.read_buffer_for_extension(buffer, EXT)
-		print(str(EXT) + ' Undotime: ' + str(OS.get_ticks_msec() - undotimeExt) + 'ms')
+		var elapsedTime = OS.get_ticks_msec() - undotimeExt
+		undoReadCount += 1
+		undoReadTime += elapsedTime
+	if undoReadCount > 0:
+		print('Undo buffers read: ' + str(undoReadCount) + ' files in ' + str(undoReadTime) + 'ms')
 
 	oOpenMap.continue_load(oCurrentMap.path)
 	undo_history.pop_front()
@@ -114,10 +120,6 @@ func perform_undo():
 		oEditor.mapHasBeenEdited = false
 	
 	print('perform_undo: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-	
-	var IDLE_FRAME_CODETIME_START = OS.get_ticks_msec()
-	
-	print('Idle frame (after undo): ' + str(OS.get_ticks_msec() - IDLE_FRAME_CODETIME_START) + 'ms')
 	
 	performing_undo = false
 

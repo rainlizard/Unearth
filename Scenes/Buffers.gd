@@ -62,16 +62,17 @@ func new_blank(EXT):
 		"LUA" : oReadData.new_lua()
 		"UNE" : oReadData.new_une()
 
-func read(filePath, EXT):
+func read(filePath, EXT, showTiming = true):
 	if File.new().file_exists(filePath) == false:
 		print("File not found : " + filePath)
-		return
+		return false
 
-	print("Attempting to read : " + filePath)
 	var CODETIME_START = OS.get_ticks_msec()
 	var buffer = file_path_to_buffer(filePath)
 	read_buffer_for_extension(buffer, EXT)
-	print('.' + EXT + ' read success in ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	if showTiming:
+		print('.' + EXT + ' read success in ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	return true
 
 func read_buffer_for_extension(buffer, EXT):
 	buffer.seek(0) # Important!
@@ -104,16 +105,15 @@ func file_path_to_buffer(filePath):
 		file.close()
 	return buffer
 
-func write(filePath, EXT):
-	print("Saving : " + filePath)
+func write(filePath, EXT, showTiming = true):
 	var CODETIME_START = OS.get_ticks_msec()
 	var buffer = get_buffer_for_extension(EXT, filePath)
-	var err = write_buffer_to_file(filePath, buffer, EXT, CODETIME_START)
-	if err == OK:
+	var err = write_buffer_to_file(filePath, buffer)
+	if showTiming and err == OK:
 		print('.' + EXT + ' wrote in ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return err
 
-func write_buffer_to_file(filePath, buffer, EXT, CODETIME_START):
+func write_buffer_to_file(filePath, buffer):
 	var file = File.new()
 	var err = file.open(filePath, File.WRITE)
 	if err == OK:

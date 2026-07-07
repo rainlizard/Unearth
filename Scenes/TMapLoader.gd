@@ -154,6 +154,8 @@ func start():
 		for i in range(maxTmapNumber + 1):
 			cachedTextures[i] = [null, null, null, null]
 	var newRememberedPaths = {}
+	var tmapProcessCount = 0
+	var tmapProcessTime = 0
 	for pathStr in tmapaDatListSorted:
 		var parsedDetails = parse_tmap_path_details(pathStr)
 		if parsedDetails == null:
@@ -163,7 +165,10 @@ func start():
 		var tmapNumber = parsedDetails.number
 		var tmapType = parsedDetails.type
 
+		var tmapProcessStart = OS.get_ticks_msec()
 		var l8Image: Image = create_l8_image(pathStr)
+		tmapProcessCount += 1
+		tmapProcessTime += OS.get_ticks_msec() - tmapProcessStart
 		if l8Image == null or l8Image.is_empty():
 			printerr("Failed to create L8 image from DAT: ", pathStr)
 			continue
@@ -179,14 +184,15 @@ func start():
 		return
 
 	texturesLoadedState = LOADING_SUCCESS
-	print("TMapLoader: " + str(OS.get_ticks_msec() - totalProcessStartTime) + "ms")
+	var tmapSummary = "TMapLoader: " + str(OS.get_ticks_msec() - totalProcessStartTime) + "ms"
+	if tmapProcessCount > 0:
+		tmapSummary += " (processed " + str(tmapProcessCount) + " DAT files in " + str(tmapProcessTime) + "ms)"
+	print(tmapSummary)
 	call_deferred("finish_load_ui")
 
 
 func create_l8_image(tmapDatPath: String) -> Image:
-	var CODETIME_START = OS.get_ticks_msec()
 	var l8ByteArray: PoolByteArray = oRNC.decompress(tmapDatPath)
-	print('RNC processing ' + tmapDatPath + " : " + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
 	if l8ByteArray.empty():
 		printerr("Failed to process file: ", tmapDatPath)

@@ -15,7 +15,6 @@ var textureData = ImageTexture.new()
 var btnGroup = ButtonGroup.new()
 var highlightedColour
 var offsetResultBy = Vector2()
-var CODETIME_START
 
 const transparencyColour = Color8(44,42,50,255) # When you click on the background
 
@@ -88,7 +87,6 @@ func _on_MapImageTextureRect_gui_input(event):
 	if oMapImageTextureRect.texture == null: return
 	
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
-		CODETIME_START = OS.get_ticks_msec()
 		update_image_if_map_size_changed()
 		
 		var imagePos = get_map_image_mouse_position()
@@ -96,6 +94,7 @@ func _on_MapImageTextureRect_gui_input(event):
 			oMessage.quick("Click within the image.")
 			return
 		
+		var CODETIME_START = OS.get_ticks_msec()
 		imageData.lock()
 		var pixel = imageData.get_pixelv(imagePos)
 		highlightedColour = Color8(pixel.r8, pixel.g8, pixel.b8, pixel.a8)

@@ -66,7 +66,7 @@ func start_variation_flash(fullVariation, slabID = -1):
 		lastGeneratedSlabID = slabID
 		var CODETIME_START = OS.get_ticks_msec()
 		generate_variation_texture()
-		print('generate_variation_position_texture Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+		print('generate_variation_texture: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	update_flash_shader_params()
 
 
@@ -174,7 +174,7 @@ func generate_columnset_texture():
 	if is_instance_valid(oOverheadGraphics):
 		for displayField in oOverheadGraphics.arrayOfColorRects:
 			displayField.material.set_shader_param("columnsetPosData", columnsetPosTexData)
-	print('generate_columnset_texture Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	print('generate_columnset_texture: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 
 func generate_variation_texture():

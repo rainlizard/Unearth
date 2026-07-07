@@ -18,7 +18,7 @@ func start():
 	
 	var totalLoadingSize:float = max(1, M.ySize*M.xSize)
 	var currentLoad:float = 0.0
-	var loadTime = OS.get_ticks_msec()
+	var loadingBarUpdateTime = OS.get_ticks_msec()
 	
 	for ySlab in M.ySize:
 		for xSlab in M.xSize:
@@ -27,8 +27,9 @@ func start():
 			# Loading bar
 			
 			currentLoad += 1
-			if OS.get_ticks_msec() > loadTime+100:
-				loadTime += 100
+			var currentTime = OS.get_ticks_msec()
+			if currentTime - loadingBarUpdateTime >= 100:
+				loadingBarUpdateTime = currentTime
 				oLoadingBar.value = (currentLoad/(totalLoadingSize))*100
 				yield(get_tree(),'idle_frame')
 			
@@ -55,7 +56,7 @@ func start():
 	loading_bar_end()
 	
 	oTerrainMesh.mesh = oVoxelGen.complete_slx_mesh(arrayOfArrays)
-	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	print('Generated terrain mesh in ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
 	yield(get_tree(),'idle_frame') # Important to solve race condition
 	emit_signal("terrain3D_finished_generating")

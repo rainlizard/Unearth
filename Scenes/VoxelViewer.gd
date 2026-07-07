@@ -206,11 +206,9 @@ func do_all():
 		oAllVoxelObjects.mesh = oVoxelGen.complete_mesh(genArray)
 		oAllVoxelObjects.translation.z = -0.5
 		oAllVoxelObjects.translation.x = -0.5
-	var CODETIME_START = OS.get_ticks_msec()
-	
-	
-	
+
 	if displayingType == DK_SLABSET: # This is not for fake slab, this is for slabset slabs
+		var CODETIME_START = OS.get_ticks_msec()
 		var slabID = oSlabsetIDSpinBox.value
 		var separation = 0
 		var variationStart = slabID * 28
@@ -230,8 +228,7 @@ func do_all():
 			separation += 1
 		
 		oAllVoxelObjects.mesh = oVoxelGen.complete_mesh(genArray)
-		
-	print('Codetime DYNAMIC: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+		print('Generated slabset voxels in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 func do_one():
 	

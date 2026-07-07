@@ -322,7 +322,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	oLoadingBar.value = 0
 	var totalLoadingSize:float = max(1,shapePositionArray.size()) #abs((rectStart.x)-(rectEnd.x+1)) * abs((rectStart.y)-(rectEnd.y+1))
 	var currentLoad:float = 0.0
-	var loadTime = OS.get_ticks_msec()
+	var loadingBarUpdateTime = OS.get_ticks_msec()
 	
 	for pos in shapePositionArray:
 		var slabID = oDataSlab.get_cell(pos.x, pos.y)
@@ -335,8 +335,9 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 		
 		currentLoad += 1
 		
-		if OS.get_ticks_msec() > loadTime+100:
-			loadTime += 100
+		var currentTime = OS.get_ticks_msec()
+		if currentTime - loadingBarUpdateTime >= 100:
+			loadingBarUpdateTime = currentTime
 			oLoadingBar.value = (currentLoad/(totalLoadingSize))*100
 			yield(get_tree(),'idle_frame')
 	
@@ -345,7 +346,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 	
 	oLoadingBar.visible = false
 	
-	print('Generated slabs in : '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	print('Generated slabs in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
 	oDataSlab.update_texture()
 	oOverheadGraphics.overhead2d_update_rect_single_threaded(shapePositionArray)

@@ -46,11 +46,11 @@ func start(mapPath):
 			mod_zip_paths.sort()
 	var campaign_cfg = load_cfgs(mapPath, mod_zip_paths)
 	load_creature_stats_data(mapPath, campaign_cfg, mod_zip_paths)
+	oCustomSlabSystem.load_unearth_custom_slabs_file()
 	
 	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 	if oConfigFilesListWindow.visible:
 		Utils.popup_centered(oConfigFilesListWindow)
-	oCustomSlabSystem.load_unearth_custom_slabs_file()
 
 
 func load_cfgs(mapPath, mod_zip_paths):
@@ -98,7 +98,7 @@ func load_cfgs(mapPath, mod_zip_paths):
 						"textureanim.toml": oTextureAnimation.generate_animation_database(actual_filepath)
 						"effects.toml": load_effects_data(actual_filepath)
 				elif ext == "cfg":
-					var result = oReadCfg.read_dkcfg_file(actual_filepath)
+					var result = oReadCfg.read_dkcfg_file(actual_filepath, false)
 					combined_cfg_data = super_merge_dictionaries(combined_cfg_data, result["config"])
 					
 					if load_cfg_type == oConfigFileManager.LOAD_CFG_FXDATA:
@@ -367,7 +367,7 @@ func load_creature_stats_dir(data, dir):
 		load_creature_stats_file(data, path.get_file(), path)
 
 func load_creature_stats_file(data, file, path, require_attributes = false):
-	var cfg_data = oReadCfg.read_dkcfg_file(path)["config"]
+	var cfg_data = oReadCfg.read_dkcfg_file(path, false)["config"]
 	if cfg_data.empty() or (require_attributes and cfg_data.has("attributes") == false):
 		return
 	data[file] = super_merge_dictionaries(data.get(file, {}), cfg_data)
@@ -442,7 +442,7 @@ func get_campaign_boss_file(mapPath):
 		return {"path": "", "config": {}}
 	var list_of_main_campaign_files = Utils.get_filetype_in_directory(levelsDirPath, "cfg")
 	for campaignPath in list_of_main_campaign_files:
-		var cfgDictionary = oReadCfg.read_dkcfg_file(campaignPath)["config"]
+		var cfgDictionary = oReadCfg.read_dkcfg_file(campaignPath, false)["config"]
 		var levelsLocation = cfgDictionary.get("common", {}).get("LEVELS_LOCATION", null)
 		if levelsLocation and oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower() == mapPath.get_base_dir().to_lower():
 			return {"path": campaignPath, "config": cfgDictionary}

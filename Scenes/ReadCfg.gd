@@ -1,6 +1,6 @@
 extends Node
 
-func read_dkcfg_file(file_path: String) -> Dictionary:
+func read_dkcfg_file(file_path: String, showTiming = true) -> Dictionary:
 	var config = {}
 	var comments = {}
 	var current_section = ""
@@ -19,8 +19,7 @@ func read_dkcfg_file(file_path: String) -> Dictionary:
 	
 	var lines = content.split("\n")
 	var pending_comments = []
-	var getFilename = file_path.get_file()
-	var is_rules_cfg = getFilename.to_lower().ends_with("rules.cfg")
+	var is_rules_cfg = file_path.get_file().to_lower().ends_with("rules.cfg")
 	
 	for line in lines:
 		var stripped = line.strip_edges()
@@ -91,7 +90,6 @@ func read_dkcfg_file(file_path: String) -> Dictionary:
 			comments[current_section][key] = pending_comments.duplicate()
 			pending_comments.clear()
 	
-	var elapsed_time = OS.get_ticks_msec() - start_time
-	print("Read " + getFilename + " dkcfg with comments in : " + str(elapsed_time) + "ms")
-	
+	if showTiming:
+		print("Read " + file_path.get_file() + " dkcfg with comments in : " + str(OS.get_ticks_msec() - start_time) + "ms")
 	return {"config": config, "comments": comments}

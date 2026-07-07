@@ -47,14 +47,20 @@ func save_map(filePath):
 
 	oDataClm.update_all_utilized()
 	var writeFailure = false
+	var mapWriteCount = 0
+	var mapWriteTime = 0
 	for EXT in oBuffers.FILE_TYPES:
 		var saveToFilePath = get_save_path(map_base_dir, map_filename_no_ext, EXT)
 		if OS.get_name() == "X11":
 			delete_map_files(map_base_dir, map_filename_no_ext, EXT, saveToFilePath)
 		var should_process = oBuffers.should_process_file_type(EXT)
 		if should_process:
-			if oBuffers.write(saveToFilePath, EXT.to_upper()) != OK:
+			var writeStart = OS.get_ticks_msec()
+			if oBuffers.write(saveToFilePath, EXT.to_upper(), false) != OK:
 				writeFailure = true
+			else:
+				mapWriteCount += 1
+				mapWriteTime += OS.get_ticks_msec() - writeStart
 		
 		var should_record_file = should_process or oCurrentMap.currentFilePaths.has(EXT)
 		if File.new().file_exists(saveToFilePath) and should_record_file:
@@ -71,6 +77,8 @@ func save_map(filePath):
 				oCurrentMap.currentFilePaths.erase(EXT)
 			elif should_process:
 				oCurrentMap.currentFilePaths.erase(EXT)
+	if mapWriteCount > 0:
+		print('Wrote map files: ' + str(mapWriteCount) + ' files in ' + str(mapWriteTime) + 'ms')
 
 	if oCurrentFormat.selected == Constants.KfxFormat:
 		var campaignFile = oCfgLoader.get_campaign_boss_file(filePath)

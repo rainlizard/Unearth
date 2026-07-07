@@ -45,14 +45,15 @@ func update_full_overhead_map():
 	
 #	for i in 2: # Helps prevent the column updating from freezing the editor so much.
 #		yield(get_tree(),'idle_frame')
-	call_deferred("overhead2d_update_rect_single_threaded", shapePositionArray)
-	print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
+	call_deferred("overhead2d_update_rect_single_threaded", shapePositionArray, CODETIME_START)
 
 
-func overhead2d_update_rect_single_threaded(shapePositionArray):
+func overhead2d_update_rect_single_threaded(shapePositionArray, CODETIME_START = -1):
 	pixel_data = generate_pixel_data(pixel_data, shapePositionArray)
 	overheadImgData.create_from_data(M.xSize * 3, M.ySize * 3, false, Image.FORMAT_RGB8, pixel_data)
 	overheadTexData.create_from_image(overheadImgData, 0)
+	if CODETIME_START >= 0:
+		print('Overhead graphics done in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	emit_signal("column_graphics_completed")
 
 const subtile3x3 = [
@@ -114,7 +115,7 @@ func generate_pixel_data(pixData, shapePositionArray):
 		
 		posIndex += 1
 	
-	print('pixData Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	print('generate_pixel_data: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	return pixData
 
 

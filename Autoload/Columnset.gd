@@ -131,8 +131,10 @@ func has_changes_since_load():
 
 
 func update_cube_lists():
-	update_list_of_columns_that_contain_owned_cubes()
-	update_list_of_columns_that_contain_rng_cubes()
+	var ownedTime = update_list_of_columns_that_contain_owned_cubes()
+	var rngTime = update_list_of_columns_that_contain_rng_cubes()
+	if cubes.empty() == false:
+		print('Column cube lists updated: ' + str(ownedTime + rngTime) + 'ms (owned ' + str(ownedTime) + 'ms, rng ' + str(rngTime) + 'ms)')
 
 
 func export_toml_columnset(filePath, column_diffs = null):
@@ -197,7 +199,7 @@ func is_column_different(index):
 func update_list_of_columns_that_contain_rng_cubes():
 	columnsContainingRngCubes.clear()
 	if cubes.empty():
-		return
+		return 0
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	
@@ -217,7 +219,7 @@ func update_list_of_columns_that_contain_rng_cubes():
 		if rngCubeTypesInColumn:
 			columnsContainingRngCubes[clmIndex] = rngCubeTypesInColumn.keys()
 	
-	print('update_list_of_columns_that_contain_rng_cubes: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	return OS.get_ticks_msec() - CODETIME_START
 
 func clear_all_column_data():
 	.clear_all_column_data()
@@ -228,7 +230,7 @@ func clear_all_column_data():
 func update_list_of_columns_that_contain_owned_cubes():
 	columnsContainingOwnedCubes.clear()
 	if cubes.empty():
-		return
+		return 0
 	
 	var CODETIME_START = OS.get_ticks_msec()
 	
@@ -248,7 +250,7 @@ func update_list_of_columns_that_contain_owned_cubes():
 		if ownedCubeTypesInColumn:
 			columnsContainingOwnedCubes[clmIndex] = ownedCubeTypesInColumn.keys()
 	
-	print('update_list_of_columns_that_contain_owned_cubes: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	return OS.get_ticks_msec() - CODETIME_START
 
 func is_valid_column_id_for_navigation(columnID):
 	if highest_columnset_id_from_fxdata <= 0:

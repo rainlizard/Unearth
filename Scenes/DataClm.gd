@@ -157,7 +157,7 @@ func sort_columns_by_utilized():
 	
 	utilized[0] = 0 # Pretend that the utilized value is maximum for column 0, so it's placed first. Set it back to 0 afterwards.
 	
-	print('Codetime: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+	print('sort_columns_by_utilized: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
 static func sorter_utilized(a, b):
 	if a[1] == b[1]:
@@ -264,5 +264,4 @@ static func sorter_utilized(a, b):
 #	var C = C0 + (2*cubeNumber)
 #	return array[C] | (array[C+1] << 8)
 #
-
 

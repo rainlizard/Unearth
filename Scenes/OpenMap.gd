@@ -153,15 +153,21 @@ func open_map(filePath, show_opened_message = true, reset_camera = true, loaded_
 			oDataLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
 			print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
 		
+		var mapReadCount = 0
+		var mapReadTime = 0
+		var missingMapFiles = []
 		for EXT in oBuffers.FILE_TYPES:
 			if oCurrentMap.currentFilePaths.has(EXT) == true:
 				if should_read_file(EXT) == false:
 					continue
 				
 				var readPath = oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING]
-				oBuffers.read(readPath, EXT.to_upper())
+				var readStart = OS.get_ticks_msec()
+				if oBuffers.read(readPath, EXT.to_upper(), false):
+					mapReadCount += 1
+					mapReadTime += OS.get_ticks_msec() - readStart
 			else:
-				print("Missing " + EXT + " file, so create blank data for that one.")
+				missingMapFiles.append(EXT)
 				oBuffers.new_blank(EXT.to_upper())
 				
 				# Assign name data to any that's missing
@@ -178,11 +184,13 @@ func open_map(filePath, show_opened_message = true, reset_camera = true, loaded_
 						for xSlab in M.xSize:
 							var slabID = oDataSlab.get_cell(xSlab, ySlab)
 							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
+		if mapReadCount > 0:
+			print('Read map files: ' + str(mapReadCount) + ' files in ' + str(mapReadTime) + 'ms')
+		if missingMapFiles.empty() == false:
+			print('Missing map files, created blanks: ' + ", ".join(missingMapFiles))
 		
 		continue_load(map)
 		continue_load_openmap(map, show_opened_message, reset_camera)
-		print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
-		print("----------------------------------------------")
 	else:
 		if ALWAYS_DECOMPRESS == false:
 			var dialogText = "In order to open this map, these files must be decompressed: \n\n" #'Unable to open map, it contains files which have RNC compression: \n\n'
@@ -285,6 +293,8 @@ func continue_load_openmap(map, show_opened_message = true, reset_camera = true)
 		for i in 3:
 			yield(get_tree(),'idle_frame')
 		oCamera2D.reset_camera(M.xSize, M.ySize)
+	print('TOTAL time to open map: '+str(OS.get_ticks_msec()-TOTAL_TIME_TO_OPEN_MAP)+'ms')
+	print("----------------------------------------------")
 
 
 func _on_ConfirmDecompression_confirmed():
