@@ -45,12 +45,11 @@ func _on_NewMapWindow_visibility_changed():
 	
 	# Default to KFX format
 	
+	var selectedFormat = Constants.KfxFormat
 	if oGame.keeperfx_is_installed() == false: # or kfxOutOfDate == true:
-		oSetNewFormat.selected = Constants.OldFormat # Set default format to Old format, for newbies who don't know what KeeperFX is
-		_on_NewMapFormat_item_selected(Constants.OldFormat)
-	else:
-		oSetNewFormat.selected = Constants.KfxFormat # Set default format to KFX format
-		_on_NewMapFormat_item_selected(Constants.KfxFormat)
+		selectedFormat = Constants.OldFormat # Set default format to Old format, for newbies who don't know what KeeperFX is
+	oSetNewFormat.selected = selectedFormat
+	_on_NewMapFormat_item_selected(oSetNewFormat.selected)
 	
 	reinit_noise_preview()
 	

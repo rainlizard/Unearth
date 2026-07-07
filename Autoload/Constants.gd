@@ -41,5 +41,5 @@ enum {
 	WRITE = 1
 }
 
-const OldFormat = 0
-const KfxFormat = 1
+const KfxFormat = 0
+const OldFormat = 1

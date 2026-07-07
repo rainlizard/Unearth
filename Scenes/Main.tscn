@@ -4013,9 +4013,9 @@ margin_top = 66.0
 margin_right = 540.0
 margin_bottom = 93.0
 hint_tooltip = "KFX format has more features but will produce maps that are incompatible with non-KeeperFX installations and old editors."
-text = "Old format"
+text = "KFX format"
 align = 1
-items = [ "Old format", null, false, 0, null, "KFX format", null, false, 1, null ]
+items = [ "KFX format", null, false, 0, null, "Old format", null, false, 1, null ]
 selected = 0
 
 [node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer"]
@@ -6638,9 +6638,9 @@ margin_bottom = 27.0
 rect_min_size = Vector2( 200, 0 )
 hint_tooltip = "KFX format has more features but will produce maps that are incompatible with non-KeeperFX installations and old editors."
 size_flags_horizontal = 10
-text = "Old format"
+text = "KFX format"
 align = 1
-items = [ "Old format", null, false, 0, null, "KFX format", null, false, 1, null ]
+items = [ "KFX format", null, false, 0, null, "Old format", null, false, 1, null ]
 selected = 0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer"]

@@ -111,7 +111,7 @@ func _on_MapProperties_visibility_changed():
 		
 		# Resizing feature isn't implemented, so do not allow changing map format back if you've adjusted size
 		if M.xSize != 85 or M.ySize != 85:
-			oCurrentFormat.selected = 1
+			oCurrentFormat.selected = Constants.KfxFormat
 			oCurrentFormat.disabled = true
 		else:
 			oCurrentFormat.disabled = false
@@ -133,11 +133,10 @@ func _on_MapFormatSetting_item_selected(index):
 	set_format_selection(index)
 
 func set_format_selection(setFormat):
-	match setFormat:
-		0: # Old format
-			oAdvancedMapProperties.visible = false
-		1: # KFX format
-			oAdvancedMapProperties.visible = true
+	if setFormat == Constants.OldFormat:
+		oAdvancedMapProperties.visible = false
+	elif setFormat == Constants.KfxFormat:
+		oAdvancedMapProperties.visible = true
 	
 	# When you change format, the object settings that are available also change
 	oPlacingSettings.update_placing_tab()
