@@ -130,7 +130,7 @@ func start():
 	var totalProcessStartTime = OS.get_ticks_msec()
 	texturesLoadedState = LOADING_IN_PROGRESS
 
-	if oReadPalette.initialize_palette_resources(Settings.unearthdata.plus_file("palette.dat")) == false or oReadPalette.palette_image_texture_2d == null:
+	if oReadPalette.initialize_palette_resources() == false or oReadPalette.palette_image_texture_2d == null:
 		printerr("Critical: Palette texture is null or initialization failed.")
 		oMessage.big("Error", "Tileset Error: Palette texture unavailable.")
 		texturesLoadedState = LOADING_NOT_STARTED

@@ -1,8 +1,40 @@
 extends Node
-onready var oBuffers = Nodelist.list["oBuffers"]
 onready var oMessage = Nodelist.list["oMessage"]
 
-var dictionary = {} # Just two different ways to read the palette, for speed.
+const PALETTE_COLORS = [
+	[0, 0, 0], [20, 16, 0], [28, 20, 0], [40, 28, 0], [52, 36, 4], [60, 44, 12], [72, 52, 16], [80, 60, 24],
+	[88, 68, 28], [96, 76, 36], [104, 84, 44], [112, 92, 48], [120, 96, 56], [128, 104, 64], [136, 112, 72], [144, 120, 80],
+	[152, 128, 88], [156, 136, 96], [164, 144, 104], [172, 152, 116], [180, 160, 124], [188, 168, 132], [192, 172, 140], [200, 180, 152],
+	[208, 188, 160], [212, 196, 172], [220, 204, 180], [228, 212, 192], [232, 220, 200], [240, 228, 212], [244, 236, 220], [244, 244, 232],
+	[40, 20, 0], [56, 24, 0], [76, 32, 0], [88, 40, 4], [104, 48, 12], [116, 56, 16], [132, 68, 24], [144, 76, 28],
+	[156, 88, 36], [172, 96, 44], [188, 108, 52], [200, 120, 60], [212, 132, 72], [228, 148, 84], [240, 160, 96], [244, 172, 112],
+	[24, 20, 0], [36, 24, 0], [52, 36, 4], [60, 48, 12], [76, 60, 20], [84, 72, 24], [92, 80, 32], [100, 92, 40],
+	[108, 100, 44], [116, 112, 52], [124, 124, 60], [136, 140, 72], [144, 152, 80], [152, 168, 88], [156, 176, 96], [164, 192, 104],
+	[36, 20, 0], [60, 24, 0], [84, 36, 4], [104, 44, 12], [124, 52, 16], [144, 56, 20], [160, 64, 24], [180, 68, 28],
+	[196, 72, 32], [204, 80, 40], [208, 88, 44], [216, 96, 52], [228, 100, 60], [232, 112, 72], [240, 120, 80], [244, 132, 92],
+	[24, 20, 0], [40, 28, 4], [52, 36, 16], [64, 48, 28], [76, 56, 44], [84, 64, 60], [92, 72, 76], [100, 80, 96],
+	[112, 92, 112], [124, 100, 128], [136, 112, 148], [148, 124, 164], [160, 136, 180], [176, 152, 200], [188, 168, 220], [204, 180, 240],
+	[36, 20, 0], [48, 20, 4], [60, 24, 12], [72, 28, 16], [84, 32, 24], [92, 32, 32], [104, 36, 44], [120, 44, 60],
+	[140, 56, 76], [156, 68, 96], [172, 80, 120], [188, 96, 140], [200, 104, 164], [216, 120, 192], [228, 136, 216], [244, 156, 240],
+	[112, 40, 4], [116, 44, 8], [116, 48, 12], [120, 56, 16], [124, 60, 20], [128, 68, 24], [132, 72, 32], [136, 80, 36],
+	[140, 88, 44], [144, 96, 48], [148, 100, 56], [152, 108, 64], [156, 116, 76], [156, 124, 84], [160, 132, 92], [164, 144, 104],
+	[48, 20, 0], [76, 32, 0], [104, 40, 0], [132, 44, 0], [156, 48, 0], [184, 48, 0], [188, 76, 0], [192, 100, 0],
+	[196, 132, 0], [204, 164, 0], [208, 192, 0], [228, 212, 0], [232, 220, 12], [240, 228, 44], [244, 236, 92], [244, 244, 152],
+	[0, 8, 0], [24, 16, 0], [56, 28, 0], [64, 36, 4], [76, 40, 4], [84, 48, 12], [92, 52, 12], [96, 56, 16],
+	[96, 64, 20], [104, 60, 24], [108, 68, 24], [112, 68, 32], [116, 72, 32], [124, 80, 40], [132, 92, 44], [140, 96, 52],
+	[20, 20, 0], [28, 44, 0], [40, 68, 4], [52, 92, 4], [56, 112, 12], [60, 136, 12], [64, 160, 12], [64, 180, 16],
+	[76, 64, 20], [80, 68, 24], [88, 76, 28], [92, 80, 32], [100, 88, 40], [104, 96, 44], [112, 100, 48], [116, 112, 52],
+	[76, 44, 0], [96, 64, 0], [120, 84, 0], [144, 104, 0], [164, 132, 0], [188, 156, 0], [208, 180, 0], [228, 212, 0],
+	[40, 36, 0], [52, 44, 0], [60, 56, 0], [76, 68, 4], [84, 80, 12], [96, 92, 16], [108, 100, 24], [116, 104, 24],
+	[244, 184, 124], [244, 196, 156], [244, 216, 192], [244, 240, 224], [172, 204, 116], [188, 212, 140], [208, 220, 164], [228, 232, 196],
+	[240, 152, 116], [244, 172, 140], [244, 192, 164], [244, 216, 196], [208, 192, 240], [220, 204, 236], [228, 216, 232], [240, 228, 232],
+	[244, 168, 240], [244, 180, 236], [244, 200, 232], [244, 220, 232], [52, 44, 4], [56, 48, 8], [60, 52, 12], [72, 60, 16],
+	[180, 136, 96], [192, 156, 120], [208, 176, 148], [228, 204, 180], [156, 156, 96], [180, 172, 124], [196, 192, 148], [220, 212, 180],
+	[124, 112, 36], [152, 140, 60], [180, 172, 92], [208, 200, 140], [156, 96, 40], [168, 108, 44], [180, 128, 56], [192, 148, 68],
+	[204, 168, 80], [216, 184, 96], [228, 204, 112], [240, 228, 128], [56, 24, 0], [80, 40, 4], [92, 64, 8], [100, 68, 8],
+	[108, 76, 12], [76, 56, 20], [88, 44, 0], [92, 52, 4], [100, 60, 4], [128, 92, 24], [156, 124, 56], [188, 160, 100],
+	[84, 60, 12], [64, 64, 4], [52, 52, 0], [40, 36, 0], [80, 44, 8], [12, 8, 0], [8, 4, 0], [240, 8, 204]
+]
 
 var palette_data_array: Array = []
 var flat_palette_bytes: PoolByteArray = PoolByteArray()
@@ -10,22 +42,17 @@ var palette_entry_count: int = 0
 var palette_image_texture_2d: ImageTexture = null
 var palette_image_texture_3d: ImageTexture = null
 
-func initialize_palette_resources(paletteFilePath: String) -> bool:
-	dictionary.clear()
-	palette_data_array = _read_colors_from_file(paletteFilePath)
-	if palette_data_array.empty():
-		printerr("Failed to load palette data from: ", paletteFilePath)
-		oMessage.big("Error", "Palette data (" + paletteFilePath.get_file() + ") could not be loaded.")
-		palette_image_texture_2d = null
-		palette_image_texture_3d = null
-		flat_palette_bytes = PoolByteArray()
-		palette_entry_count = 0
-		return false
-	flat_palette_bytes.resize(palette_data_array.size() * 3)
-	palette_entry_count = palette_data_array.size()
+func initialize_palette_resources() -> bool:
+	palette_data_array = []
+	palette_data_array.resize(PALETTE_COLORS.size())
+	flat_palette_bytes = PoolByteArray()
+	flat_palette_bytes.resize(PALETTE_COLORS.size() * 3)
+	palette_entry_count = PALETTE_COLORS.size()
 	var byteIndex = 0
-	for colorObject in palette_data_array:
-		var colorValue: Color = colorObject
+	for i in palette_entry_count:
+		var paletteColor = PALETTE_COLORS[i]
+		var colorValue = Color8(paletteColor[0], paletteColor[1], paletteColor[2])
+		palette_data_array[i] = colorValue
 		flat_palette_bytes[byteIndex] = colorValue.r8
 		flat_palette_bytes[byteIndex + 1] = colorValue.g8
 		flat_palette_bytes[byteIndex + 2] = colorValue.b8
@@ -35,35 +62,14 @@ func initialize_palette_resources(paletteFilePath: String) -> bool:
 	var tempPaletteTexture = ImageTexture.new()
 	tempPaletteTexture.create_from_image(paletteImage, 0)
 	if tempPaletteTexture == null or tempPaletteTexture.get_width() == 0:
-		printerr("Failed to create palette texture from data in: ", paletteFilePath)
-		oMessage.big("Error", "Palette texture could not be created from " + paletteFilePath.get_file() + ". Tilesets may not display correctly.")
+		printerr("Failed to create palette texture from hardcoded palette data.")
+		oMessage.big("Error", "Palette texture could not be created. Tilesets may not display correctly.")
 		palette_image_texture_2d = null
 		palette_image_texture_3d = null
 		return false
 	palette_image_texture_2d = tempPaletteTexture
 	palette_image_texture_3d = tempPaletteTexture.duplicate()
 	return true
-
-func _read_colors_from_file(filePath: String) -> Array:
-	var dataArray = []
-	dataArray.resize(256)
-	var buffer = oBuffers.file_path_to_buffer(filePath)
-	if buffer.get_size() > 0:
-		if buffer.get_size() < 768:
-			printerr("Palette file '", filePath, "' is smaller than expected (768 bytes). Actual size: ", buffer.get_size())
-			oMessage.big("Error", "Palette file (" + filePath.get_file() + ") is corrupted or incomplete.")
-			return []
-		for i in 256:
-			var rComponent = buffer.get_u8() * 4
-			var gComponent = buffer.get_u8() * 4
-			var bComponent = buffer.get_u8() * 4
-			dataArray[i] = Color8(rComponent, gComponent, bComponent)
-			dictionary[Color8(rComponent, gComponent, bComponent)] = i
-	else:
-		printerr("No palette file found or buffer empty for: ", filePath)
-		oMessage.big("Error", "Palette file (" + filePath.get_file() + ") not found or is empty.")
-		return []
-	return dataArray
 
 func get_palette_data() -> Array:
 	return palette_data_array
