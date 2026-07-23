@@ -179,7 +179,6 @@ func populate_recently_opened():
 			recentlyOpened.remove(i)
 	for i in recentlyOpened.size():
 		var mapPathKey = recentlyOpened[i]
-		var mapFileName = mapPathKey.get_file()
 		var mapDisplayName = ""
 		var actualLofFile = Utils.case_insensitive_file(mapPathKey.get_base_dir(), mapPathKey.get_file(), ".lof")
 		var actualLifFile = ""
@@ -190,7 +189,7 @@ func populate_recently_opened():
 			if actualLifFile != "":
 				mapDisplayName = oDataMapName.lif_name_text(actualLifFile)
 			else:
-				mapDisplayName = oDataMapName.get_special_lif_text(mapFileName)
+				mapDisplayName = oDataMapName.get_special_lif_text(mapPathKey)
 		var displayPath = mapPathKey
 		var gameBaseDir = oGame.GAME_DIRECTORY.replace('\\','/')
 		recentlyOpenedPopupMenu.add_item(mapDisplayName + ' - ' + displayPath.trim_prefix(gameBaseDir), i)
