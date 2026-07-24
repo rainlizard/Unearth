@@ -187,6 +187,9 @@ func open_map(filePath, show_opened_message = true, reset_camera = true, loaded_
 						for xSlab in M.xSize:
 							var slabID = oDataSlab.get_cell(xSlab, ySlab)
 							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
+		for doorID in get_tree().get_nodes_in_group("Door"):
+			if doorID.doorLocked != 0:
+				doorID.update_spinning_key()
 		oInstances.bulk_loading = false
 		oActionPointList.update_if_visible()
 		if mapReadCount > 0:
