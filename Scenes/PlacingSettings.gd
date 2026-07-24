@@ -102,6 +102,9 @@ func replicate_instance_settings(aNode):
 		var valueFromNode = aNode.get(propertyName)
 		if valueFromNode != null:
 			set(propertyName, valueFromNode)
+	
+	if aNode.thingType == Things.TYPE.DOOR:
+		oPlaceLockedCheckBox.pressed = bool(aNode.doorLocked)
 
 
 func set_placing_tab_and_update_it():

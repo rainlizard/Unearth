@@ -123,6 +123,10 @@ func update_paint():
 				
 				newPaintSlab(cursorOverSlab)
 				oPickSlabWindow.set_selection(cursorOverSlab)
+				if Slabs.is_door(cursorOverSlab):
+					var doorNode = oInstances.get_node_on_subtile((oSelector.cursorTile.x * 3) + 1.5, (oSelector.cursorTile.y * 3) + 1.5, "Door")
+					if is_instance_valid(doorNode):
+						oPlacingSettings.replicate_instance_settings(doorNode)
 				
 				if cursorOverSlabOwner != 5 or oOwnableNaturalTerrain.pressed == true or Slabs.data[cursorOverSlab][Slabs.IS_OWNABLE] == true:
 					newOwnership(cursorOverSlabOwner)
