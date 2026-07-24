@@ -48,6 +48,7 @@ var listOfSettings = [
 	"thing_window_scale",
 	"script_editor_font_size",
 	"last_changelog_displayed",
+	"tngfx_names_notice_displayed",
 	
 #	"owner_window_size",
 #	"owner_window_position",
@@ -450,6 +451,9 @@ func game_setting(doWhat,string,value):
 		"last_changelog_displayed":
 			if doWhat == SET: write_cfg("last_changelog_displayed", value)
 			if doWhat == GET: return read_cfg("last_changelog_displayed")
+		"tngfx_names_notice_displayed":
+			if doWhat == SET: write_cfg("tngfx_names_notice_displayed", value)
+			if doWhat == GET: return read_cfg("tngfx_names_notice_displayed")
 		"show_clm_data_tab":
 			var oShowCLMDataTabCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer/ShowCLMDataTabCheckbox'
 			if doWhat == SET: oShowCLMDataTabCheckbox.pressed = value

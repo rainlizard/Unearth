@@ -180,7 +180,11 @@ func write_tngfx():
 			lines.append("")
 			lines.append("[thing" + str(entryNumber) + "]")
 			lines.append("ThingType = \"" + groupName + "\"")
-			lines.append("Subtype = " + str(thingNode.subtype))
+			var subtype_data = Things.data_structure(thingType).get(thingNode.subtype)
+			if subtype_data and subtype_data[Things.NAME_ID] is String:
+				lines.append("Subtype = \"" + subtype_data[Things.NAME_ID] + "\"")
+			else:
+				lines.append("Subtype = " + str(thingNode.subtype))
 			lines.append("Ownership = " + str(thingNode.ownership))
 
 			if thingNode.effectRange != null:

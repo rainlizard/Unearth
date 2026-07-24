@@ -238,7 +238,7 @@ func find_subtype_by_name(thingType, findName):
 	var data = data_structure(thingType)
 	for subtype_key in data:
 		var subtype_data = data[subtype_key]
-		if subtype_data and subtype_data[NAME_ID] == findName:
+		if subtype_data and subtype_data[NAME_ID] is String and subtype_data[NAME_ID].to_upper() == findName.to_upper():
 			return subtype_key
 	return null
 

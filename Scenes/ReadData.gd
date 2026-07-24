@@ -411,7 +411,6 @@ func read_tngfx(buffer):
 			id.locationY = subtileY[0] + (subtileY[1] / 256.0)
 			id.locationZ = subtileZ[0] + (subtileZ[1] / 256.0)
 			
-			id.subtype = c.get_value(section, "Subtype")
 			id.ownership = c.get_value(section, "Ownership")
 			
 			match c.get_value(section, "ThingType"):
@@ -425,6 +424,15 @@ func read_tngfx(buffer):
 						id.thingType = Things.TYPE.EFFECTGEN
 				
 				_: id.thingType = Things.TYPE.NONE
+
+			id.subtype = c.get_value(section, "Subtype")
+			if id.subtype is String:
+				var subtype = Things.find_subtype_by_name(id.thingType, id.subtype)
+				if subtype == null:
+					oMessage.big("Unrecognized .tngfx subtype", "The map did not load correctly! The subtype \"%s\" for ThingType \"%s\" in [%s] is not defined in the loaded KeeperFX configuration. Do not save! Please close the map and fix the .tngfx file or configuration." % [id.subtype, c.get_value(section, "ThingType"), section])
+					id.free()
+					continue
+				id.subtype = subtype
 			
 			match id.thingType:
 				Things.TYPE.OBJECT:
