@@ -1,4 +1,4 @@
-[gd_scene load_steps=206 format=2]
+[gd_scene load_steps=212 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -189,6 +189,12 @@
 [ext_resource path="res://Scenes/ConfirmDecompression.gd" type="Script" id=280]
 [ext_resource path="res://Scenes/MapBackups.gd" type="Script" id=281]
 [ext_resource path="res://Scenes/TabCubes.gd" type="Script" id=282]
+[ext_resource path="res://Art/SortArrow.png" type="Texture" id=283]
+[ext_resource path="res://Art/SortArrowHover.png" type="Texture" id=284]
+[ext_resource path="res://Art/SortArrowPressed.png" type="Texture" id=285]
+[ext_resource path="res://Art/ShowUnlisted.png" type="Texture" id=286]
+[ext_resource path="res://Art/ShowUnlistedHover.png" type="Texture" id=287]
+[ext_resource path="res://Art/ShowUnlistedPressed.png" type="Texture" id=288]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -7459,11 +7465,43 @@ margin_right = 309.0
 margin_bottom = 906.0
 
 [node name="NameStatsButton" type="Button" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2"]
-margin_right = 100.0
+margin_right = 98.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 100, 0 )
-size_flags_horizontal = 2
+rect_min_size = Vector2( 60, 0 )
+size_flags_horizontal = 3
 text = "Name"
+
+[node name="Spacing" type="Control" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 102.0
+margin_right = 201.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="StatsSortButton" type="TextureButton" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 205.0
+margin_right = 237.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+rect_pivot_offset = Vector2( 16, 16 )
+hint_tooltip = "Sort ascending"
+texture_normal = ExtResource( 283 )
+texture_pressed = ExtResource( 285 )
+texture_hover = ExtResource( 284 )
+expand = true
+stretch_mode = 4
+
+[node name="ShowUnlistedCreatures" type="TextureButton" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 241.0
+margin_right = 273.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+hint_tooltip = "Toggle Show unlisted to include creature files not registered in creature.cfg."
+toggle_mode = true
+texture_normal = ExtResource( 286 )
+texture_pressed = ExtResource( 288 )
+texture_hover = ExtResource( 287 )
+expand = true
+stretch_mode = 4
 
 [node name="CCStatsHelpButton" type="TextureButton" parent="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2"]
 margin_left = 277.0
@@ -8676,6 +8714,8 @@ margin_bottom = 40.0
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/LeftStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_LeftStatsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer/RightStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_RightStatsButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/NameStatsButton" to="Ui/UiSystem/SortCreatureStats" method="_on_NameStatsButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/StatsSortButton" to="Ui/UiSystem/SortCreatureStats" method="_on_StatsSortButton_pressed"]
+[connection signal="toggled" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/ShowUnlistedCreatures" to="Ui/UiSystem/SortCreatureStats" method="_on_ShowUnlistedCreatures_toggled"]
 [connection signal="pressed" from="Ui/UiSystem/SortCreatureStats/MarginContainer/VBoxContainer/HBoxContainer2/CCStatsHelpButton" to="Ui/UiSystem/SortCreatureStats" method="_on_CCStatsHelpButton_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/ConfigFilesListWindow" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigFilesListWindow_about_to_show"]
 [connection signal="pressed" from="Ui/UiSystem/ConfigFilesListWindow/MarginContainer/ScrollContainer/HBoxContainer/VBoxContainer4/PanelContainer3/ConfigLinkData" to="Ui/UiSystem/ConfigFilesListWindow" method="_on_ConfigLinkData_pressed"]

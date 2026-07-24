@@ -1,10 +1,13 @@
 extends WindowDialog
 onready var oSortCreaStatsGrid = Nodelist.list["oSortCreaStatsGrid"]
 onready var oStatsOptionButton = Nodelist.list["oStatsOptionButton"]
+onready var oStatsSortButton = Nodelist.list["oStatsSortButton"]
+onready var oShowUnlistedCreatures = Nodelist.list["oShowUnlistedCreatures"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 var name_type = 0
+var sort_descending = false
 
 var all_creature_data = {}
 
@@ -37,6 +40,8 @@ func update_list(optionButtonIndex):
 	var optionButtonMeta = oStatsOptionButton.get_item_metadata(optionButtonIndex)
 	
 	for file in all_creature_data:
+		if oShowUnlistedCreatures.pressed == false and Things.find_subtype_by_name(Things.TYPE.CREATURE, file.get_basename().to_upper()) == null:
+			continue
 		var getName = figure_out_name(file)
 		
 		for section in all_creature_data[file]:
@@ -46,6 +51,8 @@ func update_list(optionButtonIndex):
 				list_data.append([getName, getValue])
 	
 	list_data.sort_custom(self, "sort_list")
+	if sort_descending:
+		list_data.invert()
 	for i in list_data:
 		var col = Color(0.5,0.5,0.5)
 		var label_text = str(i[0])  # Create a single string with a separator
@@ -138,6 +145,14 @@ func _on_NameStatsButton_pressed():
 	if name_type >= 3: name_type = 0
 	update_list(oStatsOptionButton.selected)
 
+func _on_StatsSortButton_pressed():
+	sort_descending = not sort_descending
+	oStatsSortButton.rect_rotation = 180 if sort_descending else 0
+	oStatsSortButton.hint_tooltip = "Sort descending" if sort_descending else "Sort ascending"
+	update_list(oStatsOptionButton.selected)
+
+func _on_ShowUnlistedCreatures_toggled(_pressed):
+	update_list(oStatsOptionButton.selected)
 
 func _on_RightStatsButton_pressed():
 	var next_index = oStatsOptionButton.selected + 1
