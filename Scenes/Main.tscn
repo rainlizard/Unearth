@@ -1,4 +1,4 @@
-[gd_scene load_steps=212 format=2]
+[gd_scene load_steps=211 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -124,7 +124,6 @@
 [ext_resource path="res://Scenes/LineEditInteger.gd" type="Script" id=123]
 [ext_resource path="res://Scenes/ScriptEditor.gd" type="Script" id=124]
 [ext_resource path="res://Scenes/MapSettingsWindow.gd" type="Script" id=125]
-[ext_resource path="res://Scenes/TextureEditingWindow.gd" type="Script" id=126]
 [ext_resource path="res://Scenes/CustomSlabSystem.gd" type="Script" id=127]
 [ext_resource path="res://Art/HelpIconHover.png" type="Texture" id=128]
 [ext_resource path="res://Scenes/CustomTooltip.gd" type="Script" id=129]
@@ -170,10 +169,6 @@
 [ext_resource path="res://Scenes/DataLua.gd" type="Script" id=171]
 [ext_resource path="res://Scenes/ScriptFileSection.tscn" type="PackedScene" id=172]
 [ext_resource path="res://Scenes/ConfirmOpenWhichScript.gd" type="Script" id=173]
-[ext_resource path="res://Scenes/TeditLoadDAT.gd" type="Script" id=174]
-[ext_resource path="res://Scenes/TeditSavePNG.gd" type="Script" id=175]
-[ext_resource path="res://Scenes/TeditLiveReloadPNG.gd" type="Script" id=176]
-[ext_resource path="res://Scenes/TeditSaveDAT.gd" type="Script" id=177]
 [ext_resource path="res://Scenes/ChangelogWindow.gd" type="Script" id=178]
 [ext_resource path="res://Scenes/RandomPlayers.gd" type="Script" id=179]
 [ext_resource path="res://Scenes/RandomPlayersPizza.gd" type="Script" id=180]
@@ -195,6 +190,10 @@
 [ext_resource path="res://Art/ShowUnlisted.png" type="Texture" id=286]
 [ext_resource path="res://Art/ShowUnlistedHover.png" type="Texture" id=287]
 [ext_resource path="res://Art/ShowUnlistedPressed.png" type="Texture" id=288]
+[ext_resource path="res://Scenes/TilesetEditor.tscn" type="PackedScene" id=289]
+[ext_resource path="res://Art/IconShortcut.png" type="Texture" id=290]
+[ext_resource path="res://Art/IconShortcutHover.png" type="Texture" id=291]
+[ext_resource path="res://Art/IconShortcutPressed.png" type="Texture" id=292]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -3949,19 +3948,19 @@ margin_bottom = 725.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer"]
 margin_right = 558.0
-margin_bottom = 993.0
+margin_bottom = 997.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PanelContainer2" type="PanelContainer" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer"]
 margin_right = 558.0
-margin_bottom = 154.0
+margin_bottom = 158.0
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 549.0
-margin_bottom = 145.0
+margin_bottom = 149.0
 columns = 2
 
 [node name="Label" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer"]
@@ -3988,7 +3987,7 @@ align = 1
 [node name="LabelTileset" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer"]
 margin_top = 35.0
 margin_right = 268.0
-margin_bottom = 62.0
+margin_bottom = 66.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 1
@@ -3997,27 +3996,40 @@ size_flags_vertical = 1
 text = "Tileset"
 valign = 1
 
-[node name="DungeonStyleList" type="OptionButton" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer"]
+[node name="DungeonStyle" type="HBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer"]
 margin_left = 272.0
 margin_top = 35.0
 margin_right = 540.0
-margin_bottom = 62.0
+margin_bottom = 66.0
 size_flags_horizontal = 3
-size_flags_vertical = 0
-align = 1
+
+[node name="DungeonStyleNameLabel" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer/DungeonStyle"]
+margin_top = 5.0
+margin_right = 190.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+valign = 1
+
+[node name="DungeonStyleSpinBox" type="SpinBox" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer/DungeonStyle"]
+margin_left = 194.0
+margin_right = 268.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 74, 0 )
+max_value = 255.0
+rounded = true
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer"]
-margin_top = 69.0
+margin_top = 73.0
 margin_right = 268.0
-margin_bottom = 90.0
+margin_bottom = 94.0
 mouse_filter = 1
 text = "Map file format"
 
 [node name="CurrentFormat" type="OptionButton" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer"]
 margin_left = 272.0
-margin_top = 66.0
+margin_top = 70.0
 margin_right = 540.0
-margin_bottom = 93.0
+margin_bottom = 97.0
 hint_tooltip = "KFX format has more features but will produce maps that are incompatible with non-KeeperFX installations and old editors."
 text = "KFX format"
 align = 1
@@ -4025,18 +4037,18 @@ items = [ "KFX format", null, false, 0, null, "Old format", null, false, 1, null
 selected = 0
 
 [node name="Label4" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer"]
-margin_top = 106.0
+margin_top = 110.0
 margin_right = 268.0
-margin_bottom = 127.0
+margin_bottom = 131.0
 hint_tooltip = "MAPSIZE"
 mouse_filter = 1
 text = "Map size"
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer"]
 margin_left = 272.0
-margin_top = 97.0
+margin_top = 101.0
 margin_right = 540.0
-margin_bottom = 136.0
+margin_bottom = 140.0
 
 [node name="MapSizeTextLabel" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer/PanelContainer"]
 margin_left = 9.0
@@ -4085,15 +4097,15 @@ size_flags_vertical = 2
 columns = 2
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer"]
-margin_top = 158.0
+margin_top = 162.0
 margin_right = 558.0
-margin_bottom = 178.0
+margin_bottom = 182.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="AdvancedMapProperties" type="PanelContainer" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer"]
-margin_top = 182.0
+margin_top = 186.0
 margin_right = 558.0
-margin_bottom = 583.0
+margin_bottom = 587.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties"]
 margin_left = 9.0
@@ -4444,42 +4456,26 @@ size_flags_horizontal = 7
 align = 1
 
 [node name="Spacing2" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer"]
-margin_top = 587.0
+margin_top = 591.0
 margin_right = 558.0
-margin_bottom = 607.0
+margin_bottom = 611.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="DKScriptFileSection" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer" instance=ExtResource( 172 )]
-margin_top = 611.0
+margin_top = 615.0
 margin_right = 558.0
-margin_bottom = 788.0
+margin_bottom = 792.0
 
 [node name="Spacing3" type="Control" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer"]
-margin_top = 792.0
+margin_top = 796.0
 margin_right = 558.0
-margin_bottom = 812.0
+margin_bottom = 816.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="LuaScriptFileSection" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer" instance=ExtResource( 172 )]
-margin_top = 816.0
+margin_top = 820.0
 margin_right = 558.0
-margin_bottom = 993.0
-
-[node name="ChooseTmapFileDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = 4156.0
-margin_top = 1992.0
-margin_right = 5156.0
-margin_bottom = 2554.0
-rect_min_size = Vector2( 250, 87.5 )
-window_title = "Open a File"
-resizable = true
-dialog_text = "Select a tmap*.dat file. Editable .PNGs will be extracted from this dat file."
-dialog_autowrap = true
-mode = 0
-access = 2
-filters = PoolStringArray( "*tmap*.dat" )
-show_hidden_files = true
+margin_bottom = 997.0
 
 [node name="ScriptEditorWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -5049,149 +5045,6 @@ margin_right = 844.0
 margin_bottom = 27.0
 text = "Generate script"
 
-[node name="ExportTmapDatDialog" type="FileDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = 2000.0
-margin_top = 1368.0
-margin_right = 3000.0
-margin_bottom = 1930.0
-rect_min_size = Vector2( 250, 87.5 )
-resizable = true
-access = 2
-filters = PoolStringArray( "*tmap*.dat" )
-show_hidden_files = true
-
-[node name="TextureEditingWindow" type="WindowDialog" parent="Ui/UiSystem"]
-visible = true
-margin_left = -1273.0
-margin_top = 954.0
-margin_right = -989.0
-margin_bottom = 1202.0
-rect_min_size = Vector2( 284, 248 )
-window_title = "Edit tilesets"
-resizable = true
-script = ExtResource( 126 )
-
-[node name="TeditLoadDAT" type="Node" parent="Ui/UiSystem/TextureEditingWindow"]
-script = ExtResource( 174 )
-
-[node name="TeditSavePNG" type="Node" parent="Ui/UiSystem/TextureEditingWindow"]
-script = ExtResource( 175 )
-
-[node name="TeditLiveReloadPNG" type="Node" parent="Ui/UiSystem/TextureEditingWindow"]
-script = ExtResource( 176 )
-
-[node name="TeditSaveDAT" type="Node" parent="Ui/UiSystem/TextureEditingWindow"]
-script = ExtResource( 177 )
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_right = 264.0
-margin_bottom = 89.0
-columns = 2
-
-[node name="Label" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
-margin_top = 3.0
-margin_right = 50.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 50, 0 )
-text = "1."
-align = 1
-
-[node name="CreateFilelistButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
-margin_left = 54.0
-margin_right = 229.0
-margin_bottom = 27.0
-rect_min_size = Vector2( 175, 0 )
-size_flags_horizontal = 0
-text = "Load tileset"
-
-[node name="Label2" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
-margin_top = 34.0
-margin_right = 50.0
-margin_bottom = 55.0
-rect_min_size = Vector2( 50, 0 )
-text = "2."
-align = 1
-
-[node name="ModifyTexturesButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
-margin_left = 54.0
-margin_top = 31.0
-margin_right = 229.0
-margin_bottom = 58.0
-rect_min_size = Vector2( 175, 0 )
-size_flags_horizontal = 4
-text = "Modify textures"
-
-[node name="Label3" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
-margin_top = 65.0
-margin_right = 50.0
-margin_bottom = 86.0
-rect_min_size = Vector2( 50, 0 )
-text = "3."
-align = 1
-
-[node name="ExportTmapButton" type="Button" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer"]
-margin_left = 54.0
-margin_top = 62.0
-margin_right = 229.0
-margin_bottom = 89.0
-rect_min_size = Vector2( 175, 0 )
-size_flags_horizontal = 0
-text = "Save tileset"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Spacing" type="Control" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_top = 93.0
-margin_right = 264.0
-margin_bottom = 105.0
-rect_min_size = Vector2( 0, 12 )
-
-[node name="Label" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_top = 109.0
-margin_right = 264.0
-margin_bottom = 130.0
-text = "Currently loaded:"
-
-[node name="TEScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_top = 134.0
-margin_right = 264.0
-margin_bottom = 155.0
-scroll_vertical_enabled = false
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/TEScrollContainer"]
-margin_right = 264.0
-margin_bottom = 21.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ReloaderPathPackLabel" type="Label" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer/TEScrollContainer/VBoxContainer"]
-margin_right = 264.0
-margin_bottom = 21.0
-text = "<>"
-
-[node name="TextureEditingHelpButton" type="TextureButton" parent="Ui/UiSystem/TextureEditingWindow/VBoxContainer"]
-margin_left = 232.0
-margin_top = 159.0
-margin_right = 264.0
-margin_bottom = 191.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 8
-texture_normal = ExtResource( 156 )
-texture_pressed = ExtResource( 66 )
-texture_hover = ExtResource( 128 )
-expand = true
-stretch_mode = 4
-
 [node name="AddCustomSlabWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -1595.0
@@ -5623,12 +5476,12 @@ margin_right = 236.0
 margin_bottom = 1061.0
 size_flags_vertical = 3
 
-[node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="CurrentlyOpenSlabsetPanel" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
 margin_right = 236.0
 margin_bottom = 39.0
 mouse_filter = 1
 
-[node name="CurrentlyOpenSlabset" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer4"]
+[node name="CurrentlyOpenSlabset" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/CurrentlyOpenSlabsetPanel"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 227.0
@@ -6113,12 +5966,12 @@ margin_left = 375.0
 margin_right = 601.0
 margin_bottom = 1101.0
 
-[node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer"]
+[node name="CurrentlyOpenColumnsetPanel" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer"]
 margin_right = 226.0
 margin_bottom = 39.0
 mouse_filter = 1
 
-[node name="CurrentlyOpenColumnset" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/PanelContainer"]
+[node name="CurrentlyOpenColumnset" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabColumnset/HBoxContainer/VBoxContainer/CurrentlyOpenColumnsetPanel"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 217.0
@@ -6323,12 +6176,12 @@ margin_left = 381.0
 margin_right = 601.0
 margin_bottom = 1101.0
 
-[node name="PanelContainer4" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer"]
+[node name="CurrentlyOpenCubesPanel" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer"]
 margin_right = 220.0
 margin_bottom = 39.0
 mouse_filter = 1
 
-[node name="CurrentlyOpenCubes" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/PanelContainer4"]
+[node name="CurrentlyOpenCubes" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CurrentlyOpenCubesPanel"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 211.0
@@ -6342,7 +6195,7 @@ autowrap = true
 [node name="ModifiedCubesPanelContainer" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer"]
 margin_top = 43.0
 margin_right = 220.0
-margin_bottom = 93.0
+margin_bottom = 85.0
 hint_tooltip = "List of Cube IDs that have been modified. Click an ID to jump to it."
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -6351,13 +6204,13 @@ size_flags_horizontal = 3
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 211.0
-margin_bottom = 41.0
+margin_bottom = 33.0
 mouse_filter = 1
 scroll_vertical_enabled = false
 
 [node name="ModifiedCubesLabel" type="RichTextLabel" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/ModifiedCubesPanelContainer/ScrollContainer"]
 margin_right = 202.0
-margin_bottom = 32.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 0, 24 )
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -6368,7 +6221,7 @@ text = "Modified IDs:"
 scroll_active = false
 
 [node name="CubeControls" type="PanelContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer"]
-margin_top = 97.0
+margin_top = 89.0
 margin_right = 220.0
 margin_bottom = 1047.0
 size_flags_vertical = 3
@@ -6377,14 +6230,14 @@ size_flags_vertical = 3
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 211.0
-margin_bottom = 941.0
+margin_bottom = 949.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer"]
 margin_right = 202.0
-margin_bottom = 932.0
+margin_bottom = 940.0
 size_flags_horizontal = 11
 size_flags_vertical = 3
 
@@ -6457,13 +6310,27 @@ text = "Revert"
 margin_top = 157.0
 margin_right = 202.0
 margin_bottom = 363.0
-columns = 2
+custom_constants/hseparation = 1
+columns = 3
 
 [node name="LabelNorth" type="Label" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
 margin_top = 5.0
 margin_right = 67.0
 margin_bottom = 26.0
 text = "North"
+
+[node name="CubeNorthTextureShortcut" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
+margin_left = 99.0
+margin_right = 127.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 28, 28 )
+hint_tooltip = "Show this texture in the Tileset tab"
+size_flags_horizontal = 10
+texture_normal = ExtResource( 290 )
+texture_pressed = ExtResource( 292 )
+texture_hover = ExtResource( 291 )
+expand = true
+stretch_mode = 4
 
 [node name="CubeNorthSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
 margin_left = 128.0
@@ -6478,6 +6345,20 @@ margin_top = 40.0
 margin_right = 67.0
 margin_bottom = 61.0
 text = "East"
+
+[node name="CubeEastTextureShortcut" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
+margin_left = 99.0
+margin_top = 35.0
+margin_right = 127.0
+margin_bottom = 66.0
+rect_min_size = Vector2( 28, 28 )
+hint_tooltip = "Show this texture in the Tileset tab"
+size_flags_horizontal = 10
+texture_normal = ExtResource( 290 )
+texture_pressed = ExtResource( 292 )
+texture_hover = ExtResource( 291 )
+expand = true
+stretch_mode = 4
 
 [node name="CubeEastSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
 margin_left = 128.0
@@ -6494,6 +6375,20 @@ margin_right = 67.0
 margin_bottom = 96.0
 text = "South"
 
+[node name="CubeSouthTextureShortcut" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
+margin_left = 99.0
+margin_top = 70.0
+margin_right = 127.0
+margin_bottom = 101.0
+rect_min_size = Vector2( 28, 28 )
+hint_tooltip = "Show this texture in the Tileset tab"
+size_flags_horizontal = 10
+texture_normal = ExtResource( 290 )
+texture_pressed = ExtResource( 292 )
+texture_hover = ExtResource( 291 )
+expand = true
+stretch_mode = 4
+
 [node name="CubeSouthSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
 margin_left = 128.0
 margin_top = 70.0
@@ -6508,6 +6403,20 @@ margin_top = 110.0
 margin_right = 67.0
 margin_bottom = 131.0
 text = "West"
+
+[node name="CubeWestTextureShortcut" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
+margin_left = 99.0
+margin_top = 105.0
+margin_right = 127.0
+margin_bottom = 136.0
+rect_min_size = Vector2( 28, 28 )
+hint_tooltip = "Show this texture in the Tileset tab"
+size_flags_horizontal = 10
+texture_normal = ExtResource( 290 )
+texture_pressed = ExtResource( 292 )
+texture_hover = ExtResource( 291 )
+expand = true
+stretch_mode = 4
 
 [node name="CubeWestSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
 margin_left = 128.0
@@ -6524,6 +6433,20 @@ margin_right = 67.0
 margin_bottom = 166.0
 text = "Top"
 
+[node name="CubeTopTextureShortcut" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
+margin_left = 99.0
+margin_top = 140.0
+margin_right = 127.0
+margin_bottom = 171.0
+rect_min_size = Vector2( 28, 28 )
+hint_tooltip = "Show this texture in the Tileset tab"
+size_flags_horizontal = 10
+texture_normal = ExtResource( 290 )
+texture_pressed = ExtResource( 292 )
+texture_hover = ExtResource( 291 )
+expand = true
+stretch_mode = 4
+
 [node name="CubeTopSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
 margin_left = 128.0
 margin_top = 140.0
@@ -6538,6 +6461,20 @@ margin_top = 180.0
 margin_right = 67.0
 margin_bottom = 201.0
 text = "Bottom"
+
+[node name="CubeBottomTextureShortcut" type="TextureButton" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
+margin_left = 99.0
+margin_top = 175.0
+margin_right = 127.0
+margin_bottom = 206.0
+rect_min_size = Vector2( 28, 28 )
+hint_tooltip = "Show this texture in the Tileset tab"
+size_flags_horizontal = 10
+texture_normal = ExtResource( 290 )
+texture_pressed = ExtResource( 292 )
+texture_hover = ExtResource( 291 )
+expand = true
+stretch_mode = 4
 
 [node name="CubeBottomSpinBox" type="SpinBox" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridTextures"]
 margin_left = 128.0
@@ -6576,6 +6513,9 @@ texture_pressed = ExtResource( 66 )
 texture_hover = ExtResource( 128 )
 expand = true
 stretch_mode = 4
+
+[node name="TabTileset" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs" instance=ExtResource( 289 )]
+visible = false
 
 [node name="NewMapWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
@@ -8638,7 +8578,7 @@ margin_bottom = 40.0
 [connection signal="about_to_show" from="Ui/UiSystem/MapSettingsWindow" to="Ui/UiSystem/MapSettingsWindow" method="_on_MapSettingsWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_MapProperties_visibility_changed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer/MapNameLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_MapNameLineEdit_text_changed"]
-[connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer/DungeonStyleList" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_DungeonStyleList_item_selected"]
+[connection signal="value_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer/DungeonStyle/DungeonStyleSpinBox" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_DungeonStyleSpinBox_value_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer/CurrentFormat" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_MapFormatSetting_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/LofPathLinkButton" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_LofPathLinkButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxAuthor/AuthorLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_AuthorLineEdit_text_changed"]
@@ -8652,7 +8592,6 @@ margin_bottom = 40.0
 [connection signal="pressed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignPosition/HBoxContainer2/OpenMapCoordButton" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_OpenMapCoordButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxEnsignZoom/EnsignZoomLineEdit" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_EnsignZoomLineEdit_text_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxOptions/OptionsOptionButton" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_OptionsOptionButton_item_selected"]
-[connection signal="file_selected" from="Ui/UiSystem/ChooseTmapFileDialog" to="Ui/UiSystem/TextureEditingWindow/TeditLoadDAT" method="_on_ChooseTmapFileDialog_file_selected"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer/ScriptEditorCloseButton" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptEditorCloseButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/HBoxContainer/ScriptEditorStatusLabel" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptEditorStatusLabel_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
@@ -8667,11 +8606,6 @@ margin_bottom = 40.0
 [connection signal="toggled" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/VBoxContainer2/GridContainer/ScriptSection1/OrangeAIContainer/OrangeAICheckBox" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_OrangeAICheckBox_toggled"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/HBoxContainer4/SendToClipboardButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_SendToClipboardButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/HBoxContainer4/GenerateScriptButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_GenerateScriptButton_pressed"]
-[connection signal="file_selected" from="Ui/UiSystem/ExportTmapDatDialog" to="Ui/UiSystem/TextureEditingWindow/TeditSaveDAT" method="_on_ExportTmapDatDialog_file_selected"]
-[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/CreateFilelistButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_CreateFilelistButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/ModifyTexturesButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ModifyTexturesButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/GridContainer/ExportTmapButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_ExportTmapButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/TextureEditingWindow/VBoxContainer/TextureEditingHelpButton" to="Ui/UiSystem/TextureEditingWindow" method="_on_TextureEditingHelpButton_pressed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/AddCustomSlabWindow" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_AddCustomSlabWindow_visibility_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/CustomSlabID" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_CustomSlabID_value_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/SlabBitmaskOptionButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabBitmaskOptionButton_item_selected"]

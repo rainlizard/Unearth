@@ -40,7 +40,7 @@ margin_bottom = 24.0
 margin_top = 5.0
 margin_right = 92.0
 margin_bottom = 19.0
-text = "Column index:"
+text = "Column ID:"
 __meta__ = {
 "_edit_use_anchors_": false
 }

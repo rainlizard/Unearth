@@ -1,0 +1,390 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Scenes/TabTileset.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/TilesetStrip.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/TeditSavePNG.gd" type="Script" id=3]
+[ext_resource path="res://Scenes/TeditLiveReloadPNG.gd" type="Script" id=4]
+[ext_resource path="res://Art/HelpIcon.png" type="Texture" id=5]
+[ext_resource path="res://Art/HelpIconPressed.png" type="Texture" id=6]
+[ext_resource path="res://Art/HelpIconHover.png" type="Texture" id=7]
+
+[node name="TabTileset" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 43.0
+margin_right = -12.0
+margin_bottom = -12.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 1000.0
+margin_bottom = 521.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TilesetPanel" type="PanelContainer" parent="HBoxContainer"]
+margin_right = 776.0
+margin_bottom = 521.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TilesetScrollContainer" type="ScrollContainer" parent="HBoxContainer/TilesetPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 769.0
+margin_bottom = 514.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TilesetCenterContainer" type="CenterContainer" parent="HBoxContainer/TilesetPanel/TilesetScrollContainer"]
+margin_right = 750.0
+margin_bottom = 2176.0
+size_flags_horizontal = 3
+
+[node name="TilesetStrip" type="Control" parent="HBoxContainer/TilesetPanel/TilesetScrollContainer/TilesetCenterContainer"]
+margin_left = 247.0
+margin_right = 503.0
+margin_bottom = 2176.0
+rect_min_size = Vector2( 256, 2176 )
+script = ExtResource( 2 )
+
+[node name="Sidebar" type="VBoxContainer" parent="HBoxContainer"]
+margin_left = 780.0
+margin_right = 1000.0
+margin_bottom = 521.0
+rect_min_size = Vector2( 220, 0 )
+size_flags_vertical = 3
+
+[node name="CustomFilesPanel" type="PanelContainer" parent="HBoxContainer/Sidebar"]
+margin_right = 220.0
+margin_bottom = 99.0
+hint_tooltip = "Campaign and map Tileset overrides. Click a file to view it."
+
+[node name="CustomFilesLabel" type="RichTextLabel" parent="HBoxContainer/Sidebar/CustomFilesPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 213.0
+margin_bottom = 92.0
+rect_min_size = Vector2( 0, 85 )
+mouse_filter = 1
+bbcode_enabled = true
+text = "No modified tilesets"
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/Sidebar"]
+margin_top = 103.0
+margin_right = 220.0
+margin_bottom = 183.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="GridContainer" parent="HBoxContainer/Sidebar/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 213.0
+margin_bottom = 73.0
+columns = 2
+
+[node name="TilesetLabel" type="Label" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
+margin_top = 5.0
+margin_right = 62.0
+margin_bottom = 19.0
+text = "Tileset ID"
+
+[node name="TilesetIDSpinBox" type="SpinBox" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
+margin_left = 132.0
+margin_right = 206.0
+margin_bottom = 24.0
+size_flags_horizontal = 10
+max_value = 31.0
+rounded = true
+
+[node name="Spacing" type="Control" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 62.0
+margin_bottom = 42.0
+
+[node name="TilesetIDNameLabel" type="Label" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
+margin_left = 66.0
+margin_top = 28.0
+margin_right = 206.0
+margin_bottom = 42.0
+text = "Standard"
+align = 2
+
+[node name="Spacing2" type="Control" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
+margin_top = 46.0
+margin_right = 62.0
+margin_bottom = 66.0
+
+[node name="TilesetRevertTilesetButton" type="Button" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
+margin_left = 66.0
+margin_top = 46.0
+margin_right = 206.0
+margin_bottom = 66.0
+size_flags_horizontal = 3
+text = "Revert tileset"
+
+[node name="PanelContainer2" type="PanelContainer" parent="HBoxContainer/Sidebar"]
+margin_top = 187.0
+margin_right = 220.0
+margin_bottom = 287.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Sidebar/PanelContainer2"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 213.0
+margin_bottom = 93.0
+
+[node name="TextureMapRow" type="GridContainer" parent="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer"]
+margin_right = 206.0
+margin_bottom = 38.0
+columns = 2
+
+[node name="TextureMapLabel" type="Label" parent="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/TextureMapRow"]
+margin_top = 3.0
+margin_right = 27.0
+margin_bottom = 17.0
+text = "Map"
+
+[node name="TilesetTypeList" type="OptionButton" parent="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/TextureMapRow"]
+margin_left = 130.0
+margin_right = 206.0
+margin_bottom = 20.0
+size_flags_horizontal = 10
+text = "TMap A"
+items = [ "TMap A", null, false, 0, null, "TMap B", null, false, 1, null ]
+selected = 0
+
+[node name="Spacing" type="Control" parent="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/TextureMapRow"]
+margin_top = 24.0
+margin_right = 27.0
+margin_bottom = 38.0
+
+[node name="TilesetIDsLabel" type="Label" parent="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/TextureMapRow"]
+margin_left = 31.0
+margin_top = 24.0
+margin_right = 206.0
+margin_bottom = 38.0
+text = "IDs 0-543"
+align = 2
+
+[node name="ImportExportRow" type="GridContainer" parent="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer"]
+margin_top = 42.0
+margin_right = 206.0
+margin_bottom = 62.0
+columns = 2
+
+[node name="TilesetLoadButton" type="Button" parent="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/ImportExportRow"]
+margin_right = 101.0
+margin_bottom = 20.0
+hint_tooltip = "Load a DAT or full PNG strip into the map's Tileset override."
+size_flags_horizontal = 3
+text = "Import"
+
+[node name="TilesetSaveButton" type="Button" parent="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/ImportExportRow"]
+margin_left = 105.0
+margin_right = 206.0
+margin_bottom = 20.0
+hint_tooltip = "Write a standalone DAT or PNG without changing the map's save state."
+size_flags_horizontal = 3
+text = "Export"
+
+[node name="TilesetRevertButton" type="Button" parent="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer"]
+margin_top = 66.0
+margin_right = 206.0
+margin_bottom = 86.0
+size_flags_horizontal = 3
+text = "Revert TMAPA"
+
+[node name="TilesetControls" type="PanelContainer" parent="HBoxContainer/Sidebar"]
+margin_top = 291.0
+margin_right = 220.0
+margin_bottom = 443.0
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/Sidebar/TilesetControls"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 213.0
+margin_bottom = 145.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer"]
+margin_right = 206.0
+margin_bottom = 126.0
+size_flags_horizontal = 3
+
+[node name="EditRow" type="GridContainer" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
+margin_right = 206.0
+margin_bottom = 20.0
+columns = 2
+
+[node name="TilesetStripButton" type="Button" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/EditRow"]
+margin_right = 101.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Edit strip"
+
+[node name="TilesetPackButton" type="Button" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/EditRow"]
+margin_left = 105.0
+margin_right = 206.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Edit pack"
+
+[node name="TilesetEditingStatusLabel" type="Label" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
+margin_top = 24.0
+margin_right = 206.0
+margin_bottom = 38.0
+text = "Choose an editing format."
+autowrap = true
+
+[node name="TilesetLiveReloading" type="CheckBox" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
+margin_top = 42.0
+margin_right = 206.0
+margin_bottom = 66.0
+disabled = true
+pressed = true
+text = "Live reloading"
+
+[node name="TilesetOpenFolderButton" type="Button" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
+margin_top = 70.0
+margin_right = 206.0
+margin_bottom = 90.0
+text = "Open editing folder"
+
+[node name="CurrentFolderLabel" type="Label" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
+margin_top = 94.0
+margin_right = 206.0
+margin_bottom = 108.0
+text = "Editing folder:"
+
+[node name="TilesetExternalPathScroll" type="ScrollContainer" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
+margin_top = 112.0
+margin_right = 206.0
+margin_bottom = 126.0
+scroll_vertical_enabled = false
+
+[node name="TilesetExternalPathLabel" type="Label" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/TilesetExternalPathScroll"]
+margin_right = 34.0
+margin_bottom = 14.0
+text = "None"
+
+[node name="BottomPanel" type="PanelContainer" parent="HBoxContainer/Sidebar"]
+margin_top = 447.0
+margin_right = 220.0
+margin_bottom = 521.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Sidebar/BottomPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 213.0
+margin_bottom = 67.0
+
+[node name="ZoomRow" type="HBoxContainer" parent="HBoxContainer/Sidebar/BottomPanel/VBoxContainer"]
+margin_right = 206.0
+margin_bottom = 24.0
+
+[node name="ZoomLabel" type="Label" parent="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/ZoomRow"]
+margin_top = 5.0
+margin_right = 37.0
+margin_bottom = 19.0
+text = "Zoom"
+
+[node name="TilesetZoom" type="SpinBox" parent="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/ZoomRow"]
+margin_left = 132.0
+margin_right = 206.0
+margin_bottom = 24.0
+size_flags_horizontal = 10
+min_value = 1.0
+max_value = 4.0
+value = 1.0
+rounded = true
+
+[node name="RevertRow" type="HBoxContainer" parent="HBoxContainer/Sidebar/BottomPanel/VBoxContainer"]
+margin_top = 28.0
+margin_right = 206.0
+margin_bottom = 60.0
+
+[node name="TilesetRevertAllButton" type="Button" parent="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/RevertRow"]
+margin_right = 170.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+text = "Revert all"
+
+[node name="TilesetHelpButton" type="TextureButton" parent="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/RevertRow"]
+margin_left = 174.0
+margin_right = 206.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 6 )
+texture_hover = ExtResource( 7 )
+expand = true
+stretch_mode = 4
+
+[node name="TilesetLoadDialog" type="FileDialog" parent="."]
+margin_right = 1000.0
+margin_bottom = 562.0
+rect_min_size = Vector2( 400, 140 )
+window_title = "Open a File"
+resizable = true
+mode = 0
+access = 2
+filters = PoolStringArray( "*.dat", "*.png" )
+show_hidden_files = true
+
+[node name="TilesetSaveDialog" type="FileDialog" parent="."]
+margin_right = 1000.0
+margin_bottom = 562.0
+rect_min_size = Vector2( 400, 140 )
+window_title = "Export texture map"
+resizable = true
+access = 2
+filters = PoolStringArray( "*.dat", "*.png" )
+show_hidden_files = true
+
+[node name="TilesetExternalConfirmDialog" type="ConfirmationDialog" parent="."]
+margin_right = 400.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 400, 140 )
+window_title = "Confirm file replacement"
+
+[node name="TilesetRevertConfirmDialog" type="ConfirmationDialog" parent="."]
+margin_right = 400.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 400, 140 )
+window_title = "Revert TMAPA"
+dialog_text = "Discard changes to TMAPA?"
+
+[node name="TeditSavePNG" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="TeditLiveReloadPNG" type="Node" parent="."]
+script = ExtResource( 4 )
+
+[connection signal="visibility_changed" from="." to="." method="_on_TabTileset_visibility_changed"]
+[connection signal="mouse_exited" from="HBoxContainer/TilesetPanel/TilesetScrollContainer/TilesetCenterContainer/TilesetStrip" to="HBoxContainer/TilesetPanel/TilesetScrollContainer/TilesetCenterContainer/TilesetStrip" method="_on_mouse_exited"]
+[connection signal="tile_selected" from="HBoxContainer/TilesetPanel/TilesetScrollContainer/TilesetCenterContainer/TilesetStrip" to="." method="_on_TilesetStrip_tile_selected"]
+[connection signal="meta_clicked" from="HBoxContainer/Sidebar/CustomFilesPanel/CustomFilesLabel" to="." method="_on_CustomFilesLabel_meta_clicked"]
+[connection signal="value_changed" from="HBoxContainer/Sidebar/PanelContainer/VBoxContainer/TilesetIDSpinBox" to="." method="_on_TilesetIDSpinBox_value_changed"]
+[connection signal="pressed" from="HBoxContainer/Sidebar/PanelContainer/VBoxContainer/TilesetRevertTilesetButton" to="." method="_on_TilesetRevertTilesetButton_pressed"]
+[connection signal="item_selected" from="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/TextureMapRow/TilesetTypeList" to="." method="_on_TilesetTypeList_item_selected"]
+[connection signal="pressed" from="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/ImportExportRow/TilesetLoadButton" to="." method="_on_TilesetLoadButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/ImportExportRow/TilesetSaveButton" to="." method="_on_TilesetSaveButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/TilesetRevertButton" to="." method="_on_TilesetRevertButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/EditRow/TilesetStripButton" to="." method="_on_TilesetStripButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/EditRow/TilesetPackButton" to="." method="_on_TilesetPackButton_pressed"]
+[connection signal="toggled" from="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/TilesetLiveReloading" to="." method="_on_TilesetLiveReloading_toggled"]
+[connection signal="pressed" from="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/TilesetOpenFolderButton" to="." method="_on_TilesetOpenFolderButton_pressed"]
+[connection signal="value_changed" from="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/ZoomRow/TilesetZoom" to="." method="_on_TilesetZoom_value_changed"]
+[connection signal="pressed" from="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/RevertRow/TilesetRevertAllButton" to="." method="_on_TilesetRevertAllButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/RevertRow/TilesetHelpButton" to="." method="_on_TilesetHelpButton_pressed"]
+[connection signal="file_selected" from="TilesetLoadDialog" to="." method="_on_TilesetLoadDialog_file_selected"]
+[connection signal="file_selected" from="TilesetSaveDialog" to="." method="_on_TilesetSaveDialog_file_selected"]
+[connection signal="confirmed" from="TilesetExternalConfirmDialog" to="." method="_on_TilesetExternalConfirmDialog_confirmed"]
+[connection signal="confirmed" from="TilesetRevertConfirmDialog" to="." method="_on_TilesetRevertConfirmDialog_confirmed"]
