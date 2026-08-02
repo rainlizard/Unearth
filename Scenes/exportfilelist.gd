@@ -625,4 +625,17 @@ gold_intermediate_near_lava.png	0	0	32	32
 gold_intermediate_near_lava.png	32	0	32	32
 gold_intermediate_near_lava.png	64	0	32	32
 gold_intermediate_near_lava.png	96	0	32	32
+rock_near_water.png	0	0	32	32
+rock_near_water.png	32	0	32	32
+rock_near_water.png	64	0	32	32
+rock_near_water.png	96	0	32	32
+rock_near_water.png	128	0	32	32
+rock_near_water.png	160	0	32	32
+rock_near_water.png	192	0	32	32
+rock_near_water.png	224	0	32	32
+rock_standard.png	0	96	32	32
+filler_black.png	0	0	32	32
+filler_black.png	0	0	32	32
+filler_black.png	0	0	32	32
+filler_black.png	0	0	32	32
 """
