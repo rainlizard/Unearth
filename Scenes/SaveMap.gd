@@ -18,6 +18,7 @@ onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMapBackups = Nodelist.list["oMapBackups"]
+onready var oTabTileset = Nodelist.list["oTabTileset"]
 
 var queueExit = false
 
@@ -94,6 +95,10 @@ func save_map(filePath):
 
 	if oCurrentMap.loaded_from_backup == false and oConfigFileManager.copy_current_map_files(oCurrentMap.path, filePath) == false:
 		oMessage.big("Error", "Saving failed while copying map config files. Try saving to a different directory.")
+		queueExit = false
+		return false
+	if oTabTileset.save_modified_tilesets(map_filename_no_ext, map_base_dir) == false:
+		oMessage.big("Error", "Saving failed while writing map tileset files. Try saving to a different directory.")
 		queueExit = false
 		return false
 	oCurrentMap.update_config_paths(false)

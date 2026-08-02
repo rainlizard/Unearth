@@ -12,12 +12,15 @@ onready var oTabSlabset = Nodelist.list["oTabSlabset"]
 onready var oTabColumnset = Nodelist.list["oTabColumnset"]
 onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 onready var oTabCubes = Nodelist.list["oTabCubes"]
+onready var oTabTileset = Nodelist.list["oTabTileset"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oSlabsetFlashIdsButton = Nodelist.list["oSlabsetFlashIdsButton"]
 onready var oColumnsetFlashIdsButton = Nodelist.list["oColumnsetFlashIdsButton"]
+onready var oEditor = Nodelist.list["oEditor"]
 
 var is_initializing = false
 var flash_ids_on_map = false
@@ -29,6 +32,7 @@ func _ready():
 	oSlabsetTabs.set_tab_title(1, "Columnset") #slabs.clm
 	oSlabsetTabs.set_tab_title(2, "CLM data") #map.clm
 	oSlabsetTabs.set_tab_title(3, "Cubeset") #cubes.cfg
+	oSlabsetTabs.set_tab_title(4, "Tileset") #tmapa/tmapb.dat
 	
 	# Hide or show the CLM data tab according to user preference
 	var show_clm_tab = Settings.get_setting("show_clm_data_tab")
@@ -84,6 +88,16 @@ func update_window_title():
 					window_title = "Cubeset - local"
 			else:
 				window_title = "Cubeset"
+		4: # tmapa/tmapb.dat
+			window_title = "Tileset"
+			if (oTabTileset.modified.tmapa or oTabTileset.modified.tmapb) and oCurrentMap.path != "":
+				window_title += " - local override"
+			else:
+				var source = oTabTileset.get_source(oTabTileset.currentType)
+				if source != "default":
+					window_title += " - " + source
+	if oEditor.mapHasBeenEdited:
+		window_title += " *"
 
 
 func _on_SlabsetTabs_tab_changed(tab):
@@ -96,6 +110,8 @@ func _on_SlabsetTabs_tab_changed(tab):
 			oTabClmEditor._on_ColumnEditor_visibility_changed()
 		3: # cubes.cfg
 			oTabCubes._on_TabCubes_visibility_changed()
+		4: # tmapa/tmapb.dat
+			oTabTileset._on_TabTileset_visibility_changed()
 	
 	update_window_title()
 
@@ -144,6 +160,8 @@ func _notification(what):
 func _on_SlabsetWindow_visibility_changed():
 	if visible == true:
 		is_initializing = true
+		if oSlabsetTabs.current_tab == 4:
+			oTabTileset._on_TabTileset_visibility_changed()
 		
 		oTabSlabset.update_slabset_revert_button_state()
 		oTabColumnset.update_columnset_revert_button_state()
@@ -155,9 +173,15 @@ func _on_SlabsetWindow_visibility_changed():
 		is_initializing = false
 		update_flash_state()
 	elif visible == false:
+		oTabTileset._on_TabTileset_visibility_changed()
 		oFlashingColumns.stop_column_flash()
 		oPickSlabWindow.add_slabs()
 		Columnset.update_cube_lists()
+
+
+func open_texture(textureId: int):
+	oSlabsetTabs.current_tab = 4
+	oTabTileset.select_texture_id(textureId)
 
 func open_from_cursor_position():
 	var data = oSlabsetMapRegenerator.calculate_cursor_data()
@@ -185,6 +209,16 @@ func open_from_cursor_position():
 	
 	oTabClmEditor.set_clm_column_index(data.clmEntryIndex)
 	
+	var cubeArray = oDataClm.cubes[data.clmEntryIndex]
+	var cubeHeight = oDataClm.get_highest_cube_height(cubeArray)
+	var textureID = oDataClm.floorTexture[data.clmEntryIndex]
+	if cubeHeight > 0:
+		var cubeID = cubeArray[cubeHeight - 1]
+		oTabCubes.oCubeIndexSpinBox.value = cubeID
+		if cubeID < Cube.tex.size():
+			textureID = Cube.tex[cubeID][Cube.SIDE_TOP]
+	oTabTileset.select_texture_id(textureID)
+
 	update_flash_state()
 
 func update_flash_state():

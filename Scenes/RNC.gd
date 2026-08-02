@@ -463,6 +463,8 @@ func decompress_to_bytes(path: String) -> PoolByteArray:
 	var packed_data = load_file(path)
 	if packed_data.empty():
 		return PoolByteArray()
+	if packed_data.size() < 4 or packed_data[0] != 82 or packed_data[1] != 78 or packed_data[2] != 67 or packed_data[3] != 1:
+		return packed_data
 	var result = rnc_unpack(packed_data)
 	return result if typeof(result) != TYPE_INT else PoolByteArray()
 

@@ -11,6 +11,7 @@ onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentlyOpenColumnset = Nodelist.list["oCurrentlyOpenColumnset"]
+onready var oCurrentlyOpenColumnsetPanel = Nodelist.list["oCurrentlyOpenColumnsetPanel"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oModifiedColumnsetLabel = Nodelist.list["oModifiedColumnsetLabel"]
 onready var oModifiedColumnsetPanelContainer = Nodelist.list["oModifiedColumnsetPanelContainer"]
@@ -110,6 +111,7 @@ func update_columnset_paths_label(list_of_modified_columns):
 	
 	oCurrentlyOpenColumnset.text = final_text
 	oCurrentlyOpenColumnset.hint_tooltip = tooltip_text
+	oCurrentlyOpenColumnsetPanel.modulate = Color(1.4,1.4,1.7) if file_path != "" else Color(1,1,1)
 	oSlabsetWindow.update_window_title()
 
 func update_modified_label_for_all_columns(list_of_modified_columns):

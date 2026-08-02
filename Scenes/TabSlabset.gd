@@ -37,6 +37,7 @@ onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oCurrentlyOpenSlabset = Nodelist.list["oCurrentlyOpenSlabset"]
+onready var oCurrentlyOpenSlabsetPanel = Nodelist.list["oCurrentlyOpenSlabsetPanel"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 
 signal column_shortcut_pressed(clmIndex)
@@ -270,6 +271,7 @@ func update_slabset_paths_label():
 	
 	oCurrentlyOpenSlabset.text = final_text
 	oCurrentlyOpenSlabset.hint_tooltip = tooltip_text
+	oCurrentlyOpenSlabsetPanel.modulate = Color(1.4,1.4,1.7) if file_path != "" else Color(1,1,1)
 	
 	Utils.set_id_links_label(list_of_modified_slabs, oModifiedSlabsetLabel, oModifiedSlabsetPanelContainer, "No modified slabs")
 	

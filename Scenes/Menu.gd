@@ -23,7 +23,6 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
-onready var oTextureEditingWindow = Nodelist.list["oTextureEditingWindow"]
 onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oConfirmDiscardChanges = Nodelist.list["oConfirmDiscardChanges"]
 onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
@@ -113,7 +112,6 @@ func add_edit_menu_items():
 	edit_popup.add_separator()
 	edit_popup.add_item("Rules", 7)
 	edit_popup.add_item("Slabset", 6)
-	edit_popup.add_item("Tileset", 5)
 
 func update_undo_availability():
 	if oUndoStates.undo_history.size() <= 1:
@@ -275,8 +273,6 @@ func _on_EditSubmenu_Pressed(pressedID):
 		4: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oConfirmAutoGen)
-		5: # Texture editing
-			Utils.popup_centered(oTextureEditingWindow)
 		6: # Modify slabset
 			oSlabsetWindow.popup_on_right_side()
 		7: # Cfg editor

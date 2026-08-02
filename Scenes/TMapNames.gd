@@ -1,9 +1,15 @@
 extends Node
 onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oGame = Nodelist.list["oGame"]
-onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 
 var texture_map_names = {}
+
+const DEFAULT_TEXTURE_MAP_NAMES = {
+	0: "Standard", 1: "Ancient", 2: "Winter", 3: "Snake Key", 4: "Stone Face",
+	5: "Voluptuous", 6: "Rough Ancient", 7: "Skull Relief", 8: "Desert Tomb",
+	9: "Gypsum", 10: "Lilac Stone", 11: "Swamp Serpent", 12: "Lava Cavern",
+	13: "Laterite Cavern"
+}
 
 func _ready():
 	update_texture_map_names()
@@ -11,40 +17,28 @@ func _ready():
 func update_texture_map_names():
 	if oTMapLoader.rememberedTmapaPaths == null:
 		return
-
-	var tmapDataByNumber = {}
-	for pathStr in oTMapLoader.rememberedTmapaPaths.keys():
-		var parsedDetails = oTMapLoader.parse_tmap_path_details(pathStr)
-		if parsedDetails != null and parsedDetails.type == "tmapa" and parsedDetails.number >= 0:
-			var sourceType = "campaign"
-			if pathStr.begins_with(oGame.DK_DATA_DIRECTORY):
-				sourceType = "data"
-			elif oCurrentMap.path != "" and pathStr.begins_with(oCurrentMap.path.get_base_dir()):
-				sourceType = "map"
-			tmapDataByNumber[parsedDetails.number] = {"path": pathStr, "source": sourceType, "filename": pathStr.get_file()}
-
-	var default_texture_map_names = {
-		0: "Standard", 1: "Ancient", 2: "Winter", 3: "Snake Key", 4: "Stone Face",
-		5: "Voluptuous", 6: "Rough Ancient", 7: "Skull Relief", 8: "Desert Tomb",
-		9: "Gypsum", 10: "Lilac Stone", 11: "Swamp Serpent", 12: "Lava Cavern",
-		13: "Laterite Cavern"
-	}
-	
-	var new_texture_map_names = {}
-	var textureCount = 0
-	if oTMapLoader.cachedTextures != null:
-		if typeof(oTMapLoader.cachedTextures) == TYPE_ARRAY or typeof(oTMapLoader.cachedTextures) == TYPE_DICTIONARY:
-			textureCount = oTMapLoader.cachedTextures.size()
-
+	var pathsByNumber = _get_tmapa_paths_by_number()
+	texture_map_names.clear()
+	var textureCount = oTMapLoader.cachedTextures.size() if oTMapLoader.cachedTextures != null else 0
 	for i in range(textureCount):
-		var itemText = default_texture_map_names.get(i, "Untitled")
-		if tmapDataByNumber.has(i):
-			var tmapInfo = tmapDataByNumber[i]
-			var filename = tmapInfo.filename
-			if tmapInfo.source == "data":
-				itemText = default_texture_map_names.get(i, "/data/" + filename)
-			else: # map source
-				itemText = "/" + tmapInfo.path.get_base_dir().get_file() + "/" + filename
-		new_texture_map_names[i] = itemText
-	
-	texture_map_names = new_texture_map_names
+		var itemText = DEFAULT_TEXTURE_MAP_NAMES.get(i, "Untitled")
+		if pathsByNumber.has(i):
+			var path = pathsByNumber[i]
+			itemText = DEFAULT_TEXTURE_MAP_NAMES.get(i, "/data/" + path.get_file()) if path.begins_with(oGame.DK_DATA_DIRECTORY) else "/" + path.get_base_dir().get_file() + "/" + path.get_file()
+		texture_map_names[i] = itemText
+
+
+func _get_tmapa_paths_by_number() -> Dictionary:
+	var paths = {}
+	for path in oTMapLoader.rememberedTmapaPaths:
+		var details = oTMapLoader.parse_tmap_path_details(path)
+		if details != null and details.type == "tmapa" and details.number >= 0:
+			paths[details.number] = path
+	return paths
+
+
+func get_tileset_name(number: int) -> String:
+	var loadedName = texture_map_names.get(number, "")
+	if loadedName.begins_with("/") and loadedName.begins_with("/data/") == false:
+		return loadedName.get_file()
+	return DEFAULT_TEXTURE_MAP_NAMES.get(number, "")

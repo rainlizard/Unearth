@@ -56,6 +56,7 @@ onready var oCfgEditor = Nodelist.list["oCfgEditor"]
 onready var oMapBackups = Nodelist.list["oMapBackups"]
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oActionPointList = Nodelist.list["oActionPointList"]
+onready var oTabTileset = Nodelist.list["oTabTileset"]
 
 
 var TOTAL_TIME_TO_OPEN_MAP
@@ -75,18 +76,12 @@ func start():
 		open_map(cmdLine[0])
 	else:
 		if OS.has_feature("standalone") == false:
-			#for i in 200:
-			#	yield(get_tree(), "idle_frame")
-			#oCurrentMap.clear_map()
 			#open_map("C:/Games/Dungeon Keeper GOG/levels/MAP00001.SLB")
 			#open_map("C:/Games/Dungeon Keeper/levels/deepdngn/map00084.slb")
 			#open_map("C:/Games/Dungeon Keeper/levels/personal/map00001.slb")
-			#for i in 50:
-			#	yield(get_tree(),'idle_frame')
 			#open_map("C:/Games/Dungeon Keeper/campgns/dk2/map00200.slb")
 			#open_map("C:/Games/Dungeon Keeper/levels/blazeend/map00001.slb")
 			open_map("C:/Games/Dungeon Keeper/levels/traphouse/map15416.slb")
-			pass
 		else:
 			# initialize a cleared map
 			oCurrentMap.clear_map()
@@ -122,6 +117,7 @@ func open_map(filePath, show_opened_message = true, reset_camera = true, loaded_
 	TOTAL_TIME_TO_OPEN_MAP = OS.get_ticks_msec()
 	
 	# Always begin by clearing map
+	oTabTileset.clear_modified_tileset()
 	oCurrentMap.clear_map()
 	
 	var map = filePath.get_basename()
@@ -243,23 +239,47 @@ func continue_load(map):
 	
 	oTMapLoader.start()
 	oTMapNames.update_texture_map_names() # Update names after tmap loader has started
+	if map != "":
+		_warn_missing_tilesets()
 	oOverheadGraphics.update_full_overhead_map() # 'Display fields' are created for each texture loaded
 	oTMapLoader.apply_texture_pack()
-	
+
 	oDataClm.count_filled_clm_entries()
-	
+
 	# finalize_map_opening
 	oEditor.set_view_2d()
 
 	# Update for Undo
-	
+
 	oDisplaySlxNumbers.update()
-	
+
 	if oResizeCurrentMapSize.visible == true:
 		oResizeCurrentMapSize._on_ResizeCurrentMapSize_about_to_show()
-	
+
 	if is_instance_valid(oInspector.inspectingInstance):
 		oInspector.deselect()
+
+
+func _warn_missing_tilesets():
+	var referencedTilesets = {int(oDataLevelStyle.data): true}
+	var slxData = oDataSlx.slxImgData.get_data()
+	for i in range(0, slxData.size(), 3):
+		if slxData[i] > 0:
+			referencedTilesets[slxData[i] - 1] = true
+	var missingTilesets = []
+	for tilesetID in referencedTilesets:
+		var missing = tilesetID < 0 or tilesetID >= oTMapLoader.cachedTextures.size()
+		if missing == false:
+			var textures = oTMapLoader.cachedTextures[tilesetID]
+			missing = textures == null or textures[0] == null or textures[1] == null
+		if missing:
+			missingTilesets.append(tilesetID)
+	if missingTilesets.empty() == false:
+		missingTilesets.sort()
+		var missingFilenames = PoolStringArray()
+		for tilesetID in missingTilesets:
+			missingFilenames.append("tmapa" + str(tilesetID).pad_zeros(3) + ".dat")
+		oMessage.big("Missing Tileset", "Missing tilesets used by this map: " + ", ".join(missingFilenames))
 
 
 func continue_load_openmap(map, show_opened_message = true, reset_camera = true):

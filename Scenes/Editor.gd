@@ -16,6 +16,7 @@ onready var oExportPreview = Nodelist.list["oExportPreview"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 	
 enum {
 	VIEW_2D = 0
@@ -58,12 +59,11 @@ func set_rendering_rate(val):
 		VisualServer.render_loop_enabled = true
 
 func set_map_has_been_edited(setVal):
-	if int(setVal) == oEditor.SET_EDITED_WITHOUT_SAVING_STATE: #If you save, then click Undo, it should mark as not saved but not create a new undo state when marking as edited.
-		mapHasBeenEdited = true
-		return
-	elif setVal == true:
+	if int(setVal) == 1:
 		oUndoStates.call_deferred("attempt_to_save_new_undo_state")
-	mapHasBeenEdited = setVal
+	mapHasBeenEdited = int(setVal) != 0 # SET_EDITED_WITHOUT_SAVING_STATE also resolves to true without creating an undo state.
+	if is_instance_valid(oSlabsetWindow):
+		oSlabsetWindow.update_window_title()
 
 
 func _ready():

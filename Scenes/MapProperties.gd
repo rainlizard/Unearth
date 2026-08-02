@@ -2,7 +2,8 @@ extends MarginContainer
 onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oEditor = Nodelist.list["oEditor"]
-onready var oDungeonStyleList = Nodelist.list["oDungeonStyleList"]
+onready var oDungeonStyleSpinBox = Nodelist.list["oDungeonStyleSpinBox"]
+onready var oDungeonStyleNameLabel = Nodelist.list["oDungeonStyleNameLabel"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMessage = Nodelist.list["oMessage"]
@@ -87,7 +88,7 @@ func _notification(what):
 				oLuaScriptFileSection.update_file_status()
 
 func _on_MapProperties_visibility_changed():
-	if is_instance_valid(oDungeonStyleList) == false: return
+	if is_instance_valid(oDungeonStyleSpinBox) == false: return
 	if visible == true:
 		refresh_dungeon_style_options()
 		oMapNameLineEdit.text = oDataMapName.data
@@ -146,41 +147,17 @@ func set_format_selection(setFormat):
 	oScriptGenerator.update_options_based_on_mapformat()
 
 func refresh_dungeon_style_options():
-	oDungeonStyleList.clear()
-	if oTMapLoader.rememberedTmapaPaths == null:
-		return
+	oDungeonStyleSpinBox.set_block_signals(true)
+	oDungeonStyleSpinBox.value = oDataLevelStyle.data
+	oDungeonStyleSpinBox.set_block_signals(false)
+	_update_dungeon_style_name(oDataLevelStyle.data)
 
-	var tmapDataByNumber = {}
-	for pathStr in oTMapLoader.rememberedTmapaPaths.keys():
-		var parsedDetails = oTMapLoader.parse_tmap_path_details(pathStr)
-		if parsedDetails != null and parsedDetails.type == "tmapa" and parsedDetails.number >= 0:
-			tmapDataByNumber[parsedDetails.number] = {"path": pathStr}
-
-	var textureCount = oTMapLoader.cachedTextures.size() if oTMapLoader.cachedTextures != null else 0
-
-	for i in range(textureCount):
-		var itemText = oTMapNames.texture_map_names.get(i, "Untitled " + str(i))
-		var itemMetadata = null
-
-		if tmapDataByNumber.has(i):
-			itemMetadata = tmapDataByNumber[i].path
-		
-		oDungeonStyleList.add_item(itemText, i)
-		if itemMetadata != null:
-			oDungeonStyleList.set_item_metadata(oDungeonStyleList.get_item_count() - 1, itemMetadata)
-	
-	if oDungeonStyleList.get_item_count() > 0:
-		var selectedStyleIndex = oDataLevelStyle.data
-		if selectedStyleIndex < 0 or selectedStyleIndex >= oDungeonStyleList.get_item_count():
-			selectedStyleIndex = 0
-		oDungeonStyleList.selected = selectedStyleIndex
-		oDataLevelStyle.data = selectedStyleIndex
-		oTMapLoader.apply_texture_pack()
-
-func _on_DungeonStyleList_item_selected(selectedIndex):
+func _on_DungeonStyleSpinBox_value_changed(value):
+	var selectedIndex = int(value)
 	oEditor.mapHasBeenEdited = true
 	oDataLevelStyle.data = selectedIndex
 	oTMapLoader.apply_texture_pack()
+	_update_dungeon_style_name(selectedIndex)
 	
 	if oSlabsetWindow.visible == true:
 		if is_instance_valid(oDkSlabsetVoxelView):
@@ -190,19 +167,8 @@ func _on_DungeonStyleList_item_selected(selectedIndex):
 		if is_instance_valid(oClmEditorVoxelView):
 			oClmEditorVoxelView.refresh_entire_view()
 	
-	var messageText = "Tileset selection cleared."
-	if selectedIndex != -1:
-		var metadata = oDungeonStyleList.get_item_metadata(selectedIndex)
-		if metadata != null and typeof(metadata) == TYPE_STRING and metadata != "":
-			messageText = "Selected tileset: " + metadata
-		else:
-			var defaultFilename = "tmapa" + str(selectedIndex).pad_zeros(3) + ".dat"
-			if oTMapNames.texture_map_names.has(selectedIndex):
-				messageText = oTMapNames.texture_map_names[selectedIndex] + " (" + defaultFilename + ")"
-			else:
-				messageText = "Loaded: " + defaultFilename
-	
-	oMessage.quick(messageText)
+func _update_dungeon_style_name(tilesetID: int):
+	oDungeonStyleNameLabel.text = oTMapNames.get_tileset_name(tilesetID)
 
 func _on_MapNameLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true

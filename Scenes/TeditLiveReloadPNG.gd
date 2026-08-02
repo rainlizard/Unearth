@@ -1,33 +1,36 @@
 extends Node
 
+onready var oTabTileset = Nodelist.list["oTabTileset"]
 onready var oTMapLoader = Nodelist.list["oTMapLoader"]
-onready var oReadPalette = Nodelist.list["oReadPalette"]
-onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
-onready var oEditor = Nodelist.list["oEditor"]
-onready var oMessage = Nodelist.list["oMessage"]
 
 var editingImg = Image.new()
-var fileTimes = []
+var fileHashes = []
 var partsList = []
 var modifiedCheck = File.new()
-var packFilePath = ""
 var packFolder = ""
+var packType = "tmapa"
+var packNumber = -1
+var lastError = ""
+var reloadTimer = 0.0
 
 
 func _ready():
-	editingImg.create(8*32, 68*32, false, Image.FORMAT_L8)
-	reloader_loop()
+	set_process(false)
 
 
-func reloader_loop():
-	if packFilePath != "": execute()
-	yield(get_tree().create_timer(0.25), "timeout")
-	reloader_loop()
+func _process(delta):
+	reloadTimer += delta
+	if reloadTimer >= 0.25:
+		reloadTimer = 0.0
+		execute()
 
 
-func initialize_pack(contentString: String, reloaderPath: String):
-	packFilePath = reloaderPath
+func initialize_pack(contentString: String, reloaderPath: String, type: String, number: int):
 	packFolder = reloaderPath
+	packType = type
+	packNumber = number
+	lastError = ""
+	editingImg = oTabTileset.images[packType].duplicate()
 	partsList.clear()
 	var flContent = contentString
 	if flContent == "": return
@@ -44,136 +47,81 @@ func initialize_pack(contentString: String, reloaderPath: String):
 			validParts.append([])
 			printerr("Invalid line in pack (line ", i+2, "): '", originalLine, "' - Marked as invalid.")
 	partsList = validParts
-	if fileTimes.size() != partsList.size():
-		fileTimes.resize(partsList.size())
-		fileTimes.fill(-1)
-	var fn = get_tmap_number_string()
-	if fn != null and oDataLevelStyle.data != int(fn):
-		oDataLevelStyle.data = int(fn)
-		oTMapLoader.apply_texture_pack()
-		oEditor.mapHasBeenEdited = true
-		oMessage.quick("Changed map's Tileset to show what you're currently editing")
+	fileHashes.resize(partsList.size())
+	for i in partsList.size():
+		var path = packFolder.plus_file(partsList[i][0]) if partsList[i].empty() == false else ""
+		fileHashes[i] = modifiedCheck.get_md5(path) if path != "" and modifiedCheck.file_exists(path) else ""
+
+
+func set_enabled(value: bool):
+	set_process(value)
+
+
+func stop_session():
+	set_process(false)
+	packFolder = ""
+	partsList.clear()
 
 
 func execute():
-	var partsModifiedIndices = get_modified_parts(packFolder)
-	if partsModifiedIndices.empty(): return
-	var isTmapb = is_tmapb_type()
-	process_modified_parts(partsModifiedIndices, packFolder, isTmapb)
-	var tmapNumberStr = get_tmap_number_string()
-	if tmapNumberStr != null:
-		var tmapNumber = int(tmapNumberStr)
-		var tmapType = "tmapb" if isTmapb else "tmapa"
-		oTMapLoader.cache_loaded_image(editingImg, tmapNumber, tmapType)
-		oTMapLoader.apply_texture_pack()
-
-
-func get_modified_parts(baseDir: String) -> Array:
+	if Directory.new().dir_exists(packFolder) == false:
+		if lastError != "Editing folder no longer exists":
+			lastError = "Editing folder no longer exists"
+			oTabTileset.set_reload_status(packType, packNumber, lastError)
+		return
+	if lastError == "Editing folder no longer exists":
+		lastError = ""
+		oTabTileset.set_reload_status(packType, packNumber, "Waiting for changes...")
+	lastError = ""
 	var partsModifiedIndices = []
+	var currentHashes = {}
 	for i in partsList.size():
-		if partsList[i].empty(): continue
-		var path = baseDir.plus_file(partsList[i][0])
-		if modifiedCheck.file_exists(path):
-			var currentTime = modifiedCheck.get_modified_time(path)
-			var storedTime = fileTimes[i]
-			if currentTime != storedTime:
-				partsModifiedIndices.append(i)
-	return partsModifiedIndices
-
-
-func process_modified_parts(partsModifiedIndices: Array, baseDir: String, isTmapb: bool):
-	var imgLoader = Image.new()
+		if partsList[i].empty():
+			continue
+		var path = packFolder.plus_file(partsList[i][0])
+		if modifiedCheck.file_exists(path) == false:
+			continue
+		if currentHashes.has(path) == false:
+			currentHashes[path] = modifiedCheck.get_md5(path)
+		if currentHashes[path] != fileHashes[i]:
+			partsModifiedIndices.append(i)
+	if partsModifiedIndices.empty(): return
+	var loadedImages = {}
+	var updatedImage = editingImg.duplicate()
 	for partIndex in partsModifiedIndices:
 		var partData = partsList[partIndex]
-		var path = baseDir.plus_file(partData[0])
-		fileTimes[partIndex] = modifiedCheck.get_modified_time(path)
-		if imgLoader.load(path) != OK:
-			printerr("Failed to load image: ", path)
-			continue
-		imgLoader.convert(Image.FORMAT_RGB8)
+		var path = packFolder.plus_file(partData[0])
+		if loadedImages.has(path) == false:
+			var image = Image.new()
+			if image.load(path) != OK:
+				lastError = "Reload failed: could not read " + path.get_file()
+				break
+			image.convert(Image.FORMAT_RGB8)
+			loadedImages[path] = image
+		var imgLoader = loadedImages[path]
 		var srcRectInPng = Rect2(int(partData[1]), int(partData[2]), int(partData[3]), int(partData[4]))
+		if Rect2(Vector2.ZERO, imgLoader.get_size()).encloses(srcRectInPng) == false:
+			lastError = "Reload failed: unexpected image size in " + path.get_file()
+			break
 		var tileSubImageRgb = imgLoader.get_rect(srcRectInPng)
 		if tileSubImageRgb == null or tileSubImageRgb.is_empty():
-			printerr("Failed to get_rect from ", path, " with rect ", srcRectInPng)
-			continue
-		var tileSubImageL8 = convert_rgb_image_to_l8(tileSubImageRgb)
-		if tileSubImageL8 == null or tileSubImageL8.is_empty():
-			printerr("Failed to convert tile to L8 from: ", path)
-			continue
-		var destinationCoords = Vector2((partIndex % 8) * 32, (partIndex / 8) * 32)
-		editingImg.lock()
-		editingImg.blit_rect(tileSubImageL8, Rect2(0,0, tileSubImageL8.get_width(), tileSubImageL8.get_height()), destinationCoords)
-		editingImg.unlock()
-
-
-func is_tmapb_type() -> bool:
-	var lowerPath = packFilePath.to_lower()
-	var isTmapb = lowerPath.find("tmapb") != -1
-	return isTmapb
-
-
-func get_tmap_number_string():
-	var lowerPath = packFilePath.to_lower()
-	var tmapaIndex = lowerPath.find("tmapa")
-	var tmapbIndex = lowerPath.find("tmapb")
-	if tmapaIndex != -1:
-		var afterTmapa = lowerPath.substr(tmapaIndex + 5)
-		var numberMatch = extract_number_from_string(afterTmapa)
-		return numberMatch if numberMatch != "" else null
-	elif tmapbIndex != -1:
-		var afterTmapb = lowerPath.substr(tmapbIndex + 5)
-		var numberMatch = extract_number_from_string(afterTmapb)
-		return numberMatch if numberMatch != "" else null
-	else:
-		return null
-
-
-func extract_number_from_string(text: String) -> String:
-	var result = ""
-	for i in text.length():
-		var character = text[i]
-		if character >= "0" and character <= "9":
-			result += character
-		elif result != "":
+			lastError = "Reload failed: invalid region in " + path.get_file()
 			break
-	return result
-
-
-func find_closest_palette_index(targetColor: Color, paletteArray: Array) -> int:
-	if paletteArray.empty(): return 0
-	var closestIndex = 0
-	var minDistanceSq = -1.0
-	for i in paletteArray.size():
-		var palColor: Color = paletteArray[i]
-		var dr = palColor.r - targetColor.r
-		var dg = palColor.g - targetColor.g
-		var db = palColor.b - targetColor.b
-		var currentDistanceSq = dr*dr + dg*dg + db*db
-		if minDistanceSq < 0.0 or currentDistanceSq < minDistanceSq:
-			minDistanceSq = currentDistanceSq
-			closestIndex = i
-			if minDistanceSq == 0.0: break
-	return closestIndex
-
-
-func convert_rgb_image_to_l8(rgbImage: Image) -> Image:
-	if rgbImage == null or rgbImage.is_empty(): return null
-	var localPaletteArray: Array = oReadPalette.get_palette_data()
-	if localPaletteArray.empty(): return null
-	var l8Image = Image.new()
-	l8Image.create(rgbImage.get_width(), rgbImage.get_height(), false, Image.FORMAT_L8)
-	var colorToIndexCache = {}
-	rgbImage.lock()
-	l8Image.lock()
-	for yCoord in rgbImage.get_height():
-		for xCoord in rgbImage.get_width():
-			var rgbColor = rgbImage.get_pixel(xCoord, yCoord)
-			var paletteIndex: int = colorToIndexCache.get(rgbColor, -1)
-			if paletteIndex == -1:
-				paletteIndex = find_closest_palette_index(rgbColor, localPaletteArray)
-				colorToIndexCache[rgbColor] = paletteIndex
-			var grayValue = float(paletteIndex) / 255.0
-			l8Image.set_pixel(xCoord, yCoord, Color(grayValue, grayValue, grayValue))
-	rgbImage.unlock()
-	l8Image.unlock()
-	return l8Image 
+		var destinationCoords = Vector2((partIndex % 8) * 32, (partIndex / 8) * 32)
+		var referenceImage = updatedImage.get_rect(Rect2(destinationCoords, srcRectInPng.size))
+		var tileSubImageL8 = oTMapLoader.create_l8_image_from_rgb(tileSubImageRgb, referenceImage)
+		if tileSubImageL8 == null or tileSubImageL8.is_empty():
+			lastError = "Reload failed: palette conversion failed for " + path.get_file()
+			break
+		updatedImage.lock()
+		updatedImage.blit_rect(tileSubImageL8, Rect2(0,0, tileSubImageL8.get_width(), tileSubImageL8.get_height()), destinationCoords)
+		updatedImage.unlock()
+	if lastError != "":
+		oTabTileset.set_reload_status(packType, packNumber, lastError)
+		return
+	for partIndex in partsModifiedIndices:
+		var path = packFolder.plus_file(partsList[partIndex][0])
+		fileHashes[partIndex] = currentHashes[path]
+	editingImg = updatedImage
+	if oTabTileset.apply_external_image(packType, packNumber, editingImg, int(ceil(float(partsList.size()) / 8.0)) * 32):
+		oTabTileset.set_reload_status(packType, packNumber, "Reloaded " + partsList[partsModifiedIndices[0]][0].get_file())

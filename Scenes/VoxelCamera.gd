@@ -18,9 +18,6 @@ func _input(event):
 			size += zoomStep
 
 func _process(delta):
-	if oVoxelObjectView.displayingType == oVoxelObjectView.DK_SLABSET:
-		oVoxelCameraPivotPoint.translation.z = lerp(oVoxelCameraPivotPoint.translation.z, (oVoxelObjectView.viewObject*4), cameraShiftSpeed)
-		oVoxelCameraPivotPoint.translation.x = lerp(oVoxelCameraPivotPoint.translation.x, (oVoxelObjectView.viewObject*4), cameraShiftSpeed)
-	else:
-		oVoxelCameraPivotPoint.translation.z = lerp(oVoxelCameraPivotPoint.translation.z, oVoxelObjectView.viewObject*2, cameraShiftSpeed)
-		oVoxelCameraPivotPoint.translation.x = lerp(oVoxelCameraPivotPoint.translation.x, oVoxelObjectView.viewObject*2, cameraShiftSpeed)
+	var target_position = oVoxelObjectView.viewObject * oVoxelObjectView.object_spacing
+	oVoxelCameraPivotPoint.translation.z = lerp(oVoxelCameraPivotPoint.translation.z, target_position, cameraShiftSpeed)
+	oVoxelCameraPivotPoint.translation.x = lerp(oVoxelCameraPivotPoint.translation.x, target_position, cameraShiftSpeed)

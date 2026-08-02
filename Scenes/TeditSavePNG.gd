@@ -1,143 +1,76 @@
 extends Node
 
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oTeditLiveReloadPNG = Nodelist.list["oTeditLiveReloadPNG"]
-onready var oTextureEditingWindow = Nodelist.list["oTextureEditingWindow"]
+onready var oTabTileset = Nodelist.list["oTabTileset"]
 
 const ExportFilelist = preload("res://Scenes/exportfilelist.gd")
 
-var packFolder = ""
-var openFolder = ""
-
-
-func handle_tmap_export(sourceRgbImage: Image, folderNameString: String):
+func handle_tmap_export(sourceRgbImage: Image, folderNameString: String, stripFilename: String = ""):
 	var outputDir = get_output_directory()
-	var packFolderName = folderNameString
-	var texturePackNumber = ""
-	if "_" in folderNameString:
-		var parts = folderNameString.split("_")
-		if parts.size() > 1:
-			texturePackNumber = parts[1]
-	else:
-		texturePackNumber = folderNameString
-	
-	var isTmapbFile = folderNameString.to_lower().find("tmapb") != -1
+	var isStrip = stripFilename != ""
+	var texturePackNumber = str(oTabTileset.tilesetNumber).pad_zeros(3)
 	var packContent = ""
-	if isTmapbFile:
+	if isStrip:
+		packContent = "textures_pack_" + texturePackNumber
+		for i in 544:
+			packContent += "\n%s\t%d\t%d\t32\t32" % [stripFilename, (i % 8) * 32, (i / 8) * 32]
+	elif oTabTileset.currentType == "tmapb":
 		packContent = ExportFilelist.new().string_b.replace("textures_pack_000", "textures_pack_" + texturePackNumber)
 	else:
 		packContent = ExportFilelist.new().string_a.replace("textures_pack_000", "textures_pack_" + texturePackNumber)
 	
-	var imageDictionary = build_image_dictionary(packContent)
-	var packFolderPath = outputDir.plus_file(packFolderName)
-	var uniqueDirectories = get_unique_directories(imageDictionary, packFolderPath)
-	if check_directories_exist(uniqueDirectories):
-		var fullPackPath = outputDir.plus_file(packFolderName).plus_file("")
-		var message = "The folder of .PNGs already exists, they will be overwritten: \n" + fullPackPath + "\n\n If overwriting the files here causes you data loss then Cancel and go backup the folder."
-		var userConfirmed = yield(oTextureEditingWindow.show_confirmation_dialog(message), "completed")
+	var imageDictionary = {}
+	var lines = Array(packContent.split('\n', false))
+	lines.pop_front()
+	for tileIndex in lines.size():
+		var line = Array(lines[tileIndex].split('\t', false))
+		var path = line[0]
+		if imageDictionary.has(path) == false:
+			imageDictionary[path] = {"max_x": 0, "max_y": 0, "image": Image.new(), "tiles": []}
+		var data = imageDictionary[path]
+		data.max_x = max(data.max_x, int(line[1]) + int(line[3]))
+		data.max_y = max(data.max_y, int(line[2]) + int(line[4]))
+		data.tiles.append({"line": line, "index": tileIndex})
+	var packFolderPath = outputDir if isStrip else outputDir.plus_file(folderNameString)
+	var directory = Directory.new()
+	var outputExists = isStrip and File.new().file_exists(packFolderPath.plus_file(stripFilename))
+	for localPath in imageDictionary:
+		var path = packFolderPath.plus_file(localPath).get_base_dir()
+		outputExists = outputExists or isStrip == false and directory.dir_exists(path)
+	if outputExists:
+		var replacedPath = packFolderPath.plus_file(stripFilename) if isStrip else packFolderPath.plus_file("")
+		var message = "The PNG already exists and will be overwritten: \n" if isStrip else "The folder of .PNGs already exists, they will be overwritten: \n"
+		message += replacedPath + "\n\n If overwriting the files here causes you data loss then Cancel and go backup the folder."
+		var userConfirmed = yield(oTabTileset.show_confirmation_dialog(message), "completed")
 		if userConfirmed == false:
 			oMessage.quick("Cancelled")
 			return
-	create_directories(uniqueDirectories)
-	create_images_from_dictionary(imageDictionary, sourceRgbImage)
-	save_images_to_disk(imageDictionary, packFolderPath)
-	setup_reloader(packFolderName, packFolderPath, packContent, packFolderPath)
-
-
-func build_image_dictionary(flContent: String) -> Dictionary:
-	var imageDictionary = {}
-	var rawLines = Array(flContent.split('\n', false))
-	if rawLines.empty() == false: rawLines.pop_front()
-	for iIdx in rawLines.size():
-		var lineDataArray = Array(rawLines[iIdx].split('\t', false))
-		var localPath = lineDataArray[0]
-		var posX = int(lineDataArray[1]) + int(lineDataArray[3])
-		var posY = int(lineDataArray[2]) + int(lineDataArray[4])
-		if imageDictionary.has(localPath) == false:
-			imageDictionary[localPath] = {"max_x":0, "max_y":0, "image_obj":null, "tiles_info":[]}
-		imageDictionary[localPath]["max_x"] = max(posX, imageDictionary[localPath]["max_x"])
-		imageDictionary[localPath]["max_y"] = max(posY, imageDictionary[localPath]["max_y"])
-		imageDictionary[localPath]["tiles_info"].append({"line_data": lineDataArray, "source_flat_index": iIdx})
-	for localPath in imageDictionary:
-		var imgData = imageDictionary[localPath]
-		var createNewImage = Image.new()
-		createNewImage.create(imgData["max_x"], imgData["max_y"], false, Image.FORMAT_RGB8)
-		imgData["image_obj"] = createNewImage
-	return imageDictionary
-
-
-func create_images_from_dictionary(imageDictionary: Dictionary, sourceRgbImage: Image):
 	sourceRgbImage.lock()
 	for localPath in imageDictionary:
-		var imgData = imageDictionary[localPath]
-		var currentPngImage:Image = imgData["image_obj"]
-		currentPngImage.lock()
-		for tileEntry in imgData["tiles_info"]:
-			var lineDataArray = tileEntry["line_data"]
-			var sourceTileFlatIndex = tileEntry["source_flat_index"]
-			var sourceTileY = sourceTileFlatIndex / 8
-			var sourceTileX = sourceTileFlatIndex % 8
-			var destXInPng = int(lineDataArray[1])
-			var destYInPng = int(lineDataArray[2])
-			currentPngImage.blit_rect(sourceRgbImage, Rect2(sourceTileX*32, sourceTileY*32, 32,32), Vector2(destXInPng, destYInPng))
-		currentPngImage.unlock()
+		var data = imageDictionary[localPath]
+		directory.make_dir_recursive(packFolderPath.plus_file(localPath).get_base_dir())
+		data.image.create(data.max_x, data.max_y, false, Image.FORMAT_RGB8)
+		data.image.lock()
+		for tile in data.tiles:
+			var line = tile.line
+			data.image.blit_rect(sourceRgbImage, Rect2((tile.index % 8) * 32, (tile.index / 8) * 32, 32, 32), Vector2(int(line[1]), int(line[2])))
+		data.image.unlock()
+		if data.image.save_png(packFolderPath.plus_file(localPath)) != OK:
+			oMessage.big("Error", "Failed to save PNG: " + localPath)
+			sourceRgbImage.unlock()
+			return
 	sourceRgbImage.unlock()
-
-
-func get_unique_directories(imageDictionary: Dictionary, outputDir: String) -> Dictionary:
-	var uniqueDirectories = {}
-	for localPath in imageDictionary:
-		var fullDirPath = outputDir.plus_file(localPath).get_base_dir()
-		uniqueDirectories[fullDirPath] = true
-	return uniqueDirectories
-
-
-func check_directories_exist(uniqueDirectories: Dictionary) -> bool:
-	var dir = Directory.new()
-	for packFolderPath in uniqueDirectories:
-		if dir.dir_exists(packFolderPath): return true
-	return false
-
-
-func create_directories(uniqueDirectories: Dictionary):
-	var dir = Directory.new()
-	for packFolderPath in uniqueDirectories:
-		dir.make_dir_recursive(packFolderPath)
-
-
-func save_images_to_disk(imageDictionary: Dictionary, outputDir: String):
-	for localPath in imageDictionary:
-		var savePath = outputDir.plus_file(localPath)
-		var imageToSave: Image = imageDictionary[localPath]["image_obj"]
-		if imageToSave != null and imageToSave is Image:
-			var errCode = imageToSave.save_png(savePath)
-			if errCode != OK:
-				printerr("Failed to save PNG: ", savePath, " Error code: ", errCode)
-				oMessage.big("Error", "Failed to save PNG: " + localPath)
-		else:
-			printerr("Cannot save PNG, image_obj is null or not an Image for path: ", localPath, ". Object is: ", imageToSave)
+	oTabTileset.register_editing_session(oTabTileset.currentType, oTabTileset.tilesetNumber, "strip" if isStrip else "pack", packFolderPath, packContent)
+	open_texture_folder(packFolderPath)
 
 
 func get_output_directory() -> String:
-	var outputDir = OS.get_user_data_dir().plus_file("UnearthEditorTextureCache") if OS.has_feature('editor') else Settings.unearth_path.plus_file("textures")
-	return outputDir
+	return Settings.unearth_path.plus_file("textures") if Settings.unearth_path != "" else ProjectSettings.globalize_path("res://textures")
 
 
-func setup_reloader(packFolderName: String, packFolderPath: String, packContent: String, openFolderPath: String = ""):
-	packFolder = packFolderPath
-	openFolder = openFolderPath if openFolderPath != "" else packFolderPath
-	oTextureEditingWindow.update_reloader_path_label(packFolderPath)
-	oTextureEditingWindow.enable_export_button()
-	oTeditLiveReloadPNG.initialize_pack(packContent, packFolderPath)
-
-
-func open_texture_folder():
-	if packFolder == "" and openFolder == "":
-		oMessage.big("Error", "No texture pack loaded. Please load a tileset first.")
+func open_texture_folder(folderPath: String):
+	if Directory.new().dir_exists(folderPath) == false:
+		oMessage.big("Error", "Editing folder no longer exists:\n" + folderPath)
 		return
-	var folderToOpen = openFolder if openFolder != "" else packFolder
-	if not Directory.new().dir_exists(folderToOpen):
-		oMessage.big("Error", "Texture folder does not exist: " + folderToOpen)
-		return
-	var finalPath = folderToOpen.replace("/", "\\") if OS.get_name() == "Windows" else folderToOpen
-	OS.shell_open(finalPath)
+	if OS.shell_open(ProjectSettings.globalize_path(folderPath)) != OK:
+		oMessage.big("Error", "Could not open texture folder: " + folderPath)

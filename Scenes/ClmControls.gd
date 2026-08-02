@@ -465,6 +465,7 @@ func _on_CheckboxShowAll_toggled(checkboxValue):
 func adjust_ui_color_if_different():
 	
 	var column_index = int(oColumnIndexSpinBox.value)
+	adjust_spinbox_color(oColumnIndexSpinBox, nodeClm == Columnset and Columnset.is_column_different(column_index))
 	adjust_spinbox_color(oUtilizedSpinBox, is_property_different("utilized", column_index))
 	adjust_spinbox_color(oOrientationSpinBox, is_property_different("orientation", column_index))
 	adjust_spinbox_color(oSolidMaskSpinBox, is_property_different("solidMask", column_index))

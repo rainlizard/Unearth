@@ -34,6 +34,10 @@ var viewObject = 0 setget set_object
 var column_count = 2048
 var previousObject = 0
 var disable_camera_animation = false
+var object_spacing = 2.0
+
+func _ready():
+	object_spacing = {DK_SLABSET: 3.1, DK_COLUMN: 1.1, DK_CUBE: 1.1}.get(displayingType, 2.0)
 
 func initialize():
 	if is_instance_valid(oDataClm) == false: return
@@ -47,15 +51,17 @@ func initialize():
 	if displayingType == DK_COLUMN: column_count = Columnset.column_count
 	if displayingType == DK_CUBE: column_count = Cube.CUBES_COUNT + 1
 
-	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN or displayingType == DK_CUBE:
-		do_all()
-	if displayingType == DK_SLABSET:
+	if displayingType != MAP_CUSTOM_SLAB:
 		do_all()
 
 	if displayingType == MAP_CUSTOM_SLAB:
 		oVoxelCamera.size = 10
+	if displayingType == DK_SLABSET:
+		oVoxelCamera.size = 30
+	if displayingType == DK_COLUMN:
+		oVoxelCamera.size = 25
 	if displayingType == DK_CUBE:
-		oVoxelCamera.size = 6
+		oVoxelCamera.size = 20
 		oVoxelCameraPivotPoint.translation.y = 0.5
 	else:
 		oVoxelCameraPivotPoint.translation.y = 4
@@ -66,12 +72,7 @@ func initialize():
 	
 	print('Columns generated in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 	
-	if displayingType == DK_SLABSET or displayingType == MAP_CUSTOM_SLAB:
-		oHighlightBase.mesh.size = Vector2(4,4)
-	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
-		oHighlightBase.mesh.size = Vector2(2,2)
-	if displayingType == DK_CUBE:
-		oHighlightBase.mesh.size = Vector2(2,2)
+	oHighlightBase.mesh.size = Vector2(4,4) if displayingType == DK_SLABSET or displayingType == MAP_CUSTOM_SLAB else Vector2(2,2)
 
 
 
@@ -134,12 +135,8 @@ func set_object(setVal):
 	# Speed up camera movement speed if you change the object value by a lot, to get there quicker
 	if disable_camera_animation:
 		# Set camera position directly without animation
-		if displayingType == DK_SLABSET:
-			oVoxelCameraPivotPoint.translation.z = viewObject*4
-			oVoxelCameraPivotPoint.translation.x = viewObject*4
-		else:
-			oVoxelCameraPivotPoint.translation.z = viewObject*2
-			oVoxelCameraPivotPoint.translation.x = viewObject*2
+		oVoxelCameraPivotPoint.translation.z = viewObject * object_spacing
+		oVoxelCameraPivotPoint.translation.x = viewObject * object_spacing
 	else:
 		oVoxelCamera.cameraShiftSpeed = clamp(0.08 * abs(previousObject-viewObject), 0.08, 0.6)
 	
@@ -148,9 +145,6 @@ func set_object(setVal):
 	if displayingType == DK_SLABSET:
 		oVariationNumberSpinBox.value = setVal
 		oSlabsetWindow.variation_changed(setVal)
-	
-	if displayingType == MAP_CUSTOM_SLAB:
-		pass
 	
 	if displayingType == MAP_COLUMN:
 		oClmEditorControls.oColumnIndexSpinBox.value = setVal
@@ -167,15 +161,8 @@ func set_object(setVal):
 	oSelectedPivotPoint.rotation_degrees.y = 0
 	oHighlightBase.visible = true
 	
-	if displayingType == DK_SLABSET:
-		oHighlightBase.translation.z = viewObject*4
-		oHighlightBase.translation.x = viewObject*4
-	elif displayingType == DK_CUBE:
-		oHighlightBase.translation.z = viewObject*2
-		oHighlightBase.translation.x = viewObject*2
-	else:
-		oHighlightBase.translation.z = viewObject*2
-		oHighlightBase.translation.x = viewObject*2
+	oHighlightBase.translation.z = viewObject * object_spacing
+	oHighlightBase.translation.x = viewObject * object_spacing
 
 
 func do_all():
@@ -183,26 +170,14 @@ func do_all():
 	
 	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN:
 		var surrClmIndex = [-1,-1,-1,-1]
-		
-		match displayingType:
-			MAP_COLUMN:
-				for clmIndex in column_count:
-					var x = clmIndex*2
-					var y = clmIndex*2
-					oVoxelGen.column_gen(genArray, x, y, clmIndex, surrClmIndex, true, oDataClm)
-			DK_COLUMN:
-				for clmIndex in column_count:
-					var x = clmIndex*2
-					var y = clmIndex*2
-					oVoxelGen.column_gen(genArray, x, y, clmIndex, surrClmIndex, true, Columnset)
-		
-		oAllVoxelObjects.mesh = oVoxelGen.complete_mesh(genArray)
-		oAllVoxelObjects.translation.z = -0.5
-		oAllVoxelObjects.translation.x = -0.5
-
-	if displayingType == DK_CUBE:
+		var columnData = oDataClm if displayingType == MAP_COLUMN else Columnset
+		for clmIndex in column_count:
+			var position = clmIndex * object_spacing
+			oVoxelGen.column_gen(genArray, position, position, clmIndex, surrClmIndex, true, columnData)
+	elif displayingType == DK_CUBE:
 		for cubeID in column_count:
-			oVoxelGen.cube_gen(genArray, cubeID * 2, cubeID * 2, cubeID)
+			oVoxelGen.cube_gen(genArray, cubeID * object_spacing, cubeID * object_spacing, cubeID)
+	if displayingType == MAP_COLUMN or displayingType == DK_COLUMN or displayingType == DK_CUBE:
 		oAllVoxelObjects.mesh = oVoxelGen.complete_mesh(genArray)
 		oAllVoxelObjects.translation.z = -0.5
 		oAllVoxelObjects.translation.x = -0.5
@@ -210,7 +185,6 @@ func do_all():
 	if displayingType == DK_SLABSET: # This is not for fake slab, this is for slabset slabs
 		var CODETIME_START = OS.get_ticks_msec()
 		var slabID = oSlabsetIDSpinBox.value
-		var separation = 0
 		var variationStart = slabID * 28
 		for variation in 28:
 			var surrClmIndex = [-1,-1,-1,-1]
@@ -218,14 +192,12 @@ func do_all():
 				for xSubtile in 3:
 					var subtile = (ySubtile*3) + xSubtile
 					
-					var x = (variation*3) + xSubtile + separation
-					var z = (variation*3) + ySubtile + separation
+					var x = (variation * object_spacing) + xSubtile
+					var z = (variation * object_spacing) + ySubtile
 					
 					var clmIndex = Slabset.fetch_columnset_index(variationStart+variation, subtile)
 					
 					oVoxelGen.column_gen(genArray, x-1.5, z-1.5, clmIndex, surrClmIndex, true, Columnset)
-			
-			separation += 1
 		
 		oAllVoxelObjects.mesh = oVoxelGen.complete_mesh(genArray)
 		print('Generated slabset voxels in: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
@@ -258,14 +230,14 @@ func do_one():
 			DK_COLUMN: oVoxelGen.column_gen(genArray, 0, 0, viewObject, surrClmIndex, true, Columnset)
 		
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
-		oSelectedPivotPoint.translation.z = (viewObject * 2)
-		oSelectedPivotPoint.translation.x = (viewObject * 2)
+		oSelectedPivotPoint.translation.z = viewObject * object_spacing
+		oSelectedPivotPoint.translation.x = viewObject * object_spacing
 	
 	if displayingType == DK_CUBE:
 		oVoxelGen.cube_gen(genArray, 0, 0, viewObject)
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
-		oSelectedPivotPoint.translation.z = (viewObject * 2)
-		oSelectedPivotPoint.translation.x = (viewObject * 2)
+		oSelectedPivotPoint.translation.z = viewObject * object_spacing
+		oSelectedPivotPoint.translation.x = viewObject * object_spacing
 		oSelectedVoxelObject.translation.z = -0.5
 		oSelectedVoxelObject.translation.x = -0.5
 
@@ -286,8 +258,8 @@ func do_one():
 				oVoxelGen.column_gen(genArray, x-1.5, y-1.5, clmIndex, surrClmIndex, true, Columnset)
 		
 		oSelectedVoxelObject.mesh = oVoxelGen.complete_mesh(genArray)
-		oSelectedPivotPoint.translation.z = (viewObject * 4)
-		oSelectedPivotPoint.translation.x = (viewObject * 4)
+		oSelectedPivotPoint.translation.z = viewObject * object_spacing
+		oSelectedPivotPoint.translation.x = viewObject * object_spacing
 		oSelectedVoxelObject.translation.z = 0
 		oSelectedVoxelObject.translation.x = 0
 

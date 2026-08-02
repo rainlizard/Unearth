@@ -18,6 +18,13 @@ onready var oCubeSouthSpinBox = Nodelist.list["oCubeSouthSpinBox"]
 onready var oCubeWestSpinBox = Nodelist.list["oCubeWestSpinBox"]
 onready var oCubeTopSpinBox = Nodelist.list["oCubeTopSpinBox"]
 onready var oCubeBottomSpinBox = Nodelist.list["oCubeBottomSpinBox"]
+onready var oCubeNorthTextureShortcut = Nodelist.list["oCubeNorthTextureShortcut"]
+onready var oCubeEastTextureShortcut = Nodelist.list["oCubeEastTextureShortcut"]
+onready var oCubeSouthTextureShortcut = Nodelist.list["oCubeSouthTextureShortcut"]
+onready var oCubeWestTextureShortcut = Nodelist.list["oCubeWestTextureShortcut"]
+onready var oCubeTopTextureShortcut = Nodelist.list["oCubeTopTextureShortcut"]
+onready var oCubeBottomTextureShortcut = Nodelist.list["oCubeBottomTextureShortcut"]
+onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oCubeCopyButton = Nodelist.list["oCubeCopyButton"]
 onready var oCubePasteButton = Nodelist.list["oCubePasteButton"]
 onready var oCubeFirstUnusedButton = Nodelist.list["oCubeFirstUnusedButton"]
@@ -25,6 +32,7 @@ onready var oCubeRevertButton = Nodelist.list["oCubeRevertButton"]
 onready var oCubeRevertAllButton = Nodelist.list["oCubeRevertAllButton"]
 onready var oCubeHelpButton = Nodelist.list["oCubeHelpButton"]
 onready var oCurrentlyOpenCubes = Nodelist.list["oCurrentlyOpenCubes"]
+onready var oCurrentlyOpenCubesPanel = Nodelist.list["oCurrentlyOpenCubesPanel"]
 onready var oModifiedCubesLabel = Nodelist.list["oModifiedCubesLabel"]
 onready var oModifiedCubesPanelContainer = Nodelist.list["oModifiedCubesPanelContainer"]
 
@@ -35,6 +43,14 @@ onready var textureSpinBoxArray = [
 	oCubeWestSpinBox,
 	oCubeTopSpinBox,
 	oCubeBottomSpinBox,
+]
+onready var textureShortcutArray = [
+	oCubeNorthTextureShortcut,
+	oCubeEastTextureShortcut,
+	oCubeSouthTextureShortcut,
+	oCubeWestTextureShortcut,
+	oCubeTopTextureShortcut,
+	oCubeBottomTextureShortcut,
 ]
 
 var clipboard = {
@@ -65,6 +81,7 @@ func _ready():
 		textureSpinBoxArray[i].connect("value_changed", self, "_on_texture_value_changed", [i])
 		textureSpinBoxArray[i].connect("mouse_entered", self, "_on_texture_mouse_entered", [i])
 		textureSpinBoxArray[i].connect("mouse_exited", self, "_on_texture_mouse_exited")
+		textureShortcutArray[i].connect("pressed", self, "_on_texture_shortcut_pressed", [i])
 	establish_maximum_cube_field_values()
 
 
@@ -145,6 +162,10 @@ func _on_texture_mouse_entered(side):
 func _on_texture_mouse_exited():
 	isMouseOverTextureSide = -1
 	oCustomTooltip.set_text("")
+
+
+func _on_texture_shortcut_pressed(side):
+	oSlabsetWindow.open_texture(int(textureSpinBoxArray[side].value))
 
 
 func set_cube_cfg_value(cubeID, key, value):
@@ -263,14 +284,14 @@ func update_cube_revert_button_state():
 	elif file_path != "":
 		var filename = file_path.get_file()
 		if filename.to_lower() == "cubes.cfg":
-			final_text = "Loaded: /" + file_path.get_base_dir().get_file() + "/" + filename
+			final_text = "/" + file_path.get_base_dir().get_file() + "/" + filename
 		else:
-			final_text = "Loaded: " + filename
+			final_text = filename
 		tooltip_text = file_path
 		if Cube.modified_since_load and oCurrentMap.path != "" and filename.to_lower() == "cubes.cfg":
 			var local_file_path = oCurrentMap.path.get_basename() + ".cubes.cfg"
 			final_text = "Save target: " + local_file_path.get_file()
-			tooltip_text = "Loaded: " + file_path + "\nSave target: " + local_file_path
+			tooltip_text = file_path + "\nSave target: " + local_file_path
 	else:
 		if oCurrentMap.path == "":
 			final_text = "Save map first"
@@ -281,6 +302,7 @@ func update_cube_revert_button_state():
 			tooltip_text = local_file_path
 	oCurrentlyOpenCubes.text = final_text
 	oCurrentlyOpenCubes.hint_tooltip = tooltip_text
+	oCurrentlyOpenCubesPanel.modulate = Color(1.4,1.4,1.7) if file_path != "" else Color(1,1,1)
 	Utils.set_id_links_label(modified_cube_ids, oModifiedCubesLabel, oModifiedCubesPanelContainer, "No modified cubes")
 
 
@@ -290,6 +312,7 @@ func _on_ModifiedCubesLabel_meta_clicked(meta):
 
 func adjust_ui_color_if_different():
 	var cubeID = int(oCubeIndexSpinBox.value)
+	oCubeIndexSpinBox.modulate = Color(1.4,1.4,1.7) if Cube.is_cube_export_different(cubeID) else Color(1,1,1)
 	var default_name = Cube.default_names[cubeID] if cubeID < Cube.default_names.size() else ""
 	oCubeNameLineEdit.modulate = Color(1.4,1.4,1.7) if Cube.names[cubeID] != default_name else Color(1,1,1)
 	for i in textureSpinBoxArray.size():
@@ -303,5 +326,6 @@ func _on_CubeHelpButton_pressed():
 	var helptxt = ""
 	helptxt += "cubes.cfg controls the six texture IDs used by each cube face.\n\n"
 	helptxt += "Cube changes are saved as a local map override when you save the map.\n\n"
-	helptxt += "Texture order is North, East, South, West, Top, Bottom."
+	helptxt += "Texture order is North, East, South, West, Top, Bottom.\n\n"
+	helptxt += "The shortcut beside each face opens and selects that texture in the Tileset tab."
 	oMessage.big("Help", helptxt)
