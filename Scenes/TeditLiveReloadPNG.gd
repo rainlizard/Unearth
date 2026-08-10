@@ -71,7 +71,7 @@ func execute():
 		return
 	if lastError == "Editing folder no longer exists":
 		lastError = ""
-		oTabTileset.set_reload_status(packType, packNumber, "Waiting for changes...")
+		oTabTileset.set_reload_status(packType, packNumber, oTabTileset.WAITING_STATUS)
 	lastError = ""
 	var partsModifiedIndices = []
 	var currentHashes = {}

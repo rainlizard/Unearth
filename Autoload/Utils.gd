@@ -5,6 +5,7 @@ func popup_centered(node):
 	node.popup_centered()
 	
 	# Switching visibility off then on fixes a "popup" bug which interferes with how the mouse is detected over UI.
+	# This emits popup_hide, so do not use that signal to detect cancellation with this helper.
 	node.visible = false
 	node.visible = true
 

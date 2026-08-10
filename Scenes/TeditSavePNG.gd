@@ -61,6 +61,7 @@ func handle_tmap_export(sourceRgbImage: Image, folderNameString: String, stripFi
 			return
 	sourceRgbImage.unlock()
 	oTabTileset.register_editing_session(oTabTileset.currentType, oTabTileset.tilesetNumber, "strip" if isStrip else "pack", packFolderPath, packContent)
+	yield(get_tree(), "idle_frame")
 	open_texture_folder(packFolderPath)
 
 

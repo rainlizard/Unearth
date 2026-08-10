@@ -21,7 +21,6 @@ onready var oTilesetZoom = Nodelist.list["oTilesetZoom"]
 onready var oTilesetLoadDialog = Nodelist.list["oTilesetLoadDialog"]
 onready var oTilesetSaveDialog = Nodelist.list["oTilesetSaveDialog"]
 onready var oTilesetLiveReloading = Nodelist.list["oTilesetLiveReloading"]
-onready var oTilesetOpenFolderButton = Nodelist.list["oTilesetOpenFolderButton"]
 onready var oTilesetExternalPathLabel = Nodelist.list["oTilesetExternalPathLabel"]
 onready var oTilesetExternalConfirmDialog = Nodelist.list["oTilesetExternalConfirmDialog"]
 onready var oTilesetEditingStatusLabel = Nodelist.list["oTilesetEditingStatusLabel"]
@@ -36,6 +35,7 @@ const TYPES = ["tmapa", "tmapb"]
 const IMAGE_SIZE = Vector2(256, 2176)
 const TILE_SIZE = 32
 const MAX_TILESET_ID = 255
+const WAITING_STATUS = "Waiting for changes..."
 
 var images = {"tmapa": null, "tmapb": null}
 var inheritedImages = {"tmapa": null, "tmapb": null}
@@ -465,12 +465,10 @@ func _on_TilesetLiveReloading_toggled(buttonPressed: bool):
 	_update_editing_session_ui()
 
 
-func _on_TilesetOpenFolderButton_pressed():
-	var hasSession = _is_current_session()
-	var folderPath = editingSession.path if hasSession else oTeditSavePNG.get_output_directory()
-	if hasSession == false:
-		Directory.new().make_dir_recursive(folderPath)
-	oTeditSavePNG.open_texture_folder(folderPath)
+func _on_TilesetExternalPathLabel_meta_clicked(meta):
+	if _is_current_session() == false:
+		Directory.new().make_dir_recursive(str(meta))
+	oTeditSavePNG.open_texture_folder(str(meta))
 
 
 func _on_TilesetHelpButton_pressed():
@@ -583,7 +581,7 @@ func register_editing_session(type: String, number: int, format: String, path: S
 		"path": path,
 		"content": content,
 		"liveReload": true,
-		"status": "Waiting for changes..."
+		"status": ""
 	}
 	if tilesetNumber != number or currentType != type:
 		load_tileset(number)
@@ -594,6 +592,9 @@ func register_editing_session(type: String, number: int, format: String, path: S
 
 func set_reload_status(type: String, number: int, status: String):
 	if editingSession.get("type") == type and editingSession.get("number") == number:
+		if status == WAITING_STATUS:
+			oMessage.quick(status)
+			status = ""
 		editingSession.status = status
 		_update_editing_session_ui()
 
@@ -602,8 +603,8 @@ func show_confirmation_dialog(message: String) -> bool:
 	oTilesetExternalConfirmDialog.dialog_text = message
 	externalDialogConfirmed = false
 	Utils.popup_centered(oTilesetExternalConfirmDialog)
-	yield(oTilesetExternalConfirmDialog, "popup_hide")
-	yield(get_tree(), "idle_frame")
+	while oTilesetExternalConfirmDialog.visible:
+		yield(get_tree(), "idle_frame")
 	return externalDialogConfirmed
 
 
@@ -644,7 +645,7 @@ func _switch_tileset_view(number: int, type: String):
 
 
 func _activate_session():
-	editingSession.status = "Waiting for changes..."
+	set_reload_status(editingSession.type, editingSession.number, WAITING_STATUS)
 	oTeditLiveReloadPNG.initialize_pack(editingSession.content, editingSession.path, editingSession.type, editingSession.number)
 	oTeditLiveReloadPNG.set_enabled(editingSession.liveReload)
 
@@ -656,10 +657,16 @@ func _update_editing_session_ui():
 	oTilesetLiveReloading.pressed = session.liveReload if hasSession else true
 	oTilesetLiveReloading.disabled = hasSession == false
 	oTilesetLiveReloading.set_block_signals(false)
-	oTilesetOpenFolderButton.disabled = false
-	oTilesetExternalPathLabel.text = session.path if hasSession else "None"
-	oTilesetExternalPathLabel.hint_tooltip = session.path if hasSession else ""
-	oTilesetEditingStatusLabel.text = currentType.to_upper() + " - " + session.format.capitalize() + " - " + ("Live reload on" if session.liveReload else "Live reload off") + "\n" + session.status if hasSession else "Choose an editing format."
+	var folderPath = session.path if hasSession else oTeditSavePNG.get_output_directory()
+	oTilesetExternalPathLabel.clear()
+	oTilesetExternalPathLabel.push_meta(folderPath)
+	oTilesetExternalPathLabel.push_underline()
+	oTilesetExternalPathLabel.add_text(session.path if hasSession else "Open editing folder")
+	oTilesetExternalPathLabel.pop()
+	oTilesetExternalPathLabel.pop()
+	oTilesetExternalPathLabel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	oTilesetExternalPathLabel.hint_tooltip = folderPath
+	oTilesetEditingStatusLabel.text = currentType.to_upper() + " - " + session.format.capitalize() + " - " + ("Live reload on" if session.liveReload else "Live reload off") + ("\n" + session.status if session.status != "" else "") if hasSession else "Choose an editing format."
 
 
 func _mark_modified(type: String):

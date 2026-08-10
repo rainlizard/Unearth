@@ -79,20 +79,24 @@ margin_right = 220.0
 margin_bottom = 183.0
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="GridContainer" parent="HBoxContainer/Sidebar/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Sidebar/PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 213.0
 margin_bottom = 73.0
+
+[node name="TilesetIDRow" type="GridContainer" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
+margin_right = 206.0
+margin_bottom = 24.0
 columns = 2
 
-[node name="TilesetLabel" type="Label" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
+[node name="TilesetLabel" type="Label" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer/TilesetIDRow"]
 margin_top = 5.0
 margin_right = 62.0
 margin_bottom = 19.0
 text = "Tileset ID"
 
-[node name="TilesetIDSpinBox" type="SpinBox" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
+[node name="TilesetIDSpinBox" type="SpinBox" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer/TilesetIDRow"]
 margin_left = 132.0
 margin_right = 206.0
 margin_bottom = 24.0
@@ -100,26 +104,14 @@ size_flags_horizontal = 10
 max_value = 31.0
 rounded = true
 
-[node name="Spacing" type="Control" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
-margin_top = 28.0
-margin_right = 62.0
-margin_bottom = 42.0
-
 [node name="TilesetIDNameLabel" type="Label" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
-margin_left = 66.0
 margin_top = 28.0
 margin_right = 206.0
 margin_bottom = 42.0
 text = "Standard"
 align = 2
 
-[node name="Spacing2" type="Control" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
-margin_top = 46.0
-margin_right = 62.0
-margin_bottom = 66.0
-
 [node name="TilesetRevertTilesetButton" type="Button" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]
-margin_left = 66.0
 margin_top = 46.0
 margin_right = 206.0
 margin_bottom = 66.0
@@ -215,7 +207,7 @@ scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer"]
 margin_right = 206.0
-margin_bottom = 126.0
+margin_bottom = 102.0
 size_flags_horizontal = 3
 
 [node name="EditRow" type="GridContainer" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
@@ -251,27 +243,20 @@ disabled = true
 pressed = true
 text = "Live reloading"
 
-[node name="TilesetOpenFolderButton" type="Button" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
+[node name="CurrentFolderLabel" type="Label" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
 margin_top = 70.0
 margin_right = 206.0
-margin_bottom = 90.0
-text = "Open editing folder"
-
-[node name="CurrentFolderLabel" type="Label" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
-margin_top = 94.0
-margin_right = 206.0
-margin_bottom = 108.0
+margin_bottom = 84.0
 text = "Editing folder:"
 
-[node name="TilesetExternalPathScroll" type="ScrollContainer" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
-margin_top = 112.0
+[node name="TilesetExternalPathLabel" type="RichTextLabel" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer"]
+margin_top = 88.0
 margin_right = 206.0
-margin_bottom = 126.0
-scroll_vertical_enabled = false
-
-[node name="TilesetExternalPathLabel" type="Label" parent="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/TilesetExternalPathScroll"]
-margin_right = 34.0
-margin_bottom = 14.0
+margin_bottom = 102.0
+rect_min_size = Vector2( 0, 14 )
+mouse_filter = 1
+bbcode_enabled = true
+fit_content_height = true
 text = "None"
 
 [node name="BottomPanel" type="PanelContainer" parent="HBoxContainer/Sidebar"]
@@ -353,6 +338,7 @@ margin_right = 400.0
 margin_bottom = 140.0
 rect_min_size = Vector2( 400, 140 )
 window_title = "Confirm file replacement"
+popup_exclusive = true
 
 [node name="TilesetRevertConfirmDialog" type="ConfirmationDialog" parent="."]
 margin_right = 400.0
@@ -371,7 +357,7 @@ script = ExtResource( 4 )
 [connection signal="mouse_exited" from="HBoxContainer/TilesetPanel/TilesetScrollContainer/TilesetCenterContainer/TilesetStrip" to="HBoxContainer/TilesetPanel/TilesetScrollContainer/TilesetCenterContainer/TilesetStrip" method="_on_mouse_exited"]
 [connection signal="tile_selected" from="HBoxContainer/TilesetPanel/TilesetScrollContainer/TilesetCenterContainer/TilesetStrip" to="." method="_on_TilesetStrip_tile_selected"]
 [connection signal="meta_clicked" from="HBoxContainer/Sidebar/CustomFilesPanel/CustomFilesLabel" to="." method="_on_CustomFilesLabel_meta_clicked"]
-[connection signal="value_changed" from="HBoxContainer/Sidebar/PanelContainer/VBoxContainer/TilesetIDSpinBox" to="." method="_on_TilesetIDSpinBox_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/Sidebar/PanelContainer/VBoxContainer/TilesetIDRow/TilesetIDSpinBox" to="." method="_on_TilesetIDSpinBox_value_changed"]
 [connection signal="pressed" from="HBoxContainer/Sidebar/PanelContainer/VBoxContainer/TilesetRevertTilesetButton" to="." method="_on_TilesetRevertTilesetButton_pressed"]
 [connection signal="item_selected" from="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/TextureMapRow/TilesetTypeList" to="." method="_on_TilesetTypeList_item_selected"]
 [connection signal="pressed" from="HBoxContainer/Sidebar/PanelContainer2/VBoxContainer/ImportExportRow/TilesetLoadButton" to="." method="_on_TilesetLoadButton_pressed"]
@@ -380,7 +366,7 @@ script = ExtResource( 4 )
 [connection signal="pressed" from="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/EditRow/TilesetStripButton" to="." method="_on_TilesetStripButton_pressed"]
 [connection signal="pressed" from="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/EditRow/TilesetPackButton" to="." method="_on_TilesetPackButton_pressed"]
 [connection signal="toggled" from="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/TilesetLiveReloading" to="." method="_on_TilesetLiveReloading_toggled"]
-[connection signal="pressed" from="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/TilesetOpenFolderButton" to="." method="_on_TilesetOpenFolderButton_pressed"]
+[connection signal="meta_clicked" from="HBoxContainer/Sidebar/TilesetControls/ScrollContainer/VBoxContainer/TilesetExternalPathLabel" to="." method="_on_TilesetExternalPathLabel_meta_clicked"]
 [connection signal="value_changed" from="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/ZoomRow/TilesetZoom" to="." method="_on_TilesetZoom_value_changed"]
 [connection signal="pressed" from="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/RevertRow/TilesetRevertAllButton" to="." method="_on_TilesetRevertAllButton_pressed"]
 [connection signal="pressed" from="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/RevertRow/TilesetHelpButton" to="." method="_on_TilesetHelpButton_pressed"]
