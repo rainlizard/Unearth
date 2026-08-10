@@ -22,8 +22,9 @@ onready var oInstances = Nodelist.list["oInstances"]
 onready var oGuidelines = Nodelist.list["oGuidelines"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 
-func _on_ResizeCurrentMapSizeButton_pressed():
-	Utils.popup_centered(self)
+func _on_MapSizePanel_gui_input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
+		Utils.popup_centered(self)
 
 func _on_ResizeCurrentMapSize_about_to_show():
 	oResizeTopSpinBox.value = 0
