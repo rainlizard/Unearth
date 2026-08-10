@@ -30,11 +30,11 @@ onready var oTilesetRevertAllButton = Nodelist.list["oTilesetRevertAllButton"]
 onready var oTilesetRevertConfirmDialog = Nodelist.list["oTilesetRevertConfirmDialog"]
 onready var oTeditSavePNG = Nodelist.list["oTeditSavePNG"]
 onready var oTeditLiveReloadPNG = Nodelist.list["oTeditLiveReloadPNG"]
+onready var oSlabStyle = Nodelist.list["oSlabStyle"]
 
 const TYPES = ["tmapa", "tmapb"]
 const IMAGE_SIZE = Vector2(256, 2176)
 const TILE_SIZE = 32
-const MAX_TILESET_ID = 255
 const WAITING_STATUS = "Waiting for changes..."
 
 var images = {"tmapa": null, "tmapb": null}
@@ -50,11 +50,10 @@ var externalDialogConfirmed = false
 var editingSession = {}
 var revertScope = ""
 var tilesetPathsToDelete = []
-var previewActive = false
 
 
 func _ready():
-	oTilesetIDSpinBox.max_value = MAX_TILESET_ID
+	oTilesetIDSpinBox.max_value = oTMapLoader.TMAP_COUNT - 1
 	for i in TYPES.size():
 		oTilesetTypeList.set_item_text(i, TYPES[i].to_upper())
 	oTilesetStrip.set_zoom(1)
@@ -67,9 +66,6 @@ func _on_TabTileset_visibility_changed():
 			load_tileset(max(tilesetNumber, 0))
 		else:
 			_display_image()
-	elif previewActive:
-		previewActive = false
-		oTMapLoader.apply_texture_pack()
 
 
 func load_tileset(number: int):
@@ -91,14 +87,10 @@ func load_tileset(number: int):
 		if images[type] == null:
 			images[type] = _create_blank_image()
 		differentFromInherited[type] = _is_different_from_inherited(type)
-		oTMapLoader.cache_loaded_image(images[type], tilesetNumber, type)
 	_display_image()
 
 
 func _display_image():
-	if is_visible_in_tree():
-		previewActive = true
-		oTMapLoader.apply_texture_pack(tilesetNumber)
 	oTilesetIDSpinBox.set_block_signals(true)
 	oTilesetIDSpinBox.value = tilesetNumber
 	oTilesetIDSpinBox.set_block_signals(false)
@@ -291,7 +283,10 @@ func _on_TilesetLoadDialog_file_selected(path: String):
 
 
 func _update_cache(type: String = currentType):
-	oTMapLoader.cache_loaded_image(images[type], tilesetNumber, type)
+	var available = inheritedImages[type] != null or differentFromInherited[type]
+	oTMapLoader.set_cached_image(images[type] if available else null, tilesetNumber, type)
+	oSlabStyle.update_style_button(tilesetNumber)
+	oTMapLoader.apply_texture_pack()
 
 
 func _on_TilesetSaveButton_pressed():
@@ -400,7 +395,7 @@ func save_modified_tilesets(mapFilename: String, mapDirectory: String) -> bool:
 	if reloadTilesets:
 		oTMapLoader.start()
 		oTMapNames.update_texture_map_names()
-		oTMapLoader.apply_texture_pack(tilesetNumber if previewActive else -1)
+		oTMapLoader.apply_texture_pack()
 	if tilesetNumber >= 0 and (displayedTilesetWasSaved or displayedTilesetFileWasDeleted):
 		_display_image()
 	return true
@@ -472,13 +467,13 @@ func _on_TilesetExternalPathLabel_meta_clicked(meta):
 
 
 func _on_TilesetHelpButton_pressed():
-	var helpText = """TMAPA contains texture IDs 0-543. TMAPB contains IDs 1000-1543.
+	var helpText = """To see the effects of your edits, be sure to set your map's Tileset in Map Settings.
+
+TMAPA contains texture IDs 0-543. TMAPB contains IDs 1000-1543.
 Edit as strip creates one PNG. Edit as texture pack creates a folder of PNGs. Unearth watches the selected format and reloads changes into the 2D and 3D views.
 
 Import TMAP accepts DAT files and full 256x2176 PNG strips. Export TMAP writes a standalone DAT or PNG without changing the map's save state.
-Edited texture maps are saved with the map as mapname.tmapa###.dat and mapname.tmapb###.dat, where ### is the Tileset ID.
-
-The current Tileset ID is previewed across the entire map, including every SLX style. Switching tabs or closing this window restores the map's assigned Tilesets. Change the map's Tileset in Map Properties."""
+Edited texture maps are saved with the map as mapname.tmapa###.dat and mapname.tmapb###.dat, where ### is the Tileset ID."""
 	oMessage.big("Tileset", helpText)
 
 
@@ -520,13 +515,24 @@ func _on_TilesetRevertConfirmDialog_confirmed():
 
 
 func _revert_all_tilesets():
+	var revertedTilesets = {}
+	revertedTilesets[tilesetNumber] = true
 	for path in oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CURRENT_MAP]:
-		if oTMapLoader.parse_tmap_path_details(path) != null and tilesetPathsToDelete.has(path) == false:
+		var details = oTMapLoader.parse_tmap_path_details(path)
+		if details != null and tilesetPathsToDelete.has(path) == false:
 			tilesetPathsToDelete.append(path)
+			revertedTilesets[details.number] = true
 	modified = {"tmapa": false, "tmapb": false}
 	differentFromInherited = {"tmapa": false, "tmapb": false}
 	oEditor.mapHasBeenEdited = oEditor.SET_EDITED_WITHOUT_SAVING_STATE
 	load_tileset(tilesetNumber)
+	var inheritedPaths = _get_inherited_paths()
+	for number in revertedTilesets:
+		for type in TYPES:
+			var inheritedPath = inheritedPaths.get([number, type], "")
+			oTMapLoader.set_cached_image(oTMapLoader.create_l8_image(inheritedPath) if inheritedPath != "" else null, number, type)
+		oSlabStyle.update_style_button(number)
+	oTMapLoader.apply_texture_pack()
 	oMessage.quick("Reverted all tilesets")
 
 
@@ -683,6 +689,8 @@ func _mark_modified(type: String):
 
 
 func _can_modify_tileset(number: int) -> bool:
+	if number < 0 or number >= oTMapLoader.TMAP_COUNT:
+		return false
 	if modified.tmapa == false and modified.tmapb == false or tilesetNumber == number:
 		return true
 	oMessage.big("Unsaved Tileset", "Save or revert Tileset " + str(tilesetNumber) + " before using or editing Tileset " + str(number) + ".")

@@ -4015,7 +4015,7 @@ margin_left = 194.0
 margin_right = 268.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 74, 0 )
-max_value = 255.0
+max_value = 30.0
 rounded = true
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/PanelContainer2/GridContainer"]

@@ -18,9 +18,10 @@ onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 const TMAP_IMAGE_WIDTH: int = 256
 const TMAP_IMAGE_HEIGHT: int = 2176
 const TMAP_HALF_HEIGHT: int = TMAP_IMAGE_HEIGHT / 2
-const TMAP_COUNT: int = 256
+const TMAP_COUNT: int = 31
 const EMPTY_TEXTURE_INDEX: int = 0
 const TEXTURE_FLAGS = Texture.FLAG_REPEAT + Texture.FLAG_ANISOTROPIC_FILTER
+const TMAP_SHADER_PARAMS = ["tmap_A_top", "tmap_A_bottom", "tmap_B_top", "tmap_B_bottom"]
 
 enum {
 	LOADING_NOT_STARTED,
@@ -106,7 +107,7 @@ func start():
 			printerr("Failed to create L8 image from DAT: ", pathStr)
 			continue
 		
-		cache_loaded_image(l8Image, parsedDetails.number, parsedDetails.type)
+		set_cached_image(l8Image, parsedDetails.number, parsedDetails.type)
 		newRememberedPaths[pathStr] = tmapaDatDictionary[pathStr]
 	
 	rememberedTmapaPaths = newRememberedPaths
@@ -227,35 +228,31 @@ func create_l8_image_from_rgb(rgbImage: Image, referenceImage: Image = null) -> 
 	return l8Image
 
 
-func cache_loaded_image(l8Image: Image, tmapNumber: int, tmapType: String):
+func set_cached_image(l8Image: Image, tmapNumber: int, tmapType: String):
 	if tmapNumber < 0 or tmapNumber >= TMAP_COUNT: return
+	if tmapType != "tmapa" and tmapType != "tmapb": return
+	var offset = 0 if tmapType == "tmapa" else 2
+	if l8Image == null:
+		if tmapNumber >= cachedTextures.size(): return
+		cachedTextures[tmapNumber][offset] = null
+		cachedTextures[tmapNumber][offset+1] = null
+		while cachedTextures.empty() == false and is_tileset_cached(cachedTextures.size()-1) == false:
+			cachedTextures.pop_back()
+		return
 	while cachedTextures.size() <= tmapNumber:
 		cachedTextures.append([null, null, null, null])
-	if cachedTextures[tmapNumber] == null:
-		cachedTextures[tmapNumber] = [null, null, null, null]
-	var topRect = Rect2(0, 0, TMAP_IMAGE_WIDTH, TMAP_HALF_HEIGHT)
-	var bottomRect = Rect2(0, TMAP_HALF_HEIGHT, TMAP_IMAGE_WIDTH, TMAP_HALF_HEIGHT)
+	for i in 2:
+		var halfImage = l8Image.get_rect(Rect2(0, i * TMAP_HALF_HEIGHT, TMAP_IMAGE_WIDTH, TMAP_HALF_HEIGHT))
+		if halfImage.is_empty():
+			printerr("Failed to split L8 image for tmap ", tmapNumber, " type ", tmapType)
+			return
+		var texture = ImageTexture.new()
+		texture.create_from_image(halfImage, TEXTURE_FLAGS)
+		cachedTextures[tmapNumber][offset+i] = texture
 
-	var topHalfImage: Image = l8Image.get_rect(topRect)
-	var bottomHalfImage: Image = l8Image.get_rect(bottomRect)
 
-	if topHalfImage == null or topHalfImage.is_empty() or bottomHalfImage == null or bottomHalfImage.is_empty():
-		printerr("Failed to split L8 image for tmap ", tmapNumber, " type ", tmapType)
-		return
-	var topTexture = ImageTexture.new()
-	topTexture.create_from_image(topHalfImage, TEXTURE_FLAGS)
-	
-	var bottomTexture = ImageTexture.new()
-	bottomTexture.create_from_image(bottomHalfImage, TEXTURE_FLAGS)
-
-	if tmapType == "tmapa":
-		cachedTextures[tmapNumber][0] = topTexture
-		cachedTextures[tmapNumber][1] = bottomTexture
-	elif tmapType == "tmapb":
-		cachedTextures[tmapNumber][2] = topTexture
-		cachedTextures[tmapNumber][3] = bottomTexture
-	else:
-		printerr("Unknown tmap type in cache_loaded_image: ", tmapType)
+func is_tileset_cached(tmapNumber: int) -> bool:
+	return tmapNumber >= 0 and tmapNumber < cachedTextures.size() and cachedTextures[tmapNumber].count(null) < cachedTextures[tmapNumber].size()
 
 
 func _create_blank_half_texture() -> ImageTexture:
@@ -270,34 +267,32 @@ func _create_blank_half_texture() -> ImageTexture:
 	return blankHalfTexture
 
 
-func apply_shader_params(material: ShaderMaterial, tmapTextures: Dictionary, paletteType: int = PaletteType.PALETTE_2D):
+func apply_shader_params(material: ShaderMaterial, tmapTextures: Array, paletteType: int = PaletteType.PALETTE_2D):
 	if material == null: return
-	material.set_shader_param("tmap_A_top", tmapTextures["tmap_A_top"])
-	material.set_shader_param("tmap_A_bottom", tmapTextures["tmap_A_bottom"])
-	material.set_shader_param("tmap_B_top", tmapTextures["tmap_B_top"])
-	material.set_shader_param("tmap_B_bottom", tmapTextures["tmap_B_bottom"])
+	for i in TMAP_SHADER_PARAMS.size():
+		material.set_shader_param(TMAP_SHADER_PARAMS[i], tmapTextures[i])
 	match paletteType:
 		PaletteType.PALETTE_2D: material.set_shader_param("palette_texture", oReadPalette.palette_image_texture_2d)
 		PaletteType.PALETTE_3D: material.set_shader_param("palette_texture", oReadPalette.palette_image_texture_3d)
 
-func apply_texture_pack(previewTileset: int = -1):
+func apply_texture_pack():
 	if texturesLoadedState != LOADING_SUCCESS or cachedTextures.empty():
 		return
 	if oReadPalette.palette_image_texture_2d == null:
 		oMessage.big("Error", "Palette texture is not loaded. Cannot apply textures.")
 		return
-	var tilesetIndex = previewTileset if previewTileset >= 0 else int(oDataLevelStyle.data)
+	var tilesetIndex = int(oDataLevelStyle.data)
 	var tmapTextures = _get_tmap_textures(tilesetIndex)
 	if tmapTextures.empty():
 		return
-	for i in oOverheadGraphics.arrayOfColorRects.size():
-		var overheadTextures = tmapTextures if previewTileset >= 0 or i == 0 else _get_tmap_textures(i - 1)
-		if overheadTextures.empty() == false:
-			apply_shader_params(oOverheadGraphics.arrayOfColorRects[i].get_material() as ShaderMaterial, overheadTextures)
+	oOverheadGraphics.add_missing_display_fields()
+	for style in oOverheadGraphics.displayFields:
+		var displayField = oOverheadGraphics.displayFields[style]
+		var overheadTextures = tmapTextures if style == 0 else _get_tmap_textures(style - 1)
+		apply_shader_params(displayField.get_material() as ShaderMaterial, overheadTextures)
 	for i in oGame3D.materialArray.size():
-		var materialTextures = tmapTextures if previewTileset >= 0 or i == 0 else _get_tmap_textures(i - 1)
-		if materialTextures.empty() == false:
-			apply_shader_params(oGame3D.materialArray[i] as ShaderMaterial, materialTextures, PaletteType.PALETTE_3D)
+		var materialTextures = tmapTextures if i == 0 else _get_tmap_textures(i - 1)
+		apply_shader_params(oGame3D.materialArray[i] as ShaderMaterial, materialTextures, PaletteType.PALETTE_3D)
 	for viewer in get_tree().get_nodes_in_group("VoxelViewer"):
 		if is_instance_valid(viewer):
 			for voxels in [viewer.oAllVoxelObjects, viewer.oSelectedVoxelObject]:
@@ -306,29 +301,17 @@ func apply_texture_pack(previewTileset: int = -1):
 	apply_slabwindow_textures(tmapTextures)
 
 
-func _get_tmap_textures(tilesetIndex: int) -> Dictionary:
+func _get_tmap_textures(tilesetIndex: int) -> Array:
 	if tilesetIndex < 0 or tilesetIndex >= TMAP_COUNT:
-		return {}
-	var currentPack = cachedTextures[tilesetIndex] if tilesetIndex < cachedTextures.size() and cachedTextures[tilesetIndex] != null else [null, null, null, null]
-	var tmapATopTex: ImageTexture = currentPack[0]
-	var tmapABottomTex: ImageTexture = currentPack[1]
-	var tmapBTopTex: ImageTexture = currentPack[2]
-	var tmapBBottomTex: ImageTexture = currentPack[3]
-	if tmapATopTex == null or tmapABottomTex == null:
-		var blankTexture = _create_blank_half_texture()
-		if tmapATopTex == null: tmapATopTex = blankTexture
-		if tmapABottomTex == null: tmapABottomTex = blankTexture
-	if tmapBTopTex == null or tmapBBottomTex == null:
-		var blankTexture = _create_blank_half_texture()
-		if tmapBTopTex == null: tmapBTopTex = blankTexture
-		if tmapBBottomTex == null: tmapBBottomTex = blankTexture
-	return {
-		"tmap_A_top": tmapATopTex, "tmap_A_bottom": tmapABottomTex,
-		"tmap_B_top": tmapBTopTex, "tmap_B_bottom": tmapBBottomTex
-	}
+		return []
+	var textures = cachedTextures[tilesetIndex].duplicate() if tilesetIndex < cachedTextures.size() else [null, null, null, null]
+	for i in textures.size():
+		if textures[i] == null:
+			textures[i] = _create_blank_half_texture()
+	return textures
 
 
-func apply_slabwindow_textures(tmapTextures: Dictionary):
+func apply_slabwindow_textures(tmapTextures: Array):
 	for nodeID in get_tree().get_nodes_in_group("SlabDisplay"):
 		if is_instance_valid(nodeID):
 			apply_shader_params(nodeID.get_material() as ShaderMaterial, tmapTextures)

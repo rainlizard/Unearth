@@ -101,7 +101,7 @@ margin_left = 132.0
 margin_right = 206.0
 margin_bottom = 24.0
 size_flags_horizontal = 10
-max_value = 31.0
+max_value = 30.0
 rounded = true
 
 [node name="TilesetIDNameLabel" type="Label" parent="HBoxContainer/Sidebar/PanelContainer/VBoxContainer"]

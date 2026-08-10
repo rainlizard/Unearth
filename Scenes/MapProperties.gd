@@ -60,6 +60,7 @@ const options_options = {
 
 
 func _ready():
+	oDungeonStyleSpinBox.max_value = oTMapLoader.TMAP_COUNT - 1
 	var tooltip_text = ""
 	for key in kind_options.keys():
 		tooltip_text += key + " = " + kind_options[key] + "\n"

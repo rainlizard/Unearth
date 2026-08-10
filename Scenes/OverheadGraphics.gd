@@ -18,7 +18,7 @@ signal column_graphics_completed
 var overheadImgData = Image.new()
 var overheadTexData = ImageTexture.new()
 
-var arrayOfColorRects = []
+var displayFields = {}
 var accumulated_time = 0.0
 var thread = Thread.new()
 var semaphore = Semaphore.new()
@@ -29,7 +29,7 @@ var pixel_data = PoolByteArray()
 func update_full_overhead_map():
 	var CODETIME_START = OS.get_ticks_msec()
 	
-	if arrayOfColorRects.empty() == true:
+	if displayFields.empty() == true:
 		initialize_display_fields()
 	else:
 		update_display_fields_size()
@@ -124,15 +124,19 @@ func generate_pixel_data(pixData, shapePositionArray):
 
 
 func initialize_display_fields():
-	arrayOfColorRects.clear() # just in case
-	
 	# Default
 	if oTMapLoader.cachedTextures.size() > 0:
 		createDisplayField(oDataLevelStyle.data, 0) # 0 means "Show Default Style"
-	
-	# Slab styles
+	add_missing_display_fields()
+
+func add_missing_display_fields():
+	if displayFields.empty(): return
 	for map in oTMapLoader.cachedTextures.size():
-		createDisplayField(map, map+1)
+		if oTMapLoader.is_tileset_cached(map) == false:
+			continue
+		var style = map+1
+		if displayFields.has(style) == false:
+			createDisplayField(map, style)
 
 func createDisplayField(setMap, showStyle):
 	var displayField = ColorRect.new()
@@ -169,20 +173,20 @@ func createDisplayField(setMap, showStyle):
 		mat.set_shader_param("flashingColumnset" + str(i), -1)
 	mat.set_shader_param("flashIntensity", 0.0)
 	
-	arrayOfColorRects.append(displayField)
+	displayFields[showStyle] = displayField
 	oGame2D.add_child_below_node(self, displayField)
 
 func update_display_fields_size():
-	for displayField in arrayOfColorRects:
+	for displayField in displayFields.values():
 		displayField.rect_size = Vector2(M.xSize * 96, M.ySize * 96)
 		displayField.material.set_shader_param("fieldSizeInSubtiles", Vector2((M.xSize*3), (M.ySize*3)))
 
 func update_ssaa_level(level):
-	for displayField in arrayOfColorRects:
+	for displayField in displayFields.values():
 		displayField.material.set_shader_param("supersampling_level", level)
 
 
 func _process(delta):
 	accumulated_time += delta
-	for displayField in arrayOfColorRects:
+	for displayField in displayFields.values():
 		displayField.material.set_shader_param("custom_time", accumulated_time)

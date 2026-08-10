@@ -85,7 +85,7 @@ func update_flash_shader_params():
 	var flashIntensity = 0.0
 	if flashingColumnIndex >= 0 or flashingColumnsetIndex >= 0 or flashingColumnsetIndexes.size() > 0 or flashingVariationIndex >= 0:
 		flashIntensity = (sin(flashTimer * 8.0) + 1.0) * 0.5
-	for displayField in oOverheadGraphics.arrayOfColorRects:
+	for displayField in oOverheadGraphics.displayFields.values():
 		var material = displayField.material
 		if is_instance_valid(material) and material is ShaderMaterial:
 			material.set_shader_param("flashingColumn", flashingColumnIndex)
@@ -123,7 +123,7 @@ func generate_clmdata_texture():
 	columnPosImgData.create_from_data(width, height, false, Image.FORMAT_RGB8, columnPosPixelData)
 	columnPosTexData.create_from_image(columnPosImgData, 0)
 	if is_instance_valid(oOverheadGraphics):
-		for displayField in oOverheadGraphics.arrayOfColorRects:
+		for displayField in oOverheadGraphics.displayFields.values():
 			displayField.material.set_shader_param("columnPosData", columnPosTexData)
 	print("Column position texture generated")
 
@@ -172,7 +172,7 @@ func generate_columnset_texture():
 	columnsetPosTexData.create_from_image(columnsetPosImgData, 0)
 	columnsetTextureGenerated = true
 	if is_instance_valid(oOverheadGraphics):
-		for displayField in oOverheadGraphics.arrayOfColorRects:
+		for displayField in oOverheadGraphics.displayFields.values():
 			displayField.material.set_shader_param("columnsetPosData", columnsetPosTexData)
 	print('generate_columnset_texture: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
 
@@ -215,7 +215,7 @@ func generate_variation_texture():
 	variationPosTexData.create_from_image(variationPosImgData, 0)
 	variationTextureGenerated = true
 	if is_instance_valid(oOverheadGraphics):
-		for displayField in oOverheadGraphics.arrayOfColorRects:
+		for displayField in oOverheadGraphics.displayFields.values():
 			displayField.material.set_shader_param("variationPosData", variationPosTexData)
 
 
