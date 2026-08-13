@@ -426,6 +426,16 @@ func read_tngfx(buffer):
 				_: id.thingType = Things.TYPE.NONE
 
 			id.subtype = c.get_value(section, "Subtype")
+			if c.has_section_key(section, "SubtypeStringID"):
+				var subtypeStringID = c.get_value(section, "SubtypeStringID")
+				if subtypeStringID is String:
+					var resolvedSubtype = Things.find_subtype_by_name(id.thingType, subtypeStringID)
+					if resolvedSubtype != null:
+						id.subtype = resolvedSubtype
+					else:
+						oMessage.big("Unrecognized .tngfx SubtypeStringID", "SubtypeStringID \"%s\" for ThingType \"%s\" in [%s] is not defined in the loaded KeeperFX configuration. Unearth fell back to numeric Subtype %s." % [subtypeStringID, c.get_value(section, "ThingType"), section, id.subtype])
+				else:
+					oMessage.big("Invalid .tngfx SubtypeStringID", "SubtypeStringID for ThingType \"%s\" in [%s] is not a string. Unearth fell back to numeric Subtype %s." % [c.get_value(section, "ThingType"), section, id.subtype])
 			if id.subtype is String:
 				var subtype = Things.find_subtype_by_name(id.thingType, id.subtype)
 				if subtype == null:
