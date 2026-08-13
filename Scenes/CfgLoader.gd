@@ -302,7 +302,7 @@ func load_creature_stats_data(mapPath, campaign_cfg, mod_zip_paths):
 		for path in map_cfgs:
 			var file = path.get_file()
 			if file.to_lower().begins_with(lower_map_file_prefix):
-				load_creature_stats_file(data, file.substr(map_file_prefix.length()), path, true)
+				load_creature_stats_file(data, file.substr(map_file_prefix.length()), path)
 	oConfigFileManager.current_data["creature_stats"] = data
 	var sprite_data = data.duplicate(true)
 	if oGame.GAME_DIRECTORY != "" and mod_zip_paths.empty() == false:
@@ -366,11 +366,10 @@ func load_creature_stats_dir(data, dir):
 	for path in listOfCfgs:
 		load_creature_stats_file(data, path.get_file(), path)
 
-func load_creature_stats_file(data, file, path, require_attributes = false):
+func load_creature_stats_file(data, file, path):
 	var cfg_data = oReadCfg.read_dkcfg_file(path, false)["config"]
-	if cfg_data.empty() or (require_attributes and cfg_data.has("attributes") == false):
-		return
-	data[file] = super_merge_dictionaries(data.get(file, {}), cfg_data)
+	if cfg_data.empty() == false and (get_creature_subtype(file) != null or cfg_data.has("attributes")):
+		data[file] = super_merge_dictionaries(data.get(file, {}), cfg_data)
 
 func get_creature_symbol_key(value):
 	if value == null:
