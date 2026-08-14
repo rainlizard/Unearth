@@ -61,6 +61,8 @@ func backup_existing_map_files(map_file_path):
 	var map_name_no_ext = map_file_path.get_file().get_basename()
 	if base_directory == "" or map_name_no_ext == "":
 		return true
+	if int(Settings.get_setting("backup_folder_size_limit_mb")) == 0:
+		return true
 
 	var dir = Directory.new()
 	if dir.open(base_directory) != OK:
@@ -86,9 +88,6 @@ func backup_existing_map_files(map_file_path):
 	dir.list_dir_end()
 
 	if map_files.empty() == true:
-		return true
-
-	if int(Settings.get_setting("backup_folder_size_limit_mb")) == 0:
 		return true
 
 	var date = OS.get_datetime_from_unix_time(newest_modified_time)
