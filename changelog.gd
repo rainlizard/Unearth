@@ -1,6 +1,17 @@
 ﻿extends Node
 
 const string = """
+0.71.974 - 15/8/2026
+- SubtypeStringID field is now saved and read in .tngfx files, 'Subtype' is kept as a fallback
+- Replaced Edit-->Tileset with a new Tileset tab in the Slabset editor
+- UI improvements to Slabset editor
+- Map Settings now selects Tilesets by an ID spinbox instead of a dropdown menu
+- Added missing rock and filler textures to texture-pack exports
+- Renamed Classic format to Old format and made KFX format the default when KeeperFX is installed
+- Fixed original campaign and Deeper Dungeons names in Recent Maps
+- Creature Stats window can now reverse sorting and show unlisted creatures. Fixed a crash with some map-local files
+- Right-clicking a door now copies its locked state. Fixed missing keys after loading
+- Improved map loading and saving performance, especially with custom sprite ZIPs
 0.70.950 - 5/7/2026
 - Read custom trap images
 0.70.948 - 4/7/2026
