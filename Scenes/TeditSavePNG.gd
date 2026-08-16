@@ -3,7 +3,10 @@ extends Node
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oTabTileset = Nodelist.list["oTabTileset"]
 
-const ExportFilelist = preload("res://Scenes/exportfilelist.gd")
+const ExportFilelists = {
+	"tmapa": preload("res://Scenes/exportfilelist_tmapa.gd"),
+	"tmapb": preload("res://Scenes/exportfilelist_tmapb.gd"),
+}
 
 func handle_tmap_export(sourceRgbImage: Image, folderNameString: String, stripFilename: String = ""):
 	var outputDir = get_output_directory()
@@ -14,10 +17,8 @@ func handle_tmap_export(sourceRgbImage: Image, folderNameString: String, stripFi
 		packContent = "textures_pack_" + texturePackNumber
 		for i in 544:
 			packContent += "\n%s\t%d\t%d\t32\t32" % [stripFilename, (i % 8) * 32, (i / 8) * 32]
-	elif oTabTileset.currentType == "tmapb":
-		packContent = ExportFilelist.new().string_b.replace("textures_pack_000", "textures_pack_" + texturePackNumber)
 	else:
-		packContent = ExportFilelist.new().string_a.replace("textures_pack_000", "textures_pack_" + texturePackNumber)
+		packContent = ExportFilelists[oTabTileset.currentType].CONTENT.replace("textures_pack_000", "textures_pack_" + texturePackNumber)
 	
 	var imageDictionary = {}
 	var lines = Array(packContent.split('\n', false))
