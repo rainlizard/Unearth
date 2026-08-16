@@ -2,7 +2,6 @@ extends WindowDialog
 onready var oChangelogMainVBox = Nodelist.list["oChangelogMainVBox"]
 onready var scene = preload("res://Scenes/ChangelogSection.tscn")
 onready var oGame = Nodelist.list["oGame"]
-onready var oMessage = Nodelist.list["oMessage"]
 
 const txt = preload("res://changelog.gd").string
 
@@ -14,9 +13,6 @@ func _ready():
 	var sections = parse_changelog_file()
 	if sections.size() > 0:
 		show_changelog_if_needed(sections)
-	if Settings.get_setting("tngfx_names_notice_displayed") != true:
-		oMessage.big("KeeperFX compatibility", "Players will need the latest KeeperFX version to play maps made in this version of Unearth due to .tngfx modifications.")
-		Settings.set_setting("tngfx_names_notice_displayed", true)
 
 
 func parse_changelog_file():
