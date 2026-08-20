@@ -1,6 +1,10 @@
 ﻿extends Node
 
 const string = """
+0.71.979 - 20/8/2026
+- Save tmaps to the campaign's cfg folder if it contains tmaps
+- Removed an inaccurate KeeperFX compatibility warning
+- Fixed TMAPA and TMAPB texture-pack export mappings
 0.71.974 - 15/8/2026
 - SubtypeStringID field is now saved and read in .tngfx files, 'Subtype' is kept as a fallback
 - Replaced Edit-->Tileset with a new Tileset tab in the Slabset editor
