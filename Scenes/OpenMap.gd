@@ -79,9 +79,9 @@ func start():
 			#open_map("C:/Games/Dungeon Keeper GOG/levels/MAP00001.SLB")
 			#open_map("C:/Games/Dungeon Keeper/levels/deepdngn/map00084.slb")
 			#open_map("C:/Games/Dungeon Keeper/levels/personal/map00001.slb")
-			#open_map("C:/Games/Dungeon Keeper/campgns/dk2/map00200.slb")
+			open_map("C:/Games/Dungeon Keeper/campgns/dk2/map00200.slb")
 			#open_map("C:/Games/Dungeon Keeper/levels/blazeend/map00001.slb")
-			open_map("C:/Games/Dungeon Keeper/levels/traphouse/map15416.slb")
+			#open_map("C:/Games/Dungeon Keeper/levels/traphouse/map15416.slb")
 		else:
 			# initialize a cleared map
 			oCurrentMap.clear_map()

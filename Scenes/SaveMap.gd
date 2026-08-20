@@ -292,12 +292,7 @@ func get_config_save_target(file_type, map_filename_no_ext, map_base_dir):
 
 
 func track_saved_config_file(file_path, file_type, config_type):
-	if config_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
-		if not oConfigFileManager.paths_loaded[config_type].has(file_path):
-			oConfigFileManager.paths_loaded[config_type].append(file_path)
-		oConfigFileManager.emit_signal("config_file_status_changed")
-	else:
-		oConfigFileManager.notify_file_created(file_path, file_type)
+	oConfigFileManager.notify_file_created(file_path, file_type, config_type)
 	print("Saved " + file_type.get_basename() + " to: " + file_path)
 
 

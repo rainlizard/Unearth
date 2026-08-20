@@ -147,9 +147,9 @@ func is_section_different(section_name: String) -> bool:
 	return false
 
 
-func notify_file_created(file_path, file_type):
-	if not paths_loaded[LOAD_CFG_CURRENT_MAP].has(file_path):
-		paths_loaded[LOAD_CFG_CURRENT_MAP].append(file_path)
+func notify_file_created(file_path, file_type, config_type = LOAD_CFG_CURRENT_MAP):
+	if not paths_loaded[config_type].has(file_path):
+		paths_loaded[config_type].append(file_path)
 	emit_signal("config_file_status_changed")
 	print("oConfigFileManager: Tracked new file - " + file_type + ": " + file_path)
 

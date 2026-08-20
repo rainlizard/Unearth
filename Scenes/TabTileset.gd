@@ -127,9 +127,10 @@ func _display_image():
 		else:
 			for type in TYPES:
 				if modified[type]:
-					var targetPath = oCurrentMap.path.get_basename() + "." + type + str(tilesetNumber).pad_zeros(3) + ".dat"
+					var saveTarget = _get_save_target(type, oCurrentMap.path.get_file().get_basename(), oCurrentMap.path.get_base_dir())
+					var targetPath = saveTarget[0]
 					var deleteOnSave = differentFromInherited[type] == false and oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CURRENT_MAP].has(sourcePaths[type])
-					var label = targetPath.get_file()
+					var label = "/" + targetPath.get_base_dir().get_file() + "/" + targetPath.get_file() if saveTarget[1] == oConfigFileManager.LOAD_CFG_CAMPAIGN else targetPath.get_file()
 					if File.new().file_exists(targetPath) == false:
 						label = "Save will create: " + label
 					customFiles[label] = {"path": targetPath, "number": tilesetNumber, "type": type, "modified": differentFromInherited[type], "delete": deleteOnSave}
@@ -340,12 +341,17 @@ func save_modified_tilesets(mapFilename: String, mapDirectory: String) -> bool:
 	for type in TYPES:
 		if modified[type] == false:
 			continue
-		var path = mapDirectory.plus_file(mapFilename + "." + type + str(tilesetNumber).pad_zeros(3) + ".dat")
+		var saveTarget = _get_save_target(type, mapFilename, mapDirectory)
+		var path = saveTarget[0]
 		if save_dat(path, type) == false:
 			return false
 		sourcePaths[type] = path
 		modified[type] = false
-		oConfigFileManager.notify_file_created(path, type + ".dat")
+		oConfigFileManager.notify_file_created(path, type + ".dat", saveTarget[1])
+		if saveTarget[1] == oConfigFileManager.LOAD_CFG_CAMPAIGN:
+			inheritedImages[type] = images[type].duplicate()
+			differentFromInherited[type] = false
+			reloadTilesets = true
 	var inheritedPaths = _get_inherited_paths()
 	var displayedTilesetFileWasDeleted = false
 	var file = File.new()
@@ -399,6 +405,17 @@ func save_modified_tilesets(mapFilename: String, mapDirectory: String) -> bool:
 	if tilesetNumber >= 0 and (displayedTilesetWasSaved or displayedTilesetFileWasDeleted):
 		_display_image()
 	return true
+
+
+func _get_save_target(type: String, mapFilename: String, mapDirectory: String) -> Array:
+	var campaignPaths = oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CAMPAIGN]
+	if campaignPaths.has(sourcePaths[type]):
+		return [sourcePaths[type], oConfigFileManager.LOAD_CFG_CAMPAIGN]
+	if oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CURRENT_MAP].has(sourcePaths[type]) == false:
+		for path in campaignPaths:
+			if oTMapLoader.parse_tmap_path_details(path) != null:
+				return [path.get_base_dir().plus_file(type + str(tilesetNumber).pad_zeros(3) + ".dat"), oConfigFileManager.LOAD_CFG_CAMPAIGN]
+	return [mapDirectory.plus_file(mapFilename + "." + type + str(tilesetNumber).pad_zeros(3) + ".dat"), oConfigFileManager.LOAD_CFG_CURRENT_MAP]
 
 
 func save_dat(path: String, type: String) -> bool:
@@ -473,7 +490,7 @@ TMAPA contains texture IDs 0-543. TMAPB contains IDs 1000-1543.
 Edit as strip creates one PNG. Edit as texture pack creates a folder of PNGs. Unearth watches the selected format and reloads changes into the 2D and 3D views.
 
 Import TMAP accepts DAT files and full 256x2176 PNG strips. Export TMAP writes a standalone DAT or PNG without changing the map's save state.
-Edited texture maps are saved with the map as mapname.tmapa###.dat and mapname.tmapb###.dat, where ### is the Tileset ID."""
+Texture maps are saved in the campaign cfg folder when it already contains texture maps. Map-local overrides and maps without campaign texture maps are saved as mapname.tmapa###.dat and mapname.tmapb###.dat, where ### is the Tileset ID."""
 	oMessage.big("Tileset", helpText)
 
 
