@@ -27,9 +27,18 @@ var KEEPERFX_VERSION_STRING = "0"
 var COMMAND_LINE = ""
 var COMMAND_LINE_CONSOLE = ""
 var COMMAND_LINE_CONSOLE_ARG = ""
-var DK_COMMANDS = "-nointro -alex"
 var PACKETSAVE = false
+# Boolean KeeperFX launch flags (setting key == flag without the dash, e.g. "nosound" -> -nosound).
+# Full list of flags: https://github.com/dkfans/keeperfx/wiki/Command-Line-Options
+const CMDLINE_FLAGS_ORDER = ["skipheartzoom", "alex", "show_game_turns", "framestep", "nomods", "nosound", "dbgpathfind", "dbgshots", "altinput", "timer"]
+const CMDLINE_ALWAYS_ALLOWED = ["alex", "nosound"] # These also work with the original game, the rest need KeeperFX
+var CMDLINE_FLAGS = {}
 const KEEPERFX_MAP_ROOTS = ["levels", "multiplayer", "campgns"]
+
+func _init():
+	for flag in CMDLINE_FLAGS_ORDER:
+		CMDLINE_FLAGS[flag] = false
+	CMDLINE_FLAGS["alex"] = true # Enabled by default
 
 func keeperfx_is_installed():
 	var path = EXECUTABLE_PATH.get_file().to_lower()
@@ -116,12 +125,18 @@ func set_paths(path):
 		oKeeperFXDetection.visible = true
 	reconstruct_command_line()
 
-func _on_CmdLineDkCommands_text_changed(new_text):
-	Settings.set_setting("dk_commands", new_text)
-	reconstruct_command_line()
-
 func _on_CmdLinePacketsave_toggled(button_pressed):
 	Settings.set_setting("packetsave", button_pressed)
+	reconstruct_command_line()
+
+func _on_CmdLineSkipHeartZoom_toggled(button_pressed):
+	Settings.set_setting("skipheartzoom", button_pressed)
+	if button_pressed == true:
+		oMessage.big("Warning", "Skipping the Dungeon Heart zoom changes the opening game turns and can hide map scripting or action point problems during testing.")
+	reconstruct_command_line()
+
+func _on_CmdLineFlag_toggled(button_pressed, flag):
+	Settings.set_setting(flag, button_pressed)
 	reconstruct_command_line()
 
 func reconstruct_command_line():
@@ -139,6 +154,10 @@ func reconstruct_command_line():
 	
 	COMMAND_LINE = cmdline(oCurrentMap.path, false)
 	oCmdLineExecute.text = COMMAND_LINE
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	var scroll = oCmdLineExecute.get_parent().get_parent()
+	scroll.scroll_horizontal = scroll.get_h_scrollbar().max_value
 
 func cmdline(mapPath, packetLoad):
 	# Keep in mind Linux and Windows both want different quotation marks ' "
@@ -195,9 +214,10 @@ func cmdline(mapPath, packetLoad):
 	
 	constructString = constructString.strip_edges(true,true)
 	
-	if DK_COMMANDS != '':
-		constructString += ' '
-	constructString += DK_COMMANDS
+	for flag in CMDLINE_FLAGS_ORDER:
+		if CMDLINE_FLAGS.get(flag, false) == true:
+			if CMDLINE_ALWAYS_ALLOWED.has(flag) == true or keeperfx_is_installed() == true:
+				constructString += " -" + flag
 	var packetArguments = get_packet_arguments(mapPath, packetLoad)
 	if packetArguments != "":
 		constructString += " " + packetArguments
@@ -306,7 +326,6 @@ func set_keeperfx_version():
 #	if nosound == true:
 #		arguments += " -nosound"
 #	arguments += " -fps " + str(gameSpeed)
-#	arguments += " -nointro"
 #	arguments += ' -level ' + levelNumber
 #
 #	var commands = ""
@@ -319,5 +338,4 @@ func set_keeperfx_version():
 	
 	#OS.execute('cmd', ['/C', ], false)
 
-#"-nointro -altinput -alex"
 #F:\Games\Dungeon Keeper\

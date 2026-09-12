@@ -6,8 +6,17 @@ onready var oMSAA = Nodelist.list["oMSAA"]
 onready var oCheckBoxAlwaysDecompress = Nodelist.list["oCheckBoxAlwaysDecompress"]
 onready var oBackupFolderSizeLimit = Nodelist.list["oBackupFolderSizeLimit"]
 onready var oChooseDkExe = Nodelist.list["oChooseDkExe"]
-onready var oCmdLineDkCommands = Nodelist.list["oCmdLineDkCommands"]
 onready var oCmdLinePacketsave = Nodelist.list["oCmdLinePacketsave"]
+onready var oCmdLineSkipHeartZoom = Nodelist.list["oCmdLineSkipHeartZoom"]
+onready var oCmdLineAlex = Nodelist.list["oCmdLineAlex"]
+onready var oCmdLineAltinput = Nodelist.list["oCmdLineAltinput"]
+onready var oCmdLineDbgpathfind = Nodelist.list["oCmdLineDbgpathfind"]
+onready var oCmdLineDbgshots = Nodelist.list["oCmdLineDbgshots"]
+onready var oCmdLineFramestep = Nodelist.list["oCmdLineFramestep"]
+onready var oCmdLineNomods = Nodelist.list["oCmdLineNomods"]
+onready var oCmdLineNosound = Nodelist.list["oCmdLineNosound"]
+onready var oCmdLineShowGameTurns = Nodelist.list["oCmdLineShowGameTurns"]
+onready var oCmdLineTimer = Nodelist.list["oCmdLineTimer"]
 onready var oCheckBoxMouseEdgePanning = Nodelist.list["oCheckBoxMouseEdgePanning"]
 onready var oCheckBoxSmoothPan = Nodelist.list["oCheckBoxSmoothPan"]
 onready var oCheckBoxDisplayFPS = Nodelist.list["oCheckBoxDisplayFPS"]
@@ -74,9 +83,14 @@ func _on_SettingsWindow_about_to_show():
 	oMSAA.update_appearance(msaa_slider_value)
 	oCheckBoxAlwaysDecompress.pressed = Settings.get_setting("always_decompress")
 	oBackupFolderSizeLimit.update_appearance(Settings.get_setting("backup_folder_size_limit_mb"))
-	oCmdLineDkCommands.text = Settings.get_setting("dk_commands")
-	oCmdLinePacketsave.pressed = Settings.get_setting("packetsave")
+	oCmdLinePacketsave.set_pressed_no_signal(Settings.get_setting("packetsave"))
 	oCmdLinePacketsave.disabled = oGame.keeperfx_is_installed() == false
+	var keeperfxOnlyCmdlines = {"skipheartzoom": oCmdLineSkipHeartZoom, "altinput": oCmdLineAltinput, "dbgpathfind": oCmdLineDbgpathfind, "dbgshots": oCmdLineDbgshots, "framestep": oCmdLineFramestep, "nomods": oCmdLineNomods, "show_game_turns": oCmdLineShowGameTurns, "timer": oCmdLineTimer}
+	for flag in keeperfxOnlyCmdlines:
+		keeperfxOnlyCmdlines[flag].set_pressed_no_signal(Settings.get_setting(flag))
+		keeperfxOnlyCmdlines[flag].disabled = oGame.keeperfx_is_installed() == false
+	oCmdLineNosound.set_pressed_no_signal(Settings.get_setting("nosound"))
+	oCmdLineAlex.set_pressed_no_signal(Settings.get_setting("alex"))
 	
 	oCheckBoxMouseEdgePanning.pressed = Settings.get_setting("mouse_edge_panning")
 	oCheckBoxSmoothPan.pressed = Settings.get_setting("smooth_pan_enabled")

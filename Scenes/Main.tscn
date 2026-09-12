@@ -2338,16 +2338,125 @@ text = "Path"
 valign = 1
 autowrap = true
 
-[node name="HSeparator" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+[node name="HSeparator6" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 56.0
 margin_right = 558.0
-margin_bottom = 76.0
-rect_min_size = Vector2( 0, 20 )
+margin_bottom = 57.0
+
+[node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 61.0
+margin_right = 558.0
+margin_bottom = 82.0
+size_flags_horizontal = 3
+text = "Play button arguments"
+align = 1
+
+[node name="HSeparator7" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 86.0
+margin_right = 558.0
+margin_bottom = 87.0
+
+[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 91.0
+margin_right = 558.0
+margin_bottom = 285.0
+columns = 2
+
+[node name="CmdLineSkipHeartZoom" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_right = 277.0
+margin_bottom = 29.0
+hint_tooltip = "Faster startup, but opening game turns will differ from normal play."
+size_flags_horizontal = 3
+text = "Skip heart zoom"
+
+[node name="CmdLineAlex" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_left = 281.0
+margin_right = 558.0
+margin_bottom = 29.0
+hint_tooltip = "Enable cheat console commands and menus."
+size_flags_horizontal = 3
+text = "Cheats"
+
+[node name="CmdLineNosound" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_top = 33.0
+margin_right = 277.0
+margin_bottom = 62.0
+hint_tooltip = "Disable all sounds."
+size_flags_horizontal = 3
+text = "No sound"
+
+[node name="CmdLineAltinput" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_left = 281.0
+margin_top = 33.0
+margin_right = 558.0
+margin_bottom = 62.0
+hint_tooltip = "Alternate mouse input. The cursor can leave the game window; in-game mouse sensitivity is ignored."
+size_flags_horizontal = 3
+text = "Alt mouse input"
+
+[node name="CmdLinePacketsave" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_top = 66.0
+margin_right = 277.0
+margin_bottom = 95.0
+hint_tooltip = "Record packets whenever you play. Right-click the Play button to do a packetload."
+size_flags_horizontal = 3
+text = "Packetsave"
+
+[node name="CmdLineShowGameTurns" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_left = 281.0
+margin_top = 66.0
+margin_right = 558.0
+margin_bottom = 95.0
+hint_tooltip = "Display the current GameTurn in the bottom right of the screen."
+size_flags_horizontal = 3
+text = "Show game turns"
+
+[node name="CmdLineFramestep" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_top = 99.0
+margin_right = 277.0
+margin_bottom = 128.0
+hint_tooltip = "When paused, press the . key to step a single GameTurn. Also shows game turns."
+size_flags_horizontal = 3
+text = "Frame step"
+
+[node name="CmdLineTimer" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_left = 281.0
+margin_top = 99.0
+margin_right = 558.0
+margin_bottom = 128.0
+hint_tooltip = "Display a timer during the game."
+size_flags_horizontal = 3
+text = "Timer"
+
+[node name="CmdLineDbgpathfind" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_top = 132.0
+margin_right = 277.0
+margin_bottom = 161.0
+hint_tooltip = "Show creature paths as lines on screen."
+size_flags_horizontal = 3
+text = "Debug pathfinding"
+
+[node name="CmdLineDbgshots" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_left = 281.0
+margin_top = 132.0
+margin_right = 558.0
+margin_bottom = 161.0
+hint_tooltip = "Show shot damage on screen when it hits. Only works in debug builds (keeperfx_hvlog)."
+size_flags_horizontal = 3
+text = "Debug shots"
+
+[node name="CmdLineNomods" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_top = 165.0
+margin_right = 277.0
+margin_bottom = 194.0
+hint_tooltip = "Ignore installed mods."
+size_flags_horizontal = 3
+text = "No mods"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 80.0
+margin_top = 289.0
 margin_right = 558.0
-margin_bottom = 120.0
+margin_bottom = 329.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
@@ -2386,61 +2495,25 @@ size_flags_horizontal = 3
 editable = false
 expand_to_text_length = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 124.0
-margin_right = 558.0
-margin_bottom = 164.0
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
-margin_top = 9.0
-margin_right = 209.0
-margin_bottom = 30.0
-text = "Play button arguments"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label2" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
-margin_left = 213.0
-margin_top = 9.0
-margin_right = 233.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 20, 0 )
-
-[node name="CmdLineDkCommands" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer"]
-margin_left = 237.0
-margin_right = 558.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 0, 40 )
-size_flags_horizontal = 3
-
-[node name="CmdLinePacketsave" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 168.0
-margin_right = 558.0
-margin_bottom = 197.0
-hint_tooltip = "Record packets whenever you play. Right-click the Play button to do a packetload."
-text = "Packetsave"
-
 [node name="HSeparator4" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 201.0
+margin_top = 333.0
 margin_right = 558.0
-margin_bottom = 221.0
+margin_bottom = 353.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 225.0
+margin_top = 357.0
 margin_right = 558.0
-margin_bottom = 254.0
+margin_bottom = 386.0
 text = "Always decompress maps"
 
 [node name="BackupFolderSizeLimit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 258.0
+margin_top = 390.0
 margin_right = 558.0
-margin_bottom = 289.0
+margin_bottom = 421.0
 settingText = "Backup folder limit (MB)"
 slider_step = 1.0
 maximum_value = 1.04858e+06
@@ -2828,28 +2901,29 @@ __meta__ = {
 }
 
 [node name="HSeparator5" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
-margin_top = 61.0
 margin_right = 532.0
-margin_bottom = 62.0
+margin_bottom = 1.0
 
 [node name="Label3" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
-margin_right = 40.0
-margin_bottom = 21.0
+margin_top = 5.0
+margin_right = 532.0
+margin_bottom = 26.0
 size_flags_horizontal = 3
 text = "2D"
 align = 1
 
 [node name="HSeparator4" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
-margin_top = 61.0
+margin_top = 30.0
 margin_right = 532.0
-margin_bottom = 62.0
+margin_bottom = 31.0
 
 [node name="SmoothingRate" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
+margin_top = 35.0
 margin_right = 532.0
-margin_bottom = 31.0
+margin_bottom = 66.0
 settingText = "Smoothing rate"
 slider_step = 1.0
 minimum_value = 1.0
@@ -2859,9 +2933,9 @@ maximum_value = 100.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 35.0
+margin_top = 70.0
 margin_right = 532.0
-margin_bottom = 66.0
+margin_bottom = 101.0
 settingText = "Zoom step"
 minimum_value = 0.05
 maximum_value = 0.95
@@ -2870,27 +2944,27 @@ maximum_value = 0.95
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 70.0
+margin_top = 105.0
 margin_right = 532.0
-margin_bottom = 101.0
+margin_bottom = 136.0
 settingText = "Directional pan speed"
 slider_step = 1.0
 minimum_value = 200.0
 maximum_value = 10000.0
 
 [node name="CheckBoxSmoothPan" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
-margin_top = 105.0
+margin_top = 140.0
 margin_right = 532.0
-margin_bottom = 134.0
+margin_bottom = 169.0
 text = "Smooth drag pan"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CheckBoxMouseEdgePanning" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
-margin_top = 138.0
+margin_top = 173.0
 margin_right = 532.0
-margin_bottom = 167.0
+margin_bottom = 202.0
 text = "Mouse edge panning"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2900,9 +2974,9 @@ __meta__ = {
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 196.0
+margin_top = 206.0
 margin_right = 532.0
-margin_bottom = 241.0
+margin_bottom = 251.0
 settingText = "Creature level font size scale"
 maximum_value = 10.0
 
@@ -2910,9 +2984,9 @@ maximum_value = 10.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 245.0
+margin_top = 255.0
 margin_right = 532.0
-margin_bottom = 290.0
+margin_bottom = 300.0
 settingText = "Creature level font size max zoom"
 maximum_value = 80.0
 
@@ -2920,9 +2994,9 @@ maximum_value = 80.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 294.0
+margin_top = 304.0
 margin_right = 532.0
-margin_bottom = 325.0
+margin_bottom = 335.0
 settingText = "Script icon scale"
 maximum_value = 10.0
 
@@ -2930,9 +3004,9 @@ maximum_value = 10.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 329.0
+margin_top = 339.0
 margin_right = 532.0
-margin_bottom = 360.0
+margin_bottom = 370.0
 settingText = "Script icon max zoom"
 maximum_value = 80.0
 
@@ -2940,9 +3014,9 @@ maximum_value = 80.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 294.0
+margin_top = 374.0
 margin_right = 532.0
-margin_bottom = 325.0
+margin_bottom = 405.0
 settingText = "Orientation arrow scale"
 maximum_value = 10.0
 
@@ -2950,52 +3024,54 @@ maximum_value = 10.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 329.0
+margin_top = 409.0
 margin_right = 532.0
-margin_bottom = 360.0
+margin_bottom = 454.0
 settingText = "Orientation arrow max zoom"
 maximum_value = 80.0
 
 [node name="HSeparator2" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
-margin_top = 61.0
+margin_top = 458.0
 margin_right = 532.0
-margin_bottom = 62.0
+margin_bottom = 459.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
-margin_right = 40.0
-margin_bottom = 21.0
+margin_top = 463.0
+margin_right = 532.0
+margin_bottom = 484.0
 size_flags_horizontal = 3
 text = "3D"
 align = 1
 
 [node name="HSeparator3" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
-margin_top = 61.0
+margin_top = 488.0
 margin_right = 532.0
-margin_bottom = 62.0
+margin_bottom = 489.0
 
 [node name="MouseSensitivity" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_right = 544.0
-margin_bottom = 31.0
+margin_top = 493.0
+margin_right = 532.0
+margin_bottom = 524.0
 settingText = "Mouse sensitivity"
 
 [node name="FieldOfView" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 35.0
-margin_right = 544.0
-margin_bottom = 66.0
+margin_top = 528.0
+margin_right = 532.0
+margin_bottom = 559.0
 settingText = "Field of view"
 slider_step = 1.0
 maximum_value = 179.0
 
 [node name="CheckBoxDisplay3dInfo" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabCamera/VBoxContainer"]
-margin_top = 70.0
-margin_right = 544.0
-margin_bottom = 99.0
+margin_top = 563.0
+margin_right = 532.0
+margin_bottom = 592.0
 text = "Show camera coordinates"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -8535,8 +8611,17 @@ margin_bottom = 40.0
 [connection signal="pressed" from="Ui/UiSystem/MapBackups/MarginContainer/VBoxContainer/HBoxContainer/CloseBackupButton" to="Ui/UiSystem/MapBackups" method="_on_CloseBackup_pressed"]
 [connection signal="about_to_show" from="Ui/UiSystem/PreferencesWindow" to="Ui/UiSystem/PreferencesWindow" method="_on_SettingsWindow_about_to_show"]
 [connection signal="pressed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3/SetDirButton" to="Ui/UiSystem/PreferencesWindow" method="_on_SetDirButton_pressed"]
-[connection signal="text_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer/CmdLineDkCommands" to="Game" method="_on_CmdLineDkCommands_text_changed"]
-[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/CmdLinePacketsave" to="Game" method="_on_CmdLinePacketsave_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineSkipHeartZoom" to="Game" method="_on_CmdLineSkipHeartZoom_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineAlex" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "alex" ]]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineNosound" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "nosound" ]]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineAltinput" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "altinput" ]]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLinePacketsave" to="Game" method="_on_CmdLinePacketsave_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineShowGameTurns" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "show_game_turns" ]]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineFramestep" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "framestep" ]]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineTimer" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "timer" ]]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineDbgpathfind" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "dbgpathfind" ]]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineDbgshots" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "dbgshots" ]]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineNomods" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "nomods" ]]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
 [connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer/WaterEffectPercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_WaterEffectPercent_value_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_LavaEffectPercent_value_changed"]

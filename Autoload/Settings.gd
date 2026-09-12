@@ -24,8 +24,17 @@ var listOfSettings = [
 	"always_decompress",
 	"backup_folder_size_limit_mb",
 	"msaa",
-	"dk_commands",
 	"packetsave",
+	"skipheartzoom",
+	"alex",
+	"altinput",
+	"dbgpathfind",
+	"dbgshots",
+	"framestep",
+	"nomods",
+	"nosound",
+	"show_game_turns",
+	"timer",
 	"mouse_edge_panning",
 	"pan_speed",
 	"zoom_step",
@@ -190,6 +199,11 @@ func read_all():
 	print('Read all settings in '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 
 func game_setting(doWhat,string,value):
+	var oGameCmdline = $'../Main/Game'
+	if oGameCmdline.CMDLINE_FLAGS.has(string):
+		if doWhat == SET: oGameCmdline.CMDLINE_FLAGS[string] = value
+		if doWhat == GET: return oGameCmdline.CMDLINE_FLAGS.get(string, false)
+		return
 	match string:
 		"REMEMBER_TMAPA_PATHS":
 			var oTMapLoader = $'../Main/TMapLoader'
@@ -226,10 +240,6 @@ func game_setting(doWhat,string,value):
 			var oViewport = get_viewport()
 			if doWhat == SET: oViewport.msaa = value
 			if doWhat == GET: return oViewport.msaa
-		"dk_commands":
-			var oGame = $'../Main/Game'
-			if doWhat == SET: oGame.DK_COMMANDS = value
-			if doWhat == GET: return oGame.DK_COMMANDS
 		"packetsave":
 			var oGame = $'../Main/Game'
 			if doWhat == SET: oGame.PACKETSAVE = value
