@@ -176,7 +176,8 @@ func _on_property_value_focus_exited(callingNode, leftString):
 			callingNode.oLineEditX.text = str(clamp(float(callingNode.oLineEditX.text), 0.0, M.xSize*3))
 			callingNode.oLineEditY.text = str(clamp(float(callingNode.oLineEditY.text), 0.0, M.ySize*3))
 			if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
-				callingNode.oLineEditZ.text = str(clamp(float(callingNode.oLineEditZ.text), 0.0, 255.0))
+				# Old format stores Z as unsigned bytes (0-255 is a real limit), KFX format stores signed coords so negatives are allowed.
+				callingNode.oLineEditZ.text = str(clamp(float(callingNode.oLineEditZ.text), 0.0 if oCurrentFormat.selected == Constants.OldFormat else -255.0, 255.0))
 #	if callingNode is SpinBox:
 #		callingNode.value = float(callingNode.value)
 	update_property_value(callingNode, leftString)
@@ -207,7 +208,7 @@ func update_property_value(callingNode, leftString):
 				inst.locationX = clamp(float(callingNode.oLineEditX.text), 0.0, M.xSize*3)
 				inst.locationY = clamp(float(callingNode.oLineEditY.text), 0.0, M.ySize*3)
 				if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
-					inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0, 255.0)
+					inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0 if oCurrentFormat.selected == Constants.OldFormat else -255.0, 255.0)
 				oInstances.mirror_adjusted_value(inst, "locationXYZ", originalLocation)
 				oInspector.set_inspector_subtile(Vector2(inst.locationX,inst.locationY))
 			return # Exit after handling "Position"

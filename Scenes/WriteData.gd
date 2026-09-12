@@ -112,8 +112,9 @@ func write_tng():
 		buffer.put_8(int(thingNode.locationX)) # 1
 		buffer.put_8(fmod(thingNode.locationY,1.0) * 256) # 2
 		buffer.put_8(int(thingNode.locationY)) # 3
-		buffer.put_8(fmod(thingNode.locationZ,1.0) * 256) # 4
-		buffer.put_8(int(thingNode.locationZ)) # 5
+		# Old format stores Z as unsigned bytes, so clamp (KFX maps with negative Z would otherwise wrap around)
+		buffer.put_8(fmod(clamp(thingNode.locationZ, 0.0, 255.0),1.0) * 256) # 4
+		buffer.put_8(int(clamp(thingNode.locationZ, 0.0, 255.0))) # 5
 		buffer.put_8(thingNode.thingType) # 6
 		buffer.put_8(thingNode.subtype) # 7
 		buffer.put_8(thingNode.ownership) # 8
@@ -215,7 +216,8 @@ func write_tngfx():
 
 			lines.append("SubtileX = [" + str(int(thingNode.locationX)) + ", " + str(int(fmod(thingNode.locationX, 1.0) * 256)) + "]")
 			lines.append("SubtileY = [" + str(int(thingNode.locationY)) + ", " + str(int(fmod(thingNode.locationY, 1.0) * 256)) + "]")
-			lines.append("SubtileZ = [" + str(int(thingNode.locationZ)) + ", " + str(int(fmod(thingNode.locationZ, 1.0) * 256)) + "]")
+			# floor() (not int()) so negative Z encodes as KeeperFX reads it: (stl << 8) | (sub & 0xFF)
+			lines.append("SubtileZ = [" + str(int(floor(thingNode.locationZ))) + ", " + str(int((thingNode.locationZ - floor(thingNode.locationZ)) * 256)) + "]")
 			entryNumber += 1
 	
 	lines.set(1, "ThingsCount = " + str(entryNumber))
@@ -295,8 +297,9 @@ func write_lgt():
 		buffer.put_8(int(lightNode.locationX)) # 11
 		buffer.put_8(fmod(lightNode.locationY,1.0) * 256) # 12
 		buffer.put_8(int(lightNode.locationY)) # 13
-		buffer.put_8(fmod(lightNode.locationZ,1.0) * 256) # 14
-		buffer.put_8(int(lightNode.locationZ)) # 15
+		# Old format stores Z as unsigned bytes, so clamp (KFX maps with negative Z would otherwise wrap around)
+		buffer.put_8(fmod(clamp(lightNode.locationZ, 0.0, 255.0),1.0) * 256) # 14
+		buffer.put_8(int(clamp(lightNode.locationZ, 0.0, 255.0))) # 15
 		buffer.put_8(lightNode.data16) # 16
 		buffer.put_8(lightNode.data17) # 17
 		buffer.put_16(lightNode.parentTile) # 18-19
@@ -328,7 +331,8 @@ func write_lgtfx():
 		
 		lines.append("SubtileX = [" + str(int(lightNode.locationX)) + ", " + str(int(fmod(lightNode.locationX, 1.0) * 256)) + "]")
 		lines.append("SubtileY = [" + str(int(lightNode.locationY)) + ", " + str(int(fmod(lightNode.locationY, 1.0) * 256)) + "]")
-		lines.append("SubtileZ = [" + str(int(lightNode.locationZ)) + ", " + str(int(fmod(lightNode.locationZ, 1.0) * 256)) + "]")
+		# floor() (not int()) so negative Z encodes as KeeperFX reads it: (stl << 8) | (sub & 0xFF)
+		lines.append("SubtileZ = [" + str(int(floor(lightNode.locationZ))) + ", " + str(int((lightNode.locationZ - floor(lightNode.locationZ)) * 256)) + "]")
 		
 		entryNumber += 1
 	
