@@ -5,8 +5,7 @@ onready var oPlayerDistance = Nodelist.list["oPlayerDistance"]
 onready var oPlayerPositioning = Nodelist.list["oPlayerPositioning"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oRandomPlayers = Nodelist.list["oRandomPlayers"]
-
-const impenetrableColour = Color(0.0, 0.0, 0.0, 1.0)
+onready var oRandomBorder = Nodelist.list["oRandomBorder"]
 
 
 func apply_pizza_symmetry(imageData):
@@ -98,7 +97,7 @@ func check_valid_player_position_unlocked(centerPos, imageData):
 			var x = centerPos.x + dx
 			var y = centerPos.y + dy
 			if x >= 0 and x < imageData.get_width() and y >= 0 and y < imageData.get_height():
-				if imageData.get_pixel(x, y) == impenetrableColour:
+				if oRandomBorder.is_border_pixel(imageData.get_pixel(x, y)):
 					return false
 			else:
 				return false
@@ -198,7 +197,7 @@ func find_position_with_spiral_search(centerX, centerY, mapSizeX, mapSizeY, imag
 
 func check_valid_single_pixel_position(pos, imageData):
 	imageData.lock()
-	var result = imageData.get_pixel(pos.x, pos.y) != impenetrableColour
+	var result = not oRandomBorder.is_border_pixel(imageData.get_pixel(pos.x, pos.y))
 	imageData.unlock()
 	return result
 

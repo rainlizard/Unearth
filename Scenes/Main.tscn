@@ -6630,18 +6630,18 @@ __meta__ = {
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 989.0
-margin_bottom = 640.0
+margin_bottom = 660.0
 custom_constants/separation = 20
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
 margin_right = 323.0
-margin_bottom = 620.0
+margin_bottom = 640.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
 margin_right = 314.0
-margin_bottom = 611.0
+margin_bottom = 631.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer"]
 margin_right = 305.0
@@ -6792,10 +6792,22 @@ size_flags_horizontal = 10
 pressed = true
 text = "Generate border"
 
-[node name="NewMapNoiseOptions" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+[node name="NewMapBorderType" type="OptionButton" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+margin_left = 105.0
 margin_top = 346.0
 margin_right = 305.0
-margin_bottom = 555.0
+margin_bottom = 373.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 10
+text = "Abyss"
+align = 1
+items = [ "Impenetrable rock", null, false, 0, null, "Abyss", null, false, 1, null ]
+selected = 1
+
+[node name="NewMapNoiseOptions" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer"]
+margin_top = 377.0
+margin_right = 305.0
+margin_bottom = 586.0
 
 [node name="NoiseDistance" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions" instance=ExtResource( 135 )]
 margin_top = 0.0
@@ -6854,9 +6866,9 @@ text = "Tapered"
 one_shot = true
 
 [node name="HSeparator3" type="HSeparator" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer"]
-margin_top = 559.0
+margin_top = 590.0
 margin_right = 305.0
-margin_bottom = 560.0
+margin_bottom = 591.0
 
 [node name="Spacing" type="Control" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer"]
 visible = false
@@ -6867,16 +6879,16 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ButtonNewMapOK" type="Button" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer"]
-margin_top = 575.0
+margin_top = 595.0
 margin_right = 305.0
-margin_bottom = 602.0
+margin_bottom = 622.0
 size_flags_vertical = 10
 text = "OK"
 
 [node name="QuickNoisePreview" type="TextureRect" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer"]
 margin_left = 343.0
 margin_right = 969.0
-margin_bottom = 620.0
+margin_bottom = 640.0
 hint_tooltip = "Click to randomize seed"
 size_flags_horizontal = 7
 size_flags_vertical = 7
@@ -8711,6 +8723,7 @@ margin_bottom = 40.0
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerPositioning" to="Ui/UiSystem/NewMapWindow" method="_on_PlayerPositioning_sliderChanged"]
 [connection signal="toggled" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/LinearDistanceCheckBox" to="Ui/UiSystem/NewMapWindow" method="_on_LinearDistanceCheckBox_toggled"]
 [connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/CheckBoxNewMapBorder" to="Ui/UiSystem/NewMapWindow" method="_on_CheckBoxNewMapBorder_pressed"]
+[connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapBorderType" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapBorderType_item_selected"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions/NoiseDistance" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseDistance_sliderChanged"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions/NoisePersistence" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePersistence_sliderChanged"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions/NoisePeriod" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePeriod_sliderChanged"]

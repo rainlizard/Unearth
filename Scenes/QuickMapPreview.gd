@@ -75,12 +75,15 @@ const colourDict = {
 	
 	52 : Color("D890BF"),
 	54 : Color.purple, #Color.fuchsia
+
+	61 : Color8(4,24,6),
 }
 const spoilerColor = Color8(20,16,0) #Color(0.125, 0.125, 0.175, 1.0)
 var spoiledSlabs = {
 	Slabs.ROCK:null,
 	Slabs.GOLD:null,
 	Slabs.GEMS:null,
+	Slabs.ABYSS:null,
 }
 
 func slab_is_ownable(slabID):

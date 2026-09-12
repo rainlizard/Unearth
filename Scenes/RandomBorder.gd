@@ -12,12 +12,30 @@ onready var oYSizeLine = Nodelist.list["oYSizeLine"]
 onready var oNoiseDistance = Nodelist.list["oNoiseDistance"]
 onready var oRandomPlayers = Nodelist.list["oRandomPlayers"]
 onready var oDataOwnership = Nodelist.list["oDataOwnership"]
+onready var oNewMapBorderType = Nodelist.list["oNewMapBorderType"]
 
 var noise = OpenSimplexNoise.new()
 var algorithmType = 1
 
 const earthColour = Color(36.0/255.0, 24.0/255.0, 0.0/255.0, 1.0)
 const impenetrableColour = Color(0.0, 0.0, 0.0, 1.0)
+const abyssColour = Color(4.0/255.0, 24.0/255.0, 6.0/255.0, 1.0) # Exact bytes: preview Image is RGBA8, so pixel equality needs whole bytes
+
+const BORDER_ROCK = 0
+const BORDER_ABYSS = 1
+
+func current_border_colour():
+	if oNewMapBorderType.selected == BORDER_ABYSS:
+		return abyssColour
+	return impenetrableColour
+
+func is_border_pixel(pixelColour):
+	return pixelColour == impenetrableColour or pixelColour == abyssColour
+
+func current_border_slab():
+	if oNewMapBorderType.selected == BORDER_ABYSS:
+		return Slabs.ABYSS
+	return Slabs.ROCK
 
 
 func _ready():
@@ -56,6 +74,7 @@ func convert_pixels_to_slabs(imageData):
 			if isPlayerColor == false:
 				match pixelColor:
 					impenetrableColour: oDataSlab.set_cell(x, y, Slabs.ROCK)
+					abyssColour: oDataSlab.set_cell(x, y, Slabs.ABYSS)
 					earthColour: oDataSlab.set_cell(x, y, Slabs.EARTH)
 	imageData.unlock()
 
@@ -102,7 +121,7 @@ func update_border_image_with_noise(imageData, textureData):
 	
 	var coordsToCheck = [Vector2(halfMapSize.x,halfMapSize.y)]
 	
-	imageData.fill(impenetrableColour)
+	imageData.fill(current_border_colour())
 	imageData.lock()
 	
 	while coordsToCheck.size() > 0:
@@ -129,7 +148,7 @@ func update_border_image_with_blank(imageData, textureData):
 	for x in fullMapSize.x:
 		for y in fullMapSize.y:
 			if x == 0 or x == fullMapSize.x-1 or y == 0 or y == fullMapSize.y-1:
-				imageData.set_pixel(x,y, impenetrableColour)
+				imageData.set_pixel(x,y, current_border_colour())
 	imageData.unlock()
 
 
@@ -173,7 +192,7 @@ func remove_isolated_earth_slabs(imageData):
 	for y in range(h):
 		for x in range(w):
 			if imageData.get_pixel(x, y) == earthColour:
-				imageData.set_pixel(x, y, impenetrableColour)
+				imageData.set_pixel(x, y, current_border_colour())
 			elif imageData.get_pixel(x, y) == tempColor:
 				imageData.set_pixel(x, y, earthColour)
 	for magentaPos in magentaPositions:

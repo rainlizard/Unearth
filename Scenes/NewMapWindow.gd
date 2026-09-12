@@ -26,6 +26,7 @@ onready var oRandomPlayers = Nodelist.list["oRandomPlayers"]
 onready var oRandomPlayersPizza = Nodelist.list["oRandomPlayersPizza"]
 onready var oLinearDistanceCheckBox = Nodelist.list["oLinearDistanceCheckBox"]
 onready var oPlayerPositioning = Nodelist.list["oPlayerPositioning"]
+onready var oNewMapBorderType = Nodelist.list["oNewMapBorderType"]
 
 var currently_creating_new_map = false
 
@@ -104,7 +105,7 @@ func _on_ButtonNewMapOK_pressed():
 	for y in range(rectStart.y, rectEnd.y+1):
 		for x in range(rectStart.x, rectEnd.x+1):
 			shapePositionArray.append(Vector2(x,y))
-	var slabID = Slabs.ROCK
+	var slabID = oRandomBorder.current_border_slab()
 	var useOwner = 5
 	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner)
 	
@@ -207,25 +208,33 @@ func _on_CheckBoxNewMapBorder_pressed():
 		oNewMapNoiseOptions.visible = false
 		update_border_image_with_blank()
 
+func _on_NewMapBorderType_item_selected(_index):
+	_on_CheckBoxNewMapBorder_pressed()
+
 func _on_NewMapFormat_item_selected(index):
 	if index == Constants.OldFormat:
+		oNewMapBorderType.selected = oRandomBorder.BORDER_ROCK
+		oNewMapBorderType.disabled = true
+		oNewMapBorderType.hint_tooltip = "Abyss border requires KFX format."
 		oXSizeLine.editable = false
 		oYSizeLine.editable = false
 		oXSizeLine.text = "85"
 		oYSizeLine.text = "85"
-		_on_XSizeLine_focus_exited()
-		_on_YSizeLine_focus_exited()
 		oXSizeLine.hint_tooltip = "Map size can only be changed if KFX format is used."
 		oYSizeLine.hint_tooltip = "Map size can only be changed if KFX format is used."
 		oPlayerCount.max_value = 4.0
 		if oPlayerCount.value > 4:
 			oPlayerCount.value = 4
 	elif index == Constants.KfxFormat:
+		oNewMapBorderType.disabled = false
+		oNewMapBorderType.hint_tooltip = ""
 		oXSizeLine.editable = true
 		oYSizeLine.editable = true
 		oXSizeLine.hint_tooltip = ""
 		oYSizeLine.hint_tooltip = ""
 		oPlayerCount.max_value = 8.0
+	reinit_noise_preview()
+	_on_CheckBoxNewMapBorder_pressed()
 	
 
 
@@ -337,7 +346,7 @@ func apply_symmetry():
 					imageData.set_pixel(x, y, oRandomBorder.earthColour)
 					continue
 				
-				imageData.set_pixel(x, y, oRandomBorder.impenetrableColour)
+				imageData.set_pixel(x, y, oRandomBorder.current_border_colour())
 	
 	imageData.unlock()
 

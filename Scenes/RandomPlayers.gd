@@ -15,14 +15,12 @@ onready var oPlayerDistance = Nodelist.list["oPlayerDistance"]
 onready var oPlayerPositioning = Nodelist.list["oPlayerPositioning"]
 onready var oNoiseDistance = Nodelist.list["oNoiseDistance"]
 onready var oLinearDistanceCheckBox = Nodelist.list["oLinearDistanceCheckBox"]
+onready var oRandomBorder = Nodelist.list["oRandomBorder"]
 
 var playerPositions = []
 var occupiedCoordinates = {}
 
 const PLAYER_SIZE = 5
-const earthColour = Color(36.0/255.0, 24.0/255.0, 0.0/255.0, 1.0)
-const impenetrableColour = Color(0.0, 0.0, 0.0, 1.0)
-
 
 func convert_player_number_to_index(playerNumber):
 	match playerNumber:
@@ -379,7 +377,7 @@ func check_valid_player_position(centerPos, imageData):
 			var x = centerPos.x + dx
 			var y = centerPos.y + dy
 			if x >= 0 and x < imageData.get_width() and y >= 0 and y < imageData.get_height():
-				if imageData.get_pixel(x, y) == impenetrableColour:
+				if oRandomBorder.is_border_pixel(imageData.get_pixel(x, y)):
 					imageData.unlock()
 					return false
 	imageData.unlock()
@@ -439,7 +437,7 @@ func place_colored_player_pixels_at_position(imageData, centerPos, playerNumber)
 			var y = centerPos.y + dy
 			if x >= 0 and x < mapWidth and y >= 0 and y < mapHeight:
 				var currentPixel = imageData.get_pixel(x, y)
-				if currentPixel != impenetrableColour:
+				if not oRandomBorder.is_border_pixel(currentPixel):
 					imageData.set_pixel(x, y, dungeonHeartColor)
 	
 	# Create claimed floor around the heart (5x5 area, excluding the 3x3 heart)
@@ -452,7 +450,7 @@ func place_colored_player_pixels_at_position(imageData, centerPos, playerNumber)
 				if abs(dx) <= 1 and abs(dy) <= 1:
 					continue
 				var currentPixel = imageData.get_pixel(x, y)
-				if currentPixel != impenetrableColour and currentPixel != dungeonHeartColor:
+				if not oRandomBorder.is_border_pixel(currentPixel) and currentPixel != dungeonHeartColor:
 					imageData.set_pixel(x, y, claimedFloorColor)
 	
 	print("Placed player ", playerNumber, " (index ", playerIndex, ") at position ", centerPos)
@@ -549,7 +547,7 @@ func check_valid_player_position_unlocked(centerPos, imageData):
 			var x = centerPos.x + dx
 			var y = centerPos.y + dy
 			if x >= 0 and x < imageData.get_width() and y >= 0 and y < imageData.get_height():
-				if imageData.get_pixel(x, y) == impenetrableColour:
+				if oRandomBorder.is_border_pixel(imageData.get_pixel(x, y)):
 					return false
 			else:
 				return false
