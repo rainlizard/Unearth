@@ -5333,7 +5333,7 @@ rect_min_size = Vector2( 150, 0 )
 hint_tooltip = "If a bridge is placed on this slab, this indicates what's underneath the bridge."
 size_flags_horizontal = 10
 text = "No"
-items = [ "No", null, false, 0, null, "Lava", null, false, 1, null, "Water", null, false, 2, null ]
+items = [ "No", null, false, 0, null, "Lava", null, false, 1, null, "Water", null, false, 2, null, "Abyss", null, false, 4, null ]
 selected = 0
 
 [node name="Label7" type="Label" parent="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer"]

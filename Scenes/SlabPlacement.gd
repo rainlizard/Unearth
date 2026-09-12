@@ -191,7 +191,7 @@ func place_shape_of_slab_id(shapePositionArray, slabID, ownership):
 		
 		if Slabs.data.has(slabID) and Slabs.data[slabID][Slabs.LIQUID_TYPE] == Slabs.WLB_BRIDGE and oBridgesOnlyOnLiquidCheckbox.pressed:
 			var currentSlabOnPos = oDataSlab.get_cellv(pos)
-			var isUnderlyingSlabLiquid = currentSlabOnPos == Slabs.WATER or currentSlabOnPos == Slabs.LAVA
+			var isUnderlyingSlabLiquid = Slabs.is_bridgeable(currentSlabOnPos)
 			var isUnderlyingSlabBridge = Slabs.data.has(currentSlabOnPos) and Slabs.data[currentSlabOnPos][Slabs.LIQUID_TYPE] == Slabs.WLB_BRIDGE
 			if isUnderlyingSlabLiquid == false and isUnderlyingSlabBridge == false:
 				removeFromShape.append(pos)
@@ -959,7 +959,7 @@ func modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slab
 func modify_for_liquid(slabsetIndexGroup, surrID, slabID):
 	
 	# Don't modify slab if slab is liquid or bridge
-	if slabID == Slabs.WATER or slabID == Slabs.LAVA or Slabs.data[slabID][Slabs.LIQUID_TYPE] == Slabs.WLB_BRIDGE:
+	if Slabs.data.has(slabID) == false or Slabs.is_bridgeable(slabID) or Slabs.data[slabID][Slabs.LIQUID_TYPE] == Slabs.WLB_BRIDGE:
 		return
 	
 	var modify0 = 0; var modify1 = 0; var modify2 = 0; var modify3 = 0; var modify4 = 0; var modify5 = 0; var modify6 = 0; var modify7 = 0; var modify8 = 0

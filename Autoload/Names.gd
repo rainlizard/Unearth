@@ -324,6 +324,7 @@ const slabs = {
 "DOOR_MAGIC": "Magic Door",
 "DOOR_MAGIC2": "Magic Door",
 "SLAB50": "Slab 50",
+"ABYSS": "Abyss",
 "BRIDGE_FRAME": "Bridge",
 "GEMS": "Gems",
 "GUARD_AREA": "Guard Post",

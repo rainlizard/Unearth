@@ -94,6 +94,7 @@ enum {
 	PURPLE_PATH = 54,
 	# 58 doesn't exist within 1304 entries
 	DENSE_GOLD = 60,
+	ABYSS = 61,
 	WALL_AUTOMATIC = 999,
 }
 
@@ -118,6 +119,7 @@ enum {
 	WLB_LAVA = 1
 	WLB_WATER = 2
 	WLB_BRIDGE = 3
+	WLB_ABYSS = 4
 }
 enum {
 	WIBBLE_OFF = 0
@@ -254,8 +256,9 @@ var data = {
 51: ["BRIDGE_FRAME",          FLOOR_SLAB, BITMASK_SIMPLE,        TAB_MAINSLAB,  WIBBLE_ON,       WLB_BRIDGE,  OWNABLE, 1], # 51
 52: ["GEMS",                  BLOCK_SLAB, BITMASK_SIMPLE,        TAB_MAINSLAB,  WIBBLE_ON,       WLB_PATH,  NOT_OWNABLE, 0], # 52
 53: ["GUARD_AREA",            FLOOR_SLAB, BITMASK_SIMPLE,        TAB_MAINSLAB,  WIBBLE_ON,       WLB_PATH,  OWNABLE, 1], # 53
-54: ["PURPLE_PATH",           FLOOR_SLAB, BITMASK_SIMPLE,        TAB_OTHER,     WIBBLE_OFF,      WLB_PATH,  NOT_OWNABLE, 1], # 54
-999: ["AUTOMATIC_WALL",       BLOCK_SLAB, BITMASK_REINFORCED,    TAB_MAINSLAB,  WIBBLE_ON,       WLB_PATH,  OWNABLE, 0], # 999
+ 54: ["PURPLE_PATH",           FLOOR_SLAB, BITMASK_SIMPLE,        TAB_OTHER,     WIBBLE_OFF,      WLB_PATH,  NOT_OWNABLE, 1], # 54
+ 61: ["ABYSS",                 FLOOR_SLAB, BITMASK_FLOOR,         TAB_MAINSLAB,  WIBBLE_ON,       WLB_ABYSS, NOT_OWNABLE, 19], # 61
+ 999: ["AUTOMATIC_WALL",       BLOCK_SLAB, BITMASK_REINFORCED,    TAB_MAINSLAB,  WIBBLE_ON,       WLB_PATH,  OWNABLE, 0], # 999
 }
 
 
@@ -295,6 +298,7 @@ GOLD,
 GEMS,
 WATER,
 LAVA,
+ABYSS,
 TREASURE_ROOM,
 LAIR,
 HATCHERY,
@@ -350,3 +354,9 @@ func is_door(slabID):
 		if data[slabID][BITMASK_TYPE] == BITMASK_DOOR1 or data[slabID][BITMASK_TYPE] == BITMASK_DOOR2:
 			return true
 	return false
+
+func is_bridgeable(slabID):
+	if data.has(slabID) == false:
+		return false
+	var wlb = data[slabID][LIQUID_TYPE]
+	return wlb != WLB_PATH and wlb != WLB_BRIDGE
