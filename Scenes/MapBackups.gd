@@ -57,6 +57,7 @@ func load_selected_backup():
 
 
 func backup_existing_map_files(map_file_path):
+	var BACKUPTIME_START = OS.get_ticks_msec()
 	var base_directory = map_file_path.get_base_dir()
 	var map_name_no_ext = map_file_path.get_file().get_basename()
 	if base_directory == "" or map_name_no_ext == "":
@@ -109,32 +110,36 @@ func backup_existing_map_files(map_file_path):
 		if err != OK:
 			print("Backup failed, could not copy: " + source_path + " Code: " + str(err))
 			return false
-	print("Backed up map files to: " + backup_folder)
+	var backup_sizes = Settings.read_cfg("backup_folder_sizes") if Settings.cfg_has_setting("backup_folder_sizes") else {}
 	var limit_bytes = int(Settings.get_setting("backup_folder_size_limit_mb")) * 1024 * 1024
-	if limit_bytes > 0 and backup_dir.open(backup_root) == OK:
+	if backup_dir.open(backup_root) == OK:
 		var backup_folder_paths = []
-		var backup_folder_sizes = {}
+		var current_backup_sizes = {}
 		var total_size = 0
 		backup_dir.list_dir_begin(true, false)
 		var entry = backup_dir.get_next()
 		while entry != "":
 			var entry_path = backup_root.plus_file(entry)
 			if backup_dir.current_is_dir() == true:
-				var folder_size = 0
-				var folder_dir = Directory.new()
-				var folder_file = File.new()
-				if folder_dir.open(entry_path) == OK:
-					folder_dir.list_dir_begin(true, false)
-					var backup_file_name = folder_dir.get_next()
+				var folder_size = int(backup_sizes.get(entry, 0))
+				if backup_sizes.has(entry) == false and dir.open(entry_path) == OK:
+					folder_size = 0
+					var folder_size_known = true
+					dir.list_dir_begin(true, false)
+					var backup_file_name = dir.get_next()
 					while backup_file_name != "":
-						var file_path = entry_path.plus_file(backup_file_name)
-						if folder_dir.current_is_dir() == false and folder_file.open(file_path, File.READ) == OK:
-							folder_size += folder_file.get_len()
-							folder_file.close()
-						backup_file_name = folder_dir.get_next()
-					folder_dir.list_dir_end()
+						if dir.current_is_dir() == false:
+							if file.open(entry_path.plus_file(backup_file_name), File.READ) == OK:
+								folder_size += file.get_len()
+								file.close()
+							else:
+								folder_size_known = false
+						backup_file_name = dir.get_next()
+					dir.list_dir_end()
+					if folder_size_known:
+						backup_sizes[entry] = folder_size
 				backup_folder_paths.append(entry_path)
-				backup_folder_sizes[entry_path] = folder_size
+				current_backup_sizes[entry] = folder_size
 				total_size += folder_size
 			entry = backup_dir.get_next()
 		backup_dir.list_dir_end()
@@ -142,18 +147,20 @@ func backup_existing_map_files(map_file_path):
 		backup_folder_paths.sort()
 		while total_size > limit_bytes and backup_folder_paths.size() > 1:
 			var folder_path = backup_folder_paths.pop_front()
-			var delete_dir = Directory.new()
-			if delete_dir.open(folder_path) == OK:
-				delete_dir.list_dir_begin(true, false)
-				var delete_file_name = delete_dir.get_next()
+			total_size -= current_backup_sizes[folder_path.get_file()]
+			backup_sizes.erase(folder_path.get_file())
+			if dir.open(folder_path) == OK:
+				dir.list_dir_begin(true, false)
+				var delete_file_name = dir.get_next()
 				while delete_file_name != "":
-					if delete_dir.current_is_dir() == false:
-						delete_dir.remove(delete_file_name)
-					delete_file_name = delete_dir.get_next()
-				delete_dir.list_dir_end()
+					if dir.current_is_dir() == false:
+						dir.remove(delete_file_name)
+					delete_file_name = dir.get_next()
+				dir.list_dir_end()
 				backup_dir.remove(folder_path.get_file())
-			total_size -= backup_folder_sizes[folder_path]
 			print("Deleted old backup: " + folder_path)
+	Settings.write_cfg("backup_folder_sizes", backup_sizes)
+	print("Backed up map files to: " + backup_folder + " in " + str(OS.get_ticks_msec() - BACKUPTIME_START) + "ms")
 	return true
 
 
