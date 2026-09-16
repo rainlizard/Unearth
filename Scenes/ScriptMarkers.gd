@@ -60,6 +60,7 @@ var commandsWithPositions = [
 	
 	# These original commands are "Action points", not locations. But it probably doesn't matter because a positive number is an action point.
 	["RESET_ACTION_POINT", 0, IS_LOCATION],
+	["TRIGGER_ACTION_POINT", 0, IS_LOCATION],
 	["IF_ACTION_POINT", 0, IS_LOCATION],
 	["ADD_TUNNELLER_TO_LEVEL", 1, IS_LOCATION],
 	["ADD_CREATURE_TO_LEVEL", 2, IS_LOCATION],
