@@ -1173,10 +1173,10 @@ align = 1
 
 [node name="PropertiesWindow" type="WindowDialog" parent="Ui/UiTools"]
 visible = true
-margin_left = 4000.0
+margin_left = 4240.0
 margin_top = 60.0
-margin_right = 4311.0
-margin_bottom = 360.0
+margin_right = 5081.0
+margin_bottom = 810.0
 grow_horizontal = 0
 grow_vertical = 0
 rect_min_size = Vector2( 311, 0 )
@@ -1195,7 +1195,7 @@ margin_bottom = -6.0
 mouse_filter = 2
 
 [node name="UniversalDetails" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer"]
-margin_right = 299.0
+margin_right = 829.0
 margin_bottom = 49.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -1208,18 +1208,18 @@ one_shot = true
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 290.0
+margin_right = 820.0
 margin_bottom = 40.0
 
 [node name="UniversalListData" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/VBoxContainer"]
-margin_right = 281.0
+margin_right = 811.0
 mouse_filter = 2
 custom_constants/vseparation = 8
 script = ExtResource( 42 )
 
 [node name="Spacing" type="Control" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/VBoxContainer"]
 margin_top = 4.0
-margin_right = 281.0
+margin_right = 811.0
 margin_bottom = 6.0
 rect_min_size = Vector2( 0, 2 )
 size_flags_horizontal = 3
@@ -1227,7 +1227,7 @@ size_flags_vertical = 3
 
 [node name="SlabNameDisplay" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/UniversalDetails/VBoxContainer"]
 margin_top = 10.0
-margin_right = 281.0
+margin_right = 811.0
 margin_bottom = 31.0
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -1238,8 +1238,8 @@ script = ExtResource( 90 )
 
 [node name="PropertiesTabs" type="TabContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer"]
 margin_top = 53.0
-margin_right = 299.0
-margin_bottom = 143.0
+margin_right = 829.0
+margin_bottom = 522.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource( 118 )
@@ -1248,6 +1248,7 @@ __meta__ = {
 }
 
 [node name="ThingDetails" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -1260,18 +1261,18 @@ rect_clip_content = true
 script = ExtResource( 79 )
 
 [node name="SelectionStatus" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails"]
-margin_right = 289.0
+margin_right = 819.0
 margin_bottom = 45.0
 
 [node name="PanelContainer" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus"]
-margin_right = 142.0
+margin_right = 407.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 
 [node name="SelectionStatusButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 133.0
+margin_right = 398.0
 margin_bottom = 36.0
 focus_mode = 0
 size_flags_horizontal = 3
@@ -1280,15 +1281,15 @@ text = "Selected"
 flat = true
 
 [node name="PanelContainer2" type="PanelContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus"]
-margin_left = 146.0
-margin_right = 289.0
+margin_left = 411.0
+margin_right = 819.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 
 [node name="DeleteSelectedButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails/SelectionStatus/PanelContainer2"]
 margin_left = 9.0
 margin_top = 9.0
-margin_right = 134.0
+margin_right = 399.0
 margin_bottom = 36.0
 focus_mode = 0
 size_flags_horizontal = 3
@@ -1298,14 +1299,13 @@ flat = true
 
 [node name="ThingListData" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/ThingDetails"]
 margin_top = 49.0
-margin_right = 289.0
+margin_right = 819.0
 margin_bottom = 49.0
 mouse_filter = 2
 custom_constants/vseparation = 8
 script = ExtResource( 42 )
 
 [node name="PlacingSettings" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -1315,7 +1315,7 @@ margin_bottom = -12.0
 script = ExtResource( 10 )
 
 [node name="PlacingListData" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_right = 276.0
+margin_right = 805.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/vseparation = 8
@@ -1323,7 +1323,7 @@ script = ExtResource( 42 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 4.0
-margin_right = 276.0
+margin_right = 805.0
 margin_bottom = 43.0
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -1333,14 +1333,14 @@ custom_constants/margin_left = 0
 custom_constants/margin_bottom = 2
 
 [node name="OwnerSelection" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer"]
-margin_right = 269.0
+margin_right = 798.0
 margin_bottom = 37.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 73 )
 
 [node name="OwnershipGridContainer" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection"]
-margin_right = 269.0
+margin_right = 798.0
 size_flags_horizontal = 3
 custom_constants/vseparation = 0
 custom_constants/hseparation = 0
@@ -1348,7 +1348,7 @@ columns = 6
 
 [node name="UseSlabOwnerCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection"]
 margin_top = 4.0
-margin_right = 269.0
+margin_right = 798.0
 margin_bottom = 33.0
 hint_tooltip = "The ownership of placed Things will be set to the ownership of the underlying slab"
 focus_mode = 0
@@ -1370,7 +1370,7 @@ text = "Collectible"
 
 [node name="Control" type="Control" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MarginContainer/OwnerSelection"]
 margin_top = 37.0
-margin_right = 269.0
+margin_right = 798.0
 margin_bottom = 37.0
 mouse_filter = 2
 __meta__ = {
@@ -1399,23 +1399,25 @@ __meta__ = {
 
 [node name="HSeparator" type="HSeparator" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 47.0
-margin_right = 276.0
+margin_right = 805.0
 margin_bottom = 48.0
 
 [node name="EditingTools" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 52.0
-margin_right = 276.0
+margin_right = 805.0
 margin_bottom = 135.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 109 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
-margin_right = 276.0
+margin_right = 805.0
 margin_bottom = 48.0
+alignment = 1
 
 [node name="ToolPencil" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
-margin_right = 48.0
+margin_left = 274.0
+margin_right = 322.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Pencil tool"
@@ -1430,8 +1432,8 @@ texture_hover = ExtResource( 113 )
 expand = true
 
 [node name="ToolBrush" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
-margin_left = 52.0
-margin_right = 100.0
+margin_left = 326.0
+margin_right = 374.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Brush tool"
@@ -1445,8 +1447,8 @@ texture_hover = ExtResource( 147 )
 expand = true
 
 [node name="ToolRectangle" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
-margin_left = 104.0
-margin_right = 152.0
+margin_left = 378.0
+margin_right = 426.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Rectangle tool"
@@ -1460,8 +1462,8 @@ texture_hover = ExtResource( 112 )
 expand = true
 
 [node name="ToolPaintBucket" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
-margin_left = 156.0
-margin_right = 204.0
+margin_left = 430.0
+margin_right = 478.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Paint bucket tool"
@@ -1475,8 +1477,8 @@ texture_hover = ExtResource( 142 )
 expand = true
 
 [node name="AddDoodadButton" type="TextureButton" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/HBoxContainer"]
-margin_left = 208.0
-margin_right = 256.0
+margin_left = 482.0
+margin_right = 530.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
 hint_tooltip = "Add random doodad"
@@ -1488,7 +1490,7 @@ expand = true
 
 [node name="BrushSizeContainer" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools"]
 margin_top = 52.0
-margin_right = 276.0
+margin_right = 805.0
 margin_bottom = 83.0
 
 [node name="Label" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/EditingTools/BrushSizeContainer"]
@@ -1516,7 +1518,7 @@ text = "Place door as locked"
 
 [node name="FortifyCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 139.0
-margin_right = 276.0
+margin_right = 805.0
 margin_bottom = 168.0
 focus_mode = 0
 pressed = true
@@ -1524,14 +1526,14 @@ text = "Fortify"
 
 [node name="MirrorPlacementCheckBox" type="CheckBox" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 172.0
-margin_right = 276.0
+margin_right = 805.0
 margin_bottom = 201.0
 focus_mode = 0
 text = "Symmetrical"
 
 [node name="MirrorOptions" type="HBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 205.0
-margin_right = 276.0
+margin_right = 805.0
 margin_bottom = 333.0
 script = ExtResource( 149 )
 
@@ -1616,7 +1618,7 @@ text = "Diagonal"
 
 [node name="LimitThing" type="GridContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
 margin_top = 337.0
-margin_right = 276.0
+margin_right = 805.0
 margin_bottom = 358.0
 size_flags_horizontal = 3
 columns = 2
@@ -1634,32 +1636,32 @@ margin_right = 124.0
 margin_bottom = 21.0
 
 [node name="DoodadsSeparatorTop" type="HSeparator" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 358.0
-margin_right = 276.0
-margin_bottom = 359.0
+margin_top = 362.0
+margin_right = 805.0
+margin_bottom = 363.0
 
 [node name="DoodadsLabel" type="Label" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 363.0
-margin_right = 276.0
-margin_bottom = 384.0
+margin_top = 367.0
+margin_right = 805.0
+margin_bottom = 388.0
 size_flags_horizontal = 3
 text = "Random doodads"
 
 [node name="DoodadsSeparatorBottom" type="HSeparator" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 388.0
-margin_right = 276.0
-margin_bottom = 389.0
+margin_top = 392.0
+margin_right = 805.0
+margin_bottom = 393.0
 
 [node name="DoodadsList" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 393.0
-margin_right = 276.0
-margin_bottom = 393.0
+margin_top = 397.0
+margin_right = 805.0
+margin_bottom = 397.0
 custom_constants/separation = 0
 
 [node name="PlacingTipsButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings"]
-margin_top = 362.0
-margin_right = 276.0
-margin_bottom = 389.0
+margin_top = 401.0
+margin_right = 805.0
+margin_bottom = 428.0
 focus_mode = 0
 text = "Tips"
 
@@ -3428,9 +3430,9 @@ text = "Chance"
 
 [node name="DoodadChanceSpinBox" type="SpinBox" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
 margin_left = 124.0
-margin_top = 120.0
+margin_top = 116.0
 margin_right = 280.0
-margin_bottom = 151.0
+margin_bottom = 147.0
 size_flags_horizontal = 3
 step = 0.05
 value = 0.25
