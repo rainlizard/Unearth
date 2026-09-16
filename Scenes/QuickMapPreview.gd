@@ -10,8 +10,6 @@ var img = Image.new()
 var tex = ImageTexture.new()
 
 
-#42, 43, 44, 45, 46, 47, 48, 49
-
 #11:
 #if (OwnRNC = true) then
 #Color.Gray
@@ -60,25 +58,13 @@ const colourDict = {
 	# Portal
 	#14 : Color(1,1,1,1),
 	
-	#Opened door: A8B060
-	#? door: 909850
-	# Doors
-	42 : Color("FC986C"),
-	43 : Color("FC986C"),
-	44 : Color("FC986C"),
-	45 : Color("FC986C"),
-	46 : Color("FC986C"),
-	47 : Color("FC986C"),
-	48 : Color("FC986C"),
-	49 : Color("FC986C"),
-	
-	
 	52 : Color("D890BF"),
 	54 : Color.purple, #Color.fuchsia
 
 	61 : Color8(4,24,6),
 }
 const spoilerColor = Color8(20,16,0) #Color(0.125, 0.125, 0.175, 1.0)
+const doorColour = Color("FC986C")
 var spoiledSlabs = {
 	Slabs.ROCK:null,
 	Slabs.GOLD:null,
@@ -178,6 +164,8 @@ func update_img(slbFilePath):
 			if hideSpoilers == false:
 				if colourDict.has(slabID):
 					img.set_pixel(x,y,colourDict[slabID])
+				elif Slabs.is_door(slabID):
+					img.set_pixel(x,y,doorColour)
 				else:
 					if slabID == Slabs.CLAIMED_GROUND and ownership != 255:
 						img.set_pixel(x,y,Constants.ownerFloorCol[ownership])
@@ -193,6 +181,10 @@ func update_img(slbFilePath):
 				if colourDict.has(slabID):
 					if spoiledSlabs.has(slabID) or ownership == 0:
 						img.set_pixel(x,y,colourDict[slabID])
+						pixelHasBeenSet = true
+				elif Slabs.is_door(slabID):
+					if ownership == 0:
+						img.set_pixel(x,y,doorColour)
 						pixelHasBeenSet = true
 				else:
 					if ownership == 0:
