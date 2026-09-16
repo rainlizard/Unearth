@@ -48,13 +48,6 @@ func _on_BridgesOnlyOnLiquidCheckbox_toggled(button_pressed):
 	Settings.set_setting("bridges_only_on_liquid", button_pressed)
 
 
-func _on_LavaEffectPercent_value_changed(value):
-	Settings.set_setting("chance_effect_lava", value)
-
-func _on_WaterEffectPercent_value_changed(value):
-	Settings.set_setting("chance_effect_water", value)
-
-
 func _on_PathStonePercent_value_changed(value):
 	Settings.set_setting("chance_path_stone", value)
 

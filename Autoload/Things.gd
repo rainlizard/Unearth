@@ -106,7 +106,7 @@ func fetch_name(thing_type, sub_type):
 				return dictionary_of_names.get(nameId, nameId.capitalize())
 			elif nameId is Array: # This is to take into considersation someone accidentally using two words with spaces as an object name. (otherwise we get a crash)
 				return dictionary_of_names.get(nameId[0], nameId[0].capitalize())
-			return "Error1337"
+			return "Unknown"
 		else:
 			return "Unknown " + data_structure_name[thing_type] + ": " + str(sub_type)
 	else:
@@ -121,7 +121,7 @@ func fetch_id_string(thing_type, sub_type):
 			return nameId
 		elif nameId is Array: # This is to take into considersation someone accidentally using two words with spaces as an object name. (otherwise we get a crash)
 			return nameId[0].capitalize()
-		return "Error1337"
+		return "Unknown"
 	else:
 		return "Unknown " + data_structure_name.get(thing_type, "Unknown") + ": " + str(sub_type)
 

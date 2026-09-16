@@ -201,6 +201,12 @@ func fetch_idname(slabID):
 		return slabData[NAME]
 	return ""
 
+func find_slab_id_by_name(findName):
+	for slabID in data:
+		if fetch_idname(slabID).to_upper() == findName.to_upper():
+			return slabID
+	return null
+
 var data = {
 00: ["HARD",                  BLOCK_SLAB, BITMASK_BLOCK,         TAB_MAINSLAB,  WIBBLE_ON,       WLB_PATH,  NOT_OWNABLE, 0], # 0
 01: ["GOLD",                  BLOCK_SLAB, BITMASK_BLOCK,         TAB_MAINSLAB,  WIBBLE_ON,       WLB_PATH,  NOT_OWNABLE, 0], # 1

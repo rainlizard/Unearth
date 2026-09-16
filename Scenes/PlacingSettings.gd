@@ -12,6 +12,17 @@ onready var oSelector = Nodelist.list["oSelector"]
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oPlaceLockedCheckBox = $EditingTools/PlaceLockedCheckBox
+onready var oDoodadsSeparatorTop = Nodelist.list["oDoodadsSeparatorTop"]
+onready var oDoodadsLabel = Nodelist.list["oDoodadsLabel"]
+onready var oDoodadsSeparatorBottom = Nodelist.list["oDoodadsSeparatorBottom"]
+onready var oDoodadsList = Nodelist.list["oDoodadsList"]
+onready var oDoodadWindow = Nodelist.list["oDoodadWindow"]
+onready var oDoodadSlabNameLabel = Nodelist.list["oDoodadSlabNameLabel"]
+onready var oDoodadThingTypeOptionButton = Nodelist.list["oDoodadThingTypeOptionButton"]
+onready var oDoodadSubtypeSpinBox = Nodelist.list["oDoodadSubtypeSpinBox"]
+onready var oDoodadNameLabel = Nodelist.list["oDoodadNameLabel"]
+onready var oDoodadChanceSpinBox = Nodelist.list["oDoodadChanceSpinBox"]
+onready var oDoodadDeleteButton = Nodelist.list["oDoodadDeleteButton"]
 
 # Default values for placement
 var effectRange = 5
@@ -27,6 +38,8 @@ var creatureGold = 0
 var creatureInitialHealth = 100
 var orientation = 0
 var goldValue = 0
+var doodad_edit_index = -1
+var have_opened_doodad_window = false
 
 enum FIELDS {
 	SUBTYPE
@@ -49,6 +62,7 @@ enum FIELDS {
 func _ready():
 	get_parent().set_tab_title(1, "Create")
 	oPlaceLockedCheckBox.connect("toggled", self, "_on_PlaceLockedCheckBox_toggled")
+	update_doodads()
 
 
 func _input(event):
@@ -81,13 +95,107 @@ func toggle_cursor_door():
 
 func editing_mode_was_switched(modeString):
 	if modeString == "Slab":
-		oPlacingListData.clear()
+		update_placing_tab()
 	else:
 		set_placing_tab_and_update_it()
 
 func _on_PropertiesTabs_tab_changed(tab):
 	if tab == 1:
 		set_placing_tab_and_update_it()
+
+
+func update_doodads():
+	var slabID = oSelection.paintSlab
+	var doodads = []
+	if oSelector.mode == oSelector.MODE_TILE and slabID != null:
+		doodads = Settings.slabDoodads.get(slabID, [])
+	var showDoodads = doodads.empty() == false
+	oDoodadsSeparatorTop.visible = showDoodads
+	oDoodadsLabel.visible = showDoodads
+	oDoodadsSeparatorBottom.visible = showDoodads
+	oDoodadsList.visible = showDoodads
+	if showDoodads:
+		update_doodads_list(doodads)
+
+
+func update_doodads_list(doodads):
+	for child in oDoodadsList.get_children():
+		oDoodadsList.remove_child(child)
+		child.queue_free()
+	
+	for index in doodads.size():
+		var doodad = doodads[index]
+		var button = Button.new()
+		button.text = Things.fetch_name(doodad[0], doodad[1]) + ' - ' + str(doodad[2]) + "%"
+		button.align = Button.ALIGN_LEFT
+		button.flat = true
+		button.focus_mode = Control.FOCUS_NONE
+		button.connect("pressed", self, "open_doodad_window", [index])
+		oDoodadsList.add_child(button)
+
+
+func open_doodad_window(index):
+	var slabID = oSelection.paintSlab
+	if slabID == null:
+		oMessage.quick("Select a slab first")
+		return
+	doodad_edit_index = index
+	oDoodadWindow.window_title = "Edit random doodad" if index != -1 else "Add random doodad"
+	oDoodadSlabNameLabel.text = Slabs.fetch_name(slabID)
+	if index != -1:
+		var doodad = Settings.slabDoodads[slabID][index]
+		oDoodadThingTypeOptionButton.select(max(0, oDoodadThingTypeOptionButton.get_item_index(doodad[0])))
+		oDoodadSubtypeSpinBox.value = doodad[1]
+		oDoodadChanceSpinBox.value = doodad[2]
+	elif have_opened_doodad_window == false: # Defaults for the first time opening the window
+		oDoodadThingTypeOptionButton.select(oDoodadThingTypeOptionButton.get_item_index(Things.TYPE.OBJECT))
+		oDoodadSubtypeSpinBox.value = 1
+		oDoodadChanceSpinBox.value = 0.25
+	have_opened_doodad_window = true
+	oDoodadDeleteButton.visible = index != -1
+	update_doodad_name()
+	Utils.popup_centered(oDoodadWindow)
+
+
+func doodad_window_slab_changed(): # Called whenever the selected slab changes
+	if oDoodadWindow.visible == false or oSelection.paintSlab == null:
+		return
+	doodad_edit_index = -1
+	oDoodadWindow.window_title = "Add random doodad"
+	oDoodadDeleteButton.visible = false
+	oDoodadSlabNameLabel.text = Slabs.fetch_name(oSelection.paintSlab)
+
+
+func update_doodad_name():
+	oDoodadNameLabel.text = Things.fetch_name(oDoodadThingTypeOptionButton.get_selected_id(), int(oDoodadSubtypeSpinBox.value))
+
+
+func _on_DoodadThingTypeOptionButton_item_selected(index):
+	update_doodad_name()
+
+func _on_DoodadSubtypeSpinBox_value_changed(value):
+	update_doodad_name()
+
+func _on_DoodadConfirmButton_pressed():
+	var slabID = oSelection.paintSlab
+	if Settings.slabDoodads.has(slabID) == false:
+		Settings.slabDoodads[slabID] = []
+	var doodad = [oDoodadThingTypeOptionButton.get_selected_id(), int(oDoodadSubtypeSpinBox.value), oDoodadChanceSpinBox.value]
+	if doodad_edit_index == -1:
+		Settings.slabDoodads[slabID].append(doodad)
+	else:
+		Settings.slabDoodads[slabID][doodad_edit_index] = doodad
+	Settings.save_slab_doodads()
+	oDoodadWindow.hide()
+	update_doodads()
+
+
+func _on_DoodadDeleteButton_pressed():
+	var slabID = oSelection.paintSlab
+	Settings.slabDoodads[slabID].remove(doodad_edit_index)
+	Settings.save_slab_doodads()
+	oDoodadWindow.hide()
+	update_doodads()
 
 
 func replicate_instance_settings(aNode):
@@ -113,6 +221,7 @@ func set_placing_tab_and_update_it():
 
 func update_placing_tab():
 	oPlacingListData.clear()
+	update_doodads()
 	
 	var thingType = oSelection.paintThingType
 	var subtype = oSelection.paintSubtype

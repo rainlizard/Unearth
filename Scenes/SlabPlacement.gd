@@ -37,6 +37,7 @@ onready var oRoundWaterNearLava = Nodelist.list["oRoundWaterNearLava"]
 onready var oAutomaticTorchSlabsCheckbox = Nodelist.list["oAutomaticTorchSlabsCheckbox"]
 onready var oPathStonePercent = Nodelist.list["oPathStonePercent"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
+onready var oUpdateAllSlabsWindow = Nodelist.list["oUpdateAllSlabsWindow"]
 
 enum dir {
 	s = 0
@@ -58,6 +59,11 @@ enum {
 }
 
 var autogen_was_called = false
+
+
+func should_reset(options, optionName):
+	# An empty options dictionary means everything is reset (normal placement)
+	return options.empty() or options.get(optionName, true)
 
 
 func set_door_locks(shapePositions, slabID):
@@ -264,7 +270,7 @@ func get_column_index_from_lookup(cubes, floorTexture):
 		return clmIndex
 
 
-func generate_slabs_based_on_id(shapePositionArray, updateNearby):
+func generate_slabs_based_on_id(shapePositionArray, updateNearby, options = {}):
 	oOverheadOwnership.update_ownership_image_based_on_shape(shapePositionArray)
 	var CODETIME_START = OS.get_ticks_msec()
 	
@@ -330,8 +336,8 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby):
 		var ownership = oDataOwnership.get_cell_ownership(pos.x, pos.y)
 		
 		if Slabs.data.has(slabID):
-			do_slab(pos.x, pos.y, slabID, ownership)
-			oInstances.manage_things_on_slab(pos.x, pos.y, slabID, ownership)
+			do_slab(pos.x, pos.y, slabID, ownership, options)
+			oInstances.manage_things_on_slab(pos.x, pos.y, slabID, ownership, should_reset(options, "solid_things"))
 		
 		currentLoad += 1
 		
@@ -388,7 +394,7 @@ func do_update_auto_walls(slabID):
 	return false # Is not a wall
 
 
-func do_slab(xSlab, ySlab, slabID, ownership):
+func do_slab(xSlab, ySlab, slabID, ownership, options):
 	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
 	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
 	
@@ -399,7 +405,7 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 		slabID = auto_earth(xSlab, ySlab, slabID, surrID)
 	
 	if Slabs.fake_extra_data.has(slabID): # Fake Slab IDs
-		slab_place_fake(xSlab, ySlab, slabID, ownership, surrID)
+		slab_place_fake(xSlab, ySlab, slabID, ownership, surrID, options)
 		return
 	
 	# Do not update Fake Slabs
@@ -407,36 +413,47 @@ func do_slab(xSlab, ySlab, slabID, ownership):
 		return
 	
 	# WIB (wibble)
-	update_wibble(xSlab, ySlab, slabID, false)
+	if should_reset(options, "wibble"):
+		update_wibble(xSlab, ySlab, slabID, false)
 	# WLB (Water Lava Block)
-	if Slabs.data[slabID][Slabs.LIQUID_TYPE] != Slabs.WLB_BRIDGE:
-		oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
+	if should_reset(options, "liquid"):
+		if Slabs.data[slabID][Slabs.LIQUID_TYPE] != Slabs.WLB_BRIDGE:
+			oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
 	
 	var bitmaskType = Slabs.data[slabID][Slabs.BITMASK_TYPE]
-	place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType)
+	place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType, options)
 
-func slab_place_fake(xSlab, ySlab, slabID, ownership, surrID):
+func slab_place_fake(xSlab, ySlab, slabID, ownership, surrID, options):
 	var recognizedAsID = Slabs.fake_extra_data[slabID][Slabs.FAKE_RECOGNIZED_AS]
 	var wibbleEdges = Slabs.fake_extra_data[slabID][Slabs.FAKE_WIBBLE_EDGES]
 	
 	# WIB (wibble)
-	update_wibble(xSlab, ySlab, slabID, wibbleEdges)
+	if should_reset(options, "wibble"):
+		update_wibble(xSlab, ySlab, slabID, wibbleEdges)
 	
 	# WLB (Water Lava Block)
-	if Slabs.data[recognizedAsID][Slabs.LIQUID_TYPE] != Slabs.WLB_BRIDGE:
-		var liquidValue = Slabs.data[slabID][Slabs.LIQUID_TYPE]
-		oDataLiquid.set_cell(xSlab, ySlab, liquidValue)
+	if should_reset(options, "liquid"):
+		if Slabs.data[recognizedAsID][Slabs.LIQUID_TYPE] != Slabs.WLB_BRIDGE:
+			var liquidValue = Slabs.data[slabID][Slabs.LIQUID_TYPE]
+			oDataLiquid.set_cell(xSlab, ySlab, liquidValue)
 	
-	var constructedColumns = Slabs.fake_extra_data[slabID][Slabs.FAKE_CUBE_DATA]
-	var constructedFloor = Slabs.fake_extra_data[slabID][Slabs.FAKE_FLOOR_DATA]
-	
-	set_columns(xSlab, ySlab, constructedColumns, constructedFloor)
+	if should_reset(options, "columns"):
+		var constructedColumns = Slabs.fake_extra_data[slabID][Slabs.FAKE_CUBE_DATA]
+		var constructedFloor = Slabs.fake_extra_data[slabID][Slabs.FAKE_FLOOR_DATA]
+		set_columns(xSlab, ySlab, constructedColumns, constructedFloor)
 	
 	oDataSlab.set_cell(xSlab, ySlab, recognizedAsID)
 
 
-func _on_ConfirmAutoGen_confirmed():
+func _on_ConfirmUpdateAllSlabs_pressed():
 	var CODETIME_START = OS.get_ticks_msec()
+	var options = {}
+	for child in oUpdateAllSlabsWindow.get_node("VBoxContainer").get_children():
+		if child is CheckBox:
+			options[child.name] = child.pressed
+	if options.values().has(true) == false:
+		oMessage.quick("Nothing selected")
+		return
 	oMessage.quick("Auto-generated all slabs")
 	var updateNearby = true
 	#Vector2(0,0), Vector2(M.xSize-1,M.ySize-1)
@@ -446,7 +463,7 @@ func _on_ConfirmAutoGen_confirmed():
 			shapePositionArray.append(Vector2(xSlab,ySlab))
 	
 	autogen_was_called = true
-	yield(generate_slabs_based_on_id(shapePositionArray, updateNearby), "completed")
+	yield(generate_slabs_based_on_id(shapePositionArray, updateNearby, options), "completed")
 	autogen_was_called = false
 	
 	print('Auto-generated all slabs: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
@@ -613,7 +630,7 @@ func determine_door_direction(xSlab, ySlab, slabID, surrID, bitmaskType):
 
 
 
-func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType):
+func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskType, options):
 	var modifyForLiquid = true
 	
 	var bitmask
@@ -665,8 +682,9 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 	elif slabID == Slabs.PATH:
 		randomize_path_cubes(constructedColumns)
 	
-	set_columns(xSlab, ySlab, constructedColumns, constructedFloor)
-	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabsetIndexGroup, bitmask, surrID, bitmaskType)
+	if should_reset(options, "columns"):
+		set_columns(xSlab, ySlab, constructedColumns, constructedFloor)
+	oPlaceThingWithSlab.place_slab_objects(xSlab, ySlab, slabID, ownership, slabsetIndexGroup, bitmask, surrID, bitmaskType, options)
 
 func randomize_path_cubes(constructedColumns):
 	var pthClean = Cube.rngCube["PathClean"]

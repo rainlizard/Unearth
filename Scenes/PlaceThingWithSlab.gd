@@ -2,39 +2,47 @@ extends Node
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
-onready var oLavaEffectPercent = Nodelist.list["oLavaEffectPercent"]
-onready var oWaterEffectPercent = Nodelist.list["oWaterEffectPercent"]
 onready var oSelector = Nodelist.list["oSelector"]
 
 onready var dir = oSlabPlacement.dir
 
-func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, bitmaskType):
-	oInstances.delete_attached_instances_on_slab(xSlab, ySlab)
+func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, bitmaskType, options):
+	var spawnRoomObjects = oSlabPlacement.should_reset(options, "room_objects")
+	var spawnRandomObjects = oSlabPlacement.should_reset(options, "random_objects")
 	
-	match slabID:
-		Slabs.WATER:
-			if Random.rng.randf_range(0.0, 100.0) < oWaterEffectPercent.value:
-				create_effect(xSlab, ySlab, ownership, Things.TYPE.EFFECTGEN, 2)
-		Slabs.LAVA:
-			if Random.rng.randf_range(0.0, 100.0) < oLavaEffectPercent.value:
-				create_effect(xSlab, ySlab, ownership, Things.TYPE.EFFECTGEN, 1)
-		_:
-			if Slabs.is_door(slabID):
-				create_door_thing(xSlab, ySlab, ownership)
+	if spawnRoomObjects:
+		oInstances.delete_attached_instances_on_slab(xSlab, ySlab)
+		if Slabs.is_door(slabID):
+			create_door_thing(xSlab, ySlab, ownership)
+		
+		if slabID == Slabs.PRISON:
+			var subtiles_with_bars = prison_bar_bitmask(slabID, surrID)
+			for i in range(9):
+				spawn_object(xSlab, ySlab, slabID, ownership, i, clmIndexGroup[i], subtiles_with_bars.has(i))
+		else:
+			for i in range(9):
+				spawn_object(xSlab, ySlab, slabID, ownership, i, clmIndexGroup[i], true)
 	
-	if slabID == Slabs.PRISON:
-		var subtiles_with_bars = prison_bar_bitmask(slabID, surrID)
-		for i in range(9):
-			spawn_object(xSlab, ySlab, slabID, ownership, i, clmIndexGroup[i], subtiles_with_bars.has(i))
-	else:
-		for i in range(9):
-			spawn_object(xSlab, ySlab, slabID, ownership, i, clmIndexGroup[i], true)
+	if spawnRandomObjects:
+		delete_doodads_on_slab(xSlab, ySlab)
+		for doodad in Settings.slabDoodads.get(slabID, []):
+			for subtile in 9:
+				if Random.rng.randf_range(0.0, 100.0) < doodad[2]:
+					spawn_doodad(xSlab, ySlab, ownership, doodad[0], doodad[1], subtile)
 
-func create_effect(xSlab, ySlab, ownership, effectType, effectSubtype):
-	var xSubtile = (xSlab*3) + Random.randi_range(0,2) + 0.5
-	var ySubtile = (ySlab*3) + Random.randi_range(0,2) + 0.5
+func delete_doodads_on_slab(xSlab, ySlab):
+	for id in oInstances.get_all_nodes_on_slab(xSlab, ySlab, ["Thing"]):
+		if id.has_meta("doodad"):
+			oInstances.kill_instance(id)
+
+func spawn_doodad(xSlab, ySlab, ownership, thingType, subtype, subtile):
+	var xSubtile = (xSlab*3) + (subtile % 3) + 0.5
+	var ySubtile = (ySlab*3) + (subtile / 3) + 0.5
+	if oInstances.get_all_instances_on_subtile(xSubtile, ySubtile).empty() == false: # Don't overlap things already on this subtile
+		return
 	var createAtPos = Vector3(xSubtile, ySubtile, 0)
-	oInstances.place_new_thing(effectType, effectSubtype, createAtPos, ownership)
+	var id = oInstances.place_new_thing(thingType, subtype, createAtPos, ownership)
+	id.set_meta("doodad", true)
 
 func spawn_object(xSlab, ySlab, slabID, ownership, subtile, clmIndex, shouldSpawn):
 	var variation = int(clmIndex / 9)

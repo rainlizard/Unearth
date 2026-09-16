@@ -12,6 +12,10 @@ var unearthdata = ""
 var settings_file_path = ""
 var backup_folder_size_limit_mb = 1024
 
+# {slabID: [[thingType, subtype, chance_percent], ...]} (stored in settings.cfg with string names)
+var slabDoodads = {}
+var unresolvedDoodads = {} # Loaded before their slab data was available, kept so saving doesn't lose them
+
 var config = ConfigFile.new()
 
 var listOfSettings = [
@@ -81,8 +85,6 @@ var listOfSettings = [
 	"wallauto_damaged",
 	"recently_opened",
 	"placing_tutorial",
-	"chance_effect_water",
-	"chance_effect_lava",
 	"chance_path_stone",
 	"auto_open_map_settings",
 	"fortify",
@@ -127,6 +129,59 @@ func initialize_settings():
 	executable_stuff()
 	
 	haveInitializedAllSettings = true
+
+func load_slab_doodads(): # Called once slab data (including custom slabs) is loaded
+	slabDoodads = {}
+	unresolvedDoodads = {}
+	var settingName = "slab_doodads"
+	if cfg_has_setting(settingName) == false:
+		settingName = "slab_decorations" # Legacy name
+		if cfg_has_setting(settingName) == false:
+			# Default doodads, or migrate the old "Place Dripping Water effect" / "Place Lava effect" chances
+			var waterChance = read_cfg("chance_effect_water") if cfg_has_setting("chance_effect_water") else 0.25
+			var lavaChance = read_cfg("chance_effect_lava") if cfg_has_setting("chance_effect_lava") else 0.25
+			slabDoodads[Slabs.WATER] = [[Things.TYPE.EFFECTGEN, 2, waterChance]]
+			slabDoodads[Slabs.LAVA] = [[Things.TYPE.EFFECTGEN, 1, lavaChance]]
+			if cfg_has_setting("chance_effect_water"): cfg_remove_setting("chance_effect_water")
+			if cfg_has_setting("chance_effect_lava"): cfg_remove_setting("chance_effect_lava")
+			save_slab_doodads()
+			return
+	
+	var stored = read_cfg(settingName)
+	for slabKey in stored:
+		var slabID = slab_id_from_key(slabKey)
+		if slabID == null:
+			unresolvedDoodads[slabKey] = stored[slabKey]
+			continue
+		var doodads = []
+		for entry in stored[slabKey]:
+			var thingType = entry[0]
+			var subtype = entry[1]
+			if thingType is String: # Stored thing types are names, not IDs
+				thingType = Things.reverse_data_structure_name.get(thingType, Things.TYPE.NONE)
+				if thingType == Things.TYPE.NONE: continue
+				subtype = Things.find_subtype_by_name(thingType, entry[1])
+			if subtype != null:
+				doodads.append([thingType, subtype, entry[2]])
+		slabDoodads[slabID] = doodads
+	
+	if settingName != "slab_doodads":
+		cfg_remove_setting("slab_decorations")
+		save_slab_doodads()
+
+func slab_id_from_key(slabKey):
+	if slabKey is int: return slabKey # Legacy numeric key
+	if slabKey.is_valid_integer(): return int(slabKey) # Legacy numeric string key
+	return Slabs.find_slab_id_by_name(slabKey)
+
+func save_slab_doodads():
+	var stored = unresolvedDoodads.duplicate(true)
+	for slabID in slabDoodads:
+		var doodads = []
+		for entry in slabDoodads[slabID]:
+			doodads.append([Things.data_structure_name[entry[0]], Things.fetch_id_string(entry[0], entry[1]), entry[2]])
+		stored[Slabs.fetch_idname(slabID)] = doodads
+	write_cfg("slab_doodads", stored)
 
 func executable_stuff():
 	var oGame = Nodelist.list["oGame"]
@@ -433,14 +488,6 @@ func game_setting(doWhat,string,value):
 			var oUiSystem = $'../Main/Ui/UiSystem'
 			if doWhat == SET: oUiSystem.theme.get_font("font","").size = value
 			if doWhat == GET: return oUiSystem.theme.get_font("font","").size
-		"chance_effect_water":
-			var oWaterEffectPercent = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer/WaterEffectPercent'
-			if doWhat == SET: oWaterEffectPercent.value = value
-			if doWhat == GET: return oWaterEffectPercent.value
-		"chance_effect_lava":
-			var oLavaEffectPercent = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer2/LavaEffectPercent'
-			if doWhat == SET: oLavaEffectPercent.value = value
-			if doWhat == GET: return oLavaEffectPercent.value
 		"chance_path_stone":
 			var oPathStonePercent = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer3/PathStonePercent'
 			if doWhat == SET: oPathStonePercent.value = value

@@ -503,8 +503,10 @@ func kill_instance(id): # Multi-thread safe
 	instances_to_erase.append(id)
 
 
-func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
+func manage_things_on_slab(xSlab, ySlab, slabID, ownership, deleteThings = true):
 	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
+		if deleteThings == false:
+			return
 		var nodesOnSlab = get_all_nodes_on_slab(xSlab, ySlab, ["Thing"])
 		for id in nodesOnSlab:
 			kill_instance(id)

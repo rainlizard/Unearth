@@ -12,7 +12,7 @@ onready var oMenuButtonView = Nodelist.list["oMenuButtonView"]
 onready var oMenuPlayButton = Nodelist.list["oMenuPlayButton"]
 onready var oFileDialogSaveAs = Nodelist.list["oFileDialogSaveAs"]
 onready var oFileDialogOpen = Nodelist.list["oFileDialogOpen"]
-onready var oConfirmAutoGen = Nodelist.list["oConfirmAutoGen"]
+onready var oUpdateAllSlabsWindow = Nodelist.list["oUpdateAllSlabsWindow"]
 onready var oTabPlacements = Nodelist.list["oTabPlacements"]
 onready var oSelector = Nodelist.list["oSelector"]
 onready var oMenuButtonHelp = Nodelist.list["oMenuButtonHelp"]
@@ -272,7 +272,7 @@ func _on_EditSubmenu_Pressed(pressedID):
 			Utils.popup_centered(oResizeCurrentMapSize)
 		4: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
-				Utils.popup_centered(oConfirmAutoGen)
+				Utils.popup_centered(oUpdateAllSlabsWindow)
 		6: # Modify slabset
 			oSlabsetWindow.popup_on_right_side()
 		7: # Cfg editor
