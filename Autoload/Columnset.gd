@@ -27,9 +27,8 @@ var columnsContainingRngCubes = {}
 
 
 func import_toml_columnset(filePath):
-	var cfg = ConfigFile.new()
-	var err = cfg.load(filePath)
-	if err != OK:
+	var cfg = Utils.load_toml_file(filePath)
+	if cfg == null:
 		return
 	
 	var is_from_fxdata = "fxdata" in filePath
@@ -140,27 +139,27 @@ func update_cube_lists():
 func export_toml_columnset(filePath, column_diffs = null):
 	if column_diffs == null:
 		column_diffs = find_all_different_columns()
-	if column_diffs.size() == 0:
+	if column_diffs.empty():
 		return false
 	
+	var lines = PoolStringArray()
+	for i in column_diffs:
+		lines.append('[column' + str(i) +']')
+		lines.append('Lintel = ' + str(lintel[i]))
+		lines.append('Height = ' + str(height[i]))
+		lines.append('SolidMask = ' + str(solidMask[i]))
+		lines.append('FloorTexture = ' + str(floorTexture[i]))
+		lines.append('Orientation = ' + str(orientation[i]))
+		lines.append('Cubes = ' + str(cubes[i]))
+		lines.append('')
+
 	var textFile = File.new()
+	var text = Utils.preserve_toml_comments(filePath, "\n".join(lines))
 	if textFile.open(filePath, File.WRITE) != OK:
 		var oMessage = Nodelist.list["oMessage"]
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 		return false
-	
-	for i in column_count:
-		if column_diffs.has(i) == false:
-			continue
-		
-		textFile.store_line('[column' + str(i) +']')
-		textFile.store_line('Lintel = ' + str(lintel[i]))
-		textFile.store_line('Height = ' + str(height[i]))
-		textFile.store_line('SolidMask = ' + str(solidMask[i]))
-		textFile.store_line('FloorTexture = ' + str(floorTexture[i]))
-		textFile.store_line('Orientation = ' + str(orientation[i]))
-		textFile.store_line('Cubes = ' + str(cubes[i]))
-		textFile.store_line('\r')
+	textFile.store_string(text)
 	
 	textFile.close()
 	print("Saved: " + filePath)

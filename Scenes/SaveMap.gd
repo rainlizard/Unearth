@@ -375,6 +375,15 @@ func export_rules_cfg(file_path):
 func delete_config_file_if_exists(file_path, file_type):
 	if File.new().file_exists(file_path) == false:
 		return true
+	if file_type.ends_with(".toml"):
+		var comments = Utils.get_toml_comments(file_path)
+		if comments.empty() == false:
+			var file = File.new()
+			if file.open(file_path, File.WRITE) != OK:
+				return false
+			file.store_string("\n".join(comments) + "\n")
+			file.close()
+			return true
 	var err_trash = OS.move_to_trash(ProjectSettings.globalize_path(file_path))
 	if err_trash != OK:
 		print("Error trashing " + file_type + " file: " + file_path.get_file() + " Code: " + str(err_trash))

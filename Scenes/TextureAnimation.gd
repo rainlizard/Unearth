@@ -21,10 +21,10 @@ func generate_animation_database(file_path):
 	var current_texture_index = -1
 	
 	while !file.eof_reached():
-		var line = file.get_line().strip_edges()
+		var line = Utils.strip_toml_comment(file.get_line()).strip_edges()
 		
-		# Skip empty lines and comments
-		if line.empty() or line.begins_with("#"):
+		# Skip empty lines
+		if line.empty():
 			continue
 			
 		# Check for texture definition

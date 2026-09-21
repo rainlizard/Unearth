@@ -55,6 +55,87 @@ func string_has_letters(string):
 		return true
 	return false
 
+func strip_toml_comments(text):
+	var lines = text.split("\n")
+	for i in lines.size():
+		lines[i] = strip_toml_comment(lines[i])
+	return "\n".join(lines)
+
+func strip_toml_comment(line):
+	return "" if line.strip_edges().begins_with("#") else line
+
+func load_toml_file(file_path):
+	var file = File.new()
+	if file.open(file_path, File.READ) != OK:
+		return null
+	var cfg = ConfigFile.new()
+	var err = cfg.parse(strip_toml_comments(file.get_as_text()))
+	file.close()
+	return cfg if err == OK else null
+
+func preserve_toml_comments(file_path, text):
+	var file = File.new()
+	if file.open(file_path, File.READ) != OK:
+		return text
+
+	var old_text = file.get_as_text()
+	file.close()
+	var comments_by_id = {}
+	var comments = PoolStringArray()
+	var state = ["", {}]
+	for old_line in old_text.split("\n"):
+		var line = old_line.trim_suffix("\r")
+		var id = _get_toml_line_id(line, state)
+		if line.strip_edges().begins_with("#"):
+			comments.append(line)
+		elif id != "" and comments.empty() == false:
+			comments_by_id[id] = comments
+			comments = PoolStringArray()
+	var footer_comments = comments
+
+	var merged = PoolStringArray()
+	state = ["", {}]
+	for line in text.split("\n"):
+		var id = _get_toml_line_id(line, state)
+		if comments_by_id.has(id):
+			merged.append_array(comments_by_id[id])
+			comments_by_id.erase(id)
+		merged.append(line)
+
+	if comments_by_id.empty() == false or footer_comments.empty() == false:
+		if merged[merged.size() - 1] != "":
+			merged.append("")
+		for remaining_comments in comments_by_id.values():
+			merged.append_array(remaining_comments)
+		merged.append_array(footer_comments)
+		merged.append("")
+	return "\n".join(merged)
+
+func get_toml_comments(file_path):
+	var file = File.new()
+	if file.open(file_path, File.READ) != OK:
+		return PoolStringArray()
+
+	var comments = PoolStringArray()
+	for line in file.get_as_text().split("\n"):
+		if line.strip_edges().begins_with("#"):
+			comments.append(line.trim_suffix("\r"))
+	file.close()
+	return comments
+
+func _get_toml_line_id(line, state):
+	var stripped = line.strip_edges()
+	var id = ""
+	if stripped.begins_with("["):
+		state[0] = stripped
+		id = stripped
+	elif "=" in stripped and stripped.begins_with("#") == false:
+		id = state[0] + ":" + stripped.left(stripped.find("=")).strip_edges().to_lower()
+	if id == "":
+		return ""
+	state[1][id] = state[1].get(id, 0) + 1
+	return id + ":" + str(state[1][id])
+
 func get_filetype_in_directory(directory_path: String, file_extension: String, include_subdirs = false) -> Array:
 	var files = []
 	var dirs_to_check = [directory_path]

@@ -204,7 +204,8 @@ func preprocess_toml_file(filePath): # 7ms
 	# [[slab20.NW_WATER.objects2]]
 
 	# Replace all instances of [[ with [ in the entire file text first, important for parsing to be correct
-	var fileText = file.get_as_text().replace("[[", "[").replace("]]", "]")
+	var fileText = Utils.strip_toml_comments(file.get_as_text()).replace("[[", "[").replace("]]", "]")
+	file.close()
 	var arrayOfLines = fileText.split("\n")
 	var calculateObjectIndex = 0
 	var rememberLine = ""
@@ -338,12 +339,13 @@ func export_toml_slabset(filePath, list_of_modified_slabs = null):
 			lines.append("")
 		lines.append("")
 
+	var text = Utils.preserve_toml_comments(filePath, "\n".join(lines))
 	var textFile = File.new()
 	if textFile.open(filePath, File.WRITE) != OK:
 		oMessage.big("Error", "Couldn't save file, maybe try saving to another directory.")
 		return false
 
-	textFile.store_string("\n".join(lines))
+	textFile.store_string(text)
 	textFile.close()
 
 	print("Saved: " + filePath)

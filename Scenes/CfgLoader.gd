@@ -459,9 +459,8 @@ func load_campaign_boss_file(mapPath):
 	return campaignFile["config"]
 
 func load_effects_data(file_path):
-	var cfg = ConfigFile.new()
-	var err = cfg.load(file_path)
-	if err != OK:
+	var cfg = Utils.load_toml_file(file_path)
+	if cfg == null:
 		return
 	
 	for section in cfg.get_sections():
