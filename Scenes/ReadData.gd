@@ -397,6 +397,7 @@ func read_tngfx(buffer):
 	if err == OK:
 		var numberOfTngEntries = c.get_value("common", "ThingsCount")
 		var thingScn = preload("res://Scenes/ThingInstance.tscn")
+		var unrecognizedSubtypeStringIDs = []
 		for entryNumber in numberOfTngEntries:
 			var section = "thing"+str(entryNumber)
 			if c.has_section(section) == false:
@@ -433,7 +434,7 @@ func read_tngfx(buffer):
 					if resolvedSubtype != null:
 						id.subtype = resolvedSubtype
 					else:
-						oMessage.big("Unrecognized .tngfx SubtypeStringID", "SubtypeStringID \"%s\" for ThingType \"%s\" in [%s] is not defined in the loaded KeeperFX configuration. Unearth fell back to numeric Subtype %s." % [subtypeStringID, c.get_value(section, "ThingType"), section, id.subtype])
+						unrecognizedSubtypeStringIDs.append("SubtypeStringID \"%s\" for ThingType \"%s\" in [%s] is not defined in the loaded KeeperFX configuration. Unearth fell back to numeric Subtype %s." % [subtypeStringID, c.get_value(section, "ThingType"), section, id.subtype])
 				else:
 					oMessage.big("Invalid .tngfx SubtypeStringID", "SubtypeStringID for ThingType \"%s\" in [%s] is not a string. Unearth fell back to numeric Subtype %s." % [c.get_value(section, "ThingType"), section, id.subtype])
 			if id.subtype is String:
@@ -483,6 +484,9 @@ func read_tngfx(buffer):
 			id.data18_19 = 0
 			id.data20 = 0
 			oInstances.add_instance(id)
+		
+		if unrecognizedSubtypeStringIDs.empty() == false:
+			oMessage.big("Unrecognized .tngfx SubtypeStringID", PoolStringArray(unrecognizedSubtypeStringIDs).join("\n"))
 	else:
 		oMessage.big(".tngfx unparsable", "The map did not load correctly! The .tngfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .tngfx file.")
 
