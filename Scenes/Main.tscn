@@ -3250,11 +3250,10 @@ script = ExtResource( 74 )
 
 [node name="UpdateAllSlabsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
-margin_left = -456.0
-margin_top = 144.0
-margin_right = -156.0
-margin_bottom = 394.0
-rect_min_size = Vector2( 300, 250 )
+margin_left = -632.0
+margin_right = -332.0
+margin_bottom = 237.0
+rect_min_size = Vector2( 300, 240 )
 popup_exclusive = true
 window_title = "Update all slabs"
 resizable = true
@@ -3272,52 +3271,45 @@ margin_right = 280.0
 margin_bottom = 21.0
 text = "Select what to reset:"
 
-[node name="columns" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
+[node name="room_objects" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
 margin_top = 25.0
 margin_right = 280.0
 margin_bottom = 54.0
 pressed = true
-text = "Column appearance"
+text = "Room objects"
 
-[node name="wibble" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
+[node name="random_doodads" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
 margin_top = 58.0
 margin_right = 280.0
 margin_bottom = 87.0
 pressed = true
-text = "Wibble"
+text = "Random doodads"
 
-[node name="liquid" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
+[node name="columns" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
 margin_top = 91.0
 margin_right = 280.0
 margin_bottom = 120.0
 pressed = true
-text = "Liquid"
+text = "Column appearance"
 
-[node name="room_objects" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
+[node name="wibble" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
 margin_top = 124.0
 margin_right = 280.0
 margin_bottom = 153.0
 pressed = true
-text = "Room objects"
+text = "Wibble"
 
-[node name="random_doodads" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
+[node name="liquid" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
 margin_top = 157.0
 margin_right = 280.0
 margin_bottom = 186.0
 pressed = true
-text = "Random doodads"
-
-[node name="solid_things" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
-margin_top = 190.0
-margin_right = 280.0
-margin_bottom = 219.0
-pressed = true
-text = "Things on solid slabs"
+text = "Liquid"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
-margin_top = 223.0
+margin_top = 190.0
 margin_right = 280.0
-margin_bottom = 250.0
+margin_bottom = 217.0
 alignment = 1
 
 [node name="ConfirmUpdateAllSlabsButton" type="Button" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer/HBoxContainer"]
