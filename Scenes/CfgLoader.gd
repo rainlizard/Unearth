@@ -269,6 +269,7 @@ func load_terrain_data(cfg): # 4ms
 						slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_REINFORCED
 					4: # Room
 						slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_FLOOR
+						Slabs.rooms_that_have_walls[id] = true # Room walls always borrow the room's slab ID + 1
 					5: # Obstacle
 						slabData[Slabs.BITMASK_TYPE] = Slabs.BITMASK_SIMPLE
 		

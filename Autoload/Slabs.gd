@@ -10,10 +10,12 @@ func _init():
 	# This only takes 1ms
 	default_data["data"] = data.duplicate(true)
 	default_data["doorslab_data"] = doorslab_data.duplicate(true)
+	default_data["rooms_that_have_walls"] = rooms_that_have_walls.duplicate()
 	
 func reset_slab_data_to_default(): # Reset data. Takes 1ms.
 	data = default_data["data"].duplicate(true)
 	doorslab_data = default_data["doorslab_data"].duplicate(true)
+	rooms_that_have_walls = default_data["rooms_that_have_walls"].duplicate()
 
 
 enum {
