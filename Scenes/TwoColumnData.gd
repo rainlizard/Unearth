@@ -130,22 +130,38 @@ func add_item(leftString, rightString):
 			nodeRightColumn.text = rightString #Utils.strip_special_chars_from_string(rightString)
 			nodeRightColumn.connect("text_changed", self, "_on_property_value_changed", [nodeRightColumn, leftString])
 			#nodeRightColumn.add_font_override("font", preload("res://Theme/StokeSmaller.tres"))
+		"Attached to":
+			if name == "PlacingListData":
+				nodeRightColumn = OptionButton.new()
+				nodeRightColumn.focus_mode = 0 # Fixes clicking on the menu
+				nodeRightColumn.get_popup().focus_mode = 0 # Fixes clicking on the menu
+				nodeRightColumn.add_item("Slab")
+				nodeRightColumn.add_item("Manually placed")
+				nodeRightColumn.select(0 if rightString == "True" else 1)
+				nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftString])
+			else:
+				nodeRightColumn = create_label(rightString)
 		_:
-			nodeRightColumn = Label.new()
-			nodeRightColumn.autowrap = true
-			nodeRightColumn.rect_min_size.x = columnRightSize
-			
-			nodeRightColumn.text = rightString
-			nodeRightColumn.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_END # To handle the other side's autowrap text
-			nodeRightColumn.align = HALIGN_LEFT
-			
-			var largest_word_width = get_largest_word_width(nodeRightColumn.text, nodeRightColumn.get_font("font", "Label"))
-			if largest_word_width >= 198: # EFFECTGENERATOR_ENTRANCE_ is slightly too large
-				nodeRightColumn.add_font_override("font", preload("res://Theme/StokeTiny.tres"))
-			elif largest_word_width >= 101: # "DARK_MISTRESS" is slightly too large
-				nodeRightColumn.add_font_override("font", preload("res://Theme/StokeSmaller.tres"))
+			nodeRightColumn = create_label(rightString)
 	
 	add_child(nodeRightColumn)
+
+
+func create_label(rightString):
+	var label = Label.new()
+	label.autowrap = true
+	label.rect_min_size.x = columnRightSize
+	
+	label.text = rightString
+	label.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_END # To handle the other side's autowrap text
+	label.align = HALIGN_LEFT
+	
+	var largest_word_width = get_largest_word_width(label.text, label.get_font("font", "Label"))
+	if largest_word_width >= 198: # EFFECTGENERATOR_ENTRANCE_ is slightly too large
+		label.add_font_override("font", preload("res://Theme/StokeTiny.tres"))
+	elif largest_word_width >= 101: # "DARK_MISTRESS" is slightly too large
+		label.add_font_override("font", preload("res://Theme/StokeSmaller.tres"))
+	return label
 
 
 func get_largest_word_width(text: String, font: Font) -> float:
@@ -306,6 +322,9 @@ func _on_optionbutton_item_selected(indexSelected, leftString):
 		"Orientation":
 			property_name = "orientation"
 			value = Constants.listOrientations[indexSelected]
+		"Attached to":
+			property_name = "attached"
+			value = indexSelected == 0
 		"Door locked":
 			property_name = "doorLocked"
 			match indexSelected:

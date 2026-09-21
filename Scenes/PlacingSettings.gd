@@ -23,7 +23,7 @@ onready var oDoodadSubtypeSpinBox = Nodelist.list["oDoodadSubtypeSpinBox"]
 onready var oDoodadNameLabel = Nodelist.list["oDoodadNameLabel"]
 onready var oDoodadChanceSpinBox = Nodelist.list["oDoodadChanceSpinBox"]
 onready var oDoodadOrientationOptionButton = Nodelist.list["oDoodadOrientationOptionButton"]
-onready var oDoodadAttachedCheckBox = Nodelist.list["oDoodadAttachedCheckBox"]
+onready var oDoodadAttachedOptionButton = Nodelist.list["oDoodadAttachedOptionButton"]
 onready var oDoodadDeleteButton = Nodelist.list["oDoodadDeleteButton"]
 
 # Default values for placement
@@ -39,6 +39,7 @@ var creatureName = ""
 var creatureGold = 0
 var creatureInitialHealth = 100
 var orientation = 0
+var attached = false
 var goldValue = 0
 var doodad_edit_index = -1
 var have_opened_doodad_window = false
@@ -59,6 +60,7 @@ enum FIELDS {
 	CREATURE_GOLD
 	CREATURE_NAME
 	ORIENTATION
+	ATTACHED
 }
 
 func _ready():
@@ -67,6 +69,8 @@ func _ready():
 	for orientationName in Constants.orientationNames:
 		oDoodadOrientationOptionButton.add_item(orientationName)
 	oDoodadOrientationOptionButton.add_item("Random")
+	oDoodadAttachedOptionButton.add_item("Slab")
+	oDoodadAttachedOptionButton.add_item("Manually placed")
 	update_doodads()
 
 
@@ -159,13 +163,13 @@ func open_doodad_window(index):
 		oDoodadChanceSpinBox.value = doodad[2]
 		var orientIndex = Constants.listOrientations.find(doodad[3])
 		oDoodadOrientationOptionButton.select(orientIndex if orientIndex != -1 else Constants.listOrientations.size())
-		oDoodadAttachedCheckBox.pressed = doodad[4]
+		oDoodadAttachedOptionButton.select(0 if doodad[4] else 1)
 	elif have_opened_doodad_window == false: # Defaults for the first time opening the window
 		oDoodadThingTypeOptionButton.select(oDoodadThingTypeOptionButton.get_item_index(Things.TYPE.OBJECT))
 		oDoodadSubtypeSpinBox.value = 1
 		oDoodadChanceSpinBox.value = 0.25
 		oDoodadOrientationOptionButton.select(0)
-		oDoodadAttachedCheckBox.pressed = true
+		oDoodadAttachedOptionButton.select(0)
 	have_opened_doodad_window = true
 	oDoodadDeleteButton.visible = index != -1
 	update_doodad_name()
@@ -189,7 +193,7 @@ func _on_DoodadConfirmButton_pressed():
 	var orientation = -1
 	if oDoodadOrientationOptionButton.selected < Constants.listOrientations.size():
 		orientation = Constants.listOrientations[oDoodadOrientationOptionButton.selected]
-	var doodad = [oDoodadThingTypeOptionButton.get_selected_id(), int(oDoodadSubtypeSpinBox.value), oDoodadChanceSpinBox.value, orientation, oDoodadAttachedCheckBox.pressed]
+	var doodad = [oDoodadThingTypeOptionButton.get_selected_id(), int(oDoodadSubtypeSpinBox.value), oDoodadChanceSpinBox.value, orientation, oDoodadAttachedOptionButton.selected == 0]
 	if doodad_edit_index == -1:
 		Settings.slabDoodads[slabID].append(doodad)
 	else:
@@ -220,6 +224,9 @@ func replicate_instance_settings(aNode):
 		if valueFromNode != null:
 			set(propertyName, valueFromNode)
 	
+	if aNode.get("thingType") in [Things.TYPE.OBJECT, Things.TYPE.EFFECTGEN] and aNode.get("parentTile") != null:
+		attached = aNode.parentTile != 65535
+	
 	if aNode.thingType == Things.TYPE.DOOR:
 		oPlaceLockedCheckBox.pressed = bool(aNode.doorLocked)
 
@@ -245,6 +252,7 @@ func update_placing_tab():
 				availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.CUSTOM_BOX_ID]
 			if oCurrentFormat.selected != Constants.OldFormat:
 				availableFields.append(FIELDS.ORIENTATION)
+			availableFields.append(FIELDS.ATTACHED)
 		Things.TYPE.CREATURE:
 			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.CREATURE_LEVEL]
 			if oCurrentFormat.selected != Constants.OldFormat:
@@ -253,13 +261,9 @@ func update_placing_tab():
 				availableFields.append(FIELDS.CREATURE_NAME)
 				#availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.EFFECTGEN:
-			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.EFFECT_RANGE, FIELDS.ORIENTATION]
-			if oCurrentFormat.selected != Constants.OldFormat:
-				availableFields.append(FIELDS.ORIENTATION)
+			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.EFFECT_RANGE, FIELDS.ORIENTATION, FIELDS.ATTACHED]
 		Things.TYPE.TRAP:
 			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.ORIENTATION]
-			if oCurrentFormat.selected != Constants.OldFormat:
-				availableFields.append(FIELDS.ORIENTATION)
 		Things.TYPE.DOOR:
 			availableFields = [FIELDS.SUBTYPE, FIELDS.NAME_ID, FIELDS.THINGTYPE, FIELDS.DOOR_LOCKED]
 		Things.TYPE.EXTRA:
@@ -316,6 +320,9 @@ func update_placing_tab():
 				FIELDS.ORIENTATION:
 					description = "Orientation"
 					value = orientation
+				FIELDS.ATTACHED:
+					description = "Attached to"
+					value = attached
 
 		if value != null:
 			oPlacingListData.add_item(description, str(value))

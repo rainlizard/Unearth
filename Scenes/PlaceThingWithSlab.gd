@@ -47,9 +47,8 @@ func spawn_doodad(xSlab, ySlab, ownership, doodad, subtile):
 	var orientation = doodad[3]
 	if orientation == -1:
 		orientation = Constants.listOrientations[Random.rng.randi_range(0, Constants.listOrientations.size()-1)]
-	var parentTile = ((ySlab * M.xSize) + xSlab) if doodad[4] else 65535
 	var createAtPos = Vector3(xSubtile, ySubtile, 0)
-	oInstances.place_new_thing(doodad[0], doodad[1], createAtPos, ownership, parentTile, orientation)
+	oInstances.place_new_thing(doodad[0], doodad[1], createAtPos, ownership, doodad[4], orientation)
 
 func spawn_object(xSlab, ySlab, slabID, ownership, subtile, clmIndex, shouldSpawn):
 	var variation = int(clmIndex / 9)

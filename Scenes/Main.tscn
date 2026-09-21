@@ -3455,20 +3455,19 @@ suffix = "%"
 script = ExtResource( 81 )
 
 [node name="AttachedLabel" type="Label" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
-margin_top = 186.0
+margin_top = 185.0
 margin_right = 120.0
-margin_bottom = 207.0
+margin_bottom = 206.0
 rect_min_size = Vector2( 120, 0 )
 text = "Attached to"
 
-[node name="DoodadAttachedCheckBox" type="CheckBox" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
+[node name="DoodadAttachedOptionButton" type="OptionButton" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
 margin_left = 124.0
 margin_top = 182.0
 margin_right = 280.0
-margin_bottom = 211.0
+margin_bottom = 209.0
+focus_mode = 0
 size_flags_horizontal = 3
-pressed = true
-text = "Slab"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/DoodadWindow/VBoxContainer"]
 margin_top = 263.0
