@@ -37,7 +37,7 @@ onready var oExportPreview = Nodelist.list["oExportPreview"]
 onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 onready var oGridDataWindow = Nodelist.list["oGridDataWindow"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
-onready var oActionPointListWindow = Nodelist.list["oActionPointListWindow"]
+onready var oInstanceListWindow = Nodelist.list["oInstanceListWindow"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oSortCreatureStats = Nodelist.list["oSortCreatureStats"]
 onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
@@ -363,7 +363,7 @@ func _on_ViewSubmenu_Pressed(pressedID):
 				oGenerateTerrain.start()
 			oUi.switch_to_1st_person()
 		4:
-			Utils.popup_centered(oActionPointListWindow)
+			Utils.popup_centered(oInstanceListWindow)
 		5:
 			Utils.popup_centered(oGridDataWindow)
 		6:

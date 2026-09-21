@@ -2,7 +2,7 @@ extends Node2D
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
-onready var oActionPointList = Nodelist.list["oActionPointList"]
+onready var oInstanceList = Nodelist.list["oInstanceList"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
 onready var oInstances = Nodelist.list["oInstances"]
@@ -83,11 +83,11 @@ func _ready():
 	if oInstances.bulk_loading:
 		return
 	yield(get_tree(),'idle_frame')
-	if oActionPointList:
-		oActionPointList.update_if_visible()
+	if oInstanceList:
+		oInstanceList.update_if_visible()
 
 func _exit_tree():
 	if oInstances.clearing_all_instances:
 		return
-	if oActionPointList:
-		oActionPointList.update_if_visible()
+	if oInstanceList:
+		oInstanceList.update_if_visible()

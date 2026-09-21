@@ -55,7 +55,7 @@ onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oCfgEditor = Nodelist.list["oCfgEditor"]
 onready var oMapBackups = Nodelist.list["oMapBackups"]
 onready var oInstances = Nodelist.list["oInstances"]
-onready var oActionPointList = Nodelist.list["oActionPointList"]
+onready var oInstanceList = Nodelist.list["oInstanceList"]
 onready var oTabTileset = Nodelist.list["oTabTileset"]
 
 
@@ -187,7 +187,7 @@ func open_map(filePath, show_opened_message = true, reset_camera = true, loaded_
 			if doorID.doorLocked != 0:
 				doorID.update_spinning_key()
 		oInstances.bulk_loading = false
-		oActionPointList.update_if_visible()
+		oInstanceList.update_if_visible()
 		if mapReadCount > 0:
 			print('Read map files: ' + str(mapReadCount) + ' files in ' + str(mapReadTime) + 'ms')
 		if missingMapFiles.empty() == false:

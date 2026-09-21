@@ -4,7 +4,7 @@ onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oSelectionStatus = Nodelist.list["oSelectionStatus"]
 onready var oPropertiesWindow = Nodelist.list["oPropertiesWindow"]
-onready var oActionPointList = Nodelist.list["oActionPointList"]
+onready var oInstanceList = Nodelist.list["oInstanceList"]
 
 onready var SUBTILE_SIZE = Constants.SUBTILE_SIZE
 
@@ -30,10 +30,8 @@ func set_inspector_instance(setval):
 		setval.instance_was_selected()
 		oPropertiesWindow.oPropertiesTabs.current_tab = 0
 		
-		if oActionPointList.selecting_from_list and (setval.is_in_group("ActionPoint") or setval.is_in_group("HeroGate") or setval.is_in_group("Creature")):
-			pass
-		else:
-			oActionPointList.unselect_all()
+		if oInstanceList.selecting_from_list == false:
+			oInstanceList.unselect_all()
 	
 	oThingDetails.update_details()
 
@@ -49,7 +47,7 @@ func inspect_something(id):
 func deselect():
 	if is_instance_valid(oThingDetails) == false: return # (initial mode select)
 	
-	oActionPointList.unselect_all()
+	oInstanceList.unselect_all()
 	
 	set_inspector_instance(null)
 	set_inspector_subtile(Vector2(-1000000,-1000000))

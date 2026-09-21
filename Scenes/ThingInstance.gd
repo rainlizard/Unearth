@@ -5,7 +5,7 @@ onready var oInspector = Nodelist.list["oInspector"]
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oPickThingWindow = Nodelist.list["oPickThingWindow"]
-onready var oActionPointList = Nodelist.list["oActionPointList"]
+onready var oInstanceList = Nodelist.list["oInstanceList"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oQuickMapPreview = Nodelist.list["oQuickMapPreview"]
@@ -89,13 +89,13 @@ func _ready():
 					else:
 						yield(get_tree(),'idle_frame')
 						set_herogateNumber(oInstances.get_free_hero_gate_number())
-				if oActionPointList and oInstances.bulk_loading == false:
-					oActionPointList.update_if_visible()
+			if oInstanceList and oInstances.bulk_loading == false:
+				oInstanceList.update_if_visible()
 		
 		Things.TYPE.CREATURE:
 			add_to_group("Creature")
-			if oActionPointList and oInstances.bulk_loading == false:
-				oActionPointList.update_if_visible()
+			if oInstanceList and oInstances.bulk_loading == false:
+				oInstanceList.update_if_visible()
 		Things.TYPE.EFFECTGEN:
 			add_to_group("EffectGen")
 
@@ -148,9 +148,9 @@ func _exit_tree():
 		if is_instance_valid(doorID) == true:
 			doorID.doorLocked = 0
 
-	if oActionPointList:
-		if thingType == Things.TYPE.CREATURE or (thingType == Things.TYPE.OBJECT and subtype in Things.LIST_OF_HEROGATES):
-			oActionPointList.update_if_visible()
+	if oInstanceList:
+		if thingType == Things.TYPE.CREATURE or thingType == Things.TYPE.OBJECT:
+			oInstanceList.update_if_visible()
 
 
 func set_location_x(setVal):
@@ -160,7 +160,7 @@ func set_location_x(setVal):
 	position.x = locationX * 32
 	if locationX != null and locationY != null:
 		add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
-		update_action_point_list_if_creature()
+		update_instance_list()
 
 func set_location_y(setVal):
 	if locationX != null and locationY != null:
@@ -169,12 +169,12 @@ func set_location_y(setVal):
 	position.y = locationY * 32
 	if locationX != null and locationY != null:
 		add_to_group("slab_location_group_" + str(floor(locationX/3)) + '_' + str(floor(locationY/3)))
-		update_action_point_list_if_creature()
+		update_instance_list()
 
 
-func update_action_point_list_if_creature():
-	if is_inside_tree() and thingType == Things.TYPE.CREATURE and oActionPointList and oInstances.bulk_loading == false:
-		oActionPointList.update_if_visible()
+func update_instance_list():
+	if is_inside_tree() and (thingType == Things.TYPE.CREATURE or thingType == Things.TYPE.OBJECT) and oInstanceList and oInstances.bulk_loading == false:
+		oInstanceList.update_if_visible()
 
 
 func set_location_z(setVal):
@@ -207,7 +207,7 @@ func set_ownership(setval):
 	ownership = setval
 	if is_inside_tree():
 		call_deferred("set_ownership_material")
-	update_action_point_list_if_creature()
+	update_instance_list()
 
 func set_ownership_material():
 	if ownership == 255:
