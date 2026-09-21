@@ -22,6 +22,8 @@ onready var oDoodadThingTypeOptionButton = Nodelist.list["oDoodadThingTypeOption
 onready var oDoodadSubtypeSpinBox = Nodelist.list["oDoodadSubtypeSpinBox"]
 onready var oDoodadNameLabel = Nodelist.list["oDoodadNameLabel"]
 onready var oDoodadChanceSpinBox = Nodelist.list["oDoodadChanceSpinBox"]
+onready var oDoodadOrientationOptionButton = Nodelist.list["oDoodadOrientationOptionButton"]
+onready var oDoodadAttachedCheckBox = Nodelist.list["oDoodadAttachedCheckBox"]
 onready var oDoodadDeleteButton = Nodelist.list["oDoodadDeleteButton"]
 
 # Default values for placement
@@ -62,6 +64,9 @@ enum FIELDS {
 func _ready():
 	get_parent().set_tab_title(1, "Create")
 	oPlaceLockedCheckBox.connect("toggled", self, "_on_PlaceLockedCheckBox_toggled")
+	for orientationName in Constants.orientationNames:
+		oDoodadOrientationOptionButton.add_item(orientationName)
+	oDoodadOrientationOptionButton.add_item("Random")
 	update_doodads()
 
 
@@ -116,6 +121,11 @@ func update_doodads():
 	oDoodadsList.visible = showDoodads
 	if showDoodads:
 		update_doodads_list(doodads)
+	if oDoodadWindow.visible == true and slabID != null: # The window was open while the selected slab changed
+		doodad_edit_index = -1
+		oDoodadWindow.window_title = "Add random doodad"
+		oDoodadDeleteButton.visible = false
+		oDoodadSlabNameLabel.text = Slabs.fetch_name(slabID)
 
 
 func update_doodads_list(doodads):
@@ -147,23 +157,19 @@ func open_doodad_window(index):
 		oDoodadThingTypeOptionButton.select(max(0, oDoodadThingTypeOptionButton.get_item_index(doodad[0])))
 		oDoodadSubtypeSpinBox.value = doodad[1]
 		oDoodadChanceSpinBox.value = doodad[2]
+		var orientIndex = Constants.listOrientations.find(doodad[3])
+		oDoodadOrientationOptionButton.select(orientIndex if orientIndex != -1 else Constants.listOrientations.size())
+		oDoodadAttachedCheckBox.pressed = doodad[4]
 	elif have_opened_doodad_window == false: # Defaults for the first time opening the window
 		oDoodadThingTypeOptionButton.select(oDoodadThingTypeOptionButton.get_item_index(Things.TYPE.OBJECT))
 		oDoodadSubtypeSpinBox.value = 1
 		oDoodadChanceSpinBox.value = 0.25
+		oDoodadOrientationOptionButton.select(0)
+		oDoodadAttachedCheckBox.pressed = true
 	have_opened_doodad_window = true
 	oDoodadDeleteButton.visible = index != -1
 	update_doodad_name()
 	Utils.popup_centered(oDoodadWindow)
-
-
-func doodad_window_slab_changed(): # Called whenever the selected slab changes
-	if oDoodadWindow.visible == false or oSelection.paintSlab == null:
-		return
-	doodad_edit_index = -1
-	oDoodadWindow.window_title = "Add random doodad"
-	oDoodadDeleteButton.visible = false
-	oDoodadSlabNameLabel.text = Slabs.fetch_name(oSelection.paintSlab)
 
 
 func update_doodad_name():
@@ -180,7 +186,10 @@ func _on_DoodadConfirmButton_pressed():
 	var slabID = oSelection.paintSlab
 	if Settings.slabDoodads.has(slabID) == false:
 		Settings.slabDoodads[slabID] = []
-	var doodad = [oDoodadThingTypeOptionButton.get_selected_id(), int(oDoodadSubtypeSpinBox.value), oDoodadChanceSpinBox.value]
+	var orientation = -1
+	if oDoodadOrientationOptionButton.selected < Constants.listOrientations.size():
+		orientation = Constants.listOrientations[oDoodadOrientationOptionButton.selected]
+	var doodad = [oDoodadThingTypeOptionButton.get_selected_id(), int(oDoodadSubtypeSpinBox.value), oDoodadChanceSpinBox.value, orientation, oDoodadAttachedCheckBox.pressed]
 	if doodad_edit_index == -1:
 		Settings.slabDoodads[slabID].append(doodad)
 	else:
@@ -322,6 +331,13 @@ func _on_PlacingTipsButton_pressed():
 	buildPlacingString += "Check the controls in Help -> Controls for more."
 	oMessage.big("Placing tips", buildPlacingString)
 	Settings.set_setting("placing_tutorial", false)
+
+
+func _on_DoodadHelpButton_pressed():
+	var helptext = ""
+	helptext += "Doodads are a decoration randomly placed on your slabs.\n\n"
+	helptext += "If you're having trouble removing a doodad from existing slabs, try setting its chance to 0% instead of removing the doodad entry. Then place again."
+	oMessage.big("Help", helptext)
 
 
 func _on_FortifyCheckBox_toggled(button_pressed):

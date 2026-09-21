@@ -14,7 +14,7 @@ var backup_folder_size_limit_mb = 1024
 
 # {slabID: [[thingType, subtype, chance_percent], ...]} (stored in settings.cfg with string names)
 var slabDoodads = {}
-var unresolvedDoodads = {} # Loaded before their slab data was available, kept so saving doesn't lose them
+var unresolvedDoodads = {} # Entries whose slab or thing couldn't be resolved, kept so saving doesn't lose them
 
 var config = ConfigFile.new()
 
@@ -138,10 +138,11 @@ func load_slab_doodads(): # Called once slab data (including custom slabs) is lo
 		settingName = "slab_decorations" # Legacy name
 		if cfg_has_setting(settingName) == false:
 			# Default doodads, or migrate the old "Place Dripping Water effect" / "Place Lava effect" chances
-			var waterChance = read_cfg("chance_effect_water") if cfg_has_setting("chance_effect_water") else 0.25
-			var lavaChance = read_cfg("chance_effect_lava") if cfg_has_setting("chance_effect_lava") else 0.25
-			slabDoodads[Slabs.WATER] = [[Things.TYPE.EFFECTGEN, 2, waterChance]]
-			slabDoodads[Slabs.LAVA] = [[Things.TYPE.EFFECTGEN, 1, lavaChance]]
+			# The old chances were rolled once per slab, but doodads are rolled once per subtile (9 per slab)
+			var waterChance = read_cfg("chance_effect_water") / 9.0 if cfg_has_setting("chance_effect_water") else 0.25
+			var lavaChance = read_cfg("chance_effect_lava") / 9.0 if cfg_has_setting("chance_effect_lava") else 0.25
+			slabDoodads[Slabs.WATER] = [[Things.TYPE.EFFECTGEN, 2, waterChance, 0, true]]
+			slabDoodads[Slabs.LAVA] = [[Things.TYPE.EFFECTGEN, 1, lavaChance, 0, true]]
 			if cfg_has_setting("chance_effect_water"): cfg_remove_setting("chance_effect_water")
 			if cfg_has_setting("chance_effect_lava"): cfg_remove_setting("chance_effect_lava")
 			save_slab_doodads()
@@ -150,20 +151,24 @@ func load_slab_doodads(): # Called once slab data (including custom slabs) is lo
 	var stored = read_cfg(settingName)
 	for slabKey in stored:
 		var slabID = slab_id_from_key(slabKey)
-		if slabID == null:
-			unresolvedDoodads[slabKey] = stored[slabKey]
-			continue
 		var doodads = []
 		for entry in stored[slabKey]:
 			var thingType = entry[0]
 			var subtype = entry[1]
 			if thingType is String: # Stored thing types are names, not IDs
 				thingType = Things.reverse_data_structure_name.get(thingType, Things.TYPE.NONE)
-				if thingType == Things.TYPE.NONE: continue
-				subtype = Things.find_subtype_by_name(thingType, entry[1])
-			if subtype != null:
-				doodads.append([thingType, subtype, entry[2]])
-		slabDoodads[slabID] = doodads
+				if thingType != Things.TYPE.NONE:
+					subtype = Things.find_subtype_by_name(thingType, entry[1])
+			if slabID == null or thingType == Things.TYPE.NONE or subtype == null: # Keep unresolvable entries so saving doesn't lose them
+				if unresolvedDoodads.has(slabKey) == false:
+					unresolvedDoodads[slabKey] = []
+				unresolvedDoodads[slabKey].append(entry)
+			else:
+				var orientation = entry[3] if entry.size() > 3 else 0
+				var attached = entry[4] if entry.size() > 4 else thingType == Things.TYPE.EFFECTGEN
+				doodads.append([thingType, subtype, entry[2], orientation, attached])
+		if slabID != null:
+			slabDoodads[slabID] = doodads
 	
 	if settingName != "slab_doodads":
 		cfg_remove_setting("slab_decorations")
@@ -175,12 +180,18 @@ func slab_id_from_key(slabKey):
 	return Slabs.find_slab_id_by_name(slabKey)
 
 func save_slab_doodads():
-	var stored = unresolvedDoodads.duplicate(true)
+	var stored = {}
 	for slabID in slabDoodads:
 		var doodads = []
 		for entry in slabDoodads[slabID]:
-			doodads.append([Things.data_structure_name[entry[0]], Things.fetch_id_string(entry[0], entry[1]), entry[2]])
+			doodads.append([Things.data_structure_name[entry[0]], Things.fetch_id_string(entry[0], entry[1]), entry[2], entry[3], entry[4]])
 		stored[Slabs.fetch_idname(slabID)] = doodads
+	for slabKey in unresolvedDoodads: # Entries that couldn't be resolved are saved unchanged
+		var slabID = slab_id_from_key(slabKey)
+		var key = Slabs.fetch_idname(slabID) if slabID != null else slabKey
+		if stored.has(key) == false:
+			stored[key] = []
+		stored[key].append_array(unresolvedDoodads[slabKey])
 	write_cfg("slab_doodads", stored)
 
 func executable_stuff():

@@ -398,11 +398,12 @@ func do_slab(xSlab, ySlab, slabID, ownership, options):
 	var surrID = get_surrounding_slabIDs(xSlab, ySlab)
 	var surrOwner = get_surrounding_ownership(xSlab, ySlab)
 	
-	if do_update_auto_walls(slabID) == true:
-		slabID = auto_wall(xSlab, ySlab, slabID, surrID)
-	
-	if slabID == Slabs.EARTH or slabID == Slabs.EARTH_WITH_TORCH:
-		slabID = auto_earth(xSlab, ySlab, slabID, surrID)
+	if should_reset(options, "columns"):
+		if do_update_auto_walls(slabID) == true:
+			slabID = auto_wall(xSlab, ySlab, slabID, surrID)
+		
+		if slabID == Slabs.EARTH or slabID == Slabs.EARTH_WITH_TORCH:
+			slabID = auto_earth(xSlab, ySlab, slabID, surrID)
 	
 	if Slabs.fake_extra_data.has(slabID): # Fake Slab IDs
 		slab_place_fake(xSlab, ySlab, slabID, ownership, surrID, options)
@@ -454,6 +455,7 @@ func _on_ConfirmUpdateAllSlabs_pressed():
 	if options.values().has(true) == false:
 		oMessage.quick("Nothing selected")
 		return
+	oUpdateAllSlabsWindow.hide()
 	oMessage.quick("Auto-generated all slabs")
 	var updateNearby = true
 	#Vector2(0,0), Vector2(M.xSize-1,M.ySize-1)
@@ -648,9 +650,10 @@ func place_general(xSlab, ySlab, slabID, ownership, surrID, surrOwner, bitmaskTy
 			modifyForLiquid = false
 		Slabs.BITMASK_DOOR1, Slabs.BITMASK_DOOR2: # Make sure door is facing the correct direction by changing its Slab based on surrounding slabs.
 			bitmask = 1 # Always use south variation
-			var stuff = determine_door_direction(xSlab, ySlab, slabID, surrID, bitmaskType)
-			slabID = stuff[0]
-			bitmaskType = stuff[1]
+			if should_reset(options, "columns"):
+				var stuff = determine_door_direction(xSlab, ySlab, slabID, surrID, bitmaskType)
+				slabID = stuff[0]
+				bitmaskType = stuff[1]
 			modifyForLiquid = false
 	# SlabID is adjusted by determine_door_direction(), so make_slab_for_tile() needs to occur right after
 	var slabsetIndexGroup = make_slab_for_tile(slabID, bitmask, xSlab, ySlab)

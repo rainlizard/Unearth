@@ -1,14 +1,15 @@
 extends Node
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
-onready var oPlaceLockedCheckBox = Nodelist.list["oPlaceLockedCheckBox"]
-onready var oSelector = Nodelist.list["oSelector"]
 
 onready var dir = oSlabPlacement.dir
 
 func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask, surrID, bitmaskType, options):
 	var spawnRoomObjects = oSlabPlacement.should_reset(options, "room_objects")
-	var spawnRandomObjects = oSlabPlacement.should_reset(options, "random_objects")
+	var spawnDoodads = oSlabPlacement.should_reset(options, "random_doodads")
+	
+	if spawnDoodads:
+		delete_doodads_on_slab(xSlab, ySlab, slabID)
 	
 	if spawnRoomObjects:
 		oInstances.delete_attached_instances_on_slab(xSlab, ySlab)
@@ -23,26 +24,32 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask,
 			for i in range(9):
 				spawn_object(xSlab, ySlab, slabID, ownership, i, clmIndexGroup[i], true)
 	
-	if spawnRandomObjects:
-		delete_doodads_on_slab(xSlab, ySlab)
+	if spawnDoodads:
 		for doodad in Settings.slabDoodads.get(slabID, []):
 			for subtile in 9:
 				if Random.rng.randf_range(0.0, 100.0) < doodad[2]:
-					spawn_doodad(xSlab, ySlab, ownership, doodad[0], doodad[1], subtile)
+					spawn_doodad(xSlab, ySlab, ownership, doodad, subtile)
 
-func delete_doodads_on_slab(xSlab, ySlab):
+func delete_doodads_on_slab(xSlab, ySlab, slabID):
+	var doodads = Settings.slabDoodads.get(slabID, [])
+	if doodads.empty(): return
 	for id in oInstances.get_all_nodes_on_slab(xSlab, ySlab, ["Thing"]):
-		if id.has_meta("doodad"):
-			oInstances.kill_instance(id)
+		for doodad in doodads:
+			if id.thingType == doodad[0] and id.subtype == doodad[1]:
+				oInstances.kill_instance(id)
+				break
 
-func spawn_doodad(xSlab, ySlab, ownership, thingType, subtype, subtile):
+func spawn_doodad(xSlab, ySlab, ownership, doodad, subtile):
 	var xSubtile = (xSlab*3) + (subtile % 3) + 0.5
 	var ySubtile = (ySlab*3) + (subtile / 3) + 0.5
 	if oInstances.get_all_instances_on_subtile(xSubtile, ySubtile).empty() == false: # Don't overlap things already on this subtile
 		return
+	var orientation = doodad[3]
+	if orientation == -1:
+		orientation = Constants.listOrientations[Random.rng.randi_range(0, Constants.listOrientations.size()-1)]
+	var parentTile = ((ySlab * M.xSize) + xSlab) if doodad[4] else 65535
 	var createAtPos = Vector3(xSubtile, ySubtile, 0)
-	var id = oInstances.place_new_thing(thingType, subtype, createAtPos, ownership)
-	id.set_meta("doodad", true)
+	oInstances.place_new_thing(doodad[0], doodad[1], createAtPos, ownership, parentTile, orientation)
 
 func spawn_object(xSlab, ySlab, slabID, ownership, subtile, clmIndex, shouldSpawn):
 	var variation = int(clmIndex / 9)

@@ -7,6 +7,7 @@ onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oReadCfg = Nodelist.list["oReadCfg"]
+onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 
 # These are dictionaries containing dictionaries.
 # objects_cfg["section_name"]["key"] will return the "value"
@@ -48,6 +49,7 @@ func start(mapPath):
 	load_creature_stats_data(mapPath, campaign_cfg, mod_zip_paths)
 	oCustomSlabSystem.load_unearth_custom_slabs_file()
 	Settings.load_slab_doodads()
+	oPlacingSettings.update_doodads()
 	
 	print('Loaded all .cfg and .toml files: ' + str(OS.get_ticks_msec() - CODETIME_LOADCFG_START) + 'ms')
 	if oConfigFilesListWindow.visible:

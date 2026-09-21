@@ -114,15 +114,8 @@ func add_item(leftString, rightString):
 			nodeRightColumn.focus_mode = 0 # Fixes clicking on the menu
 			nodeRightColumn.get_popup().focus_mode = 0 # Fixes clicking on the menu
 			
-			# The order of this list must match the listOrientations array in Constants
-			nodeRightColumn.add_item("North")
-			nodeRightColumn.add_item("NorthEast")
-			nodeRightColumn.add_item("East")
-			nodeRightColumn.add_item("SouthEast")
-			nodeRightColumn.add_item("South")
-			nodeRightColumn.add_item("SouthWest")
-			nodeRightColumn.add_item("West")
-			nodeRightColumn.add_item("NorthWest")
+			for orientationName in Constants.orientationNames:
+				nodeRightColumn.add_item(orientationName)
 			
 			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftString])
 			nodeRightColumn.connect("toggled",self,"_on_optionbutton_toggled", [nodeRightColumn])

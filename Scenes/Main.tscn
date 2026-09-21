@@ -194,9 +194,9 @@
 [ext_resource path="res://Art/IconShortcut.png" type="Texture" id=290]
 [ext_resource path="res://Art/IconShortcutHover.png" type="Texture" id=291]
 [ext_resource path="res://Art/IconShortcutPressed.png" type="Texture" id=292]
-[ext_resource path="res://Art/AddCustomSlab.png" type="Texture" id=293]
-[ext_resource path="res://Art/AddCustomSlabHover.png" type="Texture" id=294]
-[ext_resource path="res://Art/AddCustomSlabPressed.png" type="Texture" id=295]
+[ext_resource path="res://Art/AddDoodad.png" type="Texture" id=293]
+[ext_resource path="res://Art/AddDoodadHover.png" type="Texture" id=294]
+[ext_resource path="res://Art/AddDoodadPressed.png" type="Texture" id=295]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -1239,7 +1239,7 @@ script = ExtResource( 90 )
 [node name="PropertiesTabs" type="TabContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer"]
 margin_top = 53.0
 margin_right = 829.0
-margin_bottom = 522.0
+margin_bottom = 143.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource( 118 )
@@ -1248,7 +1248,6 @@ __meta__ = {
 }
 
 [node name="ThingDetails" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -1306,6 +1305,7 @@ custom_constants/vseparation = 8
 script = ExtResource( 42 )
 
 [node name="PlacingSettings" type="VBoxContainer" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 12.0
@@ -3300,12 +3300,12 @@ margin_bottom = 153.0
 pressed = true
 text = "Room objects"
 
-[node name="random_objects" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
+[node name="random_doodads" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
 margin_top = 157.0
 margin_right = 280.0
 margin_bottom = 186.0
 pressed = true
-text = "Random objects"
+text = "Random doodads"
 
 [node name="solid_things" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
 margin_top = 190.0
@@ -3339,8 +3339,8 @@ visible = true
 margin_left = -976.0
 margin_top = 144.0
 margin_right = -676.0
-margin_bottom = 393.0
-rect_min_size = Vector2( 300, 210 )
+margin_bottom = 454.0
+rect_min_size = Vector2( 300, 290 )
 popup_exclusive = true
 window_title = "Add random doodad"
 resizable = true
@@ -3355,7 +3355,7 @@ margin_bottom = -10.0
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/DoodadWindow/VBoxContainer"]
 margin_right = 280.0
-margin_bottom = 198.0
+margin_bottom = 259.0
 size_flags_vertical = 3
 columns = 2
 
@@ -3421,47 +3421,89 @@ margin_bottom = 112.0
 size_flags_horizontal = 3
 autowrap = true
 
-[node name="ChanceLabel" type="Label" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
-margin_top = 121.0
+[node name="OrientationLabel" type="Label" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
+margin_top = 119.0
 margin_right = 120.0
-margin_bottom = 142.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 120, 0 )
+text = "Orientation"
+
+[node name="DoodadOrientationOptionButton" type="OptionButton" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
+margin_left = 124.0
+margin_top = 116.0
+margin_right = 280.0
+margin_bottom = 143.0
+focus_mode = 0
+size_flags_horizontal = 3
+
+[node name="ChanceLabel" type="Label" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
+margin_top = 152.0
+margin_right = 120.0
+margin_bottom = 173.0
 rect_min_size = Vector2( 120, 0 )
 text = "Chance"
 
 [node name="DoodadChanceSpinBox" type="SpinBox" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
 margin_left = 124.0
-margin_top = 116.0
+margin_top = 147.0
 margin_right = 280.0
-margin_bottom = 147.0
+margin_bottom = 178.0
 size_flags_horizontal = 3
 step = 0.05
 value = 0.25
 suffix = "%"
 script = ExtResource( 81 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/DoodadWindow/VBoxContainer"]
-margin_top = 202.0
+[node name="AttachedLabel" type="Label" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
+margin_top = 186.0
+margin_right = 120.0
+margin_bottom = 207.0
+rect_min_size = Vector2( 120, 0 )
+text = "Attached to"
+
+[node name="DoodadAttachedCheckBox" type="CheckBox" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
+margin_left = 124.0
+margin_top = 182.0
 margin_right = 280.0
-margin_bottom = 229.0
+margin_bottom = 211.0
+size_flags_horizontal = 3
+pressed = true
+text = "Slab"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/DoodadWindow/VBoxContainer"]
+margin_top = 263.0
+margin_right = 280.0
+margin_bottom = 290.0
 alignment = 1
 
 [node name="DoodadDeleteButton" type="Button" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/HBoxContainer"]
-margin_left = 21.0
-margin_right = 90.0
+margin_left = 5.0
+margin_right = 74.0
 margin_bottom = 27.0
 text = "Delete"
 
 [node name="DoodadConfirmButton" type="Button" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/HBoxContainer"]
-margin_left = 94.0
-margin_right = 182.0
+margin_left = 78.0
+margin_right = 166.0
 margin_bottom = 27.0
 text = "Confirm"
 
 [node name="DoodadCancelButton" type="Button" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/HBoxContainer"]
-margin_left = 186.0
-margin_right = 259.0
+margin_left = 170.0
+margin_right = 243.0
 margin_bottom = 27.0
 text = "Cancel"
+
+[node name="DoodadHelpButton" type="TextureButton" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/HBoxContainer"]
+margin_left = 247.0
+margin_right = 274.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 27, 27 )
+texture_normal = ExtResource( 156 )
+texture_pressed = ExtResource( 66 )
+texture_hover = ExtResource( 128 )
+expand = true
+stretch_mode = 4
 
 [node name="ConfirmGenerateScript" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true
@@ -8870,6 +8912,7 @@ margin_bottom = 40.0
 [connection signal="pressed" from="Ui/UiSystem/DoodadWindow/VBoxContainer/HBoxContainer/DoodadDeleteButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_DoodadDeleteButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/DoodadWindow/VBoxContainer/HBoxContainer/DoodadConfirmButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_DoodadConfirmButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/DoodadWindow/VBoxContainer/HBoxContainer/DoodadCancelButton" to="Ui/UiSystem/DoodadWindow" method="hide"]
+[connection signal="pressed" from="Ui/UiSystem/DoodadWindow/VBoxContainer/HBoxContainer/DoodadHelpButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_DoodadHelpButton_pressed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmGenerateScript" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_ConfirmGenerateScript_confirmed"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ImageAsMapDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImageAsMapDialog_visibility_changed"]

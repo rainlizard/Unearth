@@ -97,7 +97,7 @@ func newPaintSlab(value):
 	oSelector.change_mode(oSelector.MODE_TILE)
 	oPickThingWindow.set_selection(null, null)  # Deselect anything in thing window
 	paintSlab = value
-	oPlacingSettings.doodad_window_slab_changed()
+	oPlacingSettings.update_doodads()
 
 func update_under_cursor():
 	cursorOverSlab = oSelector.get_slabID_at_pos(oSelector.cursorTile)

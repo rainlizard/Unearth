@@ -36,6 +36,8 @@ const listOrientations = [
 	1792, # ANGLE_NORTHWEST
 ]
 
+const orientationNames = ["North","NorthEast","East","SouthEast","South","SouthWest","West","NorthWest"]
+
 enum {
 	READ = 0
 	WRITE = 1
