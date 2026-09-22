@@ -57,12 +57,14 @@ onready var oMapBackups = Nodelist.list["oMapBackups"]
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oInstanceList = Nodelist.list["oInstanceList"]
 onready var oTabTileset = Nodelist.list["oTabTileset"]
+onready var oConfirmDiscardChanges = Nodelist.list["oConfirmDiscardChanges"]
 
 
 var TOTAL_TIME_TO_OPEN_MAP
 
 var compressedFiles = []
 var ALWAYS_DECOMPRESS = false # Default to false
+var pending_open = []
 
 func start():
 	get_tree().connect("files_dropped", self, "_on_files_dropped")
@@ -93,7 +95,15 @@ func start():
 func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
-func open_map(filePath, show_opened_message = true, reset_camera = true, loaded_from_backup = false):
+func open_map(filePath, options = {}):
+	if filePath != "" and oEditor.mapHasBeenEdited:
+		pending_open = [filePath, options]
+		oConfirmDiscardChanges.dialog_text = "Are you sure you want to discard changes and open this map?"
+		Utils.popup_centered(oConfirmDiscardChanges)
+		return
+	var show_opened_message = options.get("show_opened_message", true)
+	var reset_camera = options.get("reset_camera", true)
+	var loaded_from_backup = options.get("loaded_from_backup", false)
 	
 	# a filePath of "" means make a blank map.
 	
@@ -338,6 +348,15 @@ func _on_ConfirmDecompression_confirmed():
 	
 	# Retry opening the map
 	open_map(compressedFiles[0])
+
+
+func _on_ConfirmDiscardChanges_confirmed():
+	if pending_open.empty():
+		return
+	var open_args = pending_open
+	pending_open = []
+	oEditor.mapHasBeenEdited = false
+	open_map(open_args[0], open_args[1])
 
 
 func _on_FileDialogOpen_file_selected(path):

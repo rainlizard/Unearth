@@ -136,7 +136,7 @@ func warn_if_external_files_changed():
 	var changed_file_paths = changed_files.keys()
 	changed_file_paths.sort()
 	if oEditor.mapHasBeenEdited == false:
-		oOpenMap.open_map(path, false, false)
+		oOpenMap.open_map(path, {"show_opened_message": false, "reset_camera": false})
 		var changed_file_names = []
 		for file_path in changed_file_paths:
 			changed_file_names.append(file_path.get_file())
@@ -180,7 +180,8 @@ func _on_external_changes_reload_pressed(dialog, map_path):
 	get_tree().paused = false
 	if is_instance_valid(dialog):
 		dialog.hide()
-	oOpenMap.open_map(map_path, true, false)
+	oEditor.mapHasBeenEdited = false
+	oOpenMap.open_map(map_path, {"reset_camera": false})
 
 
 func _on_external_changes_save_pressed(dialog, map_path):

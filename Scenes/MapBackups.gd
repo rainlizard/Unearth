@@ -53,7 +53,7 @@ func load_selected_backup():
 		oMessage.quick("Select a backup to load.")
 		return
 	hide()
-	oOpenMap.open_map(backupPaths[selected[0]], true, true, true)
+	oOpenMap.open_map(backupPaths[selected[0]], {"loaded_from_backup": true})
 
 
 func backup_existing_map_files(map_file_path):

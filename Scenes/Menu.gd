@@ -24,7 +24,6 @@ onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oOpenMap = Nodelist.list["oOpenMap"]
-onready var oConfirmDiscardChanges = Nodelist.list["oConfirmDiscardChanges"]
 onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
@@ -251,7 +250,7 @@ func _on_FileSubmenu_Pressed(pressedID):
 		#3: Open recent
 		4: oSaveMap.clicked_save_on_menu() # Save
 		5: Utils.popup_centered(oFileDialogSaveAs) # Save as
-		6: Utils.popup_centered(oConfirmDiscardChanges) # Reload map
+		6: oOpenMap.open_map(oCurrentMap.path) # Reload map
 		7: Utils.popup_centered(oImageAsMapDialog) # Load image as map
 		8: Utils.popup_centered(oExportPreview) # Export preview
 		9: oPreferencesWindow._on_ButtonSettings_pressed()
@@ -414,6 +413,3 @@ func play_button_pressed(packetLoad):
 	
 	yield(get_tree().create_timer(2.5), "timeout")
 	playButtonLocked = false
-
-func _on_ConfirmDiscardChanges_confirmed():
-	oOpenMap.open_map(oCurrentMap.path)
