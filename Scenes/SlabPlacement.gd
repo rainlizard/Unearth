@@ -400,7 +400,7 @@ func do_slab(xSlab, ySlab, slabID, ownership, options):
 	
 	if should_reset(options, "columns"):
 		if do_update_auto_walls(slabID) == true:
-			slabID = auto_wall(xSlab, ySlab, slabID, surrID)
+			slabID = auto_wall(xSlab, ySlab, slabID, ownership, surrID)
 		
 		if slabID == Slabs.EARTH or slabID == Slabs.EARTH_WITH_TORCH:
 			slabID = auto_earth(xSlab, ySlab, slabID, surrID)
@@ -478,23 +478,39 @@ func auto_earth(xSlab:int, ySlab:int, slabID, surrID):
 	oDataSlab.set_cell(xSlab, ySlab, slabID)
 	return slabID
 
-func auto_wall(xSlab:int, ySlab:int, slabID, surrID):
+func auto_wall(xSlab:int, ySlab:int, slabID, ownership, surrID):
 	match oAutoWallArtButton.text:
 		"Grouped":
-			if xSlab % 15 < 15 or ySlab % 15 < 15: slabID = Slabs.WALL_WITH_PAIR
-			if xSlab % 15 < 10 or ySlab % 15 < 10: slabID = Slabs.WALL_WITH_WOMAN
-			if xSlab % 15 < 5 or ySlab % 15 < 5: slabID = Slabs.WALL_WITH_TWINS
+			var claimedNorthSouth = surrID[dir.n] == Slabs.CLAIMED_GROUND or surrID[dir.s] == Slabs.CLAIMED_GROUND
+			var claimedEastWest = surrID[dir.e] == Slabs.CLAIMED_GROUND or surrID[dir.w] == Slabs.CLAIMED_GROUND
+			if oAutomaticTorchSlabsCheckbox.pressed and ((xSlab % 5 == 0 and claimedNorthSouth) or (ySlab % 5 == 0 and claimedEastWest)):
+				slabID = Slabs.WALL_WITH_TORCH
+			elif (xSlab % 2 == 1 and claimedNorthSouth) or (ySlab % 2 == 1 and claimedEastWest):
+				slabID = Slabs.WALL_WITH_BANNER
+			else:
+				var center = Vector2(42, 42)
+				var heart = oInstances.return_dungeon_heart(ownership)
+				if heart != null:
+					center = Vector2(floor(heart.locationX / 3), floor(heart.locationY / 3))
+				var xDistance = abs(xSlab - center.x)
+				var yDistance = abs(ySlab - center.y)
+				var longSide = int(max(xDistance, yDistance))
+				var distance = 0
+				if longSide > 0:
+					# Match KeeperFX's fixed-point LbDiagonalLength before selecting a four-slab band.
+					var ratio = int(min(xDistance, yDistance) * 256 / longSide)
+					var factor = int(round(8192 * sqrt(1 + pow(ratio / 256.0, 2))))
+					distance = (longSide * factor) >> 13
+				slabID = [Slabs.WALL_WITH_TWINS, Slabs.WALL_WITH_WOMAN, Slabs.WALL_WITH_PAIR][int(distance / 4) % 3]
 		"Random":
 			slabID = Random.choose([Slabs.WALL_WITH_TWINS, Slabs.WALL_WITH_WOMAN, Slabs.WALL_WITH_PAIR])
-	
-	# Checkerboard
-	if (int(xSlab) % 2 == 0 and int(ySlab) % 2 == 0) or (int(xSlab) % 2 == 1 and int(ySlab) % 2 == 1):
-		for i in [Vector2(0,1),Vector2(-1,0),Vector2(0,-1),Vector2(1,0)]:
-			if oDataSlab.get_cell(xSlab+i.x, ySlab+i.y) == Slabs.CLAIMED_GROUND:
-				slabID = Slabs.WALL_WITH_BANNER
-	
-	# Torch wall takes priority
-	slabID = try_upgrade_to_torch_slab(xSlab, ySlab, slabID, surrID)
+			# Checkerboard
+			if (int(xSlab) % 2 == 0 and int(ySlab) % 2 == 0) or (int(xSlab) % 2 == 1 and int(ySlab) % 2 == 1):
+				for i in [Vector2(0,1),Vector2(-1,0),Vector2(0,-1),Vector2(1,0)]:
+					if oDataSlab.get_cell(xSlab+i.x, ySlab+i.y) == Slabs.CLAIMED_GROUND:
+						slabID = Slabs.WALL_WITH_BANNER
+			# Torch wall takes priority
+			slabID = try_upgrade_to_torch_slab(xSlab, ySlab, slabID, surrID)
 	oDataSlab.set_cell(xSlab, ySlab, slabID)
 	return slabID
 
