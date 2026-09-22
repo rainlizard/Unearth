@@ -55,7 +55,7 @@ func fill_new_area(newWidth, newHeight, previousWidth, previousHeight, offsetX, 
 			var previousY = y - offsetY
 			if previousX < 0 or previousY < 0 or previousX >= previousWidth or previousY >= previousHeight:
 				positionsToUpdate[Vector2(x, y)] = true
-	oSlabPlacement.place_shape_of_slab_id(positionsToUpdate.keys(), Slabs.EARTH, 5)
+	oSlabPlacement.place_shape_of_slab_id(positionsToUpdate.keys(), int(oResizeFillWithID.value), 5)
 	return positionsToUpdate
 
 # Function to remove old borders
@@ -77,7 +77,9 @@ func remove_old_borders(previousWidth, previousHeight, offsetX, offsetY, westDel
 	return removeBorder
 
 # Function to add new borders
-func add_new_borders(newWidth, newHeight):
+func add_new_borders(newWidth, newHeight, borderSlabID):
+	if oResizeMapApplyBorderCheckbox.pressed == false:
+		return []
 	var addBorder = []
 	for x in newWidth:
 		addBorder.append(Vector2(x, 0))
@@ -85,8 +87,21 @@ func add_new_borders(newWidth, newHeight):
 	for y in newHeight:
 		addBorder.append(Vector2(0, y))
 		addBorder.append(Vector2(newWidth - 1, y))
-	oSlabPlacement.place_shape_of_slab_id(addBorder, Slabs.ROCK, 5)
+	oSlabPlacement.place_shape_of_slab_id(addBorder, borderSlabID, 5)
 	return addBorder
+
+func get_common_border(previousWidth, previousHeight):
+	var counts = {}
+	for corner in [oDataSlab.get_cell(0, 0), oDataSlab.get_cell(previousWidth - 1, 0), oDataSlab.get_cell(0, previousHeight - 1), oDataSlab.get_cell(previousWidth - 1, previousHeight - 1)]:
+		if Slabs.data.has(corner):
+			counts[corner] = counts.get(corner, 0) + 1
+	var borderSlabID = Slabs.ROCK
+	var bestCount = 0
+	for id in counts:
+		if counts[id] > bestCount:
+			bestCount = counts[id]
+			borderSlabID = id
+	return borderSlabID
 
 # Function to remove instances outside of the new map size
 func remove_outside_instances(newWidth, newHeight):
@@ -154,6 +169,8 @@ func _on_ResizeApplyButton_pressed():
 		oMessage.big("Error", "Map size cannot be larger than 170 x 170.")
 		return
 	
+	var borderSlabID = get_common_border(previousWidth, previousHeight)
+	
 	oBuffers.resize_all_data_structures(newWidth, newHeight, offsetX, offsetY)
 	shift_instances(offsetX, offsetY, previousWidth, newWidth, newHeight)
 	set_new_map_size(newWidth, newHeight)
@@ -161,7 +178,7 @@ func _on_ResizeApplyButton_pressed():
 	
 	var positionsToUpdate = fill_new_area(newWidth, newHeight, previousWidth, previousHeight, offsetX, offsetY)
 	var removeBorder = remove_old_borders(previousWidth, previousHeight, offsetX, offsetY, westDelta, northDelta, eastDelta, southDelta)
-	var addBorder = add_new_borders(newWidth, newHeight)
+	var addBorder = add_new_borders(newWidth, newHeight, borderSlabID)
 	for pos in removeBorder:
 		positionsToUpdate[pos] = true
 	for pos in addBorder:
@@ -196,8 +213,12 @@ func update_editor_appearance():
 
 func _on_ResizeFillWithID_value_changed(value):
 	value = int(value)
-	if Slabs.data.has(value):
-		oResizeFillWithIDLabel.text = Slabs.fetch_name(value)
+	if Slabs.data.has(value) == false:
+		value = Slabs.EARTH
+		oResizeFillWithID.set_block_signals(true)
+		oResizeFillWithID.value = value
+		oResizeFillWithID.set_block_signals(false)
+	oResizeFillWithIDLabel.text = Slabs.fetch_name(value)
 
 func _on_ResizeEdgeSpinBox_value_changed(value):
 	update_resize_map_size_label()
