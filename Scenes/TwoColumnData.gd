@@ -5,6 +5,7 @@ const scnLevelChanger = preload("res://Scenes/LevelChanger.tscn")
 
 const thinLineEditTheme = preload("res://Theme/ThinLineEdit.tres")
 onready var oInspector = Nodelist.list["oInspector"]
+onready var oThingDetails = Nodelist.list["oThingDetails"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oUi = Nodelist.list["oUi"]
@@ -131,16 +132,18 @@ func add_item(leftString, rightString):
 			nodeRightColumn.connect("text_changed", self, "_on_property_value_changed", [nodeRightColumn, leftString])
 			#nodeRightColumn.add_font_override("font", preload("res://Theme/StokeSmaller.tres"))
 		"Attached to":
+			nodeRightColumn = OptionButton.new()
+			nodeRightColumn.focus_mode = 0 # Fixes clicking on the menu
+			nodeRightColumn.get_popup().focus_mode = 0 # Fixes clicking on the menu
+			nodeRightColumn.add_item("Slab")
+			nodeRightColumn.add_item("Manually placed")
 			if name == "PlacingListData":
-				nodeRightColumn = OptionButton.new()
-				nodeRightColumn.focus_mode = 0 # Fixes clicking on the menu
-				nodeRightColumn.get_popup().focus_mode = 0 # Fixes clicking on the menu
-				nodeRightColumn.add_item("Slab")
-				nodeRightColumn.add_item("Manually placed")
 				nodeRightColumn.select(0 if rightString == "True" else 1)
-				nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftString])
 			else:
-				nodeRightColumn = create_label(rightString)
+				nodeRightColumn.select(1 if rightString == "Manually placed" else 0)
+				nodeRightColumn.hint_tooltip = rightString
+			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftString])
+			nodeRightColumn.connect("toggled",self,"_on_optionbutton_toggled", [nodeRightColumn])
 		_:
 			nodeRightColumn = create_label(rightString)
 	
@@ -325,6 +328,18 @@ func _on_optionbutton_item_selected(indexSelected, leftString):
 			property_name = "orientation"
 			value = Constants.listOrientations[indexSelected]
 		"Attached to":
+			if name == "ThingListData":
+				if is_instance_valid(inst):
+					var originalPosition = Vector2(inst.locationX, inst.locationY)
+					var slabTile = (floor(inst.locationY / 3) * M.xSize) + floor(inst.locationX / 3)
+					inst.parentTile = slabTile if indexSelected == 0 else 65535
+					if indexSelected == 0:
+						oInstances.update_thing_attachment(inst)
+						if inst.parentTile == 65535: inst.parentTile = slabTile
+					oInstances.mirror_adjusted_value(inst, "parentTile", originalPosition)
+					oInspector.set_inspector_subtile(Vector2(inst.locationX, inst.locationY))
+					oThingDetails.update_details()
+				return
 			property_name = "attached"
 			value = indexSelected == 0
 		"Door locked":

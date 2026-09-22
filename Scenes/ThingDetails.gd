@@ -86,7 +86,7 @@ func light_details(id):
 			4:
 				description = "Attached to" # 18-19
 				if id.parentTile != null:
-					var parentY = int(id.parentTile/M.ySize)
+					var parentY = int(id.parentTile/M.xSize)
 					var parentX = id.parentTile - (parentY*M.xSize)
 					var hoveredCell = oDataSlab.get_cell(parentX,parentY)
 					if Slabs.data.has(hoveredCell):
@@ -128,7 +128,7 @@ func thing_details(id):
 			6:
 				description = "Attached to" # 11-12
 				if id.parentTile != null:
-					var parentY = int(id.parentTile/M.ySize)
+					var parentY = int(id.parentTile/M.xSize)
 					var parentX = id.parentTile - (parentY*M.xSize)
 					var hoveredCell = oDataSlab.get_cell(parentX,parentY)
 					if Slabs.data.has(hoveredCell):

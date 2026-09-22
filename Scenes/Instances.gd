@@ -127,6 +127,14 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust, original
 								getNodeAtMirroredPosition.orientation = instanceBeingAdjusted.orientation
 							"goldValue":
 								getNodeAtMirroredPosition.goldValue = instanceBeingAdjusted.goldValue
+							"parentTile":
+								if instanceBeingAdjusted.parentTile == 65535:
+									getNodeAtMirroredPosition.parentTile = 65535
+								else:
+									var slabTile = (floor(getNodeAtMirroredPosition.locationY / 3) * M.xSize) + floor(getNodeAtMirroredPosition.locationX / 3)
+									getNodeAtMirroredPosition.parentTile = slabTile
+									update_thing_attachment(getNodeAtMirroredPosition)
+									if getNodeAtMirroredPosition.parentTile == 65535: getNodeAtMirroredPosition.parentTile = slabTile
 
 func mirror_deletion_of_instance(instanceBeingDeleted):
 	var actions = []
