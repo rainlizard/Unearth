@@ -88,6 +88,7 @@ func create_new_map():
 	if oGame.EXECUTABLE_PATH == "":
 		oMessage.quick("Error: Game executable is not set. Set in File -> Preferences")
 		return
+	clamp_map_size_fields()
 	
 	if oOpenMap.open_map("") == false: # An empty path means a blank map
 		return
@@ -148,17 +149,19 @@ func _on_NoiseAlgTypeCheckBox_toggled(button_pressed):
 	oNoiseUpdateTimer.start(0.01)
 
 func _on_YSizeLine_focus_exited():
-	if oYSizeLine.text.to_int() > 170:
-		oYSizeLine.text = "170"
+	clamp_map_size_fields()
 	if oCheckBoxNewMapBorder.pressed == true:
 		reinit_noise_preview()
 		update_border_image_with_noise()
 func _on_XSizeLine_focus_exited():
-	if oXSizeLine.text.to_int() > 170:
-		oXSizeLine.text = "170"
+	clamp_map_size_fields()
 	if oCheckBoxNewMapBorder.pressed == true:
 		reinit_noise_preview()
 		update_border_image_with_noise()
+
+func clamp_map_size_fields():
+	oXSizeLine.text = str(clamp(oXSizeLine.text.to_int(), 1, 170))
+	oYSizeLine.text = str(clamp(oYSizeLine.text.to_int(), 1, 170))
 
 
 func _on_NoiseUpdateTimer_timeout():
