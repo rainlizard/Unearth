@@ -28,14 +28,11 @@ var data18_19 = null
 
 func set_parentTile(setval):
 	data18_19 = null
+	if parentTile != null:
+		remove_from_group('attachedtotile_'+str(parentTile))
 	parentTile = setval
-
-func _enter_tree():
 	if parentTile != null:
 		add_to_group('attachedtotile_'+str(parentTile))
-	#for i in 10:
-	#	yield(get_tree(),'idle_frame')
-	#print("hello? this is  subtype:", subtype, " thingType:" ,thingType, " position:", position, " locationX:", locationX," locationY:", locationY," locationZ:", locationZ, " visible: ", visible)
 
 func set_location_x(setVal):
 	if locationX != null and locationY != null:

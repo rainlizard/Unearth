@@ -133,12 +133,10 @@ func shift_instances(offsetX, offsetY, previousWidth, newWidth, newHeight):
 			var parentY = int(previousParentTile / previousWidth)
 			parentX += offsetX
 			parentY += offsetY
-			instance.remove_from_group("attachedtotile_" + str(previousParentTile))
 			if parentX < 0 or parentY < 0 or parentX >= newWidth or parentY >= newHeight:
 				oInstances.kill_instance(instance)
 				continue
 			instance.parentTile = (parentY * newWidth) + parentX
-			instance.add_to_group("attachedtotile_" + str(instance.parentTile))
 		instance.locationX += offsetSubtileX
 		instance.locationY += offsetSubtileY
 

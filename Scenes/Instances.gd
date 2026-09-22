@@ -97,6 +97,8 @@ func mirror_adjusted_value(instanceBeingAdjusted, variableNameToAdjust, original
 								getNodeAtMirroredPosition.locationX = mirrorMovedPosition.x
 								getNodeAtMirroredPosition.locationY = mirrorMovedPosition.y
 								getNodeAtMirroredPosition.locationZ = instanceBeingAdjusted.locationZ
+								if movedPosition != originalPosition:
+									update_thing_attachment(getNodeAtMirroredPosition)
 							"pointRange":
 								getNodeAtMirroredPosition.pointRange = instanceBeingAdjusted.pointRange
 							"lightRange":
@@ -274,15 +276,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership, newAtt
 			elif Things.is_custom_special_box(id.subtype) == true: # Special Box
 				id.boxNumber = oPlacingSettings.boxNumber
 			elif id.subtype in [2,7]: # Torch and Unlit Torch
-				for direction in [Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1)]:
-					var getParentSlabX = floor((newPosition.x + direction.x) / 3)
-					var getParentSlabY = floor((newPosition.y + direction.y) / 3)
-					if Slabs.data[oDataSlab.get_cell(getParentSlabX, getParentSlabY)][Slabs.IS_SOLID] == true:
-						id.locationX += direction.x * 0.25
-						id.locationY += direction.y * 0.25
-						id.parentTile = getParentSlabX + (getParentSlabY * M.xSize)
-						break  # We only want to adjust for one solid slab
-				update_stray_torch_height(id)
+				attach_torch_to_nearby_wall(id)
 			elif id.subtype in Things.LIST_OF_GOLDPILES:
 				match id.subtype:
 					3: id.goldValue = 500
@@ -355,6 +349,28 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership, newAtt
 		if doorSlabData == null:
 			oMessage.big("Warning","You placed a Door Thing without a Door Slab. Switch to Slab Mode and place a Door Slab for proper functionality.")
 	return id
+
+
+func attach_torch_to_nearby_wall(id):
+	id.parentTile = 65535
+	for direction in [Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1)]:
+		var getParentSlabX = floor((id.locationX + direction.x) / 3)
+		var getParentSlabY = floor((id.locationY + direction.y) / 3)
+		var neighborSlabID = oDataSlab.get_cell(getParentSlabX, getParentSlabY)
+		if Slabs.data.has(neighborSlabID) and Slabs.data[neighborSlabID][Slabs.IS_SOLID] == true:
+			id.locationX = floor(id.locationX) + 0.5 + (direction.x * 0.25)
+			id.locationY = floor(id.locationY) + 0.5 + (direction.y * 0.25)
+			id.parentTile = getParentSlabX + (getParentSlabY * M.xSize)
+			break  # We only want to adjust for one solid slab
+	update_stray_torch_height(id)
+
+
+func update_thing_attachment(id):
+	if id.thingType == Things.TYPE.OBJECT and id.subtype in [2,7]: # Torch and Unlit Torch
+		if id.parentTile != 65535:
+			attach_torch_to_nearby_wall(id)
+	elif id.get("parentTile") != null and id.parentTile != 65535:
+		id.parentTile = (floor(id.locationY / 3) * M.xSize) + floor(id.locationX / 3)
 
 
 func place_default_creature(newSubtype, newPosition, newOwnership):

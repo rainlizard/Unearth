@@ -53,9 +53,6 @@ func _ready():
 	set_texture_based_on_thingtype()
 	set_grow_direction()
 	
-	if parentTile != null:
-		add_to_group('attachedtotile_'+str(parentTile))
-	
 	load_default_kfx_values()
 	if ownership != null and (thingType == Things.TYPE.CREATURE or ownership != 5):
 		set_ownership_material()
@@ -242,7 +239,11 @@ func set_index(setval):
 
 func set_parentTile(setval):
 	data11_12 = null
+	if parentTile != null:
+		remove_from_group('attachedtotile_'+str(parentTile))
 	parentTile = setval
+	if parentTile != null:
+		add_to_group('attachedtotile_'+str(parentTile))
 func set_doorOrientation(setval):
 	data13 = null
 	doorOrientation = setval

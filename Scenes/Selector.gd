@@ -197,6 +197,7 @@ func mouse_button_on_field():
 				var originalPosition = Vector2(holdClickOnInstance.locationX, holdClickOnInstance.locationY)
 				holdClickOnInstance.locationX = snapToPos.x + 0.5
 				holdClickOnInstance.locationY = snapToPos.y + 0.5
+				oInstances.update_thing_attachment(holdClickOnInstance)
 				
 				# Readjust the thing's height when dragging it from different heights
 				if holdClickOnInstance.locationZ != 2.875: # don't knock torches onto the ground if dragging them (accidental clicks would knock them down too)

@@ -218,6 +218,8 @@ func update_property_value(callingNode, leftString):
 				inst.locationY = clamp(float(callingNode.oLineEditY.text), 0.0, M.ySize*3)
 				if callingNode.oLineEditZ.visible == true: # For the sake of ActionPoint
 					inst.locationZ = clamp(float(callingNode.oLineEditZ.text), 0.0 if oCurrentFormat.selected == Constants.OldFormat else -255.0, 255.0)
+				if Vector2(inst.locationX, inst.locationY) != originalLocation:
+					oInstances.update_thing_attachment(inst)
 				oInstances.mirror_adjusted_value(inst, "locationXYZ", originalLocation)
 				oInspector.set_inspector_subtile(Vector2(inst.locationX,inst.locationY))
 			return # Exit after handling "Position"
