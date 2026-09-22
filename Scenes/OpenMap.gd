@@ -96,11 +96,14 @@ func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
 func open_map(filePath, options = {}):
-	if filePath != "" and oEditor.mapHasBeenEdited:
+	if oEditor.mapHasBeenEdited:
 		pending_open = [filePath, options]
-		oConfirmDiscardChanges.dialog_text = "Are you sure you want to discard changes and open this map?"
+		if filePath == "":
+			oConfirmDiscardChanges.dialog_text = "Are you sure you want to discard changes and create a new map?"
+		else:
+			oConfirmDiscardChanges.dialog_text = "Are you sure you want to discard changes and open this map?"
 		Utils.popup_centered(oConfirmDiscardChanges)
-		return
+		return false
 	var show_opened_message = options.get("show_opened_message", true)
 	var reset_camera = options.get("reset_camera", true)
 	var loaded_from_backup = options.get("loaded_from_backup", false)
@@ -216,6 +219,7 @@ func open_map(filePath, options = {}):
 		else:
 			# Begin decompression without confirmation dialog
 			_on_ConfirmDecompression_confirmed()
+	return true
 
 
 func has_map_file(fileType):
@@ -356,7 +360,10 @@ func _on_ConfirmDiscardChanges_confirmed():
 	var open_args = pending_open
 	pending_open = []
 	oEditor.mapHasBeenEdited = false
-	open_map(open_args[0], open_args[1])
+	if open_args[0] == "":
+		oNewMapWindow.create_new_map()
+	else:
+		open_map(open_args[0], open_args[1])
 
 
 func _on_FileDialogOpen_file_selected(path):

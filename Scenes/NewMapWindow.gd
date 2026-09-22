@@ -1,7 +1,7 @@
 extends WindowDialog
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
-onready var oCurrentMap = Nodelist.list["oCurrentMap"]
+onready var oOpenMap = Nodelist.list["oOpenMap"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oQuickNoisePreview = Nodelist.list["oQuickNoisePreview"]
@@ -84,14 +84,14 @@ func reinit_noise_preview():
 
 
 
-func _on_ButtonNewMapOK_pressed():
-	currently_creating_new_map = true
-	
+func create_new_map():
 	if oGame.EXECUTABLE_PATH == "":
 		oMessage.quick("Error: Game executable is not set. Set in File -> Preferences")
 		return
 	
-	oCurrentMap._on_ButtonNewMap_pressed()
+	if oOpenMap.open_map("") == false: # An empty path means a blank map
+		return
+	currently_creating_new_map = true
 	
 	yield(oOverheadGraphics, "column_graphics_completed")
 	

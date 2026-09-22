@@ -65,10 +65,6 @@ func _ready():
 func _on_config_status_changed():
 	update_config_paths(true)
 
-func _on_ButtonNewMap_pressed():
-	oOpenMap.open_map("") # This means "blank" map
-
-
 func set_path_and_title(newpath):
 	if newpath != "":
 		OS.set_window_title(newpath + ' - Unearth v'+Version.full)

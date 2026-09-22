@@ -17,7 +17,7 @@ var DESCRIPTION = ""
 var DATE = ""
 var campaign_map_size_enabled = false
 
-func use_size(x, y): #called from _on_ButtonNewMapOK_pressed() and read_lof()
+func use_size(x, y): # Called from create_new_map() and read_lof()
 	M.xSize = x
 	M.ySize = y
 

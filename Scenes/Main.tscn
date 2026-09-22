@@ -8993,7 +8993,7 @@ margin_bottom = 40.0
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions/NoiseOctaves" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseOctaves_sliderChanged"]
 [connection signal="toggled" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions/NoiseAlgTypeCheckBox" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseAlgTypeCheckBox_toggled"]
 [connection signal="timeout" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions/NoiseUpdateTimer" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseUpdateTimer_timeout"]
-[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/ButtonNewMapOK" to="Ui/UiSystem/NewMapWindow" method="_on_ButtonNewMapOK_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/ButtonNewMapOK" to="Ui/UiSystem/NewMapWindow" method="create_new_map"]
 [connection signal="gui_input" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/QuickNoisePreview" to="Ui/UiSystem/NewMapWindow" method="_on_QuickNoisePreview_gui_input"]
 [connection signal="about_to_show" from="Ui/UiSystem/ResizeCurrentMapSize" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeCurrentMapSize_about_to_show"]
 [connection signal="value_changed" from="Ui/UiSystem/ResizeCurrentMapSize/MarginContainer/VBoxContainer/GridContainerResizeEdges/ResizeTopSpinBox" to="Ui/UiSystem/ResizeCurrentMapSize" method="_on_ResizeEdgeSpinBox_value_changed"]
