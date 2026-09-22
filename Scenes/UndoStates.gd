@@ -10,6 +10,7 @@ onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
+onready var oUiSystem = Nodelist.list["oUiSystem"]
 
 
 var undo_history = []
@@ -20,6 +21,8 @@ var undo_save_queued = false
 
 func _input(event):
 	if event.is_action_pressed("undo"):
+		var focus = oUiSystem.get_focus_owner()
+		if focus is TextEdit or focus is LineEdit: return # If typing some text into somewhere
 		perform_undo()
 
 
@@ -78,7 +81,6 @@ func on_undo_state_saved(new_state):
 
 
 func perform_undo():
-	if oMapSettingsWindow.visible == true: return
 	print("perform_undo")
 	if performing_undo == true or undo_history.size() <= 1:
 		return
