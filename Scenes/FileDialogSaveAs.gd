@@ -135,10 +135,9 @@ func _on_FileDialogSaveAs_visibility_changed():
 		oUi.show_tools()
 
 func determine_next_available_map_number_in_dir(path):
-	var drive = get_drive()
-	if drive == "":
-		return 1
-	path = drive.plus_file(path)
+	if OS.get_name() == "Windows":
+		var driveOptionButton = get_vbox().get_child(0).get_child(2).get_child(0)
+		path = driveOptionButton.get_item_text(driveOptionButton.selected).plus_file(path)
 	
 	var mapFileNumbers = []
 	var dir = Directory.new()
@@ -146,12 +145,13 @@ func determine_next_available_map_number_in_dir(path):
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
-			if dir.current_is_dir():
-				pass
-			else:
-				if file_name.to_upper().ends_with(".SLB"):
-					mapFileNumbers.append(file_name.get_file().to_int())
+			var map_name = file_name.get_basename().to_upper()
+			if not dir.current_is_dir() and file_name.get_extension().to_upper() == "SLB" and map_name.begins_with("MAP"):
+				var number = map_name.trim_prefix("MAP")
+				if number.length() == 5 and number.is_valid_integer():
+					mapFileNumbers.append(number.to_int())
 			file_name = dir.get_next()
+		dir.list_dir_end()
 	else:
 		print("An error occurred when trying to access the path.")
 	
@@ -165,14 +165,6 @@ func determine_next_available_map_number_in_dir(path):
 			if mapFileNumbers.has(i+1) == false:
 				return i+1
 		return 1
-
-func get_drive():
-	var driveOptionButton = get_vbox().get_child(0).get_child(2).get_child(0)
-	if is_instance_valid(driveOptionButton):
-		return driveOptionButton.get_item_text(driveOptionButton.selected)
-	else:
-		return "" # Because this has problems on linux, return "" and dont bother trying to detect the next filename
-
 
 func _on_FileDialogSaveAs_file_selected(filePath):
 	oSaveMap.save_map(filePath.get_basename())
