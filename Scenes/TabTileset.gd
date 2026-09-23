@@ -101,7 +101,7 @@ func _display_image():
 	for type in TYPES:
 		var label = oStripALabel if type == "tmapa" else oStripBLabel
 		var edited = modified[type] or differentFromInherited[type]
-		label.text = _active_filename(".dat", type) + ("*" if edited else "")
+		label.text = _active_filename(".dat", type)
 		label.modulate = Color(1, 1, 1) if edited else Color(0.55, 0.55, 0.55)
 	oTilesetStripA.textureIdOffset = 0
 	oTilesetStripB.textureIdOffset = 1000
@@ -496,12 +496,12 @@ func _on_TilesetExternalPathLabel_meta_clicked(meta):
 
 
 func _on_TilesetHelpButton_pressed():
-	var helpText = """If you're having trouble with the Edit Pack button, go manually delete the existing pack files.
+	var helpText = """To reset an existing texture pack, delete its filelists and click Edit Pack again.
 
 To see the effects of your edits, be sure to set your map's Tileset in Map Settings.
 
 TMAPA contains texture IDs 0-543. TMAPB contains IDs 1000-1543. Revert tileset handles both maps.
-Edit Pack creates PNGs and filelists for TMAPA and TMAPB in a folder named after the map, or opens existing filelists and PNGs. Unearth reloads changes into the 2D and 3D views.
+Edit Pack creates PNGs and filelists for TMAPA and TMAPB in a folder named after the map. Existing filelists control the PNG layout when remaking the pack. Unearth reloads changes into the 2D and 3D views.
 
 Import TMAP accepts DAT files and full 256x2176 PNG strips. Export TMAP writes a standalone DAT or PNG without changing the map's save state.
 Texture maps are saved in the campaign cfg folder when it already contains texture maps. Map-local overrides and maps without campaign texture maps are saved as mapname.tmapa###.dat and mapname.tmapb###.dat, where ### is the Tileset ID."""
