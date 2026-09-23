@@ -64,8 +64,7 @@ func _on_TabTileset_visibility_changed():
 	if is_visible_in_tree():
 		if modified.tmapa == false and modified.tmapb == false:
 			load_tileset(max(tilesetNumber, 0))
-		else:
-			_display_image()
+		_display_image()
 
 
 func load_tileset(number: int):
@@ -87,7 +86,6 @@ func load_tileset(number: int):
 		if images[type] == null:
 			images[type] = _create_blank_image()
 		differentFromInherited[type] = _is_different_from_inherited(type)
-	_display_image()
 
 
 func _display_image():
@@ -105,8 +103,8 @@ func _display_image():
 		label.modulate = Color(1, 1, 1) if edited else Color(0.55, 0.55, 0.55)
 	oTilesetStripA.textureIdOffset = 0
 	oTilesetStripB.textureIdOffset = 1000
-	oTilesetStripA.set_image(oTMapLoader.create_rgb_image(images.tmapa))
-	oTilesetStripB.set_image(oTMapLoader.create_rgb_image(images.tmapb))
+	oTilesetStripA.set_image(images.tmapa)
+	oTilesetStripB.set_image(images.tmapb)
 	oTilesetStripA.set_selected(selectedIndices.tmapa)
 	oTilesetStripB.set_selected(selectedIndices.tmapb)
 	var inheritedPaths = _get_inherited_paths()
@@ -560,6 +558,7 @@ func _revert_all_tilesets():
 	oTMapLoader.apply_texture_pack()
 	if _is_current_session():
 		_activate_session()
+	_display_image()
 	oMessage.quick("Reverted all tilesets")
 
 

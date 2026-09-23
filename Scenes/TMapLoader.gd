@@ -36,6 +36,7 @@ enum PaletteType {
 
 var rememberedTmapaPaths = {}
 var decodedTmapSizes = {}
+var l8ImageCache = {}
 var cachedTextures = []
 var texturesLoadedState = LOADING_NOT_STARTED
 var blankHalfTexture: ImageTexture
@@ -123,6 +124,11 @@ func start():
 
 
 func create_l8_image(tmapDatPath: String) -> Image:
+	var file = File.new()
+	var mtime = file.get_modified_time(tmapDatPath)
+	if l8ImageCache.has(tmapDatPath) and l8ImageCache[tmapDatPath].mtime == mtime:
+		decodedTmapSizes[tmapDatPath] = l8ImageCache[tmapDatPath].size
+		return l8ImageCache[tmapDatPath].image
 	var l8ByteArray: PoolByteArray = oRNC.decompress_to_bytes(tmapDatPath)
 	
 	if l8ByteArray.empty():
@@ -158,8 +164,9 @@ func create_l8_image(tmapDatPath: String) -> Image:
 		var emptyValue = float(EMPTY_TEXTURE_INDEX) / 255.0
 		fullSizeImage.fill(Color(emptyValue, emptyValue, emptyValue))
 		fullSizeImage.blit_rect(img, Rect2(0, 0, img.get_width(), img.get_height()), Vector2(0, 0))
-		return fullSizeImage
+		img = fullSizeImage
 	
+	l8ImageCache[tmapDatPath] = {"mtime": mtime, "size": actualDataSize, "image": img}
 	return img
 
 

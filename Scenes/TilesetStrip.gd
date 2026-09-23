@@ -3,26 +3,37 @@ extends Control
 signal tile_selected(index)
 
 onready var oCustomTooltip = Nodelist.list["oCustomTooltip"]
+onready var oReadPalette = Nodelist.list["oReadPalette"]
 
 const COLUMNS = 8
 const ROWS = 68
 const TILE_SIZE = 32
+const STRIP_SHADER = preload("res://Shaders/tileset_strip.shader")
 
 var imageTexture: ImageTexture
 var selectedIndex = 0
 var hoveredIndex = -1
 var textureIdOffset = 0
 var zoom = 1
+var shaderMaterial: ShaderMaterial
+
+
+func _ready():
+	shaderMaterial = ShaderMaterial.new()
+	shaderMaterial.shader = STRIP_SHADER
+	material = shaderMaterial
 
 
 func set_image(image: Image):
 	imageTexture = ImageTexture.new()
 	imageTexture.create_from_image(image, 0)
+	shaderMaterial.set_shader_param("palette_texture", oReadPalette.palette_image_texture_2d)
 	update()
 
 
 func set_zoom(value: int):
 	zoom = value
+	shaderMaterial.set_shader_param("zoom", float(zoom))
 	rect_min_size = Vector2(COLUMNS * TILE_SIZE, ROWS * TILE_SIZE) * zoom
 	update()
 
@@ -35,18 +46,9 @@ func set_selected(index: int):
 func _draw():
 	if imageTexture == null: return
 	var displaySize = Vector2(COLUMNS * TILE_SIZE, ROWS * TILE_SIZE) * zoom
+	shaderMaterial.set_shader_param("selected_index", selectedIndex)
+	shaderMaterial.set_shader_param("hovered_index", hoveredIndex)
 	draw_texture_rect(imageTexture, Rect2(Vector2.ZERO, displaySize), false)
-	var gridColor = Color(1, 1, 1, 0.18)
-	for x in COLUMNS + 1:
-		draw_line(Vector2(x * TILE_SIZE * zoom, 0), Vector2(x * TILE_SIZE * zoom, displaySize.y), gridColor)
-	for y in ROWS + 1:
-		draw_line(Vector2(0, y * TILE_SIZE * zoom), Vector2(displaySize.x, y * TILE_SIZE * zoom), gridColor)
-	if selectedIndex >= 0:
-		var tilePosition = Vector2(selectedIndex % COLUMNS, selectedIndex / COLUMNS) * TILE_SIZE * zoom
-		draw_rect(Rect2(tilePosition, Vector2(TILE_SIZE, TILE_SIZE) * zoom), Color(0.7, 0.7, 0.7), false, 2)
-	if hoveredIndex != -1:
-		var hoverPosition = Vector2(hoveredIndex % COLUMNS, hoveredIndex / COLUMNS) * TILE_SIZE * zoom
-		draw_rect(Rect2(hoverPosition, Vector2(TILE_SIZE, TILE_SIZE) * zoom), Color(1, 0.85, 0, 1), false, 2)
 
 
 func _gui_input(event):
