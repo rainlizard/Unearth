@@ -17,7 +17,7 @@ func _ready():
 func update_texture_map_names():
 	if oTMapLoader.rememberedTmapaPaths == null:
 		return
-	var pathsByNumber = _get_tmapa_paths_by_number()
+	var pathsByNumber = _get_tmap_paths_by_number()
 	texture_map_names.clear()
 	var textureCount = oTMapLoader.cachedTextures.size() if oTMapLoader.cachedTextures != null else 0
 	for i in range(textureCount):
@@ -28,11 +28,11 @@ func update_texture_map_names():
 		texture_map_names[i] = itemText
 
 
-func _get_tmapa_paths_by_number() -> Dictionary:
+func _get_tmap_paths_by_number() -> Dictionary:
 	var paths = {}
 	for path in oTMapLoader.rememberedTmapaPaths:
 		var details = oTMapLoader.parse_tmap_path_details(path)
-		if details != null and details.type == "tmapa" and details.number >= 0:
+		if details != null and details.number >= 0 and (paths.has(details.number) == false or details.type == "tmapa"):
 			paths[details.number] = path
 	return paths
 

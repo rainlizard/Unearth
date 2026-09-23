@@ -93,7 +93,7 @@ func update_window_title():
 			if (oTabTileset.modified.tmapa or oTabTileset.modified.tmapb) and oCurrentMap.path != "":
 				window_title += " - local override"
 			else:
-				var source = oTabTileset.get_source(oTabTileset.currentType)
+				var source = oTabTileset.get_source()
 				if source != "default":
 					window_title += " - " + source
 	if oEditor.mapHasBeenEdited:

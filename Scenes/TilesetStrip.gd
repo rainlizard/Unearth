@@ -41,8 +41,9 @@ func _draw():
 		draw_line(Vector2(x * TILE_SIZE * zoom, 0), Vector2(x * TILE_SIZE * zoom, displaySize.y), gridColor)
 	for y in ROWS + 1:
 		draw_line(Vector2(0, y * TILE_SIZE * zoom), Vector2(displaySize.x, y * TILE_SIZE * zoom), gridColor)
-	var tilePosition = Vector2(selectedIndex % COLUMNS, selectedIndex / COLUMNS) * TILE_SIZE * zoom
-	draw_rect(Rect2(tilePosition, Vector2(TILE_SIZE, TILE_SIZE) * zoom), Color(0.7, 0.7, 0.7), false, 2)
+	if selectedIndex >= 0:
+		var tilePosition = Vector2(selectedIndex % COLUMNS, selectedIndex / COLUMNS) * TILE_SIZE * zoom
+		draw_rect(Rect2(tilePosition, Vector2(TILE_SIZE, TILE_SIZE) * zoom), Color(0.7, 0.7, 0.7), false, 2)
 	if hoveredIndex != -1:
 		var hoverPosition = Vector2(hoveredIndex % COLUMNS, hoveredIndex / COLUMNS) * TILE_SIZE * zoom
 		draw_rect(Rect2(hoverPosition, Vector2(TILE_SIZE, TILE_SIZE) * zoom), Color(1, 0.85, 0, 1), false, 2)

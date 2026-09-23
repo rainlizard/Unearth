@@ -11,20 +11,19 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataLevelStyle = Nodelist.list["oDataLevelStyle"]
 onready var oTilesetIDSpinBox = Nodelist.list["oTilesetIDSpinBox"]
 onready var oTilesetIDNameLabel = Nodelist.list["oTilesetIDNameLabel"]
-onready var oTilesetTypeList = Nodelist.list["oTilesetTypeList"]
-onready var oTilesetIDsLabel = Nodelist.list["oTilesetIDsLabel"]
 onready var oCustomFilesPanel = Nodelist.list["oCustomFilesPanel"]
 onready var oCustomFilesLabel = Nodelist.list["oCustomFilesLabel"]
-onready var oTilesetStrip = Nodelist.list["oTilesetStrip"]
+onready var oStripALabel = Nodelist.list["oStripALabel"]
+onready var oStripBLabel = Nodelist.list["oStripBLabel"]
+onready var oTilesetStripA = Nodelist.list["oTilesetStripA"]
+onready var oTilesetStripB = Nodelist.list["oTilesetStripB"]
 onready var oTilesetScrollContainer = Nodelist.list["oTilesetScrollContainer"]
 onready var oTilesetZoom = Nodelist.list["oTilesetZoom"]
+onready var oTilesetTypeDialog = Nodelist.list["oTilesetTypeDialog"]
 onready var oTilesetLoadDialog = Nodelist.list["oTilesetLoadDialog"]
 onready var oTilesetSaveDialog = Nodelist.list["oTilesetSaveDialog"]
 onready var oTilesetLiveReloading = Nodelist.list["oTilesetLiveReloading"]
 onready var oTilesetExternalPathLabel = Nodelist.list["oTilesetExternalPathLabel"]
-onready var oTilesetExternalConfirmDialog = Nodelist.list["oTilesetExternalConfirmDialog"]
-onready var oTilesetEditingStatusLabel = Nodelist.list["oTilesetEditingStatusLabel"]
-onready var oTilesetRevertButton = Nodelist.list["oTilesetRevertButton"]
 onready var oTilesetRevertTilesetButton = Nodelist.list["oTilesetRevertTilesetButton"]
 onready var oTilesetRevertAllButton = Nodelist.list["oTilesetRevertAllButton"]
 onready var oTilesetRevertConfirmDialog = Nodelist.list["oTilesetRevertConfirmDialog"]
@@ -44,9 +43,9 @@ var contentHeights = {"tmapa": int(IMAGE_SIZE.y), "tmapb": 0}
 var modified = {"tmapa": false, "tmapb": false}
 var differentFromInherited = {"tmapa": false, "tmapb": false}
 var selectedIndices = {"tmapa": 0, "tmapb": 0}
-var currentType = "tmapa"
+var fileDialogType = "tmapa"
+var fileDialogAction = ""
 var tilesetNumber = -1
-var externalDialogConfirmed = false
 var editingSession = {}
 var revertScope = ""
 var tilesetPathsToDelete = []
@@ -54,9 +53,10 @@ var tilesetPathsToDelete = []
 
 func _ready():
 	oTilesetIDSpinBox.max_value = oTMapLoader.TMAP_COUNT - 1
-	for i in TYPES.size():
-		oTilesetTypeList.set_item_text(i, TYPES[i].to_upper())
-	oTilesetStrip.set_zoom(1)
+	oTilesetTypeDialog.get_ok().text = "TMAPA"
+	oTilesetTypeDialog.add_button("TMAPB", true, "tmapb")
+	oTilesetStripA.set_zoom(1)
+	oTilesetStripB.set_zoom(1)
 	_update_editing_session_ui()
 
 
@@ -97,13 +97,18 @@ func _display_image():
 	var tilesetName = oTMapNames.get_tileset_name(tilesetNumber)
 	oTilesetIDNameLabel.text = tilesetName
 	oTilesetIDNameLabel.visible = tilesetName != ""
-	oTilesetTypeList.selected = TYPES.find(currentType)
 	oTilesetIDSpinBox.modulate = Color(1.4,1.4,1.7) if differentFromInherited.tmapa or differentFromInherited.tmapb else Color(1,1,1)
-	oTilesetTypeList.modulate = Color(1.4,1.4,1.7) if differentFromInherited[currentType] else Color(1,1,1)
-	oTilesetIDsLabel.text = "IDs 0-543" if currentType == "tmapa" else "IDs 1000-1543"
-	oTilesetStrip.textureIdOffset = 0 if currentType == "tmapa" else 1000
-	oTilesetStrip.set_image(oTMapLoader.create_rgb_image(images[currentType]))
-	oTilesetStrip.set_selected(selectedIndices[currentType])
+	for type in TYPES:
+		var label = oStripALabel if type == "tmapa" else oStripBLabel
+		var edited = modified[type] or differentFromInherited[type]
+		label.text = _active_filename(".dat", type) + ("*" if edited else "")
+		label.modulate = Color(1, 1, 1) if edited else Color(0.55, 0.55, 0.55)
+	oTilesetStripA.textureIdOffset = 0
+	oTilesetStripB.textureIdOffset = 1000
+	oTilesetStripA.set_image(oTMapLoader.create_rgb_image(images.tmapa))
+	oTilesetStripB.set_image(oTMapLoader.create_rgb_image(images.tmapb))
+	oTilesetStripA.set_selected(selectedIndices.tmapa)
+	oTilesetStripB.set_selected(selectedIndices.tmapb)
 	var inheritedPaths = _get_inherited_paths()
 	var customFiles = {}
 	for configType in [oConfigFileManager.LOAD_CFG_CAMPAIGN, oConfigFileManager.LOAD_CFG_CURRENT_MAP]:
@@ -154,19 +159,19 @@ func _display_image():
 		oCustomFilesLabel.bbcode_text += "\n\nSave will delete:\n" + PoolStringArray(deletedFileLinks).join("\n")
 	oCustomFilesLabel.hint_tooltip = PoolStringArray(customFilePaths).join("\n")
 	oCustomFilesPanel.modulate = Color(1.4,1.4,1.7) if containsModifiedFiles else Color(1,1,1)
-	oTilesetRevertButton.text = "Revert " + currentType.to_upper()
-	oTilesetRevertButton.disabled = _can_revert(currentType) == false
 	oTilesetRevertTilesetButton.disabled = _can_revert("tmapa") == false and _can_revert("tmapb") == false
 	oTilesetRevertAllButton.disabled = _can_revert_all() == false
 	_update_editing_session_ui()
 	oSlabsetWindow.update_window_title()
 
 
-func get_source(type: String) -> String:
-	if modified[type] or oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CURRENT_MAP].has(sourcePaths[type]):
-		return "local"
-	if oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CAMPAIGN].has(sourcePaths[type]):
-		return "campaign"
+func get_source() -> String:
+	for type in TYPES:
+		if modified[type] or oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CURRENT_MAP].has(sourcePaths[type]):
+			return "local"
+	for type in TYPES:
+		if oConfigFileManager.paths_loaded[oConfigFileManager.LOAD_CFG_CAMPAIGN].has(sourcePaths[type]):
+			return "campaign"
 	return "default"
 
 
@@ -192,18 +197,29 @@ func select_texture_id(textureId: int):
 		oMessage.quick("Texture ID " + str(textureId) + " is outside the texture maps.")
 		return
 	selectedIndices[type] = index
-	_switch_tileset_view(tilesetNumber, type)
+	_switch_tileset_view(tilesetNumber)
+	_scroll_to_tile(type, index)
+
+
+func _scroll_to_tile(type: String, index: int):
 	var tileSize = TILE_SIZE * int(oTilesetZoom.value)
-	oTilesetScrollContainer.scroll_horizontal = max(0, (index % 8) * tileSize - (oTilesetScrollContainer.rect_size.x - tileSize) / 2)
-	oTilesetScrollContainer.scroll_vertical = max(0, (index / 8) * tileSize - (oTilesetScrollContainer.rect_size.y - tileSize) / 2)
+	var strip = oTilesetStripA if type == "tmapa" else oTilesetStripB
+	var stripPosition = strip.rect_global_position - oTilesetScrollContainer.rect_global_position + Vector2(oTilesetScrollContainer.scroll_horizontal, oTilesetScrollContainer.scroll_vertical)
+	oTilesetScrollContainer.scroll_horizontal = max(0, stripPosition.x + (index % 8) * tileSize - (oTilesetScrollContainer.rect_size.x - tileSize) / 2)
+	oTilesetScrollContainer.scroll_vertical = max(0, stripPosition.y + (index / 8) * tileSize - (oTilesetScrollContainer.rect_size.y - tileSize) / 2)
 
 
-func _on_TilesetStrip_tile_selected(index: int):
-	selectedIndices[currentType] = index
+func _on_TilesetStripA_tile_selected(index: int):
+	selectedIndices.tmapa = index
+
+
+func _on_TilesetStripB_tile_selected(index: int):
+	selectedIndices.tmapb = index
 
 
 func _on_TilesetZoom_value_changed(value: float):
-	oTilesetStrip.set_zoom(int(value))
+	oTilesetStripA.set_zoom(int(value))
+	oTilesetStripB.set_zoom(int(value))
 
 
 func _on_TilesetIDSpinBox_value_changed(value: float):
@@ -213,11 +229,7 @@ func _on_TilesetIDSpinBox_value_changed(value: float):
 		oTilesetIDSpinBox.value = tilesetNumber
 		oTilesetIDSpinBox.set_block_signals(false)
 		return
-	_switch_tileset_view(number, currentType)
-
-
-func _on_TilesetTypeList_item_selected(index: int):
-	_switch_tileset_view(tilesetNumber, TYPES[index])
+	_switch_tileset_view(number)
 
 
 func _on_CustomFilesLabel_meta_clicked(meta):
@@ -226,90 +238,104 @@ func _on_CustomFilesLabel_meta_clicked(meta):
 		return
 	var number = int(selection[0])
 	if _can_modify_tileset(number):
-		_switch_tileset_view(number, selection[1])
+		_switch_tileset_view(number)
+		_scroll_to_tile(selection[1], selectedIndices[selection[1]])
 
 
 func _on_TilesetLoadButton_pressed():
-	if _is_current_session() and editingSession.liveReload:
-		editingSession.liveReload = false
-		oTeditLiveReloadPNG.set_enabled(false)
-		_update_editing_session_ui()
-	var path = sourcePaths[currentType]
+	fileDialogAction = "import"
+	oTilesetTypeDialog.window_title = "Import texture map"
+	oTilesetTypeDialog.dialog_text = "Choose which texture map to import."
+	Utils.popup_centered(oTilesetTypeDialog)
+
+
+func _on_TilesetSaveButton_pressed():
+	fileDialogAction = "export"
+	oTilesetTypeDialog.window_title = "Export texture map"
+	oTilesetTypeDialog.dialog_text = "Choose which texture map to export."
+	Utils.popup_centered(oTilesetTypeDialog)
+
+
+func _on_TilesetTypeDialog_confirmed():
+	_open_file_dialog("tmapa")
+
+
+func _on_TilesetTypeDialog_custom_action(action: String):
+	oTilesetTypeDialog.hide()
+	_open_file_dialog(action)
+
+
+func _open_file_dialog(type: String):
+	fileDialogType = type
+	var dialog = oTilesetSaveDialog if fileDialogAction == "export" else oTilesetLoadDialog
+	var path = sourcePaths[type]
 	if path != "":
-		oTilesetLoadDialog.current_dir = path.get_base_dir()
-	Utils.popup_centered(oTilesetLoadDialog)
+		dialog.current_dir = path.get_base_dir()
+	if fileDialogAction == "export":
+		dialog.current_file = _active_filename(".dat", type)
+	Utils.popup_centered(dialog)
 
 
 func _on_TilesetLoadDialog_file_selected(path: String):
+	var type = fileDialogType
+	if _can_modify_tileset(tilesetNumber) == false:
+		return
 	var extension = path.get_extension().to_lower()
 	if extension == "dat":
-		if _can_modify_tileset(tilesetNumber) == false:
-			return
 		var details = oTMapLoader.parse_tmap_path_details(path)
-		if details == null or details.type != currentType:
-			oMessage.big("Error", "Select a " + currentType + " DAT file.")
+		if details == null or details.type != type:
+			oMessage.big("Error", "Select a " + type + " DAT file.")
 			return
 		var image = oTMapLoader.create_l8_image(path)
 		if image == null or image.is_empty():
 			oMessage.big("Error", "Could not load the texture map.")
 			return
-		images[currentType] = image
-		contentHeights[currentType] = _decoded_height(path)
-		_mark_modified(currentType)
+		images[type] = image
+		contentHeights[type] = _decoded_height(path)
 	elif extension == "png":
-		if _can_modify_tileset(tilesetNumber) == false:
-			return
 		var pngImage = Image.new()
 		if pngImage.load(path) != OK:
 			oMessage.big("Error", "Could not load the PNG.")
 			return
-		if pngImage.get_size() == IMAGE_SIZE:
-			var convertedImage = oTMapLoader.create_l8_image_from_rgb(pngImage, images[currentType])
-			if convertedImage == null or convertedImage.is_empty():
-				oMessage.big("Error", "Could not convert the PNG using the Tileset palette.")
-				return
-			images[currentType] = convertedImage
-			contentHeights[currentType] = int(IMAGE_SIZE.y)
-		else:
+		if pngImage.get_size() != IMAGE_SIZE:
 			oMessage.big("Error", "PNG must be a full 256x2176 strip.")
 			return
-		_mark_modified(currentType)
+		var convertedImage = oTMapLoader.create_l8_image_from_rgb(pngImage, images[type])
+		if convertedImage == null or convertedImage.is_empty():
+			oMessage.big("Error", "Could not convert the PNG using the Tileset palette.")
+			return
+		images[type] = convertedImage
+		contentHeights[type] = int(IMAGE_SIZE.y)
 	else:
 		oMessage.big("Error", "Select a DAT or PNG file.")
 		return
-	_update_cache()
-	if _is_current_session() and editingSession.liveReload == false:
+	_mark_modified(type)
+	_update_cache(type)
+	if _is_current_session():
 		_activate_session()
 	_display_image()
 
 
-func _update_cache(type: String = currentType):
+func _update_cache(type: String):
 	var available = inheritedImages[type] != null or differentFromInherited[type]
 	oTMapLoader.set_cached_image(images[type] if available else null, tilesetNumber, type)
 	oSlabStyle.update_style_button(tilesetNumber)
 	oTMapLoader.apply_texture_pack()
 
 
-func _on_TilesetSaveButton_pressed():
-	var path = sourcePaths[currentType]
-	if path != "":
-		oTilesetSaveDialog.current_dir = path.get_base_dir()
-	oTilesetSaveDialog.current_file = _active_filename(".dat")
-	Utils.popup_centered(oTilesetSaveDialog)
-
-
 func _on_TilesetSaveDialog_file_selected(path: String):
+	var type = fileDialogType
 	var extension = path.get_extension().to_lower()
 	if extension == "dat":
 		var details = oTMapLoader.parse_tmap_path_details(path)
-		if details == null or details.type != currentType:
-			oMessage.big("Error", "Export with a " + currentType + " filename.")
+		if details == null or details.type != type:
+			oMessage.big("Error", "Export with a " + type + " filename.")
 			return
-		if save_dat(path, currentType) == false:
+		if save_dat(path, type) == false:
 			oMessage.big("Error", "Could not save the texture map.")
 			return
 	elif extension == "png":
-		var rgbImage = oTMapLoader.create_rgb_image(images[currentType])
+		var rgbImage = oTMapLoader.create_rgb_image(images[type])
 		if rgbImage == null or rgbImage.is_empty() or rgbImage.save_png(path) != OK:
 			oMessage.big("Error", "Could not save the PNG.")
 			return
@@ -436,34 +462,20 @@ func _decoded_height(path: String) -> int:
 	return int(ceil(float(byteCount) / IMAGE_SIZE.x))
 
 
-func _active_filename(extension: String) -> String:
-	var path = sourcePaths[currentType]
+func _active_filename(extension: String, type: String) -> String:
+	var path = sourcePaths[type]
 	if path != "":
 		return path.get_file().get_basename() + extension
-	return currentType + str(tilesetNumber).pad_zeros(3) + extension
-
-
-func _on_TilesetStripButton_pressed():
-	_start_external_edit("strip")
+	return type + str(tilesetNumber).pad_zeros(3) + extension
 
 
 func _on_TilesetPackButton_pressed():
-	_start_external_edit("pack")
-
-
-func _start_external_edit(format: String):
 	if _can_modify_tileset(tilesetNumber) == false:
 		return
-	if _is_current_session() and editingSession.liveReload:
-		editingSession.liveReload = false
-		oTeditLiveReloadPNG.set_enabled(false)
-		_update_editing_session_ui()
-	var rgbImage = oTMapLoader.create_rgb_image(images[currentType])
-	if rgbImage == null or rgbImage.is_empty():
-		oMessage.big("Error", "Could not create the editable PNG because the Tileset palette is unavailable.")
+	if oCurrentMap.path == "":
+		oMessage.big("Save map first", "Save the map to choose a folder name for its texture pack.")
 		return
-	var folderName = _active_filename("").replace(".", "_")
-	oTeditSavePNG.handle_tmap_export(rgbImage, folderName, folderName + ".png" if format == "strip" else "")
+	oTeditSavePNG.handle_tmap_export(oCurrentMap.path.get_file().get_basename(), tilesetNumber)
 
 
 func _on_TilesetLiveReloading_toggled(buttonPressed: bool):
@@ -484,21 +496,16 @@ func _on_TilesetExternalPathLabel_meta_clicked(meta):
 
 
 func _on_TilesetHelpButton_pressed():
-	var helpText = """To see the effects of your edits, be sure to set your map's Tileset in Map Settings.
+	var helpText = """If you're having trouble with the Edit Pack button, go manually delete the existing pack files.
 
-TMAPA contains texture IDs 0-543. TMAPB contains IDs 1000-1543.
-Edit as strip creates one PNG. Edit as texture pack creates a folder of PNGs. Unearth watches the selected format and reloads changes into the 2D and 3D views.
+To see the effects of your edits, be sure to set your map's Tileset in Map Settings.
+
+TMAPA contains texture IDs 0-543. TMAPB contains IDs 1000-1543. Revert tileset handles both maps.
+Edit Pack creates PNGs and filelists for TMAPA and TMAPB in a folder named after the map, or opens existing filelists and PNGs. Unearth reloads changes into the 2D and 3D views.
 
 Import TMAP accepts DAT files and full 256x2176 PNG strips. Export TMAP writes a standalone DAT or PNG without changing the map's save state.
 Texture maps are saved in the campaign cfg folder when it already contains texture maps. Map-local overrides and maps without campaign texture maps are saved as mapname.tmapa###.dat and mapname.tmapb###.dat, where ### is the Tileset ID."""
 	oMessage.big("Tileset", helpText)
-
-
-func _on_TilesetRevertButton_pressed():
-	revertScope = "type"
-	oTilesetRevertConfirmDialog.window_title = "Revert " + currentType.to_upper()
-	oTilesetRevertConfirmDialog.dialog_text = ("Discard unsaved changes to " if modified[currentType] else "Revert the local override for ") + currentType.to_upper() + "?"
-	Utils.popup_centered(oTilesetRevertConfirmDialog)
 
 
 func _on_TilesetRevertTilesetButton_pressed():
@@ -519,16 +526,17 @@ func _on_TilesetRevertConfirmDialog_confirmed():
 	if revertScope == "all":
 		_revert_all_tilesets()
 		return
-	var types = TYPES if revertScope == "tileset" else [currentType]
 	var reverted = true
-	for type in types:
+	for type in TYPES:
 		if _can_revert(type) and _revert_type(type) == false:
 			reverted = false
-	for type in types:
+	for type in TYPES:
 		_update_cache(type)
+	if _is_current_session():
+		_activate_session()
 	_display_image()
 	if reverted:
-		oMessage.quick("Reverted Tileset " + str(tilesetNumber) if revertScope == "tileset" else "Reverted " + currentType.to_upper())
+		oMessage.quick("Reverted Tileset " + str(tilesetNumber))
 
 
 func _revert_all_tilesets():
@@ -550,6 +558,8 @@ func _revert_all_tilesets():
 			oTMapLoader.set_cached_image(oTMapLoader.create_l8_image(inheritedPath) if inheritedPath != "" else null, number, type)
 		oSlabStyle.update_style_button(number)
 	oTMapLoader.apply_texture_pack()
+	if _is_current_session():
+		_activate_session()
 	oMessage.quick("Reverted all tilesets")
 
 
@@ -578,8 +588,6 @@ func _revert_type(type: String) -> bool:
 		contentHeights[type] = _decoded_height(path)
 	modified[type] = false
 	differentFromInherited[type] = _is_different_from_inherited(type)
-	if editingSession.get("number") == tilesetNumber and editingSession.get("type") == type:
-		_activate_session()
 	return true
 
 
@@ -596,43 +604,26 @@ func _can_revert_all() -> bool:
 	return false
 
 
-func register_editing_session(type: String, number: int, format: String, path: String, content: String):
+func register_editing_session(number: int, path: String, loadExisting: bool = false):
 	editingSession = {
-		"type": type,
 		"number": number,
-		"format": format,
 		"path": path,
-		"content": content,
 		"liveReload": true,
-		"status": ""
+		"status": {"tmapa": "", "tmapb": ""}
 	}
-	if tilesetNumber != number or currentType != type:
-		load_tileset(number)
-		currentType = type
-	_activate_session()
+	_activate_session(loadExisting)
 	_display_image()
 
 
 func set_reload_status(type: String, number: int, status: String):
-	if editingSession.get("type") == type and editingSession.get("number") == number:
-		if status == WAITING_STATUS:
-			oMessage.quick(status)
+	if editingSession.get("number") == number:
+		if status == WAITING_STATUS or status.begins_with("Reloaded "):
 			status = ""
-		editingSession.status = status
-		_update_editing_session_ui()
-
-
-func show_confirmation_dialog(message: String) -> bool:
-	oTilesetExternalConfirmDialog.dialog_text = message
-	externalDialogConfirmed = false
-	Utils.popup_centered(oTilesetExternalConfirmDialog)
-	while oTilesetExternalConfirmDialog.visible:
-		yield(get_tree(), "idle_frame")
-	return externalDialogConfirmed
-
-
-func _on_TilesetExternalConfirmDialog_confirmed():
-	externalDialogConfirmed = true
+		if editingSession.status[type] == status:
+			return
+		editingSession.status[type] = status
+		if status != "":
+			oMessage.quick(type.to_upper() + ": " + status)
 
 
 func apply_external_image(type: String, number: int, image: Image, height: int) -> bool:
@@ -649,27 +640,28 @@ func apply_external_image(type: String, number: int, image: Image, height: int) 
 
 
 func _is_current_session() -> bool:
-	return editingSession.get("number") == tilesetNumber and editingSession.get("type") == currentType
+	return editingSession.get("number") == tilesetNumber
 
 
-func _switch_tileset_view(number: int, type: String):
+func _switch_tileset_view(number: int):
 	if _can_modify_tileset(number) == false:
 		return
 	if number != tilesetNumber:
 		load_tileset(number)
-	currentType = type
 	if _is_current_session():
-		_activate_session()
+		if oTeditLiveReloadPNG.packFolder != editingSession.path:
+			_activate_session()
 	else:
-		if editingSession.empty() == false:
-			editingSession.liveReload = false
 		oTeditLiveReloadPNG.stop_session()
 	_display_image()
 
 
-func _activate_session():
-	set_reload_status(editingSession.type, editingSession.number, WAITING_STATUS)
-	oTeditLiveReloadPNG.initialize_pack(editingSession.content, editingSession.path, editingSession.type, editingSession.number)
+func _activate_session(loadExisting: bool = false):
+	for type in TYPES:
+		set_reload_status(type, editingSession.number, WAITING_STATUS)
+	oTeditLiveReloadPNG.initialize_pack(editingSession.path, editingSession.number, loadExisting)
+	if loadExisting:
+		oTeditLiveReloadPNG.execute()
 	oTeditLiveReloadPNG.set_enabled(editingSession.liveReload)
 
 
@@ -689,7 +681,6 @@ func _update_editing_session_ui():
 	oTilesetExternalPathLabel.pop()
 	oTilesetExternalPathLabel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	oTilesetExternalPathLabel.hint_tooltip = folderPath
-	oTilesetEditingStatusLabel.text = currentType.to_upper() + " - " + session.format.capitalize() + " - " + ("Live reload on" if session.liveReload else "Live reload off") + ("\n" + session.status if session.status != "" else "") if hasSession else "Choose an editing format."
 
 
 func _mark_modified(type: String):
@@ -717,7 +708,6 @@ func _can_modify_tileset(number: int) -> bool:
 func clear_modified_tileset():
 	_reset_tileset_data()
 	tilesetNumber = -1
-	currentType = "tmapa"
 	selectedIndices = {"tmapa": 0, "tmapb": 0}
 	editingSession.clear()
 	tilesetPathsToDelete.clear()
