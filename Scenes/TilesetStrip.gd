@@ -46,7 +46,6 @@ func set_selected(index: int):
 func _draw():
 	if imageTexture == null: return
 	var displaySize = Vector2(COLUMNS * TILE_SIZE, ROWS * TILE_SIZE) * zoom
-	shaderMaterial.set_shader_param("selected_index", selectedIndex)
 	shaderMaterial.set_shader_param("hovered_index", hoveredIndex)
 	draw_texture_rect(imageTexture, Rect2(Vector2.ZERO, displaySize), false)
 

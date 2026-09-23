@@ -494,9 +494,7 @@ func _on_TilesetExternalPathLabel_meta_clicked(meta):
 
 
 func _on_TilesetHelpButton_pressed():
-	var helpText = """To reset an existing texture pack, delete its filelists and click Edit Pack again.
-
-To see the effects of your edits, be sure to set your map's Tileset in Map Settings.
+	var helpText = """To see the effects of your edits, be sure to set your map's Tileset in Map Settings.
 
 TMAPA contains texture IDs 0-543. TMAPB contains IDs 1000-1543. Revert tileset handles both maps.
 Edit Pack creates PNGs and filelists for TMAPA and TMAPB in a folder named after the map. Existing filelists control the PNG layout when remaking the pack. Unearth reloads changes into the 2D and 3D views.

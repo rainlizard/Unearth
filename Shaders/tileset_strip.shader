@@ -1,7 +1,6 @@
 shader_type canvas_item;
 
 uniform sampler2D palette_texture : hint_albedo;
-uniform int selected_index = -1;
 uniform int hovered_index = -1;
 uniform float zoom = 1.0;
 
@@ -25,9 +24,6 @@ void fragment() {
 	}
 
 	int tileIndex = int(tileUV.y) * int(COLUMNS) + int(tileUV.x);
-	if (tileIndex == selected_index && minDist < 2.0) {
-		rgb = vec3(0.7);
-	}
 	if (tileIndex == hovered_index && minDist < 2.0) {
 		rgb = vec3(1.0, 0.85, 0.0);
 	}
