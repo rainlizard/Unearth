@@ -375,8 +375,7 @@ func attach_torch_to_nearby_wall(id):
 
 func update_thing_attachment(id):
 	if id.thingType == Things.TYPE.OBJECT and id.subtype in [2,7]: # Torch and Unlit Torch
-		if id.parentTile != 65535:
-			attach_torch_to_nearby_wall(id)
+		attach_torch_to_nearby_wall(id)
 	elif id.get("parentTile") != null and id.parentTile != 65535:
 		id.parentTile = (floor(id.locationY / 3) * M.xSize) + floor(id.locationX / 3)
 
