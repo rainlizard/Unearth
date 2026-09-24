@@ -445,6 +445,11 @@ func read_tngfx(buffer):
 					continue
 				id.subtype = subtype
 			
+			if id.thingType in [Things.TYPE.CREATURE, Things.TYPE.TRAP, Things.TYPE.DOOR]:
+				id.index = c.get_value(section, "Index", null)
+				if id.index == null:
+					id.index = oInstances.get_free_index_number()
+			
 			match id.thingType:
 				Things.TYPE.OBJECT:
 					id.parentTile = c.get_value(section, "ParentTile")
@@ -455,7 +460,6 @@ func read_tngfx(buffer):
 					id.boxNumber = c.get_value(section, "CustomBox", -1)
 					id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.CREATURE:
-					id.index = c.get_value(section, "Index")
 					id.creatureLevel = c.get_value(section, "CreatureLevel")
 					id.creatureName = c.get_value(section, "CreatureName", "")
 					id.creatureGold = c.get_value(section, "CreatureGold", -1)
@@ -467,10 +471,8 @@ func read_tngfx(buffer):
 					id.parentTile = c.get_value(section, "ParentTile")
 					id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.TRAP:
-					id.index = c.get_value(section, "Index")
 					id.orientation = c.get_value(section, "Orientation", -1)
 				Things.TYPE.DOOR:
-					id.index = c.get_value(section, "Index")
 					id.doorOrientation = c.get_value(section, "DoorOrientation")
 					id.doorLocked = c.get_value(section, "DoorLocked")
 			id.data9 = 0
