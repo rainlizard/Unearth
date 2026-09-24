@@ -995,8 +995,8 @@ func modify_wall_based_on_nearby_room_and_liquid(slabsetIndexGroup, surrID, slab
 
 func modify_for_liquid(slabsetIndexGroup, surrID, slabID):
 	
-	# Don't modify slab if slab is liquid or bridge
-	if Slabs.data.has(slabID) == false or Slabs.is_bridgeable(slabID) or Slabs.data[slabID][Slabs.LIQUID_TYPE] == Slabs.WLB_BRIDGE:
+	# Don't modify slab if slab is liquid, bridge, or abyss
+	if Slabs.data.has(slabID) == false or Slabs.data[slabID][Slabs.LIQUID_TYPE] != Slabs.WLB_PATH:
 		return
 	
 	var modify0 = 0; var modify1 = 0; var modify2 = 0; var modify3 = 0; var modify4 = 0; var modify5 = 0; var modify6 = 0; var modify7 = 0; var modify8 = 0

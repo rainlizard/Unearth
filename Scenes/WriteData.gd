@@ -113,7 +113,7 @@ func write_tng():
 		buffer.put_8(fmod(thingNode.locationY,1.0) * 256) # 2
 		buffer.put_8(int(thingNode.locationY)) # 3
 		# Old format stores Z as unsigned bytes, so clamp (KFX maps with negative Z would otherwise wrap around)
-		buffer.put_8(fmod(clamp(thingNode.locationZ, 0.0, 255.0),1.0) * 256) # 4
+		buffer.put_8(fmod(clamp(thingNode.locationZ, 0.0, 255.0 + 255.0/256.0),1.0) * 256) # 4
 		buffer.put_8(int(clamp(thingNode.locationZ, 0.0, 255.0))) # 5
 		buffer.put_8(thingNode.thingType) # 6
 		buffer.put_8(thingNode.subtype) # 7
@@ -298,7 +298,7 @@ func write_lgt():
 		buffer.put_8(fmod(lightNode.locationY,1.0) * 256) # 12
 		buffer.put_8(int(lightNode.locationY)) # 13
 		# Old format stores Z as unsigned bytes, so clamp (KFX maps with negative Z would otherwise wrap around)
-		buffer.put_8(fmod(clamp(lightNode.locationZ, 0.0, 255.0),1.0) * 256) # 14
+		buffer.put_8(fmod(clamp(lightNode.locationZ, 0.0, 255.0 + 255.0/256.0),1.0) * 256) # 14
 		buffer.put_8(int(clamp(lightNode.locationZ, 0.0, 255.0))) # 15
 		buffer.put_8(lightNode.data16) # 16
 		buffer.put_8(lightNode.data17) # 17

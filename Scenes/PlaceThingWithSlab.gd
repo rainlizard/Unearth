@@ -41,7 +41,7 @@ func delete_doodads_on_slab(xSlab, ySlab, slabID):
 
 func spawn_doodad(xSlab, ySlab, ownership, doodad, subtile):
 	var xSubtile = (xSlab*3) + (subtile % 3) + 0.5
-	var ySubtile = (ySlab*3) + (subtile / 3) + 0.5
+	var ySubtile = (ySlab*3) + int(subtile / 3.0) + 0.5
 	if oInstances.get_all_instances_on_subtile(xSubtile, ySubtile).empty() == false: # Don't overlap things already on this subtile
 		return
 	var orientation = doodad[3]

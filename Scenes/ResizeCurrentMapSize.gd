@@ -98,7 +98,7 @@ func get_common_border(previousWidth, previousHeight):
 	var borderSlabID = Slabs.ROCK
 	var bestCount = 0
 	for id in counts:
-		if counts[id] > bestCount:
+		if counts[id] > bestCount or (counts[id] == bestCount and id < borderSlabID):
 			bestCount = counts[id]
 			borderSlabID = id
 	return borderSlabID

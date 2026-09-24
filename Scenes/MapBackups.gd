@@ -111,10 +111,10 @@ func backup_existing_map_files(map_file_path):
 			print("Backup failed, could not copy: " + source_path + " Code: " + str(err))
 			return false
 	var backup_sizes = Settings.read_cfg("backup_folder_sizes") if Settings.cfg_has_setting("backup_folder_sizes") else {}
+	var current_backup_sizes = {}
 	var limit_bytes = int(Settings.get_setting("backup_folder_size_limit_mb")) * 1024 * 1024
 	if backup_dir.open(backup_root) == OK:
 		var backup_folder_paths = []
-		var current_backup_sizes = {}
 		var total_size = 0
 		backup_dir.list_dir_begin(true, false)
 		var entry = backup_dir.get_next()
@@ -137,9 +137,10 @@ func backup_existing_map_files(map_file_path):
 						backup_file_name = dir.get_next()
 					dir.list_dir_end()
 					if folder_size_known:
-						backup_sizes[entry] = folder_size
+						current_backup_sizes[entry] = folder_size
+				elif backup_sizes.has(entry):
+					current_backup_sizes[entry] = folder_size
 				backup_folder_paths.append(entry_path)
-				current_backup_sizes[entry] = folder_size
 				total_size += folder_size
 			entry = backup_dir.get_next()
 		backup_dir.list_dir_end()
@@ -147,8 +148,8 @@ func backup_existing_map_files(map_file_path):
 		backup_folder_paths.sort()
 		while total_size > limit_bytes and backup_folder_paths.size() > 1:
 			var folder_path = backup_folder_paths.pop_front()
-			total_size -= current_backup_sizes[folder_path.get_file()]
-			backup_sizes.erase(folder_path.get_file())
+			total_size -= current_backup_sizes.get(folder_path.get_file(), 0)
+			current_backup_sizes.erase(folder_path.get_file())
 			if dir.open(folder_path) == OK:
 				dir.list_dir_begin(true, false)
 				var delete_file_name = dir.get_next()
@@ -159,7 +160,7 @@ func backup_existing_map_files(map_file_path):
 				dir.list_dir_end()
 				backup_dir.remove(folder_path.get_file())
 			print("Deleted old backup: " + folder_path)
-	Settings.write_cfg("backup_folder_sizes", backup_sizes)
+	Settings.write_cfg("backup_folder_sizes", current_backup_sizes)
 	print("Backed up map files to: " + backup_folder + " in " + str(OS.get_ticks_msec() - BACKUPTIME_START) + "ms")
 	return true
 
