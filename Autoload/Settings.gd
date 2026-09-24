@@ -133,24 +133,15 @@ func initialize_settings():
 func load_slab_doodads(): # Called once slab data (including custom slabs) is loaded
 	slabDoodads = {}
 	unresolvedDoodads = {}
-	var settingName = "slab_doodads"
-	if cfg_has_setting(settingName) == false:
-		settingName = "slab_decorations" # Legacy name
-		if cfg_has_setting(settingName) == false:
-			# Default doodads, or migrate the old "Place Dripping Water effect" / "Place Lava effect" chances
-			# The old chances were rolled once per slab, but doodads are rolled once per subtile (9 per slab)
-			var waterChance = read_cfg("chance_effect_water") / 9.0 if cfg_has_setting("chance_effect_water") else 0.25
-			var lavaChance = read_cfg("chance_effect_lava") / 9.0 if cfg_has_setting("chance_effect_lava") else 0.25
-			slabDoodads[Slabs.WATER] = [[Things.TYPE.EFFECTGEN, 2, waterChance, 0, true]]
-			slabDoodads[Slabs.LAVA] = [[Things.TYPE.EFFECTGEN, 1, lavaChance, 0, true]]
-			if cfg_has_setting("chance_effect_water"): cfg_remove_setting("chance_effect_water")
-			if cfg_has_setting("chance_effect_lava"): cfg_remove_setting("chance_effect_lava")
-			save_slab_doodads()
-			return
+	if cfg_has_setting("slab_doodads") == false:
+		slabDoodads[Slabs.WATER] = [[Things.TYPE.EFFECTGEN, 2, 0.25, 0, true]]
+		slabDoodads[Slabs.LAVA] = [[Things.TYPE.EFFECTGEN, 1, 0.25, 0, true]]
+		save_slab_doodads()
+		return
 	
-	var stored = read_cfg(settingName)
+	var stored = read_cfg("slab_doodads")
 	for slabKey in stored:
-		var slabID = slab_id_from_key(slabKey)
+		var slabID = Slabs.find_slab_id_by_name(slabKey)
 		var doodads = []
 		for entry in stored[slabKey]:
 			var thingType = entry[0]
@@ -169,15 +160,6 @@ func load_slab_doodads(): # Called once slab data (including custom slabs) is lo
 				doodads.append([thingType, subtype, entry[2], orientation, attached])
 		if slabID != null:
 			slabDoodads[slabID] = doodads
-	
-	if settingName != "slab_doodads":
-		cfg_remove_setting("slab_decorations")
-		save_slab_doodads()
-
-func slab_id_from_key(slabKey):
-	if slabKey is int: return slabKey # Legacy numeric key
-	if slabKey.is_valid_integer(): return int(slabKey) # Legacy numeric string key
-	return Slabs.find_slab_id_by_name(slabKey)
 
 func save_slab_doodads():
 	var stored = {}
@@ -187,7 +169,7 @@ func save_slab_doodads():
 			doodads.append([Things.data_structure_name[entry[0]], Things.fetch_id_string(entry[0], entry[1]), entry[2], entry[3], entry[4]])
 		stored[Slabs.fetch_idname(slabID)] = doodads
 	for slabKey in unresolvedDoodads: # Entries that couldn't be resolved are saved unchanged
-		var slabID = slab_id_from_key(slabKey)
+		var slabID = Slabs.find_slab_id_by_name(slabKey)
 		var key = Slabs.fetch_idname(slabID) if slabID != null else slabKey
 		if stored.has(key) == false:
 			stored[key] = []
