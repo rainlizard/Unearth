@@ -140,7 +140,7 @@ func _exit_tree():
 		return
 	# If a key is removed (manually deleted or otherwise) then change the door's lock state
 	# This is good to put here to handle symmetry
-	if subtype == 44 and thingType == Things.TYPE.OBJECT and is_in_group("Key"):
+	if subtype == 44 and thingType == Things.TYPE.OBJECT:
 		var doorID = oInstances.get_node_on_subtile(locationX, locationY, "Door")
 		if is_instance_valid(doorID) == true:
 			doorID.doorLocked = 0
