@@ -337,7 +337,7 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby, options = {}):
 		
 		if Slabs.data.has(slabID):
 			do_slab(pos.x, pos.y, slabID, ownership, options)
-			oInstances.manage_things_on_slab(pos.x, pos.y, slabID, ownership)
+			oInstances.manage_things_on_slab(pos.x, pos.y, slabID, ownership, options)
 		
 		currentLoad += 1
 		

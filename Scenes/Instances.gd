@@ -536,13 +536,11 @@ func kill_instance(id): # Multi-thread safe
 	instances_to_erase.append(id)
 
 
-func manage_things_on_slab(xSlab, ySlab, slabID, ownership):
+func manage_things_on_slab(xSlab, ySlab, slabID, ownership, options = {}):
 	if Slabs.data[slabID][Slabs.IS_SOLID] == true:
-		var nodesOnSlab = get_all_nodes_on_slab(xSlab, ySlab, ["Thing"])
-		if oSlabPlacement.autogen_was_called and nodesOnSlab.empty() == false:
-			oMessage.big("Thing removed", "Thing removed due to being inside wall at " + str(Vector2(xSlab, ySlab)))
-		for id in nodesOnSlab:
-			kill_instance(id)
+		if oSlabPlacement.should_reset(options, "remove_things"):
+			for id in get_all_nodes_on_slab(xSlab, ySlab, ["Thing"]):
+				kill_instance(id)
 	else:
 		var checkSlabLocationGroup = "slab_location_group_"+str(xSlab)+'_'+str(ySlab)
 		for id in get_tree().get_nodes_in_group(checkSlabLocationGroup):

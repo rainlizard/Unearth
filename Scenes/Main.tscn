@@ -3252,8 +3252,8 @@ script = ExtResource( 74 )
 visible = true
 margin_left = -632.0
 margin_right = -332.0
-margin_bottom = 237.0
-rect_min_size = Vector2( 300, 240 )
+margin_bottom = 270.0
+rect_min_size = Vector2( 300, 273 )
 popup_exclusive = true
 window_title = "Update all slabs"
 resizable = true
@@ -3306,10 +3306,17 @@ margin_bottom = 186.0
 pressed = true
 text = "Liquid"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
+[node name="remove_things" type="CheckBox" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
 margin_top = 190.0
 margin_right = 280.0
-margin_bottom = 217.0
+margin_bottom = 219.0
+pressed = true
+text = "Remove things in walls"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer"]
+margin_top = 223.0
+margin_right = 280.0
+margin_bottom = 250.0
 alignment = 1
 
 [node name="ConfirmUpdateAllSlabsButton" type="Button" parent="Ui/UiSystem/UpdateAllSlabsWindow/VBoxContainer/HBoxContainer"]
