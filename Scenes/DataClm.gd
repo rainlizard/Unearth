@@ -86,8 +86,8 @@ func update_all_utilized():
 	var CODETIME_START = OS.get_ticks_msec()
 	for clearIndex in column_count:
 		utilized[clearIndex] = 0
-	for y in (M.ySize*3):
-		for x in (M.xSize*3):
+	for y in (M.ySize*3)+1:
+		for x in (M.xSize*3)+1:
 			var value = oDataClmPos.get_cell_clmpos(x,y)
 			utilized[value] += 1
 	
@@ -142,8 +142,8 @@ func sort_columns_by_utilized():
 		cubes[i] = array[i][7]
 		floorTexture[i] = array[i][8]
 	
-	for y in (M.ySize*3):
-		for x in (M.xSize*3):
+	for y in (M.ySize*3)+1:
+		for x in (M.xSize*3)+1:
 			var clmIndex = oDataClmPos.get_cell_clmpos(x,y)
 			oDataClmPos.set_cell_clmpos(x, y, dictSrcDest[clmIndex])
 	
