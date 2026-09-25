@@ -1,6 +1,35 @@
 ﻿extends Node
 
 const string = """
+0.72.1019 - 25/9/2026
+- Added 'random doodads' feature: decorations placed at random on your slabs with a chance percentage, orientation and 'Attached to' setting. Lists are stored per slab in settings.cfg and edited via 'Add random doodad' in the Create tab
+- The 'Place Dripping Water effect' and 'Place Lava effect' percentage preferences were replaced with default doodads for water and lava
+- 'Update all slabs' now lets you choose what aspects of the map to reset
+- Tileset tab now shows TMAPA and TMAPB side by side instead of a drop-down menu, Import/Export and Revert tileset now handle both TMAPA and TMAPB
+- 'Edit pack' now saves a filelist text file, which you can edit to write instructions for extracting/using more .PNGs
+- Tileset switching is faster
+- Better support for the Abyss slab, bridging works
+- New maps can generate an Abyss border instead of Impenetrable Rock
+- Play button arguments in Preferences are now checkboxes: Skip heart zoom, Cheats, No sound, Alt mouse input, Packetsave, Show game turns, Frame step, Timer, Debug pathfinding, Debug shots and No mods
+- Added 'Attached to' setting for Objects and EffectGens: Slab or Manually placed. Picking up a thing copies it, it's editable in Properties, follows movement and mirrors with symmetry
+- Torches always hug the nearest wall when placed or moved
+- Things and Lights can have negative Z positions in KFX format
+- Instance list now has an Objects tab
+- 'Grouped' auto wall art now matches KeeperFX: torch/banner walls follow claimed ground and Twins/Woman/Pair are picked by distance from the dungeon heart
+- Room walls are now detected from terrain.cfg, so automatic walls work with custom configs
+- Resize Map now uses your map's border type instead of always using Impenetrable Rock
+- Fixed Save As to suggest the next available map number
+- Confirm before discarding unsaved changes when opening, reloading or creating a map
+- .toml files can now contain # comment lines, and existing comments are preserved when saving
+- Map previews draw all door types in one colour and show player 0's doors in the Play preview
+- Script markers now recognize TRIGGER_ACTION_POINT
+- Map backups are faster and the folder size limit now deletes old backups correctly
+- Ctrl+Z no longer performs a map undo while typing in a text field
+- Fixed attached things being tracked against the wrong tile after moving, mirroring or resizing the map, which could delete them with the wrong slab
+- Fixed 'Attached to' displaying the wrong slab on non-square maps
+- Fixed deleting a key not always unlocking its door
+- Fixed 'Sort columns' and utilized counting missing the map's outermost row and column
+- Unrecognized SubtypeStringIDs are now listed together in one message when loading a map
 0.71.979 - 20/8/2026
 - Save tmaps to the campaign's cfg folder if it contains tmaps
 - Removed an inaccurate KeeperFX compatibility warning
