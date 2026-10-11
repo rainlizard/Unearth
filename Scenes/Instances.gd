@@ -301,7 +301,7 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership, newAtt
 			id.index = get_free_index_number()
 		Things.TYPE.EFFECTGEN:
 			id.effectRange = oPlacingSettings.effectRange
-			id.parentTile = (floor(newPosition.y/3) * M.xSize) + floor(newPosition.x/3) # Should this be M.ySize ???
+			id.parentTile = 65535 # "None"
 			id.orientation = oPlacingSettings.orientation
 		Things.TYPE.TRAP:
 			id.index = get_free_index_number()
@@ -319,9 +319,8 @@ func place_new_thing(newThingType, newSubtype, newPosition, newOwnership, newAtt
 				id.subtype = doorSlabData[Slabs.DOORSLAB_THING]
 				id.doorOrientation = doorSlabData[Slabs.DOORSLAB_ORIENTATION]
 	
-	if id.thingType in [Things.TYPE.OBJECT, Things.TYPE.EFFECTGEN]:
-		var wantAttached = oPlacingSettings.attached if newAttached == null else newAttached
-		if wantAttached == false:
+	if newAttached != null and id.thingType in [Things.TYPE.OBJECT, Things.TYPE.EFFECTGEN]: # Doodads
+		if newAttached == false:
 			id.parentTile = 65535
 		elif id.parentTile == 65535:
 			id.parentTile = (ySlab * M.xSize) + xSlab

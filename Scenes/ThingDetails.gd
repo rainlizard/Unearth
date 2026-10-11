@@ -84,7 +84,7 @@ func light_details(id):
 				description = "Intensity" # 9-10
 				value = id.lightIntensity
 			4:
-				description = "Attached to" # 18-19
+				description = "Part of slab" # 18-19
 				if id.parentTile != null:
 					var parentY = int(id.parentTile/M.xSize)
 					var parentX = id.parentTile - (parentY*M.xSize)
@@ -96,7 +96,7 @@ func light_details(id):
 					if parentX == 0 and parentY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
 					value += ' (' + str(parentX) + ','+str(parentY) + ')'
 				if id.parentTile == 65535:
-					value = "Manually placed"
+					value = ""
 			
 		if value != null:
 			oThingListData.add_item(description, str(value))
@@ -126,7 +126,7 @@ func thing_details(id):
 				description = "Effect range" # 9-10
 				value = id.effectRange
 			6:
-				description = "Attached to" # 11-12
+				description = "Part of slab" # 11-12
 				if id.parentTile != null:
 					var parentY = int(id.parentTile/M.xSize)
 					var parentX = id.parentTile - (parentY*M.xSize)
@@ -138,7 +138,7 @@ func thing_details(id):
 					if parentX == 0 and parentY == 0: value = "" # Don't show the text "Impenetrable Rock" for keys
 					value += ' (' + str(parentX) + ','+str(parentY) + ')'
 				if id.parentTile == 65535:
-					value = "Manually placed"
+					value = ""
 			7:
 				description = "Door orientation" # 13
 				match id.doorOrientation:

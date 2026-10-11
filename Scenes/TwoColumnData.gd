@@ -38,12 +38,13 @@ func add_item(leftString, rightString):
 	# Right column item
 	var nodeRightColumn
 	match leftString:
-		"Door locked":
+		"Door locked","Part of slab":
 			nodeRightColumn = CheckBox.new()
 			nodeRightColumn.size_flags_horizontal = Control.SIZE_EXPAND
-			match int(rightString):
-				0: nodeRightColumn.pressed = false
-				1: nodeRightColumn.pressed = true
+			nodeRightColumn.pressed = not rightString in ["0", ""]
+			if leftString == "Part of slab":
+				nodeRightColumn.hint_tooltip = "Destroyed or re-owned along with its slab when it's dug, claimed or built over.\nUncheck for things that should behave independently."
+				if rightString != "": nodeRightColumn.hint_tooltip += "\n\nSlab: " + rightString
 			nodeRightColumn.connect("toggled",self,"_on_optionbutton_item_selected", [leftString])
 		"Ownership":
 			nodeRightColumn = OptionButton.new()
@@ -131,19 +132,6 @@ func add_item(leftString, rightString):
 			nodeRightColumn.text = rightString #Utils.strip_special_chars_from_string(rightString)
 			nodeRightColumn.connect("text_changed", self, "_on_property_value_changed", [nodeRightColumn, leftString])
 			#nodeRightColumn.add_font_override("font", preload("res://Theme/StokeSmaller.tres"))
-		"Attached to":
-			nodeRightColumn = OptionButton.new()
-			nodeRightColumn.focus_mode = 0 # Fixes clicking on the menu
-			nodeRightColumn.get_popup().focus_mode = 0 # Fixes clicking on the menu
-			nodeRightColumn.add_item("Slab")
-			nodeRightColumn.add_item("Manually placed")
-			if name == "PlacingListData":
-				nodeRightColumn.select(0 if rightString == "True" else 1)
-			else:
-				nodeRightColumn.select(1 if rightString == "Manually placed" else 0)
-				nodeRightColumn.hint_tooltip = rightString
-			nodeRightColumn.connect("item_selected",self,"_on_optionbutton_item_selected", [leftString])
-			nodeRightColumn.connect("toggled",self,"_on_optionbutton_toggled", [nodeRightColumn])
 		_:
 			nodeRightColumn = create_label(rightString)
 	
@@ -327,21 +315,18 @@ func _on_optionbutton_item_selected(indexSelected, leftString):
 		"Orientation":
 			property_name = "orientation"
 			value = Constants.listOrientations[indexSelected]
-		"Attached to":
-			if name == "ThingListData":
-				if is_instance_valid(inst):
-					var originalPosition = Vector2(inst.locationX, inst.locationY)
-					var slabTile = (floor(inst.locationY / 3) * M.xSize) + floor(inst.locationX / 3)
-					inst.parentTile = slabTile if indexSelected == 0 else 65535
-					if indexSelected == 0:
-						oInstances.update_thing_attachment(inst)
-						if inst.parentTile == 65535: inst.parentTile = slabTile
-					oInstances.mirror_adjusted_value(inst, "parentTile", originalPosition)
-					oInspector.set_inspector_subtile(Vector2(inst.locationX, inst.locationY))
-					oThingDetails.update_details()
-				return
-			property_name = "attached"
-			value = indexSelected == 0
+		"Part of slab":
+			if is_instance_valid(inst):
+				var originalPosition = Vector2(inst.locationX, inst.locationY)
+				var slabTile = (floor(inst.locationY / 3) * M.xSize) + floor(inst.locationX / 3)
+				inst.parentTile = slabTile if indexSelected else 65535
+				if indexSelected:
+					oInstances.update_thing_attachment(inst)
+					if inst.parentTile == 65535: inst.parentTile = slabTile
+				oInstances.mirror_adjusted_value(inst, "parentTile", originalPosition)
+				oInspector.set_inspector_subtile(Vector2(inst.locationX, inst.locationY))
+				oThingDetails.update_details()
+			return
 		"Door locked":
 			property_name = "doorLocked"
 			match indexSelected:
