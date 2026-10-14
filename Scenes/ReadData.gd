@@ -68,8 +68,6 @@ func read_lof(buffer):
 				oDataLof.ENSIGN_POS = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "ENSIGN_ZOOM":
 				oDataLof.ENSIGN_ZOOM = lineParts[1].strip_edges()
-			if lineParts[0].strip_edges() == "PLAYERS":
-				oDataLof.PLAYERS = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "OPTIONS":
 				oDataLof.OPTIONS = lineParts[1].strip_edges()
 			if lineParts[0].strip_edges() == "SPEECH":

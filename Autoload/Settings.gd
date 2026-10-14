@@ -474,7 +474,7 @@ func game_setting(doWhat,string,value):
 			if doWhat == SET: oPlacingTipsButton.visible = value
 			if doWhat == GET: return oPlacingTipsButton.visible
 		"script_editor_font_size":
-			var oScriptEditor = $'../Main/Ui/UiSystem/ScriptEditorWindow/MarginContainer/ScrollContainer/ScriptEditor'
+			var oScriptEditor = Nodelist.list["oScriptEditor"]
 			if doWhat == SET: oScriptEditor.set_SCRIPT_EDITOR_FONT_SIZE(value)
 			if doWhat == GET: return oScriptEditor.get_SCRIPT_EDITOR_FONT_SIZE()
 		"editor_font_size":

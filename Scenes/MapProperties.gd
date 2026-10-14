@@ -10,7 +10,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oPlacingSettings = Nodelist.list["oPlacingSettings"]
 onready var oInspector = Nodelist.list["oInspector"]
 onready var oAdvancedMapProperties = Nodelist.list["oAdvancedMapProperties"]
-onready var oMapSizeTextLabel = Nodelist.list["oMapSizeTextLabel"]
+onready var oMapSizeButton = Nodelist.list["oMapSizeButton"]
 onready var oMapNameLineEdit = Nodelist.list["oMapNameLineEdit"]
 onready var oNameIDLineEdit = Nodelist.list["oNameIDLineEdit"]
 onready var oSpeechLineEdit = Nodelist.list["oSpeechLineEdit"]
@@ -19,13 +19,11 @@ onready var oAuthorLineEdit = Nodelist.list["oAuthorLineEdit"]
 onready var oDescriptionLineEdit = Nodelist.list["oDescriptionLineEdit"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 onready var oKindOptionButton = Nodelist.list["oKindOptionButton"]
-onready var oPlayersSpinBox = Nodelist.list["oPlayersSpinBox"]
 onready var oOptionsOptionButton = Nodelist.list["oOptionsOptionButton"]
 onready var oEnsignPositionX = Nodelist.list["oEnsignPositionX"]
 onready var oEnsignPositionY = Nodelist.list["oEnsignPositionY"]
 onready var oMapCoordinatesWindow = Nodelist.list["oMapCoordinatesWindow"]
 onready var oOwnerSelection = Nodelist.list["oOwnerSelection"]
-onready var oHBoxPlayers = Nodelist.list["oHBoxPlayers"]
 onready var oHBoxSpeech = Nodelist.list["oHBoxSpeech"]
 onready var oHBoxEnsignPosition = Nodelist.list["oHBoxEnsignPosition"]
 onready var oHBoxOptions = Nodelist.list["oHBoxOptions"]
@@ -33,8 +31,6 @@ onready var oHBoxLandView = Nodelist.list["oHBoxLandView"]
 onready var oHBoxNameID = Nodelist.list["oHBoxNameID"]
 onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 onready var oOnlyOwnership = Nodelist.list["oOnlyOwnership"]
-onready var oDKScriptFileSection = Nodelist.list["oDKScriptFileSection"]
-onready var oLuaScriptFileSection = Nodelist.list["oLuaScriptFileSection"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oLofPathLinkButton = Nodelist.list["oLofPathLinkButton"]
 onready var oGame = Nodelist.list["oGame"]
@@ -83,10 +79,6 @@ func _notification(what):
 	match what:
 		NOTIFICATION_WM_FOCUS_IN:
 			_update_lof_path_button()
-			if is_instance_valid(oDKScriptFileSection):
-				oDKScriptFileSection.update_file_status()
-			if is_instance_valid(oLuaScriptFileSection):
-				oLuaScriptFileSection.update_file_status()
 
 func _on_MapProperties_visibility_changed():
 	if is_instance_valid(oDungeonStyleSpinBox) == false: return
@@ -102,14 +94,11 @@ func _on_MapProperties_visibility_changed():
 			oEnsignPositionX.text = ENSIGN_XY[0]
 			oEnsignPositionY.text = ENSIGN_XY[1]
 		
-		oPlayersSpinBox.set_block_signals(true)
-		oPlayersSpinBox.value = int(oDataLof.PLAYERS)
-		oPlayersSpinBox.set_block_signals(false)
 		oSpeechLineEdit.text = oDataLof.SPEECH
 		oLandViewLineEdit.text = oDataLof.LAND_VIEW
 		oAuthorLineEdit.text = oDataLof.AUTHOR
 		oDescriptionLineEdit.text = oDataLof.DESCRIPTION
-		oMapSizeTextLabel.text = str(M.xSize) + " x " + str(M.ySize)
+		oMapSizeButton.text = str(M.xSize) + " x " + str(M.ySize)
 		
 		# Resizing feature isn't implemented, so do not allow changing map format back if you've adjusted size
 		if M.xSize != 85 or M.ySize != 85:
@@ -118,15 +107,10 @@ func _on_MapProperties_visibility_changed():
 		else:
 			oCurrentFormat.disabled = false
 		
-		set_format_selection(oCurrentFormat.selected)
+		oAdvancedMapProperties.visible = oCurrentFormat.selected == Constants.KfxFormat
 		
 		update_section_visibility()
 		_update_lof_path_button()
-		
-		if is_instance_valid(oDKScriptFileSection):
-			oDKScriptFileSection.update_file_status()
-		if is_instance_valid(oLuaScriptFileSection):
-			oLuaScriptFileSection.update_file_status()
 
 func _on_MapFormatSetting_item_selected(index):
 	# Clicked using mouse
@@ -194,10 +178,6 @@ func _on_LandViewLineEdit_text_changed(new_text):
 	oEditor.mapHasBeenEdited = true
 	oDataLof.LAND_VIEW = new_text
 
-func _on_PlayersSpinBox_value_changed(value):
-	oEditor.mapHasBeenEdited = true
-	oDataLof.PLAYERS = str(value)
-
 
 func _on_KindOptionButton_item_selected(index):
 	oEditor.mapHasBeenEdited = true
@@ -249,7 +229,6 @@ func kind_text_to_button_id():
 
 
 func update_section_visibility():
-	oHBoxPlayers.visible = false
 	oHBoxSpeech.visible = false
 	oHBoxEnsignPosition.visible = false
 	oHBoxOptions.visible = false
@@ -259,7 +238,6 @@ func update_section_visibility():
 		"Solo":
 			pass
 		"Multiplayer":
-			oHBoxPlayers.visible = true
 			oHBoxEnsignPosition.visible = true
 			oHBoxOptions.visible = true
 			oHBoxLandView.visible = true
@@ -270,10 +248,6 @@ func update_section_visibility():
 			oHBoxOptions.visible = true
 			oHBoxLandView.visible = true
 			oHBoxNameID.visible = true
-	
-	if oHBoxPlayers.visible == false:
-		oPlayersSpinBox.value = 2
-		oDataLof.PLAYERS = ""
 	
 	if oHBoxSpeech.visible == false:
 		oSpeechLineEdit.text = ""

@@ -11,6 +11,7 @@ onready var oDataLiquid = Nodelist.list["oDataLiquid"]
 onready var oDataMapName = Nodelist.list["oDataMapName"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oDataScript = Nodelist.list["oDataScript"]
+onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 onready var oDataFakeSlab = Nodelist.list["oDataFakeSlab"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
@@ -28,7 +29,7 @@ func write_keeperfx_lof():
 	newString += "KIND = " + str(oDataLof.KIND) + "\n"
 	newString += "ENSIGN_POS = " + str(oDataLof.ENSIGN_POS) + "\n"
 	newString += "ENSIGN_ZOOM = " + str(oDataLof.ENSIGN_ZOOM) + "\n"
-	newString += "PLAYERS = " + str(oDataLof.PLAYERS) + "\n"
+	newString += "PLAYERS = " + (str(oScriptGenerator.human_slots(oDataScript.data)) if oDataLof.KIND == "MULTI" else "") + "\n"
 	newString += "OPTIONS = " + str(oDataLof.OPTIONS) + "\n"
 	newString += "SPEECH = " + str(oDataLof.SPEECH) + "\n"
 	newString += "LAND_VIEW = " + str(oDataLof.LAND_VIEW) + "\n"

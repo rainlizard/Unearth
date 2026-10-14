@@ -11,10 +11,10 @@ func _init():
 		set("custom_styles/read_only", style)
 		set("custom_styles/normal", style)
 	
-	connect("focus_exited",self,"_on_EditableLabel_focus_exited")
+	connect("text_entered",self,"_on_EditableLabel_text_entered")
 
 func _ready():
 	text = text # Fixes a Godot bug where alignment is incorrect when handling custom fonts
 
-func _on_EditableLabel_focus_exited():
-	self.release_focus()
+func _on_EditableLabel_text_entered(_new_text): # Enter commits the value, the same as clicking elsewhere
+	release_focus()

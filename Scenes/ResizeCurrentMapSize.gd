@@ -4,7 +4,7 @@ onready var oResizeBottomSpinBox = Nodelist.list["oResizeBottomSpinBox"]
 onready var oResizeLeftSpinBox = Nodelist.list["oResizeLeftSpinBox"]
 onready var oResizeRightSpinBox = Nodelist.list["oResizeRightSpinBox"]
 onready var oResizeMapSizeLabel = Nodelist.list["oResizeMapSizeLabel"]
-onready var oMapSizeTextLabel = Nodelist.list["oMapSizeTextLabel"]
+onready var oMapSizeButton = Nodelist.list["oMapSizeButton"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oOverheadOwnership = Nodelist.list["oOverheadOwnership"]
 onready var oDataOwnership = Nodelist.list["oDataOwnership"]
@@ -22,9 +22,8 @@ onready var oInstances = Nodelist.list["oInstances"]
 onready var oGuidelines = Nodelist.list["oGuidelines"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 
-func _on_MapSizePanel_gui_input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
-		Utils.popup_centered(self)
+func _on_MapSizeButton_pressed():
+	Utils.popup_centered(self)
 
 func _on_ResizeCurrentMapSize_about_to_show():
 	oResizeTopSpinBox.value = 0
@@ -43,7 +42,7 @@ func update_resize_map_size_label():
 func set_new_map_size(newWidth, newHeight):
 	M.xSize = newWidth
 	M.ySize = newHeight
-	oMapSizeTextLabel.text = str(M.xSize) + " x " + str(M.ySize)
+	oMapSizeButton.text = str(M.xSize) + " x " + str(M.ySize)
 
 
 # Function to fill positions newly exposed by moving the old map inside the new size

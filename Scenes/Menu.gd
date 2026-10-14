@@ -7,24 +7,21 @@ onready var oPreferencesWindow = Nodelist.list["oPreferencesWindow"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
 onready var oMenuButtonFile = Nodelist.list["oMenuButtonFile"]
 onready var oMenuButtonEdit = Nodelist.list["oMenuButtonEdit"]
-onready var oMenuButtonSettings = Nodelist.list["oMenuButtonSettings"]
+onready var oMenuButtonMap = Nodelist.list["oMenuButtonMap"]
+onready var oMenuButtonScript = Nodelist.list["oMenuButtonScript"]
 onready var oMenuButtonView = Nodelist.list["oMenuButtonView"]
 onready var oMenuPlayButton = Nodelist.list["oMenuPlayButton"]
 onready var oFileDialogSaveAs = Nodelist.list["oFileDialogSaveAs"]
 onready var oFileDialogOpen = Nodelist.list["oFileDialogOpen"]
 onready var oUpdateAllSlabsWindow = Nodelist.list["oUpdateAllSlabsWindow"]
-onready var oTabPlacements = Nodelist.list["oTabPlacements"]
-onready var oSelector = Nodelist.list["oSelector"]
 onready var oMenuButtonHelp = Nodelist.list["oMenuButtonHelp"]
 onready var oAboutWindow = Nodelist.list["oAboutWindow"]
 onready var oControlsWindow = Nodelist.list["oControlsWindow"]
 onready var oImageAsMapDialog = Nodelist.list["oImageAsMapDialog"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oDataClm = Nodelist.list["oDataClm"]
 onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oOpenMap = Nodelist.list["oOpenMap"]
-onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
@@ -35,15 +32,17 @@ onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oExportPreview = Nodelist.list["oExportPreview"]
 onready var oResizeCurrentMapSize = Nodelist.list["oResizeCurrentMapSize"]
 onready var oGridDataWindow = Nodelist.list["oGridDataWindow"]
-onready var oCamera2D = Nodelist.list["oCamera2D"]
 onready var oInstanceListWindow = Nodelist.list["oInstanceListWindow"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oSortCreatureStats = Nodelist.list["oSortCreatureStats"]
 onready var oConfigFilesListWindow = Nodelist.list["oConfigFilesListWindow"]
-onready var oConfirmOpenWhichScript = Nodelist.list["oConfirmOpenWhichScript"]
 onready var oChangelogWindow = Nodelist.list["oChangelogWindow"]
 onready var oCfgEditor = Nodelist.list["oCfgEditor"]
 onready var oMapBackups = Nodelist.list["oMapBackups"]
+onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
+onready var oConfirmCreateLua = Nodelist.list["oConfirmCreateLua"]
+onready var oDataLua = Nodelist.list["oDataLua"]
+onready var oBuffers = Nodelist.list["oBuffers"]
 
 var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
@@ -51,66 +50,36 @@ var fixMenuExpansion
 var playButtonLocked = false
 
 func _ready():
-	# Allow Settings and Play button to be hovered without the dropdown menu appearing
-	oMenuButtonSettings.get_popup().mouse_filter = Control.MOUSE_FILTER_IGNORE
-	oMenuButtonSettings.get_popup().modulate = Color(0,0,0,0)
+	# Allow Play button to be hovered without the dropdown menu appearing
 	oMenuPlayButton.get_popup().mouse_filter = Control.MOUSE_FILTER_IGNORE
 	oMenuPlayButton.get_popup().modulate = Color(0,0,0,0)
-	
-	for i in $HBoxContainer2.get_children():
-		if i is MenuButton:
-			i.get_popup().rect_min_size.x = 180
-	
-	add_file_menu_items()
-	add_edit_menu_items()
-	
+
+	# Item IDs count up in display order, separators ("") are skipped
+	add_menu_items(oMenuButtonFile, "_on_FileSubmenu_Pressed", ["New map", "Open map", "Browse maps", "Open recent", "", "Save map", "Save map as", "Reload map", "Backups", "", "Image to map", "Export preview", "", "Preferences", "", "Exit"])
+	add_menu_items(oMenuButtonEdit, "_on_EditSubmenu_Pressed", ["Undo", "", "Update all slabs", "Resize map"])
+	add_menu_items(oMenuButtonMap, "_on_MapSubmenu_Pressed", ["Map properties", "", "Rules", "Slabset", "Config files", "", "Open map folder"])
+	add_menu_items(oMenuButtonScript, "_on_ScriptSubmenu_Pressed", ["DKScript", "Lua", "", "Script command reference", "Open log"])
+	add_menu_items(oMenuButtonView, "_on_ViewSubmenu_Pressed", ["3D: 1st person", "", "Instance list", "Grid data", "Creature stats"])
+	add_menu_items(oMenuButtonHelp, "_on_HelpSubmenu_Pressed", ["Controls", "", "Creating a new campaign", "File format reference", "Workshop", "", "Changelog", "Report bugs & submit suggestions", "About"])
+
 	recentlyOpenedPopupMenu.set_name("recentlyOpened")
 	var popup = oMenuButtonFile.get_popup()
 	popup.add_child(recentlyOpenedPopupMenu)
-	popup.set_item_submenu(3, "recentlyOpened")
-	
+	popup.set_item_submenu(popup.get_item_index(3), "recentlyOpened")
+
 	recentlyOpenedPopupMenu.connect("id_pressed",self,"_on_RecentSubmenu_Pressed")
-	
-	oMenuButtonFile.get_popup().connect("id_pressed",self,"_on_FileSubmenu_Pressed")
-	oMenuButtonEdit.get_popup().connect("id_pressed",self,"_on_EditSubmenu_Pressed")
-	oMenuButtonView.get_popup().connect("id_pressed",self,"_on_ViewSubmenu_Pressed")
-	oMenuButtonHelp.get_popup().connect("id_pressed",self,"_on_HelpSubmenu_Pressed")
 
-func add_file_menu_items():
-	# Add menu items to oMenuButtonFile
-	var file_popup = oMenuButtonFile.get_popup()
-	
-	file_popup.add_item("New map", 0)
-	file_popup.add_item("Browse maps", 1)
-	file_popup.add_item("Open map", 2)
-	file_popup.add_item("Open recent", 3)
-	file_popup.add_item("Backups", 12)
-	file_popup.add_separator()
-	file_popup.add_item("Save map", 4)
-	file_popup.add_item("Save map as", 5)
-	file_popup.add_separator()
-	file_popup.add_item("Reload map", 6)
-	file_popup.add_item("Image to map", 7)
-	file_popup.add_item("Export preview", 8)
-	file_popup.add_item("Workshop", 11)
-	file_popup.add_separator()
-	file_popup.add_item("Preferences", 9)
-	file_popup.add_separator()
-	file_popup.add_item("Exit", 10)
-
-
-func add_edit_menu_items():
-	# Add menu items to oMenuButtonEdit
-	var edit_popup = oMenuButtonEdit.get_popup()
-	
-	edit_popup.add_item("Undo", 0)
-	edit_popup.add_separator()
-	#edit_popup.add_item("Custom objects", 2)
-	edit_popup.add_item("Update all slabs", 4)
-	edit_popup.add_item("Resize map", 3)
-	edit_popup.add_separator()
-	edit_popup.add_item("Rules", 7)
-	edit_popup.add_item("Slabset", 6)
+func add_menu_items(menuButton, method, items):
+	var popup = menuButton.get_popup()
+	popup.rect_min_size.x = 180
+	var id = 0
+	for item in items:
+		if item == "":
+			popup.add_separator()
+		else:
+			popup.add_item(item, id)
+			id += 1
+	popup.connect("id_pressed", self, method)
 
 func update_undo_availability():
 	if oUndoStates.undo_history.size() <= 1:
@@ -128,7 +97,7 @@ func add_recent(filePath):
 	if filePath == "": return
 	if oMapBackups.is_backup_path(filePath) == true: return
 	var recentString = filePath
-	
+
 	var findExisting = recentlyOpened.find(recentString)
 	if findExisting == -1:
 		recentlyOpened.push_front(recentString)
@@ -136,36 +105,15 @@ func add_recent(filePath):
 			recentlyOpened.pop_back()
 	else:
 		recentlyOpened.push_front(recentlyOpened.pop_at(findExisting))
-	
+
 	populate_recently_opened()
-	
+
 	Settings.write_cfg("recently_opened", recentlyOpened)
 
 
 func initialize_recently_opened(value):
 	recentlyOpened = value
 	populate_recently_opened()
-
-var tdir = Directory.new()
-
-func find_cased_file_path(basePathString: String, fileExtensions: Array) -> String:
-	var dirPath = basePathString.get_base_dir()
-	var baseFileNameWithoutExt = basePathString.get_file()
-	var d = Directory.new()
-	if d.open(dirPath) != OK:
-		return ""
-	d.list_dir_begin()
-	var entry = d.get_next()
-	while entry != "":
-		if d.current_is_dir() == false:
-			for ext in fileExtensions:
-				var targetFileNameWithExt = baseFileNameWithoutExt + ext
-				if entry.to_lower() == targetFileNameWithExt.to_lower():
-					d.list_dir_end()
-					return dirPath.plus_file(entry)
-		entry = d.get_next()
-	d.list_dir_end()
-	return ""
 
 func populate_recently_opened():
 	recentlyOpenedPopupMenu.clear()
@@ -194,13 +142,12 @@ func populate_recently_opened():
 
 func _process(delta):
 	constantly_monitor_play_button_state()
-	
+
 	var save_map_disabled = oCurrentMap.path == "" or oCurrentMap.loaded_from_backup == true
 	oMenuButtonFile.get_popup().set_item_disabled(oMenuButtonFile.get_popup().get_item_index(4), save_map_disabled)
-	oMenuButtonFile.get_popup().set_item_disabled(oMenuButtonFile.get_popup().get_item_index(5), false)
 	if oCurrentMap.path == "": # Certain features hould only be available to maps that exist as files - maps that have already been "Saved as".
 		oMenuPlayButton.disabled = true # Can only play a map that has been "Saved as"
-	
+
 	# Fix button being stretched
 	if visible == true and fixMenuExpansion != oEditor.mapHasBeenEdited:
 		fixMenuExpansion = oEditor.mapHasBeenEdited
@@ -215,20 +162,20 @@ func constantly_monitor_play_button_state():
 		return
 
 	var mapPath = oCurrentMap.path.to_upper().replace('\\','/')
-	
+
 	var currentDirectory = mapPath.get_base_dir()
-	
+
 	var mapIsInCorrectDirectory = false
 	if oGame.is_playable_dir(currentDirectory) == true:
 		mapIsInCorrectDirectory = true
-	
+
 	if mapIsInCorrectDirectory == true: # Is playable path
 		oMenuPlayButton.disabled = false
 		oMenuPlayButton.hint_tooltip = ""
 	else: # Is not a playable path
 		oMenuPlayButton.disabled = true
 		oMenuPlayButton.hint_tooltip = "Map must be saved in the correct directory in order to play."
-	
+
 	if oCurrentMap.path == "":
 		oMenuPlayButton.text = "Save & Play"
 	elif oEditor.mapHasBeenEdited == true:
@@ -242,149 +189,121 @@ func pressed_save_keyboard_shortcut():
 	else:
 		_on_FileSubmenu_Pressed(4) # Save
 
+func open_externally(pathToTryAndOpen, notFoundMessage):
+	if pathToTryAndOpen == "":
+		oMessage.quick(notFoundMessage)
+	elif OS.shell_open(pathToTryAndOpen) != OK:
+		oMessage.quick("Could not open: " + pathToTryAndOpen)
+
 func _on_FileSubmenu_Pressed(pressedID):
 	match pressedID:
-		0: Utils.popup_centered(oNewMapWindow) # New
-		1: oMapBrowser._on_BrowseMapsMenu_pressed() # Browse maps
-		2: Utils.popup_centered(oFileDialogOpen) # Open
+		0: Utils.popup_centered(oNewMapWindow) # New map
+		1: Utils.popup_centered(oFileDialogOpen) # Open map
+		2: oMapBrowser._on_BrowseMapsMenu_pressed() # Browse maps
 		#3: Open recent
-		4: oSaveMap.clicked_save_on_menu() # Save
-		5: Utils.popup_centered(oFileDialogSaveAs) # Save as
+		4: oSaveMap.clicked_save_on_menu() # Save map
+		5: Utils.popup_centered(oFileDialogSaveAs) # Save map as
 		6: oOpenMap.open_map(oCurrentMap.path) # Reload map
-		7: Utils.popup_centered(oImageAsMapDialog) # Load image as map
-		8: Utils.popup_centered(oExportPreview) # Export preview
-		9: oPreferencesWindow._on_ButtonSettings_pressed()
-		10: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
-		11: OS.shell_open("https://keeperfx.net/workshop") # Workshop
-		12: oMapBackups.open_window()
+		7: oMapBackups.open_window() # Backups
+		8: Utils.popup_centered(oImageAsMapDialog) # Image to map
+		9: Utils.popup_centered(oExportPreview) # Export preview
+		10: oPreferencesWindow._on_ButtonSettings_pressed() # Preferences
+		11: oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST) # Exit
 
 func _on_EditSubmenu_Pressed(pressedID):
 	match pressedID:
-		0: # Undo
-			oUndoStates.perform_undo()
-		1: # Custom columns
-			Utils.popup_centered(oTabClmEditor)
-		2: # Custom objects
-			#Utils.popup_centered(oAddCustomObjectWindow)
-			pass
-		3: # Resize and shift
-			Utils.popup_centered(oResizeCurrentMapSize)
-		4: # Update all slabs
+		0: oUndoStates.perform_undo() # Undo
+		1: # Update all slabs
 			if oDataSlab.get_cell(0,0) != TileMap.INVALID_CELL:
 				Utils.popup_centered(oUpdateAllSlabsWindow)
-		6: # Modify slabset
-			oSlabsetWindow.popup_on_right_side()
-		7: # Cfg editor
-			Utils.popup_centered(oCfgEditor)
+		2: Utils.popup_centered(oResizeCurrentMapSize) # Resize map
 
-func _on_slab_style_window_close_button_clicked():
-	oMenuButtonEdit.get_popup().set_item_checked(0, false)
-
-func _on_MenuButtonHelp_about_to_show():
-	if oGame.keeperfx_is_installed() == true:
-		oMenuButtonHelp.get_popup().set_item_disabled(0, false) # New script commands
-		oMenuButtonHelp.get_popup().set_item_disabled(1, true) # Old Script commands
-	else:
-		oMenuButtonHelp.get_popup().set_item_disabled(0, true) # New script commands
-		oMenuButtonHelp.get_popup().set_item_disabled(1, false) # Old Script commands
-
-func _on_HelpSubmenu_Pressed(pressedID):
+func _on_MapSubmenu_Pressed(pressedID):
 	match pressedID:
-		0:
-			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Level-Script-commands")
-		1:
-			OS.shell_open("https://lubiki.keeperklan.com/dk1_docs/dk_scripting_ref.htm")
-		2:
-			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Creating-a-new-campaign")
-		3:
-			OS.shell_open("https://github.com/dkfans/keeperfx/wiki/KeeperFx-Map-files-format-reference")
-		4:
-			Utils.popup_centered(oControlsWindow)
-		5:
-			Utils.popup_centered(oChangelogWindow)
-		6:
-			OS.shell_open("https://github.com/rainlizard/Unearth/issues/new")
-		7:
-			Utils.popup_centered(oAboutWindow)
+		0: # Map properties
+			if Columnset.cubes.empty() == true:
+				oMessage.quick("No currently opened map.")
+			else:
+				Utils.popup_centered(oMapSettingsWindow)
+		1: Utils.popup_centered(oCfgEditor) # Rules
+		2: oSlabsetWindow.popup_on_right_side() # Slabset
+		3: Utils.popup_centered(oConfigFilesListWindow) # Config files
+		4: open_externally(oCurrentMap.path.get_base_dir(), "No map path detected. Try saving first.") # Open map folder
+
+func _on_ScriptSubmenu_Pressed(pressedID):
+	match pressedID:
+		0: oScriptGenerator.open() # DKScript
+		1: # Lua
+			if oCurrentMap.path == "":
+				oMessage.quick("No map path detected. Try saving first.")
+				return
+			var luaPath = Utils.case_insensitive_file(oCurrentMap.path.get_base_dir(), oCurrentMap.path.get_file(), ".lua")
+			if luaPath == "":
+				Utils.popup_centered(oConfirmCreateLua)
+			else:
+				open_externally(luaPath, "")
+		2: # Script command reference
+			if oGame.keeperfx_is_installed() == true:
+				OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Level-Script-commands")
+			else:
+				OS.shell_open("https://lubiki.keeperklan.com/dk1_docs/dk_scripting_ref.htm")
+		3: open_externally(Utils.case_insensitive_file(oGame.GAME_DIRECTORY, "KEEPERFX", ".log"), "Could not find KEEPERFX.LOG") # Open log
+
+func _on_ConfirmCreateLua_confirmed():
+	var luaPath = oCurrentMap.path + ".lua"
+	var mapName = oDataMapName.data if oDataMapName.data != "" else "--insert map name--"
+	var authorName = oDataLof.AUTHOR if oDataLof.AUTHOR != "" else "--insert author--"
+	oDataLua.data = """-- ********************************************
+--
+--        %s
+--        by %s
+--
+-- ********************************************
+
+
+--will get called when the game starts
+function OnGameStart()
+	Setup()
+	SetupTriggers()
+end
+
+--here we setup things
+function Setup()
+
+end
+
+--here we setup the triggers, these can be found in fxdata/lua/triggers/Events.lua
+function SetupTriggers()
+
+end
+""" % [mapName, authorName]
+	if oBuffers.write(luaPath, "LUA") != OK:
+		oMessage.quick("Could not create: " + luaPath)
+		return
+	oCurrentMap.LuaScript_enabled = true # Saving the map keeps the file, and edits made outside Unearth are reloaded
+	oCurrentMap.currentFilePaths["LUA"] = [luaPath, File.new().get_modified_time(luaPath)]
+	open_externally(luaPath, "")
 
 func _on_ViewSubmenu_Pressed(pressedID):
 	match pressedID:
-		0: # Open map folder
-			if oCurrentMap.path != "":
-				var pathToTryAndOpen = oCurrentMap.path.get_base_dir()
-				var err = OS.shell_open(pathToTryAndOpen)
-				if err != OK:
-					oMessage.quick("Could not open: " + pathToTryAndOpen)
-			else:
-				oMessage.quick("No map path detected. Try saving first.")
-		1: # Open script file
-			if oCurrentMap.path == "":
-				oMessage.quick("No map path detected. Try saving first.")
-			else:
-				var lua_enabled = oCurrentMap.LuaScript_enabled
-				var dk_enabled = oCurrentMap.DKScript_enabled
-
-				if lua_enabled and dk_enabled:
-					Utils.popup_centered(oConfirmOpenWhichScript)
-				elif lua_enabled:
-					var scriptPathBasename = oCurrentMap.path.get_file()
-					var scriptDir = oCurrentMap.path.get_base_dir()
-					var pathToTryAndOpen = Utils.case_insensitive_file(scriptDir, scriptPathBasename, ".lua")
-					if pathToTryAndOpen != "":
-						var err = OS.shell_open(pathToTryAndOpen)
-						if err != OK:
-							oMessage.quick("Could not open: " + pathToTryAndOpen)
-					else:
-						oMessage.quick("Could not find script file: " + scriptPathBasename + ".lua")
-				elif dk_enabled:
-					var scriptPathBasename = oCurrentMap.path.get_file()
-					var scriptDir = oCurrentMap.path.get_base_dir()
-					var pathToTryAndOpen = Utils.case_insensitive_file(scriptDir, scriptPathBasename, ".txt")
-					if pathToTryAndOpen != "":
-						var err = OS.shell_open(pathToTryAndOpen)
-						if err != OK:
-							oMessage.quick("Could not open: " + pathToTryAndOpen)
-					else:
-						oMessage.quick("Could not find script file: " + scriptPathBasename + ".txt")
-				else: 
-					oMessage.quick("No script available for this map.")
-		2: # Open log file
-			var pathToTryAndOpen = Utils.case_insensitive_file(oGame.GAME_DIRECTORY, "KEEPERFX", ".log")
-			if pathToTryAndOpen != "":
-				var err = OS.shell_open(pathToTryAndOpen)
-				if err != OK:
-					oMessage.quick("Could not open: " + pathToTryAndOpen)
-			else:
-				oMessage.quick("Could not find KEEPERFX.LOG")
-		3:
+		0: # 3D: 1st person
 			if oEditor.currentView == oEditor.VIEW_2D:
 				oEditor.set_view_3d()
 				oGenerateTerrain.start()
 			oUi.switch_to_1st_person()
-		4:
-			Utils.popup_centered(oInstanceListWindow)
-		5:
-			Utils.popup_centered(oGridDataWindow)
-		6:
-			Utils.popup_centered(oConfigFilesListWindow)
-		7:
-			Utils.popup_centered(oSortCreatureStats)
-#		4:
-#			if oEditor.currentView == oEditor.VIEW_2D:
-#				oEditor.set_view_3d()
-#				oGenerateTerrain.start()
-#			oUi.switch_to_3D_overhead()
-#		5:
-#			if oEditor.currentView == oEditor.VIEW_3D:
-#				oEditor.set_view_2d()
+		1: Utils.popup_centered(oInstanceListWindow) # Instance list
+		2: Utils.popup_centered(oGridDataWindow) # Grid data
+		3: Utils.popup_centered(oSortCreatureStats) # Creature stats
 
-func _on_MenuButtonSettings_pressed():
-	oMenuButtonSettings.get_popup().visible = false
-	
-	if Columnset.cubes.empty() == true:
-		oMessage.quick("No currently opened map.")
-	else:
-		Utils.popup_centered(oMapSettingsWindow)
+func _on_HelpSubmenu_Pressed(pressedID):
+	match pressedID:
+		0: Utils.popup_centered(oControlsWindow) # Controls
+		1: OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Creating-a-new-campaign")
+		2: OS.shell_open("https://github.com/dkfans/keeperfx/wiki/KeeperFx-Map-files-format-reference")
+		3: OS.shell_open("https://keeperfx.net/workshop")
+		4: Utils.popup_centered(oChangelogWindow) # Changelog
+		5: OS.shell_open("https://github.com/rainlizard/Unearth/issues/new")
+		6: Utils.popup_centered(oAboutWindow) # About
 
 
 func _on_PlayButton_pressed(): # Use normal Button instead of MenuButton in combination with OS.execute otherwise a Godot bug occurs
@@ -405,11 +324,11 @@ func play_button_pressed(packetLoad):
 	if packetLoad == true and oGame.keeperfx_is_installed() == false:
 		oMessage.big("Incompatible", "Packetload requires keeperfx.exe")
 		return
-	
+
 	playButtonLocked = true
 	if oGame.menu_play_clicked(packetLoad) == false:
 		playButtonLocked = false
 		return
-	
+
 	yield(get_tree().create_timer(2.5), "timeout")
 	playButtonLocked = false

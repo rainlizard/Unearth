@@ -32,6 +32,7 @@ onready var oSaveMap = Nodelist.list["oSaveMap"]
 onready var oUiSystem = Nodelist.list["oUiSystem"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 onready var oInstanceList = Nodelist.list["oInstanceList"]
+onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 
 var path = ""
 var currentFilePaths = {} # [0] = pathString,  [1] = modified date
@@ -293,3 +294,5 @@ func reload_script_file(file_type, data_node, message, update_editor):
 		if update_editor:
 			oScriptEditor.update_texteditor()
 			oScriptEditor.set_script_as_edited(false)
+		if file_type == "TXT":
+			oScriptGenerator.refresh()

@@ -27,6 +27,10 @@ onready var oRandomPlayersPizza = Nodelist.list["oRandomPlayersPizza"]
 onready var oLinearDistanceCheckBox = Nodelist.list["oLinearDistanceCheckBox"]
 onready var oPlayerPositioning = Nodelist.list["oPlayerPositioning"]
 onready var oNewMapBorderType = Nodelist.list["oNewMapBorderType"]
+onready var oNewMapKind = Nodelist.list["oNewMapKind"]
+onready var oMapProperties = Nodelist.list["oMapProperties"]
+onready var oDataLof = Nodelist.list["oDataLof"]
+onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 
 var currently_creating_new_map = false
 
@@ -34,7 +38,9 @@ var imageData = Image.new()
 var textureData = ImageTexture.new()
 
 func _ready():
-	pass
+	for stringKind in oMapProperties.kind_options:
+		oNewMapKind.add_item(stringKind)
+	oNewMapKind.selected = oMapProperties.kind_options.keys().find("Multiplayer")
 
 func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
@@ -92,6 +98,7 @@ func create_new_map():
 	
 	if oOpenMap.open_map("") == false: # An empty path means a blank map
 		return
+	oDataLof.KIND = oMapProperties.kind_options[oNewMapKind.text]
 	currently_creating_new_map = true
 	
 	yield(oOverheadGraphics, "column_graphics_completed")
@@ -122,6 +129,9 @@ func create_new_map():
 	
 	# yield must be used here, because this function has yields inside of it.
 	yield(oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, false), "completed")
+	
+	# Start with a playable script. Done after slab generation so computer players are added for the dungeon hearts.
+	oScriptGenerator.add_default_setup()
 	
 	if oCheckBoxNewMapAutoOpensMapSettings.pressed == true:
 		Utils.popup_centered(oMapSettingsWindow)
@@ -219,6 +229,9 @@ func _on_NewMapFormat_item_selected(index):
 		oNewMapBorderType.selected = oRandomBorder.BORDER_ROCK
 		oNewMapBorderType.disabled = true
 		oNewMapBorderType.hint_tooltip = "Abyss border requires KFX format."
+		oNewMapKind.selected = 0
+		oNewMapKind.disabled = true
+		oNewMapKind.hint_tooltip = "Map type requires KFX format."
 		oXSizeLine.editable = false
 		oYSizeLine.editable = false
 		oXSizeLine.text = "85"
@@ -231,6 +244,8 @@ func _on_NewMapFormat_item_selected(index):
 	elif index == Constants.KfxFormat:
 		oNewMapBorderType.disabled = false
 		oNewMapBorderType.hint_tooltip = ""
+		oNewMapKind.disabled = false
+		oNewMapKind.hint_tooltip = ""
 		oXSizeLine.editable = true
 		oYSizeLine.editable = true
 		oXSizeLine.hint_tooltip = ""

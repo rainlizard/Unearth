@@ -162,17 +162,6 @@ func get_arguments_from_line(line, leftBracketPos):
 func get_position_command_attributes(commandName):
 	return commandAttributesByName.get(commandName, null)
 
-func line_may_affect_position_markers(line):
-	var parsedCommand = get_command_name_from_line(line)
-	if parsedCommand.empty() == false:
-		return get_position_command_attributes(parsedCommand["name"]) != null
-	
-	var upperLine = line.to_upper()
-	for commandName in commandAttributesByName:
-		if commandName in upperLine:
-			return true
-	return false
-
 func get_marker_position(argumentsArray, commandAttributes):
 	var argNumber = commandAttributes[1]
 	match commandAttributes[2]:

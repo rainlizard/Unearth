@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "BasicScriptPatcher",
+"language": "GDScript",
+"path": "res://Class/BasicScriptPatcher.gd"
+}, {
 "base": "SpinBox",
 "class": "CustomSpinBox",
 "language": "GDScript",
@@ -45,6 +50,7 @@ _global_script_classes=[ {
 "path": "res://Scenes/VariationConstructs.gd"
 } ]
 _global_script_class_icons={
+"BasicScriptPatcher": "",
 "CustomSpinBox": "",
 "EditableLabel": "",
 "GenericRevertButton": "",
