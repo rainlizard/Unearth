@@ -110,7 +110,10 @@ func backup_existing_map_files(map_file_path):
 		if err != OK:
 			print("Backup failed, could not copy: " + source_path + " Code: " + str(err))
 			return false
-	var backup_sizes = Settings.read_cfg("backup_folder_sizes") if Settings.cfg_has_setting("backup_folder_sizes") else {}
+	var sizes_cfg = ConfigFile.new()
+	var sizes_path = backup_root.plus_file("foldersizes.cache")
+	sizes_cfg.load(sizes_path)
+	var backup_sizes = sizes_cfg.get_value("backups", "folder_sizes", {})
 	var current_backup_sizes = {}
 	var limit_bytes = int(Settings.get_setting("backup_folder_size_limit_mb")) * 1024 * 1024
 	if backup_dir.open(backup_root) == OK:
@@ -160,7 +163,8 @@ func backup_existing_map_files(map_file_path):
 				dir.list_dir_end()
 				backup_dir.remove(folder_path.get_file())
 			print("Deleted old backup: " + folder_path)
-	Settings.write_cfg("backup_folder_sizes", current_backup_sizes)
+	sizes_cfg.set_value("backups", "folder_sizes", current_backup_sizes)
+	sizes_cfg.save(sizes_path)
 	print("Backed up map files to: " + backup_folder + " in " + str(OS.get_ticks_msec() - BACKUPTIME_START) + "ms")
 	return true
 

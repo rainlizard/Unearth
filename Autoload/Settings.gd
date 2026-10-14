@@ -124,6 +124,9 @@ func initialize_settings():
 			oMessage.big("Error", "Cannot create settings.cfg: Error "+ str(saveError) + "\n" + "Please exit the editor and move the Unearth directory elsewhere.")
 			return
 	
+	if cfg_has_setting("backup_folder_sizes"): # Moved to /backups/foldersizes.cache
+		cfg_remove_setting("backup_folder_sizes")
+	
 	read_all()
 	
 	executable_stuff()
