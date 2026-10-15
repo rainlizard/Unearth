@@ -67,15 +67,20 @@ func _on_config_status_changed():
 	update_config_paths(true)
 
 func set_path_and_title(newpath):
-	if newpath != "":
-		OS.set_window_title(newpath + ' - Unearth v'+Version.full)
-		if loaded_from_backup == false:
-			oMenu.add_recent(newpath) # Add saved maps to the recent menu
-	else:
-		OS.set_window_title('Unearth v'+Version.full)
+	if newpath != "" and loaded_from_backup == false:
+		oMenu.add_recent(newpath) # Add saved maps to the recent menu
 	path = newpath
-	
+	update_window_title()
+
 	oGame.reconstruct_command_line() # Always update command line whenever the path changes
+
+func update_window_title():
+	var title = 'Unearth v'+Version.full
+	if path != "":
+		title = path + ' - ' + title
+		if oDataMapName.data != "":
+			title = oDataMapName.data + ' - ' + title
+	OS.set_window_title(title)
 
 func clear_map(): # Remember, "Undo" calls this
 	var CODETIME_START = OS.get_ticks_msec()

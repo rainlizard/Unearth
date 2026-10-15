@@ -2,6 +2,7 @@ extends Node
 onready var oReadData = Nodelist.list["oReadData"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oBuffers = Nodelist.list["oBuffers"]
+onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 
 const DKLEVELS_NAMES = {
 	"00001": "Eversmile",
@@ -100,6 +101,7 @@ var data = ""
 func set_map_name(mapStringName):
 	data = mapStringName
 	oDataLof.NAME_TEXT = mapStringName
+	oCurrentMap.update_window_title()
 
 func _ready():
 	clear()
