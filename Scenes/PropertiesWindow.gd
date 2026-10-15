@@ -22,10 +22,11 @@ func _ready():
 	oSelectionStatus.visible = false
 
 func _on_PropertiesTabs_item_rect_changed():
-	oPropertiesTabs.disconnect("item_rect_changed",self,"_on_PropertiesTabs_item_rect_changed")
-	var contentSize = vboxContainer.get_minimum_size()
-	rect_size = contentSize + Vector2(0,12)
-	oPropertiesTabs.connect("item_rect_changed",self,"_on_PropertiesTabs_item_rect_changed")
+	# Deferred because this fires mid-sort of vboxContainer, where resizing would drop its re-sort and leave children at a stale width
+	call_deferred("fit_to_content")
+
+func fit_to_content():
+	rect_size = vboxContainer.get_minimum_size() + Vector2(0,12)
 
 #func _on_PropertiesTabs_tab_changed(tab):
 #	pass # Replace with function body.
