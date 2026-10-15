@@ -257,22 +257,16 @@ func save_rules_cfg_file(file_type, map_filename_no_ext, map_base_dir):
 func save_cubes_cfg_file(file_type, map_filename_no_ext, map_base_dir):
 	if Cube.modified_since_load == false:
 		return true
-	var file_path = get_local_cubes_save_path(file_type, map_filename_no_ext, map_base_dir)
-	var export_success = Cube.export_cfg_cubes(file_path)
-	if export_success:
-		track_saved_config_file(file_path, file_type, oConfigFileManager.LOAD_CFG_CURRENT_MAP)
+	var save_target = get_config_save_target(file_type, map_filename_no_ext, map_base_dir)
+	var file_path = save_target[0]
+	if Cube.export_cfg_cubes(file_path):
+		track_saved_config_file(file_path, file_type, save_target[1])
 		Cube.modified_since_load = false
 		return true
 	if Cube.get_all_export_cube_ids().empty() and delete_config_file_if_exists(file_path, file_type):
 		Cube.modified_since_load = false
 		return true
 	return false
-
-
-func get_local_cubes_save_path(file_type, map_filename_no_ext, map_base_dir):
-	if oCurrentMap.loaded_from_backup == false and oCurrentMap.existing_cubes_file != "" and oCurrentMap.existing_cubes_file.get_file().to_lower() != file_type:
-		return oCurrentMap.existing_cubes_file
-	return map_base_dir.plus_file(map_filename_no_ext + "." + file_type)
 
 
 func get_config_save_target(file_type, map_filename_no_ext, map_base_dir):
@@ -285,7 +279,7 @@ func get_config_save_target(file_type, map_filename_no_ext, map_base_dir):
 			"cubes.cfg": existing_file_path = oCurrentMap.existing_cubes_file
 	var config_type = oConfigFileManager.LOAD_CFG_CURRENT_MAP
 	if existing_file_path != "":
-		if existing_file_path.get_file() == file_type:
+		if existing_file_path.get_file().to_lower() == file_type:
 			config_type = oConfigFileManager.LOAD_CFG_CAMPAIGN
 		return [existing_file_path, config_type]
 	return [map_base_dir.plus_file(map_filename_no_ext + "." + file_type), config_type]

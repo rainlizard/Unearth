@@ -276,7 +276,7 @@ func update_cube_revert_button_state():
 	var final_text = ""
 	var tooltip_text = ""
 	if modified_cube_ids.empty():
-		if Cube.modified_since_load and file_path != "" and file_path.get_file().to_lower() != "cubes.cfg":
+		if Cube.modified_since_load and file_path != "":
 			final_text = "Save will delete: " + file_path.get_file()
 			tooltip_text = file_path
 		else:
@@ -288,10 +288,6 @@ func update_cube_revert_button_state():
 		else:
 			final_text = filename
 		tooltip_text = file_path
-		if Cube.modified_since_load and oCurrentMap.path != "" and filename.to_lower() == "cubes.cfg":
-			var local_file_path = oCurrentMap.path.get_basename() + ".cubes.cfg"
-			final_text = "Save target: " + local_file_path.get_file()
-			tooltip_text = file_path + "\nSave target: " + local_file_path
 	else:
 		if oCurrentMap.path == "":
 			final_text = "Save map first"
@@ -325,7 +321,7 @@ func adjust_ui_color_if_different():
 func _on_CubeHelpButton_pressed():
 	var helptxt = ""
 	helptxt += "cubes.cfg controls the six texture IDs used by each cube face.\n\n"
-	helptxt += "Cube changes are saved as a local map override when you save the map.\n\n"
+	helptxt += "Cube changes are saved when you save the map, to the campaign's cubes.cfg if it has one, otherwise to a local mapname.cubes.cfg.\n\n"
 	helptxt += "Texture order is North, East, South, West, Top, Bottom.\n\n"
 	helptxt += "The shortcut beside each face opens and selects that texture in the Tileset tab."
 	oMessage.big("Help", helptxt)
