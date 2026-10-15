@@ -16,6 +16,7 @@ var instanceType = 0
 
 func _ready():
 	get_parent().set_tab_title(2, "Column")
+	oColumnListData.singleLineValues = true # Wrapping would resize the Properties window while hovering
 
 func update_details():
 	if visible == false or oDataClm.cubes.size() == 0: return

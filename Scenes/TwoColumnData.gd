@@ -20,6 +20,8 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 const columnLeftSize = 120
 const columnRightSize = 150
 
+var singleLineValues = false # Shrink values to fit one line instead of wrapping, so the list height stays constant
+
 func _ready():
 	columns = 2
 
@@ -140,17 +142,19 @@ func add_item(leftString, rightString):
 
 func create_label(rightString):
 	var label = Label.new()
-	label.autowrap = true
+	label.autowrap = not singleLineValues
+	label.clip_text = singleLineValues
 	label.rect_min_size.x = columnRightSize
 	
 	label.text = rightString
 	label.size_flags_vertical = Control.SIZE_EXPAND# + Control.SIZE_SHRINK_END # To handle the other side's autowrap text
 	label.align = HALIGN_LEFT
 	
-	var largest_word_width = get_largest_word_width(label.text, label.get_font("font", "Label"))
-	if largest_word_width >= 198: # EFFECTGENERATOR_ENTRANCE_ is slightly too large
+	var font = label.get_font("font", "Label")
+	var unbreakable_width = font.get_string_size(label.text).x if singleLineValues else get_largest_word_width(label.text, font)
+	if unbreakable_width >= 198: # EFFECTGENERATOR_ENTRANCE_ is slightly too large
 		label.add_font_override("font", preload("res://Theme/StokeTiny.tres"))
-	elif largest_word_width >= 101: # "DARK_MISTRESS" is slightly too large
+	elif unbreakable_width >= 101: # "DARK_MISTRESS" is slightly too large
 		label.add_font_override("font", preload("res://Theme/StokeSmaller.tres"))
 	return label
 
