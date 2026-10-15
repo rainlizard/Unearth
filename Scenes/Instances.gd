@@ -31,7 +31,7 @@ func add_instance(id):
 	all_instances.append(id)
 	add_child(id)
 
-func place_new_light(newThingType, newSubtype, newPosition, newOwnership):
+func place_new_light(newThingType, newSubtype, newPosition, newOwnership, newAttached = false):
 	var id = lightScn.instance()
 	id.locationX = newPosition.x
 	id.locationY = newPosition.y
@@ -39,6 +39,8 @@ func place_new_light(newThingType, newSubtype, newPosition, newOwnership):
 	id.lightRange = oPlacingSettings.lightRange
 	id.lightIntensity = oPlacingSettings.lightIntensity
 	id.parentTile = 65535 # "None"
+	if newAttached == true: # Doodads
+		id.parentTile = int(floor(newPosition.y / 3) * M.xSize + floor(newPosition.x / 3))
 	id.data3 = 0
 	id.data4 = 0
 	id.data5 = 0

@@ -1,6 +1,8 @@
 extends Node
 onready var oInstances = Nodelist.list["oInstances"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
+onready var oDataClm = Nodelist.list["oDataClm"]
+onready var oDataClmPos = Nodelist.list["oDataClmPos"]
 
 onready var dir = oSlabPlacement.dir
 
@@ -33,7 +35,7 @@ func place_slab_objects(xSlab, ySlab, slabID, ownership, clmIndexGroup, bitmask,
 func delete_doodads_on_slab(xSlab, ySlab, slabID):
 	var doodads = Settings.slabDoodads.get(slabID, [])
 	if doodads.empty(): return
-	for id in oInstances.get_all_nodes_on_slab(xSlab, ySlab, ["Thing"]):
+	for id in oInstances.get_all_nodes_on_slab(xSlab, ySlab, ["Thing", "Light"]):
 		for doodad in doodads:
 			if id.thingType == doodad[0] and id.subtype == doodad[1]:
 				oInstances.kill_instance(id)
@@ -43,6 +45,10 @@ func spawn_doodad(xSlab, ySlab, ownership, doodad, subtile):
 	var xSubtile = (xSlab*3) + (subtile % 3) + 0.5
 	var ySubtile = (ySlab*3) + int(subtile / 3.0) + 0.5
 	if oInstances.get_all_instances_on_subtile(xSubtile, ySubtile).empty() == false: # Don't overlap things already on this subtile
+		return
+	if doodad[0] == Things.TYPE.EXTRA: # Light
+		var lightHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(floor(xSubtile), floor(ySubtile))]
+		oInstances.place_new_light(doodad[0], doodad[1], Vector3(xSubtile, ySubtile, lightHeight), ownership, doodad[4])
 		return
 	var orientation = doodad[3]
 	if orientation == -1:

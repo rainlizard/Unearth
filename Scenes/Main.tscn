@@ -3324,7 +3324,7 @@ margin_bottom = 52.0
 focus_mode = 0
 size_flags_horizontal = 3
 text = "Object"
-items = [ "Object", null, false, 1, null, "Creature", null, false, 5, null, "EffectGen", null, false, 7, null, "Trap", null, false, 8, null ]
+items = [ "Object", null, false, 1, null, "Creature", null, false, 5, null, "EffectGen", null, false, 7, null, "Trap", null, false, 8, null, "Extra", null, false, 696969, null ]
 selected = 0
 
 [node name="IDLabel" type="Label" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]

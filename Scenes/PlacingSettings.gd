@@ -168,8 +168,16 @@ func open_doodad_window(index):
 		oDoodadAttachedCheckBox.pressed = true
 	have_opened_doodad_window = true
 	oDoodadDeleteButton.visible = index != -1
+	update_doodad_subtype_lock()
 	update_doodad_name()
 	Utils.popup_centered(oDoodadWindow)
+
+
+func update_doodad_subtype_lock():
+	var isExtra = oDoodadThingTypeOptionButton.get_selected_id() == Things.TYPE.EXTRA
+	if isExtra == true:
+		oDoodadSubtypeSpinBox.value = 2 # Light is the only Extra that can be a doodad
+	oDoodadSubtypeSpinBox.editable = isExtra == false
 
 
 func update_doodad_name():
@@ -177,6 +185,7 @@ func update_doodad_name():
 
 
 func _on_DoodadThingTypeOptionButton_item_selected(index):
+	update_doodad_subtype_lock()
 	update_doodad_name()
 
 func _on_DoodadSubtypeSpinBox_value_changed(value):
