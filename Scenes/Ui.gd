@@ -75,12 +75,6 @@ func initialize_window_desired_values():
 		window.rect_position = desiredPos
 		if window.resizable and subwindows_status[windowName].has("desired_size"):
 			window.rect_size = subwindows_status[windowName]["desired_size"]
-	on_startup_put_windows_in_correct_positions()
-
-func on_startup_put_windows_in_correct_positions():
-	yield(get_tree(), 'idle_frame')
-	yield(get_tree(), 'idle_frame')
-	_on_viewport_size_changed()
 
 func _ready():
 	tabKeyInputEvent.scancode = KEY_TAB
@@ -98,6 +92,8 @@ func wait_until_windows_are_positioned():
 		window.connect("resized", self, "_on_window_dialog_became_visible", [window])
 		window.connect("gui_input", self, "_on_window_gui_input", [window])
 	get_viewport().connect("size_changed", self, "_on_viewport_size_changed")
+	# Catch windows that were made visible before the signals above were connected
+	_on_viewport_size_changed()
 
 func setup_focus_key():
 	InputMap.action_add_event("ui_focus_next", tabKeyInputEvent)
@@ -134,8 +130,6 @@ func _on_any_window_was_modified(callingNode):
 		_is_handling_drag = false
 
 func _on_viewport_size_changed():
-	if OS.window_size.x < 720 or OS.window_size.y < 720:
-		return
 	var currentViewSize = get_viewport().size / Settings.UI_SCALE
 	for windowNode in listOfWindowDialogs:
 		if windowNode.visible == false:
@@ -156,13 +150,12 @@ func _on_viewport_size_changed():
 
 func _on_window_dialog_became_visible(dialogNode):
 	if dialogNode.visible == true:
-		if OS.window_size.x < 720 or OS.window_size.y < 720:
-			return
 		var currentViewSize = get_viewport().size / Settings.UI_SCALE
 		_adjust_window_size_to_viewport(dialogNode, currentViewSize)
 
 func _adjust_window_size_to_viewport(windowNode, currentViewSize):
-	if OS.window_size.x < 720 or OS.window_size.y < 720:
+	# Only skip when there's no real view to fit into (minimized), small screens still need windows kept on-screen
+	if OS.is_window_minimized() or currentViewSize.y <= topMargin:
 		return
 	windowNode.rect_size.x = clamp(windowNode.rect_size.x, 0, currentViewSize.x)
 	windowNode.rect_size.y = clamp(windowNode.rect_size.y, 0, currentViewSize.y - topMargin)
