@@ -110,63 +110,88 @@ func backup_existing_map_files(map_file_path):
 		if err != OK:
 			print("Backup failed, could not copy: " + source_path + " Code: " + str(err))
 			return false
+	print("Backed up map files to: " + backup_folder + " in " + str(OS.get_ticks_msec() - BACKUPTIME_START) + "ms")
+	prune_backups(backup_root) # Not awaited, it may yield while rebuilding the size cache
+	return true
+
+
+func prune_backups(backup_root):
+	var PRUNETIME_START = OS.get_ticks_msec()
+	var dir = Directory.new()
+	var file = File.new()
 	var sizes_cfg = ConfigFile.new()
 	var sizes_path = backup_root.plus_file("foldersizes.cache")
 	sizes_cfg.load(sizes_path)
 	var backup_sizes = sizes_cfg.get_value("backups", "folder_sizes", {})
 	var current_backup_sizes = {}
 	var limit_bytes = int(Settings.get_setting("backup_folder_size_limit_mb")) * 1024 * 1024
-	if backup_dir.open(backup_root) == OK:
-		var backup_folder_paths = []
-		var total_size = 0
-		backup_dir.list_dir_begin(true, false)
-		var entry = backup_dir.get_next()
-		while entry != "":
-			var entry_path = backup_root.plus_file(entry)
-			if backup_dir.current_is_dir() == true:
-				var folder_size = int(backup_sizes.get(entry, 0))
-				if backup_sizes.has(entry) == false and dir.open(entry_path) == OK:
-					folder_size = 0
-					var folder_size_known = true
-					dir.list_dir_begin(true, false)
-					var backup_file_name = dir.get_next()
-					while backup_file_name != "":
-						if dir.current_is_dir() == false:
-							if file.open(entry_path.plus_file(backup_file_name), File.READ) == OK:
-								folder_size += file.get_len()
-								file.close()
-							else:
-								folder_size_known = false
-						backup_file_name = dir.get_next()
-					dir.list_dir_end()
-					if folder_size_known:
-						current_backup_sizes[entry] = folder_size
-				elif backup_sizes.has(entry):
-					current_backup_sizes[entry] = folder_size
-				backup_folder_paths.append(entry_path)
-				total_size += folder_size
-			entry = backup_dir.get_next()
-		backup_dir.list_dir_end()
+	if dir.open(backup_root) != OK:
+		return
+	var backup_folder_names = []
+	dir.list_dir_begin(true, false)
+	var entry = dir.get_next()
+	while entry != "":
+		if dir.current_is_dir() == true:
+			backup_folder_names.append(entry)
+		entry = dir.get_next()
+	dir.list_dir_end()
 
-		backup_folder_paths.sort()
-		while total_size > limit_bytes and backup_folder_paths.size() > 1:
-			var folder_path = backup_folder_paths.pop_front()
-			total_size -= current_backup_sizes.get(folder_path.get_file(), 0)
-			current_backup_sizes.erase(folder_path.get_file())
-			if dir.open(folder_path) == OK:
-				dir.list_dir_begin(true, false)
-				var delete_file_name = dir.get_next()
-				while delete_file_name != "":
-					if dir.current_is_dir() == false:
-						dir.remove(delete_file_name)
-					delete_file_name = dir.get_next()
-				dir.list_dir_end()
-				backup_dir.remove(folder_path.get_file())
-			print("Deleted old backup: " + folder_path)
+	var uncached_count = 0
+	for folder_name in backup_folder_names:
+		if backup_sizes.has(folder_name) == false:
+			uncached_count += 1
+	if uncached_count > 20:
+		oMessage.quick("Rebuilding backup size cache...")
+		for i in 2:
+			yield(get_tree(), "idle_frame") # Let the message draw before the scan freezes the editor
+		sizes_cfg.load(sizes_path) # Another prune may have finished while we were yielding
+		backup_sizes = sizes_cfg.get_value("backups", "folder_sizes", {})
+
+	var backup_folder_paths = []
+	var total_size = 0
+	for folder_name in backup_folder_names:
+		var entry_path = backup_root.plus_file(folder_name)
+		if dir.dir_exists(entry_path) == false:
+			continue # Deleted by another prune while we were yielding
+		var folder_size = int(backup_sizes.get(folder_name, 0))
+		if backup_sizes.has(folder_name) == false and dir.open(entry_path) == OK:
+			var folder_size_known = true
+			dir.list_dir_begin(true, false)
+			var backup_file_name = dir.get_next()
+			while backup_file_name != "":
+				if dir.current_is_dir() == false:
+					if file.open(entry_path.plus_file(backup_file_name), File.READ) == OK:
+						folder_size += file.get_len()
+						file.close()
+					else:
+						folder_size_known = false
+				backup_file_name = dir.get_next()
+			dir.list_dir_end()
+			if folder_size_known:
+				current_backup_sizes[folder_name] = folder_size
+		elif backup_sizes.has(folder_name):
+			current_backup_sizes[folder_name] = folder_size
+		backup_folder_paths.append(entry_path)
+		total_size += folder_size
+
+	backup_folder_paths.sort()
+	while total_size > limit_bytes and backup_folder_paths.size() > 1:
+		var folder_path = backup_folder_paths.pop_front()
+		total_size -= current_backup_sizes.get(folder_path.get_file(), 0)
+		current_backup_sizes.erase(folder_path.get_file())
+		if dir.open(folder_path) == OK:
+			dir.list_dir_begin(true, false)
+			var delete_file_name = dir.get_next()
+			while delete_file_name != "":
+				if dir.current_is_dir() == false:
+					dir.remove(delete_file_name)
+				delete_file_name = dir.get_next()
+			dir.list_dir_end()
+			dir.remove(folder_path)
+		print("Deleted old backup: " + folder_path)
 	sizes_cfg.set_value("backups", "folder_sizes", current_backup_sizes)
 	sizes_cfg.save(sizes_path)
-	print("Backed up map files to: " + backup_folder + " in " + str(OS.get_ticks_msec() - BACKUPTIME_START) + "ms")
-	return true
+	print("Pruned backups in " + str(OS.get_ticks_msec() - PRUNETIME_START) + "ms")
 
 
 func populate_backup_list():
