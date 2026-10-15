@@ -3324,7 +3324,7 @@ margin_bottom = 52.0
 focus_mode = 0
 size_flags_horizontal = 3
 text = "Object"
-items = [ "Object", null, false, 1, null, "Creature", null, false, 5, null, "EffectGen", null, false, 7, null, "Trap", null, false, 8, null, "Extra", null, false, 696969, null ]
+items = [ "Object", null, false, 1, null, "Creature", null, false, 5, null, "EffectGen", null, false, 7, null, "Trap", null, false, 8, null, "Light", null, false, 696969, null ]
 selected = 0
 
 [node name="IDLabel" type="Label" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
@@ -3358,6 +3358,45 @@ margin_right = 280.0
 margin_bottom = 112.0
 size_flags_horizontal = 3
 autowrap = true
+
+[node name="LightRangeLabel" type="Label" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
+visible = false
+margin_top = 119.0
+margin_right = 120.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 120, 0 )
+text = "Light range"
+
+[node name="DoodadLightRangeSpinBox" type="SpinBox" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
+visible = false
+margin_left = 124.0
+margin_top = 116.0
+margin_right = 280.0
+margin_bottom = 147.0
+size_flags_horizontal = 3
+max_value = 255.0
+step = 0.01
+value = 10.0
+script = ExtResource( 81 )
+
+[node name="LightIntensityLabel" type="Label" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
+visible = false
+margin_top = 151.0
+margin_right = 120.0
+margin_bottom = 172.0
+rect_min_size = Vector2( 120, 0 )
+text = "Intensity"
+
+[node name="DoodadLightIntensitySpinBox" type="SpinBox" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
+visible = false
+margin_left = 124.0
+margin_top = 147.0
+margin_right = 280.0
+margin_bottom = 178.0
+size_flags_horizontal = 3
+max_value = 255.0
+value = 32.0
+script = ExtResource( 81 )
 
 [node name="OrientationLabel" type="Label" parent="Ui/UiSystem/DoodadWindow/VBoxContainer/GridContainer"]
 margin_top = 119.0

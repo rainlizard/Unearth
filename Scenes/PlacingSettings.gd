@@ -24,6 +24,8 @@ onready var oDoodadNameLabel = Nodelist.list["oDoodadNameLabel"]
 onready var oDoodadChanceSpinBox = Nodelist.list["oDoodadChanceSpinBox"]
 onready var oDoodadOrientationOptionButton = Nodelist.list["oDoodadOrientationOptionButton"]
 onready var oDoodadAttachedCheckBox = Nodelist.list["oDoodadAttachedCheckBox"]
+onready var oDoodadLightRangeSpinBox = Nodelist.list["oDoodadLightRangeSpinBox"]
+onready var oDoodadLightIntensitySpinBox = Nodelist.list["oDoodadLightIntensitySpinBox"]
 onready var oDoodadDeleteButton = Nodelist.list["oDoodadDeleteButton"]
 
 # Default values for placement
@@ -160,6 +162,9 @@ func open_doodad_window(index):
 		var orientIndex = Constants.listOrientations.find(doodad[3])
 		oDoodadOrientationOptionButton.select(orientIndex if orientIndex != -1 else Constants.listOrientations.size())
 		oDoodadAttachedCheckBox.pressed = doodad[4]
+		if doodad[0] == Things.TYPE.EXTRA:
+			oDoodadLightRangeSpinBox.value = doodad[5]
+			oDoodadLightIntensitySpinBox.value = doodad[6]
 	elif have_opened_doodad_window == false: # Defaults for the first time opening the window
 		oDoodadThingTypeOptionButton.select(oDoodadThingTypeOptionButton.get_item_index(Things.TYPE.OBJECT))
 		oDoodadSubtypeSpinBox.value = 1
@@ -168,16 +173,24 @@ func open_doodad_window(index):
 		oDoodadAttachedCheckBox.pressed = true
 	have_opened_doodad_window = true
 	oDoodadDeleteButton.visible = index != -1
-	update_doodad_subtype_lock()
+	update_doodad_fields()
 	update_doodad_name()
 	Utils.popup_centered(oDoodadWindow)
 
 
-func update_doodad_subtype_lock():
-	var isExtra = oDoodadThingTypeOptionButton.get_selected_id() == Things.TYPE.EXTRA
-	if isExtra == true:
+func update_doodad_fields():
+	var isLight = oDoodadThingTypeOptionButton.get_selected_id() == Things.TYPE.EXTRA
+	if isLight == true:
 		oDoodadSubtypeSpinBox.value = 2 # Light is the only Extra that can be a doodad
-	oDoodadSubtypeSpinBox.editable = isExtra == false
+	for control in [oDoodadSubtypeSpinBox, oDoodadNameLabel, oDoodadOrientationOptionButton]:
+		set_doodad_row_visible(control, isLight == false)
+	for control in [oDoodadLightRangeSpinBox, oDoodadLightIntensitySpinBox]:
+		set_doodad_row_visible(control, isLight)
+
+
+func set_doodad_row_visible(control, setVisible): # Each row's label is the control's previous sibling
+	control.visible = setVisible
+	control.get_parent().get_child(control.get_index() - 1).visible = setVisible
 
 
 func update_doodad_name():
@@ -185,7 +198,7 @@ func update_doodad_name():
 
 
 func _on_DoodadThingTypeOptionButton_item_selected(index):
-	update_doodad_subtype_lock()
+	update_doodad_fields()
 	update_doodad_name()
 
 func _on_DoodadSubtypeSpinBox_value_changed(value):
@@ -199,6 +212,8 @@ func _on_DoodadConfirmButton_pressed():
 	if oDoodadOrientationOptionButton.selected < Constants.listOrientations.size():
 		orientation = Constants.listOrientations[oDoodadOrientationOptionButton.selected]
 	var doodad = [oDoodadThingTypeOptionButton.get_selected_id(), int(oDoodadSubtypeSpinBox.value), oDoodadChanceSpinBox.value, orientation, oDoodadAttachedCheckBox.pressed]
+	if doodad[0] == Things.TYPE.EXTRA:
+		doodad.append_array([oDoodadLightRangeSpinBox.value, int(oDoodadLightIntensitySpinBox.value)])
 	if doodad_edit_index == -1:
 		Settings.slabDoodads[slabID].append(doodad)
 	else:

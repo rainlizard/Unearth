@@ -52,6 +52,7 @@ func place_new_light(newThingType, newSubtype, newPosition, newOwnership, newAtt
 	id.data17 = 0
 	id.data18_19 = 0
 	add_instance(id)
+	return id
 
 func place_new_action_point(newThingType, newSubtype, newPosition, newOwnership):
 	var id = actionPointScn.instance()

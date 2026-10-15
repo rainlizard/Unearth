@@ -160,7 +160,10 @@ func load_slab_doodads(): # Called once slab data (including custom slabs) is lo
 			else:
 				var orientation = entry[3] if entry.size() > 3 else 0
 				var attached = entry[4] if entry.size() > 4 else thingType == Things.TYPE.EFFECTGEN
-				doodads.append([thingType, subtype, entry[2], orientation, attached])
+				var doodad = [thingType, subtype, entry[2], orientation, attached]
+				if thingType == Things.TYPE.EXTRA: # Light range and intensity
+					doodad.append_array([entry[5] if entry.size() > 5 else 10, entry[6] if entry.size() > 6 else 32])
+				doodads.append(doodad)
 		if slabID != null:
 			slabDoodads[slabID] = doodads
 
@@ -169,7 +172,10 @@ func save_slab_doodads():
 	for slabID in slabDoodads:
 		var doodads = []
 		for entry in slabDoodads[slabID]:
-			doodads.append([Things.data_structure_name[entry[0]], Things.fetch_id_string(entry[0], entry[1]), entry[2], entry[3], entry[4]])
+			var saved = entry.duplicate()
+			saved[0] = Things.data_structure_name[entry[0]]
+			saved[1] = Things.fetch_id_string(entry[0], entry[1])
+			doodads.append(saved)
 		stored[Slabs.fetch_idname(slabID)] = doodads
 	for slabKey in unresolvedDoodads: # Entries that couldn't be resolved are saved unchanged
 		var slabID = Slabs.find_slab_id_by_name(slabKey)

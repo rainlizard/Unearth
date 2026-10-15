@@ -48,7 +48,9 @@ func spawn_doodad(xSlab, ySlab, ownership, doodad, subtile):
 		return
 	if doodad[0] == Things.TYPE.EXTRA: # Light
 		var lightHeight = oDataClm.height[oDataClmPos.get_cell_clmpos(floor(xSubtile), floor(ySubtile))]
-		oInstances.place_new_light(doodad[0], doodad[1], Vector3(xSubtile, ySubtile, lightHeight), ownership, doodad[4])
+		var light = oInstances.place_new_light(doodad[0], doodad[1], Vector3(xSubtile, ySubtile, lightHeight), ownership, doodad[4])
+		light.lightRange = doodad[5]
+		light.lightIntensity = doodad[6]
 		return
 	var orientation = doodad[3]
 	if orientation == -1:
