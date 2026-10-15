@@ -293,11 +293,12 @@ func load_creatures_data(cfg): # 3ms
 
 func load_creature_stats_data(mapPath, campaign_cfg, mod_zip_paths):
 	var data = {}
-	load_creature_stats_dir(data, oGame.GAME_DIRECTORY.plus_file("creatrs"))
+	var paths = {}
+	load_creature_stats_dir(data, oGame.GAME_DIRECTORY.plus_file("creatrs"), paths)
 	var base_data = data.duplicate(true)
 	var creature_location = campaign_cfg.get("common", {}).get("CREATURES_LOCATION", "")
 	if creature_location != "":
-		load_creature_stats_dir(data, oGame.GAME_DIRECTORY.plus_file(creature_location))
+		load_creature_stats_dir(data, oGame.GAME_DIRECTORY.plus_file(creature_location), paths)
 	if mapPath != "":
 		var map_file_prefix = mapPath.get_basename().get_file() + "."
 		var lower_map_file_prefix = map_file_prefix.to_lower()
@@ -306,8 +307,9 @@ func load_creature_stats_data(mapPath, campaign_cfg, mod_zip_paths):
 		for path in map_cfgs:
 			var file = path.get_file()
 			if file.to_lower().begins_with(lower_map_file_prefix):
-				load_creature_stats_file(data, file.substr(map_file_prefix.length()), path)
+				load_creature_stats_file(data, file.substr(map_file_prefix.length()), path, paths)
 	oConfigFileManager.current_data["creature_stats"] = data
+	oConfigFileManager.current_data["creature_stats_paths"] = paths
 	var sprite_data = data.duplicate(true)
 	if oGame.GAME_DIRECTORY != "" and mod_zip_paths.empty() == false:
 		var mods_dir = oGame.GAME_DIRECTORY.plus_file("mods")
@@ -364,16 +366,17 @@ func load_creature_stats_data(mapPath, campaign_cfg, mod_zip_paths):
 		if portrait_key != null:
 			Graphics.sprite_id[str(sprite_key) + "_PORTRAIT"] = Graphics.sprite_id[portrait_key]
 
-func load_creature_stats_dir(data, dir):
+func load_creature_stats_dir(data, dir, paths = {}):
 	var listOfCfgs = Utils.get_filetype_in_directory(dir, "CFG")
 	listOfCfgs.sort()
 	for path in listOfCfgs:
-		load_creature_stats_file(data, path.get_file(), path)
+		load_creature_stats_file(data, path.get_file(), path, paths)
 
-func load_creature_stats_file(data, file, path):
+func load_creature_stats_file(data, file, path, paths = {}):
 	var cfg_data = oReadCfg.read_dkcfg_file(path, false)["config"]
 	if cfg_data.empty() == false and (get_creature_subtype(file) != null or cfg_data.has("attributes")):
 		data[file] = super_merge_dictionaries(data.get(file, {}), cfg_data)
+		paths[file] = path # Last loaded file has the highest priority
 
 func get_creature_symbol_key(value):
 	if value == null:

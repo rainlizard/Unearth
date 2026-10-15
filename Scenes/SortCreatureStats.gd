@@ -5,24 +5,27 @@ onready var oStatsSortButton = Nodelist.list["oStatsSortButton"]
 onready var oShowUnlistedCreatures = Nodelist.list["oShowUnlistedCreatures"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
+onready var oMenu = Nodelist.list["oMenu"]
 
 var name_type = 0
 var sort_descending = false
 
 var all_creature_data = {}
+var creature_paths = {}
 
-var selected_labels = []
+var selected_files = []
 func _on_SortCreatureStats_visibility_changed():
 	if visible == true:
 		start()
 
 func start():
 	all_creature_data = oConfigFileManager.current_data.get("creature_stats", {})
-	selected_labels.clear()
+	creature_paths = oConfigFileManager.current_data.get("creature_stats_paths", {})
+	selected_files.clear()
 	oStatsOptionButton.clear()
-	
+
 	populate_optionbutton()
-	
+
 	var default_index = min(2, oStatsOptionButton.get_item_count() - 1)
 	if default_index >= 0:
 		oStatsOptionButton.select(default_index)
@@ -32,38 +35,32 @@ func _on_StatsOptionButton_item_selected(optionButtonIndex):
 	update_list(optionButtonIndex)
 
 func update_list(optionButtonIndex):
-	
+
 	var list_data = []
 	for i in oSortCreaStatsGrid.get_children():
 		i.free()
-	
+
 	var optionButtonMeta = oStatsOptionButton.get_item_metadata(optionButtonIndex)
-	
+
 	for file in all_creature_data:
 		if oShowUnlistedCreatures.pressed == false and Things.find_subtype_by_name(Things.TYPE.CREATURE, file.get_basename().to_upper()) == null:
 			continue
 		var getName = figure_out_name(file)
-		
+
 		for section in all_creature_data[file]:
 			if section == optionButtonMeta[0]:
-				
+
 				var getValue = all_creature_data[file][section].get(optionButtonMeta[1])
-				list_data.append([getName, getValue])
-	
+				list_data.append([getName, getValue, file])
+
 	list_data.sort_custom(self, "sort_list")
 	if sort_descending:
 		list_data.invert()
 	for i in list_data:
-		var col = Color(0.5,0.5,0.5)
-		var label_text = str(i[0])  # Create a single string with a separator
-		if label_text in selected_labels:
-			col = Color(1.0,1.0,1.0)
-		
-		
 		if i[1] is Array:
 			i[1] = str(i[1]).replace("[", "").replace("]", "").replace(",", "").replace(" ", "  ")
-		
-		add_entry(i[0], i[1], col)
+
+		add_entry(i[2], i[0], i[1])
 
 func figure_out_name(file):
 	var subtype = Things.find_subtype_by_name(Things.TYPE.CREATURE, file.get_basename().to_upper())
@@ -72,7 +69,7 @@ func figure_out_name(file):
 			return file.get_basename().capitalize() if subtype == null else Things.fetch_name(Things.TYPE.CREATURE, subtype)
 		1:
 			return file.get_basename().to_upper() if subtype == null else Things.fetch_id_string(Things.TYPE.CREATURE, subtype)
-		2: 
+		2:
 			return file
 
 
@@ -88,59 +85,38 @@ func sort_value(value):
 		return int(value[0])
 	return 0
 
-func add_entry(string1, value, fontColor):
-	var addLabel1 = Label.new()
-	addLabel1.text = str(string1)
-	oSortCreaStatsGrid.add_child(addLabel1)
-	addLabel1.set("custom_colors/font_color", fontColor)
-	addLabel1.mouse_filter = Control.MOUSE_FILTER_PASS
-	
-	var addLabel2 = Label.new()
-	addLabel2.text = str(value)
-	oSortCreaStatsGrid.add_child(addLabel2)
-	addLabel2.set("custom_colors/font_color", fontColor)
-	addLabel2.mouse_filter = Control.MOUSE_FILTER_PASS
-	
-	addLabel1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	addLabel2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	
-	addLabel1.connect("mouse_entered", self, "_on_label_mouse_entered", [addLabel1, addLabel2])
-	addLabel2.connect("mouse_entered", self, "_on_label_mouse_entered", [addLabel1, addLabel2])
-	
-	addLabel1.connect("mouse_exited", self, "_on_label_mouse_exited", [addLabel1, addLabel2])
-	addLabel2.connect("mouse_exited", self, "_on_label_mouse_exited", [addLabel1, addLabel2])
-	
-	addLabel1.connect("gui_input", self, "_on_label_gui_input", [addLabel1, addLabel2])
-	addLabel2.connect("gui_input", self, "_on_label_gui_input", [addLabel1, addLabel2])
+func add_entry(file, string1, value):
+	var labels = []
+	for text in [string1, value]:
+		var addLabel = Label.new()
+		addLabel.text = str(text)
+		addLabel.hint_tooltip = creature_paths.get(file, "") + "\nDouble-click to edit"
+		addLabel.mouse_filter = Control.MOUSE_FILTER_PASS
+		addLabel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		oSortCreaStatsGrid.add_child(addLabel)
+		labels.append(addLabel)
+	for addLabel in labels:
+		addLabel.connect("mouse_entered", self, "set_labels_highlighted", [file, labels, true])
+		addLabel.connect("mouse_exited", self, "set_labels_highlighted", [file, labels, false])
+		addLabel.connect("gui_input", self, "_on_label_gui_input", [file, labels])
+	set_labels_highlighted(file, labels, false)
 
-func _on_label_mouse_entered(l1,l2):
-	if l1.text in selected_labels:
-		pass
-	else:
-		l1.set("custom_colors/font_color", Color(1,1,1))
-		l2.set("custom_colors/font_color", Color(1,1,1))
+func set_labels_highlighted(file, labels, highlighted):
+	var col = Color(1,1,1) if highlighted or file in selected_files else Color(0.5,0.5,0.5)
+	for l in labels:
+		l.set("custom_colors/font_color", col)
 
-func _on_label_mouse_exited(l1,l2):
-	if l1.text in selected_labels:
-		pass
-	else:
-		l1.set("custom_colors/font_color", Color(0.5,0.5,0.5))
-		l2.set("custom_colors/font_color", Color(0.5,0.5,0.5))
-
-func _on_label_gui_input(event, l1, l2):
+func _on_label_gui_input(event, file, labels):
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
-		var label_text = l1.text
-		if label_text in selected_labels:
-			selected_labels.erase(label_text)
-			l1.set("custom_colors/font_color", Color(0.5,0.5,0.5))
-			l2.set("custom_colors/font_color", Color(0.5,0.5,0.5))
+		if file in selected_files:
+			selected_files.erase(file)
 		else:
-			selected_labels.append(label_text)
-			l1.set("custom_colors/font_color", Color(1, 1, 1))
-			l2.set("custom_colors/font_color", Color(1, 1, 1))
+			selected_files.append(file)
+		set_labels_highlighted(file, labels, file in selected_files)
+		if event.doubleclick: # The second toggle undoes the first click's selection change
+			oMenu.open_externally(creature_paths.get(file, ""), "Could not find file path for " + file)
 
 func _on_NameStatsButton_pressed():
-	selected_labels.clear()
 	name_type += 1
 	if name_type >= 3: name_type = 0
 	update_list(oStatsOptionButton.selected)
@@ -197,4 +173,5 @@ func populate_optionbutton():
 func _on_CCStatsHelpButton_pressed():
 	var helptxt = ""
 	helptxt += "Creature stats are loaded with map configs from /creatrs/, campaign CREATURES_LOCATION, and map-local creature files."
+	helptxt += "\n\nClick creatures to highlight them. Double-click a creature to open its highest priority .cfg file in your system's text editor."
 	oMessage.big("Help",helptxt)
