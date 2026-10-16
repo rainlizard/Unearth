@@ -19,6 +19,8 @@ onready var oObjSubtileSpinBox = Nodelist.list["oObjSubtileSpinBox"]
 onready var oObjRelativeXSpinBox = Nodelist.list["oObjRelativeXSpinBox"]
 onready var oObjRelativeYSpinBox = Nodelist.list["oObjRelativeYSpinBox"]
 onready var oObjRelativeZSpinBox = Nodelist.list["oObjRelativeZSpinBox"]
+onready var oObjOrientationOptionButton = Nodelist.list["oObjOrientationOptionButton"]
+onready var oObjOrientationLabel = Nodelist.list["oObjOrientationLabel"]
 onready var oSlabsetObjectSection = Nodelist.list["oSlabsetObjectSection"]
 onready var oObjSubtypeLabel = Nodelist.list["oObjSubtypeLabel"]
 onready var oObjThingTypeLabel = Nodelist.list["oObjThingTypeLabel"]
@@ -73,6 +75,7 @@ onready var object_field_nodes = [
 	oObjIsLightCheckBox, null, oObjSubtileSpinBox,
 	oObjRelativeXSpinBox, oObjRelativeYSpinBox, oObjRelativeZSpinBox,
 	oObjThingTypeSpinBox, oObjSubtypeSpinBox, oObjEffectRangeSpinBox,
+	oObjOrientationOptionButton,
 ]
 
 func _ready():
@@ -134,6 +137,9 @@ func _ready():
 	oObjRelativeZSpinBox.connect("value_changed", self, "_on_ObjRelativeZSpinBox_value_changed")
 	oObjEffectRangeSpinBox.connect("value_changed", self, "_on_ObjEffectRangeSpinBox_value_changed")
 	oObjIsLightCheckBox.connect("toggled", self, "_on_ObjIsLightCheckBox_toggled")
+	for orientationName in Constants.orientationNames:
+		oObjOrientationOptionButton.add_item(orientationName)
+	oObjOrientationOptionButton.connect("item_selected", self, "_on_ObjOrientationOptionButton_item_selected")
 	
 	var slabsetCopyValues = get_node("HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/SlabsetCopyValues")
 	slabsetCopyValues.connect("pressed", self, "_on_SlabsetCopyValues_pressed")
@@ -376,7 +382,7 @@ func get_list_of_objects(variation):
 
 func adjust_object_color_if_different(variation):
 	var objectIndex = oObjObjectIndexSpinBox.value
-	for property in 9:
+	for property in object_field_nodes.size():
 		var id = object_field_nodes[property]
 		if id == null: continue
 		if id.modulate.a != 0:
@@ -469,6 +475,7 @@ func update_object_fields(index):
 	oObjRelativeXSpinBox.value = obj[3] / 256.0
 	oObjRelativeYSpinBox.value = obj[4] / 256.0
 	oObjRelativeZSpinBox.value = obj[5] / 256.0
+	oObjOrientationOptionButton.selected = posmod(int(round(obj[Slabset.obj.ORIENTATION] / 256.0)), 8) # Nearest of the 8 directions
 
 	oObjThingTypeSpinBox.connect("value_changed", self, "_on_ObjThingTypeSpinBox_value_changed")
 	oObjSubtypeSpinBox.connect("value_changed", self, "_on_ObjSubtypeSpinBox_value_changed")
@@ -479,15 +486,13 @@ func update_object_fields(index):
 	oObjRelativeYSpinBox.connect("value_changed", self, "_on_ObjRelativeYSpinBox_value_changed")
 	oObjRelativeZSpinBox.connect("value_changed", self, "_on_ObjRelativeZSpinBox_value_changed")
 	
-	if obj[0] == 1:
-		oObjSubtypeLabel.text = "Intensity"
-		oObjThingTypeLabel.modulate.a = 0
-		oObjThingTypeSpinBox.modulate.a = 0
-	else:
-		oObjSubtypeLabel.text = "Subtype"
-		oObjThingTypeLabel.modulate.a = 1
-		oObjThingTypeSpinBox.modulate.a = 1
+	set_light_fields_visible(obj[0] == 1)
 	update_obj_name()
+
+func set_light_fields_visible(isLight):
+	oObjSubtypeLabel.text = "Intensity" if isLight else "Subtype"
+	for id in [oObjThingTypeLabel, oObjThingTypeSpinBox, oObjOrientationLabel, oObjOrientationOptionButton]:
+		id.modulate.a = 0 if isLight else 1
 
 func _on_ObjObjectIndexSpinBox_value_changed(value):
 	var variation = get_current_variation()
@@ -520,7 +525,7 @@ func _on_ObjAddButton_pressed():
 
 func add_new_object_to_variation(variation):
 	var randomSubtype = 1
-	var new_object_defaults = [0, variation, 4, 128, 128, 256, 1, randomSubtype, 0]
+	var new_object_defaults = [0, variation, 4, 128, 128, 256, 1, randomSubtype, 0, 0]
 	ensure_tng_array_has_space(variation)
 	Slabset.tng[variation].append(new_object_defaults)
 	var lastEntryIndex = Slabset.tng[variation].size()-1
@@ -566,17 +571,12 @@ func _on_ObjSubtypeSpinBox_value_changed(value:int):
 
 func _on_ObjIsLightCheckBox_toggled(button_pressed:int):
 	oEditor.mapHasBeenEdited = true
+	set_light_fields_visible(button_pressed == 1)
 	if button_pressed == 1:
 		_previous_thing_type = int(oObjThingTypeSpinBox.value)
-		oObjSubtypeLabel.text = "Intensity"
-		oObjThingTypeLabel.modulate.a = 0
-		oObjThingTypeSpinBox.modulate.a = 0
 		update_object_property(Slabset.obj.THING_TYPE, 0)
 		oObjThingTypeSpinBox.value = 0
 	else:
-		oObjSubtypeLabel.text = "Subtype"
-		oObjThingTypeLabel.modulate.a = 1
-		oObjThingTypeSpinBox.modulate.a = 1
 		update_object_property(Slabset.obj.THING_TYPE, _previous_thing_type)
 		oObjThingTypeSpinBox.value = _previous_thing_type
 	update_obj_name()
@@ -586,6 +586,10 @@ func _on_ObjIsLightCheckBox_toggled(button_pressed:int):
 func _on_ObjEffectRangeSpinBox_value_changed(value:int):
 	oEditor.mapHasBeenEdited = true
 	update_object_property(Slabset.obj.EFFECT_RANGE, value)
+
+func _on_ObjOrientationOptionButton_item_selected(index:int):
+	oEditor.mapHasBeenEdited = true
+	update_object_property(Slabset.obj.ORIENTATION, Constants.listOrientations[index])
 
 func _on_ObjSubtileSpinBox_value_changed(value:int):
 	oEditor.mapHasBeenEdited = true
@@ -713,6 +717,8 @@ func _on_VarRotateButton_pressed():
 		var old_relative_y = obj[Slabset.obj.RELATIVE_Y]
 		obj[Slabset.obj.RELATIVE_X] = 256 - old_relative_y
 		obj[Slabset.obj.RELATIVE_Y] = old_relative_x
+		if obj[Slabset.obj.IS_LIGHT] == 0:
+			obj[Slabset.obj.ORIENTATION] = (obj[Slabset.obj.ORIENTATION] + 512) % 2048 # Rotate 90 degrees clockwise
 	update_column_spinboxes()
 	update_objects_ui()
 	oDkSlabsetVoxelView.refresh_entire_view()

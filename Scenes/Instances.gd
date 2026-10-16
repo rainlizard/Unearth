@@ -399,7 +399,8 @@ func place_default_creature(newSubtype, newPosition, newOwnership):
 #Slabset.obj.RELATIVE_Z,   # [5] RelativeZ
 #Slabset.obj.THING_TYPE,   # [6] Thing type
 #Slabset.obj.THING_SUBTYPE,# [7] Thing subtype
-#Slabset.obj.EFFECT_RANGE  # [8] Effect range
+#Slabset.obj.EFFECT_RANGE, # [8] Effect range
+#Slabset.obj.ORIENTATION   # [9] Orientation
 
 func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns from tng file
 	var id
@@ -432,6 +433,7 @@ func spawn_attached(xSlab, ySlab, slabID, ownership, subtile, tngObj): # Spawns 
 		id.data20 = 0
 		id.thingType = tngObj[Slabset.obj.THING_TYPE]
 		id.subtype = tngObj[Slabset.obj.THING_SUBTYPE]
+		id.orientation = tngObj[Slabset.obj.ORIENTATION]
 	
 	id.parentTile = (ySlab * M.xSize) + xSlab
 	

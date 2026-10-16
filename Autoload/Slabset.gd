@@ -20,7 +20,8 @@ enum obj {
 	RELATIVE_Z,   # [5] RelativeZ
 	THING_TYPE,   # [6] Thing type
 	THING_SUBTYPE,# [7] Thing subtype
-	EFFECT_RANGE  # [8] Effect range
+	EFFECT_RANGE, # [8] Effect range
+	ORIENTATION   # [9] Orientation
 }
 
 enum dir {
@@ -88,7 +89,7 @@ func import_toml_slabset(filePath):
 		if parts.size() >= 3: # ["slab34", "CENTER", "objects0"]
 			objectIndex = int(parts[2])
 			while objectIndex >= tng[variation].size():
-				tng[variation].append([0,variation,0, 0,0,0, 0,0,0])
+				tng[variation].append([0,variation,0, 0,0,0, 0,0,0, 0])
 			getObject = tng[variation][objectIndex]
 
 		var keyList = cfg.get_section_keys(section)
@@ -112,6 +113,7 @@ func import_toml_slabset(filePath):
 						getObject[obj.THING_TYPE] = 0
 				"Subtype": getObject[obj.THING_SUBTYPE] = int(value)
 				"EffectRange": getObject[obj.EFFECT_RANGE] = int(value)
+				"Orientation": getObject[obj.ORIENTATION] = int(value)
 	
 	if is_from_fxdata:
 		highest_slabset_id_from_fxdata = max_slab_id_found
@@ -239,7 +241,7 @@ func create_object_list(tng_buffer):
 	object_info.resize(numberOfThings)
 	for i in object_info.size():
 		object_info[i] = []
-		object_info[i].resize(9) #(this is coincidentally size 9, it has nothing to do with subtiles)
+		object_info[i].resize(10)
 		object_info[i][obj.IS_LIGHT] = tng_buffer.get_u8() # 0 = object/effectgen, 1 = light
 		
 		var variation = tng_buffer.get_u16() # Extract the old slab variation index
@@ -258,6 +260,7 @@ func create_object_list(tng_buffer):
 		object_info[i][obj.THING_TYPE] = tng_buffer.get_u8()
 		object_info[i][obj.THING_SUBTYPE] = tng_buffer.get_u8()
 		object_info[i][obj.EFFECT_RANGE] = tng_buffer.get_u8()
+		object_info[i][obj.ORIENTATION] = 0 # Not stored in slabs.tng
 		
 		if object_info[i][obj.IS_LIGHT] == 1:
 			object_info[i][obj.THING_TYPE] = 0
@@ -304,33 +307,17 @@ func export_toml_slabset(filePath, list_of_modified_slabs = null):
 			lines.append("Columns = " + str(dat[variation]))
 
 			if variation < tng.size():
-				for object_properties in tng[variation]:
+				for o in tng[variation]:
 					lines.append("")
 					lines.append("[[slab" + str(slabID) + "." + dirText + "_objects" + "]]")
-					for z in 9:
-						var propertyName
-						var value
-						match z:
-							0:
-								propertyName = "IsLight"
-								value = object_properties[z]
-							2:
-								propertyName = "Subtile"
-								value = object_properties[z]
-							3:
-								propertyName = "RelativePosition"
-								value = [ object_properties[3], object_properties[4], object_properties[5] ]
-							6:
-								propertyName = "ThingType"
-								value = object_properties[z]
-							7:
-								propertyName = "Subtype"
-								value = object_properties[z]
-							8:
-								propertyName = "EffectRange"
-								value = object_properties[z]
-						if propertyName:
-							lines.append(propertyName + " = " + str(value))
+					lines.append("IsLight = " + str(o[obj.IS_LIGHT]))
+					lines.append("Subtile = " + str(o[obj.SUBTILE]))
+					lines.append("RelativePosition = " + str([o[obj.RELATIVE_X], o[obj.RELATIVE_Y], o[obj.RELATIVE_Z]]))
+					lines.append("ThingType = " + str(o[obj.THING_TYPE]))
+					lines.append("Subtype = " + str(o[obj.THING_SUBTYPE]))
+					lines.append("EffectRange = " + str(o[obj.EFFECT_RANGE]))
+					if o[obj.ORIENTATION] != 0:
+						lines.append("Orientation = " + str(o[obj.ORIENTATION]))
 				if tng[variation].empty():
 					lines.append("Objects = []")
 			else:
