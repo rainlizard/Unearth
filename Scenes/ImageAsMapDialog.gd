@@ -1,289 +1,273 @@
 extends WindowDialog
 onready var oChooseMapImageFileDialog = Nodelist.list["oChooseMapImageFileDialog"]
 onready var oMapImageTextureRect = Nodelist.list["oMapImageTextureRect"]
+onready var oImgMapAspectRatioContainer = Nodelist.list["oImgMapAspectRatioContainer"]
+onready var oImgMapInfoLabel = Nodelist.list["oImgMapInfoLabel"]
+onready var oImgMapColourList = Nodelist.list["oImgMapColourList"]
+onready var oImgMapSlabList = Nodelist.list["oImgMapSlabList"]
+onready var oImgMapOwnerGrid = Nodelist.list["oImgMapOwnerGrid"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oDataSlab = Nodelist.list["oDataSlab"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oImageAsMapGuide = Nodelist.list["oImageAsMapGuide"]
 onready var oNewMapWindow = Nodelist.list["oNewMapWindow"]
 onready var oDataClm = Nodelist.list["oDataClm"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+
+const MAX_LISTED_COLOURS = 256
+const NO_FLASH = Color(0.00001, 0.00002, 0.00003, 0.00004) # Matches the shader's default so nothing flashes
+const TRANSPARENT = Color(0,0,0,0)
 
 var imageData = Image.new()
 var sourceImageData = Image.new()
-var textureData = ImageTexture.new()
-var btnGroup = ButtonGroup.new()
-var highlightedColour
-var offsetResultBy = Vector2()
-
-const transparencyColour = Color8(44,42,50,255) # When you click on the background
+var imageName = ""
+var colourOrder = [] # Colours as listed, most common first
+var colourPositions = {} # Colour -> map positions (excluding the border)
+var assignments = {} # Colour -> [slabID, owner]. Kept between images, so a reworked image can be reapplied.
+var selectedColour = null
+var currentOwner = Constants.PLAYER_NEUTRAL
 
 func _ready():
-	oImageAsMapGuide.visible = false
+	oImgMapSlabList.add_item("Unassigned")
 	for slabID in Slabs.slabOrder:
 		# Don't put the junk slabs in
 		if Slabs.data[slabID][Slabs.EDITOR_TAB] == Slabs.TAB_MAINSLAB:
-			var buttonID = Button.new()
-			buttonID.text = Slabs.fetch_name(slabID)
-			buttonID.toggle_mode = true
-			buttonID.group = btnGroup
-			buttonID.connect("pressed",self,"_on_slab_button_pressed",[buttonID])
-			buttonID.set_meta("coloursAssigned", [])
-			buttonID.set_meta("slabID", slabID)
-			
-			$HBoxContainer/VBoxContainer2/ScrollContainer/GridContainer.add_child(buttonID)
+			oImgMapSlabList.add_item(Slabs.fetch_name(slabID))
+			oImgMapSlabList.set_item_metadata(oImgMapSlabList.get_item_count() - 1, slabID)
+	update_guide()
 
 func _on_ImgMapButtonSelectImage_pressed():
 	Utils.popup_centered(oChooseMapImageFileDialog)
 
+func _on_ImgMapButtonNewMap_pressed():
+	Utils.popup_centered(oNewMapWindow)
+
 func _on_ChooseMapImageFileDialog_file_selected(path):
 	var err = sourceImageData.load(path)
-	
+
 	if err != OK:
 		oMessage.quick("Error loading file.")
 		return
-	
-	fit_image_to_current_map_size(true)
 
-func fit_image_to_current_map_size(showMessage):
-	if sourceImageData.is_empty():
-		return
+	sourceImageData.convert(Image.FORMAT_RGBA8) # blit_rect requires matching formats, images without alpha load as RGB8
+	imageName = path.get_file()
+	selectedColour = null
+	fit_image_to_current_map_size()
 
+func fit_image_to_current_map_size():
 	var mapSize = Vector2(M.xSize, M.ySize)
 	var sourceSize = sourceImageData.get_size()
 	var fittedImage = Image.new()
 	fittedImage.copy_from(sourceImageData)
 
+	var fitText = "centered on"
 	if sourceSize.x > mapSize.x or sourceSize.y > mapSize.y:
-		if showMessage == true:
-			oMessage.quick("Image has been downscaled to fit the current map size.")
-		fittedImage.resize(int(mapSize.x), int(mapSize.y), Image.INTERPOLATE_NEAREST) #Image.Interpolation.INTERPOLATE_NEAREST
+		fitText = "downscaled to fit"
+		var fittedSize = (sourceSize * min(mapSize.x / sourceSize.x, mapSize.y / sourceSize.y)).floor()
+		fittedImage.resize(int(max(fittedSize.x, 1)), int(max(fittedSize.y, 1)), Image.INTERPOLATE_NEAREST)
 	elif sourceSize == mapSize:
-		if showMessage == true:
-			oMessage.quick("Image size perfectly matches the current map size.")
-	elif sourceSize.x < mapSize.x or sourceSize.y < mapSize.y:
-		if showMessage == true:
-			oMessage.quick("Image has been centered to fit the current map size.")
+		fitText = "matches"
 
 	imageData.create(int(mapSize.x), int(mapSize.y), false, Image.FORMAT_RGBA8)
-	imageData.fill(Color(0,0,0,0))
+	imageData.fill(TRANSPARENT)
 	var destinationCoordinates = ((mapSize - fittedImage.get_size()) / 2).floor()
 	imageData.blit_rect(fittedImage, Rect2(Vector2(), fittedImage.get_size()), destinationCoordinates)
-	
-	textureData = ImageTexture.new()
+
+	var textureData = ImageTexture.new()
 	textureData.create_from_image(imageData, 0) # flags off
 	oMapImageTextureRect.texture = textureData
-	oImageAsMapGuide.visible = true
+
+	build_colour_list()
+	oImgMapInfoLabel.text = "%s  |  %dx%d image %s %dx%d map  |  %d colours" % [imageName, sourceSize.x, sourceSize.y, fitText, mapSize.x, mapSize.y, colourOrder.size()]
 
 func update_image_if_map_size_changed():
+	var mapSize = Vector2(M.xSize, M.ySize)
+	oImgMapAspectRatioContainer.ratio = mapSize.x / mapSize.y
 	if sourceImageData.is_empty():
-		return
-	if imageData.get_size() != Vector2(M.xSize, M.ySize):
-		fit_image_to_current_map_size(false)
+		oImgMapInfoLabel.text = "Map size: %dx%d" % [mapSize.x, mapSize.y]
+	elif imageData.get_size() != mapSize:
+		fit_image_to_current_map_size()
 
+func build_colour_list():
+	colourPositions.clear()
+	var imageSize = imageData.get_size()
+	imageData.lock()
+	for y in int(imageSize.y):
+		for x in int(imageSize.x):
+			var c = normalise(imageData.get_pixel(x, y))
+			if colourPositions.has(c) == false:
+				colourPositions[c] = []
+			# Don't overwrite the borders
+			if x > 0 and y > 0 and x < imageSize.x-1 and y < imageSize.y-1:
+				colourPositions[c].append(Vector2(x, y))
+	imageData.unlock()
+
+	colourOrder = colourPositions.keys()
+	colourOrder.sort_custom(self, "sort_by_most_common")
+	if colourOrder.size() > MAX_LISTED_COLOURS:
+		oMessage.quick("Image has " + str(colourOrder.size()) + " colours, only the " + str(MAX_LISTED_COLOURS) + " most common are listed. Use an image with fewer colours.")
+		colourOrder.resize(MAX_LISTED_COLOURS)
+
+	oImgMapColourList.clear()
+	for i in colourOrder.size():
+		var swatch = Image.new()
+		swatch.create(16, 16, false, Image.FORMAT_RGBA8)
+		swatch.fill(colourOrder[i])
+		var swatchTexture = ImageTexture.new()
+		swatchTexture.create_from_image(swatch, 0)
+		oImgMapColourList.add_item("", swatchTexture)
+		refresh_colour_item(i)
+
+	select_colour(selectedColour if colourOrder.has(selectedColour) else null)
+
+func sort_by_most_common(a, b):
+	return colourPositions[a].size() > colourPositions[b].size()
+
+func normalise(c):
+	return TRANSPARENT if c.a == 0 else c # All fully transparent pixels count as one colour
+
+func refresh_colour_item(i):
+	var c = colourOrder[i]
+	var text = "Unassigned"
+	if assignments.has(c):
+		var slabID = assignments[c][0]
+		var ownerID = assignments[c][1]
+		text = Slabs.fetch_name(slabID)
+		if ownerID != Constants.PLAYER_NEUTRAL and oSlabPlacement.slabID_is_ownable(slabID):
+			text += " (" + Constants.ownershipNames[ownerID] + ")"
+	if c == TRANSPARENT:
+		text = "Transparent: " + text
+	oImgMapColourList.set_item_text(i, text)
+	oImgMapColourList.set_item_custom_fg_color(i, Color(1,1,1,1) if assignments.has(c) else Color(1,1,1,0.5))
+	oImgMapColourList.set_item_tooltip(i, "R:%d G:%d B:%d A:%d\n%d tiles" % [c.r8, c.g8, c.b8, c.a8, colourPositions[c].size()])
+
+func select_colour(c):
+	selectedColour = c
+	oMapImageTextureRect.material.set_shader_param("flashSpecific", NO_FLASH if c == null else c)
+
+	var slabIndex = 0
+	if assignments.has(c):
+		slabIndex = find_slab_index(assignments[c][0])
+		currentOwner = assignments[c][1]
+		press_owner_button()
+
+	if c == null:
+		oImgMapColourList.unselect_all()
+		oImgMapSlabList.unselect_all()
+	else:
+		oImgMapColourList.select(colourOrder.find(c))
+		oImgMapColourList.ensure_current_is_visible()
+		oImgMapSlabList.select(slabIndex)
+		oImgMapSlabList.ensure_current_is_visible()
+	update_guide()
+
+func find_slab_index(slabID):
+	for i in oImgMapSlabList.get_item_count():
+		if oImgMapSlabList.get_item_metadata(i) == slabID:
+			return i
+	return 0
 
 func _on_MapImageTextureRect_gui_input(event):
-	if visible == false: return
 	if oMapImageTextureRect.texture == null: return
-	
+
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		update_image_if_map_size_changed()
-		
-		var imagePos = get_map_image_mouse_position()
-		if imagePos == null:
-			oMessage.quick("Click within the image.")
-			return
-		
-		var CODETIME_START = OS.get_ticks_msec()
+		var imageSize = imageData.get_size()
+		var imagePos = (event.position / oMapImageTextureRect.rect_size * imageSize).floor()
+		imagePos.x = clamp(imagePos.x, 0, imageSize.x - 1)
+		imagePos.y = clamp(imagePos.y, 0, imageSize.y - 1)
+
 		imageData.lock()
-		var pixel = imageData.get_pixelv(imagePos)
-		highlightedColour = Color8(pixel.r8, pixel.g8, pixel.b8, pixel.a8)
+		var c = normalise(imageData.get_pixelv(imagePos))
 		imageData.unlock()
-		#print(highlightedColour)
-		if highlightedColour == transparencyColour:
-			highlightedColour = Color(0,0,0,0)
-		
-		print('Get pixel time: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-		
-		oMapImageTextureRect.material.set_shader_param("flashSpecific", highlightedColour)
-		
-		for i in btnGroup.get_buttons():
-			if i.get_meta("coloursAssigned").has(highlightedColour) == true:
-				i.pressed = true
-				i.grab_focus() # Will scroll the ScrollContainer to show it
-			else:
-				i.pressed = false
-				i.release_focus()
-		
-		#oMessage.quick("Highlighted colour: " + str(highlightedColour.r8) + "," + str(highlightedColour.g8) + "," + str(highlightedColour.b8))
 
-func get_map_image_mouse_position():
-	var imageSize = imageData.get_size()
-	var previewSize = oMapImageTextureRect.rect_size
-	if imageSize.x <= 0 or imageSize.y <= 0 or previewSize.x <= 0 or previewSize.y <= 0:
-		return null
+		if colourOrder.has(c):
+			select_colour(c)
+		else:
+			oMessage.quick("This colour isn't listed, the image has too many colours.")
 
-	var scale = min(previewSize.x / imageSize.x, previewSize.y / imageSize.y)
-	if scale <= 0:
-		return null
+func _on_ImgMapColourList_item_selected(index):
+	select_colour(colourOrder[index])
 
-	var displayedSize = imageSize * scale
-	var displayedStart = ((previewSize - displayedSize) / 2).floor()
-	var mousePos = oMapImageTextureRect.get_local_mouse_position()
-	if mousePos.x < displayedStart.x or mousePos.y < displayedStart.y:
-		return null
-	if mousePos.x >= displayedStart.x + displayedSize.x or mousePos.y >= displayedStart.y + displayedSize.y:
-		return null
+func _on_ImgMapSlabList_item_selected(index):
+	if selectedColour == null:
+		oImgMapSlabList.unselect_all()
+		oMessage.quick("First click a colour in the image or in the colour list.")
+		return
 
-	var imagePos = ((mousePos - displayedStart) / scale).floor()
-	imagePos.x = clamp(imagePos.x, 0, imageSize.x - 1)
-	imagePos.y = clamp(imagePos.y, 0, imageSize.y - 1)
-	return imagePos
+	var slabID = oImgMapSlabList.get_item_metadata(index)
+	if slabID == null:
+		assignments.erase(selectedColour)
+	else:
+		assignments[selectedColour] = [slabID, currentOwner]
+	refresh_colour_item(colourOrder.find(selectedColour))
+	update_guide()
 
-#CODETIME_START = OS.get_ticks_msec()
-#print('Map to image time: ' + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
+func build_owner_buttons():
+	for child in oImgMapOwnerGrid.get_children():
+		child.free()
 
-func _on_slab_button_pressed(buttonID):
-	yield(get_tree(),'idle_frame')
-	buttonID.pressed = false
-	
+	var ownerOrder = [0,1,2,3,4,6,7,8,5]
+	if oCurrentFormat.selected == Constants.OldFormat:
+		ownerOrder = [0,1,2,3,4,5]
+	if ownerOrder.has(currentOwner) == false:
+		currentOwner = Constants.PLAYER_NEUTRAL
+
+	var ownerGroup = ButtonGroup.new()
+	for ownerID in ownerOrder:
+		var ownerButton = Button.new()
+		ownerButton.toggle_mode = true
+		ownerButton.group = ownerGroup
+		ownerButton.icon = Constants.ownerIcons[ownerID]
+		ownerButton.hint_tooltip = Constants.ownershipNames[ownerID]
+		ownerButton.set_meta("ownerID", ownerID)
+		ownerButton.connect("pressed", self, "_on_owner_button_pressed", [ownerID])
+		oImgMapOwnerGrid.add_child(ownerButton)
+	press_owner_button()
+
+func press_owner_button():
+	for ownerButton in oImgMapOwnerGrid.get_children():
+		ownerButton.pressed = ownerButton.get_meta("ownerID") == currentOwner
+
+func _on_owner_button_pressed(ownerID):
+	currentOwner = ownerID
+	if assignments.has(selectedColour):
+		assignments[selectedColour][1] = ownerID
+		refresh_colour_item(colourOrder.find(selectedColour))
+
+func _on_ImgMapButtonApply_pressed():
 	if oDataClm.cubes.size() == 0:
 		oMessage.quick("Must first create a new map or load an existing map.")
 		return
-	elif oMapImageTextureRect.texture == null:
-		oMessage.quick("Must first load an image.")
-		return
-	elif highlightedColour == null:
-		oMessage.quick("Must first click on a pixel within the image.")
-		return
-	
-	var slabID = buttonID.get_meta("slabID")
-	
-	# Many colours can be assigned to one Button.
-	# Many buttons CANNOT be assigned to one colour.
-	
-	# Remove the presence of this highlighted colour from every other button.
-	for i in btnGroup.get_buttons():
-		var colArr = i.get_meta("coloursAssigned")
-		while colArr.has(highlightedColour) == true:
-			colArr.erase(highlightedColour)
-	# Assign it
-	buttonID.get_meta("coloursAssigned").append(highlightedColour)
-	
-	
-	yield(get_tree(),'idle_frame')
-	var numberOfSlabsApplied = apply_colour_as_slabIDs_to_map(highlightedColour, slabID)
-	yield(get_tree(),'idle_frame')
-	
-	if numberOfSlabsApplied > 0:
-		finish_up()
-	else:
-		oMessage.quick("Must first click on a pixel within the image.")
-	
-	oImageAsMapGuide.visible = false
-
-# The apply button is to make use of being able to remember old colour values, in case you want to make multiple maps
-func _on_ImgMapButtonApply_pressed():
-	var didSomething = false
-	for i in btnGroup.get_buttons():
-		var slabID = i.get_meta("slabID")
-		for doColour in i.get_meta("coloursAssigned"):
-			apply_colour_as_slabIDs_to_map(doColour, slabID)
-			didSomething = true
-	
-	if didSomething == true:
-		finish_up()
-	else:
-		oMessage.quick("You haven't even set any colours yet.")
-
-func apply_colour_as_slabIDs_to_map(doColour, slabID):
 	update_image_if_map_size_changed()
+	var appliedCount = 0
 	var shapePositionArray = []
-	
-	imageData.lock()
-	# Only 83x83 is used within the image. Don't overwrite the borders.
-	
-	var rectStart = Vector2(1, 1)
-	var rectEnd = Vector2(imageData.get_size().x-1, imageData.get_size().y-1)
-	
-	for y in range(rectStart.y, rectEnd.y):
-		for x in range(rectStart.x, rectEnd.x):
-			var c = imageData.get_pixel(x,y)
-			
-			if c == doColour:
-				shapePositionArray.append(Vector2(x,y))
-			elif c.a == 0 and doColour.a == 0: # If the alpha of both is 0, ignore the colour values
-				shapePositionArray.append(Vector2(x,y))
-	imageData.unlock()
-	
-	var useOwner = 5
-	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner)
+	for c in colourOrder:
+		if assignments.has(c):
+			oSlabPlacement.place_shape_of_slab_id(colourPositions[c], assignments[c][0], assignments[c][1])
+			shapePositionArray.append_array(colourPositions[c])
+			appliedCount += 1
+
+	if appliedCount == 0:
+		oMessage.quick("You haven't assigned slabs to any colours yet.")
+		return
 	oSlabPlacement.generate_slabs_based_on_id(shapePositionArray, true)
-	return shapePositionArray.size()
+	oMessage.quick("Applied " + str(appliedCount) + " colours to map.")
 
-func finish_up():
-	oMessage.quick("Applied slabs to map.")
-
-
-func _on_ImgMapButtonNewMap_pressed():
-	Utils.popup_centered(oNewMapWindow)
-
+func update_guide():
+	if sourceImageData.is_empty():
+		oImageAsMapGuide.text = "Select an image to begin. Each pixel becomes one slab, so draw the image at the map size shown above."
+	elif selectedColour == null:
+		oImageAsMapGuide.text = "Click a colour in the image or in the colour list, then pick a slab for it."
+	else:
+		oImageAsMapGuide.text = "Pick a slab and owner for the flashing colour, then press Apply to place everything onto the map."
 
 func _on_ImageAsMapDialog_visibility_changed():
 	if is_instance_valid(oUi) == false: return
 	if visible == true:
 		oUi.hide_tools()
 		rect_position.x = 0
+		build_owner_buttons()
+		update_image_if_map_size_changed()
 	else:
 		oUi.show_tools()
-
-
-##
-#		for getColour in slabColDict:
-			
-		
-		#labelNode.set("custom_colors/font_color", col)
-		
-		# remove the colour from other buttons
-#		for i in btnGroup.get_buttons():
-#			if i.has_meta("colour"):
-#				if i.get_meta("colour") == col:
-#					i.remove_meta("colour")
-#					i.get_meta("colourRectNode").hint_tooltip = ""
-#					i.get_meta("colourRectNode").color = transparencyColour
-#					i.get_meta("colourRectNode").get_child(0).border_color = Color(1, 1, 1, 0)
-		
-		#pressedButton.set_meta("colour", col)
-		
-#		var colourRectNode = pressedButton.get_meta("colourRectNode")
-#
-#		colourRectNode.color = col
-#		colourRectNode.get_child(0).border_color = Color(1, 1, 1, 0.25)
-#
-#		if col == transparencyColour:
-#			colourRectNode.hint_tooltip = "Transparent"
-#		else:
-#			colourRectNode.hint_tooltip = 'R:'+str(col.r8)+', G:'+str(col.g8)+', B:'+str(col.b8)+', A:'+str(col.a8)
-		
-		
-
-#func add_colour_swatch(buttonID):
-#
-#	var colourRectNode = ColorRect.new()
-#	colourRectNode.rect_min_size = Vector2(28,28)
-#	colourRectNode.color = transparencyColour
-#	colourRectNode.hint_tooltip = ""
-#
-#	$HBoxContainer/VBoxContainer2/ScrollContainer/GridContainer.add_child(colourRectNode)
-#
-#	var borderRect = ReferenceRect.new()
-#	borderRect.border_color = Color(1, 1, 1, 0)
-#	borderRect.border_width = 1.0
-#	borderRect.editor_only = false
-#	borderRect.anchor_right = 1.0
-#	borderRect.anchor_bottom = 1.0
-#	borderRect.rect_position.x += 1
-#	borderRect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-#	colourRectNode.add_child(borderRect)
-#
-#	buttonID.set_meta("colourRectNode", colourRectNode)

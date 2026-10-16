@@ -40,16 +40,7 @@ func update_ownership_head_icons():
 		id.set_meta("grid_value", i)
 		id.img_margin = setMargin
 		var setText = ""
-		match i:
-			0: id.img_normal = preload("res://images_ui/plyrsym_32/symbol_player_red_std.png")
-			1: id.img_normal = preload("res://images_ui/plyrsym_32/symbol_player_blue_std.png")
-			2: id.img_normal = preload("res://images_ui/plyrsym_32/symbol_player_green_std.png")
-			3: id.img_normal = preload("res://images_ui/plyrsym_32/symbol_player_yellow_std.png")
-			4: id.img_normal = preload("res://images_ui/plyrsym_32/symbol_player_white_std.png")
-			5: id.img_normal = preload("res://images_ui/plyrsym_32/symbol_player_any_dis.png")
-			6: id.img_normal = preload("res://images_ui/plyrsym_32/symbol_player_purple_std.png")
-			7: id.img_normal = preload("res://images_ui/plyrsym_32/symbol_player_black_std.png")
-			8: id.img_normal = preload("res://images_ui/plyrsym_32/symbol_player_orange_std.png")
+		id.img_normal = Constants.ownerIcons[i]
 		setText = Constants.ownershipNames[i]
 	
 		add_child_to_grid(id, setText, iconSize)

@@ -24,6 +24,17 @@ const ownerRoomCol =   [Color8(156,48,0),  Color8(160,136,180), Color8(56,112,12
 const windowTitleCol = [Color8(153,92,92), Color8(151,118,168), Color8(107,128,84), Color8(178,173,116), Color8(184,184,184), Color8(86,82,102), Color8(153,92,121),  Color8(5,5,5),    Color8(178,134,89)]
 
 const ownershipNames = ["Red","Blue","Green","Yellow","White","None","Purple","Black","Orange"]
+const ownerIcons = [
+	preload("res://images_ui/plyrsym_32/symbol_player_red_std.png"),
+	preload("res://images_ui/plyrsym_32/symbol_player_blue_std.png"),
+	preload("res://images_ui/plyrsym_32/symbol_player_green_std.png"),
+	preload("res://images_ui/plyrsym_32/symbol_player_yellow_std.png"),
+	preload("res://images_ui/plyrsym_32/symbol_player_white_std.png"),
+	preload("res://images_ui/plyrsym_32/symbol_player_any_dis.png"),
+	preload("res://images_ui/plyrsym_32/symbol_player_purple_std.png"),
+	preload("res://images_ui/plyrsym_32/symbol_player_black_std.png"),
+	preload("res://images_ui/plyrsym_32/symbol_player_orange_std.png"),
+]
 
 const listOrientations = [
 	0, # ANGLE_NORTH

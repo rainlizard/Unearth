@@ -4123,81 +4123,152 @@ __meta__ = {
 visible = true
 margin_left = 8.0
 margin_top = 1872.0
-margin_right = 576.0
-margin_bottom = 2295.0
-rect_min_size = Vector2( 568, 233 )
-window_title = "Load image as map"
+margin_right = 1108.0
+margin_bottom = 2512.0
+rect_min_size = Vector2( 840, 520 )
+window_title = "Image to map"
 resizable = true
 script = ExtResource( 104 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog"]
+[node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ImageAsMapDialog"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 8
+custom_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer"]
-margin_right = 379.0
-margin_bottom = 423.0
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 1092.0
+margin_bottom = 632.0
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer"]
+margin_right = 1084.0
+margin_bottom = 27.0
+
+[node name="ImgMapButtonSelectImage" type="Button" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 137.0
+margin_bottom = 27.0
+text = "Select image..."
+
+[node name="ImgMapButtonNewMap" type="Button" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 141.0
+margin_right = 248.0
+margin_bottom = 27.0
+text = "New map..."
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer"]
+margin_top = 31.0
+margin_right = 1084.0
+margin_bottom = 574.0
+size_flags_vertical = 3
+custom_constants/separation = 8
+
+[node name="ImgMapAspectRatioContainer" type="AspectRatioContainer" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_right = 652.0
+margin_bottom = 543.0
+rect_min_size = Vector2( 320, 320 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer"]
-margin_right = 379.0
-margin_bottom = 27.0
+[node name="ColorRect" type="ColorRect" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/ImgMapAspectRatioContainer"]
+margin_left = 54.5
+margin_right = 597.5
+margin_bottom = 543.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 0.35 )
+
+[node name="MapImageTextureRect" type="TextureRect" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/ImgMapAspectRatioContainer"]
+material = SubResource( 14 )
+margin_left = 54.5
+margin_right = 597.5
+margin_bottom = 543.0
+mouse_default_cursor_shape = 3
+expand = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 660.0
+margin_right = 860.0
+margin_bottom = 543.0
+rect_min_size = Vector2( 200, 0 )
+
+[node name="Label" type="Label" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 21.0
+text = "Image colours"
+
+[node name="ImgMapColourList" type="ItemList" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+margin_top = 25.0
+margin_right = 200.0
+margin_bottom = 543.0
+size_flags_vertical = 3
+allow_reselect = true
+fixed_icon_size = Vector2( 16, 16 )
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 868.0
+margin_right = 1084.0
+margin_bottom = 543.0
+rect_min_size = Vector2( 216, 0 )
+
+[node name="Label" type="Label" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+margin_right = 216.0
+margin_bottom = 21.0
+text = "Slab"
+
+[node name="ImgMapSlabList" type="ItemList" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+margin_top = 25.0
+margin_right = 216.0
+margin_bottom = 514.0
+size_flags_vertical = 3
+
+[node name="Label2" type="Label" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+margin_top = 518.0
+margin_right = 216.0
+margin_bottom = 539.0
+text = "Owner"
+
+[node name="ImgMapOwnerGrid" type="GridContainer" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+margin_top = 543.0
+margin_right = 216.0
+margin_bottom = 543.0
+columns = 5
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer"]
+margin_top = 578.0
+margin_right = 1084.0
+margin_bottom = 624.0
+custom_constants/separation = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer3"]
+margin_right = 980.0
+margin_bottom = 46.0
 size_flags_horizontal = 3
 
-[node name="ImgMapButtonNewMap" type="Button" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer"]
-margin_right = 95.0
-margin_bottom = 27.0
-text = "New map"
-
-[node name="ImgMapButtonSelectImage" type="Button" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer"]
-margin_left = 99.0
-margin_right = 224.0
-margin_bottom = 27.0
-text = "Select image"
-
-[node name="ImgMapButtonApply" type="Button" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer"]
-margin_left = 228.0
-margin_right = 312.0
-margin_bottom = 27.0
-text = "Reapply"
-
-[node name="MapImageTextureRect" type="TextureRect" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer"]
-material = SubResource( 14 )
-margin_top = 31.0
-margin_right = 379.0
-margin_bottom = 374.0
-size_flags_horizontal = 7
-size_flags_vertical = 7
-stretch_mode = 5
-
-[node name="ImageAsMapGuide" type="Label" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer"]
-margin_top = 378.0
-margin_right = 379.0
-margin_bottom = 423.0
-text = "Click the pixels in the image above, then click a slab button to add slabs."
+[node name="ImgMapInfoLabel" type="Label" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+margin_right = 980.0
+margin_bottom = 21.0
+custom_colors/font_color = Color( 1, 1, 1, 0.5 )
 autowrap = true
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer"]
-margin_left = 383.0
-margin_right = 568.0
-margin_bottom = 423.0
-rect_min_size = Vector2( 185, 0 )
-size_flags_horizontal = 8
-size_flags_vertical = 3
+[node name="ImageAsMapGuide" type="Label" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
+margin_top = 25.0
+margin_right = 980.0
+margin_bottom = 46.0
+autowrap = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer2"]
-margin_right = 185.0
-margin_bottom = 423.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-follow_focus = true
-
-[node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer2/ScrollContainer"]
-margin_right = 185.0
-margin_bottom = 423.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="ImgMapButtonApply" type="Button" parent="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer3"]
+margin_left = 988.0
+margin_top = 19.0
+margin_right = 1084.0
+margin_bottom = 46.0
+rect_min_size = Vector2( 96, 0 )
+size_flags_vertical = 8
+text = "Apply"
 
 [node name="ChooseMapImageFileDialog" type="FileDialog" parent="Ui/UiSystem"]
 visible = true
@@ -4206,13 +4277,13 @@ margin_top = 4000.0
 margin_right = 3000.0
 margin_bottom = 4562.0
 rect_min_size = Vector2( 300, 105 )
-window_title = "Select a .png image"
+window_title = "Select an image"
 resizable = true
 dialog_hide_on_ok = true
 mode_overrides_title = false
 mode = 0
 access = 2
-filters = PoolStringArray( "*.png" )
+filters = PoolStringArray( "*.png, *.bmp ; Images" )
 show_hidden_files = true
 
 [node name="MapSettingsWindow" type="WindowDialog" parent="Ui/UiSystem"]
@@ -8708,10 +8779,12 @@ margin_bottom = 40.0
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmCreateLua" to="Ui/UiTop/Menu" method="_on_ConfirmCreateLua_confirmed"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ImageAsMapDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImageAsMapDialog_visibility_changed"]
-[connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonNewMap" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonNewMap_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonSelectImage" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonSelectImage_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/HBoxContainer/ImgMapButtonApply" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonApply_pressed"]
-[connection signal="gui_input" from="Ui/UiSystem/ImageAsMapDialog/HBoxContainer/VBoxContainer/MapImageTextureRect" to="Ui/UiSystem/ImageAsMapDialog" method="_on_MapImageTextureRect_gui_input"]
+[connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer/ImgMapButtonSelectImage" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonSelectImage_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer/ImgMapButtonNewMap" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonNewMap_pressed"]
+[connection signal="gui_input" from="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/ImgMapAspectRatioContainer/MapImageTextureRect" to="Ui/UiSystem/ImageAsMapDialog" method="_on_MapImageTextureRect_gui_input"]
+[connection signal="item_selected" from="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/ImgMapColourList" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapColourList_item_selected"]
+[connection signal="item_selected" from="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ImgMapSlabList" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapSlabList_item_selected"]
+[connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer3/ImgMapButtonApply" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonApply_pressed"]
 [connection signal="file_selected" from="Ui/UiSystem/ChooseMapImageFileDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ChooseMapImageFileDialog_file_selected"]
 [connection signal="about_to_show" from="Ui/UiSystem/MapSettingsWindow" to="Ui/UiSystem/MapSettingsWindow" method="_on_MapSettingsWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/MapSettingsWindow/MapProperties" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_MapProperties_visibility_changed"]
