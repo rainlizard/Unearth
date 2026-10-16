@@ -260,7 +260,7 @@ func open():
 		if call.command.ends_with("_AVAILABLE") and call.line.depth == 0 and target >= 0:
 			oBasicPlayerTabs.get_child(target).pressed = true
 			break
-	apply({"text": set_victory(oDataScript.data) if oCurrentMap.DKScript_enabled else oDataScript.data, "line": 0}) # Hearts may have changed since
+	refresh() # Opening never edits the script, victory blocks are only updated by the options that affect them
 
 
 # Reads every control's value back from the script, so the script is always the only source of truth.
@@ -476,11 +476,12 @@ func _on_AIOption_item_selected(index):
 
 
 # Every colour a human can play wins once all other dungeon hearts are destroyed, like KeeperFX's multiplayer maps.
-# Without an enemy keeper ALL_DUNGEONS_DESTROYED is true from the start, so the blocks are removed rather than winning instantly.
+# Without an enemy heart ALL_DUNGEONS_DESTROYED is true from the start, so the blocks are removed rather than winning instantly.
+# The heroes always exist in KeeperFX, so their heart counts without a COMPUTER_PLAYER line.
 func set_victory(text):
 	var parsed = patcher.parse(text)
 	var humans = human_slots(text)
-	var opposed = humans > 1
+	var opposed = humans > 1 or oInstances.check_for_dungeon_heart(Constants.PLAYER_WHITE)
 	for index in range(humans, PLAYERS.size()):
 		opposed = opposed or (patcher.find(parsed, "COMPUTER_PLAYER", [PLAYERS[index]]).empty() == false and oInstances.check_for_dungeon_heart(AI_HEART_OWNERS[index]))
 	var wins = 0
