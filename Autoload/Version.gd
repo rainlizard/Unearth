@@ -1,6 +1,6 @@
 ﻿extends Node
 
-var major_minor = "0.72"
+var major_minor = "0.73"
 var patch = "0000"
 var full = ""
 var unearth_map_format_version:float = 1.06
@@ -9,6 +9,28 @@ func _init():
 	full = major_minor + "." + patch
 
 const changelog = """
+<version> - <date>
+- New script editor: basic options (rooms, spells, creatures, traps, doors, portal pool, gold, max creatures, portal rate and computer players) now edit your script in place instead of generating a new one, and are read back from it so the script is always the source of truth
+- Script editor has a tab for All players plus one per keeper, hovering an option highlights its line or previews the line a click would add, and left/right clicking cycles availability forwards/backwards
+- New maps start with a playable default script
+- Added Map and Script menus: Map properties, Rules, Slabset, Config files and Open map folder are under Map; DKScript, Lua, Script command reference and Open log are under Script
+- Image to map has been reworked: image colours are listed with the most common first, and each colour is given a slab and an owner before pressing Apply
+- 'Attached to' has been replaced by a 'Part of slab' checkbox for Objects, EffectGens and random doodads
+- Lights can be random doodads, with their own range and intensity
+- Slabset objects have an Orientation setting
+- Window title shows the map name
+- Creature Stats: double-click a creature to open its .cfg file in your text editor
+- Cube changes are saved to the campaign's cubes.cfg if it has one, otherwise to a local mapname.cubes.cfg
+- Campaign config files (rules, slabset, columnset, cubes) are no longer rewritten when saving unless you edited them
+- Rules keys that don't exist in fxdata (such as differently-cased keys) are no longer dropped when saving
+- Slabset variations in a later file now replace the earlier objects instead of merging with them, matching KeeperFX
+- Switching to Old format moves columns above index 2048 down instead of losing them, or refuses if there isn't room
+- Saving, opening, undoing, resizing and Image to map now wait for slab generation to finish, which could previously corrupt the map
+- Fixed decompressing a map opening the wrong file, looping forever if decompression failed, and cancelling discarding your current map's unsaved state
+- An externally edited script is no longer reloaded over unsaved script changes made in Unearth
+- Backup pruning no longer freezes the editor and never deletes the backup that was just made. Backup folder sizes are now cached in /backups/foldersizes.cache instead of settings.cfg
+- Fixed the Properties window going off-screen on small screens and resizing incorrectly
+- Column tab values stay on one line so the Properties window doesn't resize while hovering
 0.72.1019 - 25/9/2026
 - Added 'random doodads' feature: decorations placed at random on your slabs with a chance percentage, orientation and 'Attached to' setting. Lists are stored per slab in settings.cfg and edited via 'Add random doodad' in the Create tab
 - The 'Place Dripping Water effect' and 'Place Lava effect' percentage preferences were replaced with default doodads for water and lava
