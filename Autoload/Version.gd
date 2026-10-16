@@ -10,7 +10,7 @@ func _init():
 
 const changelog = """
 0.73.1038 - 17/10/2026
-- New script editor: basic options (rooms, spells, creatures, traps, doors, portal pool, gold, max creatures, portal rate and computer players) now edit your script in place instead of generating a new one, and are read back from it so the script is always the source of truth
+- New script editor: basic options now edit your script in place instead of generating a new one, and are read back from it so the script is always the source of truth
 - Script editor has a tab for All players plus one per keeper, hovering an option highlights its line or previews the line a click would add, and left/right clicking cycles availability forwards/backwards
 - New maps start with a playable default script
 - Added Map and Script menus: Map properties, Rules, Slabset, Config files and Open map folder are under Map; DKScript, Lua, Script command reference and Open log are under Script
