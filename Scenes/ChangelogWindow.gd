@@ -3,8 +3,6 @@ onready var oChangelogMainVBox = Nodelist.list["oChangelogMainVBox"]
 onready var scene = preload("res://Scenes/ChangelogSection.tscn")
 onready var oGame = Nodelist.list["oGame"]
 
-const txt = preload("res://changelog.gd").string
-
 func _ready():
 	# Wait for settings.gd to finish reading
 	for i in 50:
@@ -18,7 +16,7 @@ func _ready():
 func parse_changelog_file():
 	var CODETIME_START = OS.get_ticks_msec()
 	var sections = []
-	var text = txt
+	var text = Version.changelog
 	var current_version = ""
 	var current_date = ""
 	var current_body = PoolStringArray()

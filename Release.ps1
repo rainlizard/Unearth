@@ -1,11 +1,12 @@
 # Set the working directory to the script's directory
 Set-Location -Path $PSScriptRoot
 
-# Read the contents of Autoload/Version.gd
-$versionFile = Get-Content -Path "Autoload/Version.gd"
+# Read Autoload/Version.gd, which holds both the version and the changelog
+$versionPath = "Autoload/Version.gd"
+$versionFile = Get-Content -Path $versionPath -Raw
 
 # Extract the major and minor version from the file
-$majorMinorVersion = $versionFile | Select-String -Pattern 'var major_minor = "(.+)"' | ForEach-Object { $_.Matches.Groups[1].Value }
+$majorMinorVersion = [regex]::Match($versionFile, 'var major_minor = "(.+)"').Groups[1].Value
 
 # Get the current commit count and add 1 for the changelog commit we're about to make
 $commitCount = [int](git rev-list --count HEAD) + 1
@@ -16,23 +17,20 @@ $fullVersion = "$majorMinorVersion.$commitCount"
 # Get current date in d/M/yyyy format
 $currentDate = Get-Date -Format "d/M/yyyy"
 
-Write-Host "Reminder: you may want to manually edit Autoload/Version.gd first!"
-Write-Host "Reminder: changelog.gd should have <version> - <date> written for the top version, so it can be edited by this script."
+Write-Host "Reminder: you may want to manually edit major_minor in Autoload/Version.gd first!"
+Write-Host "Reminder: the changelog in Autoload/Version.gd should have <version> - <date> written for the top version, so it can be edited by this script."
 Write-Host "Creating release for version $fullVersion"
 Write-Host "Press Enter to continue or Ctrl+C to cancel..."
 Read-Host
 
-# Read changelog.gd file
-$changelogFile = Get-Content -Path "changelog.gd" -Raw
-
-# Replace placeholders with actual values
-$updatedChangelog = $changelogFile -replace '<version>', $fullVersion -replace '<date>', $currentDate
+# Replace the changelog placeholders with actual values
+$updatedVersionFile = $versionFile -replace '<version>', $fullVersion -replace '<date>', $currentDate
 
 # Write the updated changelog back to the file
-$updatedChangelog | Out-File -FilePath "changelog.gd" -Encoding utf8 -NoNewline
+$updatedVersionFile | Out-File -FilePath $versionPath -Encoding utf8 -NoNewline
 
 # Stage and commit the changelog changes
-git add changelog.gd
+git add $versionPath
 git commit -m "Release $fullVersion"
 
 # Verify the commit count matches our expectation
