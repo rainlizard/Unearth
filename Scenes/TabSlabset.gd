@@ -369,6 +369,10 @@ func ensure_tng_array_has_space(variation):
 	while variation >= Slabset.tng.size():
 		Slabset.tng.append([])
 
+func ensure_variation_has_space(variation):
+	ensure_dat_array_has_space(variation)
+	ensure_tng_array_has_space(variation)
+
 func _on_SlabsetCopyValues_pressed():
 	oAddCustomSlabWindow.copy_values_from_slabset_and_index_them()
 	oSlabsetWindow.visible = false
@@ -704,7 +708,7 @@ func paste(howMany):
 func _on_VarRotateButton_pressed():
 	oEditor.mapHasBeenEdited = true
 	var variation = get_current_variation()
-	ensure_dat_array_has_space(variation)
+	ensure_variation_has_space(variation)
 	var new_dat = []
 	for i in 9:
 		new_dat.append(Slabset.dat[variation][ROTATION_MAP[i]])
@@ -750,6 +754,7 @@ func revert(variations_to_revert):
 		if Slabset.default_data.has("tng") and variation < Slabset.default_data["tng"].size():
 			setToTng = Slabset.default_data["tng"][variation].duplicate(true)
 		
+		ensure_variation_has_space(variation)
 		Slabset.dat[variation] = setToDat
 		Slabset.tng[variation] = setToTng
 	update_column_spinboxes()

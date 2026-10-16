@@ -239,6 +239,8 @@ func _on_ImgMapButtonApply_pressed():
 	if oDataClm.cubes.size() == 0:
 		oMessage.quick("Must first create a new map or load an existing map.")
 		return
+	if oSlabPlacement.block_while_generating():
+		return
 	update_image_if_map_size_changed()
 	var appliedCount = 0
 	var shapePositionArray = []

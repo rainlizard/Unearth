@@ -104,6 +104,13 @@ func update_flash_state():
 	var columnIndex = int(oClmEditorControls.oColumnIndexSpinBox.value)
 	oFlashingColumns.start_column_flash(columnIndex)
 
+# Switching map format changes oDataClm.column_count, which the editor caches
+func refresh_column_count():
+	oClmEditorVoxelView.column_count = oDataClm.column_count
+	oClmEditorControls.oColumnIndexSpinBox.max_value = oDataClm.column_count - 1
+	if is_visible_in_tree():
+		oClmEditorVoxelView.refresh_entire_view()
+
 # When re-opening window or opening for first time
 func _on_ColumnEditor_visibility_changed():
 	if visible == true:

@@ -96,6 +96,38 @@ func _on_files_dropped(_files, _screen):
 	open_map(_files[0])
 
 func open_map(filePath, options = {}):
+	if oSlabPlacement.block_while_generating():
+		return false
+	# Prevent opening any maps under any circumstance if you haven't set the dk exe yet. (Fix to launching via file association)
+	if oGame.EXECUTABLE_PATH == "":
+		oMessage.quick("Error: Cannot open map because game executable is not set. Set in File -> Preferences")
+		return
+
+	# a filePath of "" means make a blank map.
+
+	# This will replace \ with /, just for the sake of fixing ugliness
+	filePath = filePath.replace("\\", "/")
+	var map = filePath.get_basename()
+	var mapFilePaths = get_accompanying_files(map)
+
+	# Decompress before asking to discard changes, so cancelling either dialog leaves the current map and its edited state intact
+	compressedFiles.clear()
+	for i in mapFilePaths.values():
+		if oRNC.check_for_rnc_compression(i[oCurrentMap.PATHSTRING]) == true:
+			compressedFiles.append(i[oCurrentMap.PATHSTRING])
+	if compressedFiles.empty() == false:
+		pending_open = [filePath, options]
+		if ALWAYS_DECOMPRESS == true:
+			_on_ConfirmDecompression_confirmed()
+		else:
+			var dialogText = "In order to open this map, these files must be decompressed: \n\n"
+			for i in compressedFiles:
+				dialogText += i + '\n'
+			dialogText += "\n" + "This will result in overwriting, continue?"
+			oConfirmDecompression.set_dialog_text(dialogText)
+			Utils.popup_centered(oConfirmDecompression)
+		return false
+
 	if oEditor.mapHasBeenEdited:
 		pending_open = [filePath, options]
 		if filePath == "":
@@ -106,21 +138,8 @@ func open_map(filePath, options = {}):
 		return false
 	var show_opened_message = options.get("show_opened_message", true)
 	var reset_camera = options.get("reset_camera", true)
-	var loaded_from_backup = options.get("loaded_from_backup", false)
-	
-	# a filePath of "" means make a blank map.
-	
-	# This will replace \ with /, just for the sake of fixing ugliness
-	filePath = filePath.replace("\\", "/")
-	if loaded_from_backup == false and oMapBackups.is_backup_path(filePath) == true:
-		loaded_from_backup = true
-	oCurrentMap.loaded_from_backup = loaded_from_backup
-	
-	# Prevent opening any maps under any circumstance if you haven't set the dk exe yet. (Fix to launching via file association)
-	if oGame.EXECUTABLE_PATH == "":
-		oMessage.quick("Error: Cannot open map because game executable is not set. Set in File -> Preferences")
-		return
-	
+	oCurrentMap.loaded_from_backup = options.get("loaded_from_backup", false) or oMapBackups.is_backup_path(filePath)
+
 	# Prevent opening any maps under any circumstance if textures haven't been loaded. (Fix to launching via file association)
 #	if oTMapLoader.texturesLoadedState != oTMapLoader.LOADING_SUCCESS:
 #		oMessage.quick("Error: Cannot open map because textures haven't been loaded")
@@ -133,10 +152,8 @@ func open_map(filePath, options = {}):
 	oTabTileset.clear_modified_tileset()
 	oCurrentMap.clear_map()
 	
-	var map = filePath.get_basename()
-	
 	# Open all map file types
-	oCurrentMap.currentFilePaths = get_accompanying_files(map)
+	oCurrentMap.currentFilePaths = mapFilePaths
 	oCurrentMap.DKScript_enabled = oCurrentMap.currentFilePaths.has("TXT")
 	oCurrentMap.LuaScript_enabled = oCurrentMap.currentFilePaths.has("LUA")
 	
@@ -149,76 +166,58 @@ func open_map(filePath, options = {}):
 		else:
 			oCurrentFormat.selected = Constants.OldFormat
 	
-	compressedFiles.clear()
-	for i in oCurrentMap.currentFilePaths.values():
-		if oRNC.check_for_rnc_compression(i[oCurrentMap.PATHSTRING]) == true:
-			compressedFiles.append(i[oCurrentMap.PATHSTRING])
-	
 	oCfgLoader.start(filePath)
 	oDataLof.use_campaign_map_size(filePath)
 	
-	if compressedFiles.empty() == true:
-		# Load files
-		
-		if oNewMapWindow.visible == true:
-			oDataLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
-			print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
-		
-		var mapReadCount = 0
-		var mapReadTime = 0
-		var missingMapFiles = []
-		oInstances.bulk_loading = true
-		for EXT in oBuffers.FILE_TYPES:
-			if oCurrentMap.currentFilePaths.has(EXT) == true:
-				if should_read_file(EXT) == false:
-					continue
-				
-				var readPath = oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING]
-				var readStart = OS.get_ticks_msec()
-				if oBuffers.read(readPath, EXT.to_upper(), false):
-					mapReadCount += 1
-					mapReadTime += OS.get_ticks_msec() - readStart
-			else:
-				missingMapFiles.append(EXT)
-				oBuffers.new_blank(EXT.to_upper())
-				
-				# Assign name data to any that's missing
-				if EXT == "LIF":
-					var mapName = oDataMapName.get_special_lif_text(filePath)
-					if mapName != "":
-						print("LIF was missing so assign the special name: " + mapName)
-						oDataMapName.set_map_name(mapName)
-				
-				# Some maps can function without WLB files. So build them here.
-				# Generate WLB values from SLB. This is dependent on SLB being ordered before WLB inside Filetypes.FILE_TYPES
-				if EXT == "WLB":
-					for ySlab in M.ySize:
-						for xSlab in M.xSize:
-							var slabID = oDataSlab.get_cell(xSlab, ySlab)
-							oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
-		for doorID in get_tree().get_nodes_in_group("Door"):
-			if doorID.doorLocked != 0:
-				doorID.update_spinning_key()
-		oInstances.bulk_loading = false
-		oInstanceList.update_if_visible()
-		if mapReadCount > 0:
-			print('Read map files: ' + str(mapReadCount) + ' files in ' + str(mapReadTime) + 'ms')
-		if missingMapFiles.empty() == false:
-			print('Missing map files, created blanks: ' + ", ".join(missingMapFiles))
-		
-		continue_load(map)
-		continue_load_openmap(map, show_opened_message, reset_camera)
-	else:
-		if ALWAYS_DECOMPRESS == false:
-			var dialogText = "In order to open this map, these files must be decompressed: \n\n" #'Unable to open map, it contains files which have RNC compression: \n\n'
-			for i in compressedFiles:
-				dialogText += i + '\n'
-			dialogText += "\n" + "This will result in overwriting, continue?" #Decompress these files? (Warning: they will be overwritten)
-			oConfirmDecompression.set_dialog_text(dialogText)
-			Utils.popup_centered(oConfirmDecompression)
+	# Load files
+	if oNewMapWindow.visible == true:
+		oDataLof.use_size(oXSizeLine.text.to_int(), oYSizeLine.text.to_int())
+		print("NEW MAPSIZE = " + str(M.xSize) + " " + str(M.ySize))
+	
+	var mapReadCount = 0
+	var mapReadTime = 0
+	var missingMapFiles = []
+	oInstances.bulk_loading = true
+	for EXT in oBuffers.FILE_TYPES:
+		if oCurrentMap.currentFilePaths.has(EXT) == true:
+			if should_read_file(EXT) == false:
+				continue
+			
+			var readPath = oCurrentMap.currentFilePaths[EXT][oCurrentMap.PATHSTRING]
+			var readStart = OS.get_ticks_msec()
+			if oBuffers.read(readPath, EXT.to_upper(), false):
+				mapReadCount += 1
+				mapReadTime += OS.get_ticks_msec() - readStart
 		else:
-			# Begin decompression without confirmation dialog
-			_on_ConfirmDecompression_confirmed()
+			missingMapFiles.append(EXT)
+			oBuffers.new_blank(EXT.to_upper())
+			
+			# Assign name data to any that's missing
+			if EXT == "LIF":
+				var mapName = oDataMapName.get_special_lif_text(filePath)
+				if mapName != "":
+					print("LIF was missing so assign the special name: " + mapName)
+					oDataMapName.set_map_name(mapName)
+			
+			# Some maps can function without WLB files. So build them here.
+			# Generate WLB values from SLB. This is dependent on SLB being ordered before WLB inside Filetypes.FILE_TYPES
+			if EXT == "WLB":
+				for ySlab in M.ySize:
+					for xSlab in M.xSize:
+						var slabID = oDataSlab.get_cell(xSlab, ySlab)
+						oDataLiquid.set_cell(xSlab, ySlab, Slabs.data[slabID][Slabs.LIQUID_TYPE])
+	for doorID in get_tree().get_nodes_in_group("Door"):
+		if doorID.doorLocked != 0:
+			doorID.update_spinning_key()
+	oInstances.bulk_loading = false
+	oInstanceList.update_if_visible()
+	if mapReadCount > 0:
+		print('Read map files: ' + str(mapReadCount) + ' files in ' + str(mapReadTime) + 'ms')
+	if missingMapFiles.empty() == false:
+		print('Missing map files, created blanks: ' + ", ".join(missingMapFiles))
+	
+	continue_load(map)
+	continue_load_openmap(map, show_opened_message, reset_camera)
 	return true
 
 
@@ -325,10 +324,11 @@ func continue_load_openmap(map, show_opened_message = true, reset_camera = true)
 	# When opening a map, be sure that column 0 is empty. Otherwise apply a fix.
 	if oDataClm.permanent[0] != 0 or oDataClm.cubes[0] != [0,0,0,0, 0,0,0,0]:
 		# Make column 0 empty while preserving the column that was there.
-		oDataClm.sort_columns_by_utilized()
-		oDataClm.delete_column(0)
-		oEditor.mapHasBeenEdited = true
-		oMessage.quick("Fixed column index 0, re-save your map.")
+		if oDataClm.move_column_zero_to_unused_index():
+			oEditor.mapHasBeenEdited = true
+			oMessage.quick("Fixed column index 0, re-save your map.")
+		else:
+			oMessage.big("Warning", "Column index 0 is not empty, but there is no free column entry to move it to, so it was left unchanged.")
 	oDataClm.store_default_data()
 	
 	if reset_camera:
@@ -342,16 +342,23 @@ func continue_load_openmap(map, show_opened_message = true, reset_camera = true)
 func _on_ConfirmDecompression_confirmed():
 	print('Attempting to decompress...')
 	
+	var failedFiles = []
 	for path in compressedFiles:
 		var CODETIME_START = OS.get_ticks_msec()
 		var result = oRNC.decompress(path)
 		if result.empty():
 			printerr("Failed to decompress: ", path)
+			failedFiles.append(path)
 		else:
 			print('RNC decompressing ' + path + " : " + str(OS.get_ticks_msec() - CODETIME_START) + 'ms')
-	
+
+	# Retrying would hit the same compressed files again and loop forever
+	if failedFiles.empty() == false:
+		oMessage.big("Error", "Could not decompress these files, so the map was not opened. They may be read-only or corrupted:\n\n" + "\n".join(failedFiles))
+		return
+
 	# Retry opening the map
-	open_map(compressedFiles[0])
+	open_map(pending_open[0], pending_open[1])
 
 
 func _on_ConfirmDiscardChanges_confirmed():

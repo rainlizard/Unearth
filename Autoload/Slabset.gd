@@ -60,6 +60,7 @@ func import_toml_slabset(filePath):
 	
 	var is_from_fxdata = "fxdata" in filePath
 	var max_slab_id_found = 0
+	var variations_with_replaced_objects = {}
 	
 	for section in cfg.get_sections():
 		var parts = section.split(".")
@@ -83,6 +84,11 @@ func import_toml_slabset(filePath):
 			continue
 		var localVariation = int(dir_numbers[parts[1]])
 		var variation = (slabID * 28) + localVariation
+
+		# Like KeeperFX, a variation mentioned in this file replaces (not merges with) its previously loaded objects
+		if not variations_with_replaced_objects.has(variation):
+			variations_with_replaced_objects[variation] = true
+			tng[variation] = []
 
 		var objectIndex = -1
 		var getObject

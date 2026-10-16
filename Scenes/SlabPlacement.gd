@@ -59,6 +59,14 @@ enum {
 }
 
 var autogen_was_called = false
+var activeGenerations = 0 # Slab generation yields part way through, so anything that replaces map data must wait for it
+
+
+func block_while_generating():
+	if activeGenerations > 0:
+		oMessage.quick("Please wait for slab generation to finish.")
+		return true
+	return false
 
 
 func should_reset(options, optionName):
@@ -273,9 +281,10 @@ func get_column_index_from_lookup(cubes, floorTexture):
 func generate_slabs_based_on_id(shapePositionArray, updateNearby, options = {}):
 	oOverheadOwnership.update_ownership_image_based_on_shape(shapePositionArray)
 	var CODETIME_START = OS.get_ticks_msec()
-	
+	activeGenerations += 1
+
 	oEditor.mapHasBeenEdited = true
-	
+
 	# When adjusting "only ownership", do not affect the ownership of things on surrounding slabs (but we do need to adjust those slabs so we can't just set updateNearby to false)
 	if oOnlyOwnership.visible == true and autogen_was_called == false:
 		for pos in shapePositionArray:
@@ -349,8 +358,9 @@ func generate_slabs_based_on_id(shapePositionArray, updateNearby, options = {}):
 	
 	# Clear lookup dictionary after operation to free memory
 	lookupClmSpeedup.clear()
-	
-	oLoadingBar.visible = false
+
+	activeGenerations -= 1
+	oLoadingBar.visible = activeGenerations > 0 # Overlapping generations (such as mirrored placement) keep it up until the last one ends
 	
 	print('Generated slabs in: '+str(OS.get_ticks_msec()-CODETIME_START)+'ms')
 	
@@ -447,6 +457,8 @@ func slab_place_fake(xSlab, ySlab, slabID, ownership, surrID, options):
 
 
 func _on_ConfirmUpdateAllSlabs_pressed():
+	if block_while_generating():
+		return
 	var CODETIME_START = OS.get_ticks_msec()
 	var options = {}
 	for child in oUpdateAllSlabsWindow.get_node("VBoxContainer").get_children():

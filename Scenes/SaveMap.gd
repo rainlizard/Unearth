@@ -19,6 +19,7 @@ onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMapBackups = Nodelist.list["oMapBackups"]
 onready var oTabTileset = Nodelist.list["oTabTileset"]
+onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 
 var queueExit = false
 
@@ -31,6 +32,9 @@ func save_map(filePath):
 	var map_filename_no_ext = map_basename_with_ext.get_basename()
 	var map_base_dir = filePath.get_base_dir()
 	var SAVETIME_START = OS.get_ticks_msec()
+	if oSlabPlacement.block_while_generating():
+		queueExit = false
+		return false
 
 	if oMapBackups.backup_existing_map_files(filePath) == false:
 		oMessage.big("Error", "Saving cancelled because the existing map files could not be backed up. Try moving Unearth to a writable directory.")
@@ -109,7 +113,7 @@ func save_map(filePath):
 		queueExit = false
 		return false
 
-	if oCurrentMap.loaded_from_backup == false and oConfigFileManager.copy_current_map_files(oCurrentMap.path, filePath) == false:
+	if oConfigFileManager.copy_current_map_files(oCurrentMap.path, filePath) == false:
 		oMessage.big("Error", "Saving failed while copying map config files. Try saving to a different directory.")
 		queueExit = false
 		return false
@@ -136,6 +140,7 @@ func save_map(filePath):
 	oDataClm.store_default_data()
 	Slabset.store_loaded_data()
 	Columnset.store_loaded_data()
+	oConfigFileManager.store_loaded_rules_data()
 	oMapSettingsWindow.visible = false
 	if queueExit:
 		get_tree().quit()
@@ -219,14 +224,14 @@ func save_toml_file(file_type, map_filename_no_ext, map_base_dir):
 	var export_success = false
 	match file_type:
 		"slabset.toml":
-			if Slabset.has_changes_since_load() == false:
+			if config_needs_saving(Slabset.has_changes_since_load()) == false:
 				return true
 			var list_of_modified_slabs = Slabset.get_all_modified_slabs()
 			if list_of_modified_slabs.empty():
 				return delete_config_file_if_exists(file_path, file_type)
 			export_success = Slabset.export_toml_slabset(file_path, list_of_modified_slabs)
 		"columnset.toml":
-			if Columnset.has_changes_since_load() == false:
+			if config_needs_saving(Columnset.has_changes_since_load()) == false:
 				return true
 			var column_diffs = Columnset.find_all_different_columns()
 			if column_diffs.empty():
@@ -238,7 +243,14 @@ func save_toml_file(file_type, map_filename_no_ext, map_base_dir):
 	return export_success
 
 
+# Don't rewrite (or trash) a possibly shared campaign config unless it was edited. Backups are restored in full, so they always write their configs.
+func config_needs_saving(changed_since_load):
+	return changed_since_load or oCurrentMap.loaded_from_backup
+
+
 func save_rules_cfg_file(file_type, map_filename_no_ext, map_base_dir):
+	if config_needs_saving(oConfigFileManager.rules_changed_since_load()) == false:
+		return true
 	var save_target = get_config_save_target(file_type, map_filename_no_ext, map_base_dir)
 	var file_path = save_target[0]
 	var config_type = save_target[1]
@@ -255,7 +267,7 @@ func save_rules_cfg_file(file_type, map_filename_no_ext, map_base_dir):
 
 
 func save_cubes_cfg_file(file_type, map_filename_no_ext, map_base_dir):
-	if Cube.modified_since_load == false:
+	if config_needs_saving(Cube.modified_since_load) == false:
 		return true
 	var save_target = get_config_save_target(file_type, map_filename_no_ext, map_base_dir)
 	var file_path = save_target[0]
@@ -309,7 +321,8 @@ func export_rules_cfg(file_path):
 			var modified_keys = {}
 			if section_data is Dictionary:
 				for key in section_data.keys():
-					if oConfigFileManager.is_item_different(section_name, key):
+					# Keys missing from fxdata (such as differently-cased keys) can only come from campaign/map files, so keep them
+					if oConfigFileManager.is_item_different(section_name, key) or oConfigFileManager.is_item_missing_from_default(section_name, key):
 						modified_keys[key] = section_data[key]
 						has_any_changes = true
 			if not modified_keys.empty():

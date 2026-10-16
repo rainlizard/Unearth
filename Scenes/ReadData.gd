@@ -182,10 +182,7 @@ func new_dat():
 	oDataClmPos.initialize((M.xSize*3)+1, (M.ySize*3)+1, 0, Grid.U16)
 
 func read_clm(buffer):
-	if oCurrentFormat.selected == Constants.OldFormat:
-		oDataClm.column_count = 2048
-	else:
-		oDataClm.column_count = 8192
+	oDataClm.column_count = oDataClm.get_format_column_count()
 	oDataClm.clear_all_column_data()
 	
 	buffer.seek(0)
@@ -212,22 +209,8 @@ func read_clm(buffer):
 			oDataClm.cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
 
 func new_clm():
-	if oCurrentFormat.selected == Constants.OldFormat:
-		oDataClm.column_count = 2048
-	else:
-		oDataClm.column_count = 8192
+	oDataClm.column_count = oDataClm.get_format_column_count()
 	oDataClm.clear_all_column_data()
-	
-	for entry in oDataClm.column_count:
-		oDataClm.utilized[entry] = 0
-		oDataClm.permanent[entry] = 0
-		oDataClm.lintel[entry] = 0
-		oDataClm.height[entry] = 0
-		oDataClm.solidMask[entry] = 0
-		oDataClm.floorTexture[entry] = 0
-		oDataClm.orientation[entry] = 0
-		for cubeNumber in 8:
-			oDataClm.cubes[entry][cubeNumber] = 0
 
 func read_apt(buffer):
 	buffer.seek(0)

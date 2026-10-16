@@ -147,6 +147,8 @@ func _on_ResizeApplyButton_pressed():
 	var eastDelta = int(oResizeRightSpinBox.value)
 	if northDelta == 0 and southDelta == 0 and westDelta == 0 and eastDelta == 0:
 		return
+	if oSlabPlacement.block_while_generating():
+		return
 	
 	if oCurrentFormat.selected == Constants.OldFormat:
 		oMessage.big("Error", "Cannot resize map because it's in Old format. Switch to KFX format first.")

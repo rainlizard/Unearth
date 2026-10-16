@@ -39,6 +39,7 @@ onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
 onready var oDkSlabsetVoxelView = Nodelist.list["oDkSlabsetVoxelView"]
 onready var oColumnsetVoxelView = Nodelist.list["oColumnsetVoxelView"]
 onready var oClmEditorVoxelView = Nodelist.list["oClmEditorVoxelView"]
+onready var oDataClm = Nodelist.list["oDataClm"]
 
 const kind_options = {
 	"Solo" : "FREE",
@@ -114,8 +115,12 @@ func _on_MapProperties_visibility_changed():
 
 func _on_MapFormatSetting_item_selected(index):
 	# Clicked using mouse
+	if oDataClm.set_column_count(oDataClm.get_format_column_count()) == false:
+		oCurrentFormat.selected = Constants.KfxFormat
+		oMessage.big("Error", "Cannot switch to Old format, the map uses more columns than Old format can hold (2048).")
+		return
 	oEditor.mapHasBeenEdited = true
-	
+
 	set_format_selection(index)
 
 func set_format_selection(setFormat):

@@ -111,11 +111,11 @@ func backup_existing_map_files(map_file_path):
 			print("Backup failed, could not copy: " + source_path + " Code: " + str(err))
 			return false
 	print("Backed up map files to: " + backup_folder + " in " + str(OS.get_ticks_msec() - BACKUPTIME_START) + "ms")
-	prune_backups(backup_root) # Not awaited, it may yield while rebuilding the size cache
+	prune_backups(backup_root, backup_folder) # Not awaited, it may yield while rebuilding the size cache
 	return true
 
 
-func prune_backups(backup_root):
+func prune_backups(backup_root, keep_folder_path):
 	var PRUNETIME_START = OS.get_ticks_msec()
 	var dir = Directory.new()
 	var file = File.new()
@@ -175,7 +175,9 @@ func prune_backups(backup_root):
 		total_size += folder_size
 
 	backup_folder_paths.sort()
-	while total_size > limit_bytes and backup_folder_paths.size() > 1:
+	# Folders are named by the map's modified time, so a backup of an old map sorts first. Never prune the backup just made.
+	backup_folder_paths.erase(keep_folder_path)
+	while total_size > limit_bytes and backup_folder_paths.empty() == false:
 		var folder_path = backup_folder_paths.pop_front()
 		total_size -= current_backup_sizes.get(folder_path.get_file(), 0)
 		current_backup_sizes.erase(folder_path.get_file())

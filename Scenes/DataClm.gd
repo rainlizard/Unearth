@@ -6,6 +6,8 @@ onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oUniversalDetails = Nodelist.list["oUniversalDetails"]
 onready var oConfirmClmEntriesFull = Nodelist.list["oConfirmClmEntriesFull"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
+onready var oTabClmEditor = Nodelist.list["oTabClmEditor"]
 
 var column_count = 8192
 
@@ -104,6 +106,59 @@ func clear_unused_entries():
 		if utilized[clmIndex] == 0:
 			delete_column(clmIndex)
 
+
+# Moves the used columns in fromIndexes to unused indexes in 1..belowIndex-1 and repoints the subtiles that used them.
+# Returns false without changing anything if there aren't enough unused indexes.
+func relocate_used_columns(fromIndexes, belowIndex):
+	a_column_has_changed_since_last_updating_utilized = true
+	update_all_utilized()
+	var remap = {}
+	var freeIndex = 0
+	for oldIndex in fromIndexes:
+		if utilized[oldIndex] == 0:
+			continue
+		freeIndex += 1 # Also skips column 0, which must stay empty
+		while freeIndex < belowIndex and utilized[freeIndex] > 0:
+			freeIndex += 1
+		if freeIndex >= belowIndex:
+			return false
+		remap[oldIndex] = freeIndex
+	if remap.empty():
+		return true
+	for oldIndex in remap:
+		copy_column(oldIndex, remap[oldIndex])
+		utilized[remap[oldIndex]] = utilized[oldIndex]
+	for y in (M.ySize*3)+1:
+		for x in (M.xSize*3)+1:
+			var clmIndex = oDataClmPos.get_cell_clmpos(x, y)
+			if remap.has(clmIndex):
+				oDataClmPos.set_cell_clmpos(x, y, remap[clmIndex])
+	oFlashingColumns.generate_clmdata_texture()
+	return true
+
+# Column 0 must stay empty, so move its contents to an unused index
+func move_column_zero_to_unused_index():
+	if relocate_used_columns([0], column_count) == false:
+		return false
+	delete_column(0)
+	return true
+
+func get_format_column_count():
+	return 2048 if oCurrentFormat.selected == Constants.OldFormat else 8192
+
+# The map format decides how many columns the .clm holds, so used columns above the new count are moved below it first
+func set_column_count(newCount):
+	if newCount == column_count:
+		return true
+	if newCount < column_count and relocate_used_columns(range(newCount, column_count), newCount) == false:
+		return false
+	var keepCount = int(min(column_count, newCount))
+	column_count = newCount
+	resize_column_arrays(keepCount)
+	store_default_data() # Column indexes may have moved, so the old comparison data no longer lines up
+	count_filled_clm_entries()
+	oTabClmEditor.refresh_column_count()
+	return true
 
 func sort_columns_by_utilized():
 	oMessage.quick("Sorted columns by utilized value")

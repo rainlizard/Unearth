@@ -15,6 +15,7 @@ var paths_loaded = {}
 
 var current_data = {}
 var default_data = {}
+var loaded_rules_data = {}
 var FXDATA_COMMENTS = {}
 var current_mappack_cfg_filename = ""
 var current_mappack_cfg_path = ""
@@ -34,6 +35,7 @@ func clear_paths():
 	current_data = {}
 	FXDATA_COMMENTS = {}
 	default_data = {}
+	loaded_rules_data = {}
 	current_mappack_cfg_filename = ""
 	current_mappack_cfg_path = ""
 	current_mappack_cfg_data = {}
@@ -76,6 +78,18 @@ func copy_current_map_files(source_map_path, target_map_path):
 func store_default_data():
 	if current_data.has("rules.cfg") and not current_data["rules.cfg"].empty():
 		default_data["rules.cfg"] = current_data["rules.cfg"].duplicate(true)
+
+
+func store_loaded_rules_data():
+	loaded_rules_data = current_data.get("rules.cfg", {}).duplicate(true)
+
+
+func rules_changed_since_load():
+	return not deep_equal(current_data.get("rules.cfg", {}), loaded_rules_data) # != compares Dictionaries by reference in Godot 3
+
+
+func is_item_missing_from_default(section_name: String, key: String) -> bool:
+	return not default_data.get("rules.cfg", {}).get(section_name, {}).has(key)
 
 
 func get_comments_for_key(filename: String, section_name: String, key: String) -> Array:

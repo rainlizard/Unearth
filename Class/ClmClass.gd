@@ -66,24 +66,15 @@ func copy_column(indexSrc, indexDest):
 	self.floorTexture[indexDest] = self.floorTexture[indexSrc]
 
 func clear_all_column_data():
-	self.utilized.resize(self.column_count)
-	self.utilized.fill(0)
-	self.orientation.resize(self.column_count)
-	self.orientation.fill(0)
-	self.solidMask.resize(self.column_count)
-	self.solidMask.fill(0)
-	self.permanent.resize(self.column_count)
-	self.permanent.fill(0)
-	self.lintel.resize(self.column_count)
-	self.lintel.fill(0)
-	self.height.resize(self.column_count)
-	self.height.fill(0)
-	self.floorTexture.resize(self.column_count)
-	self.floorTexture.fill(0)
-	self.cubes.resize(self.column_count)
-	for i in self.column_count:
-		self.cubes[i] = [0,0,0,0, 0,0,0,0] # Don't use fill(), that doesn't work
-	
+	resize_column_arrays(0)
+
+# Resizes every column array to column_count, blanking entries from keepCount onwards
+func resize_column_arrays(keepCount):
+	for array in [self.utilized, self.orientation, self.solidMask, self.permanent, self.lintel, self.height, self.floorTexture, self.cubes]:
+		array.resize(self.column_count)
+	for i in range(keepCount, self.column_count):
+		delete_column(i) # Gives each entry its own cubes array, fill() would share one
+
 
 func find_cubearray_index(cubeArray, floorID):
 	var compareFloorTexture = false

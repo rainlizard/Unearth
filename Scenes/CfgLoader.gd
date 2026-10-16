@@ -123,6 +123,7 @@ func load_cfgs(mapPath, mod_zip_paths):
 				"magic.cfg": load_magic_data(combined_cfg_data)
 	Slabset.store_loaded_data()
 	Columnset.store_loaded_data()
+	oConfigFileManager.store_loaded_rules_data()
 	return campaign_cfg
 
 func super_merge_dictionaries(dict1:Dictionary, dict2:Dictionary):

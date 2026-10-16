@@ -11,6 +11,7 @@ onready var oEditor = Nodelist.list["oEditor"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oUiSystem = Nodelist.list["oUiSystem"]
+onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
 
 
 var undo_history = []
@@ -82,7 +83,7 @@ func on_undo_state_saved(new_state):
 
 func perform_undo():
 	print("perform_undo")
-	if performing_undo == true or undo_history.size() <= 1:
+	if performing_undo == true or undo_history.size() <= 1 or oSlabPlacement.block_while_generating():
 		return
 	var previous_state = undo_history[1]
 	if typeof(previous_state) != TYPE_DICTIONARY:

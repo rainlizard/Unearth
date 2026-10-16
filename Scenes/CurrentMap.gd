@@ -292,6 +292,9 @@ func reload_script_file(file_type, data_node, message, update_editor):
 	if file.file_exists(file_path) == false:
 		return
 	file_info[MODIFIED_DATE] = current_modified_time
+	if update_editor and oScriptEditor.scriptHasBeenEditedInUnearth:
+		oMessage.big("Script edited externally", file_path.get_file() + " was edited outside Unearth, but it was not reloaded because you have unsaved script changes in Unearth. Saving the map will overwrite the external changes.")
+		return
 	if file.open(file_path, File.READ) == OK:
 		data_node.data = file.get_as_text()
 		file.close()
