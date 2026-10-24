@@ -159,10 +159,11 @@ func get_room_list():
 		var roomName = room.get("Name", "")
 		if roomName == "" or roomID in [0, 1, 7] or has_value(roomList, 1, roomName):
 			continue
-		for slabID in Slabs.data:
-			if Slabs.data[slabID][Slabs.NAME] == room.get("SlabAssign", ""):
-				roomList.append([slabID, roomName, 0])
-				break
+		var slabID = room.get("SlabAssign", "")
+		if typeof(slabID) == TYPE_STRING:
+			slabID = Slabs.find_slab_id_by_name(slabID)
+		if Slabs.data.has(slabID):
+			roomList.append([slabID, roomName, 0])
 	return roomList
 
 
