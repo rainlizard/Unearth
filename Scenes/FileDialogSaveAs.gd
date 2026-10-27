@@ -4,6 +4,7 @@ onready var oUi = Nodelist.list["oUi"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oSaveMap = Nodelist.list["oSaveMap"]
+onready var oMenu = Nodelist.list["oMenu"]
 
 var saveInstruction = Label.new()
 var lineEdit
@@ -37,7 +38,9 @@ func _on_FileDialogSaveAs_about_to_show():
 	var path
 	if oCurrentMap.path == "" or oCurrentMap.loaded_from_backup == true:
 		var personalFolder = oGame.DK_LEVELS_DIRECTORY.plus_file("personal")
-		if Directory.new().dir_exists(personalFolder) and oGame.keeperfx_is_installed() == true:
+		if oMenu.recentlyOpened.empty() == false:
+			path = oMenu.recentlyOpened[0].get_base_dir() # Folder of the last opened map
+		elif Directory.new().dir_exists(personalFolder) and oGame.keeperfx_is_installed() == true:
 			path = personalFolder # KeeperFX has personal folder
 		else:
 			path = oGame.DK_LEVELS_DIRECTORY # Old DK does not have personal folder
