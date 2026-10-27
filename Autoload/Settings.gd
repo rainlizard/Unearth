@@ -39,6 +39,7 @@ var listOfSettings = [
 	"nosound",
 	"show_game_turns",
 	"timer",
+	"custom_cmdline",
 	"mouse_edge_panning",
 	"pan_speed",
 	"zoom_step",
@@ -301,6 +302,10 @@ func game_setting(doWhat,string,value):
 			var oGame = $'../Main/Game'
 			if doWhat == SET: oGame.PACKETSAVE = value
 			if doWhat == GET: return oGame.PACKETSAVE
+		"custom_cmdline":
+			var oGame = $'../Main/Game'
+			if doWhat == SET: oGame.CMDLINE_CUSTOM = value
+			if doWhat == GET: return oGame.CMDLINE_CUSTOM
 		"mouse_edge_panning":
 			var oCamera2D = $'../Main/Game2D/Camera2D'
 			if doWhat == SET: oCamera2D.MOUSE_EDGE_PANNING = value

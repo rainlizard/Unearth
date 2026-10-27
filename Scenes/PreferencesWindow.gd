@@ -17,6 +17,7 @@ onready var oCmdLineNomods = Nodelist.list["oCmdLineNomods"]
 onready var oCmdLineNosound = Nodelist.list["oCmdLineNosound"]
 onready var oCmdLineShowGameTurns = Nodelist.list["oCmdLineShowGameTurns"]
 onready var oCmdLineTimer = Nodelist.list["oCmdLineTimer"]
+onready var oCmdLineCustom = Nodelist.list["oCmdLineCustom"]
 onready var oCheckBoxMouseEdgePanning = Nodelist.list["oCheckBoxMouseEdgePanning"]
 onready var oCheckBoxSmoothPan = Nodelist.list["oCheckBoxSmoothPan"]
 onready var oCheckBoxDisplayFPS = Nodelist.list["oCheckBoxDisplayFPS"]
@@ -91,6 +92,7 @@ func _on_SettingsWindow_about_to_show():
 		keeperfxOnlyCmdlines[flag].disabled = oGame.keeperfx_is_installed() == false
 	oCmdLineNosound.set_pressed_no_signal(Settings.get_setting("nosound"))
 	oCmdLineAlex.set_pressed_no_signal(Settings.get_setting("alex"))
+	oCmdLineCustom.text = Settings.get_setting("custom_cmdline")
 	
 	oCheckBoxMouseEdgePanning.pressed = Settings.get_setting("mouse_edge_panning")
 	oCheckBoxSmoothPan.pressed = Settings.get_setting("smooth_pan_enabled")

@@ -33,6 +33,7 @@ var PACKETSAVE = false
 const CMDLINE_FLAGS_ORDER = ["skipheartzoom", "alex", "show_game_turns", "framestep", "nomods", "nosound", "dbgpathfind", "dbgshots", "altinput", "timer"]
 const CMDLINE_ALWAYS_ALLOWED = ["alex", "nosound"] # These also work with the original game, the rest need KeeperFX
 var CMDLINE_FLAGS = {}
+var CMDLINE_CUSTOM = "" # Extra arguments typed by the user, appended as-is
 const KEEPERFX_MAP_ROOTS = ["levels", "multiplayer", "campgns"]
 
 func _init():
@@ -139,6 +140,10 @@ func _on_CmdLineFlag_toggled(button_pressed, flag):
 	Settings.set_setting(flag, button_pressed)
 	reconstruct_command_line()
 
+func _on_CmdLineCustom_text_changed(new_text):
+	Settings.set_setting("custom_cmdline", new_text)
+	reconstruct_command_line()
+
 func reconstruct_command_line():
 	print('Constructing command line...')
 	# Keep in mind Linux and Windows both want different quotation marks ' "
@@ -218,6 +223,8 @@ func cmdline(mapPath, packetLoad = false):
 		if CMDLINE_FLAGS.get(flag, false) == true:
 			if CMDLINE_ALWAYS_ALLOWED.has(flag) == true or keeperfx_is_installed() == true:
 				constructString += " -" + flag
+	if CMDLINE_CUSTOM.strip_edges() != "":
+		constructString += " " + CMDLINE_CUSTOM.strip_edges()
 	var packetArguments = get_packet_arguments(mapPath, packetLoad)
 	if packetArguments != "":
 		constructString += " " + packetArguments

@@ -2338,7 +2338,7 @@ margin_bottom = 87.0
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 91.0
 margin_right = 558.0
-margin_bottom = 285.0
+margin_bottom = 287.0
 columns = 2
 
 [node name="CmdLineSkipHeartZoom" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
@@ -2427,15 +2427,25 @@ text = "Debug shots"
 [node name="CmdLineNomods" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
 margin_top = 165.0
 margin_right = 277.0
-margin_bottom = 194.0
+margin_bottom = 196.0
 hint_tooltip = "Ignore installed mods."
 size_flags_horizontal = 3
 text = "No mods"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 289.0
+[node name="CmdLineCustom" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
+margin_left = 281.0
+margin_top = 165.0
 margin_right = 558.0
-margin_bottom = 329.0
+margin_bottom = 196.0
+hint_tooltip = "Extra arguments added to the end of the command line, separated by spaces."
+size_flags_horizontal = 3
+placeholder_text = "Other arguments"
+placeholder_alpha = 0.15
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 291.0
+margin_right = 558.0
+margin_bottom = 331.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
@@ -2475,24 +2485,24 @@ editable = false
 expand_to_text_length = true
 
 [node name="HSeparator4" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 333.0
+margin_top = 335.0
 margin_right = 558.0
-margin_bottom = 353.0
+margin_bottom = 355.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_top = 357.0
+margin_top = 359.0
 margin_right = 558.0
-margin_bottom = 386.0
+margin_bottom = 388.0
 text = "Always decompress maps"
 
 [node name="BackupFolderSizeLimit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 390.0
+margin_top = 392.0
 margin_right = 558.0
-margin_bottom = 421.0
+margin_bottom = 423.0
 settingText = "Backup folder limit (MB)"
 slider_step = 1.0
 maximum_value = 1.04858e+06
@@ -8754,6 +8764,7 @@ margin_bottom = 40.0
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineDbgpathfind" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "dbgpathfind" ]]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineDbgshots" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "dbgshots" ]]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineNomods" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "nomods" ]]
+[connection signal="text_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineCustom" to="Game" method="_on_CmdLineCustom_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
 [connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer3/PathStonePercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_PathStonePercent_value_changed"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_BridgesOnlyOnLiquidCheckbox_toggled"]
