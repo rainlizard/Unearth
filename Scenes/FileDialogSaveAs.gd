@@ -5,6 +5,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oSaveMap = Nodelist.list["oSaveMap"]
 onready var oMenu = Nodelist.list["oMenu"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 
 var saveInstruction = Label.new()
 var lineEdit
@@ -90,6 +91,9 @@ func _process(delta):
 		if oGame.is_playable_dir(dir) == true:
 			saveInstruction.text = "Map playable from this directory. (KeeperFX)"
 			saveInstruction.set("custom_colors/font_color", Color(0.5,1.0,0.5,1))
+			if oDataLof.KIND == "MULTI" and oGame.has_multiplayer_root() == true and oGame.is_multiplayer_map(dir.plus_file(lineEdit.text)) == false:
+				saveInstruction.text = "Multiplayer maps should be saved in a /multiplayer/ sub directory. (KeeperFX)"
+				saveInstruction.set("custom_colors/font_color", Color(1.0,0.8,0.4,1))
 	else:
 		saveInstruction.text = "Map not playable from this directory. (Original DK)"
 		# Original DK
