@@ -159,7 +159,7 @@ func reconstruct_command_line():
 	var scroll = oCmdLineExecute.get_parent().get_parent()
 	scroll.scroll_horizontal = scroll.get_h_scrollbar().max_value
 
-func cmdline(mapPath, packetLoad):
+func cmdline(mapPath, packetLoad = false):
 	# Keep in mind Linux and Windows both want different quotation marks ' "
 	var constructString = ""
 	match OS.get_name():
