@@ -59,22 +59,22 @@ jobs:
         sed -i "s/var patch = .*/var patch = \"$PATCH\"/" Autoload/Version.gd
     - name: Setup Godot and Export Templates
       run: |
-        wget -q https://github.com/godotengine/godot/releases/download/3.5.3-stable/Godot_v3.5.3-stable_linux_headless.64.zip
-        wget -q https://github.com/godotengine/godot/releases/download/3.5.3-stable/Godot_v3.5.3-stable_export_templates.tpz
-        unzip -q Godot_v3.5.3-stable_linux_headless.64.zip
-        unzip -q Godot_v3.5.3-stable_export_templates.tpz
-        mkdir -p ~/.local/share/godot/templates/3.5.3.stable/
-        mv templates/* ~/.local/share/godot/templates/3.5.3.stable/
-        chmod +x Godot_v3.5.3-stable_linux_headless.64
+        wget -q https://github.com/godotengine/godot/releases/download/3.6.3-stable/Godot_v3.6.3-stable_linux_headless.64.zip
+        wget -q https://github.com/godotengine/godot/releases/download/3.6.3-stable/Godot_v3.6.3-stable_export_templates.tpz
+        unzip -q Godot_v3.6.3-stable_linux_headless.64.zip
+        unzip -q Godot_v3.6.3-stable_export_templates.tpz
+        mkdir -p ~/.local/share/godot/templates/3.6.3.stable/
+        mv templates/* ~/.local/share/godot/templates/3.6.3.stable/
+        chmod +x Godot_v3.6.3-stable_linux_headless.64
     - name: Prepare Directories
       run: |
         rm -rf ./bin
         mkdir -p ./bin/ExportLinux/unearth ./bin/ExportWindows/unearth
     - name: Export Godot Game (Linux)
-      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Linux/X11" ./bin/ExportLinux/unearth/unearth.x86_64
+      run: ./Godot_v3.6.3-stable_linux_headless.64 --export "Linux/X11" ./bin/ExportLinux/unearth/unearth.x86_64
 
     - name: Export Godot Game (Windows)
-      run: ./Godot_v3.5.3-stable_linux_headless.64 --export "Windows Desktop" ./bin/ExportWindows/unearth/unearth.exe
+      run: ./Godot_v3.6.3-stable_linux_headless.64 --export "Windows Desktop" ./bin/ExportWindows/unearth/unearth.exe
 
     - name: Install Wine
       run: |
