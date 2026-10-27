@@ -188,6 +188,7 @@ func _on_KindOptionButton_item_selected(index):
 	oEditor.mapHasBeenEdited = true
 	oDataLof.KIND = kind_options[oKindOptionButton.text]
 	update_section_visibility()
+	oGame.reconstruct_command_line() # Multiplayer kind adds -1player
 
 
 func _on_OptionsOptionButton_item_selected(index):

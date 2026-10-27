@@ -9,6 +9,7 @@ onready var oCmdLineConsoleArg = Nodelist.list["oCmdLineConsoleArg"]
 onready var oCmdLineExecute = Nodelist.list["oCmdLineExecute"]
 onready var oKeeperFXDetection = Nodelist.list["oKeeperFXDetection"]
 onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
+onready var oDataLof = Nodelist.list["oDataLof"]
 
 var EXECUTABLE_PATH = ""
 var GAME_DIRECTORY = ""
@@ -206,7 +207,7 @@ func cmdline(mapPath, packetLoad = false):
 	
 	var newMapNumber = mapPath.get_file().to_upper().trim_prefix("MAP")
 	var newCampaignName = mapPath.get_base_dir().get_file()
-	if is_multiplayer_map(mapPath) == true:
+	if is_multiplayer_map(mapPath) == true or (mapPath == oCurrentMap.path and oDataLof.KIND == "MULTI"):
 		constructString += " -1player"
 	constructString += " -level " + newMapNumber
 	if newCampaignName != "levels": # The older DK structure stored all their maps in /levels/ folder and did not use campaign command.
