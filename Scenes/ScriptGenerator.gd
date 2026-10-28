@@ -305,7 +305,6 @@ func refresh():
 		field[0].modulate = MODIFIED if is_own(finds[0]) else Color(1, 1, 1)
 	_on_PortalRateField_text_changed(oPortalRateField.text)
 	var player = selected_player()
-	oPortalRateField.get_parent().visible = player == "ALL_PLAYERS" # SET_GENERATE_SPEED has no player
 	var computer = patcher.find(parsed, "COMPUTER_PLAYER", [player])
 	oAIOption.set_item_text(0, "Lobby decides" if oDataLof.KIND == "MULTI" else "Idle")
 	oAIOption.selected = {"OFF": 0, "ROAMING": 2}.get(computer.back().args[1] if computer.empty() == false else "OFF", 1)
