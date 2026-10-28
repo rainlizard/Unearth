@@ -1,4 +1,4 @@
-[gd_scene load_steps=212 format=2]
+[gd_scene load_steps=213 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -195,6 +195,7 @@
 [ext_resource path="res://Art/AddDoodadHover.png" type="Texture" id=294]
 [ext_resource path="res://Art/AddDoodadPressed.png" type="Texture" id=295]
 [ext_resource path="res://Theme/StyleBoxBasicPanel.tres" type="StyleBox" id=296]
+[ext_resource path="res://Scenes/MapOutline.gd" type="Script" id=297]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -582,6 +583,9 @@ script = ExtResource( 133 )
 
 [node name="Guidelines" type="Node2D" parent="Game2D"]
 script = ExtResource( 168 )
+
+[node name="MapOutline" type="Node2D" parent="Game2D"]
+script = ExtResource( 297 )
 
 [node name="Node2D" type="Node2D" parent="Game2D"]
 z_index = 100

@@ -12,6 +12,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oTextureAnimation = Nodelist.list["oTextureAnimation"]
 onready var oReadPalette = Nodelist.list["oReadPalette"]
 onready var oFlashingColumns = Nodelist.list["oFlashingColumns"]
+onready var oMapOutline = Nodelist.list["oMapOutline"]
 
 signal column_graphics_completed
 
@@ -33,6 +34,7 @@ func update_full_overhead_map():
 		initialize_display_fields()
 	else:
 		update_display_fields_size()
+	oMapOutline.update()
 	
 	var shapePositionArray = []
 	var totalPositions = M.xSize * M.ySize
