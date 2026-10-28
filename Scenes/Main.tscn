@@ -4912,13 +4912,38 @@ scroll_horizontal_enabled = false
 
 [node name="BasicSections" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions"]
 margin_right = 983.0
-margin_bottom = 284.0
+margin_bottom = 319.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
-[node name="MapCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
+[node name="AIRow" type="HFlowContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
 margin_right = 983.0
-margin_bottom = 41.0
+margin_bottom = 27.0
+custom_constants/vseparation = 4
+custom_constants/hseparation = 8
+
+[node name="AIOption" type="OptionButton" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/AIRow"]
+margin_right = 983.0
+margin_bottom = 27.0
+hint_tooltip = "COMPUTER_PLAYER
+Idle: the keeper does nothing.
+Human: solo games always give Red to the human.
+Player/CPU: a human, or a computer when the lobby's Computer players option is on. Humans are seated from Red, so the map's Players counts these up to the first CPU.
+CPU only: a computer plays it, whatever the lobby's Computer players option.
+Roaming CPU: plays like the heroes, so it needs no dungeon heart. Requires KeeperFX and adds LEVEL_VERSION(1).
+Dimmed keepers have no dungeon heart on the map.
+Humans win by destroying every enemy dungeon heart. The ALL_DUNGEONS_DESTROYED win blocks follow the keepers, unless the script has a WIN_GAME of its own."
+size_flags_horizontal = 3
+custom_colors/font_color_disabled = Color( 1, 1, 1, 0.45 )
+text = "Idle"
+flat = true
+items = [ "Idle", null, false, 0, null, "CPU only", null, false, 1, null, "Roaming CPU", null, false, 2, null ]
+selected = 0
+
+[node name="MapCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
+margin_top = 35.0
+margin_right = 983.0
+margin_bottom = 76.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="PortalRateRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard"]
@@ -4955,18 +4980,18 @@ rect_min_size = Vector2( 90, 0 )
 placeholder_text = "unset"
 
 [node name="BasicPlayerTabs" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 49.0
+margin_top = 84.0
 margin_right = 983.0
-margin_bottom = 49.0
+margin_bottom = 84.0
 hint_tooltip = "All players: shows what every keeper gets and changes them all, using ALL_PLAYERS lines. Settings that differ between keepers show as Mixed.
 A keeper: shows and changes only that keeper. Highlighted settings and items marked with its symbol have a line of their own, the rest follow All players until changed here.
 Highlighted tabs have lines of their own in the script. Creature pool counts are shared, so they are only changed on All players."
 custom_constants/separation = 0
 
 [node name="KeeperCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 57.0
+margin_top = 92.0
 margin_right = 983.0
-margin_bottom = 98.0
+margin_bottom = 133.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="KeeperRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard"]
@@ -5019,38 +5044,10 @@ margin_bottom = 31.0
 rect_min_size = Vector2( 90, 0 )
 placeholder_text = "unset"
 
-[node name="AIRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard/KeeperRow"]
-margin_left = 440.0
-margin_right = 527.0
-margin_bottom = 31.0
-
-[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard/KeeperRow/AIRow"]
-margin_top = 5.0
-margin_right = 20.0
-margin_bottom = 26.0
-hint_tooltip = "COMPUTER_PLAYER"
-mouse_filter = 1
-size_flags_horizontal = 3
-text = "AI"
-
-[node name="AIOption" type="OptionButton" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard/KeeperRow/AIRow"]
-margin_left = 24.0
-margin_right = 87.0
-margin_bottom = 31.0
-hint_tooltip = "COMPUTER_PLAYER
-Idle: the keeper does nothing.
-Lobby decides: a human, or a computer when the lobby's Computer players option is on. Humans are seated from Red, so the map's Players counts these up to the first Computer.
-Computer: a computer plays it, whatever the lobby's Computer players option.
-Roaming: plays like the heroes, so it needs no dungeon heart. Requires KeeperFX and adds LEVEL_VERSION(1).
-Humans win by destroying every enemy dungeon heart. The ALL_DUNGEONS_DESTROYED win blocks follow the keepers, unless the script has a WIN_GAME of its own."
-text = "Idle"
-items = [ "Idle", null, false, 0, null, "Computer", null, false, 1, null, "Roaming", null, false, 2, null ]
-selected = 0
-
 [node name="CreaturesCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 106.0
+margin_top = 141.0
 margin_right = 983.0
-margin_bottom = 149.0
+margin_bottom = 184.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="CreaturesSection" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/CreaturesCard"]
@@ -5083,9 +5080,9 @@ margin_bottom = 33.0
 mouse_filter = 1
 
 [node name="RoomsCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 157.0
+margin_top = 192.0
 margin_right = 983.0
-margin_bottom = 194.0
+margin_bottom = 229.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="RoomsSection" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/RoomsCard"]
@@ -5112,9 +5109,9 @@ margin_bottom = 27.0
 mouse_filter = 1
 
 [node name="SpellsCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 202.0
+margin_top = 237.0
 margin_right = 983.0
-margin_bottom = 239.0
+margin_bottom = 274.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="SpellsSection" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/SpellsCard"]
@@ -5141,9 +5138,9 @@ margin_bottom = 27.0
 mouse_filter = 1
 
 [node name="TrapsDoorsRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 247.0
+margin_top = 282.0
 margin_right = 983.0
-margin_bottom = 284.0
+margin_bottom = 319.0
 custom_constants/separation = 8
 
 [node name="TrapsCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/TrapsDoorsRow"]
@@ -8850,7 +8847,6 @@ margin_bottom = 40.0
 [connection signal="text_entered" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard/KeeperRow/GoldRow/GoldField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_NumberField_apply"]
 [connection signal="focus_exited" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard/KeeperRow/MaxCreaturesRow/MaxCreaturesField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_NumberField_apply"]
 [connection signal="text_entered" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard/KeeperRow/MaxCreaturesRow/MaxCreaturesField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_NumberField_apply"]
-[connection signal="item_selected" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard/KeeperRow/AIRow/AIOption" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_AIOption_item_selected"]
 [connection signal="visibility_changed" from="Ui/UiSystem/AddCustomSlabWindow" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_AddCustomSlabWindow_visibility_changed"]
 [connection signal="value_changed" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/CustomSlabID" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_CustomSlabID_value_changed"]
 [connection signal="item_selected" from="Ui/UiSystem/AddCustomSlabWindow/MarginContainer/HBoxContainer/VBoxContainer2/PanelContainer/VBoxContainer/GridContainer/SlabBitmaskOptionButton" to="Ui/UiSystem/AddCustomSlabWindow" method="_on_SlabBitmaskOptionButton_item_selected"]

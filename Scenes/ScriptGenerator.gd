@@ -40,6 +40,7 @@ const TAB_TARGETS = ["ALL_PLAYERS"] + PLAYERS
 const MODIFIED = Color(1.4, 1.4, 1.7) # Tints what a keeper has lines of its own for, like the Slabset window
 var playerTabs = ButtonGroup.new()
 var tabs = [] # In the order of TAB_TARGETS
+var aiOptions = [] # In the order of PLAYERS
 const AI_HEART_OWNERS = [0, 1, 2, 3, 6, 7, 8, 4]
 var scriptPreview # A copy of the script editor, so previews never enter the editor's undo history
 var previewText = "" # Drawn faded in the gap left for it, since TextEdit can't fade a single line
@@ -109,7 +110,16 @@ func _ready():
 		oBasicPlayerTabs.add_child(tab)
 		tabs.append(tab)
 	tabs[0].pressed = true
-	for control in [oPortalRateField, oGoldField, oMaxCreaturesField, oAIOption]:
+	for index in PLAYERS.size(): # The scene's dropdown is copied for every other keeper
+		var option = oAIOption if index == 0 else oAIOption.duplicate(0)
+		for item in option.get_item_count():
+			option.set_item_icon(item, tabs[index + 1].icon)
+		option.connect("item_selected", self, "_on_AIOption_item_selected", [PLAYERS[index]])
+		option.connect("mouse_entered", self, "_on_setting_mouse_entered", [option])
+		if index > 0:
+			oAIOption.get_parent().add_child(option)
+		aiOptions.append(option)
+	for control in [oPortalRateField, oGoldField, oMaxCreaturesField]:
 		var row = control.get_parent()
 		for node in [row] + row.get_children():
 			node.connect("mouse_entered", self, "_on_setting_mouse_entered", [row])
@@ -123,7 +133,8 @@ func _ready():
 
 
 func update_options_based_on_mapformat():
-	oAIOption.set_item_disabled(2, oCurrentFormat.selected == Constants.OldFormat) # Roaming requires LEVEL_VERSION(1)
+	for option in aiOptions:
+		option.set_item_disabled(2, oCurrentFormat.selected == Constants.OldFormat) # Roaming requires LEVEL_VERSION(1)
 	for index in range(1, tabs.size()):
 		tabs[index].disabled = keepers().has(TAB_TARGETS[index]) == false
 	if playerTabs.get_pressed_button().disabled:
@@ -293,7 +304,7 @@ func refresh():
 		return
 	var targets = []
 	for call in parsed.calls:
-		if call.line.depth == 0:
+		if call.line.depth == 0 and call.command != "COMPUTER_PLAYER": # The AI isn't under the tabs
 			targets.append(call.args[0])
 	for index in tabs.size():
 		for style in ["normal", "hover", "pressed", "disabled"]: # Only the background, so the keeper's symbol keeps its colour
@@ -311,11 +322,17 @@ func refresh():
 		field[0].modulate = MODIFIED if is_own(finds[0]) else Color(1, 1, 1)
 	_on_PortalRateField_text_changed(oPortalRateField.text)
 	var player = selected_player()
-	var computer = patcher.find(parsed, "COMPUTER_PLAYER", [player])
-	oAIOption.set_item_text(0, "Lobby decides" if oDataLof.KIND == "MULTI" else "Idle")
-	oAIOption.selected = {"OFF": 0, "ROAMING": 2}.get(computer.back().args[1] if computer.empty() == false else "OFF", 1)
-	oAIOption.get_parent().visible = player != "ALL_PLAYERS" and (player != "PLAYER0" or oDataLof.KIND == "MULTI" or computer.empty() == false) # COMPUTER_PLAYER has no ALL_PLAYERS, and solo games always give the human Red
-	set_script_line(oAIOption.get_parent(), computer)
+	for index in aiOptions.size():
+		var option = aiOptions[index]
+		var computer = patcher.find(parsed, "COMPUTER_PLAYER", [PLAYERS[index]])
+		var solo = oDataLof.KIND != "MULTI"
+		option.set_item_text(0, "Player/CPU" if solo == false else ("Human" if index == 0 else "Idle")) # Solo games always give the human Red
+		option.selected = {"OFF": 0, "ROAMING": 2}.get(computer.back().args[1] if computer.empty() == false else "OFF", 1)
+		option.disabled = keepers().has(PLAYERS[index]) == false or (index == 0 and solo and computer.empty())
+		var active = option.selected == 2 or oInstances.check_for_dungeon_heart(AI_HEART_OWNERS[index]) # Roaming is the only AI that needs no heart
+		option.modulate.a = 1.0 if active else 0.15
+		tabs[index + 1].modulate.a = 1.0 if active or targets.has(PLAYERS[index]) else 0.15 # Still clickable, and lines of its own still apply
+		set_script_line(option, computer)
 	for parent in availableParents:
 		for button in parent.get_children():
 			var finds = find_for_selected(parsed, button.get_meta("command"), [button.get_meta("variable")])
@@ -470,8 +487,7 @@ func _on_NumberField_apply(_new_text = ""):
 	apply(result)
 
 
-func _on_AIOption_item_selected(index):
-	var player = selected_player()
+func _on_AIOption_item_selected(index, player):
 	var result = {}
 	match index:
 		0: result = patcher.remove_call(oDataScript.data, "COMPUTER_PLAYER", [player])
@@ -502,7 +518,7 @@ func set_victory(text):
 
 
 # KeeperFX seats humans on Red, Blue, Green then Yellow and a computer takes any seat with COMPUTER_PLAYER,
-# so they get the run of "Lobby decides" keepers from Red. Saved as the map's Players, which caps the lobby.
+# so they get the run of "Player/CPU" keepers from Red. Saved as the map's Players, which caps the lobby.
 func human_slots(text):
 	var parsed = patcher.parse(text)
 	var count = 0
