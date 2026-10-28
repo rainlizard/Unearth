@@ -39,6 +39,7 @@ const PLAYERS = ["PLAYER0", "PLAYER1", "PLAYER2", "PLAYER3", "PLAYER4", "PLAYER5
 const TAB_TARGETS = ["ALL_PLAYERS"] + PLAYERS
 const MODIFIED = Color(1.4, 1.4, 1.7) # Tints what a keeper has lines of its own for, like the Slabset window
 var playerTabs = ButtonGroup.new()
+var tabs = [] # In the order of TAB_TARGETS
 const AI_HEART_OWNERS = [0, 1, 2, 3, 6, 7, 8]
 var scriptPreview # A copy of the script editor, so previews never enter the editor's undo history
 var previewText = "" # Drawn faded in the gap left for it, since TextEdit can't fade a single line
@@ -92,8 +93,12 @@ var listRoom = [
 func _ready():
 	for label in ["All players", "Red", "Blue", "Green", "Yellow", "Purple", "Black", "Orange"]: # Buttons rather than Tabs, so each can be tinted
 		var tab = Button.new()
-		tab.text = label
-		tab.icon = null if label == "All players" else load("res://images_ui/plyrsym_32/symbol_player_" + label.to_lower() + "_std.png")
+		if label == "All players":
+			tab.text = label
+		else:
+			tab.icon = load("res://images_ui/plyrsym_32/symbol_player_" + label.to_lower() + "_std.png")
+			tab.expand_icon = true
+			tab.rect_min_size = tab.icon.get_size() * 2 + oBasicPlayerTabs.get_stylebox("tab_bg", "Tabs").get_minimum_size()
 		tab.toggle_mode = true
 		tab.group = playerTabs
 		tab.hint_tooltip = oBasicPlayerTabs.hint_tooltip
@@ -102,7 +107,8 @@ func _ready():
 			tab.add_color_override(style[2], oBasicPlayerTabs.get_color(style[3], "Tabs"))
 		tab.connect("pressed", self, "refresh")
 		oBasicPlayerTabs.add_child(tab)
-	oBasicPlayerTabs.get_child(0).pressed = true
+		tabs.append(tab)
+	tabs[0].pressed = true
 	for control in [oPortalRateField, oGoldField, oMaxCreaturesField, oAIOption]:
 		var row = control.get_parent()
 		for node in [row] + row.get_children():
@@ -119,9 +125,9 @@ func _ready():
 func update_options_based_on_mapformat():
 	oAIOption.set_item_disabled(2, oCurrentFormat.selected == Constants.OldFormat) # Roaming requires LEVEL_VERSION(1)
 	for index in [5, 6, 7]:
-		oBasicPlayerTabs.get_child(index).disabled = oCurrentFormat.selected == Constants.OldFormat
+		tabs[index].disabled = oCurrentFormat.selected == Constants.OldFormat
 	if playerTabs.get_pressed_button().disabled:
-		oBasicPlayerTabs.get_child(0).pressed = true
+		tabs[0].pressed = true
 	patcher.order = {} # New lines are written in the order of the tabs, then of the buttons
 	for target in TAB_TARGETS:
 		patcher.order[target] = patcher.order.size()
@@ -255,11 +261,11 @@ func open():
 	oScriptGeneratorWindow.rect_position = Vector2(0, oUi.topMargin) # Full screen, below the menu bar
 	oScriptGeneratorWindow.rect_size = get_viewport().size / Settings.UI_SCALE - oScriptGeneratorWindow.rect_position
 	# Start on the tab the script's availability lines are written for, such as Red in campaign maps
-	oBasicPlayerTabs.get_child(0).pressed = true
+	tabs[0].pressed = true
 	for call in patcher.parse(oDataScript.data).calls:
 		var target = TAB_TARGETS.find(call.args[0])
 		if call.command.ends_with("_AVAILABLE") and call.line.depth == 0 and target >= 0:
-			oBasicPlayerTabs.get_child(target).pressed = true
+			tabs[target].pressed = true
 			break
 	refresh() # Opening never edits the script, victory blocks are only updated by the options that affect them
 
@@ -289,9 +295,9 @@ func refresh():
 	for call in parsed.calls:
 		if call.line.depth == 0:
 			targets.append(call.args[0])
-	for tab in oBasicPlayerTabs.get_children():
+	for index in tabs.size():
 		for style in ["normal", "hover", "pressed", "disabled"]: # Only the background, so the keeper's symbol keeps its colour
-			tab.get_stylebox(style).modulate_color = MODIFIED if tab.get_index() > 0 and targets.has(TAB_TARGETS[tab.get_index()]) else Color(1, 1, 1)
+			tabs[index].get_stylebox(style).modulate_color = MODIFIED if index > 0 and targets.has(TAB_TARGETS[index]) else Color(1, 1, 1)
 	for field in numberFields:
 		var finds = [patcher.find(parsed, field[1])] if field[1] == "SET_GENERATE_SPEED" else find_for_selected(parsed, field[1], [])
 		var texts = []
@@ -353,7 +359,7 @@ func availability_values(button, state, version):
 
 
 func selected_player():
-	return TAB_TARGETS[playerTabs.get_pressed_button().get_index()]
+	return TAB_TARGETS[tabs.find(playerTabs.get_pressed_button())]
 
 
 func keepers(): # Old format maps only have the first four
