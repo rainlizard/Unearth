@@ -4912,7 +4912,7 @@ scroll_horizontal_enabled = false
 
 [node name="BasicSections" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions"]
 margin_right = 983.0
-margin_bottom = 319.0
+margin_bottom = 348.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
@@ -4979,19 +4979,34 @@ margin_bottom = 31.0
 rect_min_size = Vector2( 90, 0 )
 placeholder_text = "unset"
 
-[node name="BasicPlayerTabs" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
+[node name="TabsRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
 margin_top = 84.0
 margin_right = 983.0
-margin_bottom = 84.0
+margin_bottom = 113.0
+custom_constants/separation = 12
+
+[node name="UniqueSettingsCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/TabsRow"]
+margin_right = 171.0
+margin_bottom = 29.0
+hint_tooltip = "Shows a tab for each keeper, to give them settings of their own.
+Unchecked, only the All players settings are shown. Lines the script already has for a keeper are kept."
+text = "Unique settings"
+
+[node name="BasicPlayerTabs" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/TabsRow"]
+visible = false
+margin_left = 172.0
+margin_right = 983.0
+margin_bottom = 31.0
 hint_tooltip = "All players: shows what every keeper gets and changes them all, using ALL_PLAYERS lines. Settings that differ between keepers show as Mixed.
 A keeper: shows and changes only that keeper. Highlighted settings and items marked with its symbol have a line of their own, the rest follow All players until changed here.
 Highlighted tabs have lines of their own in the script. Creature pool counts are shared, so they are only changed on All players."
+size_flags_horizontal = 3
 custom_constants/separation = 0
 
 [node name="KeeperCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 92.0
+margin_top = 121.0
 margin_right = 983.0
-margin_bottom = 133.0
+margin_bottom = 162.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="KeeperRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard"]
@@ -5045,9 +5060,9 @@ rect_min_size = Vector2( 90, 0 )
 placeholder_text = "unset"
 
 [node name="CreaturesCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 141.0
+margin_top = 170.0
 margin_right = 983.0
-margin_bottom = 184.0
+margin_bottom = 213.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="CreaturesSection" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/CreaturesCard"]
@@ -5080,9 +5095,9 @@ margin_bottom = 33.0
 mouse_filter = 1
 
 [node name="RoomsCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 192.0
+margin_top = 221.0
 margin_right = 983.0
-margin_bottom = 229.0
+margin_bottom = 258.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="RoomsSection" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/RoomsCard"]
@@ -5109,9 +5124,9 @@ margin_bottom = 27.0
 mouse_filter = 1
 
 [node name="SpellsCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 237.0
+margin_top = 266.0
 margin_right = 983.0
-margin_bottom = 274.0
+margin_bottom = 303.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="SpellsSection" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/SpellsCard"]
@@ -5138,9 +5153,9 @@ margin_bottom = 27.0
 mouse_filter = 1
 
 [node name="TrapsDoorsRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 282.0
+margin_top = 311.0
 margin_right = 983.0
-margin_bottom = 319.0
+margin_bottom = 348.0
 custom_constants/separation = 8
 
 [node name="TrapsCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/TrapsDoorsRow"]

@@ -23,6 +23,7 @@ onready var oBasicOptions = Nodelist.list["oBasicOptions"]
 onready var oTrapsCard = Nodelist.list["oTrapsCard"]
 onready var oDoorsCard = Nodelist.list["oDoorsCard"]
 onready var oBasicPlayerTabs = Nodelist.list["oBasicPlayerTabs"]
+onready var oUniqueSettingsCheckBox = Nodelist.list["oUniqueSettingsCheckBox"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oCreateScriptButton = Nodelist.list["oCreateScriptButton"]
@@ -119,6 +120,7 @@ func _ready():
 		if index > 0:
 			oAIOption.get_parent().add_child(option)
 		aiOptions.append(option)
+	oUniqueSettingsCheckBox.connect("toggled", self, "_on_UniqueSettingsCheckBox_toggled")
 	for control in [oPortalRateField, oGoldField, oMaxCreaturesField]:
 		var row = control.get_parent()
 		for node in [row] + row.get_children():
@@ -271,9 +273,15 @@ func open():
 	Utils.popup_centered(oScriptGeneratorWindow)
 	oScriptGeneratorWindow.rect_position = Vector2(0, oUi.topMargin) # Full screen, below the menu bar
 	oScriptGeneratorWindow.rect_size = get_viewport().size / Settings.UI_SCALE - oScriptGeneratorWindow.rect_position
+	var parsed = patcher.parse(oDataScript.data)
+	var targets = own_targets(parsed)
+	var unique = false
+	for player in PLAYERS:
+		unique = unique or targets.has(player)
+	oUniqueSettingsCheckBox.pressed = unique
 	# Start on the tab the script's availability lines are written for, such as Red in campaign maps
 	tabs[0].pressed = true
-	for call in patcher.parse(oDataScript.data).calls:
+	for call in parsed.calls:
 		var target = TAB_TARGETS.find(call.args[0])
 		if call.command.ends_with("_AVAILABLE") and call.line.depth == 0 and target >= 0:
 			tabs[target].pressed = true
@@ -302,10 +310,7 @@ func refresh():
 		oBasicNotice.text = "This script is empty. The default setup makes the map playable."
 	if oBasicOptions.visible == false:
 		return
-	var targets = []
-	for call in parsed.calls:
-		if call.line.depth == 0 and call.command != "COMPUTER_PLAYER": # The AI isn't under the tabs
-			targets.append(call.args[0])
+	var targets = own_targets(parsed)
 	for index in tabs.size():
 		for style in ["normal", "hover", "pressed", "disabled"]: # Only the background, so the keeper's symbol keeps its colour
 			tabs[index].get_stylebox(style).modulate_color = MODIFIED if index > 0 and targets.has(TAB_TARGETS[index]) else Color(1, 1, 1)
@@ -373,6 +378,23 @@ func availability_values(button, state, version):
 		button.RESEARCH: return ["1", "0"]
 		button.ENABLED: return ["1", "1" if button.get_meta("command") == "CREATURE_AVAILABLE" and version == 0 else "0"]
 	return ["0", "0"]
+
+
+# Who the script's top-level lines are for, other than COMPUTER_PLAYER since the AI isn't under the tabs
+func own_targets(parsed):
+	var targets = []
+	for call in parsed.calls:
+		if call.line.depth == 0 and call.command != "COMPUTER_PLAYER":
+			targets.append(call.args[0])
+	return targets
+
+
+# Unchecked, only All players is shown, though keepers keep the lines they already have
+func _on_UniqueSettingsCheckBox_toggled(on):
+	oBasicPlayerTabs.visible = on
+	if on == false:
+		tabs[0].pressed = true
+	refresh()
 
 
 func selected_player():
