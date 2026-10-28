@@ -1,4 +1,4 @@
-[gd_scene load_steps=213 format=2]
+[gd_scene load_steps=214 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -196,6 +196,7 @@
 [ext_resource path="res://Art/AddDoodadPressed.png" type="Texture" id=295]
 [ext_resource path="res://Theme/StyleBoxBasicPanel.tres" type="StyleBox" id=296]
 [ext_resource path="res://Scenes/MapOutline.gd" type="Script" id=297]
+[ext_resource path="res://Scenes/RemLineOverlay.gd" type="Script" id=298]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -4906,6 +4907,12 @@ show_line_numbers = true
 draw_tabs = true
 highlight_all_occurrences = true
 caret_blink = true
+
+[node name="RemLineOverlay" type="Control" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/ScriptTextEdit"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 298 )
 
 [node name="BasicOptions" type="ScrollContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer"]
 margin_left = 497.0

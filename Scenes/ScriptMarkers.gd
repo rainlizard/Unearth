@@ -124,9 +124,9 @@ func clear():
 			id.free()
 
 func get_command_name_from_line(line):
-	var trimmedLine = line.strip_edges(true, false)
-	if trimmedLine.to_upper().begins_with("REM"):
+	if Utils.is_rem_line(line):
 		return {}
+	var trimmedLine = line.strip_edges(true, false)
 
 	var leftBracketPos = trimmedLine.find('(')
 	if leftBracketPos == -1:

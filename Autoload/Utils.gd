@@ -38,6 +38,9 @@ func strip_letters_from_string(string):
 			string = string.replace(character,"")
 	return string
 
+func is_rem_line(line): # DKScript comment
+	return line.strip_edges(true, false).to_upper().begins_with("REM")
+
 func set_id_links_label(ids, rich_text_label, panel_container, empty_text):
 	if ids.empty():
 		panel_container.modulate = Color(1, 1, 1, 1)

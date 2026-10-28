@@ -128,7 +128,7 @@ func _ready():
 		var row = control.get_parent()
 		for node in [row] + row.get_children():
 			node.connect("mouse_entered", self, "_on_setting_mouse_entered", [row])
-	scriptPreview = oScriptTextEdit.duplicate(0) # Without the editor's signals
+	scriptPreview = oScriptTextEdit.duplicate(DUPLICATE_SCRIPTS) # Without the editor's signals, but with its RemLineOverlay
 	scriptPreview.hide()
 	scriptPreview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	scriptPreview.set_anchors_and_margins_preset(Control.PRESET_WIDE)
