@@ -1,5 +1,4 @@
 extends WindowDialog
-onready var oPickSlabWindow = Nodelist.list["oPickSlabWindow"]
 onready var oSelection = Nodelist.list["oSelection"]
 onready var oThingTabs = Nodelist.list["oThingTabs"]
 onready var oActionPointOptions = Nodelist.list["oActionPointOptions"]
@@ -290,7 +289,6 @@ func current_grid_container():
 
 func pressed(id):
 	#oSelection.paintSlab = setValue # Set whatever this needs to be
-	oPickSlabWindow.set_selection(null)
 	set_selection(id.get_meta("thingType"), id.get_meta("thingSubtype"))
 	oPlacingSettings.set_placing_tab_and_update_it()
 	oInspector.deselect()

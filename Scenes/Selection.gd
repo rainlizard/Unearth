@@ -76,13 +76,11 @@ func _input(event):
 func newPaintThingType(value):
 	if value != null: # This check is important
 		oSelector.change_mode(oSelector.MODE_SUBTILE)
-		oPickSlabWindow.set_selection(null) # Deselect anything in slab window
 	paintThingType = value
 
 func newPaintSubtype(value):
 	if value != null: # This check is important
 		oSelector.change_mode(oSelector.MODE_SUBTILE)
-		oPickSlabWindow.set_selection(null) # Deselect anything in slab window
 	paintSubtype = value
 	
 	oOwnerSelection.update_ownership_options()
