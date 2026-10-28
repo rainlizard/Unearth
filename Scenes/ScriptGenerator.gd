@@ -35,12 +35,12 @@ onready var availableParents = [oCreaturePool, oHeroPool, oRoomsAvailable, oMagi
 var scnAvailableButton = preload('res://Scenes/AvailableButton.tscn')
 var patcher = BasicScriptPatcher.new()
 
-const PLAYERS = ["PLAYER0", "PLAYER1", "PLAYER2", "PLAYER3", "PLAYER4", "PLAYER5", "PLAYER6"]
+const PLAYERS = ["PLAYER0", "PLAYER1", "PLAYER2", "PLAYER3", "PLAYER4", "PLAYER5", "PLAYER6", "PLAYER_GOOD"]
 const TAB_TARGETS = ["ALL_PLAYERS"] + PLAYERS
 const MODIFIED = Color(1.4, 1.4, 1.7) # Tints what a keeper has lines of its own for, like the Slabset window
 var playerTabs = ButtonGroup.new()
 var tabs = [] # In the order of TAB_TARGETS
-const AI_HEART_OWNERS = [0, 1, 2, 3, 6, 7, 8]
+const AI_HEART_OWNERS = [0, 1, 2, 3, 6, 7, 8, 4]
 var scriptPreview # A copy of the script editor, so previews never enter the editor's undo history
 var previewText = "" # Drawn faded in the gap left for it, since TextEdit can't fade a single line
 
@@ -91,7 +91,7 @@ var listRoom = [
 
 
 func _ready():
-	for label in ["All players", "Red", "Blue", "Green", "Yellow", "Purple", "Black", "Orange"]: # Buttons rather than Tabs, so each can be tinted
+	for label in ["All players", "Red", "Blue", "Green", "Yellow", "Purple", "Black", "Orange", "White"]: # Buttons rather than Tabs, so each can be tinted
 		var tab = Button.new()
 		if label == "All players":
 			tab.text = label
@@ -124,8 +124,8 @@ func _ready():
 
 func update_options_based_on_mapformat():
 	oAIOption.set_item_disabled(2, oCurrentFormat.selected == Constants.OldFormat) # Roaming requires LEVEL_VERSION(1)
-	for index in [5, 6, 7]:
-		tabs[index].disabled = oCurrentFormat.selected == Constants.OldFormat
+	for index in range(1, tabs.size()):
+		tabs[index].disabled = keepers().has(TAB_TARGETS[index]) == false
 	if playerTabs.get_pressed_button().disabled:
 		tabs[0].pressed = true
 	patcher.order = {} # New lines are written in the order of the tabs, then of the buttons
@@ -537,7 +537,7 @@ func add_default_setup():
 	var version = patcher.parse(text).version
 	for field in numberFields:
 		text = patcher.set_call(text, field[1], ([] if field[1] == "SET_GENERATE_SPEED" else ["ALL_PLAYERS"]) + [field[2]]).text
-	for index in range(human_slots(text), PLAYERS.size()):
+	for index in range(human_slots(text), PLAYERS.find("PLAYER_GOOD")): # A hero heart is usually a target, so the heroes aren't given a keeper AI
 		if oInstances.check_for_dungeon_heart(AI_HEART_OWNERS[index]):
 			text = patcher.set_call(text, "COMPUTER_PLAYER", [PLAYERS[index], "0"]).text
 	for parent in availableParents:
