@@ -21,6 +21,13 @@ func _ready():
 	regex.compile("^[0-9]*$")
 	noSpecialCharsRegex.compile("[^a-zA-Z0-9]")
 
+func _enter_tree(): # Before the main scene enters, unlike _ready
+	get_tree().connect("node_added", self, "_on_node_added")
+
+func _on_node_added(node): # Godot 3 themes can't colour placeholder text, so LineEdits left at the default are faded here
+	if node is LineEdit and is_equal_approx(node.placeholder_alpha, 0.6):
+		node.placeholder_alpha = 0.25
+
 func strip_special_chars_from_string(input_string: String) -> String:
 	var output_string = noSpecialCharsRegex.sub(input_string, "", true)
 	return output_string
