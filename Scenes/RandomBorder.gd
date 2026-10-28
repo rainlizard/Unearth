@@ -19,7 +19,7 @@ var algorithmType = 1
 
 const earthColour = Color(36.0/255.0, 24.0/255.0, 0.0/255.0, 1.0)
 const impenetrableColour = Color(0.0, 0.0, 0.0, 1.0)
-const abyssColour = Color(4.0/255.0, 24.0/255.0, 6.0/255.0, 1.0) # Exact bytes: preview Image is RGBA8, so pixel equality needs whole bytes
+const abyssColour = Constants.ABYSS_COLOUR # Whole bytes, so it still equals the pixel read back from the RGBA8 preview Image
 
 const BORDER_ROCK = 0
 const BORDER_ABYSS = 1

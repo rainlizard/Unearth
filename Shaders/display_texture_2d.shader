@@ -33,6 +33,7 @@ uniform int flashingColumnset7 = -1;
 uniform int flashingColumnset8 = -1;
 uniform float flashIntensity = 0.0;
 const float DARKENING_FACTOR = 0.333;
+const vec4 ABYSS_COLOR = vec4(4.0/255.0, 16.0/255.0, 4.0/255.0, 1.0); // Keep in sync with Constants.ABYSS_COLOUR
 const vec2 TILE_DIMENSIONS = vec2(32.0, 32.0);
 const vec2 L8_ATLAS_PIXEL_DIMS = vec2(256.0, 1088.0);
 const float TILES_PER_L8_ATLAS_ROW = L8_ATLAS_PIXEL_DIMS.x / TILE_DIMENSIONS.x;
@@ -167,6 +168,8 @@ void fragment() {
 	int slabId = int(texelGet(slabIdData, ivec2(originalSlabX, originalSlabY), 0).r * 255.0);
 	if (slabId == 57) {
 		COLOR = vec4(averagedFinalColor.rgb * (1.0-DARKENING_FACTOR), averagedFinalColor.a);
+	} else if (slabId == 61) {
+		COLOR = ABYSS_COLOR;
 	} else {
 		COLOR = averagedFinalColor;
 	}

@@ -87,10 +87,14 @@ func set_visual(columnArray):
 	material.set_shader_param("fieldSizeInSubtiles", Vector2(3, 3))
 	material.set_shader_param("animationDatabase", oTextureAnimation.animation_database_texture)
 	material.set_shader_param("viewTextures", dataTexture)
-	if slabID == 57:
-		material.set_shader_param("slabIdData", preload("res://Shaders/Bedrock3x3.png"))
-	else:
-		material.set_shader_param("slabIdData", preload("res://Shaders/Black3x3.png"))
+
+	# Lets the shader apply its per-slab colouring (bedrock, abyss) to the icon too
+	var idImage = Image.new()
+	idImage.create(3, 3, false, Image.FORMAT_RGB8)
+	idImage.fill(Color8(slabID if slabID < 256 else 0, 0, 0))
+	var idTexture = ImageTexture.new()
+	idTexture.create_from_image(idImage, 0)
+	material.set_shader_param("slabIdData", idTexture)
 
 func _process(delta):
 	accumulated_time += delta

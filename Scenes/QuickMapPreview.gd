@@ -61,7 +61,7 @@ const colourDict = {
 	52 : Color("D890BF"),
 	54 : Color.purple, #Color.fuchsia
 
-	61 : Color8(4,24,6),
+	61 : Constants.ABYSS_COLOUR,
 }
 const spoilerColor = Color8(20,16,0) #Color(0.125, 0.125, 0.175, 1.0)
 const doorColour = Color("FC986C")

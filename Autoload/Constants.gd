@@ -2,6 +2,7 @@ extends Node
 const TILE_SIZE = 96
 const SUBTILE_SIZE = 32
 const PLAYERS_COUNT = 9
+const ABYSS_COLOUR = Color8(4, 16, 4) # Keep in sync with ABYSS_COLOR in display_texture_2d.shader
 
 enum {
 	PLAYER_RED, #0
