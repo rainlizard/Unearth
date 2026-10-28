@@ -45,6 +45,7 @@ var aiOptions = [] # In the order of PLAYERS
 const AI_HEART_OWNERS = [0, 1, 2, 3, 6, 7, 8, 4]
 var scriptPreview # A copy of the script editor, so previews never enter the editor's undo history
 var previewText = "" # Drawn faded in the gap left for it, since TextEdit can't fade a single line
+var fieldColor # The theme's text colour, faded on a keeper's tab while a field shows what All players gives it
 
 const CLASSIC_CREATURES = [19, 24, 18, 16, 26, 27, 29, 21, 30, 22, 17, 20, 28, 15, 25, 14, 12, 8, 5, 3, 2, 4, 11, 9, 1, 10, 13, 6, 7]
 
@@ -121,7 +122,9 @@ func _ready():
 			oAIOption.get_parent().add_child(option)
 		aiOptions.append(option)
 	oUniqueSettingsCheckBox.connect("toggled", self, "_on_UniqueSettingsCheckBox_toggled")
+	fieldColor = oGoldField.get_color("font_color")
 	for control in [oPortalRateField, oGoldField, oMaxCreaturesField]:
+		control.connect("text_changed", self, "_on_field_text_changed", [control])
 		var row = control.get_parent()
 		for node in [row] + row.get_children():
 			node.connect("mouse_entered", self, "_on_setting_mouse_entered", [row])
@@ -314,6 +317,7 @@ func refresh():
 	for index in tabs.size():
 		for style in ["normal", "hover", "pressed", "disabled"]: # Only the background, so the keeper's symbol keeps its colour
 			tabs[index].get_stylebox(style).modulate_color = MODIFIED if index > 0 and targets.has(TAB_TARGETS[index]) else Color(1, 1, 1)
+	var player = selected_player()
 	for field in numberFields:
 		var finds = [patcher.find(parsed, field[1])] if field[1] == "SET_GENERATE_SPEED" else find_for_selected(parsed, field[1], [])
 		var texts = []
@@ -325,8 +329,9 @@ func refresh():
 		field[0].set_meta("value", field[0].text)
 		set_script_line(field[0].get_parent(), finds[0])
 		field[0].modulate = MODIFIED if is_own(finds[0]) else Color(1, 1, 1)
+		var inherited = player != "ALL_PLAYERS" and field[1] != "SET_GENERATE_SPEED" and finds[0].empty() == false and is_own(finds[0]) == false
+		field[0].add_color_override("font_color", fieldColor * Color(1, 1, 1, 0.25 if inherited else 1.0))
 	_on_PortalRateField_text_changed(oPortalRateField.text)
-	var player = selected_player()
 	for index in aiOptions.size():
 		var option = aiOptions[index]
 		var computer = patcher.find(parsed, "COMPUTER_PLAYER", [PLAYERS[index]])
@@ -487,6 +492,10 @@ func apply(result):
 		oScriptEditor.load_generated_text(result.text)
 	refresh()
 	highlight_script_line(result.line)
+
+
+func _on_field_text_changed(_new_text, field): # Typed text is the keeper's own
+	field.add_color_override("font_color", fieldColor)
 
 
 func _on_PortalRateField_text_changed(new_text):
