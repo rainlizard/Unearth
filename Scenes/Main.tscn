@@ -3537,7 +3537,7 @@ dialog_text = "The file will be moved to the recycle bin the next time you press
 dialog_autowrap = true
 script = ExtResource( 61 )
 
-[node name="ConfirmCreateLua" type="ConfirmationDialog" parent="Ui/UiSystem"]
+[node name="ConfirmCreateScript" type="ConfirmationDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = 916.0
 margin_top = -181.0
@@ -3545,8 +3545,8 @@ margin_right = 1216.0
 margin_bottom = -76.0
 rect_min_size = Vector2( 300, 105 )
 popup_exclusive = true
-window_title = "Create Lua file"
-dialog_text = "This map has no Lua file. Create one?"
+window_title = "Create script file"
+dialog_text = "This map has no script file. Create one?"
 dialog_autowrap = true
 script = ExtResource( 61 )
 
@@ -4808,7 +4808,7 @@ margin_top = -864.0
 margin_right = 5057.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 1200, 700 )
-window_title = "DKScript"
+window_title = "DKScript editor"
 resizable = true
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ScriptGeneratorWindow"]
@@ -8833,7 +8833,7 @@ margin_bottom = 40.0
 [connection signal="pressed" from="Ui/UiSystem/DoodadWindow/VBoxContainer/HBoxContainer/DoodadCancelButton" to="Ui/UiSystem/DoodadWindow" method="hide"]
 [connection signal="pressed" from="Ui/UiSystem/DoodadWindow/VBoxContainer/HBoxContainer/DoodadHelpButton" to="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings" method="_on_DoodadHelpButton_pressed"]
 [connection signal="confirmed" from="Ui/UiSystem/ConfirmScriptDeletion" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor" method="_on_ConfirmScriptDeletion_confirmed"]
-[connection signal="confirmed" from="Ui/UiSystem/ConfirmCreateLua" to="Ui/UiTop/Menu" method="_on_ConfirmCreateLua_confirmed"]
+[connection signal="confirmed" from="Ui/UiSystem/ConfirmCreateScript" to="Ui/UiTop/Menu" method="_on_ConfirmCreateScript_confirmed"]
 [connection signal="about_to_show" from="Ui/UiSystem/AboutWindow" to="Ui/UiSystem/AboutWindow" method="_on_AboutWindow_about_to_show"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ImageAsMapDialog" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImageAsMapDialog_visibility_changed"]
 [connection signal="pressed" from="Ui/UiSystem/ImageAsMapDialog/MarginContainer/VBoxContainer/HBoxContainer/ImgMapButtonSelectImage" to="Ui/UiSystem/ImageAsMapDialog" method="_on_ImgMapButtonSelectImage_pressed"]

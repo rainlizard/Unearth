@@ -40,7 +40,7 @@ onready var oChangelogWindow = Nodelist.list["oChangelogWindow"]
 onready var oCfgEditor = Nodelist.list["oCfgEditor"]
 onready var oMapBackups = Nodelist.list["oMapBackups"]
 onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
-onready var oConfirmCreateLua = Nodelist.list["oConfirmCreateLua"]
+onready var oConfirmCreateScript = Nodelist.list["oConfirmCreateScript"]
 onready var oDataLua = Nodelist.list["oDataLua"]
 onready var oBuffers = Nodelist.list["oBuffers"]
 
@@ -48,6 +48,7 @@ var recentlyOpened = []
 var recentlyOpenedPopupMenu = PopupMenu.new()
 var fixMenuExpansion
 var playButtonLocked = false
+var scriptToCreate = "TXT"
 
 func _ready():
 	# Allow Play button to be hovered without the dropdown menu appearing
@@ -58,7 +59,7 @@ func _ready():
 	add_menu_items(oMenuButtonFile, "_on_FileSubmenu_Pressed", ["New map", "Open map", "Browse maps", "Open recent", "", "Save map", "Save map as", "Reload map", "Backups", "", "Image to map", "Export preview", "", "Preferences", "", "Exit"])
 	add_menu_items(oMenuButtonEdit, "_on_EditSubmenu_Pressed", ["Undo", "", "Update all slabs", "Resize map"])
 	add_menu_items(oMenuButtonMap, "_on_MapSubmenu_Pressed", ["Map properties", "", "Rules", "Slabset", "Config files", "", "Open map folder"])
-	add_menu_items(oMenuButtonScript, "_on_ScriptSubmenu_Pressed", ["DKScript", "Lua", "", "Script command reference", "Open log"])
+	add_menu_items(oMenuButtonScript, "_on_ScriptSubmenu_Pressed", ["DKScript editor", "", "Open DKScript file", "Open Lua file", "Open log", "", "Script command reference"])
 	add_menu_items(oMenuButtonView, "_on_ViewSubmenu_Pressed", ["3D: 1st person", "", "Instance list", "Grid data", "Creature stats"])
 	add_menu_items(oMenuButtonHelp, "_on_HelpSubmenu_Pressed", ["Controls", "", "Creating a new campaign", "File format reference", "Workshop", "", "Changelog", "Report bugs & submit suggestions", "About"])
 
@@ -241,28 +242,48 @@ func _on_MapSubmenu_Pressed(pressedID):
 
 func _on_ScriptSubmenu_Pressed(pressedID):
 	match pressedID:
-		0: oScriptGenerator.open() # DKScript
-		1: # Lua
-			if oCurrentMap.path == "":
-				oMessage.quick("No map path detected. Try saving first.")
-				return
-			var luaPath = Utils.case_insensitive_file(oCurrentMap.path.get_base_dir(), oCurrentMap.path.get_file(), ".lua")
-			if luaPath == "":
-				Utils.popup_centered(oConfirmCreateLua)
-			else:
-				open_externally(luaPath, "")
-		2: # Script command reference
+		0: oScriptGenerator.open() # DKScript editor
+		1: open_script_file("TXT") # Open DKScript file
+		2: open_script_file("LUA") # Open Lua file
+		3: open_externally(Utils.case_insensitive_file(oGame.GAME_DIRECTORY, "KEEPERFX", ".log"), "Could not find KEEPERFX.LOG") # Open log
+		4: # Script command reference
 			if oGame.keeperfx_is_installed() == true:
 				OS.shell_open("https://github.com/dkfans/keeperfx/wiki/Level-Script-commands")
 			else:
 				OS.shell_open("https://lubiki.keeperklan.com/dk1_docs/dk_scripting_ref.htm")
-		3: open_externally(Utils.case_insensitive_file(oGame.GAME_DIRECTORY, "KEEPERFX", ".log"), "Could not find KEEPERFX.LOG") # Open log
 
-func _on_ConfirmCreateLua_confirmed():
-	var luaPath = oCurrentMap.path + ".lua"
+func open_script_file(EXT):
+	if oCurrentMap.path == "":
+		oMessage.quick("No map path detected. Try saving first.")
+		return
+	var scriptPath = Utils.case_insensitive_file(oCurrentMap.path.get_base_dir(), oCurrentMap.path.get_file(), EXT)
+	if scriptPath != "":
+		open_externally(scriptPath, "")
+		return
+	scriptToCreate = EXT
+	oConfirmCreateScript.dialog_text = "This map has no %s file. Create one?" % ("DKScript" if EXT == "TXT" else "Lua")
+	Utils.popup_centered(oConfirmCreateScript)
+
+func _on_ConfirmCreateScript_confirmed():
+	if scriptToCreate == "LUA":
+		oDataLua.data = new_lua_script()
+	var scriptPath = oCurrentMap.path + "." + scriptToCreate.to_lower()
+	if oBuffers.write(scriptPath, scriptToCreate) != OK:
+		oMessage.quick("Could not create: " + scriptPath)
+		return
+	# Saving the map keeps the file, and edits made outside Unearth are reloaded
+	if scriptToCreate == "TXT":
+		oCurrentMap.DKScript_enabled = true
+	else:
+		oCurrentMap.LuaScript_enabled = true
+	oCurrentMap.currentFilePaths[scriptToCreate] = [scriptPath, File.new().get_modified_time(scriptPath)]
+	oScriptGenerator.refresh() # Show the new file in the DKScript window's path link
+	open_externally(scriptPath, "")
+
+func new_lua_script():
 	var mapName = oDataMapName.data if oDataMapName.data != "" else "--insert map name--"
 	var authorName = oDataLof.AUTHOR if oDataLof.AUTHOR != "" else "--insert author--"
-	oDataLua.data = """-- ********************************************
+	return """-- ********************************************
 --
 --        %s
 --        by %s
@@ -286,12 +307,6 @@ function SetupTriggers()
 
 end
 """ % [mapName, authorName]
-	if oBuffers.write(luaPath, "LUA") != OK:
-		oMessage.quick("Could not create: " + luaPath)
-		return
-	oCurrentMap.LuaScript_enabled = true # Saving the map keeps the file, and edits made outside Unearth are reloaded
-	oCurrentMap.currentFilePaths["LUA"] = [luaPath, File.new().get_modified_time(luaPath)]
-	open_externally(luaPath, "")
 
 func _on_ViewSubmenu_Pressed(pressedID):
 	match pressedID:
