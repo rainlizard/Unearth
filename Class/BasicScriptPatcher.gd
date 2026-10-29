@@ -22,12 +22,16 @@ var order = {} # Ranks identity arguments, such as players and items, so new cal
 var call_regex = RegEx.new()
 var if_regex = RegEx.new()
 var endif_regex = RegEx.new()
+var blank_tail_regex = RegEx.new()
+var blank_head_regex = RegEx.new()
 
 
 func _init():
 	call_regex.compile("^[ \\t]*([A-Za-z_][A-Za-z0-9_]*)[ \\t]*\\(([^()]*)\\)")
 	if_regex.compile("(?i)^[ \\t]*IF(_[A-Z0-9_]+)?[ \\t]*\\(")
 	endif_regex.compile("(?i)^[ \\t]*ENDIF\\b")
+	blank_tail_regex.compile("(?:^|\\n)((?:[ \\t]*\\r?\\n)*)$")
+	blank_head_regex.compile("^(?:[ \\t]*\\r?\\n)*")
 
 
 # Only calls with the right argument count are kept, with uppercase arguments and players by their PLAYERx name.
@@ -121,7 +125,7 @@ func remove_call(source, command, identity):
 	var matches = find(parse(source), command, identity)
 	matches.invert()
 	for call in matches:
-		source = source.substr(0, call.line.start) + source.substr(call.line.end)
+		source = cut(source, call.line.start, call.line.end)
 	return {"text": source, "line": 0}
 
 
@@ -157,8 +161,22 @@ func set_block(source, block, enabled):
 		return insert(source, source.length(), PoolStringArray(block).join("\n"), true) if found.empty() else {"text": source, "line": 0}
 	found.invert()
 	for span in found:
-		source = source.substr(0, span[0]) + source.substr(span[1])
+		source = cut(source, span[0], span[1])
 	return {"text": source, "line": 0}
+
+
+# Removes the lines between start and end, then collapses the blank lines left around the gap into one, or none at the top or bottom of the script.
+func cut(source, start, end):
+	var before = source.substr(0, start)
+	var after = source.substr(end)
+	var tail = blank_tail_regex.search(before)
+	var head = blank_head_regex.search(after)
+	var keep = 0 if tail.get_start(1) == 0 or head.get_end() == after.length() else 1
+	if tail.get_string(1).count("\n") + head.get_string().count("\n") > keep:
+		var newline = "\r\n" if "\r\n" in source else "\n"
+		before = before.substr(0, tail.get_start(1)) + (newline if keep == 1 else "")
+		after = after.substr(head.get_end())
+	return before + after
 
 
 func insert(source, at, text, new_group):
