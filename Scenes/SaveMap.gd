@@ -281,20 +281,26 @@ func save_cubes_cfg_file(file_type, map_filename_no_ext, map_base_dir):
 	return false
 
 
+func get_existing_config_file(file_type):
+	if oCurrentMap.loaded_from_backup:
+		return ""
+	match file_type:
+		"slabset.toml": return oCurrentMap.existing_slabset_file
+		"columnset.toml": return oCurrentMap.existing_columnset_file
+		"rules.cfg": return oCurrentMap.existing_rules_file
+		"cubes.cfg": return oCurrentMap.existing_cubes_file
+	return ""
+
+func get_config_save_type(file_type):
+	if get_existing_config_file(file_type).get_file().to_lower() == file_type:
+		return oConfigFileManager.LOAD_CFG_CAMPAIGN
+	return oConfigFileManager.LOAD_CFG_CURRENT_MAP
+
 func get_config_save_target(file_type, map_filename_no_ext, map_base_dir):
-	var existing_file_path = ""
-	if oCurrentMap.loaded_from_backup == false:
-		match file_type:
-			"slabset.toml": existing_file_path = oCurrentMap.existing_slabset_file
-			"columnset.toml": existing_file_path = oCurrentMap.existing_columnset_file
-			"rules.cfg": existing_file_path = oCurrentMap.existing_rules_file
-			"cubes.cfg": existing_file_path = oCurrentMap.existing_cubes_file
-	var config_type = oConfigFileManager.LOAD_CFG_CURRENT_MAP
-	if existing_file_path != "":
-		if existing_file_path.get_file().to_lower() == file_type:
-			config_type = oConfigFileManager.LOAD_CFG_CAMPAIGN
-		return [existing_file_path, config_type]
-	return [map_base_dir.plus_file(map_filename_no_ext + "." + file_type), config_type]
+	var file_path = get_existing_config_file(file_type)
+	if file_path == "":
+		file_path = map_base_dir.plus_file(map_filename_no_ext + "." + file_type)
+	return [file_path, get_config_save_type(file_type)]
 
 
 func track_saved_config_file(file_path, file_type, config_type):

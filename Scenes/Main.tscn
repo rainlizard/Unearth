@@ -3652,7 +3652,7 @@ anchor_bottom = 1.0
 
 [node name="MarginContainer" type="MarginContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer"]
 margin_right = 1220.0
-margin_bottom = 539.0
+margin_bottom = 564.0
 custom_constants/margin_right = 20
 custom_constants/margin_top = 20
 custom_constants/margin_left = 20
@@ -3662,12 +3662,12 @@ custom_constants/margin_bottom = 20
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 1200.0
-margin_bottom = 519.0
+margin_bottom = 544.0
 custom_constants/separation = 24
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer"]
 margin_right = 764.0
-margin_bottom = 499.0
+margin_bottom = 524.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_right = 764.0
@@ -3684,7 +3684,7 @@ rect_min_size = Vector2( 24, 24 )
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 margin_top = 53.0
 margin_right = 764.0
-margin_bottom = 499.0
+margin_bottom = 524.0
 custom_constants/hseparation = 21
 columns = 2
 
@@ -3895,48 +3895,48 @@ margin_bottom = 396.0
 text = "Save & Play"
 
 [node name="Label35" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
-margin_top = 375.0
+margin_top = 400.0
 margin_right = 287.0
-margin_bottom = 396.0
+margin_bottom = 421.0
 text = "Alt + Enter"
 
 [node name="Label31" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
-margin_top = 375.0
+margin_top = 400.0
 margin_right = 764.0
-margin_bottom = 396.0
+margin_bottom = 421.0
 text = "Fullscreen"
 
 [node name="Label15" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
-margin_top = 400.0
+margin_top = 425.0
 margin_right = 287.0
-margin_bottom = 421.0
+margin_bottom = 446.0
 text = "ESC"
 
 [node name="Label32" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
-margin_top = 400.0
+margin_top = 425.0
 margin_right = 764.0
-margin_bottom = 421.0
+margin_bottom = 446.0
 text = "Close windows"
 
 [node name="Label36" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
-margin_top = 425.0
+margin_top = 450.0
 margin_right = 287.0
-margin_bottom = 446.0
+margin_bottom = 471.0
 text = "Spacebar"
 
 [node name="Label37" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 308.0
-margin_top = 425.0
+margin_top = 450.0
 margin_right = 764.0
-margin_bottom = 446.0
+margin_bottom = 471.0
 text = "Toggle door lock"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer"]
 margin_left = 788.0
 margin_right = 1180.0
-margin_bottom = 499.0
+margin_bottom = 524.0
 
 [node name="Label2" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
 margin_right = 392.0

@@ -96,7 +96,7 @@ func load_cfgs(mapPath, mod_zip_paths):
 				var ext = file_name_from_list.get_extension().to_lower()
 				if ext == "toml":
 					match file_name_from_list:
-						"slabset.toml": Slabset.import_toml_slabset(actual_filepath)
+						"slabset.toml": Slabset.import_toml_slabset(actual_filepath, load_cfg_type)
 						"columnset.toml": Columnset.import_toml_columnset(actual_filepath)
 						"textureanim.toml": oTextureAnimation.generate_animation_database(actual_filepath)
 						"effects.toml": load_effects_data(actual_filepath)

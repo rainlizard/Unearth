@@ -296,7 +296,7 @@ func update_modified_label_for_slab_id():
 
 func update_modified_label_for_variation():
 	var variation = get_current_variation()
-	if Slabset.is_dat_variation_different(variation) or Slabset.is_tng_variation_different(variation):
+	if Slabset.is_variation_different(variation):
 		oVariationNumberSpinBox.modulate = Color(1.4, 1.4, 1.7)
 		oVarRevertButton.disabled = false
 	else:
@@ -700,6 +700,8 @@ func paste(howMany):
 		if clipboard_index < tng_size:
 			ensure_tng_array_has_space(i)
 			Slabset.tng[i] = clipboard["tng"][clipboard_index].duplicate(true)
+			for obj in Slabset.tng[i]:
+				obj[Slabset.obj.VARIATION] = i
 	update_column_spinboxes()
 	update_objects_ui()
 	oDkSlabsetVoxelView._on_SlabsetIDSpinBox_value_changed(oSlabsetIDSpinBox.value)
@@ -744,19 +746,11 @@ func _on_VarRevertButton_pressed():
 	oMessage.quick("Reverted current variation")
 
 func revert(variations_to_revert):
+	var baseline = Slabset.get_save_baseline()
 	for variation in variations_to_revert:
-		var setToDat = Slabset.EMPTY_SLAB.duplicate()
-		var setToTng = []
-		
-		if Slabset.default_data.has("dat") and variation < Slabset.default_data["dat"].size():
-			setToDat = Slabset.default_data["dat"][variation].duplicate()
-		
-		if Slabset.default_data.has("tng") and variation < Slabset.default_data["tng"].size():
-			setToTng = Slabset.default_data["tng"][variation].duplicate(true)
-		
 		ensure_variation_has_space(variation)
-		Slabset.dat[variation] = setToDat
-		Slabset.tng[variation] = setToTng
+		Slabset.dat[variation] = Slabset.get_baseline_value(baseline, "dat", variation, Slabset.EMPTY_SLAB).duplicate()
+		Slabset.tng[variation] = Slabset.get_baseline_value(baseline, "tng", variation, []).duplicate(true)
 	update_column_spinboxes()
 	update_objects_ui()
 	yield(get_tree(),'idle_frame')

@@ -2,6 +2,8 @@ extends Node
 onready var oGame = Nodelist.list["oGame"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oBuffers = Nodelist.list["oBuffers"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
+onready var oSaveMap = Nodelist.list["oSaveMap"]
 
 var reserved_slabset = 100
 var highest_slabset_id_from_fxdata = 0
@@ -9,6 +11,7 @@ var highest_slabset_id_from_fxdata = 0
 var tng = []
 var dat = []
 var default_data = {}
+var campaign_data = {} # fxdata + campaign slabset, which a map's own slabset file is applied over
 var loaded_data = {}
 
 enum obj {
@@ -41,9 +44,10 @@ func clear_all_slabset_data():
 	tng = []
 	dat = []
 	highest_slabset_id_from_fxdata = 0
+	campaign_data = {}
 	loaded_data = {}
 
-func import_toml_slabset(filePath):
+func import_toml_slabset(filePath, load_cfg_type):
 	var processed_string = preprocess_toml_file(filePath)
 	if processed_string == null:
 		return
@@ -58,7 +62,7 @@ func import_toml_slabset(filePath):
 		if cfg.has_section_key("slab0.S", "columns"): # Lowercase "Columns" means it's an out of date slabset.toml file
 			oMessage.big("Failed loading Slabset", "Old /fxdata/slabset.toml file, please install the latest KeeperFX alpha patch")
 	
-	var is_from_fxdata = "fxdata" in filePath
+	var is_from_fxdata = load_cfg_type == oConfigFileManager.LOAD_CFG_FXDATA
 	var max_slab_id_found = 0
 	var variations_with_replaced_objects = {}
 	
@@ -124,6 +128,8 @@ func import_toml_slabset(filePath):
 	if is_from_fxdata:
 		highest_slabset_id_from_fxdata = max_slab_id_found
 		store_default_data()
+	elif load_cfg_type == oConfigFileManager.LOAD_CFG_CAMPAIGN:
+		campaign_data = snapshot_data()
 
 
 func load_default_original_slabset():
@@ -161,13 +167,20 @@ func load_default_original_slabset():
 	store_default_data()
 
 
+func snapshot_data():
+	return {"dat": dat.duplicate(true), "tng": tng.duplicate(true)}
+
 func store_default_data():
-	default_data["dat"] = dat.duplicate(true)
-	default_data["tng"] = tng.duplicate(true)
+	default_data = snapshot_data()
 
 func store_loaded_data():
-	loaded_data["dat"] = dat.duplicate(true)
-	loaded_data["tng"] = tng.duplicate(true)
+	loaded_data = snapshot_data()
+
+# A map's own slabset file is applied over the campaign's, so it only needs to hold what differs from it
+func get_save_baseline():
+	if campaign_data.empty() == false and oSaveMap.get_config_save_type("slabset.toml") == oConfigFileManager.LOAD_CFG_CURRENT_MAP:
+		return campaign_data
+	return default_data
 
 func has_changes_since_load():
 	if loaded_data.empty():
@@ -285,11 +298,9 @@ enum { # BitFlags
 	SKIP_OBJECTS = 2,
 }
 
-func export_toml_slabset(filePath, list_of_modified_slabs = null):
+func export_toml_slabset(filePath, list_of_modified_slabs):
 	var CODETIME_START = OS.get_ticks_msec()
-	if list_of_modified_slabs == null:
-		list_of_modified_slabs = get_all_modified_slabs()
-
+	var baseline = get_save_baseline()
 	if list_of_modified_slabs.empty():
 		return false
 
@@ -301,8 +312,8 @@ func export_toml_slabset(filePath, list_of_modified_slabs = null):
 		for variationNumber in 28:
 			var variation = slabID * 28 + variationNumber
 			
-			# Only export this variation if it's actually different from default
-			if not (is_dat_variation_different(variation) or is_tng_variation_different(variation)):
+			# Only export this variation if it's actually different from the baseline
+			if not is_variation_different(variation, baseline):
 				continue
 				
 			var dirText = dir_texts[variationNumber]
@@ -351,54 +362,59 @@ func get_all_modified_slabs():
 	var num_elements = max(dat.size(), tng.size())
 	if num_elements == 0:
 		return []
+	var baseline = get_save_baseline()
 	var totalSlabs = int(ceil(float(num_elements) / 28.0))
 	for slabID in totalSlabs:
-		if is_slab_edited(slabID):
+		if is_slab_edited(slabID, baseline):
 			modified_slabs.append(slabID)
 	return modified_slabs
 
-func is_slab_edited(slabID):
+func is_slab_edited(slabID, baseline = null):
 	for variationNumber in 28:
-		var variation = slabID * 28 + variationNumber
-		if is_dat_variation_different(variation) or is_tng_variation_different(variation):
+		if is_variation_different(slabID * 28 + variationNumber, baseline):
 			return true
 	return false
 
+func is_variation_different(variation, baseline = null):
+	return is_dat_variation_different(variation, baseline) or is_tng_variation_different(variation, baseline)
 
-func is_dat_variation_different(variation):
+
+# Baseline defaults to what the slabset file being saved to is applied over
+func get_baseline_value(baseline, key, variation, fallback):
+	if baseline == null:
+		baseline = get_save_baseline()
+	if baseline.has(key) and variation < baseline[key].size():
+		return baseline[key][variation]
+	return fallback
+
+func is_dat_variation_different(variation, baseline = null):
 	if variation >= dat.size():
 		return false
-	var current_dat_val = dat[variation]
-	var default_dat_val = EMPTY_SLAB
-	if default_data.has("dat") and variation < default_data["dat"].size():
-		default_dat_val = default_data["dat"][variation]
-	return current_dat_val != default_dat_val
+	return dat[variation] != get_baseline_value(baseline, "dat", variation, EMPTY_SLAB)
 
-
-func is_tng_variation_different(variation):
+func is_tng_variation_different(variation, baseline = null):
 	if variation >= tng.size():
 		return false
-	var current_tng_val = tng[variation]
-	var default_tng_val = []
-	if default_data.has("tng") and variation < default_data["tng"].size():
-		default_tng_val = default_data["tng"][variation]
-	return current_tng_val != default_tng_val
+	return tng[variation] != get_baseline_value(baseline, "tng", variation, [])
 
 
 func is_dat_column_different(variation, subtile):
 	if variation >= dat.size() or dat[variation].empty():
 		return false
-	if variation >= default_data["dat"].size() or default_data["dat"][variation].empty():
+	var baseline_dat = get_baseline_value(null, "dat", variation, [])
+	if baseline_dat.empty():
 		return dat[variation][subtile] != 0
-	return dat[variation][subtile] != default_data["dat"][variation][subtile]
+	return dat[variation][subtile] != baseline_dat[subtile]
 
 
 func is_tng_object_different(variation, objectIndex, objectProperty):
-	if variation >= tng.size() or variation >= default_data["tng"].size():
+	var baseline = get_save_baseline()
+	if variation >= tng.size() or variation >= baseline["tng"].size():
 		return false
-	if objectIndex >= tng[variation].size() or objectIndex >= default_data["tng"][variation].size():
+	var baseline_tng = baseline["tng"][variation]
+	if objectIndex >= tng[variation].size() or objectIndex >= baseline_tng.size():
 		return true
-	return tng[variation][objectIndex][objectProperty] != default_data["tng"][variation][objectIndex][objectProperty]
+	return tng[variation][objectIndex][objectProperty] != baseline_tng[objectIndex][objectProperty]
 
 
 #func find_all_dat_differences():
