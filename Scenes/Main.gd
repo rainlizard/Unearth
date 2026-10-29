@@ -3,6 +3,7 @@ onready var oTMapLoader = Nodelist.list["oTMapLoader"]
 onready var oGenerateTerrain = Nodelist.list["oGenerateTerrain"]
 onready var oUi = Nodelist.list["oUi"]
 onready var oOpenMap = Nodelist.list["oOpenMap"]
+onready var oUpdater = Nodelist.list["oUpdater"]
 
 
 func _enter_tree():
@@ -16,6 +17,7 @@ func _ready():
 	initialize_window_settings()
 	oUi.initialize_window_desired_values()
 	oOpenMap.start()
+	oUpdater.start()
 
 
 func initialize_window_settings():

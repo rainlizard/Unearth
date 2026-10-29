@@ -17,7 +17,8 @@ onready var oUndoStates = Nodelist.list["oUndoStates"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oOverheadGraphics = Nodelist.list["oOverheadGraphics"]
 onready var oSlabsetWindow = Nodelist.list["oSlabsetWindow"]
-	
+onready var oUpdater = Nodelist.list["oUpdater"]
+
 enum {
 	VIEW_2D = 0
 	VIEW_3D = 1
@@ -94,6 +95,7 @@ func _unhandled_input(event):
 
 func _notification(what):
 	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
+		oUpdater.relaunch = false # Forget an earlier "Restart now" whose quit was cancelled
 		if OS.window_size.x >= 720 and OS.window_size.y >= 720 and OS.is_window_minimized() == false:
 			Settings.write_cfg("editor_window_position", OS.window_position)
 			Settings.write_cfg("editor_window_maximized_state", OS.window_maximized)

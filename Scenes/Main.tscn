@@ -1,4 +1,4 @@
-[gd_scene load_steps=214 format=2]
+[gd_scene load_steps=215 format=2]
 
 [ext_resource path="res://Scenes/SlabStyle.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/SlabPlacement.gd" type="Script" id=2]
@@ -197,6 +197,7 @@
 [ext_resource path="res://Theme/StyleBoxBasicPanel.tres" type="StyleBox" id=296]
 [ext_resource path="res://Scenes/MapOutline.gd" type="Script" id=297]
 [ext_resource path="res://Scenes/RemLineOverlay.gd" type="Script" id=298]
+[ext_resource path="res://Scenes/Updater.gd" type="Script" id=299]
 
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 1, 1, 1 )
@@ -310,6 +311,9 @@ script = ExtResource( 37 )
 
 [node name="Game" type="Node" parent="."]
 script = ExtResource( 30 )
+
+[node name="Updater" type="Node" parent="."]
+script = ExtResource( 299 )
 
 [node name="ConfigFileManager" type="Node" parent="."]
 script = ExtResource( 279 )
@@ -2501,13 +2505,20 @@ margin_right = 558.0
 margin_bottom = 388.0
 text = "Always decompress maps"
 
+[node name="AutomaticUpdatesCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
+margin_top = 392.0
+margin_right = 558.0
+margin_bottom = 421.0
+pressed = true
+text = "Automatic updates"
+
 [node name="BackupFolderSizeLimit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer" instance=ExtResource( 16 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
-margin_top = 392.0
+margin_top = 425.0
 margin_right = 558.0
-margin_bottom = 423.0
+margin_bottom = 456.0
 settingText = "Backup folder limit (MB)"
 slider_step = 1.0
 maximum_value = 1.04858e+06
@@ -8798,6 +8809,7 @@ margin_bottom = 40.0
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineNomods" to="Game" method="_on_CmdLineFlag_toggled" binds= [ "nomods" ]]
 [connection signal="text_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer/CmdLineCustom" to="Game" method="_on_CmdLineCustom_text_changed"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/CheckBoxAlwaysDecompress" to="Ui/UiSystem/PreferencesWindow" method="_on_CheckBoxAlwaysDecompress_toggled"]
+[connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/AutomaticUpdatesCheckbox" to="Ui/UiSystem/PreferencesWindow" method="_on_AutomaticUpdatesCheckbox_toggled"]
 [connection signal="value_changed" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/HBoxContainer3/PathStonePercent" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_PathStonePercent_value_changed"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/BridgesOnlyOnLiquidCheckbox" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_BridgesOnlyOnLiquidCheckbox_toggled"]
 [connection signal="toggled" from="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer/OwnableNaturalTerrain" to="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements" method="_on_OwnableNaturalTerrain_toggled"]

@@ -4,6 +4,8 @@ onready var oSetDirPath = Nodelist.list["oSetDirPath"]
 onready var oCheckBoxVsync = Nodelist.list["oCheckBoxVsync"]
 onready var oMSAA = Nodelist.list["oMSAA"]
 onready var oCheckBoxAlwaysDecompress = Nodelist.list["oCheckBoxAlwaysDecompress"]
+onready var oAutomaticUpdatesCheckbox = Nodelist.list["oAutomaticUpdatesCheckbox"]
+onready var oUpdater = Nodelist.list["oUpdater"]
 onready var oBackupFolderSizeLimit = Nodelist.list["oBackupFolderSizeLimit"]
 onready var oChooseDkExe = Nodelist.list["oChooseDkExe"]
 onready var oCmdLinePacketsave = Nodelist.list["oCmdLinePacketsave"]
@@ -83,6 +85,7 @@ func _on_SettingsWindow_about_to_show():
 	var msaa_slider_value = msaa_enum_to_slider_value(msaa_enum)
 	oMSAA.update_appearance(msaa_slider_value)
 	oCheckBoxAlwaysDecompress.pressed = Settings.get_setting("always_decompress")
+	oAutomaticUpdatesCheckbox.pressed = Settings.get_setting("automatic_updates")
 	oBackupFolderSizeLimit.update_appearance(Settings.get_setting("backup_folder_size_limit_mb"))
 	oCmdLinePacketsave.set_pressed_no_signal(Settings.get_setting("packetsave"))
 	oCmdLinePacketsave.disabled = oGame.keeperfx_is_installed() == false
@@ -132,6 +135,9 @@ func _on_CheckBoxVsync_toggled(button_pressed):
 func _on_CheckBoxAlwaysDecompress_toggled(button_pressed):
 	Settings.set_setting("always_decompress", button_pressed)
 
+func _on_AutomaticUpdatesCheckbox_toggled(button_pressed):
+	Settings.set_setting("automatic_updates", button_pressed)
+
 func edited_BackupFolderSizeLimit(new_text):
 	var new_value = max(0, int(new_text))
 	oBackupFolderSizeLimit.update_appearance(new_value)
@@ -147,8 +153,10 @@ func _on_CloseButton_pressed():
 	hide()
 
 func restart_application():
-	var executable_path = OS.get_executable_path()
-	OS.execute(executable_path, [], false)
+	if oUpdater.update_ready: # The update script relaunches Unearth after installing, launching now would lock the files it replaces
+		oUpdater.relaunch = true
+	else:
+		OS.execute(OS.get_executable_path(), [], false)
 	get_tree().quit()
 
 

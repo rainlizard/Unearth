@@ -94,6 +94,7 @@ var listOfSettings = [
 	"show_clm_data_tab",
 	"allow_reserved_id_editing",
 	"pause_when_minimized",
+	"automatic_updates",
 	"low_processor_mode_sleep_usec",
 	"inputs_update_screen",
 	"rendering_rate",
@@ -526,6 +527,10 @@ func game_setting(doWhat,string,value):
 			var oPauseWhenMinimizedCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/PauseWhenMinimizedCheckbox'
 			if doWhat == SET: oPauseWhenMinimizedCheckbox.pressed = value
 			if doWhat == GET: return oPauseWhenMinimizedCheckbox.pressed
+		"automatic_updates":
+			var oAutomaticUpdatesCheckbox = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/AutomaticUpdatesCheckbox'
+			if doWhat == SET: oAutomaticUpdatesCheckbox.pressed = value
+			if doWhat == GET: return oAutomaticUpdatesCheckbox.pressed
 		"low_processor_mode_sleep_usec":
 			var oLowProcessorModeSleepUsec = $'../Main/Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer/LowProcessorModeSleepUsec'
 			var oEditor = $'../Main/Editor'
