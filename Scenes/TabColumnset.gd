@@ -125,7 +125,7 @@ func _on_columnset_timer_timeout():
 
 func _on_ColumnsetHelpButton_pressed():
 	var helptxt = ""
-	helptxt += "columnset.toml is a global file in /fxdata/ that is used by all maps in the game, but it can also be saved as a local file for a map or campaign. When you run the game both columnset.toml files will be loaded, but with the local file overwriting any same fields of the file in /fxdata/.\n"
+	helptxt += "columnset.toml is a global file in /fxdata/ that is used by all maps in the game, but it can also be saved as a local file for a map or campaign. When you run the game the /fxdata/ file is loaded first, then the campaign's and then the map's, each overwriting any same fields of the ones before it.\n"
 	helptxt += "\n"
 	helptxt += "When you save the map, Columnset edits are saved to the file shown at the top of this tab. If no Columnset file exists for this map yet, Unearth creates mapname.columnset.toml beside the map.\n"
 	helptxt += "\n"

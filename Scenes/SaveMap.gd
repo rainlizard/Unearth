@@ -130,7 +130,7 @@ func save_map(filePath):
 
 	print('Total time to save: ' + str(OS.get_ticks_msec() - SAVETIME_START) + 'ms')
 	if oDataScript.data == "" and oDataLua.data == "":
-		oMessage.big("Warning", "Your map has no script. Open Script > DKScript and create the DKScript file to add the default setup.")
+		oMessage.big("Warning", "Your map has no script. Open Script > DKScript editor and press 'Add default setup'.")
 	oMessage.quick('Saved map')
 	oCurrentMap.set_path_and_title(filePath)
 	oCurrentMap.loaded_from_backup = false

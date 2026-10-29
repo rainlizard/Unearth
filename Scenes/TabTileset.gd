@@ -499,7 +499,7 @@ func _on_TilesetHelpButton_pressed():
 TMAPA contains texture IDs 0-543. TMAPB contains IDs 1000-1543. Revert tileset handles both maps.
 Edit Pack creates PNGs and filelists for TMAPA and TMAPB in a folder named after the map. Existing filelists control the PNG layout when remaking the pack. Unearth reloads changes into the 2D and 3D views.
 
-Import TMAP accepts DAT files and full 256x2176 PNG strips. Export TMAP writes a standalone DAT or PNG without changing the map's save state.
+Import accepts DAT files and full 256x2176 PNG strips. Export writes a standalone DAT or PNG without changing the map's save state.
 Texture maps are saved in the campaign cfg folder when it already contains texture maps. Map-local overrides and maps without campaign texture maps are saved as mapname.tmapa###.dat and mapname.tmapb###.dat, where ### is the Tileset ID."""
 	oMessage.big("Tileset", helpText)
 

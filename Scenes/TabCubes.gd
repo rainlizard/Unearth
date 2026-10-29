@@ -321,7 +321,7 @@ func adjust_ui_color_if_different():
 func _on_CubeHelpButton_pressed():
 	var helptxt = ""
 	helptxt += "cubes.cfg controls the six texture IDs used by each cube face.\n\n"
-	helptxt += "Cube changes are saved when you save the map, to the campaign's cubes.cfg if it has one, otherwise to a local mapname.cubes.cfg.\n\n"
+	helptxt += "When you save the map, Cube edits are saved to the file shown at the top of this tab. If no cubes file exists for this map yet, Unearth creates mapname.cubes.cfg beside the map.\n\n"
 	helptxt += "Texture order is North, East, South, West, Top, Bottom.\n\n"
 	helptxt += "The shortcut beside each face opens and selects that texture in the Tileset tab."
 	oMessage.big("Help", helptxt)

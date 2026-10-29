@@ -178,7 +178,7 @@ func _on_FakeSlabHelpButton_pressed():
 	var helptext = ""
 	helptext += "Fake slabs will work in any solo map.\n"
 	helptext += "They typically reset their appearance when placing or claiming an adjacent slab.\n"
-	helptext += "Set 'Slab ID' to Slab 50 to prevent the appearance from changing.\n"
+	helptext += "Set 'Masquerade as' to Slab 50 to prevent the appearance from changing.\n"
 	helptext += "There's a few other IDs you can use which may not reset: Impenetrable Rock, Gold, Bridge, Gems, Guard post. But this needs further testing.\n\n"
 	helptext += "Right click on the map while the Fake slab menu is open to copy column index numbers into the window."
 	oMessage.big("Help",helptext)

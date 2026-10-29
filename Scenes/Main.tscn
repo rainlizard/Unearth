@@ -1634,7 +1634,6 @@ margin_top = 337.0
 margin_right = 805.0
 margin_bottom = 358.0
 hint_tooltip = "How many are on the map, out of the game's limit. Turns red when over the limit."
-mouse_filter = 1
 size_flags_horizontal = 3
 columns = 2
 script = ExtResource( 139 )
@@ -2297,13 +2296,13 @@ size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles"]
-margin_right = 558.0
-margin_bottom = 438.0
+margin_right = 546.0
+margin_bottom = 456.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="KeeperFXDetection" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 21.0
 custom_colors/font_color = Color( 1, 0.658824, 0.329412, 1 )
 text = "Need to set executable"
@@ -2311,7 +2310,7 @@ align = 1
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 25.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 52.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2328,7 +2327,7 @@ __meta__ = {
 
 [node name="SetDirPath" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3"]
 margin_left = 166.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -2338,12 +2337,12 @@ autowrap = true
 
 [node name="HSeparator6" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 56.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 57.0
 
 [node name="Label" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 61.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 82.0
 size_flags_horizontal = 3
 text = "Play button arguments"
@@ -2351,25 +2350,25 @@ align = 1
 
 [node name="HSeparator7" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 86.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 87.0
 
 [node name="GridContainer" type="GridContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 91.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 287.0
 columns = 2
 
 [node name="CmdLineSkipHeartZoom" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
-margin_right = 277.0
+margin_right = 271.0
 margin_bottom = 29.0
 hint_tooltip = "Faster startup, but opening game turns will differ from normal play."
 size_flags_horizontal = 3
 text = "Skip heart zoom"
 
 [node name="CmdLineAlex" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
-margin_left = 281.0
-margin_right = 558.0
+margin_left = 275.0
+margin_right = 546.0
 margin_bottom = 29.0
 hint_tooltip = "Enable cheat console commands and menus."
 size_flags_horizontal = 3
@@ -2377,16 +2376,16 @@ text = "Cheats"
 
 [node name="CmdLineNosound" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
 margin_top = 33.0
-margin_right = 277.0
+margin_right = 271.0
 margin_bottom = 62.0
 hint_tooltip = "Disable all sounds."
 size_flags_horizontal = 3
 text = "No sound"
 
 [node name="CmdLineAltinput" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
-margin_left = 281.0
+margin_left = 275.0
 margin_top = 33.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 62.0
 hint_tooltip = "Alternate mouse input. The cursor can leave the game window; in-game mouse sensitivity is ignored."
 size_flags_horizontal = 3
@@ -2394,16 +2393,16 @@ text = "Alt mouse input"
 
 [node name="CmdLinePacketsave" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
 margin_top = 66.0
-margin_right = 277.0
+margin_right = 271.0
 margin_bottom = 95.0
 hint_tooltip = "Record packets whenever you play. Right-click the Play button to do a packetload."
 size_flags_horizontal = 3
 text = "Packetsave"
 
 [node name="CmdLineShowGameTurns" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
-margin_left = 281.0
+margin_left = 275.0
 margin_top = 66.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 95.0
 hint_tooltip = "Display the current GameTurn in the bottom right of the screen."
 size_flags_horizontal = 3
@@ -2411,16 +2410,16 @@ text = "Show game turns"
 
 [node name="CmdLineFramestep" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
 margin_top = 99.0
-margin_right = 277.0
+margin_right = 271.0
 margin_bottom = 128.0
 hint_tooltip = "When paused, press the . key to step a single GameTurn. Also shows game turns."
 size_flags_horizontal = 3
 text = "Frame step"
 
 [node name="CmdLineTimer" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
-margin_left = 281.0
+margin_left = 275.0
 margin_top = 99.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 128.0
 hint_tooltip = "Display a timer during the game."
 size_flags_horizontal = 3
@@ -2428,16 +2427,16 @@ text = "Timer"
 
 [node name="CmdLineDbgpathfind" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
 margin_top = 132.0
-margin_right = 277.0
+margin_right = 271.0
 margin_bottom = 161.0
 hint_tooltip = "Show creature paths as lines on screen."
 size_flags_horizontal = 3
 text = "Debug pathfinding"
 
 [node name="CmdLineDbgshots" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
-margin_left = 281.0
+margin_left = 275.0
 margin_top = 132.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 161.0
 hint_tooltip = "Show shot damage on screen when it hits. Only works in debug builds (keeperfx_hvlog)."
 size_flags_horizontal = 3
@@ -2445,16 +2444,16 @@ text = "Debug shots"
 
 [node name="CmdLineNomods" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
 margin_top = 165.0
-margin_right = 277.0
+margin_right = 271.0
 margin_bottom = 196.0
 hint_tooltip = "Ignore installed mods."
 size_flags_horizontal = 3
 text = "No mods"
 
 [node name="CmdLineCustom" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/GridContainer"]
-margin_left = 281.0
+margin_left = 275.0
 margin_top = 165.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 196.0
 hint_tooltip = "Extra arguments added to the end of the command line, separated by spaces."
 size_flags_horizontal = 3
@@ -2463,14 +2462,14 @@ placeholder_alpha = 0.15
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 291.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 331.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 scroll_vertical_enabled = false
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ScrollContainer"]
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 __meta__ = {
@@ -2498,7 +2497,7 @@ expand_to_text_length = true
 
 [node name="CmdLineExecute" type="LineEdit" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/ScrollContainer/HBoxContainer"]
 margin_left = 124.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 hint_tooltip = "The command Play runs. Change it with the options above."
@@ -2508,20 +2507,20 @@ expand_to_text_length = true
 
 [node name="HSeparator4" type="HSeparator" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 335.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 355.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="CheckBoxAlwaysDecompress" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 359.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 388.0
 hint_tooltip = "Decompress RNC-compressed map files on open without asking. The compressed files are overwritten."
 text = "Always decompress maps"
 
 [node name="AutomaticUpdatesCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 392.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 421.0
 hint_tooltip = "Check for a new version of Unearth on startup and download it in the background. You're asked before it installs."
 pressed = true
@@ -2532,7 +2531,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 0.0
 margin_top = 425.0
-margin_right = 558.0
+margin_right = 546.0
 margin_bottom = 456.0
 hint_tooltip = "Each time you save over a map, its old files are backed up first. The oldest backups are deleted once the folder passes this size. 0 = no backups."
 settingText = "Backup folder limit (MB)"
@@ -3882,6 +3881,19 @@ margin_right = 764.0
 margin_bottom = 371.0
 text = "Save"
 
+[node name="Label38" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 375.0
+margin_right = 287.0
+margin_bottom = 396.0
+text = "F5"
+
+[node name="Label39" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 308.0
+margin_top = 375.0
+margin_right = 764.0
+margin_bottom = 396.0
+text = "Save & Play"
+
 [node name="Label35" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_top = 375.0
 margin_right = 287.0
@@ -3906,7 +3918,7 @@ margin_left = 308.0
 margin_top = 400.0
 margin_right = 764.0
 margin_bottom = 421.0
-text = "Exit"
+text = "Close windows"
 
 [node name="Label36" type="Label" parent="Ui/UiSystem/ControlsWindow/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_top = 425.0
@@ -5394,7 +5406,7 @@ margin_left = 255.0
 margin_top = 35.0
 margin_right = 329.0
 margin_bottom = 66.0
-hint_tooltip = "The slab ID saved to the .slb, so it's what the game treats this slab as. The custom slab only changes its look."
+hint_tooltip = "The slab ID saved to the .slb, so it's what the game treats this slab as. The fake slab only changes its look."
 mouse_filter = 1
 size_flags_horizontal = 8
 max_value = 255.0
@@ -6797,7 +6809,7 @@ margin_bottom = 41.0
 [node name="CubeRevertAllButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 margin_right = 166.0
 margin_bottom = 32.0
-hint_tooltip = "Revert every cube to its default. This happens straight away, without asking."
+hint_tooltip = "Revert every modified cube to its default. This happens straight away, without asking."
 size_flags_horizontal = 3
 text = "Revert all"
 
