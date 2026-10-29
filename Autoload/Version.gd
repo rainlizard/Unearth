@@ -1,6 +1,6 @@
 ﻿extends Node
 
-var major_minor = "0.73"
+var major_minor = "0.74"
 var patch = "0000"
 var full = ""
 var unearth_map_format_version:float = 1.06
@@ -9,6 +9,30 @@ func _init():
 	full = major_minor + "." + patch
 
 const changelog = """
+0.74.1071 - 29/10/2026
+- Automatic updates: Unearth checks for a new release on launch, downloads it in the background and asks to restart and update. Can be turned off in Preferences
+- Script menu now has a link to directly open the .txt script file
+- REM lines are greyed out in the DKScript editor
+- DKScript editor: player tabs are shown as icons and only appear when 'Unique settings' is checked
+- DKScript editor: removing a line now removes the extra blank lines left around it
+- DKScript editor: moved some settings outside of the tabs
+- DKScript editor: players written by colour name such as RED or BLUE are recognized
+- DKScript editor: choosing a roaming or hero computer player adds the required LEVEL_VERSION(1) if it's missing
+- Added a custom command line arguments setting in Preferences
+- Multiplayer maps are launched with -1player
+- Warn when saving a multiplayer map outside the multiplayer folder
+- Save As opens in the folder of the last opened map
+- Added tooltips to menu items, Map properties and other settings
+- The map's edge is outlined to visually distinguish the outter black border with abyss
+- Abyss appearance given subtle green
+- Slab picker lists Abyss and custom slabs after the standard slabs, sorted by ID
+- Picking a thing no longer clears the selection in the slab picker
+- A map's own slabset file only saves what differs from the campaign's slabset, and Revert restores the campaign's values
+- Fixed pasted slabset objects keeping the variation they were copied from
+- Grid data no longer shows custom slab IDs above 255 as bedrock or abyss
+- Fixed a crash when terrain.cfg uses a number for SlabAssign
+- Fixed Play from the map browser missing a command line argument
+- Moved the project over from Godot 3.5.3 to 3.6.3
 0.73.1038 - 17/10/2026
 - New script editor: basic options now edit your script in place instead of generating a new one, and are read back from it so the script is always the source of truth
 - Script editor has a tab for All players plus one per keeper, hovering an option highlights its line or previews the line a click would add, and left/right clicking cycles availability forwards/backwards
