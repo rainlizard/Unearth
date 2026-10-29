@@ -20,6 +20,19 @@ onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 const columnLeftSize = 120
 const columnRightSize = 150
 
+const FIELD_TOOLTIPS = {
+	"Position": "In subtiles, 3 per slab. Z is height, 1 per cube.",
+	"Gate #": "Hero gate number. Scripts use it as a negative location, e.g. -1 for gate 1.",
+	"Point #": "Action point number. Scripts use it as a location, e.g. 1 for point 1.",
+	"Point range": "Radius in subtiles. IF_ACTION_POINT triggers when one of the player's creatures comes this close.",
+	"Effect range": "Radius in subtiles that the effect generator works in.",
+	"Light range": "Radius in subtiles.",
+	"Custom box": "Box number for scripts: picking it up sets BOX#_ACTIVATED, and SET_BOX_TOOLTIP can describe it.",
+	"Unique name": "Leave blank for a random name. The game ignores names longer than 24 characters.",
+	"Clm entries": "Columns used in the map's .clm, out of its maximum.",
+}
+const UNKNOWN_FIELD_TOOLTIP = "Raw data from the thing's .tng entry. Its meaning is unknown."
+
 var singleLineValues = false # Shrink values to fit one line instead of wrapping, so the list height stays constant
 
 func _ready():
@@ -80,7 +93,7 @@ func add_item(leftString, rightString):
 			if leftString == "Custom box":
 				nodeRightColumn.zero_key_value = 0
 				nodeRightColumn.max_value = 255
-				nodeRightColumn.shortcut_tooltip = "You can also use keyboard keys 0-9 as a shortcut for setting the custom box"
+				nodeRightColumn.shortcut_tooltip = FIELD_TOOLTIPS[leftString] + "\nYou can also use keyboard keys 0-9 as a shortcut for setting the custom box"
 			nodeRightColumn.value = float(rightString)
 		"Effect range","Light range","Intensity","Gate #","Point range","Point #","Unknown 9","Unknown 10","Unknown 11-12","Unknown 13","Unknown 14","Unknown 15","Unknown 16","Unknown 17","Unknown 18","Unknown 19","Unknown 20","Gold held","Health %","Gold value":
 			nodeRightColumn = scnSpinBoxPropertiesValue.instance()
@@ -138,6 +151,13 @@ func add_item(leftString, rightString):
 			nodeRightColumn = create_label(rightString)
 	
 	add_child(nodeRightColumn)
+	
+	var tooltip = FIELD_TOOLTIPS.get(leftString, UNKNOWN_FIELD_TOOLTIP if leftString.begins_with("Unknown") else "")
+	if tooltip != "":
+		nameDesc.hint_tooltip = tooltip
+		nameDesc.mouse_filter = MOUSE_FILTER_PASS
+		if nodeRightColumn.hint_tooltip == "":
+			nodeRightColumn.hint_tooltip = tooltip
 
 
 func create_label(rightString):

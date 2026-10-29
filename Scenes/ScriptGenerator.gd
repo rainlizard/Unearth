@@ -126,6 +126,7 @@ func _ready():
 	for control in [oPortalRateField, oGoldField, oMaxCreaturesField]:
 		control.connect("text_changed", self, "_on_field_text_changed", [control])
 		var row = control.get_parent()
+		control.hint_tooltip = row.get_node("Label").hint_tooltip # The field would hide its label's tooltip
 		for node in [row] + row.get_children():
 			node.connect("mouse_entered", self, "_on_setting_mouse_entered", [row])
 	scriptPreview = oScriptTextEdit.duplicate(DUPLICATE_SCRIPTS) # Without the editor's signals, but with its RemLineOverlay
@@ -156,9 +157,10 @@ func update_options_based_on_mapformat():
 	for i in get_magic_list():
 		add_available_button(oMagicAvailable, "MAGIC_AVAILABLE", i[1], Things.fetch_icon_sprite(Things.TYPE.OBJECT, i[0], ICON_SIZE, CREATURE_ICON_SCALE), Things.fetch_name(Things.TYPE.OBJECT, i[0]), i[2] == 1)
 	for i in get_creature_list():
-		var button = add_available_button(oCreaturePool if i[3] else oHeroPool, "CREATURE_AVAILABLE", i[1], Things.fetch_icon_sprite(Things.TYPE.CREATURE, i[0], ICON_SIZE, CREATURE_ICON_SCALE), Things.fetch_name(Things.TYPE.CREATURE, i[0]), i[2] > 0)
+		var creatureName = Things.fetch_name(Things.TYPE.CREATURE, i[0])
+		var button = add_available_button(oCreaturePool if i[3] else oHeroPool, "CREATURE_AVAILABLE", i[1], Things.fetch_icon_sprite(Things.TYPE.CREATURE, i[0], ICON_SIZE, CREATURE_ICON_SCALE), creatureName, i[2] > 0)
 		var poolLabel = button.get_node("%TextEditableLabel")
-		poolLabel.hint_tooltip = button.hint_tooltip + " in portal pool"
+		poolLabel.hint_tooltip = creatureName + " in portal pool\nClick to change the count. The pool is shared by every keeper, so it's only editable on All players."
 		poolLabel.connect("mouse_entered", self, "_on_setting_mouse_entered", [poolLabel])
 		button.set_meta("default_pool", i[2])
 	for section in [[oTrapsAvailable, Things.TYPE.TRAP, "TRAP_AVAILABLE"], [oDoorsAvailable, Things.TYPE.DOOR, "DOOR_AVAILABLE"]]:
@@ -263,6 +265,8 @@ func add_available_button(parent, command, variable, texture, display_name, avai
 	button.get_node("%IconTextureRect").texture = texture
 	button.get_node("%IconLabel").text = display_name if texture == null else ""
 	var cycle = [button.START, button.RESEARCH, button.DISABLED] if command in ["ROOM_AVAILABLE", "MAGIC_AVAILABLE"] else [button.ENABLED, button.DISABLED]
+	if cycle.size() == 3:
+		button.hint_tooltip += "\nClick to cycle Start, Research and Disabled. Right-click goes back."
 	button.set_meta("cycle", cycle)
 	button.set_meta("default", cycle[0 if availableByDefault else 1])
 	parent.add_child(button)

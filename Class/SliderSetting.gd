@@ -10,6 +10,7 @@ signal sliderChanged
 
 func _ready():
 	$"VBoxContainer/LabelNumber".text = str($"VBoxContainer/HSlider".value)
+	$"VBoxContainer/HSlider".hint_tooltip = hint_tooltip # The slider would hide the tooltip otherwise
 
 func _on_HSlider_value_changed(val):
 	$"VBoxContainer/LabelNumber".text = str(val)

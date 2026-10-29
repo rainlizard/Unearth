@@ -245,7 +245,7 @@ func _on_NewMapFormat_item_selected(index):
 		oNewMapBorderType.disabled = false
 		oNewMapBorderType.hint_tooltip = ""
 		oNewMapKind.disabled = false
-		oNewMapKind.hint_tooltip = ""
+		oNewMapKind.hint_tooltip = oMapProperties.KIND_TOOLTIP
 		oXSizeLine.editable = true
 		oYSizeLine.editable = true
 		oXSizeLine.hint_tooltip = ""

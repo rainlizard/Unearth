@@ -142,6 +142,7 @@ func update_doodads_list(doodads):
 		button.align = Button.ALIGN_LEFT
 		button.flat = true
 		button.focus_mode = Control.FOCUS_NONE
+		button.hint_tooltip = "Click to edit"
 		button.connect("pressed", self, "open_doodad_window", [index])
 		oDoodadsList.add_child(button)
 

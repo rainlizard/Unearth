@@ -1488,7 +1488,7 @@ margin_left = 482.0
 margin_right = 530.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
-hint_tooltip = "Add random doodad"
+hint_tooltip = "Add a random doodad: a thing with a chance of being placed on the selected slab type whenever you place it."
 focus_mode = 0
 texture_normal = ExtResource( 293 )
 texture_pressed = ExtResource( 295 )
@@ -1510,6 +1510,7 @@ text = "Pencil size"
 margin_left = 98.0
 margin_right = 172.0
 margin_bottom = 31.0
+hint_tooltip = "Keys 1-9 also set the size, and 0 sets it to 10."
 min_value = 1.0
 max_value = 180.0
 value = 1.0
@@ -1520,6 +1521,7 @@ visible = false
 margin_top = -55.0
 margin_right = 91.0
 margin_bottom = -26.0
+hint_tooltip = "Spacebar toggles this."
 focus_mode = 0
 text = "Place door as locked"
 
@@ -1527,6 +1529,7 @@ text = "Place door as locked"
 margin_top = 139.0
 margin_right = 805.0
 margin_bottom = 168.0
+hint_tooltip = "When placing an owned slab, turn the earth around it into that player's fortified walls."
 focus_mode = 0
 pressed = true
 text = "Fortify"
@@ -1535,6 +1538,7 @@ text = "Fortify"
 margin_top = 172.0
 margin_right = 805.0
 margin_bottom = 201.0
+hint_tooltip = "Repeat every slab and thing edit in the mirrored areas of the map. Click a coloured area to set its owner."
 focus_mode = 0
 text = "Symmetrical"
 
@@ -1609,6 +1613,7 @@ margin_bottom = 128.0
 [node name="SplitDirectionButton" type="Button" parent="Ui/UiTools/PropertiesWindow/VBoxContainer/PropertiesTabs/PlacingSettings/MirrorOptions/VBoxContainer"]
 margin_right = 133.0
 margin_bottom = 27.0
+hint_tooltip = "Cycle how the map is split: top and bottom, left and right, or four quarters."
 focus_mode = 0
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -1618,6 +1623,7 @@ text = "Division axis"
 margin_top = 31.0
 margin_right = 113.0
 margin_bottom = 60.0
+hint_tooltip = "Rotate the copy 180 degrees around the map centre instead of mirroring it straight across."
 focus_mode = 0
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -1627,6 +1633,8 @@ text = "Diagonal"
 margin_top = 337.0
 margin_right = 805.0
 margin_bottom = 358.0
+hint_tooltip = "How many are on the map, out of the game's limit. Turns red when over the limit."
+mouse_filter = 1
 size_flags_horizontal = 3
 columns = 2
 script = ExtResource( 139 )
@@ -1740,6 +1748,7 @@ __meta__ = {
 margin_left = 69.0
 margin_right = 122.0
 margin_bottom = 27.0
+hint_tooltip = "Switch between placing slabs and things (Tab)."
 focus_mode = 0
 size_flags_horizontal = 2
 size_flags_vertical = 2
@@ -2311,6 +2320,7 @@ __meta__ = {
 [node name="SetDirButton" type="Button" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer/HBoxContainer3"]
 margin_right = 162.0
 margin_bottom = 27.0
+hint_tooltip = "Choose keeperfx.exe or the original game's executable. Unearth loads game data from its folder, and Play launches it."
 text = "Game executable"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2471,6 +2481,7 @@ __meta__ = {
 margin_right = 58.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
+hint_tooltip = "The command Play runs. Change it with the options above."
 size_flags_horizontal = 0
 editable = false
 expand_to_text_length = true
@@ -2480,6 +2491,7 @@ margin_left = 62.0
 margin_right = 120.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
+hint_tooltip = "The command Play runs. Change it with the options above."
 size_flags_horizontal = 0
 editable = false
 expand_to_text_length = true
@@ -2489,6 +2501,7 @@ margin_left = 124.0
 margin_right = 558.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
+hint_tooltip = "The command Play runs. Change it with the options above."
 size_flags_horizontal = 3
 editable = false
 expand_to_text_length = true
@@ -2503,12 +2516,14 @@ rect_min_size = Vector2( 0, 20 )
 margin_top = 359.0
 margin_right = 558.0
 margin_bottom = 388.0
+hint_tooltip = "Decompress RNC-compressed map files on open without asking. The compressed files are overwritten."
 text = "Always decompress maps"
 
 [node name="AutomaticUpdatesCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabFiles/VBoxContainer"]
 margin_top = 392.0
 margin_right = 558.0
 margin_bottom = 421.0
+hint_tooltip = "Check for a new version of Unearth on startup and download it in the background. You're asked before it installs."
 pressed = true
 text = "Automatic updates"
 
@@ -2519,6 +2534,7 @@ margin_left = 0.0
 margin_top = 425.0
 margin_right = 558.0
 margin_bottom = 456.0
+hint_tooltip = "Each time you save over a map, its old files are backed up first. The oldest backups are deleted once the folder passes this size. 0 = no backups."
 settingText = "Backup folder limit (MB)"
 slider_step = 1.0
 maximum_value = 1.04858e+06
@@ -2565,6 +2581,7 @@ text = "Place Path stones"
 margin_left = 458.0
 margin_right = 532.0
 margin_bottom = 31.0
+hint_tooltip = "Chance for each subtile of a placed path slab to get a stony floor."
 size_flags_horizontal = 10
 step = 0.1
 value = 15.0
@@ -2582,24 +2599,28 @@ text = "Place bridges only on liquid"
 margin_top = 103.0
 margin_right = 532.0
 margin_bottom = 132.0
+hint_tooltip = "Allow owners on slabs that are normally neutral, such as earth, gold and liquid."
 text = "Ownable natural terrain"
 
 [node name="EditableBordersCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
 margin_top = 136.0
 margin_right = 532.0
 margin_bottom = 165.0
+hint_tooltip = "Allow editing the outer ring of slabs. The game expects impenetrable rock there."
 text = "Editable borders"
 
 [node name="PlaceThingsAnywhere" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
 margin_top = 169.0
 margin_right = 532.0
 margin_bottom = 198.0
+hint_tooltip = "Allow placing things inside solid slabs. Lights and action points can always go anywhere."
 text = "Place things anywhere"
 
 [node name="AutomaticTorchSlabsCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
 margin_top = 169.0
 margin_right = 532.0
 margin_bottom = 198.0
+hint_tooltip = "When placing earth or automatic walls beside claimed ground, use the torch version every few slabs."
 pressed = true
 text = "Automatic torch slabs"
 
@@ -2622,6 +2643,9 @@ __meta__ = {
 margin_left = 444.0
 margin_right = 532.0
 margin_bottom = 27.0
+hint_tooltip = "Which art automatic walls use.
+Grouped: the same art in bands around the owner's dungeon heart.
+Random: each wall picks its own."
 size_flags_horizontal = 10
 text = "Grouped"
 align = 0
@@ -2673,6 +2697,7 @@ margin_bottom = 280.0
 margin_top = 383.0
 margin_right = 532.0
 margin_bottom = 412.0
+hint_tooltip = "Round off the slab's corners where it meets the named terrain on two sides."
 pressed = true
 text = "Rock near liquid"
 
@@ -2680,6 +2705,7 @@ text = "Rock near liquid"
 margin_top = 416.0
 margin_right = 532.0
 margin_bottom = 445.0
+hint_tooltip = "Round off random corners of a lone block that has the named terrain on all four sides."
 pressed = true
 text = "Earth near liquid (solo block)"
 
@@ -2687,6 +2713,7 @@ text = "Earth near liquid (solo block)"
 margin_top = 449.0
 margin_right = 532.0
 margin_bottom = 478.0
+hint_tooltip = "Round off random corners of a lone block that has the named terrain on all four sides."
 pressed = true
 text = "Gold near liquid (solo block)"
 
@@ -2694,30 +2721,35 @@ text = "Gold near liquid (solo block)"
 margin_top = 482.0
 margin_right = 532.0
 margin_bottom = 511.0
+hint_tooltip = "Round off the slab's corners where it meets the named terrain on two sides."
 text = "Path near liquid"
 
 [node name="RoundWaterNearLava" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
 margin_top = 515.0
 margin_right = 532.0
 margin_bottom = 544.0
+hint_tooltip = "Round off the slab's corners where it meets the named terrain on two sides."
 text = "Water near lava"
 
 [node name="RoundRockNearPath" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
 margin_top = 284.0
 margin_right = 532.0
 margin_bottom = 313.0
+hint_tooltip = "Round off the slab's corners where it meets the named terrain on two sides."
 text = "Rock near path"
 
 [node name="RoundEarthNearPath" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
 margin_top = 317.0
 margin_right = 532.0
 margin_bottom = 346.0
+hint_tooltip = "Round off the slab's corners where it meets the named terrain on two sides."
 text = "Earth near path"
 
 [node name="RoundGoldNearPath" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
 margin_top = 350.0
 margin_right = 532.0
 margin_bottom = 379.0
+hint_tooltip = "Round off the slab's corners where it meets the named terrain on two sides."
 text = "Gold near path"
 
 [node name="WarningAboutRoundedCorners" type="Label" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPlacements/MarginContainer/VBoxContainer"]
@@ -2767,6 +2799,7 @@ margin_left = 0.0
 margin_top = 35.0
 margin_right = 544.0
 margin_bottom = 66.0
+hint_tooltip = "Size of the icons in the slab picker."
 settingText = "Slab window scale"
 minimum_value = 0.1
 maximum_value = 4.0
@@ -2778,6 +2811,7 @@ margin_left = 0.0
 margin_top = 70.0
 margin_right = 544.0
 margin_bottom = 101.0
+hint_tooltip = "Size of the icons in the thing picker."
 settingText = "Thing window scale"
 minimum_value = 0.1
 maximum_value = 4.0
@@ -2834,12 +2868,14 @@ text = "Open map properties for new map"
 margin_top = 278.0
 margin_right = 544.0
 margin_bottom = 307.0
+hint_tooltip = "Show the CLM data tab in the Slabset window, for editing the map's own .clm columns."
 text = "Show CLM data tab"
 
 [node name="AllowReservedIdEditingCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabUI/VBoxContainer"]
 margin_top = 311.0
 margin_right = 544.0
 margin_bottom = 340.0
+hint_tooltip = "Let the Slabset and Columnset tabs use the IDs set aside for future KeeperFX slabs and columns (up to 100 and 4096). Custom ones placed there may clash with a later KeeperFX."
 text = "Allow editing reserved slab/column IDs"
 
 [node name="TabCamera" type="ScrollContainer" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings"]
@@ -2888,6 +2924,7 @@ margin_left = 0.0
 margin_top = 35.0
 margin_right = 532.0
 margin_bottom = 66.0
+hint_tooltip = "How quickly the camera catches up when you zoom or pan. Higher is snappier."
 settingText = "Smoothing rate"
 slider_step = 1.0
 minimum_value = 1.0
@@ -2951,6 +2988,7 @@ margin_left = 0.0
 margin_top = 255.0
 margin_right = 532.0
 margin_bottom = 300.0
+hint_tooltip = "This grows as you zoom out so it stays readable. Zoomed out past this level, it's hidden."
 settingText = "Creature level font size max zoom"
 maximum_value = 80.0
 
@@ -2971,6 +3009,7 @@ margin_left = 0.0
 margin_top = 339.0
 margin_right = 532.0
 margin_bottom = 370.0
+hint_tooltip = "This grows as you zoom out so it stays readable. Zoomed out past this level, it's hidden."
 settingText = "Script icon max zoom"
 maximum_value = 80.0
 
@@ -2991,6 +3030,7 @@ margin_left = 0.0
 margin_top = 409.0
 margin_right = 532.0
 margin_bottom = 454.0
+hint_tooltip = "This grows as you zoom out so it stays readable. Zoomed out past this level, it's hidden."
 settingText = "Orientation arrow max zoom"
 maximum_value = 80.0
 
@@ -3070,6 +3110,7 @@ margin_left = 0.0
 margin_top = 208.0
 margin_right = 544.0
 margin_bottom = 239.0
+hint_tooltip = "Supersampling for map textures in the 2D and 3D views. Higher is smoother but slower."
 settingText = "SSAA"
 slider_step = 1.0
 minimum_value = 1.0
@@ -3082,6 +3123,7 @@ margin_left = 0.0
 margin_top = 208.0
 margin_right = 544.0
 margin_bottom = 239.0
+hint_tooltip = "Smooths the edges of 3D geometry. Higher is smoother but slower."
 settingText = "MSAA"
 slider_step = 1.0
 minimum_value = 1.0
@@ -3094,6 +3136,7 @@ margin_left = 0.0
 margin_top = 208.0
 margin_right = 544.0
 margin_bottom = 239.0
+hint_tooltip = "0 = unlimited."
 settingText = "Framerate limit"
 slider_step = 1.0
 maximum_value = 240.0
@@ -3117,6 +3160,7 @@ margin_left = 0.0
 margin_top = 373.0
 margin_right = 544.0
 margin_bottom = 404.0
+hint_tooltip = "Redraws per second. Lower uses less GPU. 0 = redraw every frame."
 settingText = "Rendering rate"
 slider_step = 1.0
 maximum_value = 240.0
@@ -3125,6 +3169,7 @@ maximum_value = 240.0
 margin_top = 373.0
 margin_right = 544.0
 margin_bottom = 402.0
+hint_tooltip = "Only matters when Rendering rate is above 0: also redraw straight away on key presses and mouse clicks."
 text = "Inputs update screen"
 
 [node name="PauseWhenMinimizedCheckbox" type="CheckBox" parent="Ui/UiSystem/PreferencesWindow/VBoxContainer/TabSettings/TabPerformance/VBoxContainer"]
@@ -3240,6 +3285,7 @@ text = "Select what to reset:"
 margin_top = 25.0
 margin_right = 280.0
 margin_bottom = 54.0
+hint_tooltip = "Delete each slab's attached things and create its slabset objects again, such as room furniture, torches and door things."
 pressed = true
 text = "Room objects"
 
@@ -3247,6 +3293,7 @@ text = "Room objects"
 margin_top = 58.0
 margin_right = 280.0
 margin_bottom = 87.0
+hint_tooltip = "Remove each slab's random doodads and roll them again."
 pressed = true
 text = "Random doodads"
 
@@ -3254,6 +3301,7 @@ text = "Random doodads"
 margin_top = 91.0
 margin_right = 280.0
 margin_bottom = 120.0
+hint_tooltip = "Rebuild each slab's columns from the slabset. Custom column edits are lost."
 pressed = true
 text = "Column appearance"
 
@@ -3261,6 +3309,7 @@ text = "Column appearance"
 margin_top = 124.0
 margin_right = 280.0
 margin_bottom = 153.0
+hint_tooltip = "Reset each slab's .wib wibble (vertex wobble) to its default."
 pressed = true
 text = "Wibble"
 
@@ -3268,6 +3317,7 @@ text = "Wibble"
 margin_top = 157.0
 margin_right = 280.0
 margin_bottom = 186.0
+hint_tooltip = "Reset each slab's .wlb value (what lies under a bridge) to its default. Bridges keep theirs."
 pressed = true
 text = "Liquid"
 
@@ -3275,6 +3325,7 @@ text = "Liquid"
 margin_top = 190.0
 margin_right = 280.0
 margin_bottom = 219.0
+hint_tooltip = "Delete things that are inside solid slabs."
 pressed = true
 text = "Remove things in walls"
 
@@ -3451,6 +3502,7 @@ margin_left = 124.0
 margin_top = 147.0
 margin_right = 280.0
 margin_bottom = 178.0
+hint_tooltip = "Chance for each subtile of a placed slab to get this doodad."
 size_flags_horizontal = 3
 step = 0.05
 value = 0.25
@@ -4293,6 +4345,7 @@ margin_top = 19.0
 margin_right = 1084.0
 margin_bottom = 46.0
 rect_min_size = Vector2( 96, 0 )
+hint_tooltip = "Place each colour's assigned slab on its pixels. Colours without a slab are left alone."
 size_flags_vertical = 8
 text = "Apply"
 
@@ -4409,6 +4462,7 @@ margin_left = 252.0
 margin_right = 326.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 74, 0 )
+hint_tooltip = "The texture set the map is drawn with. Slabs can use another one through the Style tab of the slab picker."
 max_value = 30.0
 rounded = true
 
@@ -4543,7 +4597,8 @@ margin_right = 326.0
 margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
-hint_tooltip = "AUTHOR"
+hint_tooltip = "AUTHOR
+Saved in the .lof file. KeeperFX doesn't display it."
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -4569,7 +4624,8 @@ margin_right = 326.0
 margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
-hint_tooltip = "DESCRIPTION"
+hint_tooltip = "DESCRIPTION
+Saved in the .lof file. KeeperFX doesn't display it."
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -4629,7 +4685,8 @@ margin_right = 326.0
 margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
-hint_tooltip = "SPEECH"
+hint_tooltip = "SPEECH
+Two sound files: the speech played before the level starts and after it's won."
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -4655,7 +4712,8 @@ margin_right = 326.0
 margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
-hint_tooltip = "LAND_VIEW"
+hint_tooltip = "LAND_VIEW
+The campaign map images used for this level: the land view and its window."
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -4681,7 +4739,8 @@ margin_right = 326.0
 margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
-hint_tooltip = "ENSIGN_POS and ENSIGN_ZOOM"
+hint_tooltip = "ENSIGN_POS and ENSIGN_ZOOM
+Where the level's flag stands on the campaign land view, in pixels."
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -4731,6 +4790,7 @@ size_flags_horizontal = 3
 margin_left = 139.0
 margin_right = 327.0
 margin_bottom = 31.0
+hint_tooltip = "Place the flag by clicking on a land view image."
 size_flags_horizontal = 3
 text = "Map"
 
@@ -4772,7 +4832,8 @@ margin_right = 326.0
 margin_bottom = 27.0
 grow_horizontal = 0
 grow_vertical = 0
-hint_tooltip = "OPTIONS"
+hint_tooltip = "OPTIONS
+Which flag marks this level on the campaign land view."
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -4796,7 +4857,8 @@ margin_right = 326.0
 margin_bottom = 31.0
 grow_horizontal = 0
 grow_vertical = 0
-hint_tooltip = "NAME_ID"
+hint_tooltip = "NAME_ID
+Text number from the campaign's language files. When set, KeeperFX shows that text as the map's name, so it can be translated."
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -4858,6 +4920,7 @@ custom_constants/separation = 8
 [node name="CreateScriptButton" type="Button" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide"]
 margin_right = 489.0
 margin_bottom = 27.0
+hint_tooltip = "Add the usual starting lines: gold, creature limit, portal rate, computer players, rooms, spells, traps, doors and the creature pool."
 text = "Add default setup"
 
 [node name="ScriptEditor" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide"]
@@ -4902,6 +4965,7 @@ text = "Edit"
 margin_left = 412.0
 margin_right = 481.0
 margin_bottom = 27.0
+hint_tooltip = "Delete the map's DKScript file when you next save."
 text = "Delete"
 
 [node name="ScriptTextEdit" type="TextEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer"]
@@ -5330,6 +5394,7 @@ margin_left = 255.0
 margin_top = 35.0
 margin_right = 329.0
 margin_bottom = 66.0
+hint_tooltip = "The slab ID saved to the .slb, so it's what the game treats this slab as. The custom slab only changes its look."
 mouse_filter = 1
 size_flags_horizontal = 8
 max_value = 255.0
@@ -5369,7 +5434,13 @@ margin_top = 95.0
 margin_right = 329.0
 margin_bottom = 122.0
 rect_min_size = Vector2( 150, 0 )
-hint_tooltip = "Editor placement rules"
+hint_tooltip = "Editor only. How Unearth picks the look from neighbouring slabs.
+Floor: like a room.
+Block: like earth.
+Simple: always the same.
+Reinforced: like a fortified wall.
+Claimed: like claimed path.
+Door: a door that turns to face its walls."
 size_flags_horizontal = 10
 text = "Floor"
 items = [ "Floor", null, false, 0, null, "Block", null, false, 1, null, "Simple", null, false, 2, null, "Reinforced", null, false, 3, null, "Claimed", null, false, 4, null, "Door N/S", null, false, 5, null, "Door E/W", null, true, 6, null ]
@@ -5379,7 +5450,6 @@ selected = 0
 margin_top = 131.0
 margin_right = 175.0
 margin_bottom = 152.0
-hint_tooltip = ".wib value"
 text = "Door thing"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -5426,7 +5496,7 @@ margin_top = 186.0
 margin_right = 329.0
 margin_bottom = 213.0
 rect_min_size = Vector2( 150, 0 )
-hint_tooltip = "Editor placement rules"
+hint_tooltip = "Editor only. Whether Unearth treats it as a wall or as open floor when shaping neighbouring slabs and placing things."
 size_flags_horizontal = 10
 text = "Empty"
 items = [ "Empty", null, false, 0, null, "Blocked", null, false, 1, null ]
@@ -5437,6 +5507,7 @@ margin_top = 220.0
 margin_right = 175.0
 margin_bottom = 241.0
 hint_tooltip = ".wlb value"
+mouse_filter = 1
 text = "Liquid"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -5466,7 +5537,7 @@ margin_top = 248.0
 margin_right = 329.0
 margin_bottom = 275.0
 rect_min_size = Vector2( 150, 0 )
-hint_tooltip = "Editor placement rules"
+hint_tooltip = "Editor only. No = always placed as neutral, like earth."
 size_flags_horizontal = 10
 text = "Yes"
 items = [ "No", null, false, 0, null, "Yes", null, false, 1, null ]
@@ -5477,6 +5548,7 @@ margin_top = 282.0
 margin_right = 175.0
 margin_bottom = 303.0
 hint_tooltip = ".wib value"
+mouse_filter = 1
 text = "Wibble"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -5763,6 +5835,7 @@ columns = 3
 [node name="SlabCopyButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer2/VBoxContainer/GridContainer2"]
 margin_right = 71.0
 margin_bottom = 27.0
+hint_tooltip = "Copy all 28 variations of this slab."
 size_flags_horizontal = 3
 text = "Copy"
 
@@ -5770,6 +5843,7 @@ text = "Copy"
 margin_left = 75.0
 margin_right = 146.0
 margin_bottom = 27.0
+hint_tooltip = "Paste onto all 28 variations of this slab."
 size_flags_horizontal = 3
 text = "Paste"
 
@@ -5777,6 +5851,7 @@ text = "Paste"
 margin_left = 150.0
 margin_right = 221.0
 margin_bottom = 27.0
+hint_tooltip = "Revert all 28 variations of this slab to the default."
 size_flags_horizontal = 3
 text = "Revert"
 
@@ -5811,6 +5886,7 @@ __meta__ = {
 margin_left = 147.0
 margin_right = 221.0
 margin_bottom = 31.0
+hint_tooltip = "Which of the slab's 28 variations to edit: 9 facing directions, each plain, near lava and near water (room face for room walls), plus a centre one. Neighbouring slabs decide which one is used."
 mouse_filter = 1
 size_flags_horizontal = 10
 max_value = 27.0
@@ -5828,6 +5904,7 @@ columns = 3
 [node name="VarCopyButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabSlabset/HBoxContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer5/VBoxContainer/GridContainer2"]
 margin_right = 71.0
 margin_bottom = 27.0
+hint_tooltip = "Copy only this variation."
 size_flags_horizontal = 3
 text = "Copy"
 
@@ -5835,6 +5912,7 @@ text = "Copy"
 margin_left = 75.0
 margin_right = 146.0
 margin_bottom = 27.0
+hint_tooltip = "Paste onto this variation only."
 size_flags_horizontal = 3
 text = "Paste"
 
@@ -5842,6 +5920,7 @@ text = "Paste"
 margin_left = 150.0
 margin_right = 221.0
 margin_bottom = 27.0
+hint_tooltip = "Revert only this variation to the default."
 size_flags_horizontal = 3
 text = "Revert"
 
@@ -5849,6 +5928,7 @@ text = "Revert"
 margin_top = 31.0
 margin_right = 71.0
 margin_bottom = 58.0
+hint_tooltip = "Turn this variation's columns and objects 90 degrees clockwise."
 size_flags_horizontal = 3
 text = "Rotate"
 
@@ -6002,6 +6082,7 @@ margin_left = 147.0
 margin_top = 70.0
 margin_right = 221.0
 margin_bottom = 101.0
+hint_tooltip = "Which of the slab's 9 subtiles it spawns on: 0-2 top row, 3-5 middle row, 6-8 bottom row."
 size_flags_horizontal = 10
 max_value = 8.0
 
@@ -6016,6 +6097,7 @@ margin_left = 147.0
 margin_top = 105.0
 margin_right = 221.0
 margin_bottom = 136.0
+hint_tooltip = "Offset from the subtile's top-left corner, in subtiles (0.5 = centre)."
 size_flags_horizontal = 10
 min_value = -1e+06
 max_value = 1e+06
@@ -6032,6 +6114,7 @@ margin_left = 147.0
 margin_top = 140.0
 margin_right = 221.0
 margin_bottom = 171.0
+hint_tooltip = "Offset from the subtile's top-left corner, in subtiles (0.5 = centre)."
 size_flags_horizontal = 10
 min_value = -1e+06
 max_value = 1e+06
@@ -6048,6 +6131,7 @@ margin_left = 147.0
 margin_top = 175.0
 margin_right = 221.0
 margin_bottom = 206.0
+hint_tooltip = "Height in cubes, measured from the bottom of the map rather than the floor."
 size_flags_horizontal = 10
 min_value = -1e+06
 max_value = 1e+06
@@ -6091,6 +6175,7 @@ margin_left = 113.0
 margin_top = 276.0
 margin_right = 221.0
 margin_bottom = 305.0
+hint_tooltip = "Spawn a light instead of a thing. Subtype becomes its intensity and EffectRange its radius."
 size_flags_horizontal = 10
 text = "Is a light"
 
@@ -6131,6 +6216,7 @@ toggle_mode = true
 margin_left = 36.0
 margin_right = 185.0
 margin_bottom = 32.0
+hint_tooltip = "Revert every modified slab to KeeperFX's default slabset."
 size_flags_horizontal = 3
 text = "Revert all"
 
@@ -6247,6 +6333,7 @@ toggle_mode = true
 margin_left = 36.0
 margin_right = 172.0
 margin_bottom = 32.0
+hint_tooltip = "Revert every modified column to KeeperFX's default columnset."
 size_flags_horizontal = 3
 text = "Revert all"
 
@@ -6331,6 +6418,7 @@ size_flags_horizontal = 3
 [node name="ColumnEditorClearUnusedButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabClmEditor/HBoxContainer/VBoxContainer2/PanelContainer2/HBoxContainer"]
 margin_right = 130.0
 margin_bottom = 27.0
+hint_tooltip = "Delete every column the map doesn't use (Utilized = 0)."
 size_flags_horizontal = 11
 size_flags_vertical = 0
 text = "Clear unused"
@@ -6339,6 +6427,7 @@ text = "Clear unused"
 margin_left = 134.0
 margin_right = 186.0
 margin_bottom = 27.0
+hint_tooltip = "Reorder the map's columns, most used first. Column numbers change, the map looks the same."
 size_flags_horizontal = 11
 size_flags_vertical = 0
 text = "Sort"
@@ -6504,6 +6593,7 @@ text = "Paste"
 margin_top = 31.0
 margin_right = 128.0
 margin_bottom = 58.0
+hint_tooltip = "Jump to the first free cube ID, ready for a new cube."
 text = "Go to unused"
 
 [node name="CubeRevertButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/CubeControls/ScrollContainer/VBoxContainer/GridButtons"]
@@ -6707,6 +6797,7 @@ margin_bottom = 41.0
 [node name="CubeRevertAllButton" type="Button" parent="Ui/UiSystem/SlabsetWindow/SlabsetTabs/TabCubes/HBoxContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 margin_right = 166.0
 margin_bottom = 32.0
+hint_tooltip = "Revert every cube to its default. This happens straight away, without asking."
 size_flags_horizontal = 3
 text = "Revert all"
 
@@ -6905,6 +6996,7 @@ value = 2.0
 margin_top = 45.0
 margin_right = 305.0
 margin_bottom = 86.0
+hint_tooltip = "How far the dungeon hearts are from the map centre, or from the mirror line with Line layout."
 label_setting = "Distance"
 min_value = 0.05
 max_value = 1.0
@@ -6915,6 +7007,7 @@ value = 0.75
 margin_top = 90.0
 margin_right = 305.0
 margin_bottom = 131.0
+hint_tooltip = "Slide each player sideways. 0.5 = no shift."
 label_setting = "Position"
 max_value = 1.0
 step = 0.01
@@ -6925,6 +7018,7 @@ margin_left = 174.0
 margin_top = 135.0
 margin_right = 305.0
 margin_bottom = 164.0
+hint_tooltip = "Measure Distance from the mirror line instead of the map centre."
 size_flags_horizontal = 10
 pressed = true
 text = "Line layout"
@@ -6964,6 +7058,7 @@ margin_bottom = 617.0
 margin_top = 0.0
 margin_right = 305.0
 margin_bottom = 41.0
+hint_tooltip = "How far the border reaches in from the map edges."
 label_setting = "Width"
 max_value = 5.0
 step = 0.01
@@ -7010,6 +7105,7 @@ margin_left = 205.0
 margin_top = 180.0
 margin_right = 305.0
 margin_bottom = 209.0
+hint_tooltip = "Break the land into narrow arms that thin out toward the border, instead of rounded blobs."
 size_flags_horizontal = 10
 text = "Tapered"
 
@@ -7204,6 +7300,7 @@ margin_left = 71.0
 margin_right = 145.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 48, 0 )
+hint_tooltip = "Slabs to add to this edge. Negative values remove slabs."
 size_flags_horizontal = 0
 min_value = -1e+10
 max_value = 1e+10
@@ -7223,6 +7320,7 @@ margin_top = 35.0
 margin_right = 145.0
 margin_bottom = 66.0
 rect_min_size = Vector2( 48, 0 )
+hint_tooltip = "Slabs to add to this edge. Negative values remove slabs."
 size_flags_horizontal = 0
 min_value = -1e+10
 max_value = 1e+10
@@ -7242,6 +7340,7 @@ margin_top = 70.0
 margin_right = 145.0
 margin_bottom = 101.0
 rect_min_size = Vector2( 48, 0 )
+hint_tooltip = "Slabs to add to this edge. Negative values remove slabs."
 size_flags_horizontal = 0
 min_value = -1e+10
 max_value = 1e+10
@@ -7261,6 +7360,7 @@ margin_top = 105.0
 margin_right = 145.0
 margin_bottom = 136.0
 rect_min_size = Vector2( 48, 0 )
+hint_tooltip = "Slabs to add to this edge. Negative values remove slabs."
 size_flags_horizontal = 0
 min_value = -1e+10
 max_value = 1e+10
@@ -7634,6 +7734,7 @@ margin_left = 251.0
 margin_right = 278.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 27, 27 )
+hint_tooltip = "Previous stat"
 size_flags_horizontal = 0
 text = "<"
 
@@ -7642,6 +7743,7 @@ margin_left = 282.0
 margin_right = 309.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 27, 27 )
+hint_tooltip = "Next stat"
 size_flags_horizontal = 0
 text = ">"
 
@@ -7669,6 +7771,7 @@ margin_bottom = 906.0
 margin_right = 98.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 60, 0 )
+hint_tooltip = "Cycle the names shown: display name, config ID or file name."
 size_flags_horizontal = 3
 text = "Name"
 
@@ -7836,6 +7939,7 @@ margin_left = 96.0
 margin_top = 9.0
 margin_right = 153.0
 margin_bottom = 30.0
+hint_tooltip = "Open the original game's /data/ folder."
 size_flags_horizontal = 6
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "/data/"
@@ -7876,6 +7980,7 @@ margin_left = 87.0
 margin_top = 9.0
 margin_right = 162.0
 margin_bottom = 30.0
+hint_tooltip = "Open KeeperFX's /fxdata/ folder, which holds its default configs."
 focus_mode = 2
 size_flags_horizontal = 6
 custom_colors/font_color = Color( 1, 1, 1, 1 )
@@ -7916,6 +8021,7 @@ margin_left = 78.0
 margin_top = 9.0
 margin_right = 171.0
 margin_bottom = 30.0
+hint_tooltip = "Open this map's campaign config folder."
 focus_mode = 2
 size_flags_horizontal = 6
 custom_colors/font_color = Color( 1, 1, 1, 1 )
@@ -7956,6 +8062,7 @@ margin_left = 79.0
 margin_top = 9.0
 margin_right = 171.0
 margin_bottom = 30.0
+hint_tooltip = "Open the map's folder. Configs here apply to this map only."
 focus_mode = 2
 size_flags_horizontal = 6
 custom_colors/font_color = Color( 1, 1, 1, 1 )
@@ -8109,6 +8216,7 @@ margin_left = 470.0
 margin_right = 570.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 100, 0 )
+hint_tooltip = "Load a different land view image to place the flag on."
 size_flags_horizontal = 4
 text = "Image"
 

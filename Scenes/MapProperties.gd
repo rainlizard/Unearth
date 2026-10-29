@@ -55,13 +55,23 @@ const options_options = {
 	"Cooperative flag icon" : "COOP",
 }
 
+const KIND_TOOLTIP = """KIND
+Where KeeperFX lists the map.
+Solo: free play.
+Multiplayer: multiplayer games.
+Campaign: a campaign level.
+Campaign Secret: a secret bonus level.
+Campaign Moon: an extra full or new moon level."""
+
 
 func _ready():
 	oDungeonStyleSpinBox.max_value = oTMapLoader.TMAP_COUNT - 1
-	var tooltip_text = ""
-	for key in kind_options.keys():
-		tooltip_text += key + " = " + kind_options[key] + "\n"
-	oKindOptionButton.hint_tooltip = tooltip_text.strip_edges(true)
+	oKindOptionButton.get_parent().get_child(0).hint_tooltip = KIND_TOOLTIP
+	# Inputs hide the tooltip of the label beside them, so they show it too
+	for input in [oAuthorLineEdit, oDescriptionLineEdit, oKindOptionButton, oSpeechLineEdit, oLandViewLineEdit, oOptionsOptionButton, oNameIDLineEdit]:
+		input.hint_tooltip = input.get_parent().get_child(0).hint_tooltip
+	for input in [oEnsignPositionX, oEnsignPositionY]:
+		input.hint_tooltip = oHBoxEnsignPosition.get_child(0).hint_tooltip
 	
 	# Default to hiding ONCE, when you start the editor.
 	oAdvancedMapProperties.visible = false

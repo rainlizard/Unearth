@@ -136,6 +136,7 @@ text = "Tileset ID"
 margin_left = 132.0
 margin_right = 206.0
 margin_bottom = 24.0
+hint_tooltip = "The tileset being viewed and edited. The map's own tileset is set in Map properties."
 size_flags_horizontal = 10
 max_value = 30.0
 rounded = true
@@ -275,6 +276,7 @@ margin_bottom = 60.0
 [node name="TilesetRevertAllButton" type="Button" parent="HBoxContainer/Sidebar/BottomPanel/VBoxContainer/RevertRow"]
 margin_right = 170.0
 margin_bottom = 32.0
+hint_tooltip = "Revert every modified tileset, not only this one."
 size_flags_horizontal = 3
 text = "Revert all"
 

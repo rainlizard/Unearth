@@ -50,6 +50,24 @@ var fixMenuExpansion
 var playButtonLocked = false
 var scriptToCreate = "TXT"
 
+const MENU_TOOLTIPS = {
+	"Reload map": "Load the map from disk again, dropping unsaved changes.",
+	"Backups": "Load a backup. Each time you save over a map, its old files are backed up first.",
+	"Image to map": "Build the map from an image by giving each colour a slab.",
+	"Export preview": "Save a rendered picture of the map as a .png.",
+	"Update all slabs": "Place every slab again to rebuild its look, objects or data. You choose what to reset.",
+	"Rules": "Edit the map's rules.cfg: gameplay values, research order and sacrifices.",
+	"Slabset": "Edit how slabs look: slabset, columns, cubes and textures.",
+	"Config files": "List the config files that apply to this map, from the game, campaign and map folders.",
+	"Open DKScript file": "Open the map's .txt script in your default text editor, or create one.",
+	"Open Lua file": "Open the map's .lua script in your default text editor, or create one.",
+	"Open log": "Open KEEPERFX.LOG from the game folder.",
+	"Instance list": "List the map's action points, hero gates, creatures and objects.",
+	"Grid data": "Show the raw values of one of the map's files, such as .slb or .own, over the map.",
+	"Creature stats": "Compare one stat across all creatures.",
+	"Workshop": "Open the KeeperFX workshop website to find and share maps.",
+}
+
 func _ready():
 	# Allow Play button to be hovered without the dropdown menu appearing
 	oMenuPlayButton.get_popup().mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -88,6 +106,7 @@ func add_menu_items(menuButton, method, items):
 			popup.add_separator()
 		else:
 			popup.add_item(item, id)
+			popup.set_item_tooltip(popup.get_item_count() - 1, MENU_TOOLTIPS.get(item, ""))
 			id += 1
 	popup.connect("id_pressed", self, method)
 
@@ -181,7 +200,7 @@ func constantly_monitor_play_button_state():
 
 	if mapIsInCorrectDirectory == true: # Is playable path
 		oMenuPlayButton.disabled = false
-		oMenuPlayButton.hint_tooltip = ""
+		oMenuPlayButton.hint_tooltip = "Right-click to packetload: replay the game last recorded with Packetsave."
 	else: # Is not a playable path
 		oMenuPlayButton.disabled = true
 		oMenuPlayButton.hint_tooltip = "Map must be saved in the correct directory in order to play."

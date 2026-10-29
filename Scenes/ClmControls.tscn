@@ -80,6 +80,7 @@ unique_name_in_owner = true
 margin_top = 24.0
 margin_right = 101.0
 margin_bottom = 44.0
+hint_tooltip = "Jump to the first empty column, ready for a new one."
 text = "Go to unused"
 
 [node name="ColumnRevertButton" type="Button" parent="ScrollContainer/VBoxContainer/GridContainer"]
@@ -324,7 +325,7 @@ margin_left = 132.0
 margin_top = 28.0
 margin_right = 206.0
 margin_bottom = 52.0
-hint_tooltip = "Needs more info."
+hint_tooltip = "Bitmask of the filled cube slots (1 = bottom cube, 128 = top). Updated automatically when the cubes change."
 size_flags_horizontal = 10
 max_value = 99999.0
 script = ExtResource( 1 )

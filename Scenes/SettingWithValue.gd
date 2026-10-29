@@ -11,6 +11,13 @@ func _enter_tree():
 	$Slider.max_value = maximum_value
 	$Slider.step = slider_step
 
+func _ready():
+	# The slider and value box would hide the tooltip, so they show it too
+	if Engine.editor_hint == false and hint_tooltip != "":
+		mouse_filter = MOUSE_FILTER_PASS
+		$Slider.hint_tooltip = hint_tooltip
+		lineEdit.hint_tooltip = hint_tooltip
+
 func set_label(newLabel):
 	settingText = newLabel
 	$Label.text = newLabel
