@@ -69,6 +69,15 @@ func _ready():
 
 	recentlyOpenedPopupMenu.connect("id_pressed",self,"_on_RecentSubmenu_Pressed")
 
+func _input(event):
+	# Godot 3.6 swallows clicks on a MenuButton while its own popup is open, so close it manually
+	if event is InputEventMouseButton and event.pressed == true and event.button_index == BUTTON_LEFT:
+		for menuButton in [oMenuButtonFile, oMenuButtonEdit, oMenuButtonMap, oMenuButtonScript, oMenuButtonView, oMenuButtonHelp]:
+			var popup = menuButton.get_popup()
+			if popup.visible == true and menuButton.get_global_rect().has_point(menuButton.get_global_mouse_position()):
+				popup.hide()
+				get_tree().set_input_as_handled()
+
 func add_menu_items(menuButton, method, items):
 	var popup = menuButton.get_popup()
 	popup.rect_min_size.x = 180
