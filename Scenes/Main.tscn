@@ -3638,6 +3638,19 @@ dialog_text = "<adjusted in code>"
 dialog_autowrap = true
 script = ExtResource( 61 )
 
+[node name="ConfirmDiscardUniqueSettings" type="ConfirmationDialog" parent="Ui/UiSystem"]
+visible = true
+margin_left = -456.0
+margin_top = 304.0
+margin_right = -16.0
+margin_bottom = 409.0
+rect_min_size = Vector2( 300, 105 )
+popup_exclusive = true
+window_title = "Unique settings"
+dialog_text = "Discard all unique player settings?"
+dialog_autowrap = true
+script = ExtResource( 61 )
+
 [node name="ControlsWindow" type="WindowDialog" parent="Ui/UiSystem"]
 visible = true
 margin_left = -2754.0

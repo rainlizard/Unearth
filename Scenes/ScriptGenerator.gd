@@ -24,6 +24,7 @@ onready var oTrapsCard = Nodelist.list["oTrapsCard"]
 onready var oDoorsCard = Nodelist.list["oDoorsCard"]
 onready var oBasicPlayerTabs = Nodelist.list["oBasicPlayerTabs"]
 onready var oUniqueSettingsCheckBox = Nodelist.list["oUniqueSettingsCheckBox"]
+onready var oConfirmDiscardUniqueSettings = Nodelist.list["oConfirmDiscardUniqueSettings"]
 onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oCreateScriptButton = Nodelist.list["oCreateScriptButton"]
@@ -122,6 +123,7 @@ func _ready():
 			oAIOption.get_parent().add_child(option)
 		aiOptions.append(option)
 	oUniqueSettingsCheckBox.connect("toggled", self, "_on_UniqueSettingsCheckBox_toggled")
+	oConfirmDiscardUniqueSettings.connect("confirmed", self, "_on_ConfirmDiscardUniqueSettings_confirmed")
 	fieldColor = oGoldField.get_color("font_color")
 	for control in [oPortalRateField, oGoldField, oMaxCreaturesField]:
 		control.connect("text_changed", self, "_on_field_text_changed", [control])
@@ -281,11 +283,7 @@ func open():
 	oScriptGeneratorWindow.rect_position = Vector2(0, oUi.topMargin) # Full screen, below the menu bar
 	oScriptGeneratorWindow.rect_size = get_viewport().size / Settings.UI_SCALE - oScriptGeneratorWindow.rect_position
 	var parsed = patcher.parse(oDataScript.data)
-	var targets = own_targets(parsed)
-	var unique = false
-	for player in PLAYERS:
-		unique = unique or targets.has(player)
-	oUniqueSettingsCheckBox.pressed = unique
+	oUniqueSettingsCheckBox.pressed = own_calls(parsed).empty() == false
 	# Start on the tab the script's availability lines are written for, such as Red in campaign maps
 	tabs[0].pressed = true
 	for call in parsed.calls:
@@ -389,21 +387,42 @@ func availability_values(button, state, version):
 	return ["0", "0"]
 
 
-# Who the script's top-level lines are for, other than COMPUTER_PLAYER since the AI isn't under the tabs
+# The script's top-level lines for a single keeper, other than COMPUTER_PLAYER since the AI isn't under the tabs
+func own_calls(parsed):
+	var calls = []
+	for call in parsed.calls:
+		if call.line.depth == 0 and call.command != "COMPUTER_PLAYER" and PLAYERS.has(call.args[0]):
+			calls.append(call)
+	return calls
+
+
 func own_targets(parsed):
 	var targets = []
-	for call in parsed.calls:
-		if call.line.depth == 0 and call.command != "COMPUTER_PLAYER":
-			targets.append(call.args[0])
+	for call in own_calls(parsed):
+		targets.append(call.args[0])
 	return targets
 
 
-# Unchecked, only All players is shown, though keepers keep the lines they already have
+# Unchecked, only All players is shown. Keepers with lines of their own stay checked until those lines are discarded.
 func _on_UniqueSettingsCheckBox_toggled(on):
+	if on == false and own_calls(patcher.parse(oDataScript.data)).empty() == false:
+		oUniqueSettingsCheckBox.set_pressed_no_signal(true)
+		Utils.popup_centered(oConfirmDiscardUniqueSettings)
+		return
 	oBasicPlayerTabs.visible = on
 	if on == false:
 		tabs[0].pressed = true
 	refresh()
+
+
+func _on_ConfirmDiscardUniqueSettings_confirmed():
+	var text = oDataScript.data
+	var calls = own_calls(patcher.parse(text))
+	calls.invert()
+	for call in calls:
+		text = text.substr(0, call.line.start) + text.substr(call.line.end)
+	apply({"text": text, "line": 0})
+	oUniqueSettingsCheckBox.pressed = false
 
 
 func selected_player():
