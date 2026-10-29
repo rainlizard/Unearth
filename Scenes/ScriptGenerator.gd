@@ -420,7 +420,7 @@ func _on_ConfirmDiscardUniqueSettings_confirmed():
 	var calls = own_calls(patcher.parse(text))
 	calls.invert()
 	for call in calls:
-		text = text.substr(0, call.line.start) + text.substr(call.line.end)
+		text = patcher.cut(text, call.line.start, call.line.end)
 	apply({"text": text, "line": 0})
 	oUniqueSettingsCheckBox.pressed = false
 
