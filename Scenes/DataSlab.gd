@@ -34,7 +34,9 @@ func regenerate_image_from_buffer():
 		if bytes_per_entry == U8:
 			value = buffer.get_u8()
 		elif bytes_per_entry == U16:
-			value = buffer.get_u16() & 0xFF  # Take only lower 8 bits for display
+			value = buffer.get_u16()
+			if value > 255: # Custom slab IDs don't fit, and their lower 8 bits would be mistaken for bedrock or abyss
+				value = 0
 		else:
 			value = 0
 		

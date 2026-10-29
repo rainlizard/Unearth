@@ -3,11 +3,21 @@ extends Control
 
 func _ready():
 	var oTextEdit = get_parent()
-	oTextEdit.call_deferred("move_child", self, 0) # Beneath the scrollbars
+	call_deferred("place_beneath_scrollbars") # Deferred, so a duplicate of the TextEdit made during _ready doesn't copy the BackBufferCopy
 	oTextEdit.connect("draw", self, "update")
 	material = ShaderMaterial.new()
 	material.shader = preload("res://Shaders/rem_line.shader")
 	material.set_shader_param("background", oTextEdit.get_color("background_color"))
+
+
+# Godot only copies the screen for the first SCREEN_TEXTURE reader each frame, so another TextEdit's overlay drawn earlier would leave this one a stale copy
+func place_beneath_scrollbars():
+	var oTextEdit = get_parent()
+	var screenCopy = BackBufferCopy.new()
+	screenCopy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+	oTextEdit.add_child(screenCopy)
+	oTextEdit.move_child(self, 0)
+	oTextEdit.move_child(screenCopy, 0)
 
 
 func _draw():

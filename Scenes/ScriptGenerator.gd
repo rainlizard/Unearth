@@ -524,10 +524,13 @@ func _on_NumberField_apply(_new_text = ""):
 
 func _on_AIOption_item_selected(index, player):
 	var result = {}
+	var text = oDataScript.data
+	if index == 2 or (index == 1 and player == "PLAYER_GOOD"): # Roaming and a hero computer player both require LEVEL_VERSION(1)
+		text = patcher.set_level_version(text).text
 	match index:
-		0: result = patcher.remove_call(oDataScript.data, "COMPUTER_PLAYER", [player])
-		1: result = patcher.set_call(oDataScript.data, "COMPUTER_PLAYER", [player, "0"])
-		2: result = patcher.set_call(patcher.set_level_version(oDataScript.data).text, "COMPUTER_PLAYER", [player, "ROAMING"])
+		0: result = patcher.remove_call(text, "COMPUTER_PLAYER", [player])
+		1: result = patcher.set_call(text, "COMPUTER_PLAYER", [player, "0"])
+		2: result = patcher.set_call(text, "COMPUTER_PLAYER", [player, "ROAMING"])
 	result.text = set_victory(result.text)
 	apply(result)
 

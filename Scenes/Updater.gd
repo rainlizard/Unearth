@@ -36,7 +36,7 @@ rm -rf "$(dirname "$2")"
 
 var http = HTTPRequest.new()
 var update_dir = Settings.unearth_path.plus_file("update")
-var update_ready = false
+var install_on_exit = false # Only once the user accepts, "Later" leaves it for the next launch to offer again
 var relaunch = false
 
 func start(): # Called by Main after settings are read
@@ -70,7 +70,6 @@ func download_update(new_version, url): # Downloads in the background, the user 
 func _on_update_downloaded(result, response_code, headers, body, new_version):
 	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
 		return
-	update_ready = true
 	var dialog = ConfirmationDialog.new()
 	dialog.window_title = "New version available"
 	dialog.dialog_text = "Unearth v" + new_version + " is ready to install."
@@ -84,12 +83,13 @@ func _on_update_downloaded(result, response_code, headers, body, new_version):
 
 func restart_to_update():
 	# Goes through the normal quit flow so unsaved changes can still be saved. Set relaunch afterwards since the quit request clears it.
+	install_on_exit = true
 	oEditor.notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 	relaunch = true
 
 
 func _exit_tree(): # Unearth is closing, hand the downloaded update over to the install script
-	if update_ready == false:
+	if install_on_exit == false:
 		return
 	var platform = PLATFORMS[OS.get_name()]
 	var script_path = update_dir.plus_file(platform["file"])

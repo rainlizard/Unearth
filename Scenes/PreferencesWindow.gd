@@ -153,7 +153,7 @@ func _on_CloseButton_pressed():
 	hide()
 
 func restart_application():
-	if oUpdater.update_ready: # The update script relaunches Unearth after installing, launching now would lock the files it replaces
+	if oUpdater.install_on_exit: # The update script relaunches Unearth after installing, launching now would lock the files it replaces
 		oUpdater.relaunch = true
 	else:
 		OS.execute(OS.get_executable_path(), [], false)

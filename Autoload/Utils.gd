@@ -17,9 +17,11 @@ func _input(_event):
 
 var regex = RegEx.new()
 var noSpecialCharsRegex = RegEx.new()
+var remLineRegex = RegEx.new()
 func _ready():
 	regex.compile("^[0-9]*$")
 	noSpecialCharsRegex.compile("[^a-zA-Z0-9]")
+	remLineRegex.compile("(?i)^[ \\t\\r]*REM(?![A-Za-z0-9_\\[\\]])") # Like KeeperFX, REM must be a word of its own, so REMOVE_SACRIFICE_RECIPE isn't one
 
 func _enter_tree(): # Before the main scene enters, unlike _ready
 	get_tree().connect("node_added", self, "_on_node_added")
@@ -39,7 +41,7 @@ func strip_letters_from_string(string):
 	return string
 
 func is_rem_line(line): # DKScript comment
-	return line.strip_edges(true, false).to_upper().begins_with("REM")
+	return remLineRegex.search(line) != null
 
 func set_id_links_label(ids, rich_text_label, panel_container, empty_text):
 	if ids.empty():
