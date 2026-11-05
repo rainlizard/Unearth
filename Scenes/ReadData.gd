@@ -408,6 +408,7 @@ func read_tngfx(buffer):
 				_: id.thingType = Things.TYPE.NONE
 
 			id.subtype = c.get_value(section, "Subtype")
+			var where = "ThingType \"%s\" in [%s] at subtile (%s, %s)" % [c.get_value(section, "ThingType"), section, int(id.locationX), int(id.locationY)]
 			if c.has_section_key(section, "SubtypeStringID"):
 				var subtypeStringID = c.get_value(section, "SubtypeStringID")
 				if subtypeStringID is String:
@@ -415,13 +416,13 @@ func read_tngfx(buffer):
 					if resolvedSubtype != null:
 						id.subtype = resolvedSubtype
 					else:
-						unrecognizedSubtypeStringIDs.append("SubtypeStringID \"%s\" for ThingType \"%s\" in [%s] is not defined in the loaded KeeperFX configuration. Unearth fell back to numeric Subtype %s." % [subtypeStringID, c.get_value(section, "ThingType"), section, id.subtype])
+						unrecognizedSubtypeStringIDs.append("SubtypeStringID \"%s\" for %s is not defined in the loaded KeeperFX configuration. Unearth fell back to numeric Subtype %s." % [subtypeStringID, where, id.subtype])
 				else:
-					oMessage.big("Invalid .tngfx SubtypeStringID", "SubtypeStringID for ThingType \"%s\" in [%s] is not a string. Unearth fell back to numeric Subtype %s." % [c.get_value(section, "ThingType"), section, id.subtype])
+					oMessage.big("Invalid .tngfx SubtypeStringID", "SubtypeStringID for %s is not a string. Unearth fell back to numeric Subtype %s." % [where, id.subtype])
 			if id.subtype is String:
 				var subtype = Things.find_subtype_by_name(id.thingType, id.subtype)
 				if subtype == null:
-					oMessage.big("Unrecognized .tngfx subtype", "The map did not load correctly! The subtype \"%s\" for ThingType \"%s\" in [%s] is not defined in the loaded KeeperFX configuration. Do not save! Please close the map and fix the .tngfx file or configuration." % [id.subtype, c.get_value(section, "ThingType"), section])
+					oMessage.big("Unrecognized .tngfx subtype", "The map did not load correctly! The subtype \"%s\" for %s is not defined in the loaded KeeperFX configuration. Do not save! Please close the map and fix the .tngfx file or configuration." % [id.subtype, where])
 					id.free()
 					continue
 				id.subtype = subtype
@@ -469,6 +470,7 @@ func read_tngfx(buffer):
 			oInstances.add_instance(id)
 		
 		if unrecognizedSubtypeStringIDs.empty() == false:
+			unrecognizedSubtypeStringIDs.append("Hover over these subtiles (shown in the Properties window) to find and replace or delete these things.")
 			oMessage.big("Unrecognized .tngfx SubtypeStringID", PoolStringArray(unrecognizedSubtypeStringIDs).join("\n"))
 	else:
 		oMessage.big(".tngfx unparsable", "The map did not load correctly! The .tngfx file has an error in it, likely from being manually edited. Do not save! Please close the map and fix the .tngfx file.")
