@@ -247,7 +247,7 @@ func add_item_to_grid(tabID, id, set_text):
 	id.connect("pressed",self,"pressed",[id])
 	id.rect_min_size = Vector2(grid_item_size.x * grid_window_scale, grid_item_size.y * grid_window_scale)
 	
-	if is_instance_valid(id) == true:
+	if is_instance_valid(id) == true and id.get_meta("thingType") == Things.TYPE.OBJECT:
 		add_workshop_item_sprite_overlay(id, id.get_meta("thingSubtype"))
 
 func add_workshop_item_sprite_overlay(textureParent, subtype):
