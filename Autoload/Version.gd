@@ -1,6 +1,6 @@
 ﻿extends Node
 
-var major_minor = "0.74"
+var major_minor = "0.75"
 var patch = "0000"
 var full = ""
 var unearth_map_format_version:float = 1.06
@@ -9,6 +9,18 @@ func _init():
 	full = major_minor + "." + patch
 
 const changelog = """
+0.75.1080 - 15/11/2026
+- DKScript editor: the script sidebar is collapsed by default to keep things uncluttered. It remembers its last state with settings.cfg
+- Column height, lintel and solid mask are now derived from the cubes, matching KeeperFX
+- Reusing an existing column now also compares floor texture, solid mask and orientation, matching KeeperFX
+- Fixed new columns reusing an empty column that still had a floor texture
+- Owners are listed in KeeperFX's seat order everywhere: Red, Blue, Green, Yellow, Purple, Black, Orange, White, Neutral. 'None' is now called 'Neutral'
+- DKScript editor: humans are seated and given victory conditions for all keepers, not just the first four
+- DKScript editor: Druid and Maiden are in the creature pool by default
+- Saving a map to a different folder reloads it, so that folder's campaign configs are picked up
+- Unrecognized .tngfx subtypes now tell you the subtile they're on
+- Fixed workshop item overlays appearing on creature icons
+- The map outline is hidden until a map is opened
 0.74.1071 - 29/10/2026
 - Automatic updates: Unearth checks for a new release on launch, downloads it in the background and asks to restart and update. Can be turned off in Preferences
 - Script menu now has a link to directly open the .txt script file
