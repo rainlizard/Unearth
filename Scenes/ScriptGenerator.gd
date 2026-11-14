@@ -37,13 +37,12 @@ onready var availableParents = [oCreaturePool, oHeroPool, oRoomsAvailable, oMagi
 var scnAvailableButton = preload('res://Scenes/AvailableButton.tscn')
 var patcher = BasicScriptPatcher.new()
 
-const PLAYERS = ["PLAYER0", "PLAYER1", "PLAYER2", "PLAYER3", "PLAYER4", "PLAYER5", "PLAYER6", "PLAYER_GOOD"]
-const TAB_TARGETS = ["ALL_PLAYERS"] + PLAYERS
+var players = [] # Script names of Constants.SEATS
+var tab_targets
 const MODIFIED = Color(1.4, 1.4, 1.7) # Tints what a keeper has lines of its own for, like the Slabset window
 var playerTabs = ButtonGroup.new()
-var tabs = [] # In the order of TAB_TARGETS
-var aiOptions = [] # In the order of PLAYERS
-const AI_HEART_OWNERS = [0, 1, 2, 3, 6, 7, 8, 4]
+var tabs = [] # In the order of tab_targets
+var aiOptions = [] # In the order of players
 var scriptPreview # A copy of the script editor, so previews never enter the editor's undo history
 var previewText = "" # Drawn faded in the gap left for it, since TextEdit can't fade a single line
 var fieldColor # The theme's text colour, faded on a keeper's tab while a field shows what All players gives it
@@ -94,13 +93,19 @@ var listRoom = [
 ]
 
 
+func _init():
+	for ownerID in Constants.SEATS:
+		players.append(Constants.ownerScriptNames[ownerID])
+	tab_targets = ["ALL_PLAYERS"] + players
+
+
 func _ready():
-	for label in ["All players", "Red", "Blue", "Green", "Yellow", "Purple", "Black", "Orange", "White"]: # Buttons rather than Tabs, so each can be tinted
+	for ownerID in [null] + Constants.SEATS: # Buttons rather than Tabs, so each can be tinted
 		var tab = Button.new()
-		if label == "All players":
-			tab.text = label
+		if ownerID == null:
+			tab.text = "All players"
 		else:
-			tab.icon = load("res://images_ui/plyrsym_32/symbol_player_" + label.to_lower() + "_std.png")
+			tab.icon = Constants.ownerIcons[ownerID]
 			tab.expand_icon = true
 			tab.rect_min_size = tab.icon.get_size() * 2 + oBasicPlayerTabs.get_stylebox("tab_bg", "Tabs").get_minimum_size()
 		tab.toggle_mode = true
@@ -113,11 +118,11 @@ func _ready():
 		oBasicPlayerTabs.add_child(tab)
 		tabs.append(tab)
 	tabs[0].pressed = true
-	for index in PLAYERS.size(): # The scene's dropdown is copied for every other keeper
+	for index in players.size(): # The scene's dropdown is copied for every other keeper
 		var option = oAIOption if index == 0 else oAIOption.duplicate(0)
 		for item in option.get_item_count():
 			option.set_item_icon(item, tabs[index + 1].icon)
-		option.connect("item_selected", self, "_on_AIOption_item_selected", [PLAYERS[index]])
+		option.connect("item_selected", self, "_on_AIOption_item_selected", [players[index]])
 		option.connect("mouse_entered", self, "_on_setting_mouse_entered", [option])
 		if index > 0:
 			oAIOption.get_parent().add_child(option)
@@ -144,11 +149,11 @@ func update_options_based_on_mapformat():
 	for option in aiOptions:
 		option.set_item_disabled(2, oCurrentFormat.selected == Constants.OldFormat) # Roaming requires LEVEL_VERSION(1)
 	for index in range(1, tabs.size()):
-		tabs[index].disabled = keepers().has(TAB_TARGETS[index]) == false
+		tabs[index].disabled = keepers().has(tab_targets[index]) == false
 	if playerTabs.get_pressed_button().disabled:
 		tabs[0].pressed = true
 	patcher.order = {} # New lines are written in the order of the tabs, then of the buttons
-	for target in TAB_TARGETS:
+	for target in tab_targets:
 		patcher.order[target] = patcher.order.size()
 	for parent in availableParents:
 		for button in parent.get_children():
@@ -287,7 +292,7 @@ func open():
 	# Start on the tab the script's availability lines are written for, such as Red in campaign maps
 	tabs[0].pressed = true
 	for call in parsed.calls:
-		var target = TAB_TARGETS.find(call.args[0])
+		var target = tab_targets.find(call.args[0])
 		if call.command.ends_with("_AVAILABLE") and call.line.depth == 0 and target >= 0:
 			tabs[target].pressed = true
 			break
@@ -318,7 +323,7 @@ func refresh():
 	var targets = own_targets(parsed)
 	for index in tabs.size():
 		for style in ["normal", "hover", "pressed", "disabled"]: # Only the background, so the keeper's symbol keeps its colour
-			tabs[index].get_stylebox(style).modulate_color = MODIFIED if index > 0 and targets.has(TAB_TARGETS[index]) else Color(1, 1, 1)
+			tabs[index].get_stylebox(style).modulate_color = MODIFIED if index > 0 and targets.has(tab_targets[index]) else Color(1, 1, 1)
 	var player = selected_player()
 	for field in numberFields:
 		var finds = [patcher.find(parsed, field[1])] if field[1] == "SET_GENERATE_SPEED" else find_for_selected(parsed, field[1], [])
@@ -336,14 +341,14 @@ func refresh():
 	_on_PortalRateField_text_changed(oPortalRateField.text)
 	for index in aiOptions.size():
 		var option = aiOptions[index]
-		var computer = patcher.find(parsed, "COMPUTER_PLAYER", [PLAYERS[index]])
+		var computer = patcher.find(parsed, "COMPUTER_PLAYER", [players[index]])
 		var solo = oDataLof.KIND != "MULTI"
 		option.set_item_text(0, "Player/CPU" if solo == false else ("Human" if index == 0 else "Idle")) # Solo games always give the human Red
 		option.selected = {"OFF": 0, "ROAMING": 2}.get(computer.back().args[1] if computer.empty() == false else "OFF", 1)
-		option.disabled = keepers().has(PLAYERS[index]) == false or (index == 0 and solo and computer.empty())
-		var active = option.selected == 2 or oInstances.check_for_dungeon_heart(AI_HEART_OWNERS[index]) # Roaming is the only AI that needs no heart
+		option.disabled = keepers().has(players[index]) == false or (index == 0 and solo and computer.empty())
+		var active = option.selected == 2 or oInstances.check_for_dungeon_heart(Constants.SEATS[index]) # Roaming is the only AI that needs no heart
 		option.modulate.a = 1.0 if active else 0.15
-		tabs[index + 1].modulate.a = 1.0 if active or targets.has(PLAYERS[index]) else 0.15 # Still clickable, and lines of its own still apply
+		tabs[index + 1].modulate.a = 1.0 if active or targets.has(players[index]) else 0.15 # Still clickable, and lines of its own still apply
 		set_script_line(option, computer)
 	for parent in availableParents:
 		for button in parent.get_children():
@@ -391,7 +396,7 @@ func availability_values(button, state, version):
 func own_calls(parsed):
 	var calls = []
 	for call in parsed.calls:
-		if call.line.depth == 0 and call.command != "COMPUTER_PLAYER" and PLAYERS.has(call.args[0]):
+		if call.line.depth == 0 and call.command != "COMPUTER_PLAYER" and players.has(call.args[0]):
 			calls.append(call)
 	return calls
 
@@ -426,11 +431,11 @@ func _on_ConfirmDiscardUniqueSettings_confirmed():
 
 
 func selected_player():
-	return TAB_TARGETS[tabs.find(playerTabs.get_pressed_button())]
+	return tab_targets[tabs.find(playerTabs.get_pressed_button())]
 
 
 func keepers(): # Old format maps only have the first four
-	return PLAYERS.slice(0, 3) if oCurrentFormat.selected == Constants.OldFormat else PLAYERS
+	return players.slice(0, 3) if oCurrentFormat.selected == Constants.OldFormat else players
 
 
 # The lines that apply to each selected keeper. The All players tab selects every keeper, so it shows what they all get.
@@ -462,7 +467,7 @@ func set_player_call(text, command, rest, values, inherited, default = []):
 			everyone = everyone and own.empty() == false and str(own.back().args) == str([player] + rest + values).to_upper()
 	var target = "ALL_PLAYERS" if everyone else selected_player()
 	var before = text
-	for player in PLAYERS if target == "ALL_PLAYERS" else [target]:
+	for player in players if target == "ALL_PLAYERS" else [target]:
 		text = patcher.remove_call(text, command, [player] + rest).text
 	var result = {}
 	if values.empty() or values == (default if target == "ALL_PLAYERS" else inherited):
@@ -561,25 +566,25 @@ func set_victory(text):
 	var parsed = patcher.parse(text)
 	var humans = human_slots(text)
 	var opposed = humans > 1 or oInstances.check_for_dungeon_heart(Constants.PLAYER_WHITE)
-	for index in range(humans, PLAYERS.size()):
-		opposed = opposed or (patcher.find(parsed, "COMPUTER_PLAYER", [PLAYERS[index]]).empty() == false and oInstances.check_for_dungeon_heart(AI_HEART_OWNERS[index]))
+	for index in range(humans, players.size()):
+		opposed = opposed or (patcher.find(parsed, "COMPUTER_PLAYER", [players[index]]).empty() == false and oInstances.check_for_dungeon_heart(Constants.SEATS[index]))
 	var wins = 0
 	for line in parsed.lines:
 		wins += int(patcher.squash(line.text).begins_with("WIN_GAME"))
 	var result = text
-	for index in 4:
-		var block = ["IF(" + PLAYERS[index] + ",ALL_DUNGEONS_DESTROYED == 1)", "\tWIN_GAME", "ENDIF"]
+	for index in players.size():
+		var block = ["IF(" + players[index] + ",ALL_DUNGEONS_DESTROYED == 1)", "\tWIN_GAME", "ENDIF"]
 		wins -= patcher.find_block(parsed, block).size()
 		result = patcher.set_block(result, block, opposed and index < humans).text
 	return text if wins > 0 else result # A script with a victory of its own is left alone
 
 
-# KeeperFX seats humans on Red, Blue, Green then Yellow and a computer takes any seat with COMPUTER_PLAYER,
+# KeeperFX seats humans in the order of players and a computer takes any seat with COMPUTER_PLAYER,
 # so they get the run of "Player/CPU" keepers from Red. Saved as the map's Players, which caps the lobby.
 func human_slots(text):
 	var parsed = patcher.parse(text)
 	var count = 0
-	while oDataLof.KIND == "MULTI" and count < 4 and oInstances.check_for_dungeon_heart(count) and patcher.find(parsed, "COMPUTER_PLAYER", [PLAYERS[count]]).empty():
+	while oDataLof.KIND == "MULTI" and count < players.size() and oInstances.check_for_dungeon_heart(Constants.SEATS[count]) and patcher.find(parsed, "COMPUTER_PLAYER", [players[count]]).empty():
 		count += 1
 	return max(1, count)
 
@@ -610,9 +615,9 @@ func add_default_setup():
 	var version = patcher.parse(text).version
 	for field in numberFields:
 		text = patcher.set_call(text, field[1], ([] if field[1] == "SET_GENERATE_SPEED" else ["ALL_PLAYERS"]) + [field[2]]).text
-	for index in range(human_slots(text), PLAYERS.find("PLAYER_GOOD")): # A hero heart is usually a target, so the heroes aren't given a keeper AI
-		if oInstances.check_for_dungeon_heart(AI_HEART_OWNERS[index]):
-			text = patcher.set_call(text, "COMPUTER_PLAYER", [PLAYERS[index], "0"]).text
+	for index in range(human_slots(text), players.find("PLAYER_GOOD")): # A hero heart is usually a target, so the heroes aren't given a keeper AI
+		if oInstances.check_for_dungeon_heart(Constants.SEATS[index]):
+			text = patcher.set_call(text, "COMPUTER_PLAYER", [players[index], "0"]).text
 	for parent in availableParents:
 		for button in parent.get_children():
 			if button.get_meta("default") != button.DISABLED:

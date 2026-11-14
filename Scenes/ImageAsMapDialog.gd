@@ -207,9 +207,7 @@ func build_owner_buttons():
 	for child in oImgMapOwnerGrid.get_children():
 		child.free()
 
-	var ownerOrder = [0,1,2,3,4,6,7,8,5]
-	if oCurrentFormat.selected == Constants.OldFormat:
-		ownerOrder = [0,1,2,3,4,5]
+	var ownerOrder = Constants.owner_order(oCurrentFormat.selected)
 	if ownerOrder.has(currentOwner) == false:
 		currentOwner = Constants.PLAYER_NEUTRAL
 

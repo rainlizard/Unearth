@@ -16,7 +16,6 @@ const COMMANDS = { # [argument count, identity argument count, group of lines it
 	"TRAP_AVAILABLE": [4, 2, 7],
 	"DOOR_AVAILABLE": [4, 2, 8],
 }
-const PLAYER_COLOURS = {"RED": "PLAYER0", "BLUE": "PLAYER1", "GREEN": "PLAYER2", "YELLOW": "PLAYER3", "WHITE": "PLAYER_GOOD", "NEUTRAL": "PLAYER_NEUTRAL", "PURPLE": "PLAYER4", "BLACK": "PLAYER5", "ORANGE": "PLAYER6"} # KeeperFX also names players by colour
 
 var order = {} # Ranks identity arguments, such as players and items, so new calls are inserted in order. Unranked ones go last.
 var call_regex = RegEx.new()
@@ -63,8 +62,9 @@ func parse(source):
 				call.args.append(raw.strip_edges().to_upper())
 				call.spans.append([offset + leading, offset + leading + call.args.back().length()])
 				offset += raw.length() + 1
-			if command != "ADD_CREATURE_TO_POOL": # Every other command starts with a player, or a number
-				call.args[0] = PLAYER_COLOURS.get(call.args[0], call.args[0])
+			var colourOwner = Constants.ownershipNames.find(call.args[0].capitalize()) # KeeperFX also names players by colour
+			if command != "ADD_CREATURE_TO_POOL" and colourOwner >= 0: # Every other command starts with a player, or a number
+				call.args[0] = Constants.ownerScriptNames[colourOwner]
 			parsed.calls.append(call)
 			if command == "LEVEL_VERSION": # KeeperFX preloads LEVEL_VERSION, even inside IF blocks
 				parsed.version = int(call.args[0])

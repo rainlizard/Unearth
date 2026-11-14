@@ -188,11 +188,9 @@ func get_location_position(argumentsArray, argNumber):
 	var upperLocationArgument = locationArgument.to_upper()
 	# PLAYERx - zoom to player's dungeon heart
 	var heartPosition = null
-	if "PLAYER0" in upperLocationArgument: heartPosition = dungeonHeartPositionsByOwner.get(0, null)
-	if "PLAYER1" in upperLocationArgument: heartPosition = dungeonHeartPositionsByOwner.get(1, null)
-	if "PLAYER2" in upperLocationArgument: heartPosition = dungeonHeartPositionsByOwner.get(2, null)
-	if "PLAYER3" in upperLocationArgument: heartPosition = dungeonHeartPositionsByOwner.get(3, null)
-	if "PLAYER_GOOD" in upperLocationArgument: heartPosition = dungeonHeartPositionsByOwner.get(4, null)
+	for ownerID in Constants.PLAYERS_COUNT:
+		if Constants.ownerScriptNames[ownerID] in upperLocationArgument:
+			heartPosition = dungeonHeartPositionsByOwner.get(ownerID, null)
 	if heartPosition != null:
 		return heartPosition
 	

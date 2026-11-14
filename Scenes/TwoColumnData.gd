@@ -65,16 +65,8 @@ func add_item(leftString, rightString):
 			nodeRightColumn = OptionButton.new()
 			nodeRightColumn.focus_mode = 0 # Fixes clicking on the menu
 			nodeRightColumn.get_popup().focus_mode = 0 # Fixes clicking on the menu
-			nodeRightColumn.add_item("Red")
-			nodeRightColumn.add_item("Blue")
-			nodeRightColumn.add_item("Green")
-			nodeRightColumn.add_item("Yellow")
-			nodeRightColumn.add_item("White")
-			nodeRightColumn.add_item("None")
-			if oCurrentFormat.selected == Constants.KfxFormat:
-				nodeRightColumn.add_item("Purple")
-				nodeRightColumn.add_item("Black")
-				nodeRightColumn.add_item("Orange")
+			for ownerID in Constants.owner_order(oCurrentFormat.selected):
+				nodeRightColumn.add_item(Constants.ownershipNames[ownerID])
 			
 #			print(nodeRightColumn.get_popup().mouse_filter)
 			
@@ -333,9 +325,9 @@ func _on_optionbutton_item_selected(indexSelected, leftString):
 	
 	match leftString:
 		"Ownership":
-			oSelection.paintOwnership = indexSelected
+			value = Constants.owner_order(oCurrentFormat.selected)[indexSelected]
+			oSelection.paintOwnership = value
 			property_name = "ownership"
-			value = indexSelected
 		"Orientation":
 			property_name = "orientation"
 			value = Constants.listOrientations[indexSelected]

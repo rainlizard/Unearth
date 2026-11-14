@@ -13,14 +13,8 @@ func update_grid_items():
 	for i in oGridContainer.get_children():
 		i.free()
 
-	var owner_order
-	if oCurrentFormat.selected == Constants.OldFormat:
-		owner_order = [0,1,2,3,4,5]
-	else:
-		owner_order = [0,1,2,3,6,7,8,4,5]
-
 #	# Add children
-	for i in owner_order:
+	for i in Constants.owner_order(oCurrentFormat.selected):
 		var id = scnOwnerButton.instance()
 		id.connect("pressed", self, "_on_OwnerButtonPressed", [id])
 		

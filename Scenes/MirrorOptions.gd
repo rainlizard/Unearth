@@ -12,6 +12,7 @@ onready var oMirrorColor2 = Nodelist.list["oMirrorColor2"]
 onready var oMirrorColor3 = Nodelist.list["oMirrorColor3"]
 onready var oMirrorFlipCheckBox = Nodelist.list["oMirrorFlipCheckBox"]
 onready var oGuidelines = Nodelist.list["oGuidelines"]
+onready var oCurrentFormat = Nodelist.list["oCurrentFormat"]
 
 var splitType = 2
 var ownerValue = [0,1,2,3]
@@ -92,23 +93,11 @@ func _on_MirrorColor3_gui_input(event):
 	gui_input_on_color_fields(event, 3, oMirrorColor3)
 
 func gui_input_on_color_fields(event, buttonIndex, buttonNode):
-	if event is InputEventMouseButton and event.is_pressed():
-		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT:
-			var colorIndex = Constants.ownerRoomCol.find(buttonNode.color)
-			if colorIndex != -1:
-				var newIdx
-				match event.button_index:
-					BUTTON_LEFT:
-						newIdx = colorIndex+1
-						if newIdx >= Constants.ownerRoomCol.size():
-							newIdx = 0
-					BUTTON_RIGHT:
-						newIdx = colorIndex-1
-						if newIdx < 0:
-							newIdx = Constants.ownerRoomCol.size()-1
-				
-				buttonNode.color = Constants.ownerRoomCol[newIdx]
-				ownerValue[buttonIndex] = newIdx
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index in [BUTTON_LEFT, BUTTON_RIGHT]:
+		var step = 1 if event.button_index == BUTTON_LEFT else -1
+		var owners = Constants.owner_order(oCurrentFormat.selected)
+		ownerValue[buttonIndex] = owners[posmod(owners.find(ownerValue[buttonIndex]) + step, owners.size())]
+		buttonNode.color = Constants.ownerRoomCol[ownerValue[buttonIndex]]
 
 
 func _on_MirrorPlacementCheckBox_pressed():

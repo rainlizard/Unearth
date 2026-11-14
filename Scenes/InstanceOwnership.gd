@@ -36,9 +36,10 @@ func _process(delta):
 		materialInstanceOwnership[i].set_shader_param("fadeAlpha", 1.0 - oOverheadOwnership.alphaFadeColor[i])
 
 func getFlashIndexes():
-	if oCurrentFormat.selected == Constants.KfxFormat:
-		return Constants.flashing_colors_kfx
-	return Constants.flashing_colors_dk
+	var keepers = Constants.owner_order(oCurrentFormat.selected)
+	keepers.erase(Constants.PLAYER_WHITE)
+	keepers.erase(Constants.PLAYER_NEUTRAL)
+	return keepers
 
 func getFlashColor(flashIndexes):
 	var colorIndex = flashIndexes[currentColorIndex]

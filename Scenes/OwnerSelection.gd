@@ -19,28 +19,26 @@ func update_ownership_head_icons():
 		i.free()
 	
 	var iconSize
-	var owner_order
 	var setMargin
 	if oCurrentFormat.selected == Constants.OldFormat:
-		owner_order = [0,1,2,3,4,5]
 		oOwnershipGridContainer.columns = 6
 		#oOwnershipGridContainer.set("custom_constants/hseparation", 4)
 		iconSize = Vector2(42, 42)
 		setMargin = 1
 	else:
-		owner_order = [0,1,2,3,4,6,7,8,5]
 		oOwnershipGridContainer.columns = 5
 		#oOwnershipGridContainer.set("custom_constants/hseparation", 10) #16
 		iconSize = Vector2(46, 46) #Vector2(51, 51)
 		setMargin = 1
 	
-	for i in owner_order:
+	for i in Constants.owner_order(oCurrentFormat.selected):
 		var id = gridItemScene.instance()
 		
 		id.set_meta("grid_value", i)
 		id.img_margin = setMargin
 		var setText = ""
 		id.img_normal = Constants.ownerIcons[i]
+		id.hint_tooltip = Constants.ownerScriptNames[i]
 		setText = Constants.ownershipNames[i]
 	
 		add_child_to_grid(id, setText, iconSize)
