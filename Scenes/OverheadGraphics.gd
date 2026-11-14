@@ -34,8 +34,9 @@ func update_full_overhead_map():
 		initialize_display_fields()
 	else:
 		update_display_fields_size()
+	oMapOutline.visible = true # Hidden until a map has been opened
 	oMapOutline.update()
-	
+
 	var shapePositionArray = []
 	var totalPositions = M.xSize * M.ySize
 	shapePositionArray.resize(totalPositions)

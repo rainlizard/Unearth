@@ -590,6 +590,7 @@ script = ExtResource( 133 )
 script = ExtResource( 168 )
 
 [node name="MapOutline" type="Node2D" parent="Game2D"]
+visible = false
 script = ExtResource( 297 )
 
 [node name="Node2D" type="Node2D" parent="Game2D"]
