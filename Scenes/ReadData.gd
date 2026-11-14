@@ -193,20 +193,14 @@ func read_clm(buffer):
 	for entry in oDataClm.column_count:
 		oDataClm.utilized[entry] = buffer.get_u16() # 0-1
 		
-		var specialByte = buffer.get_u8() # 2
-		var get_permanent = specialByte & 1
-		var get_lintel = (specialByte >> 1) & 7
-		var get_height = (specialByte >> 4) & 15
-		oDataClm.permanent[entry] = get_permanent
-		oDataClm.lintel[entry] = get_lintel
-		oDataClm.height[entry] = get_height
-		
-		oDataClm.solidMask[entry] = buffer.get_u16() # 3-4
+		oDataClm.permanent[entry] = buffer.get_u8() & 1 # 2, the lintel and height bits are derived from the cubes below
+		buffer.get_u16() # 3-4, the solid mask is derived from the cubes below
 		oDataClm.floorTexture[entry] = buffer.get_u16() # 5-6
 		oDataClm.orientation[entry] = buffer.get_u8() # 7
-		
+
 		for cubeNumber in 8:
 			oDataClm.cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
+		oDataClm.update_derived_values(entry) # KeeperFX's init_columns() overwrites the stored solid mask, height and lintel
 
 func new_clm():
 	oDataClm.column_count = oDataClm.get_format_column_count()

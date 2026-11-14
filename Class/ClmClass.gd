@@ -14,36 +14,32 @@ func get_height_from_bottom(cubeArray):
 			return cubeNumber
 	return 8
 
+# Matches KeeperFX's make_solidmask(): one bit per filled cube
 func calculate_solid_mask(cubeArray):
-	# For each cube value that isn't 0, add a bitmask value.
-	# 0 = 1
-	# 1 = 2
-	# 2 = 4
-	# 3 = 8
-	# 4 = 16
-	# 5 = 32
-	# 6 = 64
-	# 7 = 128
 	var setSolidBitmask:int = 0
 	for i in 8:
 		if cubeArray[i] != 0:
-			setSolidBitmask += int(pow(2, i))
+			setSolidBitmask |= 1 << i
 	return setSolidBitmask
 
+# Matches KeeperFX's create_column(): 0 when nothing sits above the floor stack's gap,
+# otherwise 7 minus the lowest filled index from 1 upwards (KeeperFX counts floor cubes above the bottom one too)
 func calculate_lintel(cubeArray):
-	var holeCount = 0
-	# Scan from top to bottom (index 7 to 0)
-	for cubeNumber in range(7, -1, -1):
-		if cubeArray[cubeNumber] == 0:
-			holeCount += 1
-			if holeCount == 2:
-				# Found the 2nd hole, return the position of the cube above it
-				# The cube above this hole is at cubeNumber + 1
-				var cubePosition = cubeNumber + 1
-				var reversedCubePosition = 7 - cubePosition
-				return reversedCubePosition
-	# If we don't find a 2nd hole, return 0 as default
+	if get_highest_cube_height(cubeArray) > get_height_from_bottom(cubeArray):
+		for i in range(1, 8):
+			if cubeArray[i] != 0:
+				return 7 - i
 	return 0
+
+# KeeperFX's create_column() and init_columns() overwrite the stored height and lintel with values derived from the cubes
+func update_height_and_lintel(index):
+	self.height[index] = get_height_from_bottom(self.cubes[index])
+	self.lintel[index] = calculate_lintel(self.cubes[index])
+
+# For map columns, init_columns() also derives the solid mask, which find_cubearray_index() relies on
+func update_derived_values(index):
+	self.solidMask[index] = calculate_solid_mask(self.cubes[index])
+	update_height_and_lintel(index)
 
 func delete_column(index):
 	self.utilized[index] = 0
@@ -76,31 +72,21 @@ func resize_column_arrays(keepCount):
 		delete_column(i) # Gives each entry its own cubes array, fill() would share one
 
 
+# Matches KeeperFX's find_column(): cubes, floor texture (used for ceilings and abyss even under cubes), solid mask and orientation.
+# Height and lintel aren't compared, KeeperFX derives them from the cubes.
 func find_cubearray_index(cubeArray, floorID):
-	var compareFloorTexture = false
-	# If the lowest cube is missing that means the floor is visible, therefore the floor should be compared too
-	if cubeArray[0] == 0:
-		compareFloorTexture = true
-	
-	var searchFrom = 1 # Skip 1st entry which should remain 0
-	while true:
-		var idx = self.cubes.find(cubeArray, searchFrom)
-		if idx != -1:
-			# Matching cubes were found, should the floor texture be compared now?
-			if compareFloorTexture == true:
-				if self.floorTexture[idx] == floorID:
-					# Found matching cubes and matching floor
-					return idx
-				else:
-					# Did not find matching floor with matching cubes, so search again starting from the next entry
-					searchFrom = idx+1
-			else:
-				# Found matching cubes, floor is irrelevant
-				return idx
-		else:
-			# Found no matching cubes
-			break
-	return -1
+	var expectedSolidMask = calculate_solid_mask(cubeArray)
+	var idx = self.cubes.find(cubeArray, 1) # Skip 1st entry which should remain 0
+	while idx != -1 and not (self.floorTexture[idx] == floorID and self.solidMask[idx] == expectedSolidMask and self.orientation[idx] == 0):
+		idx = self.cubes.find(cubeArray, idx+1)
+	return idx
+
+# A free slot for a new column: no cubes and no floor texture, other leftover values get overwritten
+func find_empty_column():
+	var idx = self.cubes.find([0,0,0,0, 0,0,0,0], 1)
+	while idx != -1 and self.floorTexture[idx] != 0:
+		idx = self.cubes.find([0,0,0,0, 0,0,0,0], idx+1)
+	return idx
 
 func get_top_cube_face(clmIndex):
 	var cubeArray = self.cubes[clmIndex]

@@ -62,16 +62,14 @@ func index_entry(cubeArray, setFloorID):
 	if idx != -1: return idx
 	
 	# Add new entry
-	var index = find_cubearray_index([0,0,0,0,0,0,0,0], 0)
+	var index = find_empty_column()
 	if index != -1:
 		utilized[index] = 1 # This can be whatever, it's automatically set when saving
 		orientation[index] = 0
-		solidMask[index] = calculate_solid_mask(cubeArray)
 		permanent[index] = 1 # Does this affect whether columns get reset?
-		lintel[index] = calculate_lintel(cubeArray)
-		height[index] = get_height_from_bottom(cubeArray)
-		cubes[index] = cubeArray
+		cubes[index] = cubeArray.duplicate() # Callers may pass another column's array, e.g. Columnset's
 		floorTexture[index] = setFloorID
+		update_derived_values(index)
 		
 		oTimerUpdateColumnEntries.start()
 		return index

@@ -290,18 +290,10 @@ func _on_cube_value_changed(value, cubeNumber): # signal connected by GDScript
 	nodeClm.cubes[clmIndex][cubeNumber] = int(value)
 	
 	# Auto-calculate height, solid mask, and lintel based on cube data
-	var calculatedHeight = nodeClm.get_height_from_bottom(nodeClm.cubes[clmIndex])
-	var calculatedSolidMask = nodeClm.calculate_solid_mask(nodeClm.cubes[clmIndex])
-	var calculatedLintel = nodeClm.calculate_lintel(nodeClm.cubes[clmIndex])
-	
-	# Update both the data arrays and UI
-	nodeClm.height[clmIndex] = calculatedHeight
-	nodeClm.solidMask[clmIndex] = calculatedSolidMask
-	nodeClm.lintel[clmIndex] = calculatedLintel
-	
-	oHeightSpinBox.value = calculatedHeight
-	oSolidMaskSpinBox.value = calculatedSolidMask
-	oLintelSpinBox.value = calculatedLintel
+	nodeClm.update_derived_values(clmIndex)
+	oHeightSpinBox.value = nodeClm.height[clmIndex]
+	oSolidMaskSpinBox.value = nodeClm.solidMask[clmIndex]
+	oLintelSpinBox.value = nodeClm.lintel[clmIndex]
 	
 	nodeVoxelView.update_column_view()
 	
@@ -430,7 +422,7 @@ func _on_ColumnFirstUnusedButton_pressed():
 	if nodeClm == Columnset:
 		findUnusedIndex = find_unused_column_in_columnset()
 	else:
-		findUnusedIndex = nodeClm.find_cubearray_index([0,0,0,0, 0,0,0,0], 0)
+		findUnusedIndex = nodeClm.find_empty_column()
 
 	if findUnusedIndex != -1:
 		oColumnIndexSpinBox.value = findUnusedIndex
@@ -534,10 +526,8 @@ func _on_ColumnPasteButton_pressed():
 	nodeClm.cubes[clmIndex] = clipboard["cubes"].duplicate(true)
 	
 	# Auto-calculate height, solid mask, and lintel based on pasted cube data
-	nodeClm.height[clmIndex] = nodeClm.get_height_from_bottom(nodeClm.cubes[clmIndex])
-	nodeClm.solidMask[clmIndex] = nodeClm.calculate_solid_mask(nodeClm.cubes[clmIndex])
-	nodeClm.lintel[clmIndex] = nodeClm.calculate_lintel(nodeClm.cubes[clmIndex])
-	
+	nodeClm.update_derived_values(clmIndex)
+
 	_on_ColumnIndexSpinBox_value_changed(clmIndex) # Update the UI to reflect the pasted values
 	oMessage.quick("Pasted column from clipboard")
 	nodeVoxelView.refresh_entire_view()

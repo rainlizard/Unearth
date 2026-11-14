@@ -43,12 +43,11 @@ func import_toml_columnset(filePath):
 			
 			utilized[columnIndex] = 0 #cfg.get_value(section, "Utilized", 0)
 			permanent[columnIndex] = 1 #cfg.get_value(section, "Permanent", 0)
-			lintel[columnIndex] = get_columnset_value(cfg, section, "Lintel", 0)
-			height[columnIndex] = get_columnset_value(cfg, section, "Height", 0)
 			solidMask[columnIndex] = get_columnset_value(cfg, section, "SolidMask", 0)
 			floorTexture[columnIndex] = get_columnset_value(cfg, section, "FloorTexture", 0)
 			orientation[columnIndex] = get_columnset_value(cfg, section, "Orientation", 0)
 			cubes[columnIndex] = get_columnset_value(cfg, section, "Cubes", [0,0,0,0, 0,0,0,0])
+			update_height_and_lintel(columnIndex) # KeeperFX's create_column() overwrites the toml's Height and Lintel
 	
 	if is_from_fxdata:
 		highest_columnset_id_from_fxdata = max_column_id_found
@@ -75,21 +74,14 @@ func load_default_original_columnset():
 	for entry in numberOfClmEntries:
 		utilized[entry] = buffer.get_u16() # 0-1
 		
-		var specialByte = buffer.get_u8() # 2
-		
-		var get_permanent = specialByte & 1
-		var get_lintel = (specialByte >> 1) & 7
-		var get_height = (specialByte >> 4) & 15
-		permanent[entry] = get_permanent
-		lintel[entry] = get_lintel
-		height[entry] = get_height
-		
+		permanent[entry] = buffer.get_u8() & 1 # 2, the lintel and height bits are derived from the cubes below
 		solidMask[entry] = buffer.get_u16() # 3-4
 		floorTexture[entry] = buffer.get_u16() # 5-6
 		orientation[entry] = buffer.get_u8() # 7
-		
+
 		for cubeNumber in 8:
 			cubes[entry][cubeNumber] = buffer.get_u16() # 8-23
+		update_height_and_lintel(entry) # The game's create_column() overwrites the stored height and lintel
 	
 	store_default_data()
 	update_cube_lists()
