@@ -73,6 +73,8 @@ var listMagic = [
 const CLASSIC_TRAP_ORDER = [2, 3, 4, 6, 1, 5]
 const CLASSIC_DOOR_ORDER = [1, 2, 3, 4]
 const HIDDEN_CREATURES = [23, 31]
+const ATTRACTED_BY_DEFAULT = ["DRUID", "MAIDEN"] # Balanced around the portal, so they join the classic pool
+const DISABLED_BY_DEFAULT = ["TNT", "BALLISTA", "SECRET", "POWER_TIME_BOMB", "POWER_REBOUND", "POWER_FREEZE", "POWER_SLOW", "POWER_FLIGHT", "POWER_VISION", "POWER_TUNNELLER"] # Traps meant for placing on the map, and situational powers
 const ICON_SIZE = Vector2(76, 64)
 const CREATURE_ICON_SCALE = 2.5
 var listRoom = [
@@ -219,7 +221,7 @@ func get_creature_list():
 		if creatureStatsByName.has(creatureName):
 			var properties = creatureStatsByName[creatureName].get("Properties", [])
 			evil = properties.has("EVIL") if properties is Array else properties == "EVIL"
-		creatureList.append([subtype, creatureName, 0, evil])
+		creatureList.append([subtype, creatureName, 20 if ATTRACTED_BY_DEFAULT.has(creatureName) else 0, evil])
 	return creatureList
 
 
@@ -262,7 +264,7 @@ func get_trapdoor_subtypes(thingType):
 	return subtypeList
 
 
-# availableByDefault is used by add_default_setup(). Rooms and spells that aren't available by default are researchable.
+# availableByDefault is used by add_default_setup(). Rooms and spells that aren't available by default are researchable, unless DISABLED_BY_DEFAULT.
 func add_available_button(parent, command, variable, texture, display_name, availableByDefault):
 	var button = scnAvailableButton.instance()
 	button.hint_tooltip = display_name
@@ -275,7 +277,7 @@ func add_available_button(parent, command, variable, texture, display_name, avai
 	if cycle.size() == 3:
 		button.hint_tooltip += "\nClick to cycle Start, Research and Disabled. Right-click goes back."
 	button.set_meta("cycle", cycle)
-	button.set_meta("default", cycle[0 if availableByDefault else 1])
+	button.set_meta("default", button.DISABLED if DISABLED_BY_DEFAULT.has(variable.to_upper()) else cycle[0 if availableByDefault else 1])
 	parent.add_child(button)
 	button.connect("mouse_entered", self, "_on_setting_mouse_entered", [button])
 	button.connect("mouse_exited", scriptPreview, "hide")
