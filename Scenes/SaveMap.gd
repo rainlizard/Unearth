@@ -20,6 +20,7 @@ onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oMapBackups = Nodelist.list["oMapBackups"]
 onready var oTabTileset = Nodelist.list["oTabTileset"]
 onready var oSlabPlacement = Nodelist.list["oSlabPlacement"]
+onready var oOpenMap = Nodelist.list["oOpenMap"]
 
 var queueExit = false
 
@@ -31,6 +32,8 @@ func save_map(filePath):
 	var map_basename_with_ext = filePath.get_file()
 	var map_filename_no_ext = map_basename_with_ext.get_basename()
 	var map_base_dir = filePath.get_base_dir()
+	# Configs (campaign, folder additions) are loaded per directory, so a map saved into a new directory must be reloaded to pick them up
+	var directory_changed = oCurrentMap.path.get_base_dir().to_lower() != map_base_dir.to_lower()
 	var SAVETIME_START = OS.get_ticks_msec()
 	if oSlabPlacement.block_while_generating():
 		queueExit = false
@@ -144,6 +147,8 @@ func save_map(filePath):
 	oMapSettingsWindow.visible = false
 	if queueExit:
 		get_tree().quit()
+	elif directory_changed:
+		oOpenMap.open_map(filePath, {"show_opened_message": false, "reset_camera": false})
 	return true
 
 
