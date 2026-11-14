@@ -3,7 +3,6 @@ onready var oScriptTextEdit = Nodelist.list["oScriptTextEdit"]
 onready var oDataScript = Nodelist.list["oDataScript"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oEditor = Nodelist.list["oEditor"]
-onready var oScriptEditorEditButton = Nodelist.list["oScriptEditorEditButton"]
 onready var oScriptMarkers = Nodelist.list["oScriptMarkers"]
 onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 onready var oScriptPathLinkButton = Nodelist.list["oScriptPathLinkButton"]
@@ -12,6 +11,7 @@ onready var oMessage = Nodelist.list["oMessage"]
 onready var oMenu = Nodelist.list["oMenu"]
 
 var scriptHasBeenEditedInUnearth = false
+var collapsed = true # The script is hidden by default, it's busy next to the basic options
 
 var SCRIPT_EDITOR_FONT_SIZE = 20 setget set_SCRIPT_EDITOR_FONT_SIZE, get_SCRIPT_EDITOR_FONT_SIZE
 
@@ -72,19 +72,36 @@ func update_texteditor():
 
 
 func _on_ScriptTextEdit_visibility_changed():
-	if is_instance_valid(oScriptTextEdit) and oScriptTextEdit.is_visible_in_tree() == false:
+	if is_instance_valid(oScriptTextEdit) and oScriptTextEdit.is_visible_in_tree() == false and oScriptTextEdit.readonly == false:
+		oScriptMarkers.start() # Closed while editing, which is kept for when it's reopened
+
+
+# The arrows step between three views: collapsed (basic options only), the script beside them, and editing the script on its own
+func _on_ScriptCollapseButton_pressed():
+	if oScriptTextEdit.readonly:
+		set_collapsed(true)
+	else:
 		set_editing(false)
 
 
-func _on_ScriptEditorEditButton_pressed():
-	set_editing(oScriptTextEdit.readonly)
+func _on_ScriptExpandButton_pressed():
+	if oScriptTextEdit.visible: # Shown even while collapsed when the basic options can't be used
+		set_editing(true)
+	else:
+		set_collapsed(false)
+
+
+# Saved to settings.cfg, unlike editing, which is only kept until Unearth closes
+func set_collapsed(value):
+	collapsed = value
+	Settings.write_cfg("script_editor_collapsed", value)
+	oScriptGenerator.refresh()
 
 
 func set_editing(enabled):
 	if enabled != oScriptTextEdit.readonly: # Already in this mode
 		return
-	oScriptEditorEditButton.text = "Close" if enabled else "Edit" # Editing hides the basic options, filling the window with the script
-	oScriptTextEdit.readonly = enabled == false
+	oScriptTextEdit.readonly = enabled == false # Editing hides the basic options, filling the window with the script
 	if enabled:
 		oScriptTextEdit.deselect() # Hovering basic options selects lines, typing shouldn't replace them
 		oScriptTextEdit.grab_focus()

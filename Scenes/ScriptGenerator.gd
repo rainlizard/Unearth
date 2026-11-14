@@ -29,6 +29,11 @@ onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oCreateScriptButton = Nodelist.list["oCreateScriptButton"]
 onready var oScriptPathLinkButton = Nodelist.list["oScriptPathLinkButton"]
+onready var oDeleteScriptButton = Nodelist.list["oDeleteScriptButton"]
+onready var oGeneratorContainer = Nodelist.list["oGeneratorContainer"]
+onready var oScriptSide = Nodelist.list["oScriptSide"]
+onready var oScriptCollapseButton = Nodelist.list["oScriptCollapseButton"]
+onready var oScriptExpandButton = Nodelist.list["oScriptExpandButton"]
 onready var oMessage = Nodelist.list["oMessage"]
 
 onready var numberFields = [[oPortalRateField, "SET_GENERATE_SPEED", "400"], [oGoldField, "START_MONEY", "2500"], [oMaxCreaturesField, "MAX_CREATURES", "25"]]
@@ -120,6 +125,7 @@ func _ready():
 		oBasicPlayerTabs.add_child(tab)
 		tabs.append(tab)
 	tabs[0].pressed = true
+	oBasicPlayerTabs.get_parent().rect_min_size.y = tabs.back().rect_min_size.y # Already the tabs' height, so ticking Unique settings doesn't grow the row
 	for index in players.size(): # The scene's dropdown is copied for every other keeper
 		var option = oAIOption if index == 0 else oAIOption.duplicate(0)
 		for item in option.get_item_count():
@@ -285,7 +291,6 @@ func add_available_button(parent, command, variable, texture, display_name, avai
 
 
 func open():
-	oScriptEditor.set_editing(false)
 	Utils.popup_centered(oScriptGeneratorWindow)
 	oScriptGeneratorWindow.rect_position = Vector2(0, oUi.topMargin) # Full screen, below the menu bar
 	oScriptGeneratorWindow.rect_size = get_viewport().size / Settings.UI_SCALE - oScriptGeneratorWindow.rect_position
@@ -312,11 +317,22 @@ func refresh():
 	var parsed = patcher.parse(oDataScript.data)
 	var editing = oScriptTextEdit.readonly == false
 	var empty = oDataScript.data.strip_edges() == ""
+	var unusable = empty or parsed.error_line != 0 # The basic options can't be used, so the script stays shown
+	var collapsed = oScriptEditor.collapsed and unusable == false
+	oGeneratorContainer.collapsed = collapsed # Ignores a dragged split, so the script narrows to its expand button
+	oScriptSide.size_flags_horizontal = Control.SIZE_FILL if collapsed else Control.SIZE_EXPAND_FILL
+	oScriptEditor.rect_min_size.x = 0 if collapsed else 300
+	for node in [oScriptTextEdit, oScriptPathLinkButton, oDeleteScriptButton]:
+		node.visible = collapsed == false
+	oScriptCollapseButton.visible = editing or (collapsed == false and unusable == false)
+	oScriptCollapseButton.hint_tooltip = "Stop editing and show the basic options." if editing else "Hide the script."
+	oScriptExpandButton.visible = editing == false
+	oScriptExpandButton.hint_tooltip = "Show the script beside the basic options." if collapsed else "Edit the script text directly. The basic options are hidden while editing."
 	oCreateScriptButton.visible = editing == false and empty # Also once a script's text was deleted
 	oBasicOptions.visible = editing == false and parsed.error_line == 0
 	oBasicNotice.visible = editing == false and (parsed.error_line != 0 or empty)
 	if parsed.error_line != 0:
-		oBasicNotice.text = "Line " + str(parsed.error_line) + " has an IF without an ENDIF, or an ENDIF without an IF. Fix it with Edit to use the basic options."
+		oBasicNotice.text = "Line " + str(parsed.error_line) + " has an IF without an ENDIF, or an ENDIF without an IF. Press -> to edit the script and fix it to use the basic options."
 		highlight_script_line(parsed.error_line)
 	else:
 		oBasicNotice.text = "This script is empty. The default setup makes the map playable."
@@ -345,7 +361,7 @@ func refresh():
 		var option = aiOptions[index]
 		var computer = patcher.find(parsed, "COMPUTER_PLAYER", [players[index]])
 		var solo = oDataLof.KIND != "MULTI"
-		option.set_item_text(0, "Player/CPU" if solo == false else ("Human" if index == 0 else "Idle")) # Solo games always give the human Red
+		option.set_item_text(0, "Player" if solo == false else ("Human" if index == 0 else "Idle")) # Solo games always give the human Red
 		option.selected = {"OFF": 0, "ROAMING": 2}.get(computer.back().args[1] if computer.empty() == false else "OFF", 1)
 		option.disabled = keepers().has(players[index]) == false or (index == 0 and solo and computer.empty())
 		var active = option.selected == 2 or oInstances.check_for_dungeon_heart(Constants.SEATS[index]) # Roaming is the only AI that needs no heart
@@ -582,7 +598,7 @@ func set_victory(text):
 
 
 # KeeperFX seats humans in the order of players and a computer takes any seat with COMPUTER_PLAYER,
-# so they get the run of "Player/CPU" keepers from Red. Saved as the map's Players, which caps the lobby.
+# so they get the run of "Player" keepers from Red. Saved as the map's Players, which caps the lobby.
 func human_slots(text):
 	var parsed = patcher.parse(text)
 	var count = 0

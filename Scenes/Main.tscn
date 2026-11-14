@@ -4979,13 +4979,22 @@ custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
 text = "map00001.txt"
 underline = 2
 
-[node name="ScriptEditorEditButton" type="Button" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/HBoxContainer"]
-margin_left = 359.0
+[node name="ScriptViewButtons" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/HBoxContainer"]
+margin_left = 352.0
 margin_right = 408.0
 margin_bottom = 27.0
-hint_tooltip = "Edit the script text directly. The basic options are hidden while editing."
 size_flags_horizontal = 10
-text = "Edit"
+
+[node name="ScriptCollapseButton" type="Button" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/HBoxContainer/ScriptViewButtons"]
+margin_right = 26.0
+margin_bottom = 27.0
+text = "<-"
+
+[node name="ScriptExpandButton" type="Button" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/HBoxContainer/ScriptViewButtons"]
+margin_left = 30.0
+margin_right = 56.0
+margin_bottom = 27.0
+text = "->"
 
 [node name="DeleteScriptButton" type="Button" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/HBoxContainer"]
 margin_left = 412.0
@@ -5024,7 +5033,7 @@ scroll_horizontal_enabled = false
 
 [node name="BasicSections" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions"]
 margin_right = 983.0
-margin_bottom = 348.0
+margin_bottom = 311.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
@@ -5040,7 +5049,7 @@ margin_bottom = 27.0
 hint_tooltip = "COMPUTER_PLAYER
 Idle: the keeper does nothing.
 Human: solo games always give Red to the human.
-Player/CPU: a human, or a computer when the lobby's Computer players option is on. Humans are seated from Red, so the map's Players counts these up to the first CPU.
+Player: a human, or a computer when the lobby's Computer players option is on. Humans are seated from Red, so the map's Players counts these up to the first CPU.
 CPU only: a computer plays it, whatever the lobby's Computer players option.
 Roaming CPU: plays like the heroes, so it needs no dungeon heart. Requires KeeperFX and adds LEVEL_VERSION(1).
 Dimmed keepers have no dungeon heart on the map.
@@ -5058,14 +5067,19 @@ margin_right = 983.0
 margin_bottom = 76.0
 custom_styles/panel = ExtResource( 296 )
 
-[node name="PortalRateRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard"]
+[node name="MapRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard"]
 margin_left = 5.0
 margin_top = 5.0
-margin_right = 300.0
+margin_right = 978.0
 margin_bottom = 36.0
+custom_constants/separation = 24
+
+[node name="PortalRateRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/MapRow"]
+margin_right = 295.0
+margin_bottom = 31.0
 size_flags_horizontal = 0
 
-[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/PortalRateRow"]
+[node name="Label" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/MapRow/PortalRateRow"]
 margin_top = 5.0
 margin_right = 197.0
 margin_bottom = 26.0
@@ -5075,7 +5089,7 @@ mouse_filter = 1
 size_flags_horizontal = 3
 text = "Portal attraction rate"
 
-[node name="PortalRateInSeconds" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/PortalRateRow"]
+[node name="PortalRateInSeconds" type="Label" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/MapRow/PortalRateRow"]
 margin_left = 201.0
 margin_top = 5.0
 margin_right = 201.0
@@ -5084,27 +5098,28 @@ hint_tooltip = "Assuming 20 game turns per second"
 mouse_filter = 1
 custom_colors/font_color = Color( 1, 1, 1, 0.376471 )
 
-[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/PortalRateRow"]
+[node name="PortalRateField" type="LineEdit" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/MapRow/PortalRateRow"]
 margin_left = 205.0
 margin_right = 295.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 90, 0 )
 placeholder_text = "unset"
 
-[node name="TabsRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 84.0
-margin_right = 983.0
-margin_bottom = 113.0
+[node name="TabsRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/MapRow"]
+margin_left = 319.0
+margin_right = 973.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
 custom_constants/separation = 12
 
-[node name="UniqueSettingsCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/TabsRow"]
+[node name="UniqueSettingsCheckBox" type="CheckBox" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/MapRow/TabsRow"]
 margin_right = 171.0
-margin_bottom = 29.0
+margin_bottom = 31.0
 hint_tooltip = "Shows a tab for each keeper, to give them settings of their own.
 Unchecked, only the All players settings are shown. Lines the script already has for a keeper are kept."
 text = "Unique settings"
 
-[node name="BasicPlayerTabs" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/TabsRow"]
+[node name="BasicPlayerTabs" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/MapRow/TabsRow"]
 visible = false
 margin_left = 172.0
 margin_right = 983.0
@@ -5116,9 +5131,9 @@ size_flags_horizontal = 3
 custom_constants/separation = 0
 
 [node name="KeeperCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 121.0
+margin_top = 84.0
 margin_right = 983.0
-margin_bottom = 162.0
+margin_bottom = 125.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="KeeperRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard"]
@@ -5172,9 +5187,9 @@ rect_min_size = Vector2( 90, 0 )
 placeholder_text = "unset"
 
 [node name="CreaturesCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 170.0
+margin_top = 133.0
 margin_right = 983.0
-margin_bottom = 213.0
+margin_bottom = 176.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="CreaturesSection" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/CreaturesCard"]
@@ -5207,9 +5222,9 @@ margin_bottom = 33.0
 mouse_filter = 1
 
 [node name="RoomsCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 221.0
+margin_top = 184.0
 margin_right = 983.0
-margin_bottom = 258.0
+margin_bottom = 221.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="RoomsSection" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/RoomsCard"]
@@ -5236,9 +5251,9 @@ margin_bottom = 27.0
 mouse_filter = 1
 
 [node name="SpellsCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 266.0
+margin_top = 229.0
 margin_right = 983.0
-margin_bottom = 303.0
+margin_bottom = 266.0
 custom_styles/panel = ExtResource( 296 )
 
 [node name="SpellsSection" type="VBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/SpellsCard"]
@@ -5265,9 +5280,9 @@ margin_bottom = 27.0
 mouse_filter = 1
 
 [node name="TrapsDoorsRow" type="HBoxContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections"]
-margin_top = 311.0
+margin_top = 274.0
 margin_right = 983.0
-margin_bottom = 348.0
+margin_bottom = 311.0
 custom_constants/separation = 8
 
 [node name="TrapsCard" type="PanelContainer" parent="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/TrapsDoorsRow"]
@@ -9008,13 +9023,14 @@ margin_bottom = 40.0
 [connection signal="item_selected" from="Ui/UiSystem/MapSettingsWindow/MapProperties/ScrollContainer/VBoxContainer/AdvancedMapProperties/VBoxContainer/HBoxOptions/OptionsOptionButton" to="Ui/UiSystem/MapSettingsWindow/MapProperties" method="_on_OptionsOptionButton_item_selected"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/CreateScriptButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="add_default_setup"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/HBoxContainer/ScriptPathLinkButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor" method="_on_ScriptPathLinkButton_pressed"]
-[connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/HBoxContainer/ScriptEditorEditButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor" method="_on_ScriptEditorEditButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/HBoxContainer/ScriptViewButtons/ScriptCollapseButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor" method="_on_ScriptCollapseButton_pressed"]
+[connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/HBoxContainer/ScriptViewButtons/ScriptExpandButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor" method="_on_ScriptExpandButton_pressed"]
 [connection signal="pressed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/HBoxContainer/DeleteScriptButton" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor" method="_on_DeleteScriptButton_pressed"]
 [connection signal="text_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor" method="_on_ScriptTextEdit_text_changed"]
 [connection signal="visibility_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor/VBoxContainer/ScriptTextEdit" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/ScriptSide/ScriptEditor" method="_on_ScriptTextEdit_visibility_changed"]
-[connection signal="focus_exited" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/PortalRateRow/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_NumberField_apply"]
-[connection signal="text_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/PortalRateRow/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_PortalRateField_text_changed"]
-[connection signal="text_entered" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/PortalRateRow/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_NumberField_apply"]
+[connection signal="focus_exited" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/MapRow/PortalRateRow/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_NumberField_apply"]
+[connection signal="text_changed" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/MapRow/PortalRateRow/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_PortalRateField_text_changed"]
+[connection signal="text_entered" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/MapCard/MapRow/PortalRateRow/PortalRateField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_NumberField_apply"]
 [connection signal="focus_exited" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard/KeeperRow/GoldRow/GoldField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_NumberField_apply"]
 [connection signal="text_entered" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard/KeeperRow/GoldRow/GoldField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_NumberField_apply"]
 [connection signal="focus_exited" from="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator/GeneratorContainer/BasicOptions/BasicSections/KeeperCard/KeeperRow/MaxCreaturesRow/MaxCreaturesField" to="Ui/UiSystem/ScriptGeneratorWindow/MarginContainer/ScriptGenerator" method="_on_NumberField_apply"]

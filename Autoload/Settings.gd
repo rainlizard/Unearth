@@ -61,6 +61,7 @@ var listOfSettings = [
 	"slab_window_scale",
 	"thing_window_scale",
 	"script_editor_font_size",
+	"script_editor_collapsed",
 	"last_changelog_displayed",
 	
 #	"owner_window_size",
@@ -492,6 +493,10 @@ func game_setting(doWhat,string,value):
 			var oScriptEditor = Nodelist.list["oScriptEditor"]
 			if doWhat == SET: oScriptEditor.set_SCRIPT_EDITOR_FONT_SIZE(value)
 			if doWhat == GET: return oScriptEditor.get_SCRIPT_EDITOR_FONT_SIZE()
+		"script_editor_collapsed":
+			var oScriptEditor = Nodelist.list["oScriptEditor"]
+			if doWhat == SET: oScriptEditor.collapsed = value
+			if doWhat == GET: return oScriptEditor.collapsed
 		"editor_font_size":
 			var oUiSystem = $'../Main/Ui/UiSystem'
 			if doWhat == SET: oUiSystem.theme.get_font("font","").size = value
