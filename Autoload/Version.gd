@@ -9,6 +9,8 @@ func _init():
 	full = major_minor + "." + patch
 
 const changelog = """
+0.75.1082 - 16/11/2026
+- Automatic updates now work on Windows 7, and if an update fails then it won't keep looping
 0.75.1080 - 15/11/2026
 - DKScript editor: the script sidebar is collapsed by default to keep things uncluttered. It remembers its last state with settings.cfg
 - Column height, lintel and solid mask are now derived from the cubes, matching KeeperFX
