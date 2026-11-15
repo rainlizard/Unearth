@@ -558,8 +558,8 @@ func delete_settings():
 	if dir.file_exists(settings_file_path) == true:
 		dir.remove(settings_file_path)
 
-func read_cfg(setting):
-	return config.get_value("settings", setting)
+func read_cfg(setting, default = null):
+	return config.get_value("settings", setting, default)
 
 func write_cfg(setting, value):
 #	var err = config.load(settings_file_path)
