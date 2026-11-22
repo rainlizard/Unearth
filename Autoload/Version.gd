@@ -9,6 +9,9 @@ func _init():
 	full = major_minor + "." + patch
 
 const changelog = """
+0.75.1086 - 22/11/2026
+- Support for campaign levels in nested subfolders
+- New Map window: Simplified some of the UI and set Impenetrable rock as the default border
 0.75.1082 - 16/11/2026
 - Automatic updates now work on Windows 7, and if an update fails then it won't keep looping
 0.75.1080 - 15/11/2026
