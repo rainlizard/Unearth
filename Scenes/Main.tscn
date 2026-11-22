@@ -7085,10 +7085,10 @@ margin_right = 305.0
 margin_bottom = 404.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 10
-text = "Abyss"
+text = "Impenetrable rock"
 align = 1
 items = [ "Impenetrable rock", null, false, 0, null, "Abyss", null, false, 1, null ]
-selected = 1
+selected = 0
 
 [node name="NewMapNoiseOptions" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer"]
 margin_top = 408.0
