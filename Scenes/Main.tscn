@@ -7028,10 +7028,21 @@ max_value = 8.0
 step = 1.0
 value = 2.0
 
-[node name="PlayerDistance" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions" instance=ExtResource( 135 )]
+[node name="PlayerSubOptions" type="MarginContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions"]
 margin_top = 76.0
 margin_right = 320.0
-margin_bottom = 117.0
+margin_bottom = 195.0
+custom_constants/margin_left = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerSubOptions"]
+margin_left = 16.0
+margin_right = 320.0
+margin_bottom = 119.0
+
+[node name="PlayerDistance" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerSubOptions/VBoxContainer" instance=ExtResource( 135 )]
+margin_top = 0.0
+margin_right = 304.0
+margin_bottom = 41.0
 hint_tooltip = "How far the dungeon hearts are from the map centre, or from the mirror line with Line layout."
 label_setting = "Distance"
 min_value = 0.05
@@ -7039,21 +7050,21 @@ max_value = 1.0
 step = 0.01
 value = 0.75
 
-[node name="PlayerPositioning" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions" instance=ExtResource( 135 )]
-margin_top = 121.0
-margin_right = 320.0
-margin_bottom = 162.0
+[node name="PlayerPositioning" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerSubOptions/VBoxContainer" instance=ExtResource( 135 )]
+margin_top = 45.0
+margin_right = 304.0
+margin_bottom = 86.0
 hint_tooltip = "Slide each player sideways. 0.5 = no shift."
 label_setting = "Position"
 max_value = 1.0
 step = 0.01
 value = 0.5
 
-[node name="LinearDistanceCheckBox" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions"]
-margin_left = 189.0
-margin_top = 166.0
-margin_right = 320.0
-margin_bottom = 195.0
+[node name="LinearDistanceCheckBox" type="CheckBox" parent="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerSubOptions/VBoxContainer"]
+margin_left = 173.0
+margin_top = 90.0
+margin_right = 304.0
+margin_bottom = 119.0
 hint_tooltip = "Measure Distance from the mirror line instead of the map centre."
 size_flags_horizontal = 10
 pressed = true
@@ -9051,9 +9062,9 @@ margin_bottom = 40.0
 [connection signal="focus_exited" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/HBoxContainer/YSizeLine" to="Ui/UiSystem/NewMapWindow" method="_on_YSizeLine_focus_exited"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/HBoxContainer5/NewMapSymmetricalBorder" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapSymmetricalBorder_item_selected"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerCount" to="Ui/UiSystem/NewMapWindow" method="_on_PlayerCount_sliderChanged"]
-[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerDistance" to="Ui/UiSystem/NewMapWindow" method="_on_PlayerDistance_sliderChanged"]
-[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerPositioning" to="Ui/UiSystem/NewMapWindow" method="_on_PlayerPositioning_sliderChanged"]
-[connection signal="toggled" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/LinearDistanceCheckBox" to="Ui/UiSystem/NewMapWindow" method="_on_LinearDistanceCheckBox_toggled"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerSubOptions/VBoxContainer/PlayerDistance" to="Ui/UiSystem/NewMapWindow" method="_on_PlayerDistance_sliderChanged"]
+[connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerSubOptions/VBoxContainer/PlayerPositioning" to="Ui/UiSystem/NewMapWindow" method="_on_PlayerPositioning_sliderChanged"]
+[connection signal="toggled" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapPlayerOptions/PlayerSubOptions/VBoxContainer/LinearDistanceCheckBox" to="Ui/UiSystem/NewMapWindow" method="_on_LinearDistanceCheckBox_toggled"]
 [connection signal="item_selected" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer6/NewMapBorderType" to="Ui/UiSystem/NewMapWindow" method="_on_NewMapBorderType_item_selected"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions/VBoxContainer/NoiseDistance" to="Ui/UiSystem/NewMapWindow" method="_on_NoiseDistance_sliderChanged"]
 [connection signal="sliderChanged" from="Ui/UiSystem/NewMapWindow/MarginContainer/HBoxContainer/PanelContainer/VBoxContainer/NewMapNoiseOptions/VBoxContainer/NoisePersistence" to="Ui/UiSystem/NewMapWindow" method="_on_NoisePersistence_sliderChanged"]
