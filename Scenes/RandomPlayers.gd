@@ -6,7 +6,6 @@ onready var oXSizeLine = Nodelist.list["oXSizeLine"]
 onready var oYSizeLine = Nodelist.list["oYSizeLine"]
 onready var oNewMapSymmetricalBorder = Nodelist.list["oNewMapSymmetricalBorder"]
 onready var oPlayerCount = Nodelist.list["oPlayerCount"]
-onready var oPlacePlayersCheckBox = Nodelist.list["oPlacePlayersCheckBox"]
 onready var oMessage = Nodelist.list["oMessage"]
 onready var oRandomPlayersPizza = Nodelist.list["oRandomPlayersPizza"]
 onready var oDataOwnership = Nodelist.list["oDataOwnership"]
@@ -61,8 +60,7 @@ func place_players_automatically(imageData):
 	print("DEBUG: Multiple player placement in sub-sections - mirroring handled by apply_symmetry()")
 	playerPositions.clear()
 	clear_occupied_coordinates()
-	if oPlacePlayersCheckBox.pressed == false:
-		print("Place players checkbox is not pressed - exiting")
+	if oPlayerCount.value == 0:
 		return
 	var mapSizeX = oXSizeLine.text.to_float()
 	var mapSizeY = oYSizeLine.text.to_float()

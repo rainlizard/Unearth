@@ -21,8 +21,9 @@ const earthColour = Color(36.0/255.0, 24.0/255.0, 0.0/255.0, 1.0)
 const impenetrableColour = Color(0.0, 0.0, 0.0, 1.0)
 const abyssColour = Constants.ABYSS_COLOUR # Whole bytes, so it still equals the pixel read back from the RGBA8 preview Image
 
-const BORDER_ROCK = 0
-const BORDER_ABYSS = 1
+const BORDER_NONE = 0
+const BORDER_ROCK = 1
+const BORDER_ABYSS = 2
 
 func current_border_colour():
 	if oNewMapBorderType.selected == BORDER_ABYSS:
@@ -41,12 +42,6 @@ func current_border_slab():
 func _ready():
 	randomize()
 	noise.seed = randi()
-
-
-func fill_entire_map_with_earth():
-	for y in range(1, M.ySize-1):
-		for x in range(1, M.xSize-1):
-			oDataSlab.set_cell(x, y, Slabs.EARTH)
 
 
 func convert_pixels_to_slabs(imageData):

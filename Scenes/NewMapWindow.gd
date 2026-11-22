@@ -12,15 +12,12 @@ onready var oYSizeLine = Nodelist.list["oYSizeLine"]
 onready var oGame = Nodelist.list["oGame"]
 onready var oSetNewFormat = Nodelist.list["oSetNewFormat"]
 onready var oMessage = Nodelist.list["oMessage"]
-onready var oCheckBoxNewMapBorder = Nodelist.list["oCheckBoxNewMapBorder"]
 onready var oNewMapSymmetricalBorder = Nodelist.list["oNewMapSymmetricalBorder"]
 onready var oMapSettingsWindow = Nodelist.list["oMapSettingsWindow"]
 onready var oCheckBoxNewMapAutoOpensMapSettings = Nodelist.list["oCheckBoxNewMapAutoOpensMapSettings"]
 onready var oUndoStates = Nodelist.list["oUndoStates"]
-onready var oNewMapPlayerOptions = Nodelist.list["oNewMapPlayerOptions"]
 onready var oRandomBorder = Nodelist.list["oRandomBorder"]
 onready var oPlayerDistance = Nodelist.list["oPlayerDistance"]
-onready var oPlacePlayersCheckBox = Nodelist.list["oPlacePlayersCheckBox"]
 onready var oPlayerCount = Nodelist.list["oPlayerCount"]
 onready var oRandomPlayers = Nodelist.list["oRandomPlayers"]
 onready var oRandomPlayersPizza = Nodelist.list["oRandomPlayersPizza"]
@@ -33,6 +30,7 @@ onready var oDataLof = Nodelist.list["oDataLof"]
 onready var oScriptGenerator = Nodelist.list["oScriptGenerator"]
 
 var currently_creating_new_map = false
+var previousPlayerCount = 0.0
 
 var imageData = Image.new()
 var textureData = ImageTexture.new()
@@ -41,6 +39,7 @@ func _ready():
 	for stringKind in oMapProperties.kind_options:
 		oNewMapKind.add_item(stringKind)
 	oNewMapKind.selected = oMapProperties.kind_options.keys().find("Multiplayer")
+	previousPlayerCount = oPlayerCount.value
 
 func _on_NewMapWindow_visibility_changed():
 	if visible == false: return
@@ -61,8 +60,8 @@ func _on_NewMapWindow_visibility_changed():
 	reinit_noise_preview()
 	
 	_on_NewMapSymmetricalBorder_item_selected(oNewMapSymmetricalBorder.selected)
-	
-	_on_CheckBoxNewMapBorder_pressed()
+
+	update_preview()
 
 
 func reinit_noise_preview():
@@ -117,14 +116,10 @@ func create_new_map():
 	var useOwner = 5
 	oSlabPlacement.place_shape_of_slab_id(shapePositionArray, slabID, useOwner)
 	
-	if oNewMapNoiseOptions.visible == true:
-		# Border
-		oRandomBorder.convert_pixels_to_slabs(imageData)
-		oRandomPlayers.place_objects()
-	else:
-		# Blank
-		oRandomBorder.fill_entire_map_with_earth()
-	
+	# The preview image holds the earth, border and players for both bordered and blank maps
+	oRandomBorder.convert_pixels_to_slabs(imageData)
+	oRandomPlayers.place_objects()
+
 	visible = false # Close New Map window after pressing OK button
 	
 	# yield must be used here, because this function has yields inside of it.
@@ -159,13 +154,10 @@ func _on_NoiseAlgTypeCheckBox_toggled(button_pressed):
 	oNoiseUpdateTimer.start(0.01)
 
 func _on_YSizeLine_focus_exited():
-	clamp_map_size_fields()
-	if oCheckBoxNewMapBorder.pressed == true:
-		reinit_noise_preview()
-		update_border_image_with_noise()
+	_on_XSizeLine_focus_exited()
 func _on_XSizeLine_focus_exited():
 	clamp_map_size_fields()
-	if oCheckBoxNewMapBorder.pressed == true:
+	if has_border():
 		reinit_noise_preview()
 		update_border_image_with_noise()
 
@@ -178,7 +170,7 @@ func _on_NoiseUpdateTimer_timeout():
 	update_border_image_with_noise()
 
 func update_border_image_with_noise():
-	if oCheckBoxNewMapBorder.pressed == false: return
+	if not has_border(): return
 	oRandomBorder.update_border_image_with_noise(imageData, textureData)
 	if oNewMapSymmetricalBorder.selected == 6:
 		apply_symmetry()
@@ -213,21 +205,25 @@ func update_border_image_with_blank():
 	textureData.set_data(imageData)
 
 
-func _on_CheckBoxNewMapBorder_pressed():
-	if oCheckBoxNewMapBorder.pressed == true:
-		oNewMapNoiseOptions.visible = true
+func has_border():
+	return oNewMapBorderType.selected != oRandomBorder.BORDER_NONE
+
+func update_preview():
+	oNewMapNoiseOptions.visible = has_border()
+	if has_border():
 		update_border_image_with_noise()
 	else:
-		oNewMapNoiseOptions.visible = false
 		update_border_image_with_blank()
 
 func _on_NewMapBorderType_item_selected(_index):
-	_on_CheckBoxNewMapBorder_pressed()
+	update_preview()
 
 func _on_NewMapFormat_item_selected(index):
-	if index == Constants.OldFormat:
+	var isOldFormat = (index == Constants.OldFormat)
+	oNewMapBorderType.set_item_disabled(oRandomBorder.BORDER_ABYSS, isOldFormat)
+	if isOldFormat and oNewMapBorderType.selected == oRandomBorder.BORDER_ABYSS:
 		oNewMapBorderType.selected = oRandomBorder.BORDER_ROCK
-		oNewMapBorderType.disabled = true
+	if index == Constants.OldFormat:
 		oNewMapBorderType.hint_tooltip = "Abyss border requires KFX format."
 		oNewMapKind.selected = 0
 		oNewMapKind.disabled = true
@@ -242,7 +238,6 @@ func _on_NewMapFormat_item_selected(index):
 		if oPlayerCount.value > 4:
 			oPlayerCount.value = 4
 	elif index == Constants.KfxFormat:
-		oNewMapBorderType.disabled = false
 		oNewMapBorderType.hint_tooltip = ""
 		oNewMapKind.disabled = false
 		oNewMapKind.hint_tooltip = oMapProperties.KIND_TOOLTIP
@@ -252,8 +247,8 @@ func _on_NewMapFormat_item_selected(index):
 		oYSizeLine.hint_tooltip = ""
 		oPlayerCount.max_value = 8.0
 	reinit_noise_preview()
-	_on_CheckBoxNewMapBorder_pressed()
-	
+	update_preview()
+
 
 
 func _on_QuickNoisePreview_gui_input(event):
@@ -264,23 +259,15 @@ func _on_QuickNoisePreview_gui_input(event):
 
 
 
-func _on_NewMapSymmetricalBorder_item_selected(index):
-	if index == 0 or index == 5 or index == 6:
-		oLinearDistanceCheckBox.visible = false
-		#oLinearDistanceCheckBox.disabled = true
-		#oLinearDistanceCheckBox.self_modulate.a = 0.0
-	else:
-		oLinearDistanceCheckBox.visible = true
-		#oLinearDistanceCheckBox.disabled = false
-		#oLinearDistanceCheckBox.self_modulate.a = 1.0
-	
-	if index == 0 or index == 6:
-		oPlayerPositioning.visible = false
-		#oPlayerPositioning.modulate.a = 0.0
-	else:
-		#oPlayerPositioning.modulate.a = 1.0
-		oPlayerPositioning.visible = true
+func _on_NewMapSymmetricalBorder_item_selected(_index):
 	_on_PlayerCount_sliderChanged()
+
+func update_player_options_visibility():
+	var symmetry = oNewMapSymmetricalBorder.selected
+	var hasPlayers = oPlayerCount.value > 0
+	oPlayerDistance.visible = hasPlayers
+	oPlayerPositioning.visible = hasPlayers and not (symmetry in [0, 6])
+	oLinearDistanceCheckBox.visible = hasPlayers and not (symmetry in [0, 5, 6])
 
 func apply_symmetry():
 	if oNewMapSymmetricalBorder.selected == 0: return
@@ -369,62 +356,44 @@ func apply_symmetry():
 	imageData.unlock()
 
 
-func _on_PlacePlayersCheckBox_toggled(button_pressed):
-	if oCheckBoxNewMapBorder.pressed == true:
-		update_border_image_with_noise()
-	else:
-		update_border_image_with_blank()
-	oNewMapPlayerOptions.visible = button_pressed
-
 func _on_PlayerCount_sliderChanged():
-	var currentSymmetry = oNewMapSymmetricalBorder.selected
-	match currentSymmetry:
-		1, 2, 3, 4: # Vertical or horizontal symmetry
-			if not (oPlayerCount.value in [2, 4, 6, 8]):
-				var validValues = [2, 4, 6, 8]
-				var closestValue = validValues[0]
-				var smallestDiff = abs(oPlayerCount.value - validValues[0])
-				for validValue in validValues:
-					var diff = abs(oPlayerCount.value - validValue)
-					if diff < smallestDiff:
-						smallestDiff = diff
-						closestValue = validValue
-				oPlayerCount.value = closestValue
-		5: # 4-way symmetry
-			oPlayerCount.value = 4
-		6: # Pizza symmetry - no constraints, any player count is valid
-			pass
-	
+	var validValues = []
+	match oNewMapSymmetricalBorder.selected:
+		1, 2, 3, 4: validValues = [0, 2, 4, 6, 8] # Vertical or horizontal symmetry
+		5: validValues = [0, 4] # 4-way symmetry
+	if validValues.size() > 0 and not (oPlayerCount.value in validValues):
+		# Snap in the direction the slider moved so single steps don't bounce back. When it didn't move (symmetry changed), snap to the nearest, ties going up.
+		var direction = sign(oPlayerCount.value - previousPlayerCount)
+		var candidates = []
+		for validValue in validValues:
+			if (validValue - oPlayerCount.value) * direction >= 0:
+				candidates.append(validValue)
+		if candidates.empty():
+			candidates = validValues
+		var closestValue = candidates[0]
+		for validValue in candidates:
+			if abs(validValue - oPlayerCount.value) <= abs(closestValue - oPlayerCount.value):
+				closestValue = validValue
+		oPlayerCount.value = closestValue # Re-emits sliderChanged, which finishes the update
+		return
+
 	if oSetNewFormat.selected == Constants.OldFormat:
 		if oPlayerCount.value > 4:
 			oPlayerCount.value = 4
-	
-	if oCheckBoxNewMapBorder.pressed == true:
-		update_border_image_with_noise()
-	else:
-		update_border_image_with_blank()
+
+	previousPlayerCount = oPlayerCount.value
+	update_player_options_visibility()
+	update_preview()
 	
 
 func _on_PlayersZonedCheckBox_toggled(button_pressed):
-	if oCheckBoxNewMapBorder.pressed == true:
-		update_border_image_with_noise()
-	else:
-		update_border_image_with_blank()
+	update_preview()
 
 func _on_PlayerDistance_sliderChanged():
-	if oCheckBoxNewMapBorder.pressed == true:
-		update_border_image_with_noise()
-	else:
-		update_border_image_with_blank()
+	update_preview()
 
 func _on_PlayerPositioning_sliderChanged():
-	if oCheckBoxNewMapBorder.pressed == true:
-		update_border_image_with_noise()
-	else:
-		update_border_image_with_blank()
+	update_preview()
 
 func _on_LinearDistanceCheckBox_toggled(button_pressed):
-	if oCheckBoxNewMapBorder.pressed == true:
-		update_border_image_with_noise()
-	else:
-		update_border_image_with_blank()
+	update_preview()
