@@ -2,6 +2,7 @@ extends PanelContainer
 onready var oSaveMap = Nodelist.list["oSaveMap"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oGame = Nodelist.list["oGame"]
+onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oEditor = Nodelist.list["oEditor"]
 onready var oPreferencesWindow = Nodelist.list["oPreferencesWindow"]
 onready var oMapBrowser = Nodelist.list["oMapBrowser"]
@@ -190,12 +191,10 @@ func constantly_monitor_play_button_state():
 		oMenuPlayButton.text = "Save & Play"
 		return
 
-	var mapPath = oCurrentMap.path.to_upper().replace('\\','/')
-
-	var currentDirectory = mapPath.get_base_dir()
+	var currentDirectory = oCurrentMap.path.replace('\\','/').get_base_dir()
 
 	var mapIsInCorrectDirectory = false
-	if oGame.is_playable_dir(currentDirectory) == true:
+	if oGame.is_playable_dir(currentDirectory, oConfigFileManager.current_mappack_cfg_path) == true: # Runs every frame, so use the cached campaign cfg
 		mapIsInCorrectDirectory = true
 
 	if mapIsInCorrectDirectory == true: # Is playable path

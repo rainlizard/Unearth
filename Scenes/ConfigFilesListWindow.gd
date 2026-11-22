@@ -6,7 +6,6 @@ onready var oVBoxContainerConfigCampaign = Nodelist.list["oVBoxContainerConfigCa
 onready var oVBoxContainerConfigData = Nodelist.list["oVBoxContainerConfigData"]
 onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oGame = Nodelist.list["oGame"]
-onready var oReadCfg = Nodelist.list["oReadCfg"]
 
 func _on_ConfigFilesListWindow_about_to_show():
 	update_everything()
@@ -50,21 +49,6 @@ func _on_linkbutton_pressed(filePath):
 	OS.shell_open(filePath)
 
 
-func get_campaign_main_data(mapPathArgument):
-	if mapPathArgument == "" or mapPathArgument == null:
-		return {}
-	var levelsDirectoryPath = mapPathArgument.get_base_dir().get_base_dir()
-	if oGame.is_map_root(levelsDirectoryPath) == false:
-		return {}
-	var listOfCampaignFiles = Utils.get_filetype_in_directory(levelsDirectoryPath, "cfg")
-	for campaignFilePath in listOfCampaignFiles:
-		var configData = oReadCfg.read_dkcfg_file(campaignFilePath)["config"]
-		var levelsLocation = configData.get("common", {}).get("LEVELS_LOCATION", null)
-		if levelsLocation and oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower() == mapPathArgument.get_base_dir().to_lower():
-			return configData
-	return {}
-
-
 func try_open_directory(directoryPath, logDescription):
 	if directoryPath == null or directoryPath == "":
 		print(logDescription + " path is not set or empty.")
@@ -97,8 +81,7 @@ func _on_ConfigLinkData_pressed():
 func _on_ConfigLinkCampaign_pressed():
 	var determinedCampaignConfigPath = ""
 	if oCurrentMap.path != "" and oCurrentMap.path != null:
-		var campaignData = get_campaign_main_data(oCurrentMap.path)
-		var configsLocation = campaignData.get("common", {}).get("CONFIGS_LOCATION", "")
+		var configsLocation = oConfigFileManager.current_mappack_cfg_data.get("common", {}).get("CONFIGS_LOCATION", "")
 		if configsLocation != "":
 			determinedCampaignConfigPath = oGame.GAME_DIRECTORY.plus_file(configsLocation)
 		else:

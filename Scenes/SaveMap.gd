@@ -104,12 +104,11 @@ func save_map(filePath):
 	if mapWriteCount > 0:
 		print('Wrote map files: ' + str(mapWriteCount) + ' files in ' + str(mapWriteTime) + 'ms')
 
-	if oCurrentFormat.selected == Constants.KfxFormat:
-		var campaignFile = oCfgLoader.get_campaign_boss_file(filePath)
-		if oDataLof.write_campaign_map_size(filePath, campaignFile) == false:
-			writeFailure = true
-		else:
-			oCfgLoader.load_campaign_boss_file(filePath)
+	var campaignFile = oCfgLoader.get_campaign_boss_file(filePath.get_base_dir())
+	if oCurrentFormat.selected == Constants.KfxFormat and oDataLof.write_campaign_map_size(filePath, campaignFile) == false:
+		writeFailure = true
+	else:
+		oCfgLoader.load_campaign_boss_file(filePath, campaignFile) # Refresh in any format, the map may have moved to another campaign
 
 	if writeFailure:
 		oMessage.big("Error", "Saving failed. Try saving to a different directory.")

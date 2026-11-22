@@ -40,6 +40,9 @@ func strip_letters_from_string(string):
 			string = string.replace(character,"")
 	return string
 
+func normalize_dir(path): # Lowercase with forward slashes and no trailing slash, for comparing directory paths
+	return path.replace('\\','/').trim_suffix("/").to_lower()
+
 func is_rem_line(line): # DKScript comment
 	return remLineRegex.search(line) != null
 

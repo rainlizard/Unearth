@@ -6,6 +6,7 @@ onready var oCurrentMap = Nodelist.list["oCurrentMap"]
 onready var oSaveMap = Nodelist.list["oSaveMap"]
 onready var oMenu = Nodelist.list["oMenu"]
 onready var oDataLof = Nodelist.list["oDataLof"]
+onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 
 var saveInstruction = Label.new()
 var lineEdit
@@ -51,6 +52,7 @@ func _on_FileDialogSaveAs_about_to_show():
 	
 	current_path = path
 	current_dir = path
+	previousCurrentDir = "" # Re-check the campaign cfg on every open, it may have been created since
 	
 	if oCurrentMap.path == "":
 		# New number
@@ -68,17 +70,19 @@ func _on_FileDialogSaveAs_about_to_show():
 	deselect_items()
 
 var previousCurrentDir = ""
+var currentDirCampaignCfgPath = ""
 
 func _process(delta):
 	if visible == false: return
-	
+
 	# This is better than a signal because it covers more cases, such as when clicking on a file in the dialog
 	if lineEditPreviousText != lineEdit.text:
 		linedit_was_changed()
 		lineEditPreviousText = lineEdit.text
-	
+
 	if previousCurrentDir != current_dir:
 		previousCurrentDir = current_dir
+		currentDirCampaignCfgPath = oCfgLoader.get_campaign_boss_file(current_dir)["path"] # Read cfg files only when the directory changes
 		working_directory_was_changed()
 	
 	saveInstruction.set("custom_colors/font_color", Color(1,0.5,0.5,1))
@@ -88,7 +92,7 @@ func _process(delta):
 		saveInstruction.text = "Map not playable from this directory. (KeeperFX)"
 		if oGame.is_map_root(dir) == true:
 			saveInstruction.text = "Must save in a sub directory. (KeeperFX)"
-		if oGame.is_playable_dir(dir) == true:
+		if oGame.is_playable_dir(dir, currentDirCampaignCfgPath) == true:
 			saveInstruction.text = "Map playable from this directory. (KeeperFX)"
 			saveInstruction.set("custom_colors/font_color", Color(0.5,1.0,0.5,1))
 			if oDataLof.KIND == "MULTI" and oGame.has_multiplayer_root() == true and oGame.is_multiplayer_map(dir.plus_file(lineEdit.text)) == false:

@@ -443,20 +443,23 @@ func get_sprite(newName, animID):
 			return sprite_key
 	return null
 
-func get_campaign_boss_file(mapPath):
-	var levelsDirPath = mapPath.get_base_dir().get_base_dir()
-	if oGame.is_map_root(levelsDirPath) == false:
+func get_campaign_boss_file(mapDir):
+	# Campaign files sit directly in the map root, but LEVELS_LOCATION can point to a folder at any depth below it
+	var mapRootDir = oGame.get_map_root_dir(mapDir)
+	if mapRootDir == "":
 		return {"path": "", "config": {}}
-	var list_of_main_campaign_files = Utils.get_filetype_in_directory(levelsDirPath, "cfg")
-	for campaignPath in list_of_main_campaign_files:
+	mapDir = Utils.normalize_dir(mapDir)
+	for campaignPath in Utils.get_filetype_in_directory(mapRootDir, "cfg"):
 		var cfgDictionary = oReadCfg.read_dkcfg_file(campaignPath, false)["config"]
 		var levelsLocation = cfgDictionary.get("common", {}).get("LEVELS_LOCATION", null)
-		if levelsLocation and oGame.GAME_DIRECTORY.plus_file(levelsLocation).to_lower() == mapPath.get_base_dir().to_lower():
+		if levelsLocation is String and levelsLocation != "" and Utils.normalize_dir(oGame.GAME_DIRECTORY.plus_file(levelsLocation)) == mapDir:
 			return {"path": campaignPath, "config": cfgDictionary}
 	return {"path": "", "config": {}}
 
-func load_campaign_boss_file(mapPath):
-	var campaignFile = get_campaign_boss_file(mapPath)
+# Pass campaignFile when it's already known, to skip reading the cfg files again
+func load_campaign_boss_file(mapPath, campaignFile = null):
+	if campaignFile == null:
+		campaignFile = get_campaign_boss_file(mapPath.get_base_dir())
 	oConfigFileManager.current_mappack_cfg_path = campaignFile["path"]
 	oConfigFileManager.current_mappack_cfg_data = campaignFile["config"]
 	oConfigFileManager.current_mappack_cfg_filename = campaignFile["path"].get_file()

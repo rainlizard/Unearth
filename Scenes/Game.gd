@@ -8,8 +8,8 @@ onready var oCmdLineConsole = Nodelist.list["oCmdLineConsole"]
 onready var oCmdLineConsoleArg = Nodelist.list["oCmdLineConsoleArg"]
 onready var oCmdLineExecute = Nodelist.list["oCmdLineExecute"]
 onready var oKeeperFXDetection = Nodelist.list["oKeeperFXDetection"]
-onready var oConfigFileManager = Nodelist.list["oConfigFileManager"]
 onready var oDataLof = Nodelist.list["oDataLof"]
+onready var oCfgLoader = Nodelist.list["oCfgLoader"]
 
 var EXECUTABLE_PATH = ""
 var GAME_DIRECTORY = ""
@@ -50,26 +50,51 @@ func keeperfx_is_installed():
 		return false
 
 
+# Folders of dirPath below the game directory, e.g. ["campgns", "hjourney", "levels"]. Empty if dirPath is not inside a map root.
+func get_dirs_below_map_root(dirPath):
+	if dirPath == null or dirPath == "" or GAME_DIRECTORY == "":
+		return []
+	var gameDir = Utils.normalize_dir(GAME_DIRECTORY) + "/"
+	var lowerPath = Utils.normalize_dir(dirPath)
+	if lowerPath.begins_with(gameDir) == false:
+		return []
+	var dirs = Array(lowerPath.substr(gameDir.length()).split("/", false))
+	if dirs.empty() or KEEPERFX_MAP_ROOTS.has(dirs[0]) == false:
+		return []
+	return dirs
+
+
 func is_map_root(path):
-	if path == null or path == "":
-		return false
-	var folderName = path.replace('\\','/').trim_suffix("/").get_file().to_lower()
-	return KEEPERFX_MAP_ROOTS.has(folderName)
+	return get_dirs_below_map_root(path).size() == 1
 
 
-func is_playable_dir(path):
+# KeeperFX plays maps one folder below a map root, or deeper when a campaign cfg's LEVELS_LOCATION points there.
+# Pass campaignCfgPath when it's already known, to skip reading the cfg files.
+func is_playable_dir(path, campaignCfgPath = null):
 	if path == null or path == "":
 		return false
-	var normalizedPath = path.replace('\\','/').trim_suffix("/")
 	if keeperfx_is_installed() == true:
-		return is_map_root(normalizedPath.get_base_dir())
-	return normalizedPath.get_file().to_lower() == "levels"
+		var depth = get_dirs_below_map_root(path).size()
+		if depth > 2 and campaignCfgPath == null:
+			campaignCfgPath = oCfgLoader.get_campaign_boss_file(path)["path"]
+		return depth == 2 or (depth > 2 and campaignCfgPath != "")
+	return Utils.normalize_dir(path).get_file() == "levels"
 
 
 func get_map_root(path):
 	if path == null or path == "":
 		return ""
-	return path.replace('\\','/').get_base_dir().get_base_dir().get_file().to_lower()
+	var dirs = get_dirs_below_map_root(path.replace('\\','/').get_base_dir())
+	return "" if dirs.empty() else dirs[0]
+
+
+func get_map_root_dir(dirPath):
+	var dirs = get_dirs_below_map_root(dirPath)
+	if dirs.empty():
+		return ""
+	# Take the folder from dirPath itself to keep its real case, as Linux paths are case-sensitive
+	var gameDirLength = Utils.normalize_dir(GAME_DIRECTORY).length() + 1
+	return dirPath.replace('\\','/').substr(0, gameDirLength + dirs[0].length())
 
 
 func is_multiplayer_map(path):
@@ -207,16 +232,14 @@ func cmdline(mapPath, packetLoad = false):
 	
 	var newMapNumber = mapPath.get_file().to_upper().trim_prefix("MAP")
 	var newCampaignName = mapPath.get_base_dir().get_file()
+	var campaignCfgPath = oCfgLoader.get_campaign_boss_file(mapPath.get_base_dir())["path"]
+	if campaignCfgPath != "":
+		newCampaignName = campaignCfgPath.get_file().get_basename()
 	if is_multiplayer_map(mapPath) == true or (mapPath == oCurrentMap.path and oDataLof.KIND == "MULTI"):
 		constructString += " -1player"
 	constructString += " -level " + newMapNumber
 	if newCampaignName != "levels": # The older DK structure stored all their maps in /levels/ folder and did not use campaign command.
-		var mappackCfgFilename = oConfigFileManager.current_mappack_cfg_filename
-		if mappackCfgFilename != "":
-			var campaignName = mappackCfgFilename.get_basename()
-			constructString += " -campaign " + get_campaign_path(mapPath, campaignName)
-		else:
-			constructString += " -campaign " + get_campaign_path(mapPath, newCampaignName)
+		constructString += " -campaign " + get_campaign_path(mapPath, newCampaignName)
 	
 	constructString = constructString.strip_edges(true,true)
 	
